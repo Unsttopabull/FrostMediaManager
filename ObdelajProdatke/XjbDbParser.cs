@@ -5,12 +5,10 @@ using System.Linq;
 using Common;
 using Common.Models.DB.Jukebox;
 using Common.Models.DB.MovieVo;
-using Common.Models.Jukebox;
 using PHPSerialize;
-
 using CoretisMovie = Common.Models.PHP.Coretis_VO_Movie;
 
-namespace ObdelajProdatke.xJukebox {
+namespace ObdelajProdatke {
     public class XjbDbParser : MediaManager<CoretisMovie> {
 
         public XjbDbParser() : base(DBSystem.Xtreamer) {

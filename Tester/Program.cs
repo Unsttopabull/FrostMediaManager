@@ -1,4 +1,4 @@
-﻿using ObdelajProdatke.XBMC;
+﻿using ObdelajProdatke;
 
 namespace Tester {
     class Program {
@@ -8,7 +8,6 @@ namespace Tester {
 
             //Movie movieFromXml = XjbXmlMovie.LoadAsMovie(@"C:\Users\Martin\Desktop\XJB\xml\50.50.2011.DVDScr.XviD-playXD_xjb.xml");
             XbmcParser xp = new XbmcParser();
-            //XbmcContainer xc = new XbmcContainer();
 
             //movie mv = new movie();
             //mv.actor = new[] {

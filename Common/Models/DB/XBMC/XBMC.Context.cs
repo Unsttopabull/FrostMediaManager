@@ -28,19 +28,13 @@ namespace Common.Models.DB.XBMC {
                         .WithMany(f => f.StreamDetails)
                         .Map(m => m.MapKey("idFile"));
 
-            //-----------------------------------------------------------------//
-
-            //modelBuilder.Entity<XbmcSet>()
-            //            .HasMany(s => s.Movies)
-            //            .WithOptional(m => m.Set)
-            //            .HasForeignKey(m => m.SetId);
-
-            //---------------------------------------------------------------------------//
-
-            //modelBuilder.Entity<XbmcMovie>()
-            //            .HasRequired(m => m.File)
-            //            .WithRequiredPrincipal(f => f.Movie)
-            //            .Map(m => m.MapKey("idFile"));
+            //foreign key on "movie" is TEXT but id on "path" is INTEGER
+            //EF detects mismatching types on entities so we map it here
+            //and remove it from entity
+            modelBuilder.Entity<XbmcMovie>()
+                        .HasRequired(m => m.Path)
+                        .WithMany(p => p.Movies)
+                        .Map(m => m.MapKey("c23"));
 
             //Join table Movie <--> Actors
             modelBuilder.Entity<XbmcMovie>()

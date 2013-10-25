@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Configuration;
-using Common;
 using System.Linq;
+using Common;
+using Common.Models.DB.MovieVo;
 using Common.Models.DB.XBMC;
-using Common.Models.DB.XBMC.StreamDetails;
-using MovieVo = Common.Models.DB.MovieVo.Movie;
 
-namespace ObdelajProdatke.XBMC {
+namespace ObdelajProdatke {
     public class XbmcParser : MediaManager<XbmcMovie> {
 
         public XbmcParser()
@@ -22,7 +20,7 @@ namespace ObdelajProdatke.XBMC {
             get { throw new System.NotImplementedException(); }
         }
 
-        public override IEnumerable<MovieVo> Movies {
+        public override IEnumerable<Movie> Movies {
             get { throw new System.NotImplementedException(); }
         }
 
@@ -30,44 +28,6 @@ namespace ObdelajProdatke.XBMC {
             ChangeConnectionString(dbLoc);
 
             XbmcContainer xc = new XbmcContainer();
-            //string traceSql = xc.Movies.Select(mv => mv).TraceSql();
-            //ICollection<XbmcPerson> q = xc.Movies.Where(mv => mv.Id == 1).Select(mv => mv.Actors).FirstOrDefault();
-            //var cNames = xc.Countries.Select(c => c.Name).ToArray();
-
-            //var q = xc.Movies.Where(mv => mv.Id == 5).Select(mv => mv.Actors);//.Select(p => new {p.Person.Id, p.Person.Name, Thumb = p.Person.ThumbXml, p.Role}));
-            //var xbmcMoviePersons = q.FirstOrDefault();
-
-            //IQueryable<XbmcMovie> xbmcMovies = xc.Movies.Where(m => m.Set != null);
-            //XbmcMovie[] movies = xbmcMovies.ToArray();
-            //XbmcSet[] sets = movies.Select(m => m.Set).ToArray();
-            //var z = xc.Movies.FirstOrDefault(m => m.Id == 5);
-
-
-            //IQueryable<XbmcMovie> xbmcMovies = xc.Movies.Where(m => m.Id == 5);
-            //XbmcMovie queryable = xc.Movies.FirstOrDefault(m => m.Id == 5);
-            IQueryable<XbmcFile> p = xc.Files.Where(file => file.Id == 39);
-
-            IQueryable<IEnumerable<XbmcSubtitleDetails>> firstOrDefault = p.Select(f => f.StreamDetails.OfType<XbmcSubtitleDetails>());
-            XbmcSubtitleDetails[] xbmcSubtitleDetailses = firstOrDefault.FirstOrDefault().ToArray();
-
-            //XbmcStreamDetails[] xbmcSD = xc.StreamDetails.Where(sd => sd.StreamType == StreamType.Subtitles).ToArray();
-            //IQueryable<XbmcFile> queryable = xc.Files.Where(xf => xf.FileId == 1);//.Select(f => f.VideoDetails);
-            //XbmcVideoDetails[] xbmcVideoDetailses = queryable.FirstOrDefault().ToArray();
-
-            //XbmcMovie xbmcMovies = xc.Movies.Where(m => m.Id == 1).FirstOrDefault();
-
-            //ICollection<XbmcPerson> xbmcPersons = queryable.Actors;
-
-
-            //ICollection<XbmcMovie> x2 = xc.Sets.Where(s => s.SetId == 1).Select(xs => xs.Movies).FirstOrDefault();
-            //XbmcMovie xbmcSets = xc.Movies.Include("Set").FirstOrDefault(m => m.Title == "Iron Man 3");
-
-            //XbmcSet xbmcMovies = xc.Sets.FirstOrDefault();
-
-            //var z = x.ToArray();
-
-            //var z = s.ToArray();
-
         }
 
         protected override void ChangeConnectionString(string databaseLocation) {

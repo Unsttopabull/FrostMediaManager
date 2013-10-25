@@ -17,7 +17,7 @@ namespace Common.Models.DB.XBMC {
         public XbmcMovie() {
             File = new XbmcFile();
             //Set = new XbmcSet();
-            //Path = new XbmcPath();
+            Path = new XbmcPath();
             Actors = new HashSet<XbmcPerson>();
             //Writers = new HashSet<XbmcWriter>();
             //Directors = new HashSet<XbmcDirector>();
@@ -127,22 +127,7 @@ namespace Common.Models.DB.XBMC {
         [Column("c22")]
         public string FolderPath { get; set; }
 
-        [Column("c23")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public string PathIdString { get; set; }
-
-        [NotMapped]
-        public long PathID {
-            get {
-                long pathID;
-                long.TryParse(PathIdString, out pathID);
-
-                return pathID;
-            }
-            set { PathIdString = value.ToString(CultureInfo.InvariantCulture); }
-        }
-
-        //public XbmcPath Path { get; set; }
+        public XbmcPath Path { get; set; }
 
         [Required, Column("idSet")]
         public long? SetId { get; set; }
