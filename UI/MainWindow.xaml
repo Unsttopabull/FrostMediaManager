@@ -1,0 +1,42 @@
+﻿<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+    xmlns:local="clr-namespace:WPF_Jukebox" xmlns:movieVo="clr-namespace:Common.Models.MovieVo;assembly=Common"
+    x:Class="WPF_Jukebox.MainWindow"
+    x:Name="Okno"
+    Title="xJukeboxPC" Icon="Images/xtreamer.ico" Height="467" d:DesignWidth="867.075">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Templates.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <DataTemplate x:Key="NaslovInLeto" DataType="movieVo:Movie">
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} ({1})">
+                            <Binding Path="Title" TargetNullValue="N\A" FallbackValue="N\A" />
+                            <Binding Path="Year" TargetNullValue="N\A" FallbackValue="N\A" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <DockPanel x:Name="Container" LastChildFill="True">
+        <ToolBar x:Name="Orodna" DockPanel.Dock="Top">
+            <Button x:Name="Gumb" Content="Button" Click="ButtonClick"/>
+        </ToolBar>
+        <DockPanel x:Name="Vsebina" DataContext="movieVo:Movie" ScrollViewer.VerticalScrollBarVisibility="Disabled" LastChildFill="False">
+            <ListBox x:Name="Filmi" Initialized="FilmiOnInitialized" MinWidth="200"
+        		ItemTemplate="{StaticResource NaslovInLeto}"
+        		ScrollViewer.VerticalScrollBarVisibility="Visible"
+        		ScrollViewer.HorizontalScrollBarVisibility="Hidden" />
+            <local:OpisFilma x:Name="Opis" DataContext="{Binding SelectedItem, ElementName=Filmi}"
+                             HorizontalContentAlignment="Center" VerticalContentAlignment="Top" DockPanel.Dock="Right" HorizontalAlignment="Left">
+            </local:OpisFilma>
+        </DockPanel>
+    </DockPanel>
+</Window>

@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{73F12859-D8B1-49C1-A835-0810CE7BD006}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Common</RootNamespace>
+    <AssemblyName>Frost.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\EF\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.SQLite, Version=1.0.85.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\SQLite\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq, Version=1.0.85.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\SQLite\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Models\DB\Jukebox\XjbMovie.cs" />
+    <Compile Include="Models\PHP\Coretis_VO_Genre.cs" />
+    <Compile Include="Models\PHP\Coretis_VO_Movie.cs" />
+    <Compile Include="Models\PHP\Coretis_VO_Person.cs" />
+    <Compile Include="Models\PHP\Coretis_VO_Picture.cs" />
+    <Compile Include="Models\DB\Jukebox\XjbDrive.cs" />
+    <Compile Include="Models\DB\Jukebox\XjbGenre.cs" />
+    <Compile Include="Models\DB\Jukebox\XjbEntities.Context.cs" />
+    <Compile Include="Models\DB\Jukebox\XjbMoviesGenres.cs" />
+    <Compile Include="Models\DB\Jukebox\XjbMoviesPersons.cs" />
+    <Compile Include="Models\DB\Jukebox\XjbOption.cs" />
+    <Compile Include="Models\DB\Jukebox\XjbPerson.cs" />
+    <Compile Include="Models\XML\Jukebox\XjbXmlMovie.cs" />
+    <Compile Include="Models\XML\Jukebox\XjbXmlActor.cs" />
+    <Compile Include="Models\DB\MovieVo\Actor.cs" />
+    <Compile Include="Models\DB\MovieVo\Art.cs" />
+    <Compile Include="Models\DB\MovieVo\Audio.cs" />
+    <Compile Include="Models\DB\MovieVo\Certification.cs" />
+    <Compile Include="Models\DB\MovieVo\Country.cs" />
+    <Compile Include="Models\DB\MovieVo\File.cs" />
+    <Compile Include="Models\DB\MovieVo\Genre.cs" />
+    <Compile Include="Models\DB\MovieVo\Movie.cs" />
+    <Compile Include="Models\DB\MovieVo\MoviePerson.cs" />
+    <Compile Include="Models\DB\MovieVo\MovieVo.Context.cs" />
+    <Compile Include="Models\DB\MovieVo\Person.cs" />
+    <Compile Include="Models\DB\MovieVo\Plot.cs" />
+    <Compile Include="Models\DB\MovieVo\Rating.cs" />
+    <Compile Include="Models\DB\MovieVo\Studio.cs" />
+    <Compile Include="Models\DB\MovieVo\Subtitle.cs" />
+    <Compile Include="Models\DB\MovieVo\Video.cs" />
+    <Compile Include="Models\DB\XBMC\Actor\XbmcMovieActor.cs" />
+    <Compile Include="Models\DB\XBMC\Actor\XbmcMoviePerson.cs" />
+    <Compile Include="Models\DB\XBMC\Actor\XbmcPerson.cs" />
+    <Compile Include="Models\DB\XBMC\StreamDetails\XbmcAudioDetails.cs" />
+    <Compile Include="Models\DB\XBMC\StreamDetails\XbmcSubtitleDetails.cs" />
+    <Compile Include="Models\DB\XBMC\StreamDetails\XbmcVideoDetails.cs" />
+    <Compile Include="Models\DB\XBMC\XbmcArt.cs" />
+    <Compile Include="Models\DB\XBMC\XbmcBookmark.cs" />
+    <Compile Include="Models\DB\XBMC\XbmcCountry.cs" />
+    <Compile Include="Models\DB\XBMC\XbmcMovieDirector.cs" />
+    <Compile Include="Models\DB\XBMC\XbmcFile.cs" />
+    <Compile Include="Models\DB\XBMC\XbmcGenre.cs" />
+    <Compile Include="Models\DB\XBMC\XbmcMovie.cs" />
+    <Compile Include="Models\DB\XBMC\XbmcPath.cs" />
+    <Compile Include="Models\DB\XBMC\XbmcSet.cs" />
+    <Compile Include="Models\DB\XBMC\XbmcSettings.cs" />
+    <Compile Include="Models\DB\XBMC\XbmcStackTimes.cs" />
+    <Compile Include="Models\DB\XBMC\StreamDetails\XbmcStreamDetails.cs" />
+    <Compile Include="Models\DB\XBMC\XbmcStudio.cs" />
+    <Compile Include="Models\DB\XBMC\Tag\XbmcTag.cs" />
+    <Compile Include="Models\DB\XBMC\Tag\TagLinks.cs" />
+    <Compile Include="Models\DB\XBMC\XbmcVersion.cs" />
+    <Compile Include="Models\DB\XBMC\XbmcMovieWriter.cs" />
+    <Compile Include="Models\DB\XBMC\XBMC.Context.cs" />
+    <Compile Include="Models\XML\XBMC\StreamDetails.cs" />
+    <Compile Include="Models\XML\XBMC\XbmcXmlActor.cs" />
+    <Compile Include="Models\XML\XBMC\XbmcXmlAudioInfo.cs" />
+    <Compile Include="Models\XML\XBMC\XbmcXmlCertification.cs" />
+    <Compile Include="Models\XML\XBMC\XbmcXmlFanart.cs" />
+    <Compile Include="Models\XML\XBMC\XbmcXmlFileInfo.cs" />
+    <Compile Include="Models\XML\XBMC\XbmcXmlMovie.cs" />
+    <Compile Include="Models\XML\XBMC\XbmcXmlMovieDbId.cs" />
+    <Compile Include="Models\XML\XBMC\XbmcXmlResumeInfo.cs" />
+    <Compile Include="Models\XML\XBMC\XbmcXmlSubtitleInfo.cs" />
+    <Compile Include="Models\XML\XBMC\XbmcXmlThumb.cs" />
+    <Compile Include="Models\XML\XBMC\XbmcXmlVideoInfo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SeedInitializer.cs" />
+    <Compile Include="XmlIndentedTextWriter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\XML\XBMC\XSD\xbmcXmlMovie.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\XML\XBMC\XSD\xbmcXmlMovie_xsd11.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Models\XML\XBMC\XSD\yamjXmlMovie.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Models\DB\MovieVo\MovieVo.edmx.sql" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

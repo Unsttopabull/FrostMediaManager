@@ -1,0 +1,11 @@
+﻿<Application x:Class="WPF_Jukebox.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+    	<ResourceDictionary>
+    		<BitmapImage x:Key="Loading" UriSource="/WPF_Jukebox;component/Images/loading.gif" />
+    		<BitmapImage x:Key="NoCover" UriSource="/WPF_Jukebox;component/Images/NoCover.png" />
+    	</ResourceDictionary>
+    </Application.Resources>
+</Application>
