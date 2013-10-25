@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using Common.Models.DB.MovieVo;
 using Common.Models.DB.XBMC.Actor;
+using Common.Models.XML.XBMC;
 
 namespace Common.Models.DB.XBMC {
 

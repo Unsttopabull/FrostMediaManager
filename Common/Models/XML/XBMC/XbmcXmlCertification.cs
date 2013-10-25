@@ -1,4 +1,6 @@
-﻿namespace Common.Models.XML.XBMC {
+﻿using Common.Models.DB.MovieVo;
+
+namespace Common.Models.XML.XBMC {
     public class XbmcXmlCertification {
 
         public XbmcXmlCertification(string country, string rating) {

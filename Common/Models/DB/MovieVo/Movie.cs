@@ -5,7 +5,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Linq;
 using Common.Models.DB.XBMC;
+using Common.Models.Jukebox;
 using Common.Models.XML.Jukebox;
+using Common.Models.XML.XBMC;
 
 namespace Common.Models.DB.MovieVo {
 

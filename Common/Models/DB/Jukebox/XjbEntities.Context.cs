@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using Common.Models.Jukebox;
 
 namespace Common.Models.DB.Jukebox
 {

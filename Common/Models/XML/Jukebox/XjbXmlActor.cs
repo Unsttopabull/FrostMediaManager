@@ -1,5 +1,6 @@
 using System;
 using System.Xml.Serialization;
+using Common.Models.XML.XBMC;
 
 namespace Common.Models.XML.Jukebox {
 

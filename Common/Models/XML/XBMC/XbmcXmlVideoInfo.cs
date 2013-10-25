@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using Common.Models.DB.MovieVo;
 
 namespace Common.Models.XML.XBMC {
     /// <remarks/>
