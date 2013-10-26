@@ -56,6 +56,13 @@
   <ItemGroup>
     <Compile Include="Extensions.cs" />
     <Compile Include="Models\DB\Jukebox\XjbMovie.cs" />
+    <Compile Include="Models\DB\XBMC\Actor\XbmcActor.cs" />
+    <Compile Include="Models\DB\XBMC\Actor\XbmcMovieActor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\DB\XBMC\Actor\XbmcPerson.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Models\PHP\Coretis_VO_Genre.cs" />
     <Compile Include="Models\PHP\Coretis_VO_Movie.cs" />
     <Compile Include="Models\PHP\Coretis_VO_Person.cs" />
@@ -85,16 +92,12 @@
     <Compile Include="Models\DB\MovieVo\Studio.cs" />
     <Compile Include="Models\DB\MovieVo\Subtitle.cs" />
     <Compile Include="Models\DB\MovieVo\Video.cs" />
-    <Compile Include="Models\DB\XBMC\Actor\XbmcMovieActor.cs" />
-    <Compile Include="Models\DB\XBMC\Actor\XbmcMoviePerson.cs" />
-    <Compile Include="Models\DB\XBMC\Actor\XbmcPerson.cs" />
     <Compile Include="Models\DB\XBMC\StreamDetails\XbmcAudioDetails.cs" />
     <Compile Include="Models\DB\XBMC\StreamDetails\XbmcSubtitleDetails.cs" />
     <Compile Include="Models\DB\XBMC\StreamDetails\XbmcVideoDetails.cs" />
     <Compile Include="Models\DB\XBMC\XbmcArt.cs" />
     <Compile Include="Models\DB\XBMC\XbmcBookmark.cs" />
     <Compile Include="Models\DB\XBMC\XbmcCountry.cs" />
-    <Compile Include="Models\DB\XBMC\XbmcMovieDirector.cs" />
     <Compile Include="Models\DB\XBMC\XbmcFile.cs" />
     <Compile Include="Models\DB\XBMC\XbmcGenre.cs" />
     <Compile Include="Models\DB\XBMC\XbmcMovie.cs" />
@@ -107,7 +110,6 @@
     <Compile Include="Models\DB\XBMC\Tag\XbmcTag.cs" />
     <Compile Include="Models\DB\XBMC\Tag\TagLinks.cs" />
     <Compile Include="Models\DB\XBMC\XbmcVersion.cs" />
-    <Compile Include="Models\DB\XBMC\XbmcMovieWriter.cs" />
     <Compile Include="Models\DB\XBMC\XBMC.Context.cs" />
     <Compile Include="Models\XML\XBMC\StreamDetails.cs" />
     <Compile Include="Models\XML\XBMC\XbmcXmlActor.cs" />
@@ -153,6 +155,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Models\DB\MovieVo\MovieVo.edmx.sql" />
+    <Content Include="Models\DB\XBMC\extendSettings.sql" />
+    <Content Include="Models\DB\XBMC\extendStreamDetails.sql" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

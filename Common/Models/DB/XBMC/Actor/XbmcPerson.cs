@@ -6,9 +6,19 @@ namespace Common.Models.DB.XBMC.Actor {
 
     [Table("actors")]
     public class XbmcPerson {
-
         public XbmcPerson() {
-            Movies = new HashSet<XbmcMovie>();
+            MoviesAsDirector = new HashSet<XbmcMovie>();
+            MoviesAsActor = new HashSet<XbmcMovieActor>();
+            MoviesAsWriter = new HashSet<XbmcMovie>();
+        }
+
+        public XbmcPerson(string name, string thumbXml) : this() {
+            Name = name;
+            ThumbXml = thumbXml;
+        }
+
+        internal XbmcPerson(long id, string name, string thumbXml) : this(name, thumbXml) {
+            Id = id;
         }
 
         [Key]
@@ -31,6 +41,8 @@ namespace Common.Models.DB.XBMC.Actor {
             set { ThumbXml = "<thumb>" + value + "</thumb>"; }
         }
 
-        public virtual ICollection<XbmcMovie> Movies { get; set; }
+        public virtual ICollection<XbmcMovie> MoviesAsDirector { get; set; }
+        public virtual ICollection<XbmcMovieActor> MoviesAsActor { get; set; }
+        public virtual ICollection<XbmcMovie> MoviesAsWriter { get; set; }
     }
 }

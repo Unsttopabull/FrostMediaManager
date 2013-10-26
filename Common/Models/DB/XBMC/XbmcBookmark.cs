@@ -13,7 +13,6 @@ namespace Common.Models.DB.XBMC {
         [Column("idFile")]
         [ForeignKey("File")]
         public long FileId { get; set; }
-        public virtual XbmcFile File { get; set; }
 
         [Column("timeInSeconds")]
         public long TimeInSeconds { get; set; }
@@ -32,5 +31,7 @@ namespace Common.Models.DB.XBMC {
 
         [Column("type")]
         public long Type { get; set; }
+
+        public virtual XbmcFile File { get; set; }
     }
 }

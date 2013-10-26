@@ -17,7 +17,7 @@ namespace Common.Models.DB.XBMC {
 
         [Key]
         [Column("idSet")]
-        public long SetId { get; set; }
+        public long Id { get; set; }
 
         [Column("strSet")]
         public string Name { get; set; }

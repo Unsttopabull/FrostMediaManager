@@ -1,14 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Common.Models.DB.XBMC {
 
     [Table("settings")]
     public class XbmcSettings {
 
+        [Key]
+        [Column("idSetting")]
+        public long Id { get; set; }
+
         [Column("idFile")]
         [ForeignKey("File")]
         public long FileId { get; set; }
-        public virtual XbmcFile File { get; set; }
 
         public bool Deinterlace { get; set; }
         public long ViewMode { get; set; }
@@ -40,5 +44,7 @@ namespace Common.Models.DB.XBMC {
         public bool PostProcess { get; set; }
         public long ScalingMethod { get; set; }
         public long DeinterlaceMode { get; set; }
+
+        public virtual XbmcFile File { get; set; }
     }
 }

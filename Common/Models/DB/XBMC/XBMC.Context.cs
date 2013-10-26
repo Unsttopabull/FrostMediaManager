@@ -6,12 +6,11 @@ using Common.Models.DB.XBMC.Tag;
 
 namespace Common.Models.DB.XBMC {
     public class XbmcContainer : DbContext {
-        public XbmcContainer()
-            : base("name=XbmcEntities") {
+
+        public XbmcContainer() : base("name=XbmcEntities") {
         }
 
-        public XbmcContainer(string connString)
-            : base(connString) {
+        public XbmcContainer(string connString) : base(connString) {
             Configuration.LazyLoadingEnabled = false;
         }
 
@@ -36,15 +35,42 @@ namespace Common.Models.DB.XBMC {
                         .WithMany(p => p.Movies)
                         .Map(m => m.MapKey("c23"));
 
-            //Join table Movie <--> Actors
-            modelBuilder.Entity<XbmcMovie>()
-                        .HasMany(p => p.Actors)
-                        .WithMany(m => m.Movies)
+            //------------------------------------------------------------------//
+
+            modelBuilder.Entity<XbmcMovieActor>()
+                        .HasRequired(mp => mp.Person)
+                        .WithMany(mp => mp.MoviesAsActor)
+                        .HasForeignKey(ma => ma.PersonId);
+
+            modelBuilder.Entity<XbmcMovieActor>()
+                        .HasRequired(mp => mp.Movie)
+                        .WithMany(m => m.Actors)
+                        .HasForeignKey(m => m.MovieId);
+
+            modelBuilder.Entity<XbmcMovieActor>()
+                        .HasKey(ma => new { ma.PersonId, ma.MovieId });
+
+            //-----------------------------------------------------------------//
+
+            modelBuilder.Entity<XbmcPerson>()
+                        .HasMany(d => d.MoviesAsDirector)
+                        .WithMany(m => m.Directors)
                         .Map(m => {
-                            m.ToTable("actorlinkmovie");
-                            m.MapLeftKey(FK_MOVIE);
-                            m.MapRightKey("idActor");
+                            m.MapLeftKey("idDirector");
+                            m.MapRightKey(FK_MOVIE);
+                            m.ToTable("directorlinkmovie");
                         });
+
+            modelBuilder.Entity<XbmcPerson>()
+                        .HasMany(d => d.MoviesAsWriter)
+                        .WithMany(m => m.Writers)
+                        .Map(m => {
+                            m.MapLeftKey("idWriter");
+                            m.MapRightKey(FK_MOVIE);
+                            m.ToTable("writerlinkmovie");
+                        });
+
+            //--------------------------------------------------------------//
 
             //Join table Movie <--> Genre
             modelBuilder.Entity<XbmcMovie>()
@@ -81,7 +107,7 @@ namespace Common.Models.DB.XBMC {
 
         public DbSet<XbmcMovie> Movies { get; set; }
 
-        public DbSet<XbmcPerson> Persons { get; set; }
+        public DbSet<XbmcPerson> People { get; set; }
 
         public DbSet<XbmcFile> Files { get; set; }
         public DbSet<XbmcPath> Paths { get; set; }

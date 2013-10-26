@@ -8,10 +8,10 @@ namespace Common.Models.DB.XBMC {
         [Column("idFile")]
         [ForeignKey("File")]
         public long FileId { get; set; }
-        public virtual XbmcFile File { get; set; }
-
 
         [Column("times")]
         public string Times { get; set; }
+
+        public virtual XbmcFile File { get; set; }
     }
 }

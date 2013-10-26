@@ -13,7 +13,7 @@ namespace Common.Models.DB.XBMC {
     
         [Key]
         [Column("idGenre")]
-        public long GenreId { get; set; }
+        public long Id { get; set; }
 
         [Column("strGenre")]
         public string GenreName { get; set; }

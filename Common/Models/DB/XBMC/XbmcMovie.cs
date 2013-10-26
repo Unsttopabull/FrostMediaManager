@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Globalization;
 using Common.Models.DB.MovieVo;
 using Common.Models.DB.XBMC.Actor;
 using Common.Models.XML.XBMC;
@@ -16,11 +15,11 @@ namespace Common.Models.DB.XBMC {
 
         public XbmcMovie() {
             File = new XbmcFile();
-            //Set = new XbmcSet();
+            Set = new XbmcSet();
             Path = new XbmcPath();
-            Actors = new HashSet<XbmcPerson>();
-            //Writers = new HashSet<XbmcWriter>();
-            //Directors = new HashSet<XbmcDirector>();
+            Actors = new HashSet<XbmcMovieActor>();
+            Writers = new HashSet<XbmcPerson>();
+            Directors = new HashSet<XbmcPerson>();
             Genres = new HashSet<XbmcGenre>();
             Countries = new HashSet<XbmcCountry>();
             Studios = new HashSet<XbmcStudio>();
@@ -135,13 +134,17 @@ namespace Common.Models.DB.XBMC {
         [ForeignKey("SetId")]
         public virtual XbmcSet Set { get; set; }
 
-        public virtual ICollection<XbmcPerson> Actors { get; set; }
+        [InverseProperty("MoviesAsWriter")]
+        public virtual ICollection<XbmcPerson> Writers { get; set; }
+
+        [InverseProperty("MoviesAsDirector")]
+        public virtual ICollection<XbmcPerson> Directors { get; set; }
+
+        public virtual ICollection<XbmcMovieActor> Actors { get; set; }
+
         public virtual ICollection<XbmcGenre> Genres { get; set; }
         public virtual ICollection<XbmcCountry> Countries { get; set; }
         public virtual ICollection<XbmcStudio> Studios { get; set; }
-
-        //public HashSet<XbmcWriter> Writers { get; set; }
-        //public HashSet<XbmcDirector> Directors { get; set; }
 
         #region Conversion Functions
 
@@ -162,11 +165,7 @@ namespace Common.Models.DB.XBMC {
         }
 
         public static explicit operator XbmcXmlMovie(XbmcMovie movie) {
-            XbmcXmlMovie xm = new XbmcXmlMovie();
-            
-
-
-            return xm;
+            throw new NotImplementedException();
         }
 
         #endregion

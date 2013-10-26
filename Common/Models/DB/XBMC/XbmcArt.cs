@@ -8,7 +8,7 @@ namespace Common.Models.DB.XBMC {
 
         [Key]
         [Column("art_id")]
-        public long ArtID { get; set; }
+        public long Id { get; set; }
 
         /// <summary>Id of the Actor/Movie/Set referenced</summary>
         [Column("media_id")]

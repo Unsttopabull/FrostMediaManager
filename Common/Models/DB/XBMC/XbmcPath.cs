@@ -13,7 +13,7 @@ namespace Common.Models.DB.XBMC {
 
         [Key]
         [Column("idPath")]
-        public long PathId { get; set; }
+        public long Id { get; set; }
 
         [Column("strPath")]
         public string PathName { get; set; }

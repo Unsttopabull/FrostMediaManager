@@ -26,7 +26,6 @@ namespace Common.Models.DB.XBMC {
         [Column("idPath")]
         [ForeignKey("Path")]
         public long PathId { get; set; }
-        public XbmcPath Path { get; set; }
 
         [Column("strFilename")]
         public string Filename { get; set; }
@@ -42,6 +41,8 @@ namespace Common.Models.DB.XBMC {
 
         //[InverseProperty("File")]
         public virtual ICollection<XbmcStreamDetails> StreamDetails { get; set; }
+
+        public XbmcPath Path { get; set; }
 
         //public virtual XbmcBookmark Bookmark { get; set; }
 

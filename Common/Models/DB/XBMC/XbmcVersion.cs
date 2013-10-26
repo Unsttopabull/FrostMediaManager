@@ -8,7 +8,7 @@ namespace Common.Models.DB.XBMC {
 
         [Key]
         [Column("idVersion")]
-        public long VersionId { get; set; }
+        public long Id { get; set; }
 
         [Column("idCompressCount")]
         public long CompressCountId { get; set; }
