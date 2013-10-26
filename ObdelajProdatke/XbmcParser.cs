@@ -29,20 +29,8 @@ namespace ObdelajProdatke {
             ChangeConnectionString(dbLoc);
 
             XbmcContainer xc = new XbmcContainer();
-            var queryable = xc.Movies
-                              .Where(m => m.Id == 5)
-                              .SelectMany(m => m.Actors);
-                                     //.Select(m => new XbmcActor{
-                                     //    Id = m.PersonId,
-                                     //    Name = m.Person.Name,
-                                     //    ThumbXml = m.Person.ThumbXml,
-                                     //    Order = m.Order,
-                                     //    Role = m.Role
-                                     //});
-
-            var z = queryable.ToArray();
-
-            //var xbmcWriters = queryable.FirstOrDefault();
+            int xbmcMovies = xc.Movies.Count(m => m.Set != null);
+//            XbmcMovie[] movies = xbmcMovies.ToArray();
         }
 
         protected override void ChangeConnectionString(string databaseLocation) {

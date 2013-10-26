@@ -19,6 +19,11 @@ namespace Common.Models.DB.XBMC {
 
             const string FK_MOVIE = "idMovie";
 
+            modelBuilder.Entity<XbmcMovie>()
+                        .HasOptional(m => m.Set)
+                        .WithMany(s => s.Movies)
+                        .HasForeignKey(m => m.SetId);
+
             modelBuilder.Entity<XbmcStreamDetails>()
                         .Map<XbmcVideoDetails>(s => s.Requires("iStreamType").HasValue(0))
                         .Map<XbmcAudioDetails>(s => s.Requires("iStreamType").HasValue(1))

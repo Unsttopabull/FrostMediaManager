@@ -32,10 +32,6 @@ namespace Common.Models.DB.XBMC {
         [Required, Column("idFile")]
         public long FileId { get; set; }
 
-        [Required]
-        [ForeignKey("FileId")]
-        public virtual XbmcFile File { get; set; }
-
         [Column("c00")]
         public string Title { get; set; }
 
@@ -126,10 +122,16 @@ namespace Common.Models.DB.XBMC {
         [Column("c22")]
         public string FolderPath { get; set; }
 
-        public XbmcPath Path { get; set; }
-
-        [Required, Column("idSet")]
+        [Column("idSet")]
         public long? SetId { get; set; }
+
+        #region Relation Tables
+
+        [Required]
+        [ForeignKey("FileId")]
+        public virtual XbmcFile File { get; set; }
+
+        public XbmcPath Path { get; set; }
 
         [ForeignKey("SetId")]
         public virtual XbmcSet Set { get; set; }
@@ -145,6 +147,7 @@ namespace Common.Models.DB.XBMC {
         public virtual ICollection<XbmcGenre> Genres { get; set; }
         public virtual ICollection<XbmcCountry> Countries { get; set; }
         public virtual ICollection<XbmcStudio> Studios { get; set; }
+        #endregion
 
         #region Conversion Functions
 
