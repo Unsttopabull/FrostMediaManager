@@ -19,10 +19,26 @@ namespace Common.Models.DB.XBMC {
 
             const string FK_MOVIE = "idMovie";
 
+            modelBuilder.Entity<XbmcFile>()
+                        .HasRequired(f => f.Movie)
+                        .WithRequiredPrincipal(m => m.File)
+                        .Map(m => m.MapKey("idFile"));
+
+            // File <--> Path
+            modelBuilder.Entity<XbmcFile>()
+                        .HasRequired(m => m.Path)
+                        .WithMany(p => p.Files)
+                        .HasForeignKey(f => f.PathId);
+
+            //--------------------------------------------------------------------------------//
+
+            // Movie <--> Set relation
             modelBuilder.Entity<XbmcMovie>()
                         .HasOptional(m => m.Set)
                         .WithMany(s => s.Movies)
                         .HasForeignKey(m => m.SetId);
+
+            //-------------------------------------------------------------------------------//
 
             modelBuilder.Entity<XbmcStreamDetails>()
                         .Map<XbmcVideoDetails>(s => s.Requires("iStreamType").HasValue(0))
@@ -31,6 +47,8 @@ namespace Common.Models.DB.XBMC {
                         .HasRequired(sd => sd.File)
                         .WithMany(f => f.StreamDetails)
                         .Map(m => m.MapKey("idFile"));
+
+            //------------------------------------------------------------------------------//
 
             //foreign key on "movie" is TEXT but id on "path" is INTEGER
             //EF detects mismatching types on entities so we map it here
@@ -116,7 +134,7 @@ namespace Common.Models.DB.XBMC {
 
         public DbSet<XbmcFile> Files { get; set; }
         public DbSet<XbmcPath> Paths { get; set; }
-        //public DbSet<XbmcStreamDetails> StreamDetails { get; set; }
+        public DbSet<XbmcStreamDetails> StreamDetails { get; set; }
 
         public DbSet<XbmcSet> Sets { get; set; }
 

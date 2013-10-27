@@ -9,6 +9,7 @@ namespace Common.Models.DB.XBMC {
 
         public XbmcPath() {
             Movies = new HashSet<XbmcMovie>();
+            Files = new HashSet<XbmcFile>();
         }
 
         [Key]
@@ -28,22 +29,24 @@ namespace Common.Models.DB.XBMC {
         public string Hash { get; set; }
 
         [Column("scanRecursive")]
-        public long ScanRecursive { get; set; }
+        public bool? ScanRecursive { get; set; }
 
         [Column("useFolderNames")]
-        public bool UseFolderNames { get; set; }
+        public bool? UseFolderNames { get; set; }
 
         [Column("strSettings")]
         public string Settings { get; set; }
 
         [Column("noUpdate")]
-        public bool NoUpdate { get; set; }
+        public bool? NoUpdate { get; set; }
 
         [Column("exclude")]
-        public bool Exclude { get; set; }
+        public bool? Exclude { get; set; }
 
         [Column("dateAdded")]
         public string DateAdded { get; set; }
+
+        public virtual ICollection<XbmcFile> Files { get; set; } 
 
         public virtual ICollection<XbmcMovie> Movies { get; set; }
     }

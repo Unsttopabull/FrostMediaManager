@@ -5,6 +5,8 @@ using System.Linq;
 using Common;
 using Common.Models.DB.MovieVo;
 using Common.Models.DB.XBMC;
+using Common.Models.DB.XBMC.StreamDetails;
+using Common.Models.XML.XBMC;
 
 namespace ObdelajProdatke {
     public class XbmcParser : MediaManager<XbmcMovie> {
@@ -29,8 +31,17 @@ namespace ObdelajProdatke {
             ChangeConnectionString(dbLoc);
 
             XbmcContainer xc = new XbmcContainer();
-            int xbmcMovies = xc.Movies.Count(m => m.Set != null);
-//            XbmcMovie[] movies = xbmcMovies.ToArray();
+            var z = xc.Files.Select(f => new {f.FileNameString, f.Movie.Title});
+
+            //var k = from sd in xc.StreamDetails.OfType<XbmcSubtitleDetails>()
+            //        where sd.SubtitleLanguage != null
+            //        group sd by sd.File.FileNameString
+            //        into sd2
+            //        select new {
+            //            sd2.Key,
+            //            Languages = from sd3 in sd2 select sd3.SubtitleLanguage
+            //        };
+            var zz = z.ToArray();
         }
 
         protected override void ChangeConnectionString(string databaseLocation) {

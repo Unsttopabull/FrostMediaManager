@@ -26,6 +26,15 @@ namespace Common {
             return filename.Substring(0, filename.LastIndexOf('.'));
         }
 
+        public static string ToWinPath(this string fn) {
+            if (fn.StartsWith("smb://")) {
+                //Win does not recognize samba protocol paths
+                //they use double backslash for network paths
+                fn = fn.Replace("smb://", @"\\");
+            }
+            return fn;
+        }
+
         public static string TrimIfNotNull(this string str) {
             return (str != null)
                         ? str.Trim()

@@ -29,9 +29,6 @@ namespace Common.Models.DB.XBMC {
         [Column("idMovie")]
         public long Id { get; set; }
 
-        [Required, Column("idFile")]
-        public long FileId { get; set; }
-
         [Column("c00")]
         public string Title { get; set; }
 
@@ -127,8 +124,7 @@ namespace Common.Models.DB.XBMC {
 
         #region Relation Tables
 
-        [Required]
-        [ForeignKey("FileId")]
+        [InverseProperty("Movie")]
         public virtual XbmcFile File { get; set; }
 
         public XbmcPath Path { get; set; }

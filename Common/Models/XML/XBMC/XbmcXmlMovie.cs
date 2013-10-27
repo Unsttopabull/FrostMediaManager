@@ -307,11 +307,11 @@ namespace Common.Models.XML.XBMC {
             if (fn.StartsWith("stack://")) {
                 fn = fn.Replace("stack://", "");
                 foreach (string fileName in fn.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries)) {
-                    AddFile(ToWinPath(fileName.Trim()), files);
+                    AddFile(fileName.Trim().ToWinPath(), files);
                 }
             }
             else {
-                AddFile(ToWinPath(fn), files);
+                AddFile(fn.ToWinPath(), files);
             }
             return files;
         }
@@ -326,15 +326,6 @@ namespace Common.Models.XML.XBMC {
                 return false;
             }
             return true;
-        }
-
-        private string ToWinPath(string fn) {
-            if (fn.StartsWith("smb://")) {
-                //Win does not recognize samba protocol instead
-                //they use double backslash for network paths
-                fn = fn.Replace("smb://", @"\\");
-            }
-            return fn;
         }
 
         public ICollection<Subtitle> GetSubtitles() {
