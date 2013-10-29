@@ -8,82 +8,109 @@
 -- --------------------------------------------------
 
     
-	DROP TABLE if exists [Movie];
+	DROP TABLE if exists [Movies];
     
-	DROP TABLE if exists [Audio];
+	DROP TABLE if exists [Audios];
     
-	DROP TABLE if exists [File];
+	DROP TABLE if exists [Files];
     
-	DROP TABLE if exists [Video];
+	DROP TABLE if exists [Videos];
+
+	DROP TABLE if exists [Subtitles];
     
-	DROP TABLE if exists [Art];
+	DROP TABLE if exists [Arts];
     
 	DROP TABLE if exists [Ratings];
-    
-	DROP TABLE if exists [Plot];
-    
-	DROP TABLE if exists [Person];
 
-	DROP TABLE if exists [Actor];
+	DROP TABLE if exists [Specials];
+
+	DROP TABLE if exists [Studios];
     
-	DROP TABLE if exists [Genre];
+	DROP TABLE if exists [Plots];
     
-	DROP TABLE if exists [Certification];
+	DROP TABLE if exists [People];
+
+	DROP TABLE if exists [Actors];
     
-	DROP TABLE if exists [MoviePerson];
+	DROP TABLE if exists [Genres];
     
-	DROP TABLE if exists [GenreMovie];
+	DROP TABLE if exists [Certifications];
+    
+	DROP TABLE if exists [MovieActors];
+
+	DROP TABLE if exists [MovieDirectors];
+
+	DROP TABLE if exists [MovieWriters];
+    
+	DROP TABLE if exists [MovieGenres];
+
+	DROP TABLE if exists [MovieStudios];
+
+	DROP TABLE if exists [MovieCountries];
 
 -- --------------------------------------------------
 -- Creating all tables
 -- --------------------------------------------------
 
 -- Creating table 'Movie'
-CREATE TABLE [Movie] (
+CREATE TABLE [Movies] (
     [Id] integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    [Title] nvarchar(2147483647)   NOT NULL ,
-    [OriginalTitle] nvarchar(2147483647)   NULL ,
-	[Country] nvarchar(2147483647) NULL,
+    [Title] TEXT   NOT NULL ,
+    [OriginalTitle] TEXT   NULL ,
+    [SortTitle] TEXT   NULL ,
     [Year] integer   NULL ,
-	[ReleaseDate] nvarchar(2147483647) NULL,
-    [Subtitle] nvarchar(2147483647)   NULL ,
-    [Specials] nvarchar(2147483647)   NULL ,
+	[ReleaseDate] TEXT NULL,
+	[LastPlayed] TEXT NULL,
+	[Premiered] TEXT NULL,
+	[Aired] TEXT NULL,
+	[Trailer] TEXT NULL,
+	[Top250] integer NULL,
     [Runtime] integer   NULL ,
-    [FPS] integer   NULL ,
+	[Watched] boolean NOT NULL,
+	[PlayCount] integer NOT NULL, 
     [RatingAverage] float   NULL ,
-    [ImdbID] nvarchar(2147483647)   NULL ,
-    [Studio] nvarchar(2147483647)   NULL,
+    [ImdbID] TEXT   NULL ,
+    [TmdbID] TEXT   NULL ,
+    [SetId] integer   NULL,
 	[MainPlotId] integer NOT NULL,
 	
 	CONSTRAINT [FK_MoviePlot]
 		FOREIGN KEY ([MainPlotId])
-		REFERENCES [Plot]([Id])
-					
+		REFERENCES [Plot]([Id]),
+
+	CONSTRAINT [FK_MovieSet]
+		FOREIGN KEY ([SetId])
+		REFERENCES [Set]([Id])					
 );
 
 -- Creating table 'Audio'
-CREATE TABLE [Audio] (
+CREATE TABLE [Audios] (
     [Id] integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    [Source] nvarchar(2147483647)   NULL ,
-    [Type] nvarchar(2147483647)   NULL ,
-    [Channels] nvarchar(2147483647)   NULL ,
-    [Codec] nvarchar(2147483647)   NULL ,
-    [MovieId] integer   NOT NULL 
+    [Source] TEXT   NULL ,
+    [Type] TEXT   NULL ,
+    [Channels] TEXT   NULL ,
+    [Codec] TEXT   NULL ,
+    [MovieId] integer   NOT NULL, 
+    [FileId] integer   NOT NULL, 
 			
 		,CONSTRAINT [FK_MovieAudio]
     		FOREIGN KEY ([MovieId])
     		REFERENCES [Movie] ([Id])					
-    		
+
+		,CONSTRAINT [FK_AudioFile]
+    		FOREIGN KEY ([FileId])
+    		REFERENCES [File] ([Id])					    		
 );
 
 -- Creating table 'File'
-CREATE TABLE [File] (
+CREATE TABLE [Files] (
     [Id] integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    [Extension] nvarchar(2147483647)   NOT NULL ,
-    [Name] nvarchar(2147483647)   NOT NULL ,
-    [PathOnDrive] nvarchar(2147483647)   NOT NULL ,
-    [InfoXML] nvarchar(2147483647)   NOT NULL ,
+    [Extension] TEXT   NOT NULL ,
+    [Name] TEXT   NOT NULL ,
+    [FolderPath] TEXT   NOT NULL ,
+    [InfoXML] TEXT   NOT NULL ,
     [Size] integer   NULL,
+	[DateAdded] TEXT NULL,
 	[MovieId] integer NOT NULL,
 
 	CONSTRAINT [FK_MovieFile]
@@ -92,27 +119,32 @@ CREATE TABLE [File] (
 );
 
 -- Creating table 'Video'
-CREATE TABLE [Video] (
+CREATE TABLE [Videos] (
     [Id] integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    [Source] nvarchar(2147483647)   NULL ,
-    [Type] nvarchar(2147483647)   NULL ,
-    [Format] nvarchar(2147483647)   NULL ,
-    [Codec] nvarchar(2147483647)   NULL ,
+    [Source] TEXT   NULL ,
+    [Type] TEXT   NULL ,
+    [Format] TEXT   NULL ,
+    [Codec] TEXT   NULL ,
     [Aspect] float   NULL ,
     [Width] integer   NULL ,
     [Height] integer   NULL, 
 	[MovieId] integer NOT NULL,
+	[FileId] integer NOT NULL,
 
 	CONSTRAINT [FK_MovieVideo]
 		FOREIGN KEY ([MovieId])
-    	REFERENCES [Movie] ([Id])
+    	REFERENCES [Movie] ([Id]),
+
+	CONSTRAINT [FK_VideoFile]
+		FOREIGN KEY ([FileId])
+    	REFERENCES [File] ([Id])
 );
 
 -- Creating table 'Art'
-CREATE TABLE [Art] (
+CREATE TABLE [Arts] (
     [Id] integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    [Type] nvarchar(2147483647)   NOT NULL ,
-    [Path] nvarchar(2147483647)   NOT NULL ,
+    [Type] integer   NOT NULL ,
+    [Path] TEXT   NOT NULL ,
     [MovieId] integer   NOT NULL 
 			
 		,CONSTRAINT [FK_MovieArt]
@@ -122,9 +154,9 @@ CREATE TABLE [Art] (
 );
 
 -- Creating table 'Ratings'
-CREATE TABLE [Rating] (
+CREATE TABLE [Ratings] (
     [Id] integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    [Critic] nvarchar(2147483647)   NOT NULL ,
+    [Critic] TEXT   NOT NULL ,
     [Value] float   NOT NULL ,
     [MovieId] integer   NOT NULL 
 			
@@ -135,11 +167,12 @@ CREATE TABLE [Rating] (
 );
 
 -- Creating table 'Plot'
-CREATE TABLE [Plot] (
+CREATE TABLE [Plots] (
     [Id] integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    [Summary] nvarchar(2147483647)   NULL ,
-    [Full] nvarchar(2147483647)   NOT NULL ,
-    [Language] nvarchar(2147483647)   NOT NULL ,
+	[Tagline] TEXT   NULL ,
+    [Summary] TEXT   NULL ,
+    [Full] TEXT   NOT NULL ,
+    [Language] TEXT   NOT NULL ,
     [MovieId] integer   NOT NULL 
 			
 		,CONSTRAINT [FK_MoviePlot]
@@ -151,12 +184,15 @@ CREATE TABLE [Plot] (
 -- Creating table 'Person'
 CREATE TABLE [Person] (
     [Id] integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    [Name] nvarchar(2147483647)   NOT NULL
+    [Name] TEXT   NOT NULL,
+	[Thumb] TEXT NULL,
+	[Character] TEXT NULL,
+	[Role] TEXT NULL
 );
 
 CREATE TABLE [Actor] (
 	[PersonId] integer PRIMARY KEY NOT NULL,
-	[Character] nvarchar(2147483647) NULL,
+	[Character] TEXT NULL,
 
 	CONSTRAINT [FK_ActorPerson]
 		FOREIGN KEY ([PersonId])
@@ -166,13 +202,13 @@ CREATE TABLE [Actor] (
 -- Creating table 'Genre'
 CREATE TABLE [Genre] (
     [Id] integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    [Type] nvarchar(2147483647)   NOT NULL 
+    [Type] TEXT   NOT NULL 
 );
 
 -- Creating table 'Certification'
 CREATE TABLE [Certification] (
     [Id] integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    [Country] nvarchar(2147483647)   NOT NULL ,
+    [Country] TEXT   NOT NULL ,
     [Rating] float   NOT NULL ,
     [MovieId] integer   NOT NULL 
 			
@@ -184,7 +220,7 @@ CREATE TABLE [Certification] (
 
 CREATE TABLE [Studio] (
 	[Id] integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	[Name] nvarchar(2147483647) NOT NULL,
+	[Name] TEXT NOT NULL,
 	[MovieId] integer NOT NULL,
 
 	CONSTRAINT [FK_MovieStudio]
@@ -197,7 +233,7 @@ CREATE TABLE [MoviePerson] (
     [Id] integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
     [MovieId] integer   NOT NULL ,
     [PersonId] integer   NOT NULL ,
-    [Job] nvarchar(2147483647)   NULL 
+    [Job] TEXT   NULL 
 			
 		,CONSTRAINT [FK_MovieMoviePerson]
     		FOREIGN KEY ([MovieId])
