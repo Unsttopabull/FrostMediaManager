@@ -1,12 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Common.Models.DB.MovieVo {
+namespace Common.Models.DB.MovieVo.Arts {
 
-    public class Art{
+    public class Art {
 
-        public Art(string type, string path) {
-            Type = type;
+        public Art(string path) {
             Path = path;
 
             Movie = new Movie();
@@ -15,9 +14,9 @@ namespace Common.Models.DB.MovieVo {
         [Key]
         public long Id { get; set; }
 
-        public string Type { get; set; }
-
         public string Path { get; set; }
+
+        public string Preview { get; set; }
 
         public long MovieId { get; set; }
 

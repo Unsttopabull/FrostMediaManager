@@ -1,6 +1,12 @@
 using System;
 using System.Collections;
 using Common.Models.DB.MovieVo;
+using Common.Models.DB.MovieVo.Arts;
+
+using CoretisMovie = Common.Models.PHP.Coretis_VO_Movie;
+using CoretisGenre = Common.Models.PHP.Coretis_VO_Genre;
+using CoretisPerson = Common.Models.PHP.Coretis_VO_Person;
+using CoretisPicture = Common.Models.PHP.Coretis_VO_Picture;
 
 namespace Common.Models.PHP {
     public class Coretis_VO_Movie {
@@ -178,8 +184,8 @@ namespace Common.Models.PHP {
         /// <summary>full description</summary>
         public string plotFull;
 
-        public Coretis_VO_Person[] personArr; // array( Coretis_VO_Person object1, Coretis_VO_Person object2 )
-        public Coretis_VO_Genre[] genreArr; // array( Coretis_VO_Genre object1, Coretis_VO_Genre object2 )
+        public CoretisPerson[] personArr; // array( Coretis_VO_Person object1, Coretis_VO_Person object2 )
+        public CoretisGenre[] genreArr; // array( Coretis_VO_Genre object1, Coretis_VO_Genre object2 )
 
         public Hashtable certificationArr; // array( 'us' => 'PG-13' ) keys must be ISO 3166-1 like country codes, see here: http://www.iso.org/iso/english_country_names_and_code_elements
 
@@ -190,7 +196,7 @@ namespace Common.Models.PHP {
         public string studio;
 
         /// <example>array( Coretis_VO_Picture object1, Coretis_VO_Picture object2 )</example>
-        public Coretis_VO_Picture[] pictureArr;
+        public CoretisPicture[] pictureArr;
 
         /// <summary>The text right to left</summary>
         /// <remarks>1 for using right text alignment</remarks>
@@ -203,56 +209,45 @@ namespace Common.Models.PHP {
         public Hashtable scraperLastRun;
 
         #region Conversion Functions
-        private static Movie ConvertToMovie(Coretis_VO_Movie movie) {
-            Movie mov = new Movie();
-
-            GetMovieTitle(movie, mov);
-
-            //za vsak najden žanr preverimo èe že obstaja in ga potem dodamo filmu
-            foreach (Coretis_VO_Genre genreVo in movie.genreArr) {
-                mov.Genres.Add(genreVo.name);
-            }
-
-            CheckAddNewCast(movie, mov);
-            AddPlot(movie.plotFull, movie.plotSummary, mov);
-            GetInfo(movie, mov);
-            AddAudioVideoInfo(movie, mov);
-
-            mov.Files.Add(new File(movie.fileName, movie.fileExtension, movie.filePathOnDrive, (long)movie.fileSize));
-
-            AddArt(movie.pathCover, movie.pathFanartArr, movie.pathFanartArr, mov);
-            return mov;
+        public Movie ToMovie() {
+            return (Movie)this;
         }
 
-        private static void GetInfo(Coretis_VO_Movie movie, Movie mov) {
+        private static void GetInfo(CoretisMovie movie, Movie mov) {
             int result;
             if (int.TryParse(movie.year, out result)) {
                 mov.Year = result;
             }
 
             mov.Subtitles.Add(new Subtitle(movie.subtitle.TrimIfNotNull())); ;
-            mov.Specials = movie.specials.TrimIfNotNull();
+            //mov.Specials = movie.specials.TrimIfNotNull();
             mov.Runtime = (movie.length > 0) ? movie.length : (long?)null;
 
-            mov.FPS = (movie.fps == 0) ? (int?)null : movie.fps;
+            //mov.FPS = (movie.fps == 0) ? (int?)null : movie.fps;
 
             mov.RatingAverage = movie.ratingAverage;
             mov.ImdbID = movie.imdbId;
             mov.Studios.Add(new Studio(movie.studio));
         }
 
-        private static void CheckAddNewCast(Coretis_VO_Movie movie, Movie mov) {
-            foreach (Coretis_VO_Person cPerson in movie.personArr) {
+        private static void CheckAddNewCast(CoretisMovie movie, Movie mov) {
+            foreach (CoretisPerson cPerson in movie.personArr) {
+                Person person = new Person(cPerson.name);
+
                 if (string.Equals(cPerson.job, "actor", StringComparison.OrdinalIgnoreCase)) {
-                    mov.Cast.Add((MoviePerson) new Actor(cPerson.name, cPerson.character));
+                    person.Character = cPerson.character;
+                    mov.Actors.Add(person);
                 }
-                else {
-                    mov.Cast.Add(new MoviePerson(cPerson.name, cPerson.job));
+                else if (string.Equals(cPerson.job, "director", StringComparison.OrdinalIgnoreCase)) {
+                    mov.Directors.Add(person);
+                }
+                else if (string.Equals(cPerson.job, "writer", StringComparison.OrdinalIgnoreCase)) {
+                    mov.Writers.Add(person);
                 }
             }
         }
 
-        private static void GetMovieTitle(Coretis_VO_Movie movie, Movie mov) {
+        private static void GetMovieTitle(CoretisMovie movie, Movie mov) {
             mov.Title = movie.name;
             if (movie.titleOrg != null) {
                 mov.OriginalTitle = movie.titleOrg;
@@ -270,7 +265,7 @@ namespace Common.Models.PHP {
             mov.Plot.Add(new Plot(plotFull, plotSummary, null));
         }
 
-        private static void AddAudioVideoInfo(Coretis_VO_Movie movie, Movie mov) {
+        private static void AddAudioVideoInfo(CoretisMovie movie, Movie mov) {
             mov.Audio.Add(new Audio(
                 movie.audioSource,
                 movie.audioType,
@@ -291,20 +286,19 @@ namespace Common.Models.PHP {
 
         private static void AddArt(string pathCover, string[] pathScreenArr, string[] pathFanartArr, Movie mov) {
             if (pathCover != null) {
-                mov.Art.Add(new Art("Cover", pathCover));
+                mov.Art.Add(new Cover(pathCover));
             }
 
-            int len = pathScreenArr.Length;
-            if (len > 0) {
-                for (int i = 0; i < len; i++) {
-                    mov.Art.Add(new Art("Screen", pathScreenArr[i]));
+
+            if (pathScreenArr != null) {
+                foreach (string screen in pathScreenArr) {
+                    mov.Art.Add(new Fanart(screen));
                 }
             }
 
-            len = pathFanartArr.Length;
-            if (len > 0) {
-                for (int i = 0; i < len; i++) {
-                    mov.Art.Add(new Art("Fanart", pathFanartArr[i]));
+            if (pathFanartArr != null) {
+                foreach (string fanart in pathFanartArr) {
+                    mov.Art.Add(new Fanart(fanart));
                 }
             }
         }
@@ -312,8 +306,25 @@ namespace Common.Models.PHP {
         #endregion
 
         #region Conversion operators
-        public static explicit operator Movie(Coretis_VO_Movie movie) {
-            return ConvertToMovie(movie);
+        public static explicit operator Movie(CoretisMovie movie) {
+            Movie mov = new Movie();
+
+            GetMovieTitle(movie, mov);
+
+            //za vsak najden žanr preverimo èe že obstaja in ga potem dodamo filmu
+            foreach (CoretisGenre genreVo in movie.genreArr) {
+                mov.Genres.Add(genreVo.name);
+            }
+
+            CheckAddNewCast(movie, mov);
+            AddPlot(movie.plotFull, movie.plotSummary, mov);
+            GetInfo(movie, mov);
+            AddAudioVideoInfo(movie, mov);
+
+            mov.Files.Add(new File(movie.fileName, movie.fileExtension, movie.filePathOnDrive, (long)movie.fileSize));
+
+            AddArt(movie.pathCover, movie.pathFanartArr, movie.pathFanartArr, mov);
+            return mov;
         }
         #endregion
     }

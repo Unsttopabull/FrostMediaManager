@@ -75,7 +75,7 @@ namespace Common {
             return (T) obj; 
         }
 
-        private static TTo[] ConvertArray<TTo, TFrom>(this TFrom[] inArr) {
+        public static TTo[] ConvertArray<TTo, TFrom>(this TFrom[] inArr) {
             if (inArr == null) {
                 return null;
             }

@@ -1,5 +1,5 @@
 ﻿using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
+using Common.Models.DB.MovieVo.Arts;
 
 namespace Common.Models.DB.MovieVo {
 
@@ -8,7 +8,58 @@ namespace Common.Models.DB.MovieVo {
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
-            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+
+
+            modelBuilder.Entity<Art>()
+                        .Map<Cover>(m => m.Requires("Type").HasValue(1))
+                        .Map<Poster>(m => m.Requires("Type").HasValue(2))
+                        .Map<Fanart>(m => m.Requires("Type").HasValue(3));
+
+            //---------------------------------------------------------------//
+
+            modelBuilder.Entity<Special>()
+                        .HasMany(s => s.Movies)
+                        .WithMany(m => m.Specials)
+                        .Map(m => {
+                            m.ToTable("MovieSpecials");
+                            m.MapLeftKey("SpecialId");
+                            m.MapRightKey("MovieId");
+                        });
+
+            //-----------------------------------------------------------------//
+
+            // Movie <--> Director link
+            modelBuilder.Entity<Person>()
+                        .HasMany(p => p.MoviesAsDirector)
+                        .WithMany(m => m.Directors)
+                        .Map(m => {
+                            m.ToTable("MovieDirectors");
+                            m.MapLeftKey("DirectorId");
+                            m.MapRightKey("MovieId");
+                        });
+
+            // Movie <--> Writer link
+            modelBuilder.Entity<Person>()
+                        .HasMany(p => p.MoviesAsWriter)
+                        .WithMany(m => m.Writers)
+                        .Map(m => {
+                            m.ToTable("MovieWriters");
+                            m.MapLeftKey("WriterId");
+                            m.MapRightKey("MovieId");
+                        });
+
+            // Movie <--> Actor link
+            modelBuilder.Entity<Person>()
+                        .HasMany(p => p.MoviesAsWriter)
+                        .WithMany(m => m.Writers)
+                        .Map(m => {
+                            m.ToTable("MovieWriters");
+                            m.MapLeftKey("WriterId");
+                            m.MapRightKey("MovieId");
+                        });
+
+            //----------------------------------------------------//
 
             //Join tabela za Movie <--> Country
             modelBuilder.Entity<Movie>()
@@ -40,21 +91,20 @@ namespace Common.Models.DB.MovieVo {
                             m.MapRightKey("StudioId");
                         });
 
-            Database.SetInitializer(new SeedInitializer());
+            //Database.SetInitializer(new SeedInitializer());
 
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<Movie> Movie { get; set; }
-        public DbSet<Audio> Audio { get; set; }
-        public DbSet<File> File { get; set; }
-        public DbSet<Video> Video { get; set; }
+        public DbSet<Movie> Movies { get; set; }
+        public DbSet<Audio> AudioDetails { get; set; }
+        public DbSet<File> Files { get; set; }
+        public DbSet<Video> VideoDetails { get; set; }
         public DbSet<Art> Art { get; set; }
         public DbSet<Rating> Ratings { get; set; }
-        public DbSet<Plot> Plot { get; set; }
-        public DbSet<Person> Person { get; set; }
-        public DbSet<Genre> Genre { get; set; }
-        public DbSet<Certification> Certification { get; set; }
-        public DbSet<MoviePerson> MoviePerson { get; set; }
+        public DbSet<Plot> Plots { get; set; }
+        public DbSet<Genre> Genres { get; set; }
+        public DbSet<Certification> Certifications { get; set; }
+        public DbSet<Person> People { get; set; }
     }
 }

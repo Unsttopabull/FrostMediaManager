@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Common.Models.Jukebox {
+namespace Common.Models.DB.Jukebox {
 
     [Table("movies")]
     public class XjbMovie {

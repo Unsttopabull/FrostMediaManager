@@ -20,6 +20,12 @@ namespace Common.Models.DB.XBMC {
             const string FK_MOVIE = "idMovie";
 
             modelBuilder.Entity<XbmcFile>()
+                        .HasOptional(f => f.Bookmark)
+                        .WithRequired(b => b.File)
+                        .Map(m => m.MapKey("idFile"));
+
+            // Movie <--> File
+            modelBuilder.Entity<XbmcFile>()
                         .HasRequired(f => f.Movie)
                         .WithRequiredPrincipal(m => m.File)
                         .Map(m => m.MapKey("idFile"));

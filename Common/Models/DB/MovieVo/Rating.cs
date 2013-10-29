@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Common.Models.DB.MovieVo {
 
-    public class Rating{
+    public class Rating {
 
         public Rating(string critic, double value) {
             Critic = critic;

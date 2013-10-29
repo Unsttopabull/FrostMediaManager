@@ -31,7 +31,8 @@ namespace ObdelajProdatke {
             ChangeConnectionString(dbLoc);
 
             XbmcContainer xc = new XbmcContainer();
-            var z = xc.Files.Select(f => new {f.FileNameString, f.Movie.Title});
+            var z = xc.Files.Where(f => f.Bookmark != null)
+                            .Select(f => new {f.FileNameString, f.Bookmark.Id});
 
             //var k = from sd in xc.StreamDetails.OfType<XbmcSubtitleDetails>()
             //        where sd.SubtitleLanguage != null

@@ -9,6 +9,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Common.Models.DB.MovieVo;
+using Common.Models.DB.MovieVo.Arts;
 using Common.Models.DB.XBMC;
 using File = Common.Models.DB.MovieVo.File;
 
@@ -19,6 +20,8 @@ namespace Common.Models.XML.XBMC {
     [XmlRoot("movie", Namespace = "", IsNullable = false)]
     public class XbmcXmlMovie {
         private const string SEPARATOR = " / ";
+        private const string CERTIFICATIONS_SEPARATOR = ":";
+        private const string STACK_FILE_SEPARATOR = " , ";
 
         public XbmcXmlMovie() {
             FileInfo = new XbmcXmlFileInfo();
@@ -97,7 +100,7 @@ namespace Common.Models.XML.XBMC {
                 int numCerts = countryCerts.Length;
                 XbmcXmlCertification[] xbmcCerts = new XbmcXmlCertification[numCerts];
                 for (int i = 0; i < numCerts; i++) {
-                    string[] kvp = countryCerts[i].Split(new[] { ":" }, StringSplitOptions.RemoveEmptyEntries);
+                    string[] kvp = countryCerts[i].Split(new[] { CERTIFICATIONS_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
 
                     if (kvp.Length < 2) {
                         continue;
@@ -113,7 +116,7 @@ namespace Common.Models.XML.XBMC {
                 StringBuilder sb = new StringBuilder();
 
                 for (int i = 0; i < numCerts; i++) {
-                    sb.Append(value[i].Country + ":" + value[i].Rating);
+                    sb.Append(value[i].Country + CERTIFICATIONS_SEPARATOR + value[i].Rating);
                     if (i < numCerts - 1) {
                         sb.Append(SEPARATOR);
                     }
@@ -296,6 +299,22 @@ namespace Common.Models.XML.XBMC {
 
         #region Utility Functions
 
+        public ICollection<Person> GetActors() {
+            return Actors.ConvertArray<Person, XbmcXmlActor>();
+        }
+
+        private ICollection<Person> GetWriters() {
+            return new HashSet<Person>(from c in Credits
+                                       where !string.IsNullOrEmpty(c)
+                                       select new Person(c));
+        }
+
+        private ICollection<Person> GetDirectors() {
+            return new HashSet<Person>(from d in Directors
+                                       where !string.IsNullOrEmpty(d)
+                                       select new Person(d));
+        }
+
         public ICollection<File> GetFiles() {
             ICollection<File> files = new HashSet<File>();
             if (string.IsNullOrEmpty(FilenameAndPath)) {
@@ -306,7 +325,7 @@ namespace Common.Models.XML.XBMC {
 
             if (fn.StartsWith("stack://")) {
                 fn = fn.Replace("stack://", "");
-                foreach (string fileName in fn.Split(new[] {','}, StringSplitOptions.RemoveEmptyEntries)) {
+                foreach (string fileName in fn.Split(new[] { STACK_FILE_SEPARATOR }, StringSplitOptions.RemoveEmptyEntries)) {
                     AddFile(fileName.Trim().ToWinPath(), files);
                 }
             }
@@ -352,42 +371,35 @@ namespace Common.Models.XML.XBMC {
                : new HashSet<Certification>();
         }
 
-        public ICollection<MoviePerson> GetCast() {
-            ICollection<MoviePerson> moviePersons = new HashSet<MoviePerson>();
-
-            //add actors (convert XbmcActor to Actor)
-            foreach (XbmcXmlActor actor in Actors) {
-                moviePersons.Add(new MoviePerson((Actor)actor));
-            }
-
-            //Add credited writers
-            foreach (string writer in Credits) {
-                moviePersons.Add(new MoviePerson(writer, "writer"));
-            }
-
-            foreach (string director in Directors) {
-                moviePersons.Add(new MoviePerson(director, "director"));
-            }
-
-            return moviePersons;
-        }
-
         public ICollection<Art> GetArt() {
             ICollection<Art> art = new HashSet<Art>();
 
             //add all Thumbnails/Posters/Covers
             foreach (XbmcXmlThumb thumb in Thumbs) {
-                art.Add(new Art(thumb.Aspect, thumb.URL));
+                Art a = null;
 
-                //if preview (small copy) exists add it aswell
-                if (!string.IsNullOrEmpty(thumb.Preview)) {
-                    art.Add(new Art(thumb.Aspect + " preview", thumb.Preview));
+                switch (thumb.Aspect.ToLower()) {
+                    case "poster":
+                        a = new Fanart(thumb.URL);
+                        break;
+                    case "cover":
+                        a = new Cover(thumb.URL);
+                        break;
+                }
+
+                if (a != null) {
+                    //if preview (small copy) exists add it aswell
+                    if (!string.IsNullOrEmpty(thumb.Preview)) {
+                        a.Preview = thumb.Preview;
+                    }
+
+                    art.Add(a);
                 }
             }
 
             //add fanart
             foreach (XbmcXmlThumb thumb in Fanart.Thumbs) {
-                art.Add(new Art("fanart", thumb.URL));
+                art.Add(new Fanart(thumb.URL));
             }
 
             return art;
@@ -424,17 +436,17 @@ namespace Common.Models.XML.XBMC {
         public static XbmcXmlMovie Load(string xmlLocation) {
             XmlSerializer xs = new XmlSerializer(typeof(XbmcXmlMovie));
 
-            return (XbmcXmlMovie)xs.Deserialize(new XmlTextReader(xmlLocation));            
+            return (XbmcXmlMovie)xs.Deserialize(new XmlTextReader(xmlLocation));
         }
 
         public static Movie LoadAsMovie(string xmlLocation) {
-            return (Movie) Load(xmlLocation);
+            return (Movie)Load(xmlLocation);
         }
         #endregion
 
         #region Conversion Functions
         public Movie ToMovie() {
-            return (Movie) this;
+            return (Movie)this;
         }
 
         public XbmcMovie ToXbmcMovie() {
@@ -454,7 +466,7 @@ namespace Common.Models.XML.XBMC {
                 RatingAverage = mx.Rating,
                 ReleaseDate = mx.ReleaseDate,
                 Runtime = mx.RuntimeInSeconds,
-                Set = mx.Set,
+                Set = new Set(mx.Set),
                 SortTitle = mx.SortTitle,
                 Title = mx.Title,
                 TmdbID = mx.TmdbId,
@@ -463,7 +475,9 @@ namespace Common.Models.XML.XBMC {
                 Watched = mx.Watched,
                 Year = mx.Year,
                 Art = mx.GetArt(),
-                Cast = mx.GetCast(),
+                Actors = mx.GetActors(),
+                Directors = mx.GetDirectors(),
+                Writers = mx.GetWriters(),
                 Genres = Genre.GetFromNames(mx.Genres),
                 Studios = Studio.GetFromNames(mx.Studios),
                 Countries = Country.GetFromNames(mx.Countries),
@@ -475,6 +489,7 @@ namespace Common.Models.XML.XBMC {
                 Files = mx.GetFiles()
             };
             mv.Plot.Add(new Plot(mx.Plot, mx.Outline, mx.Tagline, null));
+
 
             return mv;
         }

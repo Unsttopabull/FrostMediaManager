@@ -78,7 +78,7 @@ namespace WPF_Jukebox {
                 return;
             }
 
-            var movieFiles = _xjb.Movie.Where(m => m.Id == mv.Id).Select(m => m.Files).FirstOrDefault();
+            var movieFiles = _xjb.Movies.Where(m => m.Id == mv.Id).Select(m => m.Files).FirstOrDefault();
             if (movieFiles != null) {
                 FileVo file = movieFiles.FirstOrDefault();
                 if (file != null) {

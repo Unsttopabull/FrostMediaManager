@@ -6,6 +6,9 @@ namespace Common.Models.DB.MovieVo {
     public class Video {
 
         public Video(string codec, int width, int height) {
+            Movie = new Movie();
+            File = new File();
+
             Codec = codec;
 
             if (height > 0) {
@@ -51,6 +54,33 @@ namespace Common.Models.DB.MovieVo {
         /// <example>720p 1080p 720i 1080i PAL HDTV INTERLACED LETTERBOX</example>
         public string Format { get; set; }
 
+        public long? FPS { get; set; }
+
+        /// <summary>Gets or sets the video bit rate mode.</summary>
+        /// <value>The bit rate mode</value>
+        /// <example>Constant, Variable</example>
+        public string BitRateMode { get; set; }
+
+        /// <summary>Gets or sets the video sampling rate.</summary>
+        /// <value>The sampling rate in KHz.</value>
+        public long SamplingRate { get; set; }
+
+        /// <summary>Gets or sets the video bit depth.</summary>
+        /// <value>The video depth in bits.</value>
+        public long BitDepth { get; set; }
+
+        public string CompressionMode { get; set; }
+
+        /// <summary>Gets or sets the video duration.</summary>
+        /// <value>The video duration in miliseconds.</value>
+        public long Duration { get; set; }
+
+        /// <example>Progressive</example>
+        public string ScanType { get; set; }
+
+        ///<example>YUV</example>
+        public string ColorSpace { get; set; }
+
         public string Codec { get; set; }
 
         public double? Aspect { get; set; }
@@ -60,6 +90,11 @@ namespace Common.Models.DB.MovieVo {
         public int? Height { get; set; }
 
         public long MovieId { get; set; }
+
+        public long FileId { get; set; }
+
+        [ForeignKey("FileId")]
+        public virtual File File { get; set; }
 
         [Required]
         [ForeignKey("MovieId")]

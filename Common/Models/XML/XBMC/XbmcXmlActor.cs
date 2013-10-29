@@ -31,8 +31,8 @@ namespace Common.Models.XML.XBMC {
         [XmlElement("thumb", Form = XmlSchemaForm.Unqualified, DataType = "anyURI")]
         public string Thumb { get; set; }
 
-        public static explicit operator Actor(XbmcXmlActor act) {
-            return new Actor(
+        public static explicit operator Person(XbmcXmlActor act) {
+            return new Person(
                 string.IsNullOrEmpty(act.Name) ? null : act.Name,
                 string.IsNullOrEmpty(act.Role) ? null : act.Role,
                 act.Thumb

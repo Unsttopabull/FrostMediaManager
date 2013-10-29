@@ -4,14 +4,16 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Linq;
+using Common.Models.DB.Jukebox;
+using Common.Models.DB.MovieVo.Arts;
 using Common.Models.DB.XBMC;
-using Common.Models.Jukebox;
 using Common.Models.XML.Jukebox;
 using Common.Models.XML.XBMC;
 
 namespace Common.Models.DB.MovieVo {
 
     public class Movie {
+        private const string SEPARATOR = " / ";
 
         public Movie() {
             // ReSharper disable DoNotCallOverridableMethodsInConstructor
@@ -20,12 +22,16 @@ namespace Common.Models.DB.MovieVo {
             Plot = new HashSet<Plot>();
             Art = new HashSet<Art>();
             Certifications = new HashSet<Certification>();
-            Cast = new HashSet<MoviePerson>();
             Genres = new HashSet<Genre>();
             Videos = new HashSet<Video>();
             Files = new HashSet<File>();
             Countries = new HashSet<Country>();
             Studios = new HashSet<Studio>();
+            Specials = new HashSet<Special>();
+
+            Directors = new HashSet<Person>();
+            Writers = new HashSet<Person>();
+            Actors = new HashSet<Person>();
             // ReSharper restore DoNotCallOverridableMethodsInConstructor
         }
 
@@ -34,7 +40,6 @@ namespace Common.Models.DB.MovieVo {
 
         [ForeignKey("MainPlot")]
         public long MainPlotID { get; set; }
-        public Plot MainPlot { get; set; }
 
         public string Title { get; set; }
 
@@ -54,9 +59,7 @@ namespace Common.Models.DB.MovieVo {
 
         public string Trailer { get; set; }
 
-        public int Top250 { get; set; }
-
-        public string Specials { get; set; }
+        public int? Top250 { get; set; }
 
         public long? Runtime { get; set; }
 
@@ -64,15 +67,13 @@ namespace Common.Models.DB.MovieVo {
 
         public int PlayCount { get; set; }
 
-        public int? FPS { get; set; }
-
         public double? RatingAverage { get; set; }
 
         public string ImdbID { get; set; }
 
         public string TmdbID { get; set; }
 
-        public string Set { get; set; }
+        public long? SetId { get; set; }
 
         #region Utility Functions
 
@@ -80,43 +81,31 @@ namespace Common.Models.DB.MovieVo {
 
         public string GetFileSizeFormatted() { return GetFileSizeSum().FormatFileSizeAsString(); }
 
-        public string GetGenreNames() { return string.Join(" / ", Genres.Select(g => g.Name)); }
-
-        public Person[] GetDirectors() {
-            return Cast.Where(mp => mp.Job.Equals("director", StringComparison.OrdinalIgnoreCase))
-                       .Select(mp => mp.Person)
-                       .ToArray();
-        }
+        public string GetGenreNames() { return string.Join(SEPARATOR, Genres.Select(g => g.Name)); }
 
         public string GetDirectorNames() {
-            IEnumerable<string> directors = Cast.Where(mp => mp.Job.Equals("director", StringComparison.OrdinalIgnoreCase)).Select(mp => mp.Person.Name);
-            string directorsJoin = string.Join(" / ", directors);
+            IEnumerable<string> directors = Directors.Select(d => d.Name);
+            string directorsJoin = string.Join(SEPARATOR, directors);
             return string.IsNullOrEmpty(directorsJoin)
                            ? @"N\A"
                            : directorsJoin;
         }
 
         public string GetCoverPath() {
-            Art cover = Art.FirstOrDefault(art => art.Type == "Cover");
+            Cover cover = Art.OfType<Cover>().FirstOrDefault();
             return (cover != null)
                            ? cover.Path
                            : null;
         }
 
-        public Actor[] GetActors() {
-            return Cast.Where(mp => mp.Job.Equals("actor", StringComparison.OrdinalIgnoreCase))
-                       .Select(mp => mp.Person as Actor)
-                       .ToArray();
-        }
-
-        public string GetStudioNamesFormatted() { return String.Join(" / ", Studios.Select(stud => stud.Name)); }
+        public string GetStudioNamesFormatted() { return String.Join(SEPARATOR, Studios.Select(stud => stud.Name)); }
 
         public string[] GetStudioNames() {
             return Studios.Select(s => s.Name).ToArray();
         }
 
         public XjbXmlActor[] GetXjbXmlActors() {
-            Actor[] actors = GetActors();
+            Person[] actors = Actors.ToArray();
             int numActors = actors.Length;
 
             XjbXmlActor[] xmlActors = new XjbXmlActor[numActors];
@@ -128,6 +117,11 @@ namespace Common.Models.DB.MovieVo {
         #endregion
 
         #region Relation tables/properties
+
+        public virtual Plot MainPlot { get; set; }
+
+        [ForeignKey("SetId")]
+        public virtual Set Set { get; set; }
 
         public virtual ICollection<Subtitle> Subtitles { get; set; }
         public virtual ICollection<Country> Countries { get; set; }
@@ -141,17 +135,22 @@ namespace Common.Models.DB.MovieVo {
         public virtual ICollection<Plot> Plot { get; set; }
         public virtual ICollection<Art> Art { get; set; }
         public virtual ICollection<Certification> Certifications { get; set; }
-        public virtual ICollection<MoviePerson> Cast { get; set; }
 
+        [InverseProperty("MoviesAsWriter")]
+        public virtual ICollection<Person> Writers { get; set; }
+
+        [InverseProperty("MoviesAsDirector")]
+        public virtual ICollection<Person> Directors { get; set; }
+
+        [InverseProperty("MoviesAsActor")]
+        public virtual ICollection<Person> Actors { get; set; }
+
+        public virtual ICollection<Special> Specials { get; set; }
         public virtual ICollection<Genre> Genres { get; set; }
 
         #endregion
 
         #region Add Functions
-        public void AddDirector(string name) {
-            Cast.Add(new MoviePerson(name, "director"));
-        }
-
         public void AddGenres(string[] genreNames) {
             if (genreNames == null) {
                 return;
@@ -162,13 +161,13 @@ namespace Common.Models.DB.MovieVo {
             }
         }
 
-        public void AddActors(Actor[] actors) {
+        public void AddActors(Person[] actors) {
             if (actors == null) {
                 return;
             }
 
-            foreach (Actor actor in actors) {
-                Cast.Add(new MoviePerson(actor));
+            foreach (Person actor in actors) {
+                Actors.Add(actor);
             }
         }
 
@@ -177,8 +176,8 @@ namespace Common.Models.DB.MovieVo {
                 return;
             }
 
-            foreach (Actor actor in actors) {
-                Cast.Add(new MoviePerson(actor));
+            foreach (Person actor in actors) {
+                Actors.Add(actor);
             }
         }
 
@@ -232,7 +231,7 @@ namespace Common.Models.DB.MovieVo {
         }
         #endregion
 
-        #region ConversionOperators
+        #region Conversion Operators
         public static explicit operator XjbMovie(Movie movie) {
             throw new NotImplementedException();
         }

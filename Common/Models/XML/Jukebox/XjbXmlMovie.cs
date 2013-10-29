@@ -11,8 +11,9 @@ namespace Common.Models.XML.Jukebox {
     /// <remarks/>
     [Serializable]
     [XmlType(AnonymousType = true)]
-    [XmlRoot(Namespace = "", IsNullable = false, ElementName = "movie")]
+    [XmlRoot("movie", Namespace = "", IsNullable = false)]
     public class XjbXmlMovie {
+        private const string SEPARATOR = " / ";
 
         public XjbXmlMovie() {
             Votes = "";
@@ -72,7 +73,7 @@ namespace Common.Models.XML.Jukebox {
                 }
 
                 //certifications are saved in a string separated by ' / '
-                string[] certs = CertificationsString.Split(new[] { " / " }, StringSplitOptions.RemoveEmptyEntries);
+                string[] certs = CertificationsString.Split(new[] { SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
                 Certification[] certsArr = new Certification[certs.Length];
 
                 for (int i = 0; i < certs.Length; i++) {
@@ -100,7 +101,7 @@ namespace Common.Models.XML.Jukebox {
                         sb.Append(certifications[i].Rating);
 
                         if (i < certLen - 1) {
-                            sb.Append(" / ");
+                            sb.Append(SEPARATOR);
                         }
                     }
                     CertificationsString = sb.ToString();
@@ -109,7 +110,7 @@ namespace Common.Models.XML.Jukebox {
             }
         }
 
-        /// <remarks/>
+        /// <summary>genres are saved in a single string with genres divided by " / "</summary>
         /// <example>Drama / Thriller</example>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("genre", Form = XmlSchemaForm.Unqualified)]
@@ -119,11 +120,11 @@ namespace Common.Models.XML.Jukebox {
         public string[] Genres {
             get {
                 return !string.IsNullOrEmpty(GenreString)
-                               ? GenreString.Split(new[] { " / " }, StringSplitOptions.RemoveEmptyEntries)
+                               ? GenreString.Split(new[] { SEPARATOR }, StringSplitOptions.RemoveEmptyEntries)
                                : null;
             }
             set {
-                GenreString = string.Join(" / ", value);
+                GenreString = string.Join(SEPARATOR, value);
             }
         }
 
@@ -232,9 +233,8 @@ namespace Common.Models.XML.Jukebox {
 
             mv.Plot.Add(new Plot(xmlMovie.Plot, xmlMovie.Outline, xmlMovie.Tagline, null));
 
-            mv.AddDirector(xmlMovie.Director);
+            mv.Directors.Add(new Person(xmlMovie.Director));
 
-            //genres are saved in a single string with genres divided by " / "
             mv.AddGenres(xmlMovie.Genres);
             mv.AddActors(xmlMovie.Actors);
 

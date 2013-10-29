@@ -15,12 +15,12 @@ namespace Common.Models.DB.XBMC {
 
         public XbmcFile() {
             Path = new XbmcPath();
-            //Movie = new XbmcMovie();
+            Movie = new XbmcMovie();
+            Bookmark = new XbmcBookmark();
             StreamDetails = new HashSet<XbmcStreamDetails>();
         }
 
-        public XbmcFile(string dateAdded, string lastPlayed, long? playCount)
-            : this() {
+        public XbmcFile(string dateAdded, string lastPlayed, long? playCount) : this() {
             DateAdded = dateAdded;
             LastPlayed = lastPlayed;
             PlayCount = playCount;
@@ -87,7 +87,7 @@ namespace Common.Models.DB.XBMC {
 
         public virtual XbmcPath Path { get; set; }
 
-        //public virtual XbmcBookmark Bookmark { get; set; }
+        public virtual XbmcBookmark Bookmark { get; set; }
 
         public virtual ICollection<XbmcStreamDetails> StreamDetails { get; set; }
 
@@ -95,7 +95,7 @@ namespace Common.Models.DB.XBMC {
 
         public string ToSmbPath(string fn) {
             if (fn.StartsWith(@"\\")) {
-
+                return "smb://" + fn.Remove(0, 2);
             }
             return fn;
         }

@@ -56,6 +56,12 @@
   <ItemGroup>
     <Compile Include="Extensions.cs" />
     <Compile Include="Models\DB\Jukebox\XjbMovie.cs" />
+    <Compile Include="Models\DB\MovieVo\Actor.cs" />
+    <Compile Include="Models\DB\MovieVo\Arts\Cover.cs" />
+    <Compile Include="Models\DB\MovieVo\Arts\Fanart.cs" />
+    <Compile Include="Models\DB\MovieVo\Arts\Poster.cs" />
+    <Compile Include="Models\DB\MovieVo\Set.cs" />
+    <Compile Include="Models\DB\MovieVo\Special.cs" />
     <Compile Include="Models\DB\XBMC\Actor\XbmcActor.cs" />
     <Compile Include="Models\DB\XBMC\Actor\XbmcMovieActor.cs">
       <SubType>Code</SubType>
@@ -76,15 +82,13 @@
     <Compile Include="Models\DB\Jukebox\XjbPerson.cs" />
     <Compile Include="Models\XML\Jukebox\XjbXmlMovie.cs" />
     <Compile Include="Models\XML\Jukebox\XjbXmlActor.cs" />
-    <Compile Include="Models\DB\MovieVo\Actor.cs" />
-    <Compile Include="Models\DB\MovieVo\Art.cs" />
+    <Compile Include="Models\DB\MovieVo\Arts\Art.cs" />
     <Compile Include="Models\DB\MovieVo\Audio.cs" />
     <Compile Include="Models\DB\MovieVo\Certification.cs" />
     <Compile Include="Models\DB\MovieVo\Country.cs" />
     <Compile Include="Models\DB\MovieVo\File.cs" />
     <Compile Include="Models\DB\MovieVo\Genre.cs" />
     <Compile Include="Models\DB\MovieVo\Movie.cs" />
-    <Compile Include="Models\DB\MovieVo\MoviePerson.cs" />
     <Compile Include="Models\DB\MovieVo\MovieVo.Context.cs" />
     <Compile Include="Models\DB\MovieVo\Person.cs" />
     <Compile Include="Models\DB\MovieVo\Plot.cs" />

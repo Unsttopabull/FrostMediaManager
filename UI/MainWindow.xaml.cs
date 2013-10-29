@@ -32,7 +32,7 @@ namespace WPF_Jukebox {
                 InitXjb();
 
                 Movies filmi = new Movies();
-                filmi.AddRange(_xjb.Movie.Select(movie => movie));
+                filmi.AddRange(_xjb.Movies.Select(movie => movie));
 
                 return filmi;
             }
