@@ -5,6 +5,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Common.Models.DB.MovieVo;
+using Common.Models.DB.MovieVo.People;
 
 namespace Common.Models.XML.Jukebox {
 

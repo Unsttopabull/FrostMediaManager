@@ -1,9 +1,19 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.ModelConfiguration;
 
 namespace Common.Models.DB.MovieVo.Arts {
 
     public class Art {
+
+        public class ArtConfiguration : EntityTypeConfiguration<Art> {
+
+            public ArtConfiguration() {
+                Map<Cover>(m => m.Requires("Type").HasValue(1));
+                Map<Poster>(m => m.Requires("Type").HasValue(2));
+                Map<Fanart>(m => m.Requires("Type").HasValue(3));
+            }
+        }
 
         public Art(string path) {
             Path = path;

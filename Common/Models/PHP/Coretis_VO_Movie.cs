@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using Common.Models.DB.MovieVo;
 using Common.Models.DB.MovieVo.Arts;
-
+using Common.Models.DB.MovieVo.People;
 using CoretisMovie = Common.Models.PHP.Coretis_VO_Movie;
 using CoretisGenre = Common.Models.PHP.Coretis_VO_Genre;
 using CoretisPerson = Common.Models.PHP.Coretis_VO_Person;
@@ -232,16 +232,18 @@ namespace Common.Models.PHP {
 
         private static void CheckAddNewCast(CoretisMovie movie, Movie mov) {
             foreach (CoretisPerson cPerson in movie.personArr) {
-                Person person = new Person(cPerson.name);
 
-                if (string.Equals(cPerson.job, "actor", StringComparison.OrdinalIgnoreCase)) {
-                    person.Character = cPerson.character;
-                    mov.Actors.Add(person);
+                if (cPerson.job.OrdinalEquals("actor")) {
+                    Actor actor = new Actor(cPerson.name, null, cPerson.character);
+                    mov.Actors.Add(actor);
+                    continue;
                 }
-                else if (string.Equals(cPerson.job, "director", StringComparison.OrdinalIgnoreCase)) {
+
+                Person person = new Person(cPerson.name);
+                if (cPerson.job.OrdinalEquals("director")) {
                     mov.Directors.Add(person);
                 }
-                else if (string.Equals(cPerson.job, "writer", StringComparison.OrdinalIgnoreCase)) {
+                else if (cPerson.job.OrdinalEquals("writer")) {
                     mov.Writers.Add(person);
                 }
             }

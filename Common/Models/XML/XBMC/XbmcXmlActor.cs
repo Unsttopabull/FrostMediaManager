@@ -2,6 +2,7 @@
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Common.Models.DB.MovieVo;
+using Common.Models.DB.MovieVo.People;
 
 namespace Common.Models.XML.XBMC {
     /// <remarks/>
@@ -31,11 +32,11 @@ namespace Common.Models.XML.XBMC {
         [XmlElement("thumb", Form = XmlSchemaForm.Unqualified, DataType = "anyURI")]
         public string Thumb { get; set; }
 
-        public static explicit operator Person(XbmcXmlActor act) {
-            return new Person(
+        public static explicit operator Actor(XbmcXmlActor act) {
+            return new Actor(
                 string.IsNullOrEmpty(act.Name) ? null : act.Name,
-                string.IsNullOrEmpty(act.Role) ? null : act.Role,
-                act.Thumb
+                act.Thumb,
+                string.IsNullOrEmpty(act.Role) ? null : act.Role
             );
         }
     }

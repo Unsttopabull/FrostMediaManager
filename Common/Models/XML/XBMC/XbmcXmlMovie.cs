@@ -10,6 +10,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using Common.Models.DB.MovieVo;
 using Common.Models.DB.MovieVo.Arts;
+using Common.Models.DB.MovieVo.People;
 using Common.Models.DB.XBMC;
 using File = Common.Models.DB.MovieVo.File;
 
@@ -299,8 +300,8 @@ namespace Common.Models.XML.XBMC {
 
         #region Utility Functions
 
-        public ICollection<Person> GetActors() {
-            return Actors.ConvertArray<Person, XbmcXmlActor>();
+        public ICollection<Actor> GetActors() {
+            return Actors.ConvertArray<Actor, XbmcXmlActor>();
         }
 
         private ICollection<Person> GetWriters() {

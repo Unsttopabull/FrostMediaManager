@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using Common.Models.DB.Jukebox;
 using Common.Models.DB.MovieVo.Arts;
+using Common.Models.DB.MovieVo.People;
 using Common.Models.DB.XBMC;
 using Common.Models.XML.Jukebox;
 using Common.Models.XML.XBMC;
@@ -31,7 +32,9 @@ namespace Common.Models.DB.MovieVo {
 
             Directors = new HashSet<Person>();
             Writers = new HashSet<Person>();
-            Actors = new HashSet<Person>();
+            ActorsLink = new HashSet<MovieActor>();
+
+            Actors = new HashSet<Actor>();
             // ReSharper restore DoNotCallOverridableMethodsInConstructor
         }
 
@@ -105,7 +108,7 @@ namespace Common.Models.DB.MovieVo {
         }
 
         public XjbXmlActor[] GetXjbXmlActors() {
-            Person[] actors = Actors.ToArray();
+            Actor[] actors = Actors.ToArray();
             int numActors = actors.Length;
 
             XjbXmlActor[] xmlActors = new XjbXmlActor[numActors];
@@ -142,16 +145,25 @@ namespace Common.Models.DB.MovieVo {
         [InverseProperty("MoviesAsDirector")]
         public virtual ICollection<Person> Directors { get; set; }
 
-        [InverseProperty("MoviesAsActor")]
-        public virtual ICollection<Person> Actors { get; set; }
+        [InverseProperty("MoviesLink")]
+        public virtual ICollection<MovieActor> ActorsLink { get; set; }
 
         public virtual ICollection<Special> Specials { get; set; }
         public virtual ICollection<Genre> Genres { get; set; }
 
+        [NotMapped]
+        public ICollection<Actor> Actors {
+            get { return new HashSet<Actor>(ActorsLink.Select(ma => (Actor)ma)); }
+            set {
+                foreach (Actor actor in value) {
+                    ActorsLink.Add(new MovieActor(actor, actor.Character));
+                }
+            }
+        }
         #endregion
 
         #region Add Functions
-        public void AddGenres(string[] genreNames) {
+        public void AddGenres(IEnumerable<string> genreNames) {
             if (genreNames == null) {
                 return;
             }
@@ -161,22 +173,22 @@ namespace Common.Models.DB.MovieVo {
             }
         }
 
-        public void AddActors(Person[] actors) {
+        public void AddActors(IEnumerable<Actor> actors) {
             if (actors == null) {
                 return;
             }
 
-            foreach (Person actor in actors) {
+            foreach (Actor actor in actors) {
                 Actors.Add(actor);
             }
         }
 
-        public void AddActors(XjbXmlActor[] actors) {
+        public void AddActors(IEnumerable<XjbXmlActor> actors) {
             if (actors == null) {
                 return;
             }
 
-            foreach (Person actor in actors) {
+            foreach (Actor actor in actors) {
                 Actors.Add(actor);
             }
         }
@@ -255,6 +267,10 @@ namespace Common.Models.DB.MovieVo {
                 Title = movie.Title,
                 Year = movie.Year ?? 0,
                 Actors = movie.GetXjbXmlActors(),
+                //FileInfo
+                //MPAA
+                //Votes = 
+                //Credits =
             };
             return z;
         }

@@ -1,4 +1,5 @@
-﻿using System.Data.Entity.Core.Objects;
+﻿using System;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -51,6 +52,14 @@ namespace Common {
             StringBuilder sb = new StringBuilder(11);
             StrFormatByteSize(size, sb, sb.Capacity);
             return sb.ToString();
+        }
+
+        /// <summary>Check if strings match character by character ignoring case</summary>
+        /// <param name="lhs">string to compare</param>
+        /// <param name="rhs">string to compare with</param>
+        /// <returns></returns>
+        public static bool OrdinalEquals(this string lhs, string rhs) {
+            return string.Equals(lhs, rhs, StringComparison.OrdinalIgnoreCase);
         }
 
         public static Audio[] ToAudioArray(this XbmcXmlAudioInfo[] arr) {

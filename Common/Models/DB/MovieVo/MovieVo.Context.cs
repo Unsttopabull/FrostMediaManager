@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using Common.Models.DB.MovieVo.Arts;
+using Common.Models.DB.MovieVo.People;
 
 namespace Common.Models.DB.MovieVo {
 
@@ -10,86 +11,12 @@ namespace Common.Models.DB.MovieVo {
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
-
-            modelBuilder.Entity<Art>()
-                        .Map<Cover>(m => m.Requires("Type").HasValue(1))
-                        .Map<Poster>(m => m.Requires("Type").HasValue(2))
-                        .Map<Fanart>(m => m.Requires("Type").HasValue(3));
-
-            //---------------------------------------------------------------//
-
-            modelBuilder.Entity<Special>()
-                        .HasMany(s => s.Movies)
-                        .WithMany(m => m.Specials)
-                        .Map(m => {
-                            m.ToTable("MovieSpecials");
-                            m.MapLeftKey("SpecialId");
-                            m.MapRightKey("MovieId");
-                        });
-
-            //-----------------------------------------------------------------//
-
-            // Movie <--> Director link
-            modelBuilder.Entity<Person>()
-                        .HasMany(p => p.MoviesAsDirector)
-                        .WithMany(m => m.Directors)
-                        .Map(m => {
-                            m.ToTable("MovieDirectors");
-                            m.MapLeftKey("DirectorId");
-                            m.MapRightKey("MovieId");
-                        });
-
-            // Movie <--> Writer link
-            modelBuilder.Entity<Person>()
-                        .HasMany(p => p.MoviesAsWriter)
-                        .WithMany(m => m.Writers)
-                        .Map(m => {
-                            m.ToTable("MovieWriters");
-                            m.MapLeftKey("WriterId");
-                            m.MapRightKey("MovieId");
-                        });
-
-            // Movie <--> Actor link
-            modelBuilder.Entity<Person>()
-                        .HasMany(p => p.MoviesAsWriter)
-                        .WithMany(m => m.Writers)
-                        .Map(m => {
-                            m.ToTable("MovieWriters");
-                            m.MapLeftKey("WriterId");
-                            m.MapRightKey("MovieId");
-                        });
-
-            //----------------------------------------------------//
-
-            //Join tabela za Movie <--> Country
-            modelBuilder.Entity<Movie>()
-                        .HasMany(m => m.Countries)
-                        .WithMany(c => c.Movies)
-                        .Map(m => {
-                            m.ToTable("MovieCountries");
-                            m.MapLeftKey("MovieId");
-                            m.MapRightKey("CountryId");
-                        });
-
-            //Join tabela za Movie <--> Genre
-            modelBuilder.Entity<Movie>()
-                        .HasMany(m => m.Genres)
-                        .WithMany(g => g.Movies)
-                        .Map(m => {
-                            m.ToTable("MovieGenres");
-                            m.MapLeftKey("MovieId");
-                            m.MapRightKey("GenreId");
-                        });
-
-            //Join tabela za Movie <--> Studio
-            modelBuilder.Entity<Movie>()
-                        .HasMany(m => m.Studios)
-                        .WithMany(g => g.Movies)
-                        .Map(m => {
-                            m.ToTable("MovieStudios");
-                            m.MapLeftKey("MovieId");
-                            m.MapRightKey("StudioId");
-                        });
+            modelBuilder.Configurations.Add(new Art.ArtConfiguration());
+            modelBuilder.Configurations.Add(new Special.SpecialConfiguration());
+            modelBuilder.Configurations.Add(new Person.PersonConfiguration());
+            modelBuilder.Configurations.Add(new Country.CountryConfiguration());
+            modelBuilder.Configurations.Add(new Studio.StudioConfiguration());
+            modelBuilder.Configurations.Add(new Genre.GenreConfiguration());
 
             //Database.SetInitializer(new SeedInitializer());
 

@@ -56,7 +56,8 @@
   <ItemGroup>
     <Compile Include="Extensions.cs" />
     <Compile Include="Models\DB\Jukebox\XjbMovie.cs" />
-    <Compile Include="Models\DB\MovieVo\Actor.cs" />
+    <Compile Include="Models\DB\MovieVo\People\Actor.cs" />
+    <Compile Include="Models\DB\MovieVo\People\MovieActor.cs" />
     <Compile Include="Models\DB\MovieVo\Arts\Cover.cs" />
     <Compile Include="Models\DB\MovieVo\Arts\Fanart.cs" />
     <Compile Include="Models\DB\MovieVo\Arts\Poster.cs" />
@@ -90,7 +91,7 @@
     <Compile Include="Models\DB\MovieVo\Genre.cs" />
     <Compile Include="Models\DB\MovieVo\Movie.cs" />
     <Compile Include="Models\DB\MovieVo\MovieVo.Context.cs" />
-    <Compile Include="Models\DB\MovieVo\Person.cs" />
+    <Compile Include="Models\DB\MovieVo\People\Person.cs" />
     <Compile Include="Models\DB\MovieVo\Plot.cs" />
     <Compile Include="Models\DB\MovieVo\Rating.cs" />
     <Compile Include="Models\DB\MovieVo\Studio.cs" />
