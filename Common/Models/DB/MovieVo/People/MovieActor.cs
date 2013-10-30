@@ -13,8 +13,12 @@ namespace Common.Models.DB.MovieVo.People {
         public MovieActor(string personName, string character) : this(new Person(personName), character) {
         }
 
+        public MovieActor(Actor actor) : this(actor, actor.Character) {
+        }
+
         [Key]
         public long Id { get; set; }
+
         public string Character { get; set; }
 
         [ForeignKey("MovieId")]

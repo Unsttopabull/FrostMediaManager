@@ -1,13 +1,29 @@
-﻿using ObdelajProdatke;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Common.Models.DB.MovieVo.People;
+using Common.Models.XML.Jukebox;
+using ObdelajProdatke;
 
 namespace Tester {
     class Program {
         static void Main() {
+            //XbmcParser xp = new XbmcParser();
+            ICollection<Actor> actors = new HashSet<Actor>();
+            actors.Add(new Actor("Alan Aalan", "http://imgur.com/123456", "Aimself"));
+            actors.Add(new Actor("Alan Balan", "http://imgur.com/123457", "Bimself"));
+            actors.Add(new Actor("Alan Calan", "http://imgur.com/123458", "Cimself"));
+            actors.Add(new Actor("Alan Dalan", "http://imgur.com/123459", "Dimself"));
+            actors.Add(new Actor("Alan Ealan", "http://imgur.com/123450", "Eimself"));
+            actors.Add(new Actor("Alan Falan", "http://imgur.com/123451", "Fimself"));
+
+            XjbXmlActor[] xjbXmlActors = actors.Select(actor => (XjbXmlActor) actor).ToArray();
+        }
+
+        public void TestXml() {
             //XmlSerializer xs = new XmlSerializer(typeof(XbmcXmlMovie));
             //XbmcXmlMovie deserialize = (XbmcXmlMovie) xs.Deserialize(new XmlTextReader(@"C:\Users\Martin\Desktop\VIDEO_TS.nfo"));//@"E:\Torrenti\FILMI\Anna.Karenina (2012)\VIDEO_TS\VIDEO_TS.nfo"));
 
             //Movie movieFromXml = XjbXmlMovie.LoadAsMovie(@"C:\Users\Martin\Desktop\XJB\xml\50.50.2011.DVDScr.XviD-playXD_xjb.xml");
-            XbmcParser xp = new XbmcParser();
 
             //movie mv = new movie();
             //mv.actor = new[] {
@@ -71,7 +87,7 @@ namespace Tester {
             //};
 
             //XmlSerializer xs = new XmlSerializer(typeof(movie));
-            //xs.Serialize(new XmlIndentedTextWriter("test.xml"), mv);
+            //xs.Serialize(new XmlIndentedTextWriter("test.xml"), mv);            
         }
     }
 }

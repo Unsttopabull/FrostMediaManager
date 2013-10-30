@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using Common.Models.DB.MovieVo;
 
 namespace Common.Models.XML.XBMC {
     /// <remarks/>
@@ -25,5 +26,10 @@ namespace Common.Models.XML.XBMC {
         /// <remarks/>
         [XmlElement("longlanguage", Form = XmlSchemaForm.Unqualified)]
         public string LongLanguage { get; set; }
+
+
+        public static explicit operator Subtitle(XbmcXmlSubtitleInfo subtitle) {
+            return new Subtitle(subtitle.LongLanguage ?? subtitle.Language);
+        }
     }
 }

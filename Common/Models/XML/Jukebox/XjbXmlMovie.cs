@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 using System.Xml;
@@ -186,7 +187,6 @@ namespace Common.Models.XML.Jukebox {
         [XmlElement("fileinfo", Form = XmlSchemaForm.Unqualified)]
         public string Fileinfo { get; set; }
 
-
         #region Conversion Functions
         public Movie ToMovie() {
             return (Movie)this;
@@ -223,7 +223,7 @@ namespace Common.Models.XML.Jukebox {
                 OriginalTitle = xmlMovie.OriginalTitle,
                 Year = xmlMovie.Year,
                 RatingAverage = xmlMovie.Rating,
-                Certifications = xmlMovie.Certifications,
+                Certifications = new HashSet<Certification>(xmlMovie.Certifications),
                 ImdbID = xmlMovie.ID,
                 Runtime = runtimeInSec
             };
@@ -233,11 +233,12 @@ namespace Common.Models.XML.Jukebox {
             }
 
             mv.Plot.Add(new Plot(xmlMovie.Plot, xmlMovie.Outline, xmlMovie.Tagline, null));
-
             mv.Directors.Add(new Person(xmlMovie.Director));
+            mv.Genres.UnionWith(Genre.GetFromNames(xmlMovie.Genres));
 
-            mv.AddGenres(xmlMovie.Genres);
-            mv.AddActors(xmlMovie.Actors);
+            if (xmlMovie.Actors != null) {
+                mv.Actors = xmlMovie.Actors.ToHashSet<Actor, XjbXmlActor>();
+            }
 
             return mv;
         }

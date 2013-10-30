@@ -78,6 +78,47 @@ namespace Common.Models.DB.MovieVo {
 
         public long? SetId { get; set; }
 
+        #region Relation tables/properties
+
+        public virtual Plot MainPlot { get; set; }
+
+        [ForeignKey("SetId")]
+        public virtual Set Set { get; set; }
+
+        public virtual HashSet<Subtitle> Subtitles { get; set; }
+        public virtual HashSet<Country> Countries { get; set; }
+        public virtual HashSet<Studio> Studios { get; set; }
+
+        public virtual HashSet<Video> Videos { get; set; }
+        public virtual HashSet<File> Files { get; set; }
+
+        public virtual HashSet<Audio> Audio { get; set; }
+        public virtual HashSet<Rating> Ratings { get; set; }
+        public virtual HashSet<Plot> Plot { get; set; }
+        public virtual HashSet<Art> Art { get; set; }
+        public virtual HashSet<Certification> Certifications { get; set; }
+
+        [InverseProperty("MoviesAsWriter")]
+        public virtual HashSet<Person> Writers { get; set; }
+
+        [InverseProperty("MoviesAsDirector")]
+        public virtual HashSet<Person> Directors { get; set; }
+
+        [InverseProperty("MoviesLink")]
+        public virtual HashSet<MovieActor> ActorsLink { get; set; }
+
+        public virtual HashSet<Special> Specials { get; set; }
+        public virtual HashSet<Genre> Genres { get; set; }
+
+        [NotMapped]
+        public HashSet<Actor> Actors {
+            get { return new HashSet<Actor>(ActorsLink.Select(ma => (Actor)ma)); }
+            set {
+                ActorsLink.UnionWith(value.Select(a => new MovieActor(a)));
+            }
+        }
+        #endregion
+
         #region Utility Functions
 
         public long GetFileSizeSum() { return Files.Where(f => f.Size != null).Sum(f => f.Size).Value; }
@@ -101,98 +142,17 @@ namespace Common.Models.DB.MovieVo {
                            : null;
         }
 
-        public string GetStudioNamesFormatted() { return String.Join(SEPARATOR, Studios.Select(stud => stud.Name)); }
+        public string GetStudioNamesFormatted() {
+            return String.Join(SEPARATOR, Studios.Select(stud => stud.Name));
+        }
 
         public string[] GetStudioNames() {
             return Studios.Select(s => s.Name).ToArray();
         }
 
         public XjbXmlActor[] GetXjbXmlActors() {
-            Actor[] actors = Actors.ToArray();
-            int numActors = actors.Length;
-
-            XjbXmlActor[] xmlActors = new XjbXmlActor[numActors];
-            for (int i = 0; i < numActors; i++) {
-                xmlActors[i] = (XjbXmlActor)actors[i];
-            }
-            return xmlActors;
+            return Actors.Select(a => (XjbXmlActor)a).ToArray();
         }
-        #endregion
-
-        #region Relation tables/properties
-
-        public virtual Plot MainPlot { get; set; }
-
-        [ForeignKey("SetId")]
-        public virtual Set Set { get; set; }
-
-        public virtual ICollection<Subtitle> Subtitles { get; set; }
-        public virtual ICollection<Country> Countries { get; set; }
-        public virtual ICollection<Studio> Studios { get; set; }
-
-        public virtual ICollection<Video> Videos { get; set; }
-        public virtual ICollection<File> Files { get; set; }
-
-        public virtual ICollection<Audio> Audio { get; set; }
-        public virtual ICollection<Rating> Ratings { get; set; }
-        public virtual ICollection<Plot> Plot { get; set; }
-        public virtual ICollection<Art> Art { get; set; }
-        public virtual ICollection<Certification> Certifications { get; set; }
-
-        [InverseProperty("MoviesAsWriter")]
-        public virtual ICollection<Person> Writers { get; set; }
-
-        [InverseProperty("MoviesAsDirector")]
-        public virtual ICollection<Person> Directors { get; set; }
-
-        [InverseProperty("MoviesLink")]
-        public virtual ICollection<MovieActor> ActorsLink { get; set; }
-
-        public virtual ICollection<Special> Specials { get; set; }
-        public virtual ICollection<Genre> Genres { get; set; }
-
-        [NotMapped]
-        public ICollection<Actor> Actors {
-            get { return new HashSet<Actor>(ActorsLink.Select(ma => (Actor)ma)); }
-            set {
-                foreach (Actor actor in value) {
-                    ActorsLink.Add(new MovieActor(actor, actor.Character));
-                }
-            }
-        }
-        #endregion
-
-        #region Add Functions
-        public void AddGenres(IEnumerable<string> genreNames) {
-            if (genreNames == null) {
-                return;
-            }
-
-            foreach (string genreName in genreNames) {
-                Genres.Add(genreName);
-            }
-        }
-
-        public void AddActors(IEnumerable<Actor> actors) {
-            if (actors == null) {
-                return;
-            }
-
-            foreach (Actor actor in actors) {
-                Actors.Add(actor);
-            }
-        }
-
-        public void AddActors(IEnumerable<XjbXmlActor> actors) {
-            if (actors == null) {
-                return;
-            }
-
-            foreach (Actor actor in actors) {
-                Actors.Add(actor);
-            }
-        }
-
         #endregion
 
         public override string ToString() {

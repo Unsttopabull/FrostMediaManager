@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity.Core.Objects;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using Common.Models.DB.MovieVo;
-using Common.Models.XML.XBMC;
+
+using File = Common.Models.DB.MovieVo.File;
 
 namespace Common {
     public enum DBSystem {
@@ -54,28 +56,28 @@ namespace Common {
             return sb.ToString();
         }
 
+        public static bool AddFile(this ICollection<File> files, string filename) {
+            try {
+                FileInfo fi = new FileInfo(filename);
+
+                files.Add(new File(fi.Name, fi.Extension, fi.FullName, fi.Length));
+            }
+            catch (Exception) {
+                return false;
+            }
+            return true;
+        }
+
+        public static HashSet<T> ToHashSet<T, T2>(this IEnumerable<T2> enumerable) where T : class {
+            return new HashSet<T>(enumerable.Select(a => a as T));
+        }
+
         /// <summary>Check if strings match character by character ignoring case</summary>
         /// <param name="lhs">string to compare</param>
         /// <param name="rhs">string to compare with</param>
         /// <returns></returns>
         public static bool OrdinalEquals(this string lhs, string rhs) {
             return string.Equals(lhs, rhs, StringComparison.OrdinalIgnoreCase);
-        }
-
-        public static Audio[] ToAudioArray(this XbmcXmlAudioInfo[] arr) {
-            return ConvertArray<Audio, XbmcXmlAudioInfo>(arr);
-        }
-
-        public static Video[] ToVideoArray(this XbmcXmlVideoInfo[] arr) {
-            return ConvertArray<Video, XbmcXmlVideoInfo>(arr);
-        }
-
-        public static Subtitle[] ToSubtitleArray(this XbmcXmlSubtitleInfo[] arr) {
-            return ConvertArray<Subtitle, XbmcXmlSubtitleInfo>(arr);
-        }
-
-        public static Certification[] ToCertificationArray(this XbmcXmlCertification[] arr) {
-            return ConvertArray<Certification, XbmcXmlCertification>(arr);
         }
 
         public static T CastAs<T>(this object obj) {
