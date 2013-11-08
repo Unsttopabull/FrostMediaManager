@@ -7,7 +7,7 @@ using System.Windows.Media;
 using Common;
 using Common.Models.DB.MovieVo;
 using ObdelajProdatke;
-using FileVo = Common.Models.DB.MovieVo.File;
+using FileVo = Common.Models.DB.MovieVo.Files.File;
 
 namespace WPF_Jukebox {
     /// <summary>

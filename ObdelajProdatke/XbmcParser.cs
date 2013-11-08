@@ -5,8 +5,6 @@ using System.Linq;
 using Common;
 using Common.Models.DB.MovieVo;
 using Common.Models.DB.XBMC;
-using Common.Models.DB.XBMC.StreamDetails;
-using Common.Models.XML.XBMC;
 
 namespace ObdelajProdatke {
     public class XbmcParser : MediaManager<XbmcMovie> {

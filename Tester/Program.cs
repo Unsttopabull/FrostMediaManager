@@ -1,29 +1,77 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Common.Models.DB.MovieVo.People;
-using Common.Models.XML.Jukebox;
-using ObdelajProdatke;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Xml;
+using System.Xml.Serialization;
+using Common;
+using Common.Models.DB.MovieVo;
+using Common.Models.XML.XBMC;
+using XbmcStreamDetails = Common.Models.XML.XBMC.XbmcStreamDetails;
 
 namespace Tester {
     class Program {
         static void Main() {
             //XbmcParser xp = new XbmcParser();
-            ICollection<Actor> actors = new HashSet<Actor>();
-            actors.Add(new Actor("Alan Aalan", "http://imgur.com/123456", "Aimself"));
-            actors.Add(new Actor("Alan Balan", "http://imgur.com/123457", "Bimself"));
-            actors.Add(new Actor("Alan Calan", "http://imgur.com/123458", "Cimself"));
-            actors.Add(new Actor("Alan Dalan", "http://imgur.com/123459", "Dimself"));
-            actors.Add(new Actor("Alan Ealan", "http://imgur.com/123450", "Eimself"));
-            actors.Add(new Actor("Alan Falan", "http://imgur.com/123451", "Fimself"));
-
-            XjbXmlActor[] xjbXmlActors = actors.Select(actor => (XjbXmlActor) actor).ToArray();
+            TestXml();
         }
 
-        public void TestXml() {
-            //XmlSerializer xs = new XmlSerializer(typeof(XbmcXmlMovie));
-            //XbmcXmlMovie deserialize = (XbmcXmlMovie) xs.Deserialize(new XmlTextReader(@"C:\Users\Martin\Desktop\VIDEO_TS.nfo"));//@"E:\Torrenti\FILMI\Anna.Karenina (2012)\VIDEO_TS\VIDEO_TS.nfo"));
+        private static void ParseCertString() {
+            const string CERT_STRING = @"USA:R / UK:15 / Switzerland:16 / Sweden:11 / Spain:18 / South Korea:18 / Singapore:M18 / Portugal:M / Philippines:R-18 / Peru:14 / Norway:15 / New Zealand:R16 / Netherlands:16 / Mexico:B15 / Malaysia:(Banned) / Japan:PG-12 / Ireland:18 / Iceland:16 / Hong Kong:III / Germany:12 / France:-12 / Finland:K-15 / Chile:14 / Canada:13+ / Brazil:16 / Australia:MA / Argentina:16";
+            Certification[] certificationsString = Certification.ParseCertificationsString(CERT_STRING);
+        }
+
+        public static void TestXml() {
+            XmlSerializer xs = new XmlSerializer(typeof(XbmcXmlMovie));
+            XbmcXmlMovie deserialize = (XbmcXmlMovie)xs.Deserialize(new XmlTextReader(@"C:\Users\Martin\Desktop\VIDEO_TS.nfo"));//@"E:\Torrenti\FILMI\Anna.Karenina (2012)\VIDEO_TS\VIDEO_TS.nfo"));
 
             //Movie movieFromXml = XjbXmlMovie.LoadAsMovie(@"C:\Users\Martin\Desktop\XJB\xml\50.50.2011.DVDScr.XviD-playXD_xjb.xml");
+
+            XbmcXmlMovie mv = new XbmcXmlMovie {
+                Actors = new List<XbmcXmlActor>(new[] {
+                    new XbmcXmlActor ("alal", "malal", "file://c:/cd.jph"),
+                    new XbmcXmlActor ("blal", "nalal", "file://c:/cd.jph"),
+                    new XbmcXmlActor ("clal", "oalal", "file://c:/cd.jph"),
+                    new XbmcXmlActor ("dlal", "palal", "file://c:/cd.jph")
+                }),
+                Aired = DateTime.Now,
+                CertificationsString = "US:PG-13",
+                Countries = new List<string>(new[] {"US", "Mexico", "Canada"}), 
+                Credits = new List<string>(new[] {"Alfred H", "Malibu C"}),
+                DateAdded = DateTime.Now.ToString("yyyy-dd.MM HH:ii:ss"),
+                Directors = new List<string>(new[] {"Alan C", "Norick B"}),
+                FilenameAndPath = "file://c:/naodoa.jpg", 
+                Genres = new List<string>(new[] {"Comedy", "Adventure", "Sci-Fi"}),
+                LastPlayed = DateTime.Now, 
+                MPAA = "Rated R", 
+                OriginalTitle = "Dunky",
+                Outline = "dsfljasdlf dsfa", 
+                PlayCount = 11111111, 
+                Plot = "fsjlakjglajslgjasdčlgjalsdjgdas", 
+                Premiered = DateTime.Now,
+                Rating = 9.9f, 
+                ReleaseDate = DateTime.Now,
+                RuntimeString = "105 min",
+                Set = "The Dunkys", 
+                SortTitle = "Dunky 1", 
+                Studios = new List<string>(new[] {"Fox", "WB"}),
+                Tagline = "The best dunky ever", 
+                Title = "Dunky", 
+                Top250 = 1,
+                Trailer = "plugin://langubga.cm",
+                Votes = 2000000.ToString(CultureInfo.InvariantCulture),
+                Watched = true,
+                Year = DateTime.Now.Year,
+                FileInfo = new XbmcXmlFileInfo {
+                    StreamDetails = new XbmcStreamDetails {
+                        Audio = new List<XbmcXmlAudioInfo>(new[] {new XbmcXmlAudioInfo("ac3", 6, "en")}),
+                        Subtitles = new List<XbmcXmlSubtitleInfo>(new[] {new XbmcXmlSubtitleInfo("en")}),
+                        Video = new List<XbmcXmlVideoInfo>(new[] {new XbmcXmlVideoInfo("xvid", 5.5, 300, 400, 30000)})
+                    }
+                }
+            };
+
+            XmlSerializer xs2 = new XmlSerializer(typeof(XbmcXmlMovie));
+            xs.Serialize(new XmlIndentedTextWriter("test.xml"), mv);            
 
             //movie mv = new movie();
             //mv.actor = new[] {

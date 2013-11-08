@@ -36,27 +36,27 @@ namespace Common.Models.PHP {
         public long id;
 
         ///<summary>Scraper"s picture Id prefixed with scraper"s name</summary>
-        ///<example>tmdb4bc92150017a3c57fe00d378</example>
+        ///<example>\eg{ <c>tmdb4bc92150017a3c57fe00d378</c>}</example>
         public string picId;
 
         ///<summary>Picture type (poster, fanart)</summary>
-        /// <example>poster (portrait) / fanart (landscape)</example>
+        ///<example>\eg{ ''<c>poster</c>'' (portrait) or ''<c>fanart</c>'' (landscape)}</example>
         public string type;
 
         ///<summary>Picture type (original, mid, thumb)</summary>
-        /// <example>original</example>
+        ///<example>eg{''<c>original</c>'', ''<c>mid</c>'', ''<c>thumb</c>''}</example>
         public string size;
 
         ///<summary>Picture width in pixels</summary>
-        /// <example>1280</example>
+        ///<example>\eg{ <c>1280</c>}</example>
         public string width;
 
         ///<summary>Picture height in pixels</summary>
-        /// <example>720</example>
+        /// <example>\eg{ <c>720</c>}</example>
         public string height;
 
         ///<summary>Picture url</summary>
-        /// <example>http://passion-xbmc.org/scraper/Gallery/main/Poster_Transformers2laRevanche-288440.jpg</example>
+        /// <example>\eg{ <c>http://passion-xbmc.org/scraper/Gallery/main/Poster_Transformers2laRevanche-288440.jpg</c>}</example>
         public string url;
     }
 }

@@ -35,25 +35,25 @@ namespace Common.Models.PHP{
 
 
 	    ///<summary>string	Name of the Person in format "Firstname Surname"</summary>
-        ///<example>Teddy Chan</example>
+        ///<example>eg{''<c>Teddy Chan</c>''}</example>
 	    public string name;
 
         ///<summary>Name of the Character</summary>
-        ///<example>Sarah Connor</example>
+        ///<example>eg{''<c>Sarah Connor</c>''}</example>
 	    public string character;
 
         ///<summary>Type of job</summary>
         ///<example>
-        ///Actor, Art Direction, Author, Best Boy Electric, Boom Operator, Camera Operator,
+        ///eg{''<c>Actor, Art Direction, Author, Best Boy Electric, Boom Operator, Camera Operator,
         ///Casting, Costume Design, Director, Director of Photography, Editor, Executive Producer,
         ///Makeup Artist, Music, Novel, Original Music Composer, Producer, Production Design,
-        ///Produzent, Screenplay, Set Decoration, Set Designer, Sound Designer, Sound Editor, Visual Effects, Writer, ...
+        ///Produzent, Screenplay, Set Decoration, Set Designer, Sound Designer, Sound Editor, Visual Effects, Writer, ...</c>''}
         ///</example>
 	    public string job; 
 
 
 	    ///<summary>The person id at a online sources</summary>
-        ///<example>// array ( "imdb" => "nm0269463", "tmbd => "70703")</example>
+        ///<example>\eg{ <code>array ( "imdb" => "nm0269463", "tmbd => "70703")</code>}</example>
         ///<remarks>http://www.themoviedb.org/person/70703</remarks>
         [XmlIgnore]
 	    public Hashtable personOnlineIdArr; 

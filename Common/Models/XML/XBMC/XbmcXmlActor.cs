@@ -1,37 +1,46 @@
 ﻿using System;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using Common.Models.DB.MovieVo;
 using Common.Models.DB.MovieVo.People;
 
 namespace Common.Models.XML.XBMC {
-    /// <remarks/>
+
+    /// <summary>Represents a serialized actor in a movie</summary>
     [Serializable]
-    public class XbmcXmlActor{
+    public class XbmcXmlActor {
+
+        /// <summary>Initializes a new instance of the <see cref="XbmcXmlActor"/> class.</summary>
         public XbmcXmlActor() {
         }
 
-        public XbmcXmlActor(string name, string role, string thumb) {
+        /// <summary>Initializes a new instance of the <see cref="XbmcXmlActor"/> class.</summary>
+        /// <param name="name">The actors full name.</param>
+        /// <param name="role">The role or character the actor is portraying.</param>
+        /// <param name="thumb">The actors thumbnail (small picture)</param>
+        public XbmcXmlActor(string name, string role, string thumb = null) {
             Name = name;
             Role = role;
             Thumb = thumb;
         }
 
-        public XbmcXmlActor(string name, string role) : this(name, role, null){
-        }
-
-        /// <remarks/>
+        /// <summary>Gets or sets the actors full name.</summary>
+        /// <value>The actors full name.</value>
         [XmlElement("name", Form = XmlSchemaForm.Unqualified)]
         public string Name { get; set; }
 
-        /// <remarks/>
+        /// <summary>Gets or sets the role or character the actor is portraying..</summary>
+        /// <value>The role or character the actor is portraying.</value>
         [XmlElement("role", Form = XmlSchemaForm.Unqualified)]
         public string Role { get; set; }
 
-        /// <remarks/>
+        /// <summary>Gets or sets the actors thumbnail.</summary>
+        /// <value>The actors thumbnail (small picture)</value>
         [XmlElement("thumb", Form = XmlSchemaForm.Unqualified, DataType = "anyURI")]
         public string Thumb { get; set; }
 
+        /// <summary>Converts <see cref="XbmcXmlActor"/> to an instance of <see cref="Actor"/></summary>
+        /// <param name="act">The instance of <see cref="XbmcXmlActor"/> to convert</param>
+        /// <returns>An instance of <see cref="Actor"/> converted from <see cref="XbmcXmlActor"/></returns>
         public static explicit operator Actor(XbmcXmlActor act) {
             return new Actor(
                 string.IsNullOrEmpty(act.Name) ? null : act.Name,

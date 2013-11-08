@@ -3,7 +3,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Common.Models.DB.MovieVo {
 
+    /// <summary>Contains information about movie story/plot.</summary>
     public class Plot{
+
+        /// <summary>Initializes a new instance of the <see cref="Plot"/> class.</summary>
+        /// <param name="full">The full plot.</param>
+        /// <param name="summary">A short story summary, the plot outline</param>
+        /// <param name="tagline">The tagline (short promotional slogan / one-liner / clarification).</param>
+        /// <param name="language">The language of the plot.</param>
         public Plot(string full, string summary, string tagline, string language) {
             Tagline = tagline;
             Summary = summary;
@@ -11,30 +18,51 @@ namespace Common.Models.DB.MovieVo {
             Language = language;
         }
 
+        /// <summary>Initializes a new instance of the <see cref="Plot"/> class.</summary>
+        /// <param name="fullPlot">The full plot.</param>
+        /// <param name="language">The language of the plot.</param>
         public Plot(string fullPlot, string language) {
             Full = fullPlot;
             Language = language;
         }
 
+        /// <summary>Initializes a new instance of the <see cref="Plot"/> class.</summary>
+        /// <param name="fullPlot">The full plot.</param>
+        /// <param name="summary">A short story summary, the plot outline</param>
+        /// <param name="lanugage">The language of the plot.</param>
         public Plot(string fullPlot, string summary, string lanugage) : this(fullPlot, lanugage) {
             if (!string.IsNullOrEmpty(summary)) {
                 Summary = summary;
             }
         }
 
+        /// <summary>Gets or sets the database plot Id.</summary>
+        /// <value>The database plot Id</value>
         [Key]
         public long Id { get; set; }
 
+        /// <summary>Gets or sets the tagline (short one-liner).</summary>
+        /// <value>The tagline (short promotional slogan / one-liner / clarification).</value>
         public string Tagline { get; set; }
 
+        /// <summary>Gets or sets the story summary.</summary>
+        /// <value>A short story summary, the plot outline</value>
         public string Summary { get; set; }
 
+        /// <summary>Gets or sets the full plot.</summary>
+        /// <value>The full plot.</value>
         public string Full { get; set; }
 
+        /// <summary>Gets or sets the language of this plot.</summary>
+        /// <value>The language of this plot.</value>
         public string Language { get; set; }
 
+        /// <summary>Gets or sets the movie foreign key.</summary>
+        /// <value>The movie foreign key.</value>
         public long MovieId { get; set; }
 
+        /// <summary>Gets or sets the movie this plot belongs to.</summary>
+        /// <value>Gets or sets the movie this plot belongs to.</value>
         [ForeignKey("MovieId")]
         public virtual Movie Movie { get; set; }
     }

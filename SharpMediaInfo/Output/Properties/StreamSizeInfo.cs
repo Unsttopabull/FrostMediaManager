@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SharpMediaInfo.Output.Properties {
+﻿namespace SharpMediaInfo.Output.Properties {
     public enum StreamSizeType {
         StreamSize,
         SourceStreamSize,
@@ -12,22 +10,13 @@ namespace SharpMediaInfo.Output.Properties {
         private readonly Media _media;
         private readonly string[] _propNames;
 
-        internal StreamSizeInfo(Media media) : this(media, StreamSizeType.StreamSize) {
-        }
-
-        internal StreamSizeInfo(Media mediaAudio, StreamSizeType type) {
+        internal StreamSizeInfo(Media mediaAudio, StreamSizeType type = StreamSizeType.StreamSize) {
             _media = mediaAudio;
 
             switch (type) {
                 case StreamSizeType.StreamSize:
-                    _propNames = new[] {"", "", "", "", "", "", ""};
-                    break;
                 case StreamSizeType.SourceStreamSize:
-                    _propNames = new[] { "", "", "", "", "", "", "" };
-                    break;
                 case StreamSizeType.EncodedStreamSize:
-                    _propNames = new[] { "", "", "", "", "", "", "" };
-                    break;
                 case StreamSizeType.EncodedSourceStreamSize:
                     _propNames = new[] { "", "", "", "", "", "", "" };
                     break;

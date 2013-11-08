@@ -6,13 +6,14 @@ using Common.Properties;
 using File = System.IO.File;
 
 namespace Common {
+    /// <summary>If the databse doesn't exist it creates it and seeds it with data.</summary>
     public class SeedInitializer : IDatabaseInitializer<MovieVoContainer> {
         public const string CACHE_FILENAME = "movieVo.db3";
 
         public void InitializeDatabase(MovieVoContainer context) {
             try {
                 if (File.Exists(CACHE_FILENAME)) {
-                    Console.WriteLine("Cache file exists");
+                    Console.WriteLine(@"Cache file exists");
                     return;
                 }
                 File.Delete(CACHE_FILENAME);

@@ -3,40 +3,49 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Common.Models.DB.MovieVo {
+
+    /// <summary>Represents a studio that prodcuced a movie.</summary>
     public class Studio {
 
-        public class StudioConfiguration : EntityTypeConfiguration<Studio> {
-            public StudioConfiguration() {
-                //Join tabela za Movie <--> Studio
-                HasMany(m => m.Movies)
-                .WithMany(g => g.Studios)
-                .Map(m => {
-                    m.ToTable("MovieStudios");
-                    m.MapLeftKey("StudioId");
-                    m.MapRightKey("MovieId");
-                });
-            }
-        }
-
+        /// <summary>Initializes a new instance of the <see cref="Studio"/> class.</summary>
         public Studio() {
             Movies = new HashSet<Movie>();
         }
 
-        public Studio(string name)
-            : this() {
+        /// <summary>Initializes a new instance of the <see cref="Studio"/> class with the specified studio name.</summary>
+        /// <param name="name">The name of the studio.</param>
+        public Studio(string name) : this() {
             Name = name;
         }
 
+        /// <summary>Initializes a new instance of the <see cref="Studio" /> class with specified name and an URI to the logo image.</summary>
+        /// <param name="name">The name of the studio.</param>
+        /// <param name="logo">The URI to the studio's logo image</param>
+        public Studio(string name, string logo) : this(name) {
+            Logo = logo;
+        }
+
+        /// <summary>Gets or sets the Id of this studio in the database.</summary>
+        /// <value>The Id of this studio in the database</value>
         [Key]
         public long Id { get; set; }
 
+        /// <summary>Gets or sets the name of the studio.</summary>
+        /// <value>The name of the studio.</value>
         public string Name { get; set; }
 
+        /// <summary>Gets or sets the URI to the studio's logo image.</summary>
+        /// <value>The URI to the studio's logo image</value>
         public string Logo { get; set; }
 
-        public virtual ICollection<Movie> Movies { get; set; }
+        /// <summary>Gets or sets the movies this studio has produced.</summary>
+        /// <value>The movies this studio has produced.</value>
+        public virtual HashSet<Movie> Movies { get; set; }
 
-        public static Studio[] GetFromNames(string[] studioNames) {
+        /// <summary>Converts studio names to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Studio"/></summary>
+        /// <param name="studioNames">The studio names.</param>
+        /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Studio"/> instances with specified studio names</returns>
+        public static IEnumerable<Studio> GetFromNames(string[] studioNames) {
             int numStudios = studioNames.Length;
 
             Studio[] studios = new Studio[numStudios];
@@ -46,5 +55,22 @@ namespace Common.Models.DB.MovieVo {
 
             return studios;
         }
+
+        internal class Configuration : EntityTypeConfiguration<Studio> {
+
+            public Configuration() {
+                //Join tabela za Movie <--> Studio
+                HasMany(m => m.Movies)
+                    .WithMany(g => g.Studios)
+                    .Map(m => {
+                        m.ToTable("MovieStudios");
+                        m.MapLeftKey("StudioId");
+                        m.MapRightKey("MovieId");
+                    });
+            }
+
+        }
+
     }
+
 }

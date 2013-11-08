@@ -5,151 +5,94 @@ using Common.Models.DB.XBMC.StreamDetails;
 using Common.Models.DB.XBMC.Tag;
 
 namespace Common.Models.DB.XBMC {
+
+    /// <summary>Represents a context used for manipulation of the XBMC database.</summary>
     public class XbmcContainer : DbContext {
 
+        /// <summary>Initializes a new instance of the <see cref="XbmcContainer"/> class.</summary>
         public XbmcContainer() : base("name=XbmcEntities") {
         }
 
+        /// <summary>Initializes a new instance of the <see cref="XbmcContainer"/> class.</summary>
+        /// <param name="connString">The connection string.</param>
         public XbmcContainer(string connString) : base(connString) {
             Configuration.LazyLoadingEnabled = false;
         }
 
+        /// <summary>Gets or sets the information about the movies in the XBMC library.</summary>
+        /// <value>The information about the movies in XBMC library.</value>
+        public DbSet<XbmcMovie> Movies { get; set; }
+
+        /// <summary>Gets or sets the information about people that participated in the movies in the XBMC library.</summary>
+        /// <value>The information about people that participated in the movies in the XBMC library</value>
+        public DbSet<XbmcPerson> People { get; set; }
+
+        /// <summary>Gets or sets the information about files that contain the movies their subtitles in the XBMC library.</summary>
+        /// <value>The information about files that contain the movies their subtitles in the XBMC library</value>
+        public DbSet<XbmcFile> Files { get; set; }
+
+        /// <summary>Gets or sets the information about folders and their roles and settings.</summary>
+        /// <value>The information about folders and their roles and settings</value>
+        public DbSet<XbmcPath> Paths { get; set; }
+
+        /// <summary>Gets or sets the infromation about movie video/audio/subtitle stream details.</summary>
+        /// <value>The infromation about movie video/audio/subtitle stream details.</value>
+        public DbSet<XbmcStreamDetails> StreamDetails { get; set; }
+
+        /// <summary>Gets or sets the information about movie collections and sets in the XBMC library.</summary>
+        /// <value>The information about movie collections and sets in the XBMC library.</value>
+        public DbSet<XbmcSet> Sets { get; set; }
+
+        /// <summary>Gets or sets the information about genres of the movies in the XBMC library</summary>
+        /// <value>The information about genres of the movies in the XBMC library</value>
+        public DbSet<XbmcGenre> Genres { get; set; }
+
+        /// <summary>Gets or sets the information about studios that procuced the movies in the XBMC library.</summary>
+        /// <value>The information about studios that procuced the movies in the XBMC library.</value>
+        public DbSet<XbmcStudio> Studios { get; set; }
+
+        /// <summary>Gets or sets the information about contries the movies in the XBMC library were shot and/or produced in.</summary>
+        /// <value>The information about contries the movies in the XBMC library were shot and/or produced in.</value>
+        public DbSet<XbmcCountry> Countries { get; set; }
+
+        /// <summary>Gets or sets the information about tags in the XBMC library.</summary>
+        /// <value>The information about tags in the XBMC library.</value>
+        public DbSet<XbmcTag> Tags { get; set; }
+
+        /// <summary>Gets or sets the tag links.</summary>
+        /// <value>The tag links.</value>
+        public DbSet<XbmcTagLink> TagLinks { get; set; }
+
+        /// <summary>Gets or sets the information about promotional images in the XBMC library.</summary>
+        /// <value>The information about promotional images in the XBMC library.</value>
+        public DbSet<XbmcArt> Art { get; set; }
+
+        /// <summary>Gets or sets the information about XBMC settings about a particular file.</summary>
+        /// <value>The information about XBMC settings about a particular file</value>
+        public DbSet<XbmcSettings> Settings { get; set; }
+
+        /// <summary>Gets or sets the database version and compression information.</summary>
+        /// <value>The database version and compression information.</value>
+        public DbSet<XbmcVersion> Version { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
-            const string FK_MOVIE = "idMovie";
-
-            modelBuilder.Entity<XbmcFile>()
-                        .HasOptional(f => f.Bookmark)
-                        .WithRequired(b => b.File)
-                        .Map(m => m.MapKey("idFile"));
-
-            // Movie <--> File
-            modelBuilder.Entity<XbmcFile>()
-                        .HasRequired(f => f.Movie)
-                        .WithRequiredPrincipal(m => m.File)
-                        .Map(m => m.MapKey("idFile"));
-
-            // File <--> Path
-            modelBuilder.Entity<XbmcFile>()
-                        .HasRequired(m => m.Path)
-                        .WithMany(p => p.Files)
-                        .HasForeignKey(f => f.PathId);
-
-            //--------------------------------------------------------------------------------//
-
-            // Movie <--> Set relation
-            modelBuilder.Entity<XbmcMovie>()
-                        .HasOptional(m => m.Set)
-                        .WithMany(s => s.Movies)
-                        .HasForeignKey(m => m.SetId);
-
-            //-------------------------------------------------------------------------------//
-
-            modelBuilder.Entity<XbmcStreamDetails>()
-                        .Map<XbmcVideoDetails>(s => s.Requires("iStreamType").HasValue(0))
-                        .Map<XbmcAudioDetails>(s => s.Requires("iStreamType").HasValue(1))
-                        .Map<XbmcSubtitleDetails>(s => s.Requires("iStreamType").HasValue(2))
-                        .HasRequired(sd => sd.File)
-                        .WithMany(f => f.StreamDetails)
-                        .Map(m => m.MapKey("idFile"));
-
-            //------------------------------------------------------------------------------//
-
-            //foreign key on "movie" is TEXT but id on "path" is INTEGER
-            //EF detects mismatching types on entities so we map it here
-            //and remove it from entity
-            modelBuilder.Entity<XbmcMovie>()
-                        .HasRequired(m => m.Path)
-                        .WithMany(p => p.Movies)
-                        .Map(m => m.MapKey("c23"));
-
-            //------------------------------------------------------------------//
-
-            modelBuilder.Entity<XbmcMovieActor>()
-                        .HasRequired(mp => mp.Person)
-                        .WithMany(mp => mp.MoviesAsActor)
-                        .HasForeignKey(ma => ma.PersonId);
-
-            modelBuilder.Entity<XbmcMovieActor>()
-                        .HasRequired(mp => mp.Movie)
-                        .WithMany(m => m.Actors)
-                        .HasForeignKey(m => m.MovieId);
-
-            modelBuilder.Entity<XbmcMovieActor>()
-                        .HasKey(ma => new { ma.PersonId, ma.MovieId });
-
-            //-----------------------------------------------------------------//
-
-            modelBuilder.Entity<XbmcPerson>()
-                        .HasMany(d => d.MoviesAsDirector)
-                        .WithMany(m => m.Directors)
-                        .Map(m => {
-                            m.MapLeftKey("idDirector");
-                            m.MapRightKey(FK_MOVIE);
-                            m.ToTable("directorlinkmovie");
-                        });
-
-            modelBuilder.Entity<XbmcPerson>()
-                        .HasMany(d => d.MoviesAsWriter)
-                        .WithMany(m => m.Writers)
-                        .Map(m => {
-                            m.MapLeftKey("idWriter");
-                            m.MapRightKey(FK_MOVIE);
-                            m.ToTable("writerlinkmovie");
-                        });
-
-            //--------------------------------------------------------------//
-
-            //Join table Movie <--> Genre
-            modelBuilder.Entity<XbmcMovie>()
-                        .HasMany(m => m.Genres)
-                        .WithMany(g => g.Movies)
-                        .Map(m => {
-                            m.ToTable("genrelinkmovie");
-                            m.MapLeftKey(FK_MOVIE);
-                            m.MapRightKey("idGenre");
-                        });
-
-            //Join table Movie <--> Country
-            modelBuilder.Entity<XbmcMovie>()
-                        .HasMany(m => m.Countries)
-                        .WithMany(c => c.Movies)
-                        .Map(m => {
-                            m.ToTable("countrylinkmovie");
-                            m.MapLeftKey(FK_MOVIE);
-                            m.MapRightKey("idCountry");
-                        });
-
-            //Join table Movie <--> Country
-            modelBuilder.Entity<XbmcMovie>()
-                        .HasMany(m => m.Studios)
-                        .WithMany(s => s.Movies)
-                        .Map(m => {
-                            m.ToTable("studiolinkmovie");
-                            m.MapLeftKey(FK_MOVIE);
-                            m.MapRightKey("idStudio");
-                        });
+            modelBuilder.Configurations.Add(new XbmcBookmark.Configuration());
+            modelBuilder.Configurations.Add(new XbmcFile.Configuration());
+            modelBuilder.Configurations.Add(new XbmcMovie.Configuration());
+            modelBuilder.Configurations.Add(new XbmcStreamDetails.Configuration());
+            modelBuilder.Configurations.Add(new XbmcSet.Configuration());
+            modelBuilder.Configurations.Add(new XbmcPath.Configuration());
+            modelBuilder.Configurations.Add(new XbmcMovieActor.Configuration());
+            modelBuilder.Configurations.Add(new XbmcPerson.Configuration());
+            modelBuilder.Configurations.Add(new XbmcGenre.Configuration());
+            modelBuilder.Configurations.Add(new XbmcCountry.Configuration());
+            modelBuilder.Configurations.Add(new XbmcStudio.Configuration());
 
             base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<XbmcMovie> Movies { get; set; }
-
-        public DbSet<XbmcPerson> People { get; set; }
-
-        public DbSet<XbmcFile> Files { get; set; }
-        public DbSet<XbmcPath> Paths { get; set; }
-        public DbSet<XbmcStreamDetails> StreamDetails { get; set; }
-
-        public DbSet<XbmcSet> Sets { get; set; }
-
-        public DbSet<XbmcGenre> Genres { get; set; }
-        public DbSet<XbmcStudio> Studios { get; set; }
-        public DbSet<XbmcCountry> Countries { get; set; }
-        public DbSet<XbmcTag> Tags { get; set; }
-
-        public DbSet<XbmcArt> Art { get; set; }
-
     }
+
 }

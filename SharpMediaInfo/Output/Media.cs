@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Linq;
 using SharpMediaInfo.Output.Properties;
-using SharpMediaInfo.Output.Properties.Formats;
 
 #pragma warning disable 1591
 
@@ -133,7 +132,6 @@ namespace SharpMediaInfo.Output {
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
-        /// <filterpriority>2</filterpriority>
         public override string ToString() {
             StringBuilder sb = new StringBuilder(10000);
             foreach (KeyValuePair<string, string> kvp in Properties[StreamNumber]) {

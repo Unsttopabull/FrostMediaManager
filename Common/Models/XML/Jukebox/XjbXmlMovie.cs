@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
+using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -10,13 +10,15 @@ using Common.Models.DB.MovieVo.People;
 
 namespace Common.Models.XML.Jukebox {
 
-    /// <remarks/>
+    /// <summary>Represents an infromation about a movie in Xtreamer Movie Jukebox database that is ready to be serialized.</summary>
     [Serializable]
     [XmlType(AnonymousType = true)]
     [XmlRoot("movie", Namespace = "", IsNullable = false)]
     public class XjbXmlMovie {
+
         private const string SEPARATOR = " / ";
 
+        /// <summary>Initializes a new instance of the <see cref="XjbXmlMovie"/> class.</summary>
         public XjbXmlMovie() {
             Votes = "";
             MPAA = "";
@@ -25,139 +27,131 @@ namespace Common.Models.XML.Jukebox {
             GenreString = "";
         }
 
-        /// <remarks/>
+        /// <summary>Gets or sets the title of the movie in the local language.</summary>
+        /// <value>The title of the movie in the local language.</value>
+        /// <example>\eg{ ''<c>Downfall</c>''}</example>
         [XmlElement("title", Form = XmlSchemaForm.Unqualified)]
         public string Title { get; set; }
 
-        /// <remarks/>
+        /// <summary>Gets or sets the title in the original language.</summary>
+        /// <value>The title in the original language.</value>
+        /// <example>\eg{ ''<c>Der Untergang</c>''}</example>
         [XmlElement("originaltitle", Form = XmlSchemaForm.Unqualified)]
         public string OriginalTitle { get; set; }
 
-        /// <remarks/>
+        /// <summary>Gets or sets the title used for sorting (eg. sequels)..</summary>
+        /// <value>The title used for sorting</value>
+        /// <example>\eg{ ''<c>Pirates of the Caribbean: The Curse of the Black Pearl</c>'' becomes ''<c>Pirates of the Caribbean 1</c>''}</example>
         [XmlElement("sorttitle", Form = XmlSchemaForm.Unqualified)]
         public string SortTitle { get; set; }
 
-        /// <remarks/>
+        /// <summary>Gets or sets Imdb ID</summary>
+        /// <value>The IMDB Id</value>
         [XmlElement("id", Form = XmlSchemaForm.Unqualified)]
         public string ID { get; set; }
 
-        /// <remarks/>
+        /// <summary>Gets or sets the year this movie was released in.</summary>
+        /// <value>The year this movie was released in.</value>
         [XmlElement("year", Form = XmlSchemaForm.Unqualified)]
         public int Year { get; set; }
 
-        /// <remarks/>
+        /// <summary>Gets or sets the date the movie was released in the cinemas.</summary>
+        /// <value>The date the movie was released in the cinemas.</value>
         [XmlElement("releasedate", Form = XmlSchemaForm.Unqualified)]
         public string ReleaseDate { get; set; }
 
-        /// <remarks/>
+        /// <summary>Gets or sets the average movie rating</summary>
+        /// <value>Average movie rating</value>
         [XmlElement("rating", Form = XmlSchemaForm.Unqualified)]
-        public float Rating { get; set; }
+        public float AverageRating { get; set; }
 
-        /// <remarks/>
+        /// <summary>Gets or sets the number of votes the average rating was computed from</summary>
+        /// <value>The number of ratings</value>
         [XmlElement("votes", Form = XmlSchemaForm.Unqualified)]
         public string Votes { get; set; }
 
-        /// <remarks/>
+        /// <summary>Gets or sets the US MPAA movie rating and the reason for it</summary>
+        /// <value>The US Movie rating</value>
         [XmlElement("mpaa", Form = XmlSchemaForm.Unqualified)]
         public string MPAA { get; set; }
 
-        /// <remarks/>
-        /// <example>us:R / au:M</example>
+        /// <summary>Gets or sets the certifications for other countries</summary>
+        /// <value>Other country ratings</value>
+        /// <remarks>If more than 1 they are split by " / " with country and rating split by ":" without space</remarks>
+        /// <example>\eg{ ''<c>us:R / au:M</c>''}</example>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("certification", Form = XmlSchemaForm.Unqualified)]
         public string CertificationsString { get; set; }
 
+        /// <summary>Gets or sets the certifications for other countries</summary>
+        /// <value>Other country ratings</value>
         [XmlIgnore]
         public Certification[] Certifications {
-            get {
-                if (string.IsNullOrEmpty(CertificationsString)) {
-                    return null;
-                }
-
-                //certifications are saved in a string separated by ' / '
-                string[] certs = CertificationsString.Split(new[] { SEPARATOR }, StringSplitOptions.RemoveEmptyEntries);
-                Certification[] certsArr = new Certification[certs.Length];
-
-                for (int i = 0; i < certs.Length; i++) {
-                    //each cetification consists of key and a value separated by ':'
-                    string[] kvp = certs[i].Split(':');
-
-                    //if the record is malformed we discard it
-                    if (kvp.Length < 2) {
-                        continue;
-                    }
-
-                    certsArr[i] = new Certification(kvp[0], kvp[1]);
-                }
-                return certsArr;
-            }
-            set {
-                Certification[] certifications = value;
-                int certLen = certifications.Length;
-
-                if (certLen != 0) {
-                    StringBuilder sb = new StringBuilder();
-                    for (int i = 0; i < certLen; i++) {
-                        sb.Append(certifications[i].Country);
-                        sb.Append(":");
-                        sb.Append(certifications[i].Rating);
-
-                        if (i < certLen - 1) {
-                            sb.Append(SEPARATOR);
-                        }
-                    }
-                    CertificationsString = sb.ToString();
-                }
-                CertificationsString = null;
-            }
+            get { return Certification.ParseCertificationsString(CertificationsString); }
+            set { CertificationsString = string.Join<Certification>(SEPARATOR, value); }
         }
 
-        /// <summary>genres are saved in a single string with genres divided by " / "</summary>
-        /// <example>Drama / Thriller</example>
+        /// <summary>Gets or sets the movie genres.</summary>
+        /// <value>The movie genres separated by " / "</value>
+        /// <remarks>Genre names are saved in a single string with genres divided by " / "</remarks>
+        /// <example>\eg{ ''<c>Drama / Thriller</c>''}</example>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("genre", Form = XmlSchemaForm.Unqualified)]
         public string GenreString { get; set; }
 
+        /// <summary>Gets or sets the movie genres.</summary>
+        /// <value>The movie genres.</value>
         [XmlIgnore]
         public string[] Genres {
             get {
                 return !string.IsNullOrEmpty(GenreString)
-                               ? GenreString.Split(new[] { SEPARATOR }, StringSplitOptions.RemoveEmptyEntries)
-                               : null;
+                    ? GenreString.SplitWithoutEmptyEntries(SEPARATOR)
+                    : null;
             }
-            set {
-                GenreString = string.Join(SEPARATOR, value);
-            }
+            set { GenreString = string.Join(SEPARATOR, value); }
         }
 
-        /// <remarks/>
+        /// <summary>The studio that produced this movie.</summary>
+        /// <value>The studio name.</value>
         [XmlElement("studio", Form = XmlSchemaForm.Unqualified)]
         public string Studio { get; set; }
 
-        /// <remarks/>
+        /// <summary>Gets or sets the director name.</summary>
+        /// <remarks>If more than 1 they are separated by " / "</remarks>
+        /// <value>Name of the person that directed the movie</value>
         [XmlElement("director", Form = XmlSchemaForm.Unqualified)]
         public string Director { get; set; }
 
-        /// <remarks/>
+        /// <summary>Gets or sets the name of the writer(s).</summary>
+        /// <remarks>If more than 1 they are separated by " / "</remarks>
+        /// <value>The names of script writer(s)</value>
         [XmlElement("credits", Form = XmlSchemaForm.Unqualified)]
         public string Credits { get; set; }
 
-        /// <remarks/>
+        /// <summary>Gets or sets the tagline (short one-liner).</summary>
+        /// <value>The tagline (short promotional slogan / one-liner / clarification).</value>
         [XmlElement("tagline", Form = XmlSchemaForm.Unqualified)]
         public string Tagline { get; set; }
 
-        /// <remarks/>
+        /// <summary>Gets or sets the plot outline.</summary>
+        /// <value>Outline, a short story summary</value>
         [XmlElement("outline", Form = XmlSchemaForm.Unqualified)]
         public string Outline { get; set; }
 
-        /// <remarks/>
+        /// <summary>Gets or sets the plot.</summary>
+        /// <value>The plot.</value>
         [XmlElement("plot", Form = XmlSchemaForm.Unqualified)]
         public string Plot { get; set; }
 
-        /// <remarks/>
+        /// <summary>Gets or sets the runtime in minutes pretty printed</summary>
+        /// <value>Runtime in minutes as "X min"</value>
+        /// <remarks>runtime is saved as a string with seconds integer divided by 60 with appended text " min"</remarks>
         [XmlElement("runtime", Form = XmlSchemaForm.Unqualified)]
         public string RuntimeString { get; set; }
 
+        /// <summary>Gets or sets the runtime in minutes</summary>
+        /// <value>Runtime in minutes</value>
+        /// <remarks>runtime is saved as a string with seconds integer divided by 60 with appended text " min"</remarks>
         [XmlIgnore]
         public long? Runtime {
             get {
@@ -167,80 +161,109 @@ namespace Common.Models.XML.Jukebox {
                 long runtimeVal;
                 if (long.TryParse(runtimeInMinutes, out runtimeVal)) {
                     return runtimeVal > 0
-                        ? (long?)runtimeVal
+                        ? (long?) runtimeVal
                         : null;
                 }
                 return null;
             }
             set {
                 RuntimeString = (value.HasValue)
-                                        ? value + " min"
-                                        : null;
+                    ? value + " min"
+                    : null;
             }
         }
 
-        /// <remarks/>
+        /// <summary>Gets or sets the actors that starred in the movie.</summary>
+        /// <value>The actors that preformed in this movie.</value>
         [XmlElement("actor", Form = XmlSchemaForm.Unqualified)]
         public XjbXmlActor[] Actors { get; set; }
 
-        /// <remarks/>
+        /// <summary>Gets or sets the file info of this movie.</summary>
+        /// <value>The file info of this movie (video/audio/subtitle details).</value>
         [XmlElement("fileinfo", Form = XmlSchemaForm.Unqualified)]
         public string Fileinfo { get; set; }
 
         #region Conversion Functions
+
+        /// <summary>Converts the current instance to the <see cref="Movie"/></summary>
+        /// <returns>Movie instance that is able to be save in the cache db</returns>
         public Movie ToMovie() {
-            return (Movie)this;
+            return (Movie) this;
         }
+
         #endregion
 
         #region Serialization
+
+        /// <summary>Serializes the instance to XML in the specified save location.</summary>
+        /// <param name="xmlSaveLocation">The XML save location.</param>
         public void Serialize(string xmlSaveLocation) {
             XmlSerializer xs = new XmlSerializer(typeof(XjbXmlMovie));
-            xs.Serialize(new XmlIndentedTextWriter(xmlSaveLocation), this);            
+            xs.Serialize(new XmlIndentedTextWriter(xmlSaveLocation), this);
         }
 
+        /// <summary>Loads the serialized movie info XML file from the specified path.</summary>
+        /// <param name="pathToXml">The path to info XML file.</param>
+        /// <returns>Instance of <see cref="XjbXmlMovie"/> deserialized from info XML in the given path</returns>
+        /// <exception cref="FileNotFoundException">Throws when specified file path can not be found</exception>
+        /// <exception cref="InvalidOperationException">Throws when the specified file is not a serialized instance of <see cref="XjbXmlMovie"/>.</exception>
         public static XjbXmlMovie Load(string pathToXml) {
             XmlSerializer xs = new XmlSerializer(typeof(XjbXmlMovie));
 
-            return (XjbXmlMovie)xs.Deserialize(new XmlTextReader(pathToXml));
+            return (XjbXmlMovie) xs.Deserialize(new XmlTextReader(pathToXml));
         }
 
+        /// <summary>Loads the serialized movie info XML file from the specified path and converts it into <see cref="Movie"/>.</summary>
+        /// <param name="pathToXml">The path to info XML file.</param>
+        /// <returns>Instance of <see cref="Movie"/> converted from deserialized info XML in the given path</returns>
         public static Movie LoadAsMovie(string pathToXml) {
-            return (Movie)Load(pathToXml);
+            return (Movie) Load(pathToXml);
         }
+
         #endregion
 
-        //conversion operator by explicit casting
-        public static explicit operator Movie(XjbXmlMovie xmlMovie) {
+        /// <summary>Converts an instance of <see cref="XjbXmlMovie"/> to <see cref="Common.Models.DB.MovieVo.Movie">Movie</see> by explicit casting</summary>
+        /// <param name="xm">The <see cref="XjbXmlMovie"/> to convert</param>
+        /// <returns><see cref="XjbXmlMovie"/> converted to an instance of <see cref="Common.Models.DB.MovieVo.Movie">Movie</see></returns>
+        public static explicit operator Movie(XjbXmlMovie xm) {
             long? runtimeInSec = null;
-            if (xmlMovie.Runtime.HasValue) {
+            if (xm.Runtime.HasValue) {
                 //convert mins to seconds
-                runtimeInSec = xmlMovie.Runtime.Value * 60;
+                runtimeInSec = xm.Runtime.Value * 60;
             }
 
             Movie mv = new Movie {
-                Title = xmlMovie.Title,
-                OriginalTitle = xmlMovie.OriginalTitle,
-                Year = xmlMovie.Year,
-                RatingAverage = xmlMovie.Rating,
-                Certifications = new HashSet<Certification>(xmlMovie.Certifications),
-                ImdbID = xmlMovie.ID,
+                Title = xm.Title,
+                OriginalTitle = xm.OriginalTitle,
+                Year = xm.Year,
+                RatingAverage = xm.AverageRating,
+                Certifications = new HashSet<Certification>(xm.Certifications),
+                ImdbID = xm.ID,
                 Runtime = runtimeInSec
             };
 
-            if (!string.IsNullOrEmpty(xmlMovie.Studio)) {
-                mv.Studios.Add(new Studio(xmlMovie.Studio));
+            if (!string.IsNullOrEmpty(xm.Studio)) {
+                mv.Studios.Add(new Studio(xm.Studio));
             }
 
-            mv.Plot.Add(new Plot(xmlMovie.Plot, xmlMovie.Outline, xmlMovie.Tagline, null));
-            mv.Directors.Add(new Person(xmlMovie.Director));
-            mv.Genres.UnionWith(Genre.GetFromNames(xmlMovie.Genres));
+            //add all available plot info (constructor will omit null/empty ones)
+            mv.Plot.Add(new Plot(xm.Plot, xm.Outline, xm.Tagline, language: null));
 
-            if (xmlMovie.Actors != null) {
-                mv.Actors = xmlMovie.Actors.ToHashSet<Actor, XjbXmlActor>();
+            if (!string.IsNullOrEmpty(xm.Director)) {
+                mv.Directors.Add(new Person(xm.Director));
+            }
+
+            //Add Genres, if a genre already exists it wont be duplicated
+            mv.Genres.UnionWith(Genre.GetFromNames(xm.Genres));
+
+            //Convert and Add XjbXmlActor array to HashSet<Actor>
+            if (xm.Actors != null) {
+                mv.Actors = xm.Actors.ToHashSet<Actor, XjbXmlActor>();
             }
 
             return mv;
         }
+
     }
+
 }

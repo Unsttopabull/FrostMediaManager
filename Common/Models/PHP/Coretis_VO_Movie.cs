@@ -1,7 +1,8 @@
-using System;
 using System.Collections;
+using System.Linq;
 using Common.Models.DB.MovieVo;
 using Common.Models.DB.MovieVo.Arts;
+using Common.Models.DB.MovieVo.Files;
 using Common.Models.DB.MovieVo.People;
 using CoretisMovie = Common.Models.PHP.Coretis_VO_Movie;
 using CoretisGenre = Common.Models.PHP.Coretis_VO_Genre;
@@ -16,16 +17,16 @@ namespace Common.Models.PHP {
 
         #region File info
         ///<summary>The Filename</summary>
-        ///<example>Family.Guy.S05E08.Dei.Gesetzeshueter.German.Dubbed.FS.DVDRip.XviD-iNSPiRED.mp4</example>
+        ///<example>\eg{ ''<c>Family.Guy.S05E08.Dei.Gesetzeshueter.German.Dubbed.FS.DVDRip.XviD-iNSPiRED.mp4</c>''}</example>
         public string fileName;
 
         ///<summary>The File Extension without beginning point</summary>
-        ///<example>'mp4' - without beginning point</example>
+        ///<example>\eg{ ''<c>mp4</c>'' - without beginning point}</example>
         public string fileExtension;
 
         ///<summary>Full path to the file relative to the device</summary>
-        ///<example>/tmp/usbmounts/sda1/movies/Family.Guy</example>
-        ///<remarks>realy needed full path ?</remarks>
+        ///<example>\eg{ ''<c>/tmp/usbmounts/sda1/movies/Family.Guy</c>''}</example>
+        ///<remarks>Realy needed full path ?</remarks>
         public string filePathFull;
 
         ///<summary>Path to file relative to the drive its stored in</summary>
@@ -33,7 +34,7 @@ namespace Common.Models.PHP {
         public string filePathOnDrive;
 
         ///<summary>Unique ID of the drive</summary>
-        ///<example>989e59b4c82b76f9a7c0d3db3208da87</example>
+        ///<example>\eg{ ''<c>989e59b4c82b76f9a7c0d3db3208da87</c>''}</example>
         public string driveUniqueId;
 
         ///<summary>File Size in Bytes (longint)</summary>
@@ -48,10 +49,11 @@ namespace Common.Models.PHP {
 
         #region filename extracted data
 
-        /// <summary>The movie title in the language of the movie 'Family Guy'</summary>
+        /// <summary>The movie title in the language of the movie</summary>
+        /// <example>\eg{ ''<c>Family Guy</c>''}</example>
         public string name;
 
-        ///<example>Dei.Gesetzeshueter</example>
+        ///<example>\eg{ ''<c>Dei.Gesetzeshueter</c>''}</example>
         public string nameSub;
 
         /// <summary></summary>
@@ -61,83 +63,97 @@ namespace Common.Models.PHP {
         #endregion
 
         /// <summary>Languages available</summary>
-        /// <example>GERMAN/DE ENGLISH/EN</example>
+        /// <example>\eg{ <c>GERMAN/DE</c> <c>ENGLISH/EN</c>}</example>
         public Hashtable languageArr;
 
         /// <summary>Language and type of the subtitles</summary>
-        /// <example>GERMAN SUBBED</example>
-        /// <remarks>Language or Keyword "SUBBED" if language is the text-language with undefined audio language</remarks>
+        /// <remarks>Language or Keyword ''<c>SUBBED</c>'' if language is the text-language with undefined audio language</remarks>
+        /// <example>\eg{ ''<c>GERMAN SUBBED</c>''}</example>
         public string subtitle;
 
-        /// <example>DOKU MANGA XXX MOVIE SERIE -> (S01E01 S01 staffel1 staffel.12 season folge1 folge.12 complete)</example>
+        /// <example>\eg{ <c>DOKU MANGA XXX MOVIE SERIE -> (S01E01 S01 staffel1 staffel.12 season folge1 folge.12 complete)</c>}</example>
         public string art;
 
         /// <summary>The episode in the series</summary>
-        /// <example>S01E01 E01</example>
+        /// <example>\eg{ ''<c>S01E01 E01</c>''}</example>
         public string episode;
 
         #region Type information
         ///<summary>The type of the audio</summary>
-        ///<example>AC3 DTS</example>
+        ///<example>\eg{ <c>AC3 DTS</c>}</example>
         public string audioType;
 
         /// <summary>The source of the audio</summary>
-        /// <example>LD MD LINE MIC</example>
+        /// <example>\eg{ <c>TS, TC, TELESYNC, CAM, HDRIP, DVDRIP, BDRIP, DTV, HD2DVD, HDDVDRIP, HDTVRIP, VHS, SCREENER, RECODE</c>}</example>
         public string audioSource;
 
         /// <summary>The type of the video</summary>
-        /// <example>XVID DVD5 DVD9 DVDR BLUERAY BD HD2DVD X264</example>
+        /// <example>\eg{ <c>XVID, DVD5, DVD9, DVDR, BLUERAY, BD, HD2DVD, X264</c>}</example>
         public string videoType;
 
         ///<summary>With what this video was made from</summary>
-        /// <example>TS TC TELESYNC CAM HDRIP DVDRIP BDRIP DTV HD2DVD HDDVDRIP HDTVRIP VHS SCREENER RECODE</example>
+        /// <example>\eg{TS TC TELESYNC CAM HDRIP DVDRIP BDRIP DTV HD2DVD HDDVDRIP HDTVRIP VHS SCREENER RECODE}</example>
         public string videoSource;
 
-        ///<summary>Resolution and format of the video</summary>
-        /// <example>720p 1080p 720i 1080i PAL HDTV INTERLACED LETTERBOX</example>
+        /// <summary>Resolution and format of the video</summary>
+        /// <example>\eg{ <c>720p, 1080p, 720i, 1080i, PAL, HDTV, INTERLACED, LETTERBOX</c>}</example>
         public string videoFormat;
 
         ///<summary>Special addithions or types</summary>
-        ///<example>INTERNAL DUBBED LIMITED PROPER REPACK RERIP SUBBED</example>
+        ///<example>\eg{ <c>INTERNAL, DUBBED, LIMITED, PROPER, REPACK, RERIP, SUBBED</c>}</example>
         public string specials;
         #endregion
 
         #region mplayer extracted infos
 
-        /// <summary>Audio channels</summary>
+        /// <summary>The audio channels setting.</summary>
+        /// <example>\eg{ <c>Stereo, 2, 5.1, 6</c>}</example>
         public string achannels;
 
-        /// <example>MP3</example>
+        /// <summary>The codec of the audio is encoded in.</summary>
+        /// <example>\eg{ <c>MP3, AC3, FLAC</c>}</example>
         public string acodec;
 
-        /// <example>WMV3 DIVX XVID H264 VP6 AVC</example>
+        /// <summary>Gets or sets the codec of the video is encoded in.</summary>
+        /// <value>The codec of the video is encoded in.</value>
+        /// <example>\eg{ <c>WMV3 DIVX XVID H264 VP6 AVC</c>}</example>
         public string vcodec;
 
-        /// <example>1.333</example>
+        /// <summary>Aspect; ratio between width and height (width / height)</summary>
+        /// <example>\eg{ <c>1.333</c>}</example>
         public double aspect;
 
-        public int width; // in pixel
-        public int height; // in pixel
-        public int length; // in seconds
-        public int fps; // frame count
-        //we not use:	public colordepth					= NULL;			// bit count
+        /// <summary>The width of the video in pixel.</summary>
+        public int width; // 
+
+        /// <summary>The height of the video in pixel.</summary>
+        public int height;
+
+        /// <summary>The length in seconds</summary>
+        public int length;
+
+        /// <summary>frame count</summary>
+        public int fps;
         #endregion
 
         #region info-file-paths:
 
-        ///<example>/movies/Kill Bill/folder.jpg</example>
+        ///<example>\eg{ ''<c>/movies/Kill Bill/folder.jpg</c>''}</example>
         public string pathCover;
 
-        public string[] pathScreenArr; // array ( '/movies/Kill Bill/Kill Bill-screen.jpg', '...' )
-        public string[] pathFanartArr; // array ( '/movies/Kill Bill/Kill Bill-fanart', '...' )
+        /// <example>\eg{ <code>array ( '/movies/Kill Bill/Kill Bill-screen.jpg', '...' )</code>}</example>
+        public string[] pathScreenArr;
 
-        /// <example>/movies/Kill Bill/Kill Bill.xml</example>
+        /// <example>\eg{ <code>array ( '/movies/Kill Bill/Kill Bill-fanart', '...' )</code>}</example>
+        public string[] pathFanartArr;
+
+        /// <example>\eg{''<c>/movies/Kill Bill/Kill Bill.xml</c>''}</example>
         public string pathInfoXml;
 
-        /// <example></example>
-        public Hashtable pathSubtitlesArr; // array ( 'de' => '/movies/Kill Bill/Kill Bill.srt')
+        /// <example>\eg{ <code>array ( 'de' => '/movies/Kill Bill/Kill Bill.srt')</code>}</example>
+        public Hashtable pathSubtitlesArr;
 
-        /// <example>/Kill Bill/Kill Bill_xjb_sheet.jpg || /Kill Bill/Kill Bill_sheet.jpg</example>
+        /// <example>\eg{/Kill Bill/Kill Bill_xjb_sheet.jpg || /Kill Bill/Kill Bill_sheet.jpg}</example>
         public string pathSheet;
         #endregion
 
@@ -149,7 +165,7 @@ namespace Common.Models.PHP {
         // imdb is standard - so we save extra
 
         /// <summary>The imdb id</summary>
-        /// <example>tt0266697 - http://www.imdb.com/title/tt0266697/</example>
+        /// <example>\eg{''<c>tt0266697</c>'' is in IMDB http://www.imdb.com/title/tt0266697/ }</example>
         public string imdbId;
 
         /// <summary>The imdb rating</summary>
@@ -157,13 +173,13 @@ namespace Common.Models.PHP {
         public int imdbRating;
 
         ///<summary>The movie id at a online sources</summary>
-        ///<example>array ( 'imdb' => 'tt0266697', 'tmbd => '70703', 'allocine' => '60502')</example>
+        ///<example>\eg{ <code>array ( 'imdb' => 'tt0266697', 'tmbd => '70703', 'allocine' => '60502')</code>}</example>
         public Hashtable movieOnlineIdArr;
 
         // http://www.imdb.com/title/tt0266697/ http://www.themoviedb.org/movie/70703
 
         ///<summary>The ratings at online sources</summary>
-        ///<example>array ( 'imdb' => '10', 'tmbd => '50', 'allocine' => '100') from 10 to 100 (1-10 for view)</example>
+        ///<example>\eg{ <code>array ( 'imdb' => '10', 'tmbd => '50', 'allocine' => '100')</code> from 10 to 100 (1-10 for view)}</example>
         public Hashtable ratingArr;
         #endregion
 
@@ -184,18 +200,25 @@ namespace Common.Models.PHP {
         /// <summary>full description</summary>
         public string plotFull;
 
-        public CoretisPerson[] personArr; // array( Coretis_VO_Person object1, Coretis_VO_Person object2 )
-        public CoretisGenre[] genreArr; // array( Coretis_VO_Genre object1, Coretis_VO_Genre object2 )
+        /// <example>\eg{ <code>array( Coretis_VO_Person object1, Coretis_VO_Person object2 )</code>}</example>
+        public CoretisPerson[] personArr;
 
-        public Hashtable certificationArr; // array( 'us' => 'PG-13' ) keys must be ISO 3166-1 like country codes, see here: http://www.iso.org/iso/english_country_names_and_code_elements
+        /// <example>\eg{ <code>array( Coretis_VO_Genre object1, Coretis_VO_Genre object2 )</code>}</example>
+        public CoretisGenre[] genreArr;
 
-        public string[] countryArr; // array('de', 'us', 'uk')	in ISO 3166-1
+        /// <remarks>Keys must be ISO 3166-1 like country codes, see here: http://www.iso.org/iso/english_country_names_and_code_elements </remarks>
+        /// <example>\eg{ <code>array( 'us' => 'PG-13' )</code>}</example>
+        public Hashtable certificationArr;
 
-        ///<summary>The studio</summary>
-        ///<example>universal pictures</example>
+        ///<remarks>In ISO 3166-1</remarks>
+        /// <example>\eg{ <code>array('de', 'us', 'uk')</code>}</example>
+        public string[] countryArr;
+
+        /// <summary>Gets or sets the name of the studio.</summary>
+        ///<example>\eg{''<c>universal pictures</c>''}</example>
         public string studio;
 
-        /// <example>array( Coretis_VO_Picture object1, Coretis_VO_Picture object2 )</example>
+        /// <example>\eg{ <code>array( Coretis_VO_Picture object1, Coretis_VO_Picture object2 )</code>}</example>
         public CoretisPicture[] pictureArr;
 
         /// <summary>The text right to left</summary>
@@ -204,34 +227,52 @@ namespace Common.Models.PHP {
 
         #endregion
 
-        /// <summary>defines the unix timestamp of last scraper run on this object</summary>
-        /// <example>array( 'Scraper_Name' => 'unixtimestamp') example: array ('Coretis_Scraper_Filename' => '946707734')</example>
+        /// <summary>Defines the unix timestamp of last scraper run on this object</summary>
+        /// <remarks>array( 'Scraper_Name' => 'unixtimestamp')</remarks>
+        /// <example>\eg{ <code>array ('Coretis_Scraper_Filename' => '946707734')</code>}</example>
         public Hashtable scraperLastRun;
 
         #region Conversion Functions
+        /// <summary>Converts this instance to an instance of <see cref="Movie"/></summary>
+        /// <returns>An instance of <see cref="Movie"/> converted from the current instance</returns>
         public Movie ToMovie() {
             return (Movie)this;
         }
 
-        private static void GetInfo(CoretisMovie movie, Movie mov) {
+        private void GetInfo(Movie mov) {
+            //convert the year to int if valid number
             int result;
-            if (int.TryParse(movie.year, out result)) {
+            if (int.TryParse(year, out result)) {
                 mov.Year = result;
             }
 
-            mov.Subtitles.Add(new Subtitle(movie.subtitle.TrimIfNotNull())); ;
-            //mov.Specials = movie.specials.TrimIfNotNull();
-            mov.Runtime = (movie.length > 0) ? movie.length : (long?)null;
+            if(subtitle != null) {
+                //if subtitle language contains the word SUBBED
+                //it is embeded in the movie video
+                bool embeded = subtitle.Contains("SUBBED");
 
-            //mov.FPS = (movie.fps == 0) ? (int?)null : movie.fps;
+                string subtitleLang = subtitle;
+                if (embeded) {
+                    //remove the "SUBBED" from the string and trim empty space
+                    subtitleLang = subtitle.Replace("SUBBED", "").Trim();
+                }
 
-            mov.RatingAverage = movie.ratingAverage;
-            mov.ImdbID = movie.imdbId;
-            mov.Studios.Add(new Studio(movie.studio));
+                mov.Subtitles.Add(new Subtitle(subtitleLang, embeded));
+            }
+
+            //Split the specials string where "/" or "," 
+            //and convert the resulting string array to a HashSet<Special>
+            mov.Specials = specials.SplitWithoutEmptyEntries("/", ",").ToHashSet<Special, string>();
+
+            mov.Runtime = (length > 0) ? length : (long?)null;
+
+            mov.RatingAverage = ratingAverage;
+            mov.ImdbID = imdbId;
+            mov.Studios.Add(new Studio(studio));
         }
 
-        private static void CheckAddNewCast(CoretisMovie movie, Movie mov) {
-            foreach (CoretisPerson cPerson in movie.personArr) {
+        private void AddNewCast(Movie mov) {
+            foreach (CoretisPerson cPerson in personArr) {
 
                 if (cPerson.job.OrdinalEquals("actor")) {
                     Actor actor = new Actor(cPerson.name, null, cPerson.character);
@@ -249,83 +290,73 @@ namespace Common.Models.PHP {
             }
         }
 
-        private static void GetMovieTitle(CoretisMovie movie, Movie mov) {
-            mov.Title = movie.name;
-            if (movie.titleOrg != null) {
-                mov.OriginalTitle = movie.titleOrg;
+        private void GetMovieTitle(Movie mov) {
+            mov.Title = name;
+            if (!string.IsNullOrEmpty(titleOrg)) {
+                mov.OriginalTitle = titleOrg;
             }
-            else if (movie.titleSort != null) {
-                mov.OriginalTitle = movie.titleSort;
+
+            if (!string.IsNullOrEmpty(titleSort)) {
+                mov.SortTitle = titleSort;
             }
-            mov.SortTitle = movie.titleSort;
         }
 
-        private static void AddPlot(string plotFull, string plotSummary, Movie mov) {
-            if (string.IsNullOrEmpty(plotFull)) {
-                return;
-            }
-            mov.Plot.Add(new Plot(plotFull, plotSummary, null));
-        }
-
-        private static void AddAudioVideoInfo(CoretisMovie movie, Movie mov) {
+        private void AddAudioVideoInfo(Movie mov) {
             mov.Audio.Add(new Audio(
-                movie.audioSource,
-                movie.audioType,
-                movie.achannels,
-                movie.acodec
+                audioSource,
+                audioType,
+                acodec,
+                achannels
             ));
 
             mov.Videos.Add(new Video(
-                movie.vcodec,
-                movie.videoFormat,
-                movie.videoType,
-                movie.videoSource,
-                movie.aspect,
-                movie.height,
-                movie.width
+                vcodec,
+                width,
+                height,
+                aspect,
+                fps,
+                videoFormat,
+                videoType,
+                videoSource
             ));
         }
 
-        private static void AddArt(string pathCover, string[] pathScreenArr, string[] pathFanartArr, Movie mov) {
-            if (pathCover != null) {
+        private void AddArt(Movie mov) {
+            if (!string.IsNullOrEmpty(pathCover)) {
                 mov.Art.Add(new Cover(pathCover));
             }
 
-
             if (pathScreenArr != null) {
-                foreach (string screen in pathScreenArr) {
-                    mov.Art.Add(new Fanart(screen));
-                }
+                //if the array is not null we add all art as Fanart
+                mov.Art.UnionWith(pathScreenArr.Select(screen => new Fanart(screen)));
             }
 
             if (pathFanartArr != null) {
-                foreach (string fanart in pathFanartArr) {
-                    mov.Art.Add(new Fanart(fanart));
-                }
+                mov.Art.UnionWith(pathFanartArr.Select(fanart => new Fanart(fanart)));
             }
         }
 
         #endregion
 
         #region Conversion operators
-        public static explicit operator Movie(CoretisMovie movie) {
+        public static explicit operator Movie(CoretisMovie m) {
             Movie mov = new Movie();
 
-            GetMovieTitle(movie, mov);
+            m.GetMovieTitle(mov);
+            mov.Genres = m.genreArr.ToHashSet<Genre, Coretis_VO_Genre>();
+            m.AddNewCast(mov);
 
-            //za vsak najden žanr preverimo èe že obstaja in ga potem dodamo filmu
-            foreach (CoretisGenre genreVo in movie.genreArr) {
-                mov.Genres.Add(genreVo.name);
+            //if the full plot summary exists add new plot otherwise we discard all plot info 
+            if (!string.IsNullOrEmpty(m.plotFull)) {
+                mov.Plot.Add(new Plot(m.plotFull, m.plotSummary, null));
             }
 
-            CheckAddNewCast(movie, mov);
-            AddPlot(movie.plotFull, movie.plotSummary, mov);
-            GetInfo(movie, mov);
-            AddAudioVideoInfo(movie, mov);
+            m.GetInfo(mov);
+            m.AddAudioVideoInfo(mov);
 
-            mov.Files.Add(new File(movie.fileName, movie.fileExtension, movie.filePathOnDrive, (long)movie.fileSize));
+            mov.Files.Add(new File(m.fileName, m.fileExtension, m.filePathOnDrive, (long)m.fileSize));
 
-            AddArt(movie.pathCover, movie.pathFanartArr, movie.pathFanartArr, mov);
+            m.AddArt(mov);
             return mov;
         }
         #endregion

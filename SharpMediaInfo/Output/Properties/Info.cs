@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SharpMediaInfo.Output.Properties {
+﻿namespace SharpMediaInfo.Output.Properties {
     public enum InfoType {
         ScanType,
         ScanOrder,

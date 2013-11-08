@@ -24,6 +24,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <PlatformTarget>x86</PlatformTarget>
     <UseVSHostingProcess>true</UseVSHostingProcess>
+    <DocumentationFile>bin\Debug\Frost.Common.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -54,7 +55,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Models\CertificationBase.cs" />
     <Compile Include="Models\DB\Jukebox\XjbMovie.cs" />
     <Compile Include="Models\DB\MovieVo\People\Actor.cs" />
     <Compile Include="Models\DB\MovieVo\People\MovieActor.cs" />
@@ -84,10 +87,10 @@
     <Compile Include="Models\XML\Jukebox\XjbXmlMovie.cs" />
     <Compile Include="Models\XML\Jukebox\XjbXmlActor.cs" />
     <Compile Include="Models\DB\MovieVo\Arts\Art.cs" />
-    <Compile Include="Models\DB\MovieVo\Audio.cs" />
+    <Compile Include="Models\DB\MovieVo\Files\Audio.cs" />
     <Compile Include="Models\DB\MovieVo\Certification.cs" />
     <Compile Include="Models\DB\MovieVo\Country.cs" />
-    <Compile Include="Models\DB\MovieVo\File.cs" />
+    <Compile Include="Models\DB\MovieVo\Files\File.cs" />
     <Compile Include="Models\DB\MovieVo\Genre.cs" />
     <Compile Include="Models\DB\MovieVo\Movie.cs" />
     <Compile Include="Models\DB\MovieVo\MovieVo.Context.cs" />
@@ -95,8 +98,8 @@
     <Compile Include="Models\DB\MovieVo\Plot.cs" />
     <Compile Include="Models\DB\MovieVo\Rating.cs" />
     <Compile Include="Models\DB\MovieVo\Studio.cs" />
-    <Compile Include="Models\DB\MovieVo\Subtitle.cs" />
-    <Compile Include="Models\DB\MovieVo\Video.cs" />
+    <Compile Include="Models\DB\MovieVo\Files\Subtitle.cs" />
+    <Compile Include="Models\DB\MovieVo\Files\Video.cs" />
     <Compile Include="Models\DB\XBMC\StreamDetails\XbmcAudioDetails.cs" />
     <Compile Include="Models\DB\XBMC\StreamDetails\XbmcSubtitleDetails.cs" />
     <Compile Include="Models\DB\XBMC\StreamDetails\XbmcVideoDetails.cs" />
@@ -113,10 +116,10 @@
     <Compile Include="Models\DB\XBMC\StreamDetails\XbmcStreamDetails.cs" />
     <Compile Include="Models\DB\XBMC\XbmcStudio.cs" />
     <Compile Include="Models\DB\XBMC\Tag\XbmcTag.cs" />
-    <Compile Include="Models\DB\XBMC\Tag\TagLinks.cs" />
+    <Compile Include="Models\DB\XBMC\Tag\XbmcTagLink.cs" />
     <Compile Include="Models\DB\XBMC\XbmcVersion.cs" />
     <Compile Include="Models\DB\XBMC\XBMC.Context.cs" />
-    <Compile Include="Models\XML\XBMC\StreamDetails.cs" />
+    <Compile Include="Models\XML\XBMC\XbmcStreamDetails.cs" />
     <Compile Include="Models\XML\XBMC\XbmcXmlActor.cs" />
     <Compile Include="Models\XML\XBMC\XbmcXmlAudioInfo.cs" />
     <Compile Include="Models\XML\XBMC\XbmcXmlCertification.cs" />
