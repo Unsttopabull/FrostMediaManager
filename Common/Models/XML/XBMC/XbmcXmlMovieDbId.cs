@@ -2,6 +2,7 @@
 using System.Xml.Serialization;
 
 namespace Common.Models.XML.XBMC {
+
     /// <summary>Represent the online movie databse indentifier</summary>
     [Serializable]
     public class XbmcXmlMovieDbId {
@@ -36,5 +37,7 @@ namespace Common.Models.XML.XBMC {
         /// <example>\eg{ Imdb: <c>tt0068646</c>}</example>
         [XmlText]
         public string Indentifier { get; set; }
+
     }
+
 }

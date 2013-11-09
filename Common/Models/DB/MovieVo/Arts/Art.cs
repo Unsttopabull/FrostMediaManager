@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
@@ -5,7 +6,7 @@ using System.Data.Entity.ModelConfiguration;
 namespace Common.Models.DB.MovieVo.Arts {
 
     /// <summary>Represents a promotional movie art.</summary>
-    public class Art {
+    public class Art : IEquatable<Art> {
 
         /// <summary>Initializes a new instance of the <see cref="Art"/> class with specified path.</summary>
         /// <param name="path">The path to this art (can be local or network or an URI).</param>
@@ -47,6 +48,28 @@ namespace Common.Models.DB.MovieVo.Arts {
         /// <value>The movie this art is for</value>
         [ForeignKey("MovieId")]
         public virtual Movie Movie { get; set; }
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(Art other) {
+            if (other == null) {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            if (Id != 0 && other.Id != 0) {
+                return Id == other.Id;
+            }
+
+            return Path == other.Path &&
+                   Preview == other.Preview &&
+                   Type == other.Type &&
+                   MovieId == other.MovieId;
+        }
 
         internal class Configuration : EntityTypeConfiguration<Art> {
 

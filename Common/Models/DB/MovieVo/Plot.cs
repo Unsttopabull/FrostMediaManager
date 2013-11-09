@@ -1,10 +1,11 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Common.Models.DB.MovieVo {
 
     /// <summary>Contains information about movie story/plot.</summary>
-    public class Plot{
+    public class Plot : IEquatable<Plot> {
 
         /// <summary>Initializes a new instance of the <see cref="Plot"/> class.</summary>
         /// <param name="full">The full plot.</param>
@@ -65,5 +66,29 @@ namespace Common.Models.DB.MovieVo {
         /// <value>Gets or sets the movie this plot belongs to.</value>
         [ForeignKey("MovieId")]
         public virtual Movie Movie { get; set; }
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(Plot other) {
+            if (other == null) {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            if (Id != 0 && other.Id != 0) {
+                return Id == other.Id;
+            }
+
+            return Tagline == other.Tagline &&
+                   Summary == other.Summary &&
+                   Full == other.Full &&
+                   Language == other.Language;
+        }
+
     }
+
 }

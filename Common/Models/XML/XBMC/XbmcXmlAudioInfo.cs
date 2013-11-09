@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 using Common.Models.DB.MovieVo.Files;
 
 namespace Common.Models.XML.XBMC {
+
     /// <summary>Represents serialized information about an audio stream in a movie</summary>
     [Serializable]
     public class XbmcXmlAudioInfo {
@@ -17,7 +18,7 @@ namespace Common.Models.XML.XBMC {
         /// <param name="channels">The number of chanells in the audio stream (5.1 has 6 chanels)</param>
         /// <param name="language">The language of this audio in a 3 letter abreviation (ISO 639-2 Code).</param>
         /// <param name="longLanguage">The full name of the language in this audio stream</param>
-        public XbmcXmlAudioInfo(string codec, int channels, string language, string longLanguage ) {
+        public XbmcXmlAudioInfo(string codec, int channels, string language, string longLanguage) {
             Codec = codec;
             Language = language;
             LongLanguage = longLanguage;
@@ -59,5 +60,7 @@ namespace Common.Models.XML.XBMC {
         public static explicit operator Audio(XbmcXmlAudioInfo audio) {
             return new Audio(audio.Codec, audio.Channels.ToICString(), audio.Language);
         }
+
     }
+
 }

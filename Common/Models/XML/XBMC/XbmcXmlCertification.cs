@@ -52,5 +52,7 @@ namespace Common.Models.XML.XBMC {
         public static explicit operator Certification(XbmcXmlCertification cert) {
             return new Certification(cert.Country, cert.Rating);
         }
+
     }
+
 }

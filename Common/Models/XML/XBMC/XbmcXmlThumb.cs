@@ -3,7 +3,7 @@ using System.IO;
 using System.Xml.Serialization;
 
 namespace Common.Models.XML.XBMC {
-    
+
     /// <summary>Represent a promotional image of the movie ready to be serialized.</summary>
     [Serializable]
     public class XbmcXmlThumb {
@@ -61,4 +61,5 @@ namespace Common.Models.XML.XBMC {
         }
 
     }
+
 }

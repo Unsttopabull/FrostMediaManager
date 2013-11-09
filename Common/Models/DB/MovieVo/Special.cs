@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Common.Models.DB.MovieVo {
 
     /// <summary>Represents a special information about a movie's release or type.</summary>
-    public class Special {
+    public class Special : IEquatable<Special> {
 
         /// <summary>Initializes a new instance of the <see cref="Special"/> class.</summary>
         /// <param name="value">The value of the special</param>
@@ -24,6 +25,25 @@ namespace Common.Models.DB.MovieVo {
         /// <summary>Gets or sets the movies that this special applies to</summary>
         /// <value>The movies this special applies to.</value>
         public HashSet<Movie> Movies { get; set; }
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(Special other) {
+            if (other == null) {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            if (Id != 0 && other.Id != 0) {
+                return Id == other.Id;
+            }
+
+            return Value == other.Value;
+        }
 
         /// <summary>Converts a <see cref="string"/> to an instance of <see cref="Special"/></summary>
         /// <param name="specialName">The value of the special</param>

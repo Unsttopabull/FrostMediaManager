@@ -2,6 +2,7 @@
 using System.Xml;
 
 namespace Common {
+
     /// <summary>Represents an xml writer of which tags are indented.</summary>
     public class XmlIndentedTextWriter : XmlTextWriter {
 
@@ -11,5 +12,7 @@ namespace Common {
         public XmlIndentedTextWriter(string filename, Encoding encoding = null) : base(filename, encoding) {
             Formatting = Formatting.Indented;
         }
+
     }
+
 }

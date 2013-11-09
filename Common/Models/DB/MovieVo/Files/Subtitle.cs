@@ -1,10 +1,11 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents information about a subtitle stream in a file.</summary>
-    public class Subtitle {
+    public class Subtitle : IEquatable<Subtitle> {
 
         /// <summary>Initializes a new instance of the <see cref="Subtitle"/> class.</summary>
         public Subtitle() {
@@ -69,5 +70,29 @@ namespace Common.Models.DB.MovieVo.Files {
 
         #endregion
 
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(Subtitle other) {
+            if (other == null) {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            if (Id != 0 && other.Id != 0) {
+                return Id == other.Id;
+            }
+
+            return Language == other.Language &&
+                   EmbededInVideo == other.EmbededInVideo &&
+                   ForHearingImpaired == other.ForHearingImpaired &&
+                   MovieId == other.MovieId &&
+                   FileId == other.FileId;
+        }
+
     }
+
 }

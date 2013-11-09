@@ -6,7 +6,6 @@ namespace Common.Models.DB.XBMC {
     /// <summary>This table stores XBMC settings for individual files.</summary>
     [Table("settings")]
     public class XbmcSettings {
-
         #region Properties / Columns
 
         /// <summary>Gets or sets the id of this setting in the database.</summary>
@@ -142,5 +141,7 @@ namespace Common.Models.DB.XBMC {
         /// <summary>Gets or sets the file this setting is for.</summary>
         /// <value>The file this setting is for.</value>
         public virtual XbmcFile File { get; set; }
+
     }
+
 }

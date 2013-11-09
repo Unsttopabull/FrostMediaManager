@@ -1,10 +1,11 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Common.Models.DB.MovieVo {
 
     /// <summary>Represents a movie certification/restriction in a certain country.</summary>
-    public class Certification : CertificationBase {
+    public class Certification : CertificationBase, IEquatable<Certification> {
 
         /// <summary>Initializes a new instance of the <see cref="Certification"/> class.</summary>
         public Certification() {
@@ -55,6 +56,27 @@ namespace Common.Models.DB.MovieVo {
         [ForeignKey("CountryId")]
         public virtual Country Country { get; set; }
 
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(Certification other) {
+            if (other == null) {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            if (Id != 0 && other.Id != 0) {
+                return Id == other.Id;
+            }
+
+            return Rating == other.Rating &&
+                   CountryId == other.CountryId &&
+                   MovieId == other.MovieId;
+        }
+
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString() {
@@ -75,5 +97,7 @@ namespace Common.Models.DB.MovieVo {
         protected override T FromCountyRating<T>(string country, string rating) {
             return new Certification(country, rating) as T;
         }
+
     }
+
 }

@@ -34,7 +34,7 @@ namespace Common.Models.DB.MovieVo.People {
         public long Id { get; set; }
 
         /// <summary>Gets or sets the character the person is portraying in this movie.</summary>
-        /// <value>the character the person is portraying in this movie.</value>
+        /// <value>The character the person is portraying in this movie.</value>
         public string Character { get; set; }
 
         /// <summary>Gets or sets the foreign key to the movie.</summary>
@@ -55,7 +55,6 @@ namespace Common.Models.DB.MovieVo.People {
         [ForeignKey("PersonId")]
         public virtual Person Person { get; set; }
 
-
         /// <summary>Converts an instance of <see cref="MovieActor"/> into <see cref="Actor"/></summary>
         /// <param name="ma">The MovieActor to convert.</param>
         /// <returns>
@@ -65,5 +64,7 @@ namespace Common.Models.DB.MovieVo.People {
         public static explicit operator Actor(MovieActor ma) {
             return new Actor(ma.Person, ma.Character);
         }
+
     }
+
 }

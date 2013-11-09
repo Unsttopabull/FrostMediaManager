@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents an information about a file.</summary>
-    public class File {
+    public class File : IEquatable<File> {
 
         /// <summary>Initializes a new instance of the <see cref="File"/> class.</summary>
         public File() {
@@ -20,7 +20,7 @@ namespace Common.Models.DB.MovieVo.Files {
         /// <summary>Initializes a new instance of the <see cref="File"/> class.</summary>
         /// <param name="name">The filename in folder</param>
         /// <param name="extension">The file extension withot begining point</param>
-		/// <param name="size">The file size in bytes.</param>
+        /// <param name="size">The file size in bytes.</param>
         /// <param name="pathOnDrive">The full path to the folder that contains the file with trailing '/' without quotes (" or ')</param>
         public File(string name, string extension, string pathOnDrive, long? size = null) : this() {
             Extension = extension;
@@ -91,6 +91,29 @@ namespace Common.Models.DB.MovieVo.Files {
         public virtual HashSet<Subtitle> Subtitles { get; set; }
 
         #endregion
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(File other) {
+            if (other == null) {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            if (Id != 0 && other.Id != 0) {
+                return Id == other.Id;
+            }
+
+            return Extension == other.Extension &&
+                   Name == other.Name &&
+                   FolderPath == other.FolderPath &&
+                   DateAdded == other.DateAdded &&
+                   MovieId == other.MovieId;
+        }
 
         /// <summary>Gets the full path to the file.</summary>
         /// <returns>A full path filename to the fille or <b>null</b> if any of <b>FolderPath</b> or <b>FileName</b> are null</returns>

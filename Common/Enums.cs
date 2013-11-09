@@ -27,6 +27,7 @@
         /// <summary>The progressive (noninterlaced) scan type. All rows of the drawn for each frame.</summary>
         /// <remarks>Supported on all screens.</remarks>
         Progressive
+
     }
 
     /// <summary>The bitrate mode that was used when ecoding.</summary>
@@ -62,10 +63,13 @@
 
         /// <summary>The Xtreamer Movie Jukebox database.</summary>
         Xtreamer,
+
         /// <summary>The XBMC Movie database.</summary>
         XBMC,
+
         /// <summary>The Frost Media Manager cache database.</summary>
         Cache
+
     }
 
     /// <summary>The xml serialization system.</summary>
@@ -194,12 +198,16 @@
 
     /// <summary>The deinterlacing mode used.</summary>
     public enum XbmcDeinterlaceMode : long {
+
         /// <summary>The video should not be deinterlaced.</summary>
         Disabled,
+
         /// <summary>XBMC should determine if it should deinterlace the movie.</summary>
         Automatic,
+
         /// <summary>Force the video to be deinterlaced.</summary>
         Force
+
     }
 
 }

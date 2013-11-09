@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Data.SQLite;
+using System.IO;
 using Common.Models.DB.MovieVo;
 using Common.Properties;
-using File = System.IO.File;
 
 namespace Common {
+
     /// <summary>If the databse doesn't exist it creates it and seeds it with data.</summary>
     public class SeedInitializer : IDatabaseInitializer<MovieVoContainer> {
+
         public const string CACHE_FILENAME = "movieVo.db3";
 
         public void InitializeDatabase(MovieVoContainer context) {
@@ -19,7 +21,7 @@ namespace Common {
                 File.Delete(CACHE_FILENAME);
                 SQLiteConnection.CreateFile(CACHE_FILENAME);
             }
-            catch(Exception e){
+            catch (Exception e) {
                 Console.WriteLine(e.Message);
             }
             SQLiteCommand.Execute(Resources.MovieVoSQL, SQLiteExecuteType.NonQuery, context.Database.Connection.ConnectionString, new object());
@@ -27,5 +29,7 @@ namespace Common {
             //XjbDbParser xjb = new XjbDbParser();
             //xjb.MakeCache(context);
         }
+
     }
+
 }

@@ -6,13 +6,14 @@ using System.Xml.Serialization;
 using Common;
 using Common.Models.DB.MovieVo;
 using Common.Models.XML.XBMC;
-using XbmcStreamDetails = Common.Models.XML.XBMC.XbmcStreamDetails;
+using ObdelajProdatke;
 
 namespace Tester {
     class Program {
         static void Main() {
-            //XbmcParser xp = new XbmcParser();
-            TestXml();
+            XbmcParser xp = new XbmcParser();
+
+            //TestXml();
         }
 
         private static void ParseCertString() {

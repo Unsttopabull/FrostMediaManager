@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,7 +11,8 @@ namespace Common.Models.DB.XBMC {
 
     /// <summary>This table stores filenames and links to the Path table.</summary>
     [Table("files")]
-    public class XbmcFile {
+    public class XbmcFile : IEquatable<XbmcFile> {
+
         /// <summary>Prefix for movies split into multiple files</summary>
         public const string STACK_PREFIX = "stack://";
 
@@ -170,6 +172,29 @@ namespace Common.Models.DB.XBMC {
         public virtual HashSet<XbmcStreamDetails> StreamDetails { get; set; }
 
         #endregion
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(XbmcFile other) {
+            if (other == null) {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            if (Id != 0 && other.Id != 0) {
+                return Id == other.Id;
+            }
+
+            return PathId == other.PathId &&
+                   FileNameString == other.FileNameString &&
+                   PlayCount == other.PlayCount &&
+                   LastPlayed == other.LastPlayed &&
+                   DateAdded == other.DateAdded;
+        }
 
         /// <summary>Converts a Windows network path to SAMBA path.</summary>
         /// <param name="fn">The filename to convert</param>

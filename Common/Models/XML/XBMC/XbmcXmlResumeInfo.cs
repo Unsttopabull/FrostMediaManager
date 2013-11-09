@@ -3,6 +3,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 
 namespace Common.Models.XML.XBMC {
+
     /// <summary>Represents information about where to resume the movie, ready to be serialized.</summary>
     [Serializable]
     public class XbmcXmlResumeInfo {
@@ -28,5 +29,7 @@ namespace Common.Models.XML.XBMC {
         /// <value>The total.</value>
         [XmlElement("total", Form = XmlSchemaForm.Unqualified)]
         public float Total { get; set; }
+
     }
+
 }

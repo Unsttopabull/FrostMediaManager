@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
@@ -7,8 +8,9 @@ namespace Common.Models.DB.XBMC {
 
     /// <summary>Table holds information about folder path and folder settings and the type of content inside.</summary>
     [Table("path")]
-    public class XbmcPath {
+    public class XbmcPath : IEquatable<XbmcPath> {
 
+        /// <summary>Initializes a new instance of the <see cref="XbmcPath"/> class.</summary>
         public XbmcPath() {
             Movies = new HashSet<XbmcMovie>();
             Files = new HashSet<XbmcFile>();
@@ -66,6 +68,8 @@ namespace Common.Models.DB.XBMC {
         [Column("strSettings")]
         public string Settings { get; set; }
 
+        /// <summary>Gets or sets the whether the movie should no be automaticaly updated.</summary>
+        /// <value>Is <c>true</c> when the movie should no be automaticaly updated; otherwise <c>false</c>.</value>
         [Column("noUpdate")]
         public bool? NoUpdate { get; set; }
 
@@ -81,6 +85,8 @@ namespace Common.Models.DB.XBMC {
 
         #endregion
 
+        #region Associations / Related tables
+
         /// <summary>Gets or sets the files on this path.</summary>
         /// <value>The files on this path.</value>
         public virtual HashSet<XbmcFile> Files { get; set; }
@@ -88,6 +94,36 @@ namespace Common.Models.DB.XBMC {
         /// <summary>Gets or sets the movies on this path.</summary>
         /// <value>The movies on this path.</value>
         public virtual HashSet<XbmcMovie> Movies { get; set; }
+
+        #endregion
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(XbmcPath other) {
+            if (other == null) {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            if (Id != 0 && other.Id != 0) {
+                return Id == other.Id;
+            }
+
+            return PathName == other.PathName &&
+                   Content == other.Content &&
+                   Scraper == other.Scraper &&
+                   Hash == other.Hash &&
+                   ScanRecursive == other.ScanRecursive &&
+                   UseFolderNames == other.UseFolderNames &&
+                   Settings == other.Settings &&
+                   NoUpdate == other.NoUpdate &&
+                   Exclude == other.Exclude &&
+                   DateAdded == other.DateAdded;
+        }
 
         internal class Configuration : EntityTypeConfiguration<XbmcPath> {
 

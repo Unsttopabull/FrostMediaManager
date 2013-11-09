@@ -1,11 +1,11 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents information about a video stream in a file.</summary>
-    public class Video {
-
+    public class Video : IEquatable<Video> {
         #region Constructors
 
         /// <summary>Initializes a new instance of the <see cref="Video"/> class.</summary>
@@ -81,6 +81,10 @@ namespace Common.Models.DB.MovieVo.Files {
         /// <summary>Gets or sets the frames per second in this video.</summary>
         /// <value>The Frames per second.</value>
         public float? FPS { get; set; }
+
+        /// <summary>Gets or sets the video bit rate.</summary>
+        /// <value>The bit rate in Kbps.</value>
+        public long BitRate { get; set; }
 
         /// <summary>Gets or sets the video bit rate mode.</summary>
         /// <value>The bit rate mode</value>
@@ -161,6 +165,41 @@ namespace Common.Models.DB.MovieVo.Files {
         public virtual Movie Movie { get; set; }
 
         #endregion
+    
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(Video other) {
+            if (other == null) {
+                return false;
+            }
 
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            if (Id != 0 && other.Id != 0) {
+                return Id == other.Id;
+            }
+
+            return Source == other.Source &&
+                   Type == other.Type &&
+                   Format == other.Format &&
+                   FPS == other.FPS &&
+                   BitRate == other.BitRate &&
+                   BitRateMode == other.BitRateMode &&
+                   SamplingRate == other.SamplingRate &&
+                   BitDepth == other.BitDepth &&
+                   CompressionMode == other.CompressionMode &&
+                   Duration == other.Duration &&
+                   ScanType == other.ScanType &&
+                   ColorSpace == other.ColorSpace &&
+                   Codec == other.Codec &&
+                   Aspect == other.Aspect &&
+                   Width == other.Width &&
+                   Height == other.Height &&
+                   Language == other.Language;
+        }
     }
+
 }

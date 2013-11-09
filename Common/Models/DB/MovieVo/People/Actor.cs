@@ -1,9 +1,11 @@
+using System;
 using Common.Models.XML.Jukebox;
 
 namespace Common.Models.DB.MovieVo.People {
 
     /// <summary>Represents an actor in a movie.</summary>
-    public class Actor : Person {
+    public class Actor : Person, IEquatable<Actor> {
+
         private string _character;
 
         /// <summary>Initializes a new instance of the <see cref="Actor"/> class.</summary>
@@ -33,10 +35,17 @@ namespace Common.Models.DB.MovieVo.People {
         public string Character {
             get {
                 return string.IsNullOrEmpty(_character)
-                               ? null
-                               : _character;
+                    ? null
+                    : _character;
             }
             set { _character = value; }
+        }
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(Actor other) {
+            return base.Equals(other) && _character == other._character;
         }
 
         /// <summary>Returns a string that represents the current object.</summary>
@@ -57,11 +66,12 @@ namespace Common.Models.DB.MovieVo.People {
         /// </returns>
         public static explicit operator XjbXmlActor(Actor act) {
             return new XjbXmlActor(
-                    act.Character ?? "",
-                    act.Name ?? "",
-                    act.Thumb
-                    );
+                act.Character ?? "",
+                act.Name ?? "",
+                act.Thumb
+                );
         }
+
     }
 
 }

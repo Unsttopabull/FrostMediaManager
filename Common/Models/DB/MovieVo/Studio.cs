@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.ModelConfiguration;
 
 namespace Common.Models.DB.MovieVo {
 
     /// <summary>Represents a studio that prodcuced a movie.</summary>
-    public class Studio {
+    public class Studio : IEquatable<Studio> {
 
         /// <summary>Initializes a new instance of the <see cref="Studio"/> class.</summary>
         public Studio() {
@@ -41,6 +42,25 @@ namespace Common.Models.DB.MovieVo {
         /// <summary>Gets or sets the movies this studio has produced.</summary>
         /// <value>The movies this studio has produced.</value>
         public virtual HashSet<Movie> Movies { get; set; }
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(Studio other) {
+            if (other == null) {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            if (Id != 0 && other.Id != 0) {
+                return Id == other.Id;
+            }
+
+            return Name == other.Name && Logo == other.Logo;
+        }
 
         /// <summary>Converts studio names to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Studio"/></summary>
         /// <param name="studioNames">The studio names.</param>

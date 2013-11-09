@@ -5,7 +5,7 @@ namespace Common.Models.DB.XBMC.Actor {
 
     /// <summary>Represents an actor in the XBMC library.</summary>
     [NotMapped]
-    public class XbmcActor {
+    public class XbmcActor : IEquatable<XbmcActor> {
 
         private readonly long _movieID;
         private XbmcPerson _person;
@@ -66,6 +66,13 @@ namespace Common.Models.DB.XBMC.Actor {
         /// <summary>Gets or sets the position in a list this actor should appear at.</summary>
         /// <value>The position in a list this actor should appear at.</value>
         public long Order { get; set; }
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(XbmcActor other) {
+            return _person.Equals(other._person) && Role == other.Role;
+        }
 
         /// <summary>Converts this instance to an instance of <see cref="Common.Models.DB.XBMC.Actor.XbmcMovieActor">XbmcMovieActor</see></summary>
         /// <returns>An instance of <see cref="Common.Models.DB.XBMC.Actor.XbmcMovieActor">XbmcMovieActor</see> converted from <see cref="XbmcActor"/></returns>

@@ -22,7 +22,7 @@ namespace Common.Models.XML.XBMC {
         /// <summary>Initializes a new instance of the <see cref="XbmcXmlSubtitleInfo"/> class.</summary>
         /// <param name="language">The language of this subtitle in a 3 letter abreviation (ISO 639-2 Code).</param>
         /// <param name="longLanguage">The full name of the language in this subtitle stream</param>
-        public XbmcXmlSubtitleInfo(string language, string longLanguage) : this(language){
+        public XbmcXmlSubtitleInfo(string language, string longLanguage) : this(language) {
             LongLanguage = longLanguage;
         }
 
@@ -43,5 +43,7 @@ namespace Common.Models.XML.XBMC {
         public static explicit operator Subtitle(XbmcXmlSubtitleInfo subtitle) {
             return new Subtitle(subtitle.LongLanguage ?? subtitle.Language);
         }
+
     }
+
 }

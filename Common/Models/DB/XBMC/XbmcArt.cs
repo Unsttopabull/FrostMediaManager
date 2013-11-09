@@ -1,12 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Common.Models.DB.XBMC {
 
     /// <summary>This table stores the URLs for movie art metadata.</summary>
     [Table("art")]
-    public class XbmcArt {
-
+    public class XbmcArt : IEquatable<XbmcArt> {
         #region Constants
 
         /// <summary>The value of the <see cref="XbmcArt.Type"/> when this art is a thumbnail</summary>
@@ -70,6 +70,28 @@ namespace Common.Models.DB.XBMC {
         /// </example>
         [Column("url")]
         public string Url { get; set; }
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(XbmcArt other) {
+            if (other == null) {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            if (Id != 0 && other.Id != 0) {
+                return Id == other.Id;
+            }
+
+            return MediaID == other.MediaID &&
+                   MediaType == other.MediaType &&
+                   Type == other.Type &&
+                   Url == other.Url;
+        }
 
     }
 

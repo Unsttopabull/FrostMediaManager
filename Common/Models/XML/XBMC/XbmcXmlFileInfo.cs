@@ -10,6 +10,7 @@ namespace Common.Models.XML.XBMC {
     [Serializable]
     [XmlType(AnonymousType = true)]
     public class XbmcXmlFileInfo {
+
         private const string SEPARATOR = " / ";
 
         /// <summary>Initializes a new instance of the <see cref="XbmcXmlFileInfo"/> class.</summary>
@@ -57,8 +58,8 @@ namespace Common.Models.XML.XBMC {
         public string[] GetSubtitleLanguages() {
             if (Subtitles != null) {
                 return Subtitles.Where(s => s.Language != null)
-                                .Select(s => s.Language)
-                                .ToArray();
+                    .Select(s => s.Language)
+                    .ToArray();
             }
             return null;
         }
@@ -88,5 +89,7 @@ namespace Common.Models.XML.XBMC {
                     throw new ArgumentOutOfRangeException("type");
             }
         }
+
     }
+
 }

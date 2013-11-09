@@ -43,15 +43,15 @@ namespace Common {
         /// <returns>The trimmed string or <c>null</c> if the parameter <c><paramref name="str"/></c> was <c>null</c>.</returns>
         public static string TrimIfNotNull(this string str) {
             return (str != null)
-                        ? str.Trim()
-                        : null;
+                ? str.Trim()
+                : null;
         }
 
         [DllImport("Shlwapi.dll", CharSet = CharSet.Auto)]
         private static extern long StrFormatByteSize(
-                long fileSize,
-                [MarshalAs(UnmanagedType.LPTStr)] StringBuilder buffer,
-                int bufferSize);
+            long fileSize,
+            [MarshalAs(UnmanagedType.LPTStr)] StringBuilder buffer,
+            int bufferSize);
 
         /// <summary>Formats the file size in bytes as a pretty printed string.</summary>
         /// <param name="size">The size in bytes.</param>
@@ -88,7 +88,7 @@ namespace Common {
             return str.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        /// <summary>Adds the file info as an instance <see cref="File">File</see> to the collection if the file with specified filename it exists.</summary>
+        /// <summary>Adds the file info as an instance <see cref="Models.DB.MovieVo.Files.File">File</see> to the collection if the file with specified filename it exists.</summary>
         /// <param name="files">The files collection to add to.</param>
         /// <param name="filename">The filename to check.</param>
         /// <returns>Returns <b>true</b> if the fille exist and there was no error retrieving its info; otherwise <b>false</b>.</returns>
@@ -134,7 +134,7 @@ namespace Common {
         public static T CastAs<T>(this object obj) {
             //Will throw an exception if casting fails
             //(there must be a conversion operator defined for custom types)
-            return (T) obj; 
+            return (T) obj;
         }
 
         /// <summary>
@@ -150,5 +150,7 @@ namespace Common {
         public static IEnumerable<TTo> ConvertIEnumerable<TTo, TFrom>(this IEnumerable<TFrom> enumerable) where TTo : class {
             return enumerable.Select(e => e as TTo);
         }
+
     }
+
 }

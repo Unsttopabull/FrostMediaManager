@@ -29,5 +29,7 @@ namespace Common.Models.DB.XBMC.Tag {
         /// <summary>Gets or sets the referenced tag.</summary>
         /// <value> The tag referenced.</value>
         public virtual XbmcTag Tag { get; set; }
+
     }
+
 }

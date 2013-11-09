@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Common.Models.XML.XBMC;
@@ -5,8 +6,7 @@ using Common.Models.XML.XBMC;
 namespace Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents information about an audio stream in a file.</summary>
-    public class Audio {
-
+    public class Audio : IEquatable<Audio> {
         #region Constructors
 
         /// <summary>Initializes a new instance of the <see cref="Audio"/> class.</summary>
@@ -135,6 +135,37 @@ namespace Common.Models.DB.MovieVo.Files {
         public virtual Movie Movie { get; set; }
 
         #endregion
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(Audio other) {
+            if (other == null) {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            if (Id != 0 && other.Id != 0) {
+                return Id == other.Id;
+            }
+
+            return Source == other.Source &&
+                   Type == other.Type &&
+                   ChannelSetup == other.ChannelSetup &&
+                   NumberOfChannels == other.NumberOfChannels &&
+                   ChannelPositions == other.ChannelPositions &&
+                   Codec == other.Codec &&
+                   BitRate == other.BitRate &&
+                   BitRateMode == other.BitRateMode &&
+                   SamplingRate == other.SamplingRate &&
+                   BitDepth == other.BitDepth &&
+                   CompressionMode == other.CompressionMode &&
+                   Duration == other.Duration &&
+                   Language == other.Language;
+        }
 
         /// <summary>Converts and instance of <see cref="Audio"/> to an instance of <see cref="Common.Models.XML.XBMC.XbmcXmlAudioInfo">XbmcXmlAudioInfo</see></summary>
         /// <param name="audio">The audio to convert</param>

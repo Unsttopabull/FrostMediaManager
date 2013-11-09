@@ -100,5 +100,7 @@ namespace Common.Models.XML.XBMC {
         public static explicit operator Video(XbmcXmlVideoInfo video) {
             return new Video(video.Codec, video.Width, video.Height, video.Aspect);
         }
+
     }
+
 }

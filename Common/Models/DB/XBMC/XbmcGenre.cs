@@ -34,6 +34,17 @@ namespace Common.Models.DB.XBMC {
         /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
         /// <param name="other">An object to compare with this object.</param>
         public bool Equals(XbmcGenre other) {
+            if (other == null) {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            if (Id != 0 && other.Id != 0) {
+                return Id == other.Id;
+            }
             return Name == other.Name;
         }
 
@@ -42,12 +53,12 @@ namespace Common.Models.DB.XBMC {
             public Configuration() {
                 //Join table Movie <--> Genre
                 HasMany(m => m.Movies)
-                        .WithMany(g => g.Genres)
-                        .Map(m => {
-                            m.ToTable("genrelinkmovie");
-                            m.MapLeftKey("idGenre");
-                            m.MapRightKey("idMovie");
-                        });
+                    .WithMany(g => g.Genres)
+                    .Map(m => {
+                        m.ToTable("genrelinkmovie");
+                        m.MapLeftKey("idGenre");
+                        m.MapRightKey("idMovie");
+                    });
             }
 
         }

@@ -1,9 +1,10 @@
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Common.Models.DB.XBMC.StreamDetails {
 
     /// <summary>Represents information about an audio stream in a file.</summary>
-    public class XbmcAudioDetails : XbmcStreamDetails {
+    public class XbmcAudioDetails : XbmcStreamDetails, IEquatable<XbmcAudioDetails> {
 
         /// <summary>Initializes a new instance of the <see cref="XbmcAudioDetails"/> class.</summary>
         /// <param name="codec">The codec this audio is encoded in.</param>
@@ -22,7 +23,7 @@ namespace Common.Models.DB.XBMC.StreamDetails {
 
             Codec = codec;
             Channels = channels;
-            Language = language;            
+            Language = language;
         }
 
         /// <summary>Gets or sets the codec this audio is encoded in.</summary>
@@ -40,5 +41,28 @@ namespace Common.Models.DB.XBMC.StreamDetails {
         /// <value>The language of this audio.</value>
         [Column("strAudioLanguage")]
         public string Language { get; set; }
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(XbmcAudioDetails other) {
+            if (other == null) {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            if (Id != 0 && other.Id != 0) {
+                return Id == other.Id;
+            }
+
+            return Codec == other.Codec &&
+                   Channels == other.Channels &&
+                   Language == other.Language;
+        }
+
     }
+
 }

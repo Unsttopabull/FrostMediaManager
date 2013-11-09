@@ -1,9 +1,10 @@
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Common.Models.DB.XBMC.StreamDetails {
 
     /// <summary>Represents information about a video stream in a file.</summary>
-    public class XbmcVideoDetails : XbmcStreamDetails {
+    public class XbmcVideoDetails : XbmcStreamDetails, IEquatable<XbmcVideoDetails> {
 
         /// <summary>Initializes a new instance of the <see cref="XbmcVideoDetails"/> class.</summary>
         /// <param name="codec">The video codec.</param>
@@ -11,7 +12,7 @@ namespace Common.Models.DB.XBMC.StreamDetails {
         /// <param name="width">The width of the video.</param>
         /// <param name="height">The height of the video.</param>
         /// <param name="duration">The duration of the video in seconds.</param>
-        public XbmcVideoDetails(string codec, double? aspect, long? width, long? height, long? duration) : this(new XbmcFile(), codec, aspect,width, height, duration) {
+        public XbmcVideoDetails(string codec, double? aspect, long? width, long? height, long? duration) : this(new XbmcFile(), codec, aspect, width, height, duration) {
         }
 
         /// <summary>Initializes a new instance of the <see cref="XbmcVideoDetails"/> class.</summary>
@@ -54,5 +55,30 @@ namespace Common.Models.DB.XBMC.StreamDetails {
         /// <value>The duration of the video in seconds.</value>
         [Column("iVideoDuration")]
         public long? Duration { get; set; }
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(XbmcVideoDetails other) {
+            if (other == null) {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            if (Id != 0 && other.Id != 0) {
+                return Id == other.Id;
+            }
+
+            return Codec == other.Codec &&
+                   Aspect == other.Aspect &&
+                   Width == other.Width &&
+                   Height == other.Height &&
+                   Duration == other.Duration;
+        }
+
     }
+
 }

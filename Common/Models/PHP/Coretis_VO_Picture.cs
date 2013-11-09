@@ -1,7 +1,8 @@
 namespace Common.Models.PHP {
-    public class Coretis_VO_Picture {
 
+    public class Coretis_VO_Picture {
         #region Konstante
+
         ///<summary>The DVD / Blu-ray cover art.</summary>
         public const string TYPE_POSTER = "poster";
 
@@ -19,7 +20,35 @@ namespace Common.Models.PHP {
 
         ///<summary>The thumb/cover size.</summary>
         public const string SIZE_THUMB = "thumb";
+
         #endregion
+
+        ///<summary>Picture height in pixels</summary>
+        /// <example>\eg{ <c>720</c>}</example>
+        public string height;
+
+        ///<summary>The id for this row in DB</summary>
+        public long id;
+
+        ///<summary>Scraper"s picture Id prefixed with scraper"s name</summary>
+        ///<example>\eg{ <c>tmdb4bc92150017a3c57fe00d378</c>}</example>
+        public string picId;
+
+        ///<summary>Picture type (original, mid, thumb)</summary>
+        ///<example>eg{''<c>original</c>'', ''<c>mid</c>'', ''<c>thumb</c>''}</example>
+        public string size;
+
+        ///<summary>Picture type (poster, fanart)</summary>
+        ///<example>\eg{ ''<c>poster</c>'' (portrait) or ''<c>fanart</c>'' (landscape)}</example>
+        public string type;
+
+        ///<summary>Picture url</summary>
+        /// <example>\eg{ <c>http://passion-xbmc.org/scraper/Gallery/main/Poster_Transformers2laRevanche-288440.jpg</c>}</example>
+        public string url;
+
+        ///<summary>Picture width in pixels</summary>
+        ///<example>\eg{ <c>1280</c>}</example>
+        public string width;
 
         public Coretis_VO_Picture() {
         }
@@ -32,32 +61,6 @@ namespace Common.Models.PHP {
             this.url = url;
         }
 
-        ///<summary>The id for this row in DB</summary>
-        public long id;
-
-        ///<summary>Scraper"s picture Id prefixed with scraper"s name</summary>
-        ///<example>\eg{ <c>tmdb4bc92150017a3c57fe00d378</c>}</example>
-        public string picId;
-
-        ///<summary>Picture type (poster, fanart)</summary>
-        ///<example>\eg{ ''<c>poster</c>'' (portrait) or ''<c>fanart</c>'' (landscape)}</example>
-        public string type;
-
-        ///<summary>Picture type (original, mid, thumb)</summary>
-        ///<example>eg{''<c>original</c>'', ''<c>mid</c>'', ''<c>thumb</c>''}</example>
-        public string size;
-
-        ///<summary>Picture width in pixels</summary>
-        ///<example>\eg{ <c>1280</c>}</example>
-        public string width;
-
-        ///<summary>Picture height in pixels</summary>
-        /// <example>\eg{ <c>720</c>}</example>
-        public string height;
-
-        ///<summary>Picture url</summary>
-        /// <example>\eg{ <c>http://passion-xbmc.org/scraper/Gallery/main/Poster_Transformers2laRevanche-288440.jpg</c>}</example>
-        public string url;
     }
-}
 
+}

@@ -1,10 +1,11 @@
 using Common.Models.DB.MovieVo;
 
 namespace Common.Models.PHP {
+
     public class Coretis_VO_Genre {
 
         /// <summary>Initializes a new instance of the <see cref="Coretis_VO_Genre"/> class.</summary>
-        public Coretis_VO_Genre() {    
+        public Coretis_VO_Genre() {
         }
 
         /// <summary>Initializes a new instance of the <see cref="Coretis_VO_Genre"/> class.</summary>
@@ -16,7 +17,7 @@ namespace Common.Models.PHP {
         /// <summary>Initializes a new instance of the <see cref="Coretis_VO_Genre"/> class.</summary>
         /// <param name="id">The database identifier.</param>
         /// <param name="name">The genre name.</param>
-        public Coretis_VO_Genre(int id, string name) : this(name){
+        public Coretis_VO_Genre(int id, string name) : this(name) {
             this.id = id;
         }
 
@@ -35,5 +36,7 @@ namespace Common.Models.PHP {
         public static explicit operator Genre(Coretis_VO_Genre genre) {
             return new Genre(genre.name);
         }
+
     }
+
 }
