@@ -1,4 +1,4 @@
-﻿namespace SharpMediaInfo.Output.Properties.Delay {
+﻿namespace Frost.MediaInfo.Output.Properties.Delay {
     public class GeneralDelayInfo {
         protected readonly Media MediaStream;
         protected readonly bool DelayOriginal;

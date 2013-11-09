@@ -4,15 +4,15 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Linq;
-using Common.Models.DB.Jukebox;
-using Common.Models.DB.MovieVo.Arts;
-using Common.Models.DB.MovieVo.Files;
-using Common.Models.DB.MovieVo.People;
-using Common.Models.DB.XBMC;
-using Common.Models.XML.Jukebox;
-using Common.Models.XML.XBMC;
+using Frost.Common.Models.DB.Jukebox;
+using Frost.Common.Models.DB.MovieVo.Arts;
+using Frost.Common.Models.DB.MovieVo.Files;
+using Frost.Common.Models.DB.MovieVo.People;
+using Frost.Common.Models.DB.XBMC;
+using Frost.Common.Models.XML.Jukebox;
+using Frost.Common.Models.XML.XBMC;
 
-namespace Common.Models.DB.MovieVo {
+namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents an information about a movie in the library.</summary>
     public class Movie {

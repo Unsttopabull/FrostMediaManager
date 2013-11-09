@@ -1,4 +1,4 @@
-﻿namespace SharpMediaInfo.Output.Properties.Duration {
+﻿namespace Frost.MediaInfo.Output.Properties.Duration {
     public class ExtendedDurationInfo : DurationInfo {
 
         public ExtendedDurationInfo(Media media, bool source) : base(media, source) {

@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Common.Models.DB.MovieVo {
+namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents a movie certification/restriction in a certain country.</summary>
     public class Certification : CertificationBase, IEquatable<Certification> {

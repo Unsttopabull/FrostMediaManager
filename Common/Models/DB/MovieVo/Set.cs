@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Common.Models.DB.MovieVo {
+namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents a movie set or collection.</summary>
     public class Set : IEquatable<Set> {

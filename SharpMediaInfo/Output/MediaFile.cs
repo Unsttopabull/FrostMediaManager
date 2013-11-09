@@ -4,7 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Xml.Linq;
 
-namespace SharpMediaInfo.Output {
+namespace Frost.MediaInfo.Output {
     public class MediaFile {
         private readonly MediaInfo _mi;
 

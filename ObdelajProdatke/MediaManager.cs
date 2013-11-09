@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using Common;
-using MovieVo = Common.Models.DB.MovieVo.Movie;
+using Frost.Common;
+using Frost.Common.Models.DB.MovieVo;
 
-namespace ObdelajProdatke {
+namespace Frost.ProcessDatabase {
     public abstract class MediaManager<T> where T : class {
         protected List<T> ObdelaniFilmi;
 
         protected bool DBFound { get; set; }
 
         public abstract IEnumerable<T> RawMovies { get; }
-        public abstract IEnumerable<MovieVo> Movies { get; }
+        public abstract IEnumerable<Movie> Movies { get; }
 
         protected MediaManager(DBSystem sistem) {
             string dbLoc = DBCheck.FindDB(sistem);

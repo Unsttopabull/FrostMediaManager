@@ -1,4 +1,4 @@
-﻿namespace Common {
+﻿namespace Frost.Common {
 
     /// <summary>The compression mode used.</summary>
     public enum CompressionMode : long {

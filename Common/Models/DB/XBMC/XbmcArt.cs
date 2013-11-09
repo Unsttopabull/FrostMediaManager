@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Common.Models.DB.XBMC {
+namespace Frost.Common.Models.DB.XBMC {
 
     /// <summary>This table stores the URLs for movie art metadata.</summary>
     [Table("art")]

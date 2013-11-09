@@ -1,10 +1,10 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using Common.Models.DB.XBMC.Actor;
-using Common.Models.DB.XBMC.StreamDetails;
-using Common.Models.DB.XBMC.Tag;
+using Frost.Common.Models.DB.XBMC.Actor;
+using Frost.Common.Models.DB.XBMC.StreamDetails;
+using Frost.Common.Models.DB.XBMC.Tag;
 
-namespace Common.Models.DB.XBMC {
+namespace Frost.Common.Models.DB.XBMC {
 
     /// <summary>Represents a context used for manipulation of the XBMC database.</summary>
     public class XbmcContainer : DbContext {

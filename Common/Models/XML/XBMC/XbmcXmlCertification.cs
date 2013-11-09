@@ -1,6 +1,6 @@
-﻿using Common.Models.DB.MovieVo;
+﻿using Frost.Common.Models.DB.MovieVo;
 
-namespace Common.Models.XML.XBMC {
+namespace Frost.Common.Models.XML.XBMC {
 
     /// <summary>Holds movie certifications information to be serialized</summary>
     public class XbmcXmlCertification : CertificationBase {

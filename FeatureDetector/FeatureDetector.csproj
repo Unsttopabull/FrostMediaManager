@@ -7,7 +7,7 @@
     <ProjectGuid>{8542C013-AA9A-4852-98FA-6F05CC037A91}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FeatureDetector</RootNamespace>
+    <RootNamespace>Frost.FeatureDetector</RootNamespace>
     <AssemblyName>Frost.FeatureDetector</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Xml;
 using System.Xml.Serialization;
-using Common;
-using Common.Models.DB.MovieVo;
-using Common.Models.XML.XBMC;
-using ObdelajProdatke;
+using Frost.Common;
+using Frost.Common.Models.DB.MovieVo;
+using Frost.Common.Models.XML.XBMC;
+using Frost.ProcessDatabase;
 
-namespace Tester {
+namespace Frost.Tester {
     class Program {
         static void Main() {
             XbmcParser xp = new XbmcParser();

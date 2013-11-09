@@ -5,9 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Text;
-using Common.Models.DB.XBMC.StreamDetails;
+using Frost.Common.Models.DB.XBMC.StreamDetails;
 
-namespace Common.Models.DB.XBMC {
+namespace Frost.Common.Models.DB.XBMC {
 
     /// <summary>This table stores filenames and links to the Path table.</summary>
     [Table("files")]

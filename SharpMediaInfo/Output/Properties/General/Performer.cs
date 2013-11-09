@@ -1,4 +1,4 @@
-﻿namespace SharpMediaInfo.Output.Properties.General {
+﻿namespace Frost.MediaInfo.Output.Properties.General {
     public class Performer {
         private readonly Media _media;
 

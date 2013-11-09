@@ -1,10 +1,10 @@
-﻿using SharpMediaInfo.Output.Properties;
-using SharpMediaInfo.Output.Properties.Duration;
-using SharpMediaInfo.Output.Properties.Formats;
+﻿using Frost.MediaInfo.Output.Properties;
+using Frost.MediaInfo.Output.Properties.Duration;
+using Frost.MediaInfo.Output.Properties.Formats;
 
 #pragma warning disable 1591
 
-namespace SharpMediaInfo.Output {
+namespace Frost.MediaInfo.Output {
     public class MediaOther : Media {
 
         public MediaOther(MediaFile mediaInfo) : base(mediaInfo, StreamKind.Other) {

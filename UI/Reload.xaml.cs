@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Common;
+using Frost.Common;
 
-namespace WPF_Jukebox
+namespace Frost.UI
 {
 	public partial class Reload : INotifyPropertyChanged
 	{

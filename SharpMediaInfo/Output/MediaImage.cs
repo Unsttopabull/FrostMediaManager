@@ -1,9 +1,8 @@
-﻿using SharpMediaInfo.Output.Properties;
-using SharpMediaInfo.Output.Properties.Codecs;
-using SharpMediaInfo.Output.Properties.Formats;
+﻿using Frost.MediaInfo.Output.Properties;
+using Frost.MediaInfo.Output.Properties.Codecs;
+using Frost.MediaInfo.Output.Properties.Formats;
 
-namespace SharpMediaInfo.Output {
-    using Info = Properties.Info;
+namespace Frost.MediaInfo.Output {
 
     public class MediaImage : Media {
 
@@ -15,8 +14,8 @@ namespace SharpMediaInfo.Output {
             StreamSizeInfo = new StreamSizeInfo(this);
             EncodedLibraryInfo = new EncodedLibraryInfo(this);
             LanguageInfo = new LanguageInfo(this);
-            DisplayAspectRatioInfo = new Info(this, InfoType.DisplayAspectRatio);
-            PixelAspectRatioInfo = new Info(this, InfoType.PixelAspectRatio);
+            DisplayAspectRatioInfo = new Properties.Info(this, InfoType.DisplayAspectRatio);
+            PixelAspectRatioInfo = new Properties.Info(this, InfoType.PixelAspectRatio);
         }
 
         /// <summary>Name of the track</summary>
@@ -40,11 +39,11 @@ namespace SharpMediaInfo.Output {
 
         /// <summary>Pixel Aspect ratio</summary>
         public string PixelAspectRatio { get { return this[""]; } }
-        public Info PixelAspectRatioInfo { get; private set; }
+        public Properties.Info PixelAspectRatioInfo { get; private set; }
 
         /// <summary>Display Aspect ratio</summary>
         public string DisplayAspectRatio { get { return this[""]; } }
-        public Info DisplayAspectRatioInfo { get; private set; }
+        public Properties.Info DisplayAspectRatioInfo { get; private set; }
 
         public string ColorSpace { get { return this[""]; } }
 

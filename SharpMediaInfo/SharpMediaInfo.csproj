@@ -7,7 +7,7 @@
     <ProjectGuid>{4EA24C1B-3AF2-4EB0-AA98-62EAFB0C2682}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SharpMediaInfo</RootNamespace>
+    <RootNamespace>Frost.MediaInfo</RootNamespace>
     <AssemblyName>Frost.MediaInfo</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

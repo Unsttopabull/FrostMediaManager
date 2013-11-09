@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Common.Models.DB.XBMC.StreamDetails {
+namespace Frost.Common.Models.DB.XBMC.StreamDetails {
 
     /// <summary>Represents information about a video stream in a file.</summary>
     public class XbmcVideoDetails : XbmcStreamDetails, IEquatable<XbmcVideoDetails> {

@@ -1,6 +1,6 @@
-using Common.Models.DB.MovieVo;
+using Frost.Common.Models.DB.MovieVo;
 
-namespace Common.Models.PHP {
+namespace Frost.Common.Models.PHP {
 
     public class Coretis_VO_Genre {
 

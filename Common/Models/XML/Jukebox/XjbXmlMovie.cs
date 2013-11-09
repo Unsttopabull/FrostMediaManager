@@ -5,10 +5,10 @@ using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using Common.Models.DB.MovieVo;
-using Common.Models.DB.MovieVo.People;
+using Frost.Common.Models.DB.MovieVo;
+using Frost.Common.Models.DB.MovieVo.People;
 
-namespace Common.Models.XML.Jukebox {
+namespace Frost.Common.Models.XML.Jukebox {
 
     /// <summary>Represents an infromation about a movie in Xtreamer Movie Jukebox database that is ready to be serialized.</summary>
     [Serializable]

@@ -18,7 +18,7 @@
 
 #pragma warning disable 1591 // Disable XML documentation warnings
 
-namespace SharpMediaInfo {
+namespace Frost.MediaInfo {
     public enum StreamKind {
         General,
         Video,

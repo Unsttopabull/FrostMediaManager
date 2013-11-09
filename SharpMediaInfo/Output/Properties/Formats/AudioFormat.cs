@@ -1,6 +1,6 @@
 #pragma warning disable 1591
 
-namespace SharpMediaInfo.Output.Properties.Formats {
+namespace Frost.MediaInfo.Output.Properties.Formats {
     public class AudioFormat : Format {
         internal AudioFormat(Media media) : base(media) {
         }

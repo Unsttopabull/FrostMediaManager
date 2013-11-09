@@ -6,7 +6,7 @@ using System.Globalization;
 
 #endregion
 
-namespace PHPSerialize {
+namespace Frost.PHPtoNET {
     internal sealed class PHPObject { }
 
     internal static class PHPDeserializer {

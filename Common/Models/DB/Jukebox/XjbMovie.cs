@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Common.Models.DB.Jukebox {
+namespace Frost.Common.Models.DB.Jukebox {
 
     /// <summary>Represents a movie in the Xtreamer Movie Jukebox library.</summary>
     [Table("movies")]

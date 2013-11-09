@@ -1,13 +1,12 @@
-﻿
-using SharpMediaInfo.Output.Properties;
-using SharpMediaInfo.Output.Properties.Codecs;
-using SharpMediaInfo.Output.Properties.Delay;
-using SharpMediaInfo.Output.Properties.Duration;
-using SharpMediaInfo.Output.Properties.Formats;
+﻿using Frost.MediaInfo.Output.Properties;
+using Frost.MediaInfo.Output.Properties.Codecs;
+using Frost.MediaInfo.Output.Properties.Delay;
+using Frost.MediaInfo.Output.Properties.Duration;
+using Frost.MediaInfo.Output.Properties.Formats;
 
 #pragma warning disable 1591
 
-namespace SharpMediaInfo.Output {
+namespace Frost.MediaInfo.Output {
     public class MediaMenu : Media{
 
         public MediaMenu(MediaFile mediaInfo) : base(mediaInfo, StreamKind.Menu) {

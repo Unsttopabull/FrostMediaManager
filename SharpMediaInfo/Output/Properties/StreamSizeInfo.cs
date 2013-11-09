@@ -1,4 +1,4 @@
-﻿namespace SharpMediaInfo.Output.Properties {
+﻿namespace Frost.MediaInfo.Output.Properties {
     public enum StreamSizeType {
         StreamSize,
         SourceStreamSize,

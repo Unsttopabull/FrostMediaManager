@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
-namespace Common.Models.DB.MovieVo.Arts {
+namespace Frost.Common.Models.DB.MovieVo.Arts {
 
     /// <summary>Represents a promotional movie art.</summary>
     public class Art : IEquatable<Art> {

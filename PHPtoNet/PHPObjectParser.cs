@@ -8,7 +8,7 @@ using System.Text;
 
 #endregion
 
-namespace PHPSerialize {
+namespace Frost.PHPtoNET {
     internal enum PHPType {
         Unknown,
         Integer,

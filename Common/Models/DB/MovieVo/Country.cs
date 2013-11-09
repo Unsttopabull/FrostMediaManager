@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.ModelConfiguration;
 
-namespace Common.Models.DB.MovieVo {
+namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents a country a movie was shot or/and produced in.</summary>
     public class Country : IEquatable<Country> {

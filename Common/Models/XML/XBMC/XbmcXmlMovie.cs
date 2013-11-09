@@ -8,14 +8,14 @@ using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using Common.Models.DB.MovieVo;
-using Common.Models.DB.MovieVo.Arts;
-using Common.Models.DB.MovieVo.Files;
-using Common.Models.DB.MovieVo.People;
-using Common.Models.DB.XBMC;
-using File = Common.Models.DB.MovieVo.Files.File;
+using Frost.Common.Models.DB.MovieVo;
+using Frost.Common.Models.DB.MovieVo.Arts;
+using Frost.Common.Models.DB.MovieVo.Files;
+using Frost.Common.Models.DB.MovieVo.People;
+using Frost.Common.Models.DB.XBMC;
+using File = Frost.Common.Models.DB.MovieVo.Files.File;
 
-namespace Common.Models.XML.XBMC {
+namespace Frost.Common.Models.XML.XBMC {
 
     /// <summary>Represents an information about a movie in XBMC library ready to be serialized.</summary>
     [Serializable]

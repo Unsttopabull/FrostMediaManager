@@ -1,4 +1,4 @@
-﻿namespace SharpMediaInfo.Options {
+﻿namespace Frost.MediaInfo.Options {
     public class SSH {
         private readonly MediaInfo _mi;
 

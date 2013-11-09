@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
-namespace Common.Models.DB.XBMC.Actor {
+namespace Frost.Common.Models.DB.XBMC.Actor {
 
     /// <summary>Represents a link table in XBMC database between a movie and a person containing the name of the persons charater.</summary>
     [Table("actorlinkmovie")]

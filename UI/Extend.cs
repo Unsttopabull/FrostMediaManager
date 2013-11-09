@@ -4,7 +4,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using WpfAnimatedGif;
 
-namespace WPF_Jukebox {
+namespace Frost.UI {
     static class Extend {
 
         public static void SetAnimatedSourceFromResource(this Image img, string fullResourcePath) {

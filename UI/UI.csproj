@@ -8,7 +8,7 @@
     <ProjectGuid>{D9BA5456-AED6-496D-BD96-CD602D32169B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WPF_Jukebox</RootNamespace>
+    <RootNamespace>Frost.UI</RootNamespace>
     <AssemblyName>Frost.UI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
@@ -185,9 +185,9 @@
       <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ObdelajProdatke\ObdelajPodatke.csproj">
+    <ProjectReference Include="..\ObdelajProdatke\ProcessDatabase.csproj">
       <Project>{deaba63d-465e-4ab2-a643-d7fbe7ac3181}</Project>
-      <Name>ObdelajPodatke</Name>
+      <Name>ProcessDatabase</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,9 +1,9 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Common.Models.XML.XBMC;
+using Frost.Common.Models.XML.XBMC;
 
-namespace Common.Models.DB.MovieVo.Files {
+namespace Frost.Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents information about an audio stream in a file.</summary>
     public class Audio : IEquatable<Audio> {

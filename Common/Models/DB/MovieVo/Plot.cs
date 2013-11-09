@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Common.Models.DB.MovieVo {
+namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Contains information about movie story/plot.</summary>
     public class Plot : IEquatable<Plot> {

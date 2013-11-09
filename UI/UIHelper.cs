@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace WPF_Jukebox {
+namespace Frost.UI {
     static class UIHelper {
         /// <summary>Finds a Child of a given item in the visual tree. </summary>
         /// <param name="parent">A direct parent of the queried item.</param>

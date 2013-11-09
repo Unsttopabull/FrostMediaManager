@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Common.Models.DB.Jukebox {
+namespace Frost.Common.Models.DB.Jukebox {
 
     /// <summary>
     /// Represents a link table between Movie and a Person containing person's job in the movie.

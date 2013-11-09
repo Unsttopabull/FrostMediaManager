@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{D9BA5456-AED6-496D-BD96-CD602D32169B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObdelajPodatke", "ObdelajProdatke\ObdelajPodatke.csproj", "{DEABA63D-465E-4AB2-A643-D7FBE7AC3181}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessDatabase", "ObdelajProdatke\ProcessDatabase.csproj", "{DEABA63D-465E-4AB2-A643-D7FBE7AC3181}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PHPtoNET", "PHPtoNet\PHPtoNET.csproj", "{4661DD6C-BE69-4BCB-A835-53D192DE841C}"
 EndProject

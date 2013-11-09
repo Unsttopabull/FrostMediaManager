@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
-namespace Common.Models.DB.XBMC.StreamDetails {
+namespace Frost.Common.Models.DB.XBMC.StreamDetails {
 
     /// <summary>Represents information about a stream in a file.</summary>
     [Table("streamdetails")]

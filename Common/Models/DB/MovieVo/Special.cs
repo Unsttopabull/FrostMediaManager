@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration;
 
-namespace Common.Models.DB.MovieVo {
+namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents a special information about a movie's release or type.</summary>
     public class Special : IEquatable<Special> {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using Common.Models.DB.MovieVo.Files;
+using Frost.Common.Models.DB.MovieVo.Files;
 
-namespace Common.Models.XML.XBMC {
+namespace Frost.Common.Models.XML.XBMC {
 
     /// <summary>Represents serialized information about a subtitle in a movie</summary>
     [Serializable]

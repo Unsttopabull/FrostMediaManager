@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
-namespace Common.Models.DB.XBMC.Actor {
+namespace Frost.Common.Models.DB.XBMC.Actor {
 
     /// <summary>Represents a person that worked on a movie.</summary>
     [Table("actors")]

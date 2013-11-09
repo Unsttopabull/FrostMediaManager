@@ -1,9 +1,9 @@
 ﻿using System.Data.Entity;
-using Common.Models.DB.MovieVo.Arts;
-using Common.Models.DB.MovieVo.Files;
-using Common.Models.DB.MovieVo.People;
+using Frost.Common.Models.DB.MovieVo.Arts;
+using Frost.Common.Models.DB.MovieVo.Files;
+using Frost.Common.Models.DB.MovieVo.People;
 
-namespace Common.Models.DB.MovieVo {
+namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents a context used for manipulation of the database.</summary>
     public class MovieVoContainer : DbContext {

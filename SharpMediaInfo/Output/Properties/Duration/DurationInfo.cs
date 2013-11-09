@@ -1,4 +1,4 @@
-﻿namespace SharpMediaInfo.Output.Properties.Duration {
+﻿namespace Frost.MediaInfo.Output.Properties.Duration {
     public class DurationInfo {
         protected readonly Media MediaStream;
         protected readonly bool OriginalDuration;

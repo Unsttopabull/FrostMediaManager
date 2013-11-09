@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Common.Models.DB.Jukebox {
+namespace Frost.Common.Models.DB.Jukebox {
 
     /// <summary>Represent a list of options in a dictionary-like fashion.</summary>
     [Table("options")]

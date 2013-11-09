@@ -1,9 +1,9 @@
 using System;
 using System.Runtime.InteropServices;
-using SharpMediaInfo.Options;
-using SharpMediaInfo.Output;
+using Frost.MediaInfo.Options;
+using Frost.MediaInfo.Output;
 
-namespace SharpMediaInfo {
+namespace Frost.MediaInfo {
     public class MediaInfo {
         //Import of DLL functions. DO NOT USE until you know what you do (MediaInfo DLL do NOT use CoTaskMemAlloc to allocate memory)
         internal readonly IntPtr Handle;

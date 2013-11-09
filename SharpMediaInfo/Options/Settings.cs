@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace SharpMediaInfo.Options {
+namespace Frost.MediaInfo.Options {
     public class Settings {
         private readonly MediaInfo _mi;
 

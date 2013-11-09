@@ -4,12 +4,12 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Media;
-using Common;
-using Common.Models.DB.MovieVo;
-using ObdelajProdatke;
-using FileVo = Common.Models.DB.MovieVo.Files.File;
+using Frost.Common;
+using Frost.Common.Models.DB.MovieVo;
+using Frost.ProcessDatabase;
+using File = Frost.Common.Models.DB.MovieVo.Files.File;
 
-namespace WPF_Jukebox {
+namespace Frost.UI {
     /// <summary>
     /// Interaction logic for OpisFilma.xaml
     /// </summary>
@@ -80,7 +80,7 @@ namespace WPF_Jukebox {
 
             var movieFiles = _xjb.Movies.Where(m => m.Id == mv.Id).Select(m => m.Files).FirstOrDefault();
             if (movieFiles != null) {
-                FileVo file = movieFiles.FirstOrDefault();
+                File file = movieFiles.FirstOrDefault();
                 if (file != null) {
                     TryLoadCover(file.FolderPath, file.Name.WithoutExtension());
                 }

@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Common.Models.DB.XBMC.Tag {
+namespace Frost.Common.Models.DB.XBMC.Tag {
 
     /// <summary>Represents a table that lists tags.</summary>
     [Table("tag")]

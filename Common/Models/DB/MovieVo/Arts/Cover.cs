@@ -1,6 +1,6 @@
 using System;
 
-namespace Common.Models.DB.MovieVo.Arts {
+namespace Frost.Common.Models.DB.MovieVo.Arts {
 
     /// <summary>Represents a movie cover image.</summary>
     public class Cover : Art, IEquatable<Cover> {

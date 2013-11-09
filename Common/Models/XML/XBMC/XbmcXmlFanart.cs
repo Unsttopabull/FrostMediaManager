@@ -4,7 +4,7 @@ using System.IO;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace Common.Models.XML.XBMC {
+namespace Frost.Common.Models.XML.XBMC {
 
     /// <summary>Holds information about movie's promotional images ready to be serialized.</summary>
     [Serializable]

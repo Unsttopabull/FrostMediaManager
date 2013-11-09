@@ -4,7 +4,7 @@ using System;
 
 #endregion
 
-namespace PHPSerialize {
+namespace Frost.PHPtoNET {
     internal class ParsingException : Exception {
         private const string MSG = "Error occured while parsing, expected {0}, found \"{1}\" on line {2} column {3}.";
         private const string MSG2 = "Expcted value of type {0} got {1}";

@@ -1,4 +1,4 @@
-namespace SharpMediaInfo.Output.Properties.Formats {
+namespace Frost.MediaInfo.Output.Properties.Formats {
     public class Format{
         protected readonly Media MediaStream;
 

@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Common.Models.DB.XBMC {
+namespace Frost.Common.Models.DB.XBMC {
 
     /// <summary>This table stores the database version and compression information.</summary>
     [Table("version")]

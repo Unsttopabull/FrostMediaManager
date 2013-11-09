@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using Common;
-using Common.Models.DB.Jukebox;
-using Common.Models.DB.MovieVo;
-using PHPSerialize;
-using CoretisMovie = Common.Models.PHP.Coretis_VO_Movie;
+using Frost.Common;
+using Frost.Common.Models.DB.Jukebox;
+using Frost.Common.Models.DB.MovieVo;
+using Frost.Common.Models.PHP;
+using Frost.PHPtoNET;
 
-namespace ObdelajProdatke {
-    public class XjbDbParser : MediaManager<CoretisMovie> {
+namespace Frost.ProcessDatabase {
+    public class XjbDbParser : MediaManager<Coretis_VO_Movie> {
 
         public XjbDbParser() : base(DBSystem.Xtreamer) {
         }
@@ -17,7 +17,7 @@ namespace ObdelajProdatke {
         public XjbDbParser(string dbLocation) : base(DBSystem.Xtreamer, dbLocation) {
         }
 
-        public override IEnumerable<CoretisMovie> RawMovies {
+        public override IEnumerable<Coretis_VO_Movie> RawMovies {
             get {
                 return DBFound
                     ? ObdelaniFilmi
@@ -36,14 +36,14 @@ namespace ObdelajProdatke {
             string[] phpFilmi = xjb.Movies.Select(mov => mov.MovieVo).ToArray();
 
             int stFilmov = phpFilmi.Length;
-            ObdelaniFilmi = new List<CoretisMovie>(stFilmov);
+            ObdelaniFilmi = new List<Coretis_VO_Movie>(stFilmov);
 
 
             for (int i = 0; i < stFilmov; i++) {
                 phpFilmi[i] = phpFilmi[i].Replace('\n', ' ');
                 PHPObjectParser objParser = new PHPObjectParser(new Scanner(phpFilmi[i]));
 
-                CoretisMovie mv = new CoretisMovie();
+                Coretis_VO_Movie mv = new Coretis_VO_Movie();
                 try {
                     objParser.Obj(ref mv);
                 }

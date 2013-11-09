@@ -1,15 +1,11 @@
 using System.Collections;
 using System.Linq;
-using Common.Models.DB.MovieVo;
-using Common.Models.DB.MovieVo.Arts;
-using Common.Models.DB.MovieVo.Files;
-using Common.Models.DB.MovieVo.People;
-using CoretisMovie = Common.Models.PHP.Coretis_VO_Movie;
-using CoretisGenre = Common.Models.PHP.Coretis_VO_Genre;
-using CoretisPerson = Common.Models.PHP.Coretis_VO_Person;
-using CoretisPicture = Common.Models.PHP.Coretis_VO_Picture;
+using Frost.Common.Models.DB.MovieVo;
+using Frost.Common.Models.DB.MovieVo.Arts;
+using Frost.Common.Models.DB.MovieVo.Files;
+using Frost.Common.Models.DB.MovieVo.People;
 
-namespace Common.Models.PHP {
+namespace Frost.Common.Models.PHP {
 
     public class Coretis_VO_Movie {
 
@@ -80,7 +76,7 @@ namespace Common.Models.PHP {
         }
 
         private void AddNewCast(Movie mov) {
-            foreach (CoretisPerson cPerson in personArr) {
+            foreach (Coretis_VO_Person cPerson in personArr) {
                 if (cPerson.job.OrdinalEquals("actor")) {
                     Actor actor = new Actor(cPerson.name, null, cPerson.character);
                     mov.Actors.Add(actor);
@@ -147,7 +143,7 @@ namespace Common.Models.PHP {
 
         #region Conversion operators
 
-        public static explicit operator Movie(CoretisMovie m) {
+        public static explicit operator Movie(Coretis_VO_Movie m) {
             Movie mov = new Movie();
 
             m.GetMovieTitle(mov);
@@ -291,13 +287,13 @@ namespace Common.Models.PHP {
         public string[] countryArr;
 
         /// <example>\eg{ <code>array( Coretis_VO_Genre object1, Coretis_VO_Genre object2 )</code>}</example>
-        public CoretisGenre[] genreArr;
+        public Coretis_VO_Genre[] genreArr;
 
         /// <example>\eg{ <code>array( Coretis_VO_Person object1, Coretis_VO_Person object2 )</code>}</example>
-        public CoretisPerson[] personArr;
+        public Coretis_VO_Person[] personArr;
 
         /// <example>\eg{ <code>array( Coretis_VO_Picture object1, Coretis_VO_Picture object2 )</code>}</example>
-        public CoretisPicture[] pictureArr;
+        public Coretis_VO_Picture[] pictureArr;
 
         /// <summary>full description</summary>
         public string plotFull;

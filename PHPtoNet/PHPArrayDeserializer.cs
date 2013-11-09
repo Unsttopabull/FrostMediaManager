@@ -3,7 +3,7 @@ using System.Collections;
 using System.Globalization;
 using System.Reflection;
 
-namespace PHPSerialize {
+namespace Frost.PHPtoNET {
     public static class PHPArrayDeserializer{
         /// <summary>Parses the single type unsigned integer keyed array.</summary>
         /// <param name="scanner">The scanner.</param>

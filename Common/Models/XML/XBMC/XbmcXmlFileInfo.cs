@@ -4,7 +4,7 @@ using System.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace Common.Models.XML.XBMC {
+namespace Frost.Common.Models.XML.XBMC {
 
     /// <summary>Represents movie's file information ready to be serialized</summary>
     [Serializable]

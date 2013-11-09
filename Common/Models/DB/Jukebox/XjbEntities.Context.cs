@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity;
 
-namespace Common.Models.DB.Jukebox {
+namespace Frost.Common.Models.DB.Jukebox {
 
     public class XjbEntities : DbContext {
 

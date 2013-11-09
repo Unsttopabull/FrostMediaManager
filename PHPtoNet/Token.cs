@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PHPSerialize {
+namespace Frost.PHPtoNET {
     public enum Tokens {
         Error = 0,
         Integer = 1,
@@ -49,9 +49,7 @@ namespace PHPSerialize {
         /// <example>float, separator, operator, ...</example>
         public Tokens TokenType { get; set; }
 
-        /// <summary>
-        /// Vrne ali nastavi ali trenutni token predstavlja konec datoteke.
-        /// </summary>
+        /// <summary>Vrne ali nastavi ali trenutni token predstavlja konec datoteke.</summary>
         /// <value>
         ///   <c>true</c> če konec datoteke; drugače, <c>false</c>.
         /// </value>

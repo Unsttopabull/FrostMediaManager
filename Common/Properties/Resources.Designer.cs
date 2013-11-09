@@ -8,8 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Common.Properties {
-
+namespace Frost.Common.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -37,7 +39,7 @@ namespace Common.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Common.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Frost.Common.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -69,13 +71,13 @@ namespace Common.Properties {
         ///-- --------------------------------------------------
         ///
         ///    
-        ///	DROP TABLE if exists [Movie];
+        ///	DROP TABLE if exists [Movies];
         ///    
-        ///	DROP TABLE if exists [Audio];
+        ///	DROP TABLE if exists [Audios];
         ///    
-        ///	DROP TABLE if exists [File];
+        ///	DROP TABLE if exists [Files];
         ///    
-        ///	DROP TABLE  [rest of string was truncated]&quot;;.
+        ///	DROP TAB [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MovieVoSQL {
             get {

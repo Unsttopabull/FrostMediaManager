@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Common.Models.DB.MovieVo.People {
+namespace Frost.Common.Models.DB.MovieVo.People {
 
     /// <summary>Represents a link table between a movie and a person containing the name of the person's charater.</summary>
     public class MovieActor {

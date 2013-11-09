@@ -8,7 +8,7 @@
     <ProjectGuid>{4661DD6C-BE69-4BCB-A835-53D192DE841C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PHPSerialize</RootNamespace>
+    <RootNamespace>Frost.PHPtoNET</RootNamespace>
     <AssemblyName>Frost.PHPtoNET</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

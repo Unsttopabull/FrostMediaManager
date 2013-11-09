@@ -4,11 +4,11 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using Common.Models.DB.MovieVo;
-using Common.Models.DB.XBMC.Actor;
-using Common.Models.XML.XBMC;
+using Frost.Common.Models.DB.MovieVo;
+using Frost.Common.Models.DB.XBMC.Actor;
+using Frost.Common.Models.XML.XBMC;
 
-namespace Common.Models.DB.XBMC {
+namespace Frost.Common.Models.DB.XBMC {
 
     /// <summary>This table sores information about a movie in the XBMC library.</summary>
     [Table("movie")]

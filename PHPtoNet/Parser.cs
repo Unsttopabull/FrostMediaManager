@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace PHPSerialize {
+namespace Frost.PHPtoNET {
     internal class Parser {
         private readonly IScanner _scanner;
 

@@ -7,7 +7,7 @@
     <ProjectGuid>{73F12859-D8B1-49C1-A835-0810CE7BD006}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Common</RootNamespace>
+    <RootNamespace>Frost.Common</RootNamespace>
     <AssemblyName>Frost.Common</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

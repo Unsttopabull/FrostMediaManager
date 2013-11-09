@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Forms;
-using Common.Models.DB.MovieVo;
+using Frost.Common.Models.DB.MovieVo;
+using ListBox = System.Windows.Controls.ListBox;
 
-namespace WPF_Jukebox {
-    using System.Windows.Controls;
+namespace Frost.UI {
 
     public partial class MainWindow {
         private readonly NotifyIcon _ni;

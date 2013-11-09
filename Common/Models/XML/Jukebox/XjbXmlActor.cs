@@ -1,8 +1,8 @@
 using System;
 using System.Xml.Serialization;
-using Common.Models.XML.XBMC;
+using Frost.Common.Models.XML.XBMC;
 
-namespace Common.Models.XML.Jukebox {
+namespace Frost.Common.Models.XML.Jukebox {
 
     /// <summary>Represents an actor in a movie.</summary>
     [Serializable]

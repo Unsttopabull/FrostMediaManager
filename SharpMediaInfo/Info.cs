@@ -1,4 +1,4 @@
-﻿namespace SharpMediaInfo {
+﻿namespace Frost.MediaInfo {
     public class Info {
         private readonly MediaInfo _mi;
 

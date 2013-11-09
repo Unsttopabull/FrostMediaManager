@@ -5,9 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using File = Common.Models.DB.MovieVo.Files.File;
+using File = Frost.Common.Models.DB.MovieVo.Files.File;
 
-namespace Common {
+namespace Frost.Common {
 
     /// <summary>Contains extension methods to be used in this assembly.</summary>
     public static class Extensions {

@@ -1,7 +1,7 @@
 using System;
-using Common.Models.XML.Jukebox;
+using Frost.Common.Models.XML.Jukebox;
 
-namespace Common.Models.DB.MovieVo.People {
+namespace Frost.Common.Models.DB.MovieVo.People {
 
     /// <summary>Represents an actor in a movie.</summary>
     public class Actor : Person, IEquatable<Actor> {

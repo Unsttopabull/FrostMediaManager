@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Linq;
-using SharpMediaInfo.Output.Properties;
+using Frost.MediaInfo.Output.Properties;
 
 #pragma warning disable 1591
 
-namespace SharpMediaInfo.Output {
+namespace Frost.MediaInfo.Output {
     public abstract class Media : IEnumerable<KeyValuePair<string, string>> {
         protected bool Cached;
         protected MediaFile MediaFile;

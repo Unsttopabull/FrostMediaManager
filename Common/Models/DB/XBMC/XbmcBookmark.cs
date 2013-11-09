@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
-namespace Common.Models.DB.XBMC {
+namespace Frost.Common.Models.DB.XBMC {
 
     /// <summary>This table stores bookmarks, which are timestamps representing the point in a video where a user stopped playback, an explicit bookmark requested by the user, or an automatically generated episode bookmark.</summary>
     [Table("bookmark")]

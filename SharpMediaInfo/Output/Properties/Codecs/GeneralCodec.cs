@@ -1,4 +1,4 @@
-﻿namespace SharpMediaInfo.Output.Properties.Codecs {
+﻿namespace Frost.MediaInfo.Output.Properties.Codecs {
     public class GeneralCodec : Codec {
         public GeneralCodec(Media mediaMenu) : base(mediaMenu) {
         }

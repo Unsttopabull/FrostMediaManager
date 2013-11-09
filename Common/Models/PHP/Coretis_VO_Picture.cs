@@ -1,4 +1,4 @@
-namespace Common.Models.PHP {
+namespace Frost.Common.Models.PHP {
 
     public class Coretis_VO_Picture {
         #region Konstante

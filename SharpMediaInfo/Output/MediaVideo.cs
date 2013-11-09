@@ -1,13 +1,12 @@
-﻿using SharpMediaInfo.Output.Properties;
-using SharpMediaInfo.Output.Properties.Codecs;
-using SharpMediaInfo.Output.Properties.Delay;
-using SharpMediaInfo.Output.Properties.Duration;
-using SharpMediaInfo.Output.Properties.Formats;
+﻿using Frost.MediaInfo.Output.Properties;
+using Frost.MediaInfo.Output.Properties.Codecs;
+using Frost.MediaInfo.Output.Properties.Delay;
+using Frost.MediaInfo.Output.Properties.Duration;
+using Frost.MediaInfo.Output.Properties.Formats;
 
 #pragma warning disable 1591
 
-namespace SharpMediaInfo.Output {
-    using Info = Properties.Info;
+namespace Frost.MediaInfo.Output {
 
     public class MediaVideo : Media {
 
@@ -24,10 +23,10 @@ namespace SharpMediaInfo.Output {
             DelayInfo = new DelayInfo(this, false);
             DelayOriginalInfo = new DelayInfo(this, true);
             EncodedLibraryInfo = new EncodedLibraryInfo(this);
-            ScanTypeInfo = new Info(this, InfoType.ScanType);
-            ScanOrderInfo = new Info(this, InfoType.ScanOrder);
-            DisplayAspectRatioInfo = new Info(this, InfoType.DisplayAspectRatio);
-            PixelAspectRatioInfo = new Info(this, InfoType.PixelAspectRatio);
+            ScanTypeInfo = new Properties.Info(this, InfoType.ScanType);
+            ScanOrderInfo = new Properties.Info(this, InfoType.ScanOrder);
+            DisplayAspectRatioInfo = new Properties.Info(this, InfoType.DisplayAspectRatio);
+            PixelAspectRatioInfo = new Properties.Info(this, InfoType.PixelAspectRatio);
 
             StreamSizeInfo = new StreamSizeInfo(this, StreamSizeType.StreamSize);
             SourceStreamSizeInfo = new StreamSizeInfo(this, StreamSizeType.SourceStreamSize);
@@ -74,11 +73,11 @@ namespace SharpMediaInfo.Output {
 
         /// <summary>Pixel Aspect ratio</summary>
         public string PixelAspectRatio { get { return this[""]; } }
-        public Info PixelAspectRatioInfo { get; private set; }
+        public Properties.Info PixelAspectRatioInfo { get; private set; }
 
         /// <summary>Display Aspect ratio</summary>
         public string DisplayAspectRatio { get { return this[""]; } }
-        public Info DisplayAspectRatioInfo { get; private set; }
+        public Properties.Info DisplayAspectRatioInfo { get; private set; }
 
         /// <summary>Active Format Description (AFD value)</summary>
         public string ActiveFormatDescription { get { return this[""]; } }
@@ -119,10 +118,10 @@ namespace SharpMediaInfo.Output {
         public string BitDepthString { get { return this[""]; } }
         
         public string ScanType { get { return this[""]; } }
-        public Info ScanTypeInfo { get; private set; }
+        public Properties.Info ScanTypeInfo { get; private set; }
         
         public string ScanOrder { get { return this[""]; } }
-        public Info ScanOrderInfo { get; private set; }
+        public Properties.Info ScanOrderInfo { get; private set; }
 
         public string Interlacement { get { return this[""]; } }
         public string InterlacementString { get { return this[""]; } }

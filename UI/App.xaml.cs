@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace WPF_Jukebox {
+namespace Frost.UI {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>

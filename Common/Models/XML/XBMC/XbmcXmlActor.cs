@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using Common.Models.DB.MovieVo.People;
+using Frost.Common.Models.DB.MovieVo.People;
 
-namespace Common.Models.XML.XBMC {
+namespace Frost.Common.Models.XML.XBMC {
 
     /// <summary>Represents a serialized actor in a movie</summary>
     [Serializable]

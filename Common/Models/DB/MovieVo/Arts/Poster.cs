@@ -1,6 +1,6 @@
 using System;
 
-namespace Common.Models.DB.MovieVo.Arts {
+namespace Frost.Common.Models.DB.MovieVo.Arts {
 
     /// <summary>Represents a movie poster image.</summary>
     public class Poster : Art, IEquatable<Poster> {

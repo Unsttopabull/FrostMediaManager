@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Common.Models.DB.XBMC.Actor {
+namespace Frost.Common.Models.DB.XBMC.Actor {
 
     /// <summary>Represents an actor in the XBMC library.</summary>
     [NotMapped]

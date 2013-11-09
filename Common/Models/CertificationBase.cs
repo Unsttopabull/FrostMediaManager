@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Common.Models {
+namespace Frost.Common.Models {
 
     /// <summary>Represents a base certification class of which information can be parsed from a certification string.</summary>
     public abstract class CertificationBase {

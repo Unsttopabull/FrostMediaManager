@@ -3,9 +3,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
-    xmlns:local="clr-namespace:WPF_Jukebox"
-    xmlns:movieVo="clr-namespace:Common.Models.DB.MovieVo;assembly=Frost.Common"
-    x:Class="WPF_Jukebox.MainWindow"
+    xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
+    xmlns:ui="clr-namespace:Frost.UI"
+    x:Class="Frost.UI.MainWindow"
     x:Name="Okno"
     Title="xJukeboxPC" Icon="Images/xtreamer.ico" Height="467" d:DesignWidth="867.075">
     <Window.Resources>
@@ -35,9 +35,9 @@
         		ItemTemplate="{StaticResource NaslovInLeto}"
         		ScrollViewer.VerticalScrollBarVisibility="Visible"
         		ScrollViewer.HorizontalScrollBarVisibility="Hidden" />
-            <local:OpisFilma x:Name="Opis" DataContext="{Binding SelectedItem, ElementName=Filmi}"
+            <ui:OpisFilma x:Name="Opis" DataContext="{Binding SelectedItem, ElementName=Filmi}"
                              HorizontalContentAlignment="Center" VerticalContentAlignment="Top" DockPanel.Dock="Right" HorizontalAlignment="Left">
-            </local:OpisFilma>
+            </ui:OpisFilma>
         </DockPanel>
     </DockPanel>
 </Window>

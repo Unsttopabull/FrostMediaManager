@@ -4,18 +4,18 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
-using Common;
+using Frost.Common;
 using Trinet.Networking;
 
-namespace ObdelajProdatke {
+namespace Frost.ProcessDatabase {
 
     public class DBCheck {
         private const string XJB_DB_LOC = @"\\{0}\{1}\{2}\scripts\Xtreamering\var\db";
         private const string XJB_DB_LOC2 = @"\\{0}\{1}\{2}\scripts\var\db";
         private const string WIN_XBMC_DB_LOC = @"XBMC\userdata\Database\";
 
-        private static readonly string[] XtNames = new[] { "Xtreamer", "Xtreamer_PRO" };
-        private static readonly string[] HostNames = new[] { "MYXTREAMER" };
+        private static readonly string[] XtNames = { "Xtreamer", "Xtreamer_PRO" };
+        private static readonly string[] HostNames = { "MYXTREAMER" };
 
         public static string FindDB(DBSystem sistem) {
             switch (sistem) {
@@ -75,7 +75,6 @@ namespace ObdelajProdatke {
                                : null;
             }
 
-            //Console.WriteLine(@"Searching all");
             return XtNames.Select(xtName => string.Format(XJB_DB_LOC, hostName, xtName, "sda1"))
                           .Where(Directory.Exists)
                           .FirstOrDefault();

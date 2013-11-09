@@ -1,4 +1,4 @@
-﻿namespace SharpMediaInfo.Output.Properties.Formats {
+﻿namespace Frost.MediaInfo.Output.Properties.Formats {
     public class FormatWithWrapping : Format{
         internal FormatWithWrapping(Media media) : base(media) {
         }

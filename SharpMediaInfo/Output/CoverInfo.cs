@@ -1,4 +1,4 @@
-﻿namespace SharpMediaInfo.Output {
+﻿namespace Frost.MediaInfo.Output {
     public class CoverInfo {
         private MediaGeneral _media;
 

@@ -1,4 +1,4 @@
-﻿namespace SharpMediaInfo.Output.Properties.Codecs {
+﻿namespace Frost.MediaInfo.Output.Properties.Codecs {
     public class TextCodec : Codec {
         public TextCodec(Media mediaText) : base(mediaText){
         }

@@ -1,4 +1,4 @@
-﻿namespace SharpMediaInfo.Output.Properties {
+﻿namespace Frost.MediaInfo.Output.Properties {
     public class BitRateInfo : GeneralBitRateInfo {
         public BitRateInfo(Media media) : base(media, false) {
         }

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using Common;
-using Common.Models.DB.MovieVo;
-using Common.Models.DB.XBMC;
+using Frost.Common;
+using Frost.Common.Models.DB.MovieVo;
+using Frost.Common.Models.DB.XBMC;
 
-namespace ObdelajProdatke {
+namespace Frost.ProcessDatabase {
     public class XbmcParser : MediaManager<XbmcMovie> {
 
         public XbmcParser()

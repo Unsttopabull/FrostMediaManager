@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Common.Models.DB.MovieVo.Files {
+namespace Frost.Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents an information about a file.</summary>
     public class File : IEquatable<File> {

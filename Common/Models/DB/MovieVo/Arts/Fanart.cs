@@ -1,6 +1,6 @@
 using System;
 
-namespace Common.Models.DB.MovieVo.Arts {
+namespace Frost.Common.Models.DB.MovieVo.Arts {
 
     /// <summary>Represents a movie fanart image (backround / backdrop).</summary>
     public class Fanart : Art, IEquatable<Fanart> {

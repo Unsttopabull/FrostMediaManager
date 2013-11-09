@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace PHPSerialize {
+namespace Frost.PHPtoNET {
     public interface IScanner {
         Token CurrToken();
         Token NextToken();

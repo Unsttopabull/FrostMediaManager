@@ -1,4 +1,4 @@
-namespace SharpMediaInfo.Output.Properties.Formats {
+namespace Frost.MediaInfo.Output.Properties.Formats {
     public class VideoFormat : Format {
         internal VideoFormat(Media media) : base(media) {
         }

@@ -1,4 +1,4 @@
-﻿namespace SharpMediaInfo.Output {
+﻿namespace Frost.MediaInfo.Output {
     public class OriginalSourceInfo {
         private readonly Media _media;
 
