@@ -80,7 +80,7 @@
     <Compile Include="Models\DB\Jukebox\XjbDrive.cs" />
     <Compile Include="Models\DB\Jukebox\XjbGenre.cs" />
     <Compile Include="Models\DB\Jukebox\XjbEntities.Context.cs" />
-    <Compile Include="Models\DB\Jukebox\XjbMoviesPersons.cs" />
+    <Compile Include="Models\DB\Jukebox\XjbMoviePerson.cs" />
     <Compile Include="Models\DB\Jukebox\XjbOption.cs" />
     <Compile Include="Models\DB\Jukebox\XjbPerson.cs" />
     <Compile Include="Models\XML\Jukebox\XjbXmlMovie.cs" />

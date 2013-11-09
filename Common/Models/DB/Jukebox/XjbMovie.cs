@@ -8,6 +8,14 @@ namespace Common.Models.DB.Jukebox {
     [Table("movies")]
     public class XjbMovie {
 
+        public XjbMovie() {
+            Drive = new XjbDrive();
+            Genres = new HashSet<XjbGenre>();
+            Cast = new HashSet<XjbMoviePerson>();
+        }
+
+        #region Properties/Columns
+
         /// <summary>Gets or sets the Id of this option in the database.</summary>
         /// <value>The Id of this option in the database</value>
         [Key]
@@ -130,10 +138,14 @@ namespace Common.Models.DB.Jukebox {
         [Column("movie_vo")]
         public string MovieVo { get; set; }
 
+        #endregion
+
         /// <summary>Gets or sets the foreign key to the drive this movie is contained on.</summary>
         /// <value>The foreign key to the drive this movie is contained on</value>
         [Column("drive_id")]
         public string DriveId { get; set; }
+
+        #region Associations/Related tables
 
         /// <summary>Gets or sets the drive this movie is contained on.</summary>
         /// <value>The drive this movie is contained on.</value>
@@ -143,6 +155,12 @@ namespace Common.Models.DB.Jukebox {
         /// <summary>Gets or sets the genres of this movie.</summary>
         /// <value>The genres of this movie.</value>
         public virtual HashSet<XjbGenre> Genres { get; set; }
+
+        /// <summary>Gets or sets the link to the people that worked on this movie.</summary>
+        /// <value>The link to the people that worked on this movie</value>
+        public virtual HashSet<XjbMoviePerson> Cast { get; set; }
+        #endregion
+
     }
 
 }

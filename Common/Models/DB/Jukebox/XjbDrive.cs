@@ -8,6 +8,10 @@ namespace Common.Models.DB.Jukebox {
     public class XjbDrive {
 
         /// <summary>Initializes a new instance of the <see cref="XjbDrive"/> class.</summary>
+        public XjbDrive() {
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="XjbDrive"/> class.</summary>
         /// <param name="size">The size of the drive.</param>
         /// <param name="label">The drive's label.</param>
         /// <param name="lastSeenTs">The time when was this drive last scanned in UNIX timestamp (seconds since epoch).</param>
