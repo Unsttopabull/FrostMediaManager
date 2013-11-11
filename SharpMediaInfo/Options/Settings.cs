@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Globalization;
+using Frost.SharpMediaInfo.Output;
 
 namespace Frost.SharpMediaInfo.Options {
 
     public class Settings {
 
-        private readonly MediaInfo _mi;
+        private readonly MediaFile _mf;
 
-        internal Settings(MediaInfo mi) {
-            _mi = mi;
+        internal Settings(MediaFile mf) {
+            _mf = mf;
 
-            MpegTS = new MpegTS(_mi);
-            SSH = new SSH(_mi);
-            SSL = new SSL(_mi);
+            MpegTS = new MpegTS(_mf);
+            SSH = new SSH(_mf);
+            SSL = new SSL(_mf);
         }
 
         public SSH SSH { get; private set; }
@@ -23,114 +24,114 @@ namespace Frost.SharpMediaInfo.Options {
 
         public BlockMethod BlockMethod {
             get {
-                return _mi.Option("blockmethod_get") == "1"
+                return _mf.Option("blockmethod_get") == "1"
                     ? BlockMethod.AfterLocalInfo
                     : BlockMethod.Immediately;
             }
             set {
-                _mi.Option("blockmethod", value == BlockMethod.Immediately ? "" : "1");
+                _mf.Option("blockmethod", value == BlockMethod.Immediately ? "" : "1");
             }
         }
 
         public bool ShowAllInfo {
-            get { return _mi.Option("Complete_Get") == "1"; }
-            set { _mi.Option("Complete", value ? "1" : ""); }
+            get { return _mf.Option("Complete_Get") == "1"; }
+            set { _mf.Option("Complete", value ? "1" : ""); }
         }
 
         public bool ParseUnknownExtensions {
-            get { return _mi.Option("ParseUnknownExtensions_Get") == "1"; }
-            set { _mi.Option("ParseUnknownExtensions", value ? "1" : ""); }
+            get { return _mf.Option("ParseUnknownExtensions_Get") == "1"; }
+            set { _mf.Option("ParseUnknownExtensions", value ? "1" : ""); }
         }
 
         public bool ReadByHuman {
-            get { return _mi.Option("readbyhuman_get") == "1"; }
+            get { return _mf.Option("readbyhuman_get") == "1"; }
             set {
-                _mi.Option("readbyhuman", value ? "1" : "0");
+                _mf.Option("readbyhuman", value ? "1" : "0");
             }
         }
 
         public bool LegacyStreamDisplay {
-            get { return _mi.Option("LegacyStreamDisplay_get") == "1"; }
+            get { return _mf.Option("LegacyStreamDisplay_get") == "1"; }
             set {
-                _mi.Option("LegacyStreamDisplay", value ? "1" : "0");
+                _mf.Option("LegacyStreamDisplay", value ? "1" : "0");
             }
         }
 
         public bool SkipBinaryData {
-            get { return _mi.Option("SkipBinaryData_get") == "1"; }
+            get { return _mf.Option("SkipBinaryData_get") == "1"; }
             set {
-                _mi.Option("SkipBinaryData", value ? "1" : "0");
+                _mf.Option("SkipBinaryData", value ? "1" : "0");
             }
         }
 
         public float ParseSpeed {
             get {
                 float parseSpeed;
-                float.TryParse(_mi.Option("parsespeed_get"), out parseSpeed);
+                float.TryParse(_mf.Option("parsespeed_get"), out parseSpeed);
 
                 return parseSpeed;
             }
-            set { _mi.Option("parsespeed", value.ToString(CultureInfo.InvariantCulture)); }
+            set { _mf.Option("parsespeed", value.ToString(CultureInfo.InvariantCulture)); }
         }
 
         public float Verbosity {
             get {
                 float parseSpeed;
-                float.TryParse(_mi.Option("verbosity_get"), out parseSpeed);
+                float.TryParse(_mf.Option("verbosity_get"), out parseSpeed);
 
                 return parseSpeed;
             }
-            set { _mi.Option("verbosity", value.ToString(CultureInfo.InvariantCulture)); }
+            set { _mf.Option("verbosity", value.ToString(CultureInfo.InvariantCulture)); }
         }
 
         public string LineSeparator {
-            get { return _mi.Option("LineSeparator_get"); }
-            set { _mi.Option("LineSeparator", value); }
+            get { return _mf.Option("LineSeparator_get"); }
+            set { _mf.Option("LineSeparator", value); }
         }
 
         public string Version {
-            get { return _mi.Option("Version_Get"); }
-            set { _mi.Option("Version", value); }
+            get { return _mf.Option("Version_Get"); }
+            set { _mf.Option("Version", value); }
         }
 
         public string ColumnSeparator {
-            get { return _mi.Option("ColumnSeparator_Get"); }
-            set { _mi.Option("ColumnSeparator", value); }
+            get { return _mf.Option("ColumnSeparator_Get"); }
+            set { _mf.Option("ColumnSeparator", value); }
         }
 
         public string TagSeparator {
-            get { return _mi.Option("TagSeparator_Get"); }
-            set { _mi.Option("TagSeparator", value); }
+            get { return _mf.Option("TagSeparator_Get"); }
+            set { _mf.Option("TagSeparator", value); }
         }
 
         public string Quote {
-            get { return _mi.Option("Quote_Get"); }
-            set { _mi.Option("Quote", value); }
+            get { return _mf.Option("Quote_Get"); }
+            set { _mf.Option("Quote", value); }
         }
 
         public string DecimalPoint {
-            get { return _mi.Option("decimalpoint_get"); }
-            set { _mi.Option("decimalpoint", value); }
+            get { return _mf.Option("decimalpoint_get"); }
+            set { _mf.Option("decimalpoint", value); }
         }
 
         public string ThousandsPoint {
-            get { return _mi.Option("thousandspoint_get"); }
-            set { _mi.Option("thousandspoint", value); }
+            get { return _mf.Option("thousandspoint_get"); }
+            set { _mf.Option("thousandspoint", value); }
         }
 
         public string StreamMax {
-            get { return _mi.Option("streammax_get"); }
-            set { _mi.Option("streammax", value); }
+            get { return _mf.Option("streammax_get"); }
+            set { _mf.Option("streammax", value); }
         }
 
         public string Language {
-            get { return _mi.Option("Language_Get"); }
-            set { _mi.Option("Language", value); }
+            get { return _mf.Option("Language_Get"); }
+            set { _mf.Option("Language", value); }
         }
 
         public string Inform {
-            get { return _mi.Option("inform_get"); }
-            set { _mi.Option("inform", value); }
+            get { return _mf.Option("inform_get"); }
+            set { _mf.Option("inform", value); }
         }
 
         public InformPreset InformPreset {
@@ -153,72 +154,72 @@ namespace Frost.SharpMediaInfo.Options {
                         break;
                 }
 
-                _mi.Option("inform", strType);
+                _mf.Option("inform", strType);
             }
         }
 
         public string InformReplace {
-            get { return _mi.Option("inform_replace_get"); }
-            set { _mi.Option("inform_replace", value); }
+            get { return _mf.Option("inform_replace_get"); }
+            set { _mf.Option("inform_replace", value); }
         }
 
         public string TraceLevel {
-            get { return _mi.Option("trace_level_get"); }
-            set { _mi.Option("trace_level", value); }
+            get { return _mf.Option("trace_level_get"); }
+            set { _mf.Option("trace_level", value); }
         }
 
         public bool TraceTimeSectionOnlyFirstOccurrence {
-            get { return _mi.Option("trace_timesection_onlyfirstoccurrence_get") == "1"; }
+            get { return _mf.Option("trace_timesection_onlyfirstoccurrence_get") == "1"; }
             set {
-                _mi.Option("trace_timesection_onlyfirstoccurrence", value ? "1" : "");
+                _mf.Option("trace_timesection_onlyfirstoccurrence", value ? "1" : "");
             }
         }
 
         public TraceFormat TraceFormat {
             get {
-                return _mi.Option("trace_format_get") == "CSV"
+                return _mf.Option("trace_format_get") == "CSV"
                     ? TraceFormat.CSV
                     : TraceFormat.Tree;
             }
             set {
-                _mi.Option("trace_format", value == TraceFormat.CSV ? "CSV" : "Tree");
+                _mf.Option("trace_format", value == TraceFormat.CSV ? "CSV" : "Tree");
             }
         }
 
         public string DetailsModificator {
-            get { return _mi.Option("detailsmodificator_get"); }
-            set { _mi.Option("detailsmodificator", value); }
+            get { return _mf.Option("detailsmodificator_get"); }
+            set { _mf.Option("detailsmodificator", value); }
         }
 
         public string ShowFiles {
-            set { _mi.Option("ShowFiles_Set", value); }
+            set { _mf.Option("ShowFiles_Set", value); }
         }
 
         public bool AllowInternetConnection {
-            get { return _mi.Option("Internet") == "1"; }
+            get { return _mf.Option("Internet") == "1"; }
             set {
-                _mi.Option("Internet", value ? "1" : "");
+                _mf.Option("Internet", value ? "1" : "");
             }
         }
 
         public string CustomMapping {
-            set { _mi.Option("custommapping", value); }
+            set { _mf.Option("custommapping", value); }
         }
 
         public bool MultipleValues {
-            get { return _mi.Option("multiplevalues_get") == "1"; }
+            get { return _mf.Option("multiplevalues_get") == "1"; }
             set {
-                _mi.Option("multiplevalues", value ? "1" : "");
+                _mf.Option("multiplevalues", value ? "1" : "");
             }
         }
 
         public Demux Demux {
             get {
                 Demux dm;
-                Enum.TryParse(_mi.Option("demux"), true, out dm);
+                Enum.TryParse(_mf.Option("demux"), true, out dm);
                 return dm;
             }
-            set { _mi.Option("demux", value.ToString()); }
+            set { _mf.Option("demux", value.ToString()); }
         }
 
         /// <summary>Configure or get information about MediaInfoLib</summary>
@@ -226,7 +227,7 @@ namespace Frost.SharpMediaInfo.Options {
         /// <param name="value">The value of option</param>
         /// <returns>Depend of the option: by default "" (nothing) means No, other means Yes</returns>
         public string Custom(string option, string value = "") {
-            return _mi.Option(option, value);
+            return _mf.Option(option, value);
         }
 
     }

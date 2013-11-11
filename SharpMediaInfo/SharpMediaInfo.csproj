@@ -75,8 +75,7 @@
     <Compile Include="Output\Media.cs" />
     <Compile Include="Output\Properties\CodecID.cs" />
     <Compile Include="Output\MediaAudio.cs" />
-    <Compile Include="Output\MediaFile.cs" />
-    <Compile Include="MediaInfo.cs" />
+    <Compile Include="MediaFile.cs" />
     <Compile Include="MediaInfoEnums.cs" />
     <Compile Include="MediaInfoList.cs" />
     <Compile Include="Options\MpegTS.cs" />

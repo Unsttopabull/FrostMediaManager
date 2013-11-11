@@ -14,8 +14,8 @@ namespace Frost.Tester {
     class Program {
         static void Main() {
             //XbmcParser xp = new XbmcParser();
-            //TestMediaInfo();
-            TestMediaInfo2();
+            TestMediaInfo();
+            //TestMediaInfo2();
 
             //TestXml();
         }
@@ -154,74 +154,73 @@ namespace Frost.Tester {
         }
 
         static void TestMediaInfo() {
-            MediaInfo mi = new MediaInfo();
+            using (MediaFile mf = new MediaFile(@"E:\Torrenti\FILMI\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi.avi", true)) {
 
-            StringBuilder sb = new StringBuilder(148000);
-            sb.AppendLine(mi.Option("Info_Version", "0.7.13;MediaInfoDLL_Example_MSVC;0.7.13"));
-            sb.AppendLine();
-
-            //sb.AppendLine("Info_Parameters");
-            //sb.AppendLine(mf.Info.KnownParameters);
-            //sb.AppendLine();
-
-            //sb.AppendLine("Info Codecs");
-            //sb.AppendLine(mf.Info.KnownCodecs);
-            //sb.AppendLine();
-
-            sb.AppendLine("Open");
-            MediaFile mf = new MediaFile(@"E:\Torrenti\FILMI\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi.avi", true);
-            sb.AppendLine();
-
-            if (mf.IsOpen) {
-                sb.AppendLine("Inform with Complete=false");
-                mf.Options.ShowAllInfo = false;
-                sb.AppendLine(mi.Inform());
+                StringBuilder sb = new StringBuilder(148000);
+                sb.AppendLine(mf.Options.Custom("Info_Version", "0.7.13;MediaInfoDLL_Example_MSVC;0.7.13"));
                 sb.AppendLine();
 
-                sb.AppendLine("Inform with Complete=true");
-                mf.Options.ShowAllInfo = true;
-                sb.AppendLine(mi.Inform());
+                sb.AppendLine("Info_Parameters");
+                sb.AppendLine(mf.Info.KnownParameters);
                 sb.AppendLine();
 
-                sb.AppendLine("Custom Inform");
-                mf.Options.Inform = "General;Example : FileSize=%FileSize%";
-                sb.AppendLine(mi.Inform());
+                sb.AppendLine("Info Codecs");
+                sb.AppendLine(mf.Info.KnownCodecs);
                 sb.AppendLine();
 
-                sb.AppendLine("Get with Stream=General and Parameter=\"FileSize\"");
-                sb.AppendLine(mf.General["FileSize"]);
+                sb.AppendLine("Open");
 
-                sb.AppendLine("GetI with Stream=General and Parameter=46");
-                sb.AppendLine(mf.General[46]);
+                sb.AppendLine();
 
-                sb.AppendLine("Count_Get with StreamKind=Stream_Audio");
-                sb.AppendLine(mf.Audio.StreamCount.ToString(CultureInfo.InvariantCulture));
+                if (mf.IsOpen) {
+                    sb.AppendLine("Inform with Complete=false");
+                    mf.Options.ShowAllInfo = false;
+                    sb.AppendLine(mf.Inform());
+                    sb.AppendLine();
 
-                sb.AppendLine("Get with Stream=General and Parameter=\"AudioCount\"");
-                sb.AppendLine(mf.General["AudioCount"]);
+                    sb.AppendLine("Inform with Complete=true");
+                    mf.Options.ShowAllInfo = true;
+                    sb.AppendLine(mf.Inform());
+                    sb.AppendLine();
 
-                sb.AppendLine("Get with Stream=Audio and Parameter=\"StreamCount\"");
-                sb.AppendLine(mf.Audio["StreamCount"]);
+                    sb.AppendLine("Custom Inform");
+                    mf.Options.Inform = "General;Example : FileSize=%FileSize%";
+                    sb.AppendLine(mf.Inform());
+                    sb.AppendLine();
 
-                sb.AppendLine("Moj Get Codec");
-                sb.AppendLine(mf.Audio.Codec.Name);
+                    sb.AppendLine("Get with Stream=General and Parameter=\"FileSize\"");
+                    sb.AppendLine(mf.General["FileSize"]);
 
-                sb.AppendLine("Moj Fomat");
-                sb.AppendLine(mf.General.Format.Summary);
+                    sb.AppendLine("GetI with Stream=General and Parameter=46");
+                    sb.AppendLine(mf.General[46]);
 
-                sb.AppendLine("Are there menues?");
-                sb.AppendLine(mf.Menu.Any.ToString());
+                    sb.AppendLine("Count_Get with StreamKind=Stream_Audio");
+                    sb.AppendLine(mf.Audio.StreamCount.ToString(CultureInfo.InvariantCulture));
 
-                sb.AppendLine("Close");
-                mi.Close();
+                    sb.AppendLine("Get with Stream=General and Parameter=\"AudioCount\"");
+                    sb.AppendLine(mf.General["AudioCount"]);
 
-                Console.Write(sb.ToString());
+                    sb.AppendLine("Get with Stream=Audio and Parameter=\"StreamCount\"");
+                    sb.AppendLine(mf.Audio["StreamCount"]);
+
+                    sb.AppendLine("Moj Get Codec");
+                    sb.AppendLine(mf.Audio.Codec.Name);
+
+                    sb.AppendLine("Moj Fomat");
+                    sb.AppendLine(mf.General.Format.Summary);
+
+                    sb.AppendLine("Are there menues?");
+                    sb.AppendLine(mf.Menu.Any.ToString());
+
+                    sb.AppendLine("Close");
+
+                    Console.Write(sb.ToString());
+                }
+                else {
+                    sb.AppendLine("Napaka med odprianjem");
+                    Console.Write(sb.ToString());
+                }
             }
-            else {
-                sb.AppendLine("Napaka med odprianjem");
-                Console.Write(sb.ToString());
-            }
-            mf.Close();
             Console.WriteLine();
             Console.WriteLine("----------Končal----------");
             //Console.Read();

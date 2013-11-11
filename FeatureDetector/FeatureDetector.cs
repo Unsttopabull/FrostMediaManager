@@ -1,5 +1,5 @@
 ﻿using Frost.Common.Models.DB.MovieVo.Files;
-using Frost.SharpMediaInfo.Output;
+using Frost.SharpMediaInfo;
 
 namespace Frost.FeatureDetector {
     public class FeatureDetector {
