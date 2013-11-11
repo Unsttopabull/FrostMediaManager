@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.XML.XBMC;
 using Frost.ProcessDatabase;
+using Frost.SharpMediaInfo;
+using Frost.SharpMediaInfo.Output;
 
 namespace Frost.Tester {
     class Program {
@@ -137,6 +140,78 @@ namespace Frost.Tester {
 
             //XmlSerializer xs = new XmlSerializer(typeof(movie));
             //xs.Serialize(new XmlIndentedTextWriter("test.xml"), mv);            
+        }
+
+        static void TestMediaInfo() {
+            MediaInfo mi = new MediaInfo();
+
+            StringBuilder sb = new StringBuilder(148000);
+            sb.AppendLine(mi.Option("Info_Version", "0.7.13;MediaInfoDLL_Example_MSVC;0.7.13"));
+            sb.AppendLine();
+
+            sb.AppendLine("Info_Parameters");
+            sb.AppendLine(mi.Info.KnownParameters);
+            sb.AppendLine();
+
+            sb.AppendLine("Info Codecs");
+            sb.AppendLine(mi.Info.KnownCodecs);
+            sb.AppendLine();
+
+            sb.AppendLine("Open");
+            MediaFile mf = new MediaFile(@"E:\Torrenti\FILMI\Game.of.Thrones.S03E03.HDTV.XviD-AFG\Game.of.Thrones.S03E03.HDTV.XviD-AFG.avi", true);
+            sb.AppendLine();
+
+            if (mf.IsOpen) {
+                sb.AppendLine("Inform with Complete=false");
+                mi.Options.ShowAllInfo = false;
+                sb.AppendLine(mi.Inform());
+                sb.AppendLine();
+
+                sb.AppendLine("Inform with Complete=true");
+                mi.Options.ShowAllInfo = true;
+                sb.AppendLine(mi.Inform());
+                sb.AppendLine();
+
+                sb.AppendLine("Custom Inform");
+                mi.Options.Inform = "General;Example : FileSize=%FileSize%";
+                sb.AppendLine(mi.Inform());
+                sb.AppendLine();
+
+                sb.AppendLine("Get with Stream=General and Parameter=\"FileSize\"");
+                sb.AppendLine(mf.General["FileSize"]);
+
+                sb.AppendLine("GetI with Stream=General and Parameter=46");
+                sb.AppendLine(mf.General[46]);
+
+                sb.AppendLine("Count_Get with StreamKind=Stream_Audio");
+                sb.AppendLine(mf.Audio.StreamCount.ToString(CultureInfo.InvariantCulture));
+
+                sb.AppendLine("Get with Stream=General and Parameter=\"AudioCount\"");
+                sb.AppendLine(mf.General["AudioCount"]);
+
+                sb.AppendLine("Get with Stream=Audio and Parameter=\"StreamCount\"");
+                sb.AppendLine(mf.Audio["StreamCount"]);
+
+                sb.AppendLine("Moj Get Codec");
+                sb.AppendLine(mf.Audio.Codec.Name);
+
+                sb.AppendLine("Moj Fomat");
+                sb.AppendLine(mf.General.Format.Summary);
+
+                sb.AppendLine("Are there menues?");
+                sb.AppendLine(mf.Menu.Any.ToString());
+
+                sb.AppendLine("Close");
+                mi.Close();
+
+                Console.Write(sb.ToString());
+            }
+            else {
+                sb.AppendLine("Napaka med odprianjem");
+            }
+            //Console.WriteLine();
+            //Console.WriteLine("----------Končal----------");
+            //Console.Read();
         }
     }
 }

@@ -1,42 +1,38 @@
-﻿namespace Frost.MediaInfo.Output.Properties {
+﻿namespace Frost.SharpMediaInfo.Output.Properties {
+
     public class FrameRateInfo {
-        private readonly Media _media;
+        protected readonly Media Media;
 
         public FrameRateInfo(Media media) {
-            _media = media;
+            Media = media;
         }
 
         /// <summary>Frames per second (with measurement)</summary>
-        public string String { get { return _media[""]; } }
+        public string String { get { return Media["FrameRate/String"]; } }
 
         /// <summary>Original (in the raw stream) frames per second</summary>
-        public string Original { get { return _media[""]; } }
+        public string Original { get { return Media["FrameRate_Original"]; } }
         /// <summary>Original (in the raw stream) frames per second</summary>
-        public string OriginalString { get { return _media[""]; } }
+        public string OriginalString { get { return Media["FrameRate_Original/String"]; } }
 
         /// <summary>Frame rate mode (CFR, VFR)</summary>
-        public string Mode { get { return _media[""]; } }
+        public string Mode { get { return Media["FrameRate_Mode"]; } }
         /// <summary>Frame rate mode (Constant, Variable)</summary>
-        public string ModeString { get { return _media[""]; } }
-
-        /// <summary>Original frame rate mode (CFR, VFR)</summary>
-        public string ModeOriginal { get { return _media[""]; } }
-        /// <summary>Original frame rate mode (Constant, Variable)</summary>
-        public string ModeOriginalString { get { return _media[""]; } }
+        public string ModeString { get { return Media["FrameRate_Mode/String"]; } }
 
         /// <summary>Minimum Frames per second</summary>
-        public string Minimum { get { return _media[""]; } }
+        public string Minimum { get { return Media["FrameRate_Minimum"]; } }
         /// <summary>Minimum Frames per second (with measurement)</summary>
-        public string MinimumString { get { return _media[""]; } }
+        public string MinimumString { get { return Media["FrameRate_Minimum/String"]; } }
 
         /// <summary>Nominal Frames per second</summary>
-        public string Nominal { get { return _media[""]; } }
+        public string Nominal { get { return Media["FrameRate_Nominal"]; } }
         /// <summary>Nominal Frames per second (with measurement)</summary>
-        public string NominalString { get { return _media[""]; } }
+        public string NominalString { get { return Media["FrameRate_Nominal/String"]; } }
 
         /// <summary>Maximum Frames per second</summary>
-        public string Maximum { get { return _media[""]; } }
+        public string Maximum { get { return Media["FrameRate_Maximum"]; } }
         /// <summary>Maximum Frames per second (with measurement)</summary>
-        public string MaximumString { get { return _media[""]; } }
+        public string MaximumString { get { return Media["FrameRate_Maximum/String"]; } }
     }
 }

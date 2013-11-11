@@ -1,5 +1,8 @@
-﻿namespace Frost.MediaInfo.Output.Properties.Delay {
+﻿
+namespace Frost.SharpMediaInfo.Output.Properties.Delay {
+
     public class DelayInfo : GeneralDelayInfo{
+
         internal DelayInfo(Media media, bool delayOriginal) : base(media, delayOriginal) {
         }
 

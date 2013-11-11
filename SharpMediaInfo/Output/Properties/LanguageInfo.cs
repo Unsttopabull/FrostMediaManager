@@ -1,5 +1,7 @@
-﻿namespace Frost.MediaInfo.Output.Properties {
+﻿namespace Frost.SharpMediaInfo.Output.Properties {
+
     public class LanguageInfo {
+
         private readonly Media _media;
 
         public LanguageInfo(Media media) {
@@ -7,21 +9,23 @@
         }
 
         /// <summary>Language name (full)</summary>
-        public string String { get { return _media[""]; } }
+        public string String { get { return _media["Language/String"]; } }
 
         /// <summary>Language name (full)</summary>
-        public string String1 { get { return _media[""]; } }
+        public string String1 { get { return _media["Language/String1"]; } }
 
         /// <summary>Language (2-letter ISO 639-1 if exists, else empty)</summary>
-        public string String2 { get { return _media[""]; } }
+        public string String2 { get { return _media["Language/String2"]; } }
 
         /// <summary>Language (3-letter ISO 639-2 if exists, else empty)</summary>
-        public string String3 { get { return _media[""]; } }
+        public string String3 { get { return _media["Language/String3"]; } }
 
         /// <summary>Language (2-letter ISO 639-1 if exists with optional ISO 3166-1 country separated by a dash if available, e.g. en, en-us, zh-cn, else empty)</summary>
-        public string String4 { get { return _media[""]; } }
+        public string String4 { get { return _media["Language/String4"]; } }
 
         /// <summary>More info about Language (e.g. Director's Comment)</summary>
-        public string More { get { return _media[""]; } }
+        public string More { get { return _media["Language_More"]; } }
+
     }
+
 }

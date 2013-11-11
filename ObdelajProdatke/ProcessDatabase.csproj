@@ -60,15 +60,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
+      <Project>{73F12859-D8B1-49C1-A835-0810CE7BD006}</Project>
       <Name>Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\NetworkShares\NetworkShares.csproj">
-      <Project>{a85f5e2b-149a-4fb5-a749-056ae20ab72f}</Project>
+      <Project>{A85F5E2B-149A-4FB5-A749-056AE20AB72F}</Project>
       <Name>NetworkShares</Name>
     </ProjectReference>
     <ProjectReference Include="..\PHPtoNet\PHPtoNET.csproj">
-      <Project>{4661dd6c-be69-4bcb-a835-53d192de841c}</Project>
+      <Project>{4661DD6C-BE69-4BCB-A835-53D192DE841C}</Project>
       <Name>PHPtoNET</Name>
     </ProjectReference>
   </ItemGroup>

@@ -1,8 +1,8 @@
-﻿namespace Frost.MediaInfo.Output.Properties {
-    public class EncodedLibraryInfo {
+﻿namespace Frost.SharpMediaInfo.Output.Properties {
+    public class EncodingLibraryInfo {
         private readonly Media _media;
 
-        public EncodedLibraryInfo(Media media) {
+        public EncodingLibraryInfo(Media media) {
             _media = media;
         }
 

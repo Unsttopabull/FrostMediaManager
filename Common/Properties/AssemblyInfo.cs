@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Common")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Frost.Common")]
+[assembly: AssemblyDescription("Common classes and Models used throughout the Frost Media Manager")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Common")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCompany("Martin Kraner")]
+[assembly: AssemblyProduct("Frost Common Library")]
+[assembly: AssemblyCopyright("Copyright © Martin Kraner 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

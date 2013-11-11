@@ -1,8 +1,8 @@
-﻿namespace Frost.MediaInfo {
-    public class Info {
+﻿namespace Frost.SharpMediaInfo {
+    public class LibraryInfo {
         private readonly MediaInfo _mi;
 
-        internal Info(MediaInfo mi) {
+        internal LibraryInfo(MediaInfo mi) {
             _mi = mi;
         }
 

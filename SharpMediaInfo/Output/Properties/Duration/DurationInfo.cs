@@ -1,23 +1,26 @@
-﻿namespace Frost.MediaInfo.Output.Properties.Duration {
-    public class DurationInfo {
-        protected readonly Media MediaStream;
-        protected readonly bool OriginalDuration;
+﻿
+namespace Frost.SharpMediaInfo.Output.Properties.Duration {
 
-        public DurationInfo(Media media, bool originalDuration) {
+    public class DurationInfo {
+
+        protected readonly Media MediaStream;
+        private readonly bool _originalDuration;
+
+        protected DurationInfo(Media media, bool originalDuration) {
             MediaStream = media;
-            OriginalDuration = originalDuration;
+            _originalDuration = originalDuration;
         }
         
         /// <summary>Play time in format : XXx YYy only, YYy omited if zero</summary>
-        public string String { get { return OriginalDuration ? MediaStream["Source_Duration/String"] : MediaStream["Duration/String"]; } }
+        public string String { get { return _originalDuration ? MediaStream["Source_Duration/String"] : MediaStream["Duration/String"]; } }
 
         /// <summary>Play time in format : HHh MMmn SSs MMMms, XX omited if zero</summary>
-        public string String1 { get { return OriginalDuration ? MediaStream["Source_Duration/String1"] : MediaStream["Duration/String1"]; } }
+        public string String1 { get { return _originalDuration ? MediaStream["Source_Duration/String1"] : MediaStream["Duration/String1"]; } }
 
         /// <summary>Play time in format : XXx YYy only, YYy omited if zero</summary>
-        public string String2 { get { return OriginalDuration ? MediaStream["Source_Duration/String2"] : MediaStream["Duration/String2"]; } }
+        public string String2 { get { return _originalDuration ? MediaStream["Source_Duration/String2"] : MediaStream["Duration/String2"]; } }
 
         /// <summary>Play time in format : HH:MM:SS.MMM</summary>
-        public string String3 { get { return OriginalDuration ? MediaStream["Source_Duration/String3"] : MediaStream["Duration/String3"]; } }
+        public string String3 { get { return _originalDuration ? MediaStream["Source_Duration/String3"] : MediaStream["Duration/String3"]; } }
     }
 }

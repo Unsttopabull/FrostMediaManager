@@ -55,12 +55,20 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
+      <Project>{73F12859-D8B1-49C1-A835-0810CE7BD006}</Project>
       <Name>Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\ObdelajProdatke\ProcessDatabase.csproj">
-      <Project>{deaba63d-465e-4ab2-a643-d7fbe7ac3181}</Project>
+      <Project>{DEABA63D-465E-4AB2-A643-D7FBE7AC3181}</Project>
       <Name>ProcessDatabase</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpMediaInfo\SharpMediaInfo.csproj">
+      <Project>{4EA24C1B-3AF2-4EB0-AA98-62EAFB0C2682}</Project>
+      <Name>SharpMediaInfo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UI\UI.csproj">
+      <Project>{d9ba5456-aed6-496d-bd96-cd602d32169b}</Project>
+      <Name>UI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

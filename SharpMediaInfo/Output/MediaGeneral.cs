@@ -1,13 +1,13 @@
-﻿using Frost.MediaInfo.Output.Properties;
-using Frost.MediaInfo.Output.Properties.Codecs;
-using Frost.MediaInfo.Output.Properties.Delay;
-using Frost.MediaInfo.Output.Properties.Duration;
-using Frost.MediaInfo.Output.Properties.Formats;
-using Frost.MediaInfo.Output.Properties.General;
+﻿using Frost.SharpMediaInfo.Output.Properties;
+using Frost.SharpMediaInfo.Output.Properties.Codecs;
+using Frost.SharpMediaInfo.Output.Properties.Delay;
+using Frost.SharpMediaInfo.Output.Properties.Duration;
+using Frost.SharpMediaInfo.Output.Properties.Formats;
+using Frost.SharpMediaInfo.Output.Properties.General;
 
 #pragma warning disable 1591
 
-namespace Frost.MediaInfo.Output {
+namespace Frost.SharpMediaInfo.Output {
     public class MediaGeneral : Media {
 
         public MediaGeneral(MediaFile mediaInfo) : base(mediaInfo, StreamKind.General) {
@@ -17,14 +17,14 @@ namespace Frost.MediaInfo.Output {
             DurationInfo = new GeneralDurationInfo(this);
             DelayInfo = new GeneralDelayInfo(this);
             StreamSizeInfo = new StreamSizeInfo(this);
-            OverallBitRateInfo = new GeneralBitRateInfo(this, true);
+            OverallBitRateInfo = new GeneralBitRateInfo(this);
             Season = new Season(this);
             Movie = new Movie(this);
             Album = new Album(this);
             Comic = new Comic(this);
             Track = new Track(this);
             Performer = new Performer(this);
-            EncodedLibraryInfo = new EncodedLibraryInfo(this);
+            EncodingLibraryInfo = new EncodingLibraryInfo(this);
             Service = new ServiceInfo(this);
             Part = new PartInfo(this);
             CoverInfo = new CoverInfo(this);
@@ -126,7 +126,7 @@ namespace Frost.MediaInfo.Output {
         public GeneralDelayInfo DelayInfo { get; private set; }
 
         /// <summary>Stream size in bytes</summary>
-        public string StreamSize { get { return this[""]; } }
+        public string StreamSize { get { return this["StreamSize"]; } }
         public StreamSizeInfo StreamSizeInfo { get; private set; }
 
         public string HeaderSize { get { return this["HeaderSize"]; } }
@@ -254,7 +254,7 @@ namespace Frost.MediaInfo.Output {
 
         /// <summary>Software used to create the file</summary>
         public string EncodedLibrary { get { return this["Encoded_Library"]; } }
-        public EncodedLibraryInfo EncodedLibraryInfo { get; private set; }
+        public EncodingLibraryInfo EncodingLibraryInfo { get; private set; }
 
         public string Cropped { get { return this["Cropped"]; } }
         public string Dimensions { get { return this["Dimensions"]; } }

@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Xml.Linq;
-using Frost.MediaInfo.Output.Properties;
+using Frost.SharpMediaInfo.Output.Properties;
 
 #pragma warning disable 1591
 
-namespace Frost.MediaInfo.Output {
+namespace Frost.SharpMediaInfo.Output {
     public abstract class Media : IEnumerable<KeyValuePair<string, string>> {
-        protected bool Cached;
-        protected MediaFile MediaFile;
-        protected StreamKind StreamKind;
-        protected Dictionary<string, string>[] Properties;
+        private bool _cached;
+        private MediaFile MediaFile;
+        private StreamKind StreamKind;
+        private Dictionary<string, string>[] Properties;
         protected int CachedStreamCount = -1;
 
         protected Media(MediaFile mediaInfo, StreamKind streamKind) {
@@ -67,7 +67,7 @@ namespace Frost.MediaInfo.Output {
         /// <param name="parameter">Parameter you are looking for in the stream (Codec, width, bitrate...), in string format ("Codec", "Width"...) </param>
         public string this[string parameter] {
             get {
-                if (Cached && Properties[StreamNumber].ContainsKey(parameter)) {
+                if (_cached && Properties[StreamNumber].ContainsKey(parameter)) {
                     return Properties[StreamNumber][parameter];
                 }
 
@@ -86,7 +86,7 @@ namespace Frost.MediaInfo.Output {
 
         #region Getters & Functions
         internal virtual void ParseInform(XElement track, int streamNumber) {
-            if (Cached) {
+            if (_cached) {
                 return;
             }
 
@@ -95,7 +95,7 @@ namespace Frost.MediaInfo.Output {
             foreach (XElement xElement in track.Nodes()) {
                 Properties[streamNumber][xElement.Name.LocalName] = xElement.Value;
             }
-            Cached = true;
+            _cached = true;
         }
 
         /// <summary>Get a piece of information about an image</summary>

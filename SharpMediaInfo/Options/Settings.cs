@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Frost.MediaInfo.Options {
+namespace Frost.SharpMediaInfo.Options {
+
     public class Settings {
+
         private readonly MediaInfo _mi;
 
         internal Settings(MediaInfo mi) {
@@ -22,8 +24,8 @@ namespace Frost.MediaInfo.Options {
         public BlockMethod BlockMethod {
             get {
                 return _mi.Option("blockmethod_get") == "1"
-                               ? BlockMethod.AfterLocalInfo
-                               : BlockMethod.Immediately;
+                    ? BlockMethod.AfterLocalInfo
+                    : BlockMethod.Immediately;
             }
             set {
                 _mi.Option("blockmethod", value == BlockMethod.Immediately ? "" : "1");
@@ -31,16 +33,12 @@ namespace Frost.MediaInfo.Options {
         }
 
         public bool ShowAllInfo {
-            get {
-                return _mi.Option("Complete_Get") == "1";
-            }
+            get { return _mi.Option("Complete_Get") == "1"; }
             set { _mi.Option("complete", value ? "1" : ""); }
         }
 
         public bool ParseUnknownExtensions {
-            get {
-                return _mi.Option("ParseUnknownExtensions_Get") == "1";
-            }
+            get { return _mi.Option("ParseUnknownExtensions_Get") == "1"; }
             set { _mi.Option("ParseUnknownExtensions", value ? "1" : ""); }
         }
 
@@ -62,7 +60,7 @@ namespace Frost.MediaInfo.Options {
             get { return _mi.Option("SkipBinaryData_get") == "1"; }
             set {
                 _mi.Option("SkipBinaryData", value ? "1" : "0");
-            }            
+            }
         }
 
         public float ParseSpeed {
@@ -131,7 +129,7 @@ namespace Frost.MediaInfo.Options {
         }
 
         public string Inform {
-            get { return _mi.Option("inform_get");}
+            get { return _mi.Option("inform_get"); }
             set { _mi.Option("inform", value); }
         }
 
@@ -169,7 +167,7 @@ namespace Frost.MediaInfo.Options {
             set { _mi.Option("trace_level", value); }
         }
 
-        public bool TraceTimesectionOnlyFirstOccurrence  {
+        public bool TraceTimesectionOnlyFirstOccurrence {
             get { return _mi.Option("trace_timesection_onlyfirstoccurrence_get") == "1"; }
             set {
                 _mi.Option("trace_timesection_onlyfirstoccurrence", value ? "1" : "");
@@ -179,8 +177,8 @@ namespace Frost.MediaInfo.Options {
         public TraceFormat TraceFormat {
             get {
                 return _mi.Option("trace_format_get") == "CSV"
-                               ? TraceFormat.CSV
-                               : TraceFormat.Tree;
+                    ? TraceFormat.CSV
+                    : TraceFormat.Tree;
             }
             set {
                 _mi.Option("trace_format", value == TraceFormat.CSV ? "CSV" : "Tree");
@@ -222,5 +220,7 @@ namespace Frost.MediaInfo.Options {
             }
             set { _mi.Option("demux", value.ToString()); }
         }
+
     }
+
 }

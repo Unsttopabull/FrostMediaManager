@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ObdelajXtreamerProdatke")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Fost.ProcessDatabase")]
+[assembly: AssemblyDescription("Frost Media Manger database processing library.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ObdelajXtreamerProdatke")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCompany("Martin Kraner")]
+[assembly: AssemblyProduct("Frost ProcessDtabase")]
+[assembly: AssemblyCopyright("Copyright © Martin Kraner 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

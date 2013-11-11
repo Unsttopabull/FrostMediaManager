@@ -28,7 +28,7 @@ namespace Frost.ProcessDatabase {
             }
         }
 
-        public static string FindXjbDriveLoc() {
+        public static string FindXjbDriveLocation() {
             string dbLoc = FindDB(DBSystem.Xtreamer);
             if (dbLoc != null) {
                 int num = 0;

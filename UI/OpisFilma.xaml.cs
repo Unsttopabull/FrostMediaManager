@@ -25,7 +25,7 @@ namespace Frost.UI {
         private void InitXjb() {
             if (_xjb == null) {
                 _xjb = new MovieVoContainer();
-                _dbLoc = DBCheck.FindXjbDriveLoc();
+                _dbLoc = DBCheck.FindXjbDriveLocation();
             }
         }
 

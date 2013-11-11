@@ -1,20 +1,32 @@
-namespace Frost.MediaInfo.Output.Properties.Formats {
+
+namespace Frost.SharpMediaInfo.Output.Properties.Formats {
+
     public class Format{
+
         protected readonly Media MediaStream;
 
         internal Format(Media media) {
             MediaStream = media;
         }
 
-        public string Summary { get { return MediaStream[""]; } }
-        public string Info { get { return MediaStream[""]; } }
-        public string Url { get { return MediaStream[""]; } }
-        public string Commercial { get { return MediaStream[""]; } }
-        public string CommercialIfAny { get { return MediaStream[""]; } }
-        public string Version { get { return MediaStream[""]; } }
-        public string Profile { get { return MediaStream[""]; } }
-        public string Compression { get { return MediaStream[""]; } }
+        /// <summary>Format used</summary>
+        public string Summary { get { return MediaStream["Format"]; } }
+        /// <summary>Info about the format</summary>
+        public string Info { get { return MediaStream["Format/Info"]; } }
+        /// <summary>Homepage of this format</summary>
+        public string Url { get { return MediaStream["Format/Url"]; } }
+        /// <summary>Commercial name used by vendor for theses setings or Format field if there is no difference</summary>
+        public string Commercial { get { return MediaStream["Format_Commercial"]; } }
+        /// <summary>Commercial name used by vendor for theses setings if there is one</summary>
+        public string CommercialIfAny { get { return MediaStream["Format_Commercial_IfAny"]; } }
+        /// <summary>Version of this format</summary>
+        public string Version { get { return MediaStream["Format_Version"]; } }
+        /// <summary>Profile of this Format</summary>
+        public string Profile { get { return MediaStream["Format_Profile"]; } }
+        /// <summary>Compression method used</summary>
+        public string Compression { get { return MediaStream["Format_Compression"]; } }
 
-        public string Settings { get { return MediaStream[""]; } }
+        /// <summary>Settings needed for decoder used, summary</summary>
+        public string Settings { get { return MediaStream["Format_Settings"]; } }
     }
 }

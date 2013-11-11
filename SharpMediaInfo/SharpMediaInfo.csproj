@@ -7,8 +7,8 @@
     <ProjectGuid>{4EA24C1B-3AF2-4EB0-AA98-62EAFB0C2682}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Frost.MediaInfo</RootNamespace>
-    <AssemblyName>Frost.MediaInfo</AssemblyName>
+    <RootNamespace>Frost.SharpMediaInfo</RootNamespace>
+    <AssemblyName>Frost.SharpMediaInfo</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -21,7 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
-    <DocumentationFile>bin\Debug\Frost.MediaInfo.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\Frost.SharpMediaInfo.xml</DocumentationFile>
     <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -42,8 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Info.cs" />
+    <Compile Include="LibraryInfo.cs" />
     <Compile Include="Output\CoverInfo.cs" />
+    <Compile Include="Output\Properties\Duration\FrameDuration.cs" />
     <Compile Include="Output\Properties\General\FileInfo.cs" />
     <Compile Include="Output\OriginalSourceInfo.cs" />
     <Compile Include="Output\PartInfo.cs" />
@@ -55,7 +56,7 @@
     <Compile Include="Output\Properties\ChannelInfo.cs" />
     <Compile Include="Output\Properties\GeneralBitRateInfo.cs" />
     <Compile Include="Output\Properties\Interleave.cs" />
-    <Compile Include="Output\Properties\EncodedLibraryInfo.cs" />
+    <Compile Include="Output\Properties\EncodingLibraryInfo.cs" />
     <Compile Include="Output\Properties\Delay\DelayInfo.cs" />
     <Compile Include="Output\Properties\Delay\GeneralDelayInfo.cs" />
     <Compile Include="Output\Properties\Delay\VideoDelayInfo.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Output\Properties\Info.cs" />
     <Compile Include="Output\Properties\General\Season.cs" />
     <Compile Include="Output\Properties\General\Track.cs" />
+    <Compile Include="Output\Properties\VideoFrameRateInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Options\Settings.cs" />
     <Compile Include="Options\SSH.cs" />

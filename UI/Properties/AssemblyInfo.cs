@@ -5,12 +5,12 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WPF_Jukebox")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Frost.UI")]
+[assembly: AssemblyDescription("Frost Media Manager UI.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("WPF_Jukebox")]
-[assembly: AssemblyCopyright("Copyright © Microsoft 2011")]
+[assembly: AssemblyCompany("Martin Kraner")]
+[assembly: AssemblyProduct("Frost UI")]
+[assembly: AssemblyCopyright("Copyright © Martin Kraner 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

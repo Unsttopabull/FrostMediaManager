@@ -1,4 +1,4 @@
-﻿namespace Frost.MediaInfo.Output.Properties {
+﻿namespace Frost.SharpMediaInfo.Output.Properties {
     public enum InfoType {
         ScanType,
         ScanOrder,
@@ -8,29 +8,29 @@
 
     public class Info {
         private readonly Media _media;
-        private readonly string[] propNames;
+        private readonly string[] _propNames;
 
-        public Info(Media mediaVideo, InfoType type) {
+        internal Info(Media mediaVideo, InfoType type) {
             _media = mediaVideo;
 
             switch (type) {
                 case InfoType.ScanType:
-                    propNames = new[] { "", "", "" };
+                    _propNames = new[] { "ScanType/String", "ScanType_Original", "ScanType_Original/String" };
                     break;
                 case InfoType.ScanOrder:
-                    propNames = new[] { "", "", "" };
+                    _propNames = new[] { "ScanOrder/String", "ScanOrder_Original", "ScanOrder_Original/String" };
                     break;
                 case InfoType.PixelAspectRatio:
-                    propNames = new[] { "", "", "" };
+                    _propNames = new[] { "PixelAspectRatio/String", "PixelAspectRatio_Original", "PixelAspectRatio_Original/String" };
                     break;
                 case InfoType.DisplayAspectRatio:
-                    propNames = new[] { "", "", "" };
+                    _propNames = new[] { "DisplayAspectRatio/String", "DisplayAspectRatio_Original", "DisplayAspectRatio_Original/String" };
                     break;
             }
         }
 
-        public string String { get { return _media[propNames[0]]; } }
-        public string Original { get { return _media[propNames[1]]; } }
-        public string OriginalString { get { return _media[propNames[2]]; } }
+        public string String { get { return _media[_propNames[0]]; } }
+        public string Original { get { return _media[_propNames[1]]; } }
+        public string OriginalString { get { return _media[_propNames[2]]; } }
     }
 }

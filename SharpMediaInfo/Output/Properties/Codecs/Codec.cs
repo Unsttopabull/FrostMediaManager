@@ -1,4 +1,4 @@
-﻿namespace Frost.MediaInfo.Output.Properties.Codecs {
+﻿namespace Frost.SharpMediaInfo.Output.Properties.Codecs {
     public class Codec {
         protected readonly Media MediaStream;
 

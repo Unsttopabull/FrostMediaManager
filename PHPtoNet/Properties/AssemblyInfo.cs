@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PHPSerializeParser")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Frost.PHPtoNET")]
+[assembly: AssemblyDescription("Frost Media Manager PHP object deserialization library.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("PHPSerializeParser")]
-[assembly: AssemblyCopyright("Copyright ©  2012")]
+[assembly: AssemblyCompany("Martin Kraner")]
+[assembly: AssemblyProduct("Frost PHPtoNET")]
+[assembly: AssemblyCopyright("Copyright © Martin Kraner 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

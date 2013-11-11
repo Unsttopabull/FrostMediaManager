@@ -1,4 +1,4 @@
-﻿namespace Frost.MediaInfo.Options {
+﻿namespace Frost.SharpMediaInfo.Options {
     public class MpegTS {
         private readonly MediaInfo _mi;
 

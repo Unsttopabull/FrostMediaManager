@@ -1,21 +1,24 @@
-﻿namespace Frost.MediaInfo.Output.Properties.Codecs {
+﻿
+namespace Frost.SharpMediaInfo.Output.Properties.Codecs {
+
     public class VideoCodec : TextCodec{
+
         public VideoCodec(Media media) : base(media){
         }
 
-        public string Family { get { return MediaStream[""]; } }
-        public string Profile { get { return MediaStream[""]; } }
-        public string Description { get { return MediaStream[""]; } }
+        public string Family { get { return MediaStream["Codec/Family"]; } }
+        public string Profile { get { return MediaStream["Codec_Profile"]; } }
+        public string Description { get { return MediaStream["Codec_Description"]; } }
 
-        public string Settings { get { return MediaStream[""]; } }
-        public string PacketBitStream { get { return MediaStream[""]; } }
-        public string BVOP { get { return MediaStream[""]; } }
-        public string QPel { get { return MediaStream[""]; } }
-        public string GMC { get { return MediaStream[""]; } }
-        public string GMCString { get { return MediaStream[""]; } }
-        public string Matrix { get { return MediaStream[""]; } }
-        public string MatrixData { get { return MediaStream[""]; } }
-        public string CABAC { get { return MediaStream[""]; } }
-        public string RefFrames { get { return MediaStream[""]; } }
+        public string Settings { get { return MediaStream["Codec_Settings"]; } }
+        public string PacketBitStream { get { return MediaStream["Codec_Settings_PacketBitStream"]; } }
+        public string BVOP { get { return MediaStream["Codec_Settings_BVOP"]; } }
+        public string QPel { get { return MediaStream["Codec_Settings_QPel"]; } }
+        public string GMC { get { return MediaStream["Codec_Settings_GMC"]; } }
+        public string GMCString { get { return MediaStream["Codec_Settings_GMC/String"]; } }
+        public string Matrix { get { return MediaStream["Codec_Settings_Matrix"]; } }
+        public string MatrixData { get { return MediaStream["Codec_Settings_Matrix_Data"]; } }
+        public string CABAC { get { return MediaStream["Codec_Settings_CABAC"]; } }
+        public string RefFrames { get { return MediaStream["Codec_Settings_RefFrames"]; } }
     }
 }

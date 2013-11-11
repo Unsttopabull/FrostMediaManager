@@ -1,4 +1,4 @@
-﻿namespace Frost.MediaInfo.Output.Properties.Delay {
+﻿namespace Frost.SharpMediaInfo.Output.Properties.Delay {
     public class VideoDelayInfo : GeneralDelayInfo {
         internal VideoDelayInfo(Media media) : base(media) {
         }

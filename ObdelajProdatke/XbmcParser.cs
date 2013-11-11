@@ -9,12 +9,10 @@ using Frost.Common.Models.DB.XBMC;
 namespace Frost.ProcessDatabase {
     public class XbmcParser : MediaManager<XbmcMovie> {
 
-        public XbmcParser()
-            : base(DBSystem.XBMC) {
+        public XbmcParser() : base(DBSystem.XBMC) {
         }
 
-        public XbmcParser(string dbLocation)
-            : base(DBSystem.XBMC, dbLocation) {
+        public XbmcParser(string dbLocation) : base(DBSystem.XBMC, dbLocation) {
         }
 
         public override IEnumerable<XbmcMovie> RawMovies {

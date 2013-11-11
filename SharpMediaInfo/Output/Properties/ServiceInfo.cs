@@ -1,4 +1,4 @@
-﻿namespace Frost.MediaInfo.Output.Properties {
+﻿namespace Frost.SharpMediaInfo.Output.Properties {
     public class ServiceInfo {
         private readonly Media _media;
 

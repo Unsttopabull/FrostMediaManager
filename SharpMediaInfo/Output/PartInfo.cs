@@ -1,4 +1,4 @@
-﻿namespace Frost.MediaInfo.Output {
+﻿namespace Frost.SharpMediaInfo.Output {
     public class PartInfo {
         private readonly Media _media;
 

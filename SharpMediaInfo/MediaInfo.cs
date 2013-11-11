@@ -1,24 +1,32 @@
 using System;
 using System.Runtime.InteropServices;
-using Frost.MediaInfo.Options;
-using Frost.MediaInfo.Output;
+using Frost.SharpMediaInfo.Options;
+using Frost.SharpMediaInfo.Output;
 
-namespace Frost.MediaInfo {
-    public class MediaInfo {
-        //Import of DLL functions. DO NOT USE until you know what you do (MediaInfo DLL do NOT use CoTaskMemAlloc to allocate memory)
+namespace Frost.SharpMediaInfo {
+
+    public class MediaInfo : IDisposable {
+
         internal readonly IntPtr Handle;
         public readonly bool MustUseAnsi;
 
         public MediaInfo() {
             Handle = MediaInfo_New();
-            Options = new Settings(this);
-            Info = new Info(this);
 
-            MustUseAnsi = Environment.OSVersion.ToString().IndexOf("Windows", StringComparison.Ordinal) == -1;
+            Options = new Settings(this);
+            Info = new LibraryInfo(this);
+            MustUseAnsi = Environment.OSVersion.ToString().IndexOf("Windows", StringComparison.Ordinal) == -1;            
         }
 
-        public Info Info { get; private set; }
+        public LibraryInfo Info { get; private set; }
 
+        public Settings Options { get; protected internal set; }
+
+        public bool IsDisposed { get; private set; }
+
+        #region P/Invoke C funtions
+
+        //Import of DLL functions. DO NOT USE until you know what you do (MediaInfo DLL do NOT use CoTaskMemAlloc to allocate memory)
         [DllImport("MediaInfo.dll")]
         internal static extern IntPtr MediaInfo_New();
 
@@ -30,6 +38,8 @@ namespace Frost.MediaInfo {
 
         [DllImport("MediaInfo.dll")]
         internal static extern IntPtr MediaInfoA_Open(IntPtr handle, IntPtr fileName);
+
+        #region P/Invoke for buffers
 
         [DllImport("MediaInfo.dll")]
         internal static extern IntPtr MediaInfo_Open_Buffer_Init(IntPtr handle, Int64 fileSize, Int64 fileOffset);
@@ -54,6 +64,8 @@ namespace Frost.MediaInfo {
 
         [DllImport("MediaInfo.dll")]
         internal static extern IntPtr MediaInfoA_Open_Buffer_Finalize(IntPtr handle);
+
+        #endregion
 
         [DllImport("MediaInfo.dll")]
         internal static extern void MediaInfo_Close(IntPtr handle);
@@ -88,39 +100,40 @@ namespace Frost.MediaInfo {
         [DllImport("MediaInfo.dll")]
         internal static extern IntPtr MediaInfo_Count_Get(IntPtr handle, IntPtr streamKind, IntPtr streamNumber);
 
-        //MediaInfo class
+        #endregion
+
         ~MediaInfo() {
-            MediaInfo_Delete(Handle);
+            Dispose();
         }
 
-        public Settings Options { get; private set; }
-
-        /// <summary>Open a file and collect information about it (technical information and tags)</summary>
-        /// <param name="fileName">Full name of the file to open.</param>
-        /// <returns>Returns true if sucessfull, otherwise false</returns>
-        public MediaFile Open(string fileName) {
-            return Open(fileName, false);
+        /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
+        public void Dispose() {
+            if (!IsDisposed) {
+                MediaInfo_Delete(Handle);
+                GC.SuppressFinalize(this);
+                IsDisposed = true;
+            }
         }
 
         /// <summary>Open a file and collect information about it (technical information and tags)</summary>
         /// <param name="fileName">Full name of the file to open.</param>
         /// <param name="cacheInform">
-        /// <para>If should we parse inform data, and return cached values on string indexers and properties when available</para>
+        /// <para>If should we parse inform data, and return cached values on string indexers and properties when available </para>
         /// <para>so we don't call to the DLL if we don't need to.</para>
         /// </param>
         /// <returns>Returns true if sucessfull, otherwise false</returns>
-        public MediaFile Open(string fileName, bool cacheInform) {
+        public bool Open(string fileName, bool cacheInform = false) {
             if (MustUseAnsi) {
                 IntPtr fileNamePtr = Marshal.StringToHGlobalAnsi(fileName);
-                int toReturn = (int)MediaInfoA_Open(Handle, fileNamePtr);
+                int toReturn = (int) MediaInfoA_Open(Handle, fileNamePtr);
                 Marshal.FreeHGlobal(fileNamePtr);
 
-                return toReturn == 1
-                               ? new MediaFile(this, cacheInform)
-                               : null;
+                return toReturn == 1;
             }
-            return ((int)MediaInfo_Open(Handle, fileName)) == 1 ? new MediaFile(this, cacheInform) : null;
+            return (int) MediaInfo_Open(Handle, fileName) == 1;
         }
+
+        #region Functions for Buffers
 
         ///// <summary>Open a stream (Init)</summary>
         ///// <param name="fileSize">Estimated file size</param>
@@ -150,6 +163,8 @@ namespace Frost.MediaInfo {
         //    return (int) MediaInfo_Open_Buffer_Finalize(_handle);
         //}
 
+        #endregion
+
         /// <summary>Close a file opened before with Open() (without saving)</summary>
         public void Close() {
             MediaInfo_Close(Handle);
@@ -160,15 +175,15 @@ namespace Frost.MediaInfo {
         /// <remarks>You can change default presentation with Inform_Set()</remarks>
         public string Inform() {
             return MustUseAnsi
-                           ? Marshal.PtrToStringAnsi(MediaInfoA_Inform(Handle, (IntPtr) 0))
-                           : Marshal.PtrToStringUni(MediaInfo_Inform(Handle, (IntPtr) 0));
+                ? Marshal.PtrToStringAnsi(MediaInfoA_Inform(Handle, (IntPtr) 0))
+                : Marshal.PtrToStringUni(MediaInfo_Inform(Handle, (IntPtr) 0));
         }
 
         /// <summary>Configure or get information about MediaInfoLib</summary>
         /// <param name="option">The option.</param>
         /// <param name="value">The value of option</param>
         /// <returns>Depend of the option: by default "" (nothing) means No, other means Yes</returns>
-        public string Option(string option, string value) {
+        public string Option(string option, string value = "") {
             if (MustUseAnsi) {
                 IntPtr optionPtr = Marshal.StringToHGlobalAnsi(option);
                 IntPtr valuePtr = Marshal.StringToHGlobalAnsi(value);
@@ -180,19 +195,48 @@ namespace Frost.MediaInfo {
             return Marshal.PtrToStringUni(MediaInfo_Option(Handle, option, value));
         }
 
-        /// <summary>Configure or get information about MediaInfoLib</summary>
-        /// <param name="option">The option.</param>
-        /// <returns>Depend of the option: by default "" (nothing) means No, other means Yes</returns>
-        public string Option(string option) {
-            return Option(option, "");
-        }
-
-        /// <summary>(NOT IMPLEMENTED YET) Get the state of the library</summary>
-        /// <returns></returns>
+        /// <summary>Get the state of the library (NOT IMPLEMENTED YET).</summary>
+        /// <returns>The state of the library.</returns>
         public int StateGet() {
             return (int) MediaInfo_State_Get(Handle);
         }
 
+        /// <summary>Get a piece of information about a file (parameter is an integer)</summary>
+        /// <param name="streamKind">Kind of stream (general, video, audio...)</param>
+        /// <param name="streamNumber">Stream number in Kind of stream (first, second...)</param>
+        /// <param name="parameter">Parameter you are looking for in the stream (Codec, width, bitrate...), in string format ("Codec", "Width"...) </param>
+        /// <param name="kindOfInfo">Kind of information you want about the parameter (the text, the measure, the help...)</param>
+        /// <param name="kindOfSearch">Where to look for the parameter</param>
+        /// <returns>a string about information you search, an empty string if there is a problem</returns>
+        public string Get(StreamKind streamKind, int streamNumber, string parameter, InfoKind kindOfInfo = InfoKind.Text, InfoKind kindOfSearch = InfoKind.Name) {
+            if (MustUseAnsi) {
+                IntPtr parameterPtr = Marshal.StringToHGlobalAnsi(parameter);
+                string toReturn = Marshal.PtrToStringAnsi(MediaInfo.MediaInfoA_Get(Handle, (IntPtr)streamKind, (IntPtr)streamNumber, parameterPtr, (IntPtr)kindOfInfo, (IntPtr)kindOfSearch));
+                Marshal.FreeHGlobal(parameterPtr);
+                return toReturn;
+            }
+            return Marshal.PtrToStringUni(MediaInfo_Get(Handle, (IntPtr)streamKind, (IntPtr)streamNumber, parameter, (IntPtr)kindOfInfo, (IntPtr)kindOfSearch));
+        }
 
+        /// <summary>Get a piece of information about a file (parameter is an integer)</summary>
+        /// <param name="streamKind">Kind of stream (general, video, audio...)</param>
+        /// <param name="streamNumber">Stream number in Kind of stream (first, second...)</param>
+        /// <param name="parameter">Parameter you are looking for in the stream (Codec, width, bitrate...), in integer format (first parameter, second parameter...)</param>
+        /// <param name="kindOfInfo">Kind of information you want about the parameter (the text, the measure, the help...)</param>
+        /// <returns>a string about information you search, an empty string if there is a problem</returns>
+        public string Get(StreamKind streamKind, int streamNumber, int parameter, InfoKind kindOfInfo = InfoKind.Text) {
+            return MustUseAnsi
+                ? Marshal.PtrToStringAnsi(MediaInfoA_GetI(Handle, (IntPtr)streamKind, (IntPtr)streamNumber, (IntPtr)parameter, (IntPtr)kindOfInfo))
+                : Marshal.PtrToStringUni(MediaInfo_GetI(Handle, (IntPtr)streamKind, (IntPtr)streamNumber, (IntPtr)parameter, (IntPtr)kindOfInfo));
+        }
+
+        /// <summary>Count of streams of a stream kind or count of piece of information in this stream.</summary>
+        /// <param name="streamKind">Kind of stream (general, video, audio...)</param>
+        /// <param name="streamNumber">Stream number in this kind of stream (first, second...)</param>
+        /// <returns></returns>
+        public int CountGet(StreamKind streamKind, int streamNumber = -1) {
+            return (int)MediaInfo_Count_Get(Handle, (IntPtr)streamKind, (IntPtr)streamNumber);
+        }
     }
+
 }
