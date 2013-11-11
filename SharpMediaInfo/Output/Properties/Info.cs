@@ -1,4 +1,6 @@
-﻿namespace Frost.SharpMediaInfo.Output.Properties {
+﻿
+namespace Frost.SharpMediaInfo.Output.Properties {
+
     public enum InfoType {
         ScanType,
         ScanOrder,

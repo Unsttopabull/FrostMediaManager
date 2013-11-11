@@ -1,4 +1,4 @@
-﻿namespace Frost.SharpMediaInfo.Output.Properties {
+﻿namespace Frost.SharpMediaInfo.Output.Properties.BitRate {
     public class GeneralBitRateInfo {
         protected readonly Media MediaStream;
         private readonly bool _general;

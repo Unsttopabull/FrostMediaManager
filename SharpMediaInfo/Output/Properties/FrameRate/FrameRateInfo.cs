@@ -1,4 +1,4 @@
-﻿namespace Frost.SharpMediaInfo.Output.Properties {
+﻿namespace Frost.SharpMediaInfo.Output.Properties.FrameRate {
 
     public class FrameRateInfo {
         protected readonly Media Media;

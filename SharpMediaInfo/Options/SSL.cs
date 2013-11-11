@@ -1,6 +1,4 @@
-﻿using Frost.SharpMediaInfo.Output;
-
-namespace Frost.SharpMediaInfo.Options {
+﻿namespace Frost.SharpMediaInfo.Options {
     public class SSL {
         private readonly MediaFile _mf;
 

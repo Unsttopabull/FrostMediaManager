@@ -1,8 +1,10 @@
 ﻿using Frost.SharpMediaInfo.Output.Properties;
+using Frost.SharpMediaInfo.Output.Properties.BitRate;
 using Frost.SharpMediaInfo.Output.Properties.Codecs;
 using Frost.SharpMediaInfo.Output.Properties.Delay;
 using Frost.SharpMediaInfo.Output.Properties.Duration;
 using Frost.SharpMediaInfo.Output.Properties.Formats;
+using Frost.SharpMediaInfo.Output.Properties.FrameRate;
 
 #pragma warning disable 1591
 

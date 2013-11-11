@@ -1,5 +1,5 @@
 ﻿
-namespace Frost.SharpMediaInfo.Output.Properties {
+namespace Frost.SharpMediaInfo.Output.Properties.FrameRate {
 
     public class VideoFrameRateInfo : FrameRateInfo {
 

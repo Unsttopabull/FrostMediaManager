@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using Frost.SharpMediaInfo.Output;
 
 namespace Frost.SharpMediaInfo.Options {
 

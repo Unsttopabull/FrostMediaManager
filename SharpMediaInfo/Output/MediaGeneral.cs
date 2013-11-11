@@ -1,4 +1,5 @@
 ﻿using Frost.SharpMediaInfo.Output.Properties;
+using Frost.SharpMediaInfo.Output.Properties.BitRate;
 using Frost.SharpMediaInfo.Output.Properties.Codecs;
 using Frost.SharpMediaInfo.Output.Properties.Delay;
 using Frost.SharpMediaInfo.Output.Properties.Duration;
