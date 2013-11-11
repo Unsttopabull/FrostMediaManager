@@ -11,8 +11,10 @@ namespace Frost.SharpMediaInfo.Output {
 
         private readonly MediaInfo _mi;
 
-        public MediaFile(string filePath, bool cacheInfom, MediaInfo medaInfo = null) {
+        public MediaFile(string filePath, bool cacheInfom, bool allInfoInform = true, MediaInfo medaInfo = null) {
             _mi = medaInfo ?? new MediaInfo();
+            Info = new LibraryInfo(_mi);
+            Options = new Settings(_mi);
 
             IsOpen = _mi.Open(filePath, cacheInfom);
 
@@ -25,20 +27,15 @@ namespace Frost.SharpMediaInfo.Output {
             General = new MediaGeneral(this);
 
             if (cacheInfom) {
-                CacheInform();
+                CacheInform(allInfoInform);
             }
         }
 
         #region Media Properties
 
-        public LibraryInfo Info {
-            get { return _mi.Info; }
-        }
+        public LibraryInfo Info { get; private set; }
 
-        public Settings Options {
-            get { return _mi.Options; }
-            set { _mi.Options = value; }
-        }
+        public Settings Options { get; private set; }
 
         /// <summary>General info about the media file</summary>
         public MediaGeneral General { get; private set; }
@@ -69,20 +66,25 @@ namespace Frost.SharpMediaInfo.Output {
             return _mi.Inform();
         }
 
-        public void Close() {
-            _mi.Close();
-            IsOpen = false;
-        }
-
         /// <summary>Gets the XML inform and passes it on then restores the original inform type</summary>
-        private void CacheInform() {
-            string prevInform = _mi.Options.Inform;
+        private void CacheInform(bool allInfoInform) {
+            string prevInform = Options.Inform;
 
-            _mi.Options.InformPreset = InformPreset.XML;
+            bool showAllInfo = false;
+            if (allInfoInform) {
+                showAllInfo = Options.ShowAllInfo;
+                Options.ShowAllInfo = true;
+            }
+
+            Options.InformPreset = InformPreset.XML;
+
             string inform = _mi.Inform();
             ParseInform(inform);
 
-            _mi.Options.Inform = prevInform;
+            if (allInfoInform) {
+                Options.ShowAllInfo = showAllInfo;
+            }
+            Options.Inform = prevInform;
         }
 
         private void ParseInform(string inform) {
@@ -96,8 +98,8 @@ namespace Frost.SharpMediaInfo.Output {
                 }
 
                 string type = trackType.Value;
-                StreamKind streamKind;
 
+                StreamKind streamKind;
                 if (!Enum.TryParse(type, true, out streamKind)) {
                     continue;
                 }
@@ -132,17 +134,22 @@ namespace Frost.SharpMediaInfo.Output {
 
         public bool IsOpen { get; private set; }
 
-        /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
-        public void Dispose() {
+        public void Close() {
             if (!IsOpen) {
+                _mi.Close();
                 _mi.Dispose();
                 GC.SuppressFinalize(this);
-                IsOpen = true;
+                IsOpen = false;
             }
         }
 
+        /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
+        void IDisposable.Dispose() {
+            Close();
+        }
+
         ~MediaFile() {
-            Dispose();
+            Close();
         }
 
         #endregion
@@ -157,13 +164,7 @@ namespace Frost.SharpMediaInfo.Output {
         /// <param name="kindOfSearch">Where to look for the parameter</param>
         /// <returns>a string about information you search, an empty string if there is a problem</returns>
         public string Get(StreamKind streamKind, int streamNumber, string parameter, InfoKind kindOfInfo = InfoKind.Text, InfoKind kindOfSearch = InfoKind.Name) {
-            if (_mi.MustUseAnsi) {
-                IntPtr parameterPtr = Marshal.StringToHGlobalAnsi(parameter);
-                string toReturn = Marshal.PtrToStringAnsi(MediaInfo.MediaInfoA_Get(_mi.Handle, (IntPtr) streamKind, (IntPtr) streamNumber, parameterPtr, (IntPtr) kindOfInfo, (IntPtr) kindOfSearch));
-                Marshal.FreeHGlobal(parameterPtr);
-                return toReturn;
-            }
-            return Marshal.PtrToStringUni(MediaInfo.MediaInfo_Get(_mi.Handle, (IntPtr) streamKind, (IntPtr) streamNumber, parameter, (IntPtr) kindOfInfo, (IntPtr) kindOfSearch));
+            return _mi.Get(streamKind, streamNumber, parameter, kindOfInfo, kindOfSearch);
         }
 
         /// <summary>Get a piece of information about a file (parameter is an integer)</summary>
@@ -173,9 +174,7 @@ namespace Frost.SharpMediaInfo.Output {
         /// <param name="kindOfInfo">Kind of information you want about the parameter (the text, the measure, the help...)</param>
         /// <returns>a string about information you search, an empty string if there is a problem</returns>
         public string Get(StreamKind streamKind, int streamNumber, int parameter, InfoKind kindOfInfo = InfoKind.Text) {
-            return _mi.MustUseAnsi
-                ? Marshal.PtrToStringAnsi(MediaInfo.MediaInfoA_GetI(_mi.Handle, (IntPtr) streamKind, (IntPtr) streamNumber, (IntPtr) parameter, (IntPtr) kindOfInfo))
-                : Marshal.PtrToStringUni(MediaInfo.MediaInfo_GetI(_mi.Handle, (IntPtr) streamKind, (IntPtr) streamNumber, (IntPtr) parameter, (IntPtr) kindOfInfo));
+            return _mi.Get(streamKind, streamNumber, parameter, kindOfInfo);
         }
 
         /// <summary>Count of streams of a stream kind or count of piece of information in this stream.</summary>
@@ -183,7 +182,7 @@ namespace Frost.SharpMediaInfo.Output {
         /// <param name="streamNumber">Stream number in this kind of stream (first, second...)</param>
         /// <returns></returns>
         public int CountGet(StreamKind streamKind, int streamNumber = -1) {
-            return (int) MediaInfo.MediaInfo_Count_Get(_mi.Handle, (IntPtr) streamKind, (IntPtr) streamNumber);
+            return _mi.CountGet(streamKind, streamNumber);
         }
 
         #endregion

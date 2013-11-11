@@ -34,7 +34,7 @@ namespace Frost.SharpMediaInfo.Options {
 
         public bool ShowAllInfo {
             get { return _mi.Option("Complete_Get") == "1"; }
-            set { _mi.Option("complete", value ? "1" : ""); }
+            set { _mi.Option("Complete", value ? "1" : ""); }
         }
 
         public bool ParseUnknownExtensions {
@@ -167,7 +167,7 @@ namespace Frost.SharpMediaInfo.Options {
             set { _mi.Option("trace_level", value); }
         }
 
-        public bool TraceTimesectionOnlyFirstOccurrence {
+        public bool TraceTimeSectionOnlyFirstOccurrence {
             get { return _mi.Option("trace_timesection_onlyfirstoccurrence_get") == "1"; }
             set {
                 _mi.Option("trace_timesection_onlyfirstoccurrence", value ? "1" : "");
@@ -219,6 +219,14 @@ namespace Frost.SharpMediaInfo.Options {
                 return dm;
             }
             set { _mi.Option("demux", value.ToString()); }
+        }
+
+        /// <summary>Configure or get information about MediaInfoLib</summary>
+        /// <param name="option">The option.</param>
+        /// <param name="value">The value of option</param>
+        /// <returns>Depend of the option: by default "" (nothing) means No, other means Yes</returns>
+        public string Custom(string option, string value = "") {
+            return _mi.Option(option, value);
         }
 
     }

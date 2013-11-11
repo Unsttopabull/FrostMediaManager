@@ -92,8 +92,25 @@ namespace Frost.SharpMediaInfo.Output {
 
             Properties[streamNumber] = new Dictionary<string, string>();
 
+            Dictionary<string, int> multipleOccurances = new Dictionary<string, int>();
             foreach (XElement xElement in track.Nodes()) {
-                Properties[streamNumber][xElement.Name.LocalName] = xElement.Value;
+                string tagName = xElement.Name.LocalName;
+
+                //check if this tag has already occured in this stream
+                if(Properties[streamNumber].ContainsKey(tagName)) {
+                    //if it has and its already in the multiple occuraces dictionary
+                    //we just increment the number of occurances and append it to the tag name
+                    if (multipleOccurances.ContainsKey(tagName)) {
+                        tagName = string.Format("{0}/String{1}", tagName, ++multipleOccurances[tagName]);
+                    }
+                    else {
+                        //otherwise we add new entry to the dictionary and add "/String" to the tag name
+                        multipleOccurances.Add(tagName, 0);
+                        tagName += "/String";
+                    }
+                }
+
+                Properties[streamNumber][tagName] = xElement.Value;
             }
             _cached = true;
         }

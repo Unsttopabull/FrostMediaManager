@@ -13,14 +13,8 @@ namespace Frost.SharpMediaInfo {
         public MediaInfo() {
             Handle = MediaInfo_New();
 
-            Options = new Settings(this);
-            Info = new LibraryInfo(this);
             MustUseAnsi = Environment.OSVersion.ToString().IndexOf("Windows", StringComparison.Ordinal) == -1;            
         }
-
-        public LibraryInfo Info { get; private set; }
-
-        public Settings Options { get; protected internal set; }
 
         public bool IsDisposed { get; private set; }
 

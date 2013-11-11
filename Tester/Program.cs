@@ -7,14 +7,15 @@ using System.Xml.Serialization;
 using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.XML.XBMC;
-using Frost.ProcessDatabase;
 using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
 
 namespace Frost.Tester {
     class Program {
         static void Main() {
-            XbmcParser xp = new XbmcParser();
+            //XbmcParser xp = new XbmcParser();
+            //TestMediaInfo();
+            TestMediaInfo2();
 
             //TestXml();
         }
@@ -142,6 +143,16 @@ namespace Frost.Tester {
             //xs.Serialize(new XmlIndentedTextWriter("test.xml"), mv);            
         }
 
+        static void TestMediaInfo2() {
+            StringBuilder sb = new StringBuilder(100000);
+            using (MediaFile mf = new MediaFile(@"E:\Torrenti\FILMI\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi.avi", true)) {
+                foreach (KeyValuePair<string, string> kvp in mf.Video) {
+                    sb.AppendLine(kvp.Key + " : " + kvp.Value);
+                }
+            }
+            Console.Write(sb.ToString());
+        }
+
         static void TestMediaInfo() {
             MediaInfo mi = new MediaInfo();
 
@@ -149,31 +160,31 @@ namespace Frost.Tester {
             sb.AppendLine(mi.Option("Info_Version", "0.7.13;MediaInfoDLL_Example_MSVC;0.7.13"));
             sb.AppendLine();
 
-            sb.AppendLine("Info_Parameters");
-            sb.AppendLine(mi.Info.KnownParameters);
-            sb.AppendLine();
+            //sb.AppendLine("Info_Parameters");
+            //sb.AppendLine(mf.Info.KnownParameters);
+            //sb.AppendLine();
 
-            sb.AppendLine("Info Codecs");
-            sb.AppendLine(mi.Info.KnownCodecs);
-            sb.AppendLine();
+            //sb.AppendLine("Info Codecs");
+            //sb.AppendLine(mf.Info.KnownCodecs);
+            //sb.AppendLine();
 
             sb.AppendLine("Open");
-            MediaFile mf = new MediaFile(@"E:\Torrenti\FILMI\Game.of.Thrones.S03E03.HDTV.XviD-AFG\Game.of.Thrones.S03E03.HDTV.XviD-AFG.avi", true);
+            MediaFile mf = new MediaFile(@"E:\Torrenti\FILMI\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi.avi", true);
             sb.AppendLine();
 
             if (mf.IsOpen) {
                 sb.AppendLine("Inform with Complete=false");
-                mi.Options.ShowAllInfo = false;
+                mf.Options.ShowAllInfo = false;
                 sb.AppendLine(mi.Inform());
                 sb.AppendLine();
 
                 sb.AppendLine("Inform with Complete=true");
-                mi.Options.ShowAllInfo = true;
+                mf.Options.ShowAllInfo = true;
                 sb.AppendLine(mi.Inform());
                 sb.AppendLine();
 
                 sb.AppendLine("Custom Inform");
-                mi.Options.Inform = "General;Example : FileSize=%FileSize%";
+                mf.Options.Inform = "General;Example : FileSize=%FileSize%";
                 sb.AppendLine(mi.Inform());
                 sb.AppendLine();
 
@@ -208,9 +219,11 @@ namespace Frost.Tester {
             }
             else {
                 sb.AppendLine("Napaka med odprianjem");
+                Console.Write(sb.ToString());
             }
-            //Console.WriteLine();
-            //Console.WriteLine("----------Končal----------");
+            mf.Close();
+            Console.WriteLine();
+            Console.WriteLine("----------Končal----------");
             //Console.Read();
         }
     }
