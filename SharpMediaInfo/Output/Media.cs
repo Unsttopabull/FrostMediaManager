@@ -1,8 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Xml.Linq;
-using Frost.SharpMediaInfo.Output.Properties;
+using Frost.SharpMediaInfo.Output.Properties.Codecs;
 
 #pragma warning disable 1591
 
@@ -25,19 +27,22 @@ namespace Frost.SharpMediaInfo.Output {
 
         #region Properties
 
+        /// <summary>Bit field (0=IsAccepted, 1=IsFilled, 2=IsUpdated, 3=IsFinished)</summary>
         public string Status { get { return this["Status"]; } }
 
         public string StreamKindID { get { return this["StreamKindID"]; } }
         public string StreamKindPos { get { return this["StreamKindPos"]; } }
-        public string StreamOrder { get { return this["StreamOrder"]; } }
+        public long? StreamOrder { get { return TryParseLong("StreamOrder"); } }
 
-        public string FirstPacketOrder { get { return this["FirstPacketOrder"]; } }
+        public long? FirstPacketOrder { get { return TryParseLong("FirstPacketOrder"); } }
 
-        public string ID { get { return this["ID"]; } }
+        public long? ID {  get { return TryParseLong("ID"); } }
         public string IDString { get { return this["IDString"]; } }
-        public string UniqueID { get { return this["UniqueID"]; } }
+
+        public long? UniqueID { get { return TryParseLong("UniqueID"); } }
         public string UniqueIDString { get { return this["UniqueID/String"]; } }
-        public string MenuID { get { return this["MenuID"]; } }
+
+        public long? MenuID { get { return TryParseLong("MenuID"); } }
         public string MenuIDString { get { return this["MenuID/String"]; } }
 
         /// <summary>The default stream number to use when accessing media info through properties</summary>
@@ -71,7 +76,10 @@ namespace Frost.SharpMediaInfo.Output {
                     return Properties[StreamNumber][parameter];
                 }
 
-                return MediaFile.Get(StreamKind, StreamNumber, parameter);
+                string str = MediaFile.Get(StreamKind, StreamNumber, parameter);
+                return string.IsNullOrEmpty(str)
+                    ? null
+                    : str;
             }
         }
 
@@ -79,12 +87,15 @@ namespace Frost.SharpMediaInfo.Output {
         /// <param name="parameter">Parameter you are looking for in the stream (Codec, width, bitrate...), in integer format (first parameter, second parameter...)</param>
         public string this[int parameter] {
             get {
-                return MediaFile.Get(StreamKind, StreamNumber, parameter);
+                string str = MediaFile.Get(StreamKind, StreamNumber, parameter);
+                return string.IsNullOrEmpty(str)
+                    ? null
+                    : str;
             }
         }
         #endregion
 
-        #region Getters & Functions
+        #region MediaInfo Getters & Functions
         internal virtual void ParseInform(XElement track, int streamNumber) {
             if (_cached) {
                 return;
@@ -144,6 +155,39 @@ namespace Frost.SharpMediaInfo.Output {
         /// <returns>An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator() {
             return GetEnumerator();
+        }
+        #endregion
+
+        #region Other functions
+
+        public long? TryParseLong(string parameter) {
+            int value;
+            if (int.TryParse(this[parameter], NumberStyles.Integer, CultureInfo.InvariantCulture, out value)) {
+                return value;
+            }
+            return null;
+        }
+
+        public float? TryParseFloat(string parameter) {
+            float value;
+            if (float.TryParse(this[parameter], NumberStyles.Float, CultureInfo.InvariantCulture, out value)) {
+                return value;
+            }
+            return null;            
+        }
+
+        public DateTime? TryParseDateTime(string parameter, bool utc) {
+            string dateFormat = utc ? "UTC yyyy-MM-dd hh:mm:ss.fff" : "yyyy-MM-dd hh:mm:ss.fff";
+
+            DateTimeStyles dateTimeStyles = utc
+                ? (DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeUniversal)
+                : DateTimeStyles.AllowWhiteSpaces;
+
+            DateTime dt;
+            if (DateTime.TryParseExact(this[parameter], dateFormat, CultureInfo.InvariantCulture, dateTimeStyles, out dt)) {
+                return dt;
+            }
+            return null;
         }
         #endregion
 

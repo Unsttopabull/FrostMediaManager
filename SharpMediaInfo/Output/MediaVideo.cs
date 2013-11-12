@@ -1,4 +1,5 @@
-﻿using Frost.SharpMediaInfo.Output.Properties;
+﻿using System;
+using Frost.SharpMediaInfo.Output.Properties;
 using Frost.SharpMediaInfo.Output.Properties.BitRate;
 using Frost.SharpMediaInfo.Output.Properties.Codecs;
 using Frost.SharpMediaInfo.Output.Properties.Delay;
@@ -54,31 +55,31 @@ namespace Frost.SharpMediaInfo.Output {
         public string MuxingMode { get { return this["MuxingMode"]; } }
 
         /// <summary>Play time of the stream in ms</summary>
-        public string Duration { get { return this["Duration"]; } }
+        public long? Duration { get { return TryParseLong("Duration"); } }
         public ExtendedDurationInfo DurationInfo { get; private set; }
 
         /// <summary>Source Play time of the stream</summary>
-        public string SourceDuration { get { return this["Source_Duration"]; } }
+        public long? SourceDuration { get { return TryParseLong("Source_Duration"); } }
         public ExtendedDurationInfo SourceDurationInfo { get; private set; }
 
         /// <summary>Bit rate in bps</summary>
-        public string BitRate { get { return this["BitRate"]; } }
+        public float? BitRate { get { return TryParseLong("BitRate"); } }
         public BitRateInfo BitRateInfo { get; private set; }
 
         /// <summary>Width (aperture size if present) in pixel</summary>
-        public string Width { get { return this["Width"]; } }
+        public long? Width { get { return TryParseLong("Width"); } }
         public SizeInfo WidthInfo { get; private set; }
 
         /// <summary>Height (aperture size if present) in pixel</summary>
-        public string Height { get { return this["Height"]; } }
+        public long? Height { get { return TryParseLong("Height"); } }
         public SizeInfo HeightInfo { get; private set; }
 
         /// <summary>Pixel Aspect ratio</summary>
-        public string PixelAspectRatio { get { return this["PixelAspectRatio"]; } }
+        public float? PixelAspectRatio { get { return TryParseFloat("PixelAspectRatio"); } }
         public Info PixelAspectRatioInfo { get; private set; }
 
         /// <summary>Display Aspect ratio</summary>
-        public string DisplayAspectRatio { get { return this["DisplayAspectRatio"]; } }
+        public float? DisplayAspectRatio { get { return TryParseFloat("DisplayAspectRatio"); } }
         public Info DisplayAspectRatioInfo { get; private set; }
 
         /// <summary>Active Format Description (AFD value)</summary>
@@ -94,18 +95,18 @@ namespace Frost.SharpMediaInfo.Output {
         public string RotationString { get { return this["Rotation/String"]; } }
 
         /// <summary>Frames per second</summary>
-        public string FrameRate { get { return this["FrameRate"]; } }
+        public float? FrameRate { get { return TryParseFloat("FrameRate"); } }
         public VideoFrameRateInfo FrameRateInfo { get; private set; }
 
         /// <summary>Number of frames</summary>
-        public string FrameCount { get { return this["FrameCount"]; } }
+        public long? FrameCount { get { return TryParseLong("FrameCount"); } }
         /// <summary>Source Number of frames</summary>
-        public string SourceFrameCount { get { return this["Source_FrameCount"]; } }
+        public long? SourceFrameCount { get { return TryParseLong("Source_FrameCount"); } }
         
         /// <summary>NTSC or PAL</summary>
         public string Standard { get { return this["Standard"]; } }
-        
-        public string Resolution { get { return this["Resolution"]; } }
+
+        public long? Resolution { get { return TryParseLong("Resolution"); } }
         public string ResolutionString { get { return this["Resolution/String"]; } }
         
         public string Colorimetry { get { return this["Colorimetry"]; } }
@@ -115,7 +116,7 @@ namespace Frost.SharpMediaInfo.Output {
         public string ChromaSubsampling { get { return this["ChromaSubsampling"]; } }
         
         /// <summary>16/24/32</summary>
-        public string BitDepth { get { return this["BitDepth"]; } }
+        public long? BitDepth { get { return TryParseLong("BitDepth"); } }
         /// <summary>16/24/32 bits</summary>
         public string BitDepthString { get { return this["BitDepth/String"]; } }
         
@@ -134,21 +135,21 @@ namespace Frost.SharpMediaInfo.Output {
         public string CompressionModeString { get { return this["Compression_Mode/String"]; } }
 
         /// <summary>Current stream size divided by uncompressed stream size</summary>
-        public string CompressionRatio { get { return this["Compression_Ratio"]; } }
+        public float? CompressionRatio { get { return TryParseFloat("Compression_Ratio"); } }
 
         /// <summary>bits/(Pixel*Frame) (like Gordian Knot)</summary>
-        public string BitsPerPixelFrame { get{ return this["Bits-(Pixel*Frame)"]; } }
+        public float? BitsPerPixelFrame { get{ return TryParseFloat("Bits__Pixel_Frame_"); } }
 
         /// <summary>Delay fixed in the stream (relative) IN MS</summary>
-        public string Delay { get { return this["Delay"]; } }
+        public long? Delay { get { return TryParseLong("Delay"); } }
         public DelayInfo DelayInfo { get; private set; }
         
         /// <summary>Delay fixed in the raw stream (relative) IN MS</summary>
-        public string DelayOriginal { get { return this["Delay_Original"]; } }
+        public long? DelayOriginal { get { return TryParseLong("Delay_Original"); } }
         public DelayInfo DelayOriginalInfo { get; private set; }
         
         /// <summary>TimeStamp fixed in the stream (relative) IN MS</summary>
-        public string TimeStampFirstFrame { get { return this["TimeStamp_FirstFrame"]; } }
+        public long? TimeStampFirstFrame { get { return TryParseLong("TimeStamp_FirstFrame"); } }
         /// <summary>TimeStamp with measurement</summary>
         public string TimeStampFirstFrameString { get { return this["TimeStamp_FirstFrame/String"]; } }
         /// <summary>TimeStamp with measurement</summary>
@@ -166,19 +167,19 @@ namespace Frost.SharpMediaInfo.Output {
         public string TimeCodeSource { get { return this["TimeCode_Source"]; } }
 
         /// <summary>Streamsize in bytes</summary>
-        public string StreamSize { get { return this["StreamSize"]; } }
+        public long? StreamSize { get { return TryParseLong("StreamSize"); } }
         public StreamSizeInfo StreamSizeInfo { get; private set; }
 
         /// <summary>Source Streamsize in bytes</summary>
-        public string SourceStreamSize { get { return this["Source_StreamSize"]; } }
+        public long? SourceStreamSize { get { return TryParseLong("Source_StreamSize"); } }
         public StreamSizeInfo SourceStreamSizeInfo { get; private set; }
 
         /// <summary>Encoded Streamsize in bytes</summary>
-        public string StreamSizeEncoded { get { return this["StreamSize_Encoded"]; } }
+        public long? StreamSizeEncoded { get { return TryParseLong("StreamSize_Encoded"); } }
         public StreamSizeInfo StreamSizeEncodedInfo { get; private set; }
 
         /// <summary>Source Encoded Streamsize in bytes</summary>
-        public string SourceStreamSizeEncoded { get { return this["Source_StreamSize_Encoded"]; } }
+        public long? SourceStreamSizeEncoded { get { return TryParseLong("Source_StreamSize_Encoded"); } }
         public StreamSizeInfo SourceStreamSizeEncodedInfo { get; private set; }
         
         /// <summary>Name of the track</summary>
@@ -212,10 +213,10 @@ namespace Frost.SharpMediaInfo.Output {
         public string ForcedString { get { return this["Forced/String"]; } }
         
         /// <summary>UTC time that the encoding of this item was completed began.</summary>
-        public string EncodedDate { get { return this["Encoded_Date"]; } }
+        public DateTime? EncodedDate { get { return TryParseDateTime("Encoded_Date", true); } }
 
         /// <summary>UTC time that the tags were done for this item.</summary>
-        public string TaggedDate { get { return this["Tagged_Date"]; } }
+        public DateTime? TaggedDate { get { return TryParseDateTime("Tagged_Date", true); } }
         
         public string Encryption { get { return this["Encryption"]; } }
         

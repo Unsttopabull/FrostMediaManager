@@ -32,7 +32,8 @@ namespace Frost.SharpMediaInfo.Output.Properties {
         }
 
         public string String { get { return _media[_propNames[0]]; } }
-        public string Original { get { return _media[_propNames[1]]; } }
+
+        public float? Original { get { return _media.TryParseFloat(_propNames[1]); } }
         public string OriginalString { get { return _media[_propNames[2]]; } }
     }
 }

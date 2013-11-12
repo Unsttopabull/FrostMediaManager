@@ -27,12 +27,12 @@
         public string String { get { return _media[propNames[0]]; } }
 
         /// <summary>Offset between original height and displayed size (aperture size) in pixel</summary>
-        public string Offset { get { return _media[propNames[1]]; } }
+        public long? Offset { get { return _media.TryParseLong(propNames[1]); } }
         /// <summary>Offset between original height and displayed size (aperture size) in pixel</summary>
         public string OffsetString { get { return _media[propNames[2]]; } }
 
         /// <summary>Original (in the raw stream) size in pixel</summary>
-        public string Original { get { return _media[propNames[3]]; } }
+        public long? Original { get { return _media.TryParseLong(propNames[3]); } }
         /// <summary>Original (in the raw stream) size with measurement (pixel)</summary>
         public string OriginalString { get { return _media[propNames[4]]; } }
     }

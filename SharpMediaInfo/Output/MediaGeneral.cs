@@ -18,7 +18,7 @@ namespace Frost.SharpMediaInfo.Output {
             DurationInfo = new GeneralDurationInfo(this);
             DelayInfo = new GeneralDelayInfo(this);
             StreamSizeInfo = new StreamSizeInfo(this);
-            OverallBitRateInfo = new GeneralBitRateInfo(this);
+            OverallBitRateInfo = new OverallBitRateInfo(this);
             Season = new Season(this);
             Movie = new Movie(this);
             Album = new Album(this);
@@ -34,10 +34,10 @@ namespace Frost.SharpMediaInfo.Output {
         }
 
         /// <summary>Number of general streams</summary>
-        public string GeneralCount { get { return this["GeneralCount"]; } }
+        public long? GeneralCount { get { return TryParseLong("GeneralCount"); } }
 
         /// <summary>Number of video streams</summary>
-        public string VideoCount { get { return this["VideoCount"]; } }
+        public long? VideoCount { get { return TryParseLong("VideoCount"); } }
         /// <summary>Video Codecs in this file, separated by /</summary>
         public string VideoFormatList { get { return this["Video_Format_List"]; } }
         /// <summary>Video Codecs in this file with popular name (hint), separated by /</summary>
@@ -48,7 +48,7 @@ namespace Frost.SharpMediaInfo.Output {
         public string VideoLanguageList { get { return this["Video_Language_List"]; } }
 
         /// <summary>Number of audio streams</summary>
-        public string AudioCount { get { return this["AudioCount"]; } }
+        public long? AudioCount { get { return TryParseLong("AudioCount"); } }
         /// <summary>Audio Codecs in this file,separated by /</summary>
         public string AudioFormatList { get { return this["Audio_Format_List"]; } }
         /// <summary>Audio Codecs in this file with popular name (hint), separated by /</summary>
@@ -59,7 +59,7 @@ namespace Frost.SharpMediaInfo.Output {
         public string AudioLanguageList { get { return this["Audio_Language_List"]; } }
 
         /// <summary>Number of text streams</summary>
-        public string TextCount { get { return this["TextCount"]; } }
+        public long? TextCount { get { return TryParseLong("TextCount"); } }
         /// <summary>Text Codecs in this file, separated by /</summary>
         public string TextFormatList { get { return this["Text_Format_List"]; } }
         /// <summary>Text Codecs in this file with popular name (hint),separated by /</summary>
@@ -70,7 +70,7 @@ namespace Frost.SharpMediaInfo.Output {
         public string TextLanguageList { get { return this["Text_Language_List"]; } }
 
         /// <summary>Number of other streams</summary>
-        public string OtherCount { get { return this["OtherCount"]; } }
+        public long? OtherCount { get { return TryParseLong("OtherCount"); } }
         /// <summary>Other formats in this file, separated by /</summary>
         public string OtherFormatList { get { return this["Other_Format_List"]; } }
         /// <summary>Other formats in this file with popular name (hint), separated by /</summary>
@@ -81,7 +81,7 @@ namespace Frost.SharpMediaInfo.Output {
         public string OtherLanguageList { get { return this["Other_Language_List"]; } }
 
         /// <summary>Number of image streams</summary>
-        public string ImageCount { get { return this["ImageCount"]; } }
+        public long? ImageCount { get { return TryParseLong("ImageCount"); } }
         /// <summary>Image Codecs in this file, separated by /</summary>
         public string ImageFormatList { get { return this["Image_Format_List"]; } }
         /// <summary>Image Codecs in this file with popular name (hint), separated by /</summary>
@@ -92,7 +92,7 @@ namespace Frost.SharpMediaInfo.Output {
         public string ImageLanguageList { get { return this["Image_Language_List"]; } }
 
         /// <summary>Number of menu streams</summary>
-        public string MenuCount { get { return this["MenuCount"]; } }
+        public long? MenuCount { get { return TryParseLong("MenuCount"); } }
         /// <summary>Menu Codecsin this file, separated by /</summary>
         public string MenuFormatList { get { return this["Menu_Format_List"]; } }
         /// <summary>Menu Codecs in this file with popular name (hint),separated by /</summary>
@@ -115,24 +115,24 @@ namespace Frost.SharpMediaInfo.Output {
         public GeneralCodec Codec { get; private set; }
 
         /// <summary>Play time of the stream in ms</summary>
-        public string Duration { get { return this["Duration"]; } }
+        public long? Duration { get { return TryParseLong("Duration"); } }
         public GeneralDurationInfo DurationInfo { get; private set; }
 
         /// <summary>Bit rate of all streams in bps</summary>
-        public string OverallBitRate { get { return this["OverallBitRate"]; } }
-        public GeneralBitRateInfo OverallBitRateInfo { get; private set; }
+        public float? OverallBitRate { get { return TryParseFloat("OverallBitRate"); } }
+        public OverallBitRateInfo OverallBitRateInfo { get; private set; }
 
         /// <summary>Delay fixed in the stream (relative) IN MS</summary>
-        public string Delay { get { return this["Delay"]; } }
+        public long? Delay { get { return TryParseLong("Delay"); } }
         public GeneralDelayInfo DelayInfo { get; private set; }
 
         /// <summary>Stream size in bytes</summary>
-        public string StreamSize { get { return this["StreamSize"]; } }
+        public long? StreamSize { get { return TryParseLong("StreamSize"); } }
         public StreamSizeInfo StreamSizeInfo { get; private set; }
 
-        public string HeaderSize { get { return this["HeaderSize"]; } }
-        public string DataSize { get { return this["DataSize"]; } }
-        public string FooterSize { get { return this["FooterSize"]; } }
+        public long? HeaderSize { get { return TryParseLong("HeaderSize"); } }
+        public long? DataSize { get { return TryParseLong("DataSize"); } }
+        public long? FooterSize { get { return TryParseLong("FooterSize"); } }
 
         public string IsStreamable { get { return this["IsStreamable"]; } }
 
@@ -302,9 +302,9 @@ namespace Frost.SharpMediaInfo.Output {
 
         public string PlayedFirstDate { get { return this["Played_First_Date"]; } }
         public string PlayedLastDate { get { return this["Played_Last_Date"]; } }
-        public string PlayedCount { get { return this["Played_Count"]; } }
+        public long? PlayedCount { get { return TryParseLong("Played_Count"); } }
 
-        public string EPGPositionsBegin { get { return this["EPG_Positions_Begin"]; } }
-        public string EPGPositionsEnd { get { return this["EPG_Positions_End"]; } }
+        public long? EPGPositionsBegin { get { return TryParseLong("EPG_Positions_Begin"); } }
+        public long? EPGPositionsEnd { get { return TryParseLong("EPG_Positions_End"); } }
     }
 }

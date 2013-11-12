@@ -11,7 +11,7 @@
         public string String { get { return Media["FrameRate/String"]; } }
 
         /// <summary>Original (in the raw stream) frames per second</summary>
-        public string Original { get { return Media["FrameRate_Original"]; } }
+        public float? Original { get { return Media.TryParseFloat("FrameRate_Original"); } }
         /// <summary>Original (in the raw stream) frames per second</summary>
         public string OriginalString { get { return Media["FrameRate_Original/String"]; } }
 
@@ -21,17 +21,17 @@
         public string ModeString { get { return Media["FrameRate_Mode/String"]; } }
 
         /// <summary>Minimum Frames per second</summary>
-        public string Minimum { get { return Media["FrameRate_Minimum"]; } }
+        public float? Minimum { get { return Media.TryParseFloat("FrameRate_Minimum"); } }
         /// <summary>Minimum Frames per second (with measurement)</summary>
         public string MinimumString { get { return Media["FrameRate_Minimum/String"]; } }
 
         /// <summary>Nominal Frames per second</summary>
-        public string Nominal { get { return Media["FrameRate_Nominal"]; } }
+        public float? Nominal { get { return Media.TryParseFloat("FrameRate_Nominal"); } }
         /// <summary>Nominal Frames per second (with measurement)</summary>
         public string NominalString { get { return Media["FrameRate_Nominal/String"]; } }
 
         /// <summary>Maximum Frames per second</summary>
-        public string Maximum { get { return Media["FrameRate_Maximum"]; } }
+        public float? Maximum { get { return Media.TryParseFloat("FrameRate_Maximum"); } }
         /// <summary>Maximum Frames per second (with measurement)</summary>
         public string MaximumString { get { return Media["FrameRate_Maximum/String"]; } }
     }

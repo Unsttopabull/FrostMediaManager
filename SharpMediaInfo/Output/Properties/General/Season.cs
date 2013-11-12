@@ -8,6 +8,6 @@
 
         public string Name { get { return _media["Season"]; } }
         public string Position { get { return _media["Season_Position"]; } }
-        public string PositionTotal { get { return _media["Season_Position_Total"]; } }
+        public long? PositionTotal { get { return _media.TryParseLong("Season_Position_Total"); } }
     }
 }

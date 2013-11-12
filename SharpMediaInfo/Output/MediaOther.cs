@@ -22,19 +22,19 @@ namespace Frost.SharpMediaInfo.Output {
         public string MuxingMode { get { return this["MuxingMode"]; } }
 
         /// <summary>Play time of the stream in ms</summary>
-        public string Duration { get { return this["Duration"]; } }
+        public long? Duration { get { return TryParseLong("Duration"); } }
         public GeneralDurationInfo DurationInfo { get; private set; }
 
         /// <summary>Frames per second</summary>
-        public string FrameRate { get { return this["FrameRate"]; } }
+        public float? FrameRate { get { return TryParseFloat("FrameRate"); } }
         /// <summary>Frames per second (with measurement)</summary>
         public string FrameRateString { get { return this["FrameRate/String"]; } }
 
         /// <summary>Number of frames</summary>
-        public string FrameCount { get { return this["FrameCount"]; } }
+        public long? FrameCount { get { return TryParseLong("FrameCount"); } }
 
         /// <summary>TimeStamp fixed in the stream (relative) IN MS</summary>
-        public string TimeStampFirstFrame { get { return this["TimeStamp_FirstFrame"]; } }
+        public long? TimeStampFirstFrame { get { return TryParseLong("TimeStamp_FirstFrame"); } }
         /// <summary>TimeStamp with measurement</summary>
         public string TimeStampFirstFrameString { get { return this["TimeStamp_FirstFrame/String"]; } }
         /// <summary>TimeStamp with measurement</summary>

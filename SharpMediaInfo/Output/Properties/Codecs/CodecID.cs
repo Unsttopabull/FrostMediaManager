@@ -1,4 +1,4 @@
-﻿namespace Frost.SharpMediaInfo.Output.Properties {
+﻿namespace Frost.SharpMediaInfo.Output.Properties.Codecs {
     public class CodecID {
         private readonly Media _media;
 

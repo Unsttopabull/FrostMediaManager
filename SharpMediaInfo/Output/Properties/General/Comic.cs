@@ -8,6 +8,6 @@
 
         public string Name { get { return _media["Comic"]; } }
         public string More { get { return _media["Comic/More"]; } }
-        public string PositionTotal { get { return _media["Comic/Position_Total"]; } }
+        public long? PositionTotal { get { return _media.TryParseLong("Comic/Position_Total"); } }
     }
 }

@@ -8,6 +8,8 @@ using Frost.SharpMediaInfo.Output.Properties.Formats;
 #pragma warning disable 1591
 
 namespace Frost.SharpMediaInfo.Output {
+
+    // ReSharper disable UnusedMember.Global
     public class MediaAudio : Media {
 
         public MediaAudio(MediaFile mediaInfo) : base(mediaInfo, StreamKind.Audio) {
@@ -46,15 +48,15 @@ namespace Frost.SharpMediaInfo.Output {
         public string MuxingModeMoreInfo { get { return this["MuxingMode_MoreInfo"]; } }
 
         /// <summary>Play time of the stream</summary>
-        public string Duration { get { return this["Duration"]; } }
+        public long? Duration { get { return TryParseLong("Duration"); } }
         public ExtendedDurationInfo DurationInfo { get; private set; }
 
         /// <summary>Source Play time of the stream</summary>
-        public string SourceDuration { get { return this["Source_Duration"]; } }
+        public long? SourceDuration { get { return TryParseLong("Source_Duration"); } }
         public ExtendedDurationInfo SourceDurationInfo { get; private set; }
 
         /// <summary>Bit rate in bps</summary>
-        public string BitRate { get { return this["BitRate"]; } }
+        public long? BitRate { get { return TryParseLong("BitRate"); } }
         public BitRateInfo BitRateInfo { get; private set; }
 
         /// <summary>Number of channels</summary>
@@ -65,10 +67,11 @@ namespace Frost.SharpMediaInfo.Output {
         public string SamplingRate { get { return this["SamplingRate"]; } }
         /// <summary>Sampling rate in KHz</summary>
         public string SamplingRateString { get { return this["SamplingRate/String"]; } }
+
         /// <summary>Sample count (based on sampling rate)</summary>
-        public string SamplingCount { get { return this["SamplingCount"]; } }
+        public long? SamplesCount { get { return TryParseLong("SamplingCount"); } }
         /// <summary>Source Sample count (based on sampling rate)</summary>
-        public string SourceSamplingCount { get { return this["Source_SamplingCount"]; } }
+        public long? SourceSamplesCount { get { return TryParseLong("Source_SamplingCount"); } }
 
         /// <summary>Frames per second</summary>
         public string FrameRate { get { return this["FrameRate"]; } }
@@ -76,15 +79,15 @@ namespace Frost.SharpMediaInfo.Output {
         public string FrameRateString { get { return this["FrameRate/String"]; } }
 
         /// <summary>Frame count (a frame contains a count of samples depends of the format)</summary>
-        public string FrameCount { get { return this["FrameCount"]; } }
+        public long? FrameCount { get { return TryParseLong("FrameCount"); } }
         /// <summary>Source Frame count (a frame contains a count of samples depends of the format)</summary>
-        public string SourceFrameCount { get { return this["Source_FrameCount"]; } }
+        public long? SourceFrameCount { get { return TryParseLong("Source_FrameCount"); } }
 
         public string Resolution { get { return this["Resolution"]; } }
         public string ResolutionString { get { return this["Resolution/String"]; } }
 
         /// <summary>Resolution in bits (8, 16, 20, 24)</summary>
-        public string BitDepth { get { return this["BitDepth"]; } }
+        public long? BitDepth { get { return TryParseLong("BitDepth"); } }
         /// <summary>Resolution in bits (8, 16, 20, 24)</summary>
         public string BitDepthString { get { return this["BitDepth/String"]; } }
 
@@ -96,18 +99,19 @@ namespace Frost.SharpMediaInfo.Output {
         public string CompressionRatio { get { return this["Compression_Ratio"]; } }
 
         /// <summary>Delay fixed in the stream (relative) IN MS</summary>
-        public string Delay { get { return this["Delay"]; } }
+        public long? Delay { get { return TryParseLong("Delay"); } }
         public DelayInfo DelayInfo { get; private set; }
 
         /// <summary>Delay fixed in the raw stream (relative) IN MS</summary>
-        public string DelayOriginal { get { return this["Delay_Original"]; } }
+        public long? DelayOriginal { get { return TryParseLong("Delay_Original"); } }
+
         public DelayInfo DelayOriginalInfo { get; private set; }
 
         /// <summary>Delay fixed in the stream (absolute / video)</summary>
-        public string VideoDelay { get { return this["Video_Delay"]; } }
+        public long? VideoDelay { get { return TryParseLong("Video_Delay"); } }
         public VideoDelayInfo VideoDelayInfo { get; private set; }
 
-        public string Video0Delay { get { return this["Video0_Delay"]; } }
+        public long? Video0Delay { get { return TryParseLong("Video0_Delay"); } }
         public VideoDelayInfo Video0DelayInfo { get; private set; }
 
         /// <summary>The gain to apply to reach 89dB SPL on playback</summary>
@@ -117,19 +121,19 @@ namespace Frost.SharpMediaInfo.Output {
         public string ReplayGainPeak { get { return this["ReplayGain_Peak"]; } }
 
         /// <summary>Streamsize in bytes</summary>
-        public string StreamSize { get { return this["StreamSize"]; } }
+        public long? StreamSize { get { return TryParseLong("StreamSize"); } }
         public StreamSizeInfo StreamSizeInfo { get; private set; }
 
         /// <summary>Source Streamsize in bytes</summary>
-        public string SourceStreamSize { get { return this["Source_StreamSize"]; } }
+        public long? SourceStreamSize { get { return TryParseLong("Source_StreamSize"); } }
         public StreamSizeInfo SourceStreamSizeInfo { get; private set; }
 
         /// <summary>Encoded Streamsize in bytes</summary>
-        public string StreamSizeEncoded { get { return this["StreamSize_Encoded"]; } }
+        public long? StreamSizeEncoded { get { return TryParseLong("StreamSize_Encoded"); } }
         public StreamSizeInfo StreamSizeEncodedInfo { get; private set; }
 
         /// <summary>Source Encoded Streamsize in bytes</summary>
-        public string SourceStreamSizeEncoded { get { return this["Source_StreamSize_Encoded"]; } }
+        public long? SourceStreamSizeEncoded { get { return TryParseLong("Source_StreamSize_Encoded"); } }
         public StreamSizeInfo SourceStreamSizeEncodedInfo { get; private set; }
 
         /// <summary>How this stream file is aligned in the container</summary>
@@ -168,4 +172,5 @@ namespace Frost.SharpMediaInfo.Output {
 
         public string Encryption { get { return this["Encryption"]; } }
     }
+    // ReSharper restore UnusedMember.Global
 }

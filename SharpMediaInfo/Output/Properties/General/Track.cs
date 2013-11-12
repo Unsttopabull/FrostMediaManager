@@ -10,7 +10,7 @@
         public string More { get { return _media["Track/More"]; } }
         public string Url { get { return _media["Track/Url"]; } }
         public string Sort { get { return _media["Track/Sort"]; } }
-        public string Position { get { return _media["Track/Position"]; } }
-        public string PositionTotal { get { return _media["Track/Position_Total"]; } }
+        public long? Position { get { return _media.TryParseLong("Track/Position"); } }
+        public long? PositionTotal { get { return _media.TryParseLong("Track/Position_Total"); } }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Frost.SharpMediaInfo.Output.Properties;
+﻿using System;
+using Frost.SharpMediaInfo.Output.Properties;
 using Frost.SharpMediaInfo.Output.Properties.BitRate;
 using Frost.SharpMediaInfo.Output.Properties.Codecs;
 using Frost.SharpMediaInfo.Output.Properties.Delay;
@@ -45,40 +46,40 @@ namespace Frost.SharpMediaInfo.Output {
         public string MuxingModeMoreInfo { get { return this["MuxingMode_MoreInfo"]; } }
 
         /// <summary>Play time of the stream in ms</summary>
-        public string Duration { get { return this["Duration"]; } }
+        public long? Duration { get { return TryParseLong("Duration"); } }
         public ExtendedDurationInfo DurationInfo { get; private set; }
 
         /// <summary>Source Play time of the stream</summary>
-        public string SourceDuration { get { return this["Source_Duration"]; } }
+        public long? SourceDuration { get { return TryParseLong("Source_Duration"); } }
         public ExtendedDurationInfo SourceDurationInfo { get; private set; }
 
         /// <summary>Bit rate in bps</summary>
-        public string BitRate { get { return this["BitRate"]; } }
+        public float? BitRate { get { return TryParseLong("BitRate"); } }
         public BitRateInfo BitRateInfo { get; private set; }
 
-        public string Width { get { return this["Width"]; } }
+        public long? Width { get { return TryParseLong("Width"); } }
         public string WidthString { get { return this["Width/String"]; } }
 
-        public string Height { get { return this["Height"]; } }
+        public long? Height { get { return TryParseLong("Height"); } }
         public string HeightString { get { return this["Height/String"]; } }
 
         /// <summary>Frames per second</summary>
-        public string FrameRate { get { return this["FrameRate"]; } }
+        public float? FrameRate { get { return TryParseFloat("FrameRate"); } }
         public FrameRateInfo FrameRateInfo { get; private set; }
 
         /// <summary>Number of frames</summary>
-        public string FrameCount { get { return this["FrameCount"]; } }
+        public long? FrameCount { get { return TryParseLong("FrameCount"); } }
         /// <summary>Source Number of frames</summary>
-        public string SourceFrameCount { get { return this["Source_FrameCount"]; } }
+        public long? SourceFrameCount { get { return TryParseLong("Source_FrameCount"); } }
 
         public string ColorSpace { get { return this["ColorSpace"]; } }
 
         public string ChromaSubsampling { get { return this["ChromaSubsampling"]; } }
 
-        public string Resolution { get { return this["Resolution"]; } }
+        public long? Resolution { get { return TryParseLong("Resolution"); } }
         public string ResolutionString { get { return this["Resolution/String"]; } }
 
-        public string BitDepth { get { return this["BitDepth"]; } }
+        public long? BitDepth { get { return TryParseLong("BitDepth"); } }
         public string BitDepthString { get { return this["BitDepth/String"]; } }
 
         /// <summary>Compression mode (Lossy or Lossless)</summary>
@@ -87,36 +88,36 @@ namespace Frost.SharpMediaInfo.Output {
         public string CompressionModeString { get { return this["Compression_Mode/String"]; } }
 
         /// <summary>Current stream size divided by uncompressed stream size</summary>
-        public string CompressionRatio { get { return this["Compression_Ratio"]; } }
+        public float? CompressionRatio { get { return TryParseFloat("Compression_Ratio"); } }
 
         /// <summary>Delay fixed in the stream (relative) IN MS</summary>
-        public string Delay { get { return this["Delay"]; } }
+        public long? Delay { get { return TryParseLong("Delay"); } }
         public DelayInfo DelayInfo { get; private set; }
 
         /// <summary>Delay fixed in the raw stream (relative) IN MS</summary>
-        public string DelayOriginal { get { return this["Delay_Original"]; } }
+        public long? DelayOriginal { get { return TryParseLong("Delay_Original"); } }
         public DelayInfo DelayOriginalInfo { get; private set; }
 
-        public string VideoDelay { get { return this["Video_Delay"]; } }
+        public long? VideoDelay { get { return TryParseLong("Video_Delay"); } }
         public VideoDelayInfo VideoDelayInfo { get; private set; }
 
-        public string Video0Delay { get { return this["Video0_Delay"]; } }
+        public long? Video0Delay { get { return TryParseLong("Video0_Delay"); } }
         public VideoDelayInfo Video0DelayInfo { get; private set; }
 
         /// <summary>Streamsize in bytes</summary>
-        public string StreamSize { get { return this["StreamSize"]; } }
+        public long? StreamSize { get { return TryParseLong("StreamSize"); } }
         public StreamSizeInfo StreamSizeInfo { get; private set; }
 
         /// <summary>Source Streamsize in bytes</summary>
-        public string SourceStreamSize { get { return this["Source_StreamSize"]; } }
+        public long? SourceStreamSize { get { return TryParseLong("Source_StreamSize"); } }
         public StreamSizeInfo SourceStreamSizeInfo { get; private set; }
 
         /// <summary>Encoded Streamsize in bytes</summary>
-        public string StreamSizeEncoded { get { return this["StreamSize_Encoded"]; } }
+        public long? StreamSizeEncoded { get { return TryParseLong("StreamSize_Encoded"); } }
         public StreamSizeInfo StreamSizeEncodedInfo { get; private set; }
 
         /// <summary>Source Encoded Streamsize in bytes</summary>
-        public string SourceStreamSizeEncoded { get { return this["StreamSize_Encoded"]; } }
+        public long? SourceStreamSizeEncoded { get { return TryParseLong("StreamSize_Encoded"); } }
         public StreamSizeInfo SourceStreamSizeEncodedInfo { get; private set; }
 
         /// <summary>Name of the track</summary>
@@ -143,10 +144,10 @@ namespace Frost.SharpMediaInfo.Output {
         public string Summary { get { return this["Summary"]; } }
 
         /// <summary>UTC time that the encoding of this item was completed began.</summary>
-        public string EncodedDate { get { return this["Encoded_Date"]; } }
+        public DateTime? EncodedDate { get { return TryParseDateTime("Encoded_Date", true); } }
 
         /// <summary>UTC time that the tags were done for this item.</summary>
-        public string TaggedDate { get { return this["Tagged_Date"]; } }
+        public DateTime? TaggedDate { get { return TryParseDateTime("Tagged_Date", true); } }
 
         public string Encryption { get { return this["Encryption"]; } }
     }

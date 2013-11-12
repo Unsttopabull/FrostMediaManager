@@ -8,7 +8,6 @@ using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.XML.XBMC;
 using Frost.SharpMediaInfo;
-using Frost.SharpMediaInfo.Output;
 
 namespace Frost.Tester {
     class Program {
@@ -146,15 +145,38 @@ namespace Frost.Tester {
         static void TestMediaInfo2() {
             StringBuilder sb = new StringBuilder(100000);
             using (MediaFile mf = new MediaFile(@"E:\Torrenti\FILMI\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi.avi", true)) {
-                foreach (KeyValuePair<string, string> kvp in mf.Video) {
+                foreach (KeyValuePair<string, string> kvp in mf.Audio) {
                     sb.AppendLine(kvp.Key + " : " + kvp.Value);
                 }
             }
             Console.Write(sb.ToString());
         }
 
+        public static string Format(IEnumerable<byte> data) {
+            //storage for the resulting string
+            string result = string.Empty;
+            //iterate through the byte[]
+            foreach (byte value in data) {
+                //storage for the individual byte
+                string binarybyte = Convert.ToString(value, 2);
+                //if the binarybyte is not 8 characters long, its not a proper result
+                while (binarybyte.Length < 8) {
+                    //prepend the value with a 0
+                    binarybyte = "0" + binarybyte;
+                }
+                //append the binarybyte to the result
+                result += binarybyte;
+            }
+            //return the result
+            return result;
+        }
+
         static void TestMediaInfo() {
-            using (MediaFile mf = new MediaFile(@"E:\Torrenti\FILMI\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi.avi", true)) {
+            string filePath = @"E:\Torrenti\FILMI\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi.avi";
+            string filePath2 = @"E:\Torrenti\FILMI\Intersections 2013 CROSubs.DVDRip XViD juggs\Intersections 2013 CROSubs.DVDRip XViD juggs.avi";
+
+            using (MediaFile mf = new MediaFile(filePath2, true)) {
+                string title = mf.Audio.Title;
 
                 StringBuilder sb = new StringBuilder(148000);
                 sb.AppendLine(mf.Options.Custom("Info_Version", "0.7.13;MediaInfoDLL_Example_MSVC;0.7.13"));

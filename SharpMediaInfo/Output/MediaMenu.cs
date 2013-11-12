@@ -23,11 +23,11 @@ namespace Frost.SharpMediaInfo.Output {
         public Format Format { get; private set; }
 
         /// <summary>Play time of the stream in ms</summary>
-        public string Duration { get { return this["Duration"]; } }
+        public long? Duration { get { return TryParseLong("Duration"); } }
         public GeneralDurationInfo DurationInfo { get; private set; }
 
         /// <summary>Delay fixed in the stream (relative) IN MS</summary>
-        public string Delay { get { return this["Delay"]; } }
+        public long? Delay { get { return TryParseLong("Delay"); } }
         public DelayInfo DelayInfo { get; private set; }
 
         /// <summary>List of programs available</summary>
@@ -55,9 +55,9 @@ namespace Frost.SharpMediaInfo.Output {
         public string TimeZones { get { return this["TimeZones"]; } }
 
         /// <summary>Used by third-party developers to know about the beginning of the chapters list, to be used by Get(Stream_Menu, x, Pos), where Pos is an Integer between Chapters_Pos_Begin and Chapters_Pos_End</summary>
-        public string ChaptersBeginPosition { get { return this["Chapters_Pos_Begin"]; } }
+        public long? ChaptersBeginPosition { get { return TryParseLong("Chapters_Pos_Begin"); } }
 
         /// <summary>Used by third-party developers to know about the end of the chapters list (this position excluded)</summary>
-        public string ChaptersEndPosition { get { return this["Chapters_Pos_End"]; } }
+        public long? ChaptersEndPosition { get { return TryParseLong("Chapters_Pos_End"); } }
     }
 }

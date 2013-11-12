@@ -1,7 +1,7 @@
 ﻿
 namespace Frost.SharpMediaInfo.Output.Properties.Delay {
 
-    public class DelayInfo : GeneralDelayInfo{
+    public class DelayInfo : GeneralDelayInfo {
 
         internal DelayInfo(Media media, bool delayOriginal) : base(media, delayOriginal) {
         }
@@ -17,7 +17,7 @@ namespace Frost.SharpMediaInfo.Output.Properties.Delay {
         public string DropFrame { get { return DelayOriginal ? MediaStream["Delay_Original_DropFrame"] : MediaStream["Delay_DropFrame"]; } }
 
         /// <summary>Delay source (Container or Stream or empty)</summary>
-        public string Source { get { return DelayOriginal ? MediaStream["Delay_Original_Source"] : MediaStream["Delay_Source"]; } }
+        public long? Source { get { return DelayOriginal ? MediaStream.TryParseLong("Delay_Original_Source") : MediaStream.TryParseLong("Delay_Source"); } }
 
         /// <summary>Delay source (Container or Stream or empty)</summary>
         public string SourceString { get { return DelayOriginal ? MediaStream["Delay_Original_Source/String"] : MediaStream["Delay_Source/String"]; } }

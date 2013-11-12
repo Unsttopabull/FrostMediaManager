@@ -43,18 +43,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LibraryInfo.cs" />
-    <Compile Include="Output\CoverInfo.cs" />
+    <Compile Include="Output\Properties\CoverInfo.cs" />
     <Compile Include="Output\Properties\Duration\FrameDuration.cs" />
     <Compile Include="Output\Properties\General\FileInfo.cs" />
-    <Compile Include="Output\OriginalSourceInfo.cs" />
-    <Compile Include="Output\PartInfo.cs" />
+    <Compile Include="Output\Properties\OriginalSourceInfo.cs" />
+    <Compile Include="Output\Properties\PartInfo.cs" />
     <Compile Include="Output\Properties\General\Album.cs" />
     <Compile Include="Output\Properties\General\Comic.cs" />
     <Compile Include="Output\Properties\General\Performer.cs" />
     <Compile Include="Output\Properties\General\Movie.cs" />
     <Compile Include="Output\Properties\FileSizeInfo.cs" />
     <Compile Include="Output\Properties\ChannelInfo.cs" />
-    <Compile Include="Output\Properties\BitRate\GeneralBitRateInfo.cs" />
+    <Compile Include="Output\Properties\BitRate\OverallBitRateInfo.cs" />
     <Compile Include="Output\Properties\Interleave.cs" />
     <Compile Include="Output\Properties\EncodingLibraryInfo.cs" />
     <Compile Include="Output\Properties\Delay\DelayInfo.cs" />
@@ -73,7 +73,7 @@
     <Compile Include="Output\Properties\Formats\AudioFormat.cs" />
     <Compile Include="Output\Properties\Formats\Format.cs" />
     <Compile Include="Output\Media.cs" />
-    <Compile Include="Output\Properties\CodecID.cs" />
+    <Compile Include="Output\Properties\Codecs\CodecID.cs" />
     <Compile Include="Output\MediaAudio.cs" />
     <Compile Include="MediaFile.cs" />
     <Compile Include="MediaInfoEnums.cs" />
