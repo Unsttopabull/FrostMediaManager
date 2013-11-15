@@ -7,7 +7,7 @@ namespace Frost.SharpMediaInfo.Output {
 
     public class MediaImage : Media {
 
-        public MediaImage(MediaFile mediaInfo) : base(mediaInfo, StreamKind.Image) {
+        internal MediaImage(MediaFile mediaInfo) : base(mediaInfo, StreamKind.Image) {
             Format = new FormatWithWrapping(this);
             Codec = new Codec(this);
             WidthInfo = new SizeInfo(this, SizeType.Width);
@@ -57,7 +57,7 @@ namespace Frost.SharpMediaInfo.Output {
         public string BitDepthString { get { return this["BitDepth/String"]; } }
 
         /// <summary>Compression mode (Lossy or Lossless)</summary>
-        public string CompressionMode { get { return this["Compression_Mode"]; } }
+        public CompressionMode CompressionMode { get { return ParseCompressionMode("Compression_Mode"); } }
         /// <summary>Compression mode (Lossy or Lossless)</summary>
         public string CompressionModeString { get { return this["Compression_Mode/String"]; } }
 

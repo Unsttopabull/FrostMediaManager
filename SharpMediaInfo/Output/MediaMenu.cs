@@ -1,4 +1,5 @@
-﻿using Frost.SharpMediaInfo.Output.Properties;
+﻿using System;
+using Frost.SharpMediaInfo.Output.Properties;
 using Frost.SharpMediaInfo.Output.Properties.Codecs;
 using Frost.SharpMediaInfo.Output.Properties.Delay;
 using Frost.SharpMediaInfo.Output.Properties.Duration;
@@ -23,11 +24,11 @@ namespace Frost.SharpMediaInfo.Output {
         public Format Format { get; private set; }
 
         /// <summary>Play time of the stream in ms</summary>
-        public long? Duration { get { return TryParseLong("Duration"); } }
+        public TimeSpan? Duration { get { return TryParseTimeSpan("Duration"); } }
         public GeneralDurationInfo DurationInfo { get; private set; }
 
         /// <summary>Delay fixed in the stream (relative) IN MS</summary>
-        public long? Delay { get { return TryParseLong("Delay"); } }
+        public TimeSpan? Delay { get { return TryParseTimeSpan("Delay"); } }
         public DelayInfo DelayInfo { get; private set; }
 
         /// <summary>List of programs available</summary>

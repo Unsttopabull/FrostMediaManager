@@ -13,7 +13,7 @@ namespace Frost.SharpMediaInfo {
         private readonly IntPtr _handle;
         private readonly bool _mustUseAnsi;
 
-        public MediaFile(string filePath, bool cacheInfom, bool allInfoInform = true) {
+        public MediaFile(string filePath, bool cacheInfom, bool allInfoCache = true) {
             _handle = MediaInfo_New();
             _mustUseAnsi = Environment.OSVersion.ToString().IndexOf("Windows", StringComparison.Ordinal) == -1;            
 
@@ -31,7 +31,7 @@ namespace Frost.SharpMediaInfo {
             General = new MediaGeneral(this);
 
             if (cacheInfom) {
-                CacheInform(allInfoInform);
+                CacheInform(allInfoCache);
             }
         }
 

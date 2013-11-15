@@ -9,18 +9,20 @@ using Frost.SharpMediaInfo.Output.Properties.Codecs;
 #pragma warning disable 1591
 
 namespace Frost.SharpMediaInfo.Output {
+
     public abstract class Media : IEnumerable<KeyValuePair<string, string>> {
-        private bool _cached;
-        private MediaFile MediaFile;
-        private StreamKind StreamKind;
-        private Dictionary<string, string>[] Properties;
+
+        private readonly MediaFile _mediaFile;
+        private readonly StreamKind _streamKind;
         protected int CachedStreamCount = -1;
+        private Dictionary<string, string>[] _properties;
+        private bool _cached;
 
         protected Media(MediaFile mediaInfo, StreamKind streamKind) {
-            MediaFile = mediaInfo;
-            StreamKind = streamKind;
+            _mediaFile = mediaInfo;
+            _streamKind = streamKind;
             StreamNumber = 0;
-            Properties = new Dictionary<string, string>[StreamCount];
+            _properties = new Dictionary<string, string>[StreamCount];
             CachedStreamCount = StreamCount;
             CodecID = new CodecID(this);
         }
@@ -31,18 +33,23 @@ namespace Frost.SharpMediaInfo.Output {
         public string Status { get { return this["Status"]; } }
 
         public string StreamKindID { get { return this["StreamKindID"]; } }
+
         public string StreamKindPos { get { return this["StreamKindPos"]; } }
+
         public long? StreamOrder { get { return TryParseLong("StreamOrder"); } }
 
         public long? FirstPacketOrder { get { return TryParseLong("FirstPacketOrder"); } }
 
-        public long? ID {  get { return TryParseLong("ID"); } }
+        public long? ID { get { return TryParseLong("ID"); } }
+
         public string IDString { get { return this["IDString"]; } }
 
         public long? UniqueID { get { return TryParseLong("UniqueID"); } }
+
         public string UniqueIDString { get { return this["UniqueID/String"]; } }
 
         public long? MenuID { get { return TryParseLong("MenuID"); } }
+
         public string MenuIDString { get { return this["MenuID/String"]; } }
 
         /// <summary>The default stream number to use when accessing media info through properties</summary>
@@ -52,7 +59,7 @@ namespace Frost.SharpMediaInfo.Output {
         public int StreamCount {
             get {
                 if (CachedStreamCount == -1) {
-                    CachedStreamCount = MediaFile.CountGet(StreamKind);
+                    CachedStreamCount = _mediaFile.CountGet(_streamKind);
                 }
                 return CachedStreamCount;
             }
@@ -63,23 +70,37 @@ namespace Frost.SharpMediaInfo.Output {
         /// <summary>Gets a value indicating whether information exists about this kind of stream</summary>
         /// <value><c>true</c> if info is available; otherwise, <c>false</c>.</value>
         /// <remarks>Equivalent to checking if StreamCount is equal to 0</remarks>
-        public bool Any { get { return StreamCount != 0; } }
+        public bool Any {
+            get { return StreamCount != 0; }
+        }
 
         #endregion
 
         #region Indexers
+
         /// <summary>Get a piece of information about a media element</summary>
         /// <param name="parameter">Parameter you are looking for in the stream (Codec, width, bitrate...), in string format ("Codec", "Width"...) </param>
         public string this[string parameter] {
             get {
-                if (_cached && Properties[StreamNumber].ContainsKey(parameter)) {
-                    return Properties[StreamNumber][parameter];
+                //if caching is enabled and the parameter exists in cache return cached value
+                if (_cached && _properties[StreamNumber].ContainsKey(parameter)) {
+                    return _properties[StreamNumber][parameter];
                 }
 
-                string str = MediaFile.Get(StreamKind, StreamNumber, parameter);
-                return string.IsNullOrEmpty(str)
-                    ? null
-                    : str;
+                //otherwise call MediaInfo DLL
+                string value = _mediaFile.Get(_streamKind, StreamNumber, parameter);
+
+                //if the returned string is not empty or null we return the value (and optional cache it)
+                if (!string.IsNullOrEmpty(value)) {
+                    if (_cached) {
+                        //we tested if the dictionary already contains this key
+                        //so no need to check again
+                        _properties[StreamNumber].Add(parameter, value);
+                    }
+                    return value;
+                }
+                //otherwise we return null
+                return null;
             }
         }
 
@@ -87,28 +108,30 @@ namespace Frost.SharpMediaInfo.Output {
         /// <param name="parameter">Parameter you are looking for in the stream (Codec, width, bitrate...), in integer format (first parameter, second parameter...)</param>
         public string this[int parameter] {
             get {
-                string str = MediaFile.Get(StreamKind, StreamNumber, parameter);
+                string str = _mediaFile.Get(_streamKind, StreamNumber, parameter);
                 return string.IsNullOrEmpty(str)
                     ? null
                     : str;
             }
         }
+
         #endregion
 
         #region MediaInfo Getters & Functions
+
         internal virtual void ParseInform(XElement track, int streamNumber) {
             if (_cached) {
                 return;
             }
 
-            Properties[streamNumber] = new Dictionary<string, string>();
+            _properties[streamNumber] = new Dictionary<string, string>();
 
             Dictionary<string, int> multipleOccurances = new Dictionary<string, int>();
             foreach (XElement xElement in track.Nodes()) {
                 string tagName = xElement.Name.LocalName;
 
                 //check if this tag has already occured in this stream
-                if(Properties[streamNumber].ContainsKey(tagName)) {
+                if (_properties[streamNumber].ContainsKey(tagName)) {
                     //if it has and its already in the multiple occuraces dictionary
                     //we just increment the number of occurances and append it to the tag name
                     if (multipleOccurances.ContainsKey(tagName)) {
@@ -121,7 +144,7 @@ namespace Frost.SharpMediaInfo.Output {
                     }
                 }
 
-                Properties[streamNumber][tagName] = xElement.Value;
+                _properties[streamNumber][tagName] = xElement.Value;
             }
             _cached = true;
         }
@@ -132,7 +155,7 @@ namespace Frost.SharpMediaInfo.Output {
         /// <param name="kindOfSearch">Where to look for the parameter</param>
         /// <returns>a string about information you search, an empty string if there is a problem</returns>
         public string Get(string parameter, InfoKind kindOfInfo, InfoKind kindOfSearch) {
-            return MediaFile.Get(StreamKind, StreamNumber, parameter, kindOfInfo, kindOfSearch);
+            return _mediaFile.Get(_streamKind, StreamNumber, parameter, kindOfInfo, kindOfSearch);
         }
 
         /// <summary>Get a piece of information about an image (parameter is an integer)</summary>
@@ -140,15 +163,17 @@ namespace Frost.SharpMediaInfo.Output {
         /// <param name="kindOfInfo">Kind of information you want about the parameter (the text, the measure, the help...)</param>
         /// <returns>a string about information you search, an empty string if there is a problem</returns>
         public string Get(int parameter, InfoKind kindOfInfo) {
-            return MediaFile.Get(StreamKind, StreamNumber, parameter, kindOfInfo);
+            return _mediaFile.Get(_streamKind, StreamNumber, parameter, kindOfInfo);
         }
+
         #endregion
 
         #region IEnumerable
+
         /// <summary>Returns an enumerator that iterates through the collection.</summary>
         /// <returns>A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.</returns>
         public IEnumerator<KeyValuePair<string, string>> GetEnumerator() {
-            return Properties[StreamNumber].GetEnumerator();
+            return _properties[StreamNumber].GetEnumerator();
         }
 
         /// <summary>Returns an enumerator that iterates through a collection.</summary>
@@ -156,9 +181,10 @@ namespace Frost.SharpMediaInfo.Output {
         IEnumerator IEnumerable.GetEnumerator() {
             return GetEnumerator();
         }
+
         #endregion
 
-        #region Other functions
+        #region Type parsers
 
         public long? TryParseLong(string parameter) {
             int value;
@@ -173,11 +199,58 @@ namespace Frost.SharpMediaInfo.Output {
             if (float.TryParse(this[parameter], NumberStyles.Float, CultureInfo.InvariantCulture, out value)) {
                 return value;
             }
-            return null;            
+            return null;
+        }
+
+        public TimeSpan? TryParseTimeSpan(string parameter) {
+            long? miliseconds = TryParseLong(parameter);
+            if (miliseconds.HasValue) {
+                return TimeSpan.FromMilliseconds(miliseconds.Value);
+            }
+            return null;
+        }
+
+        public CompressionMode ParseCompressionMode(string parameter) {
+            switch (this[parameter]) {
+                case "Lossy":
+                    return CompressionMode.Lossy;
+                case "Lossless":
+                    return CompressionMode.Lossless;
+                default:
+                    return CompressionMode.Unknown;
+            }
+        }
+
+        public byte[] ParseBase64String(string parameter) {
+            string enc = this[parameter];
+
+            return enc == null
+                       ? null
+                       : Convert.FromBase64String(enc);
+        }
+
+        public string[] ParseStringList(string parameter, string separator = " / ") {
+            string list = this[parameter];
+
+            //can only test for null as the indexer already checks for string.IsNullOrEmpty() and
+            //coerces empty strings to null
+            return list != null
+                ? list.Split(new[] {separator}, StringSplitOptions.RemoveEmptyEntries)
+                : null;
+        }
+
+        public bool? TryParseBool(string parameter) {
+            bool value;
+            if (bool.TryParse(this[parameter], out value)) {
+                return value;
+            }
+            return null;
         }
 
         public DateTime? TryParseDateTime(string parameter, bool utc) {
-            string dateFormat = utc ? "UTC yyyy-MM-dd hh:mm:ss.fff" : "yyyy-MM-dd hh:mm:ss.fff";
+            string dateFormat = utc
+                ? "UTC yyyy-MM-dd hh:mm:ss.fff"
+                : "yyyy-MM-dd hh:mm:ss.fff";
 
             DateTimeStyles dateTimeStyles = utc
                 ? (DateTimeStyles.AllowWhiteSpaces | DateTimeStyles.AssumeUniversal)
@@ -189,16 +262,19 @@ namespace Frost.SharpMediaInfo.Output {
             }
             return null;
         }
+
         #endregion
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString() {
             StringBuilder sb = new StringBuilder(10000);
-            foreach (KeyValuePair<string, string> kvp in Properties[StreamNumber]) {
+            foreach (KeyValuePair<string, string> kvp in _properties[StreamNumber]) {
                 sb.AppendLine(kvp.Key + " : " + kvp.Value);
             }
             return sb.ToString();
         }
+
     }
+
 }

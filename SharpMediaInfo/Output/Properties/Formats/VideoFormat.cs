@@ -1,12 +1,14 @@
 namespace Frost.SharpMediaInfo.Output.Properties.Formats {
+
     public class VideoFormat : Format {
+
         internal VideoFormat(Media media) : base(media) {
         }
 
         public string BVOP { get { return MediaStream["Format_Settings_BVOP"]; } }
         public string BVOPString { get { return MediaStream["Format_Settings_BVOP/String"]; } }
 
-        public string QPel { get { return MediaStream["Format_Settings_QPel"]; } }
+        public bool? QPel { get { return MediaStream.TryParseBool("Format_Settings_QPel"); } }
         public string QPelString { get { return MediaStream["Format_Settings_QPel/String"]; } }
 
         public long? GMC { get { return MediaStream.TryParseLong("Format_Settings_GMC"); } }
@@ -16,9 +18,9 @@ namespace Frost.SharpMediaInfo.Output.Properties.Formats {
         public string MatrixString { get { return MediaStream["Format_Settings_Matrix/String"]; } }
 
         /// <summary>Matrix, in binary format encoded BASE64. Order = intra, non-intra, gray intra, gray non-intra</summary>
-        public string MatrixData { get { return MediaStream["Format_Settings_Matrix_Data"]; } }
+        public byte[] MatrixData { get { return MediaStream.ParseBase64String("Format_Settings_Matrix_Data"); } }
 
-        public string CABAC { get { return MediaStream["Format_Settings_CABAC"]; } }
+        public bool? CABAC { get { return MediaStream.TryParseBool("Format_Settings_CABAC"); } }
         public string CABACString { get { return MediaStream["Format_Settings_CABAC/String"]; } }
 
         public long? RefFrames { get { return MediaStream.TryParseLong("Format_Settings_RefFrames"); } }

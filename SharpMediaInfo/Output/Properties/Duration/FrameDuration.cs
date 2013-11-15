@@ -1,7 +1,9 @@
 ﻿
+using System;
+
 namespace Frost.SharpMediaInfo.Output.Properties.Duration {
 
-    public enum FrameNumber {
+    internal enum FrameNumber {
         FirstFrame,
         LastFrame
     }
@@ -31,7 +33,7 @@ namespace Frost.SharpMediaInfo.Output.Properties.Duration {
         }
 
         /// <summary>Duration of the frame if it is longer than others, in ms</summary>
-        public long? Duration { get { return _media.TryParseLong(_propNames[0]); } }
+        public TimeSpan? Duration { get { return _media.TryParseTimeSpan(_propNames[0]); } }
 
         /// <summary>Duration of the frame if it is longer than others, in format : XXx YYy only, YYy omited if zero</summary>
         public string String { get { return _media[_propNames[1]]; } }

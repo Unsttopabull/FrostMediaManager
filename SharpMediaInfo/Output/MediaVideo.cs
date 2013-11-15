@@ -14,8 +14,8 @@ namespace Frost.SharpMediaInfo.Output {
     public class MediaVideo : Media {
 
         internal MediaVideo(MediaFile mi) : base(mi, StreamKind.Video) {
-            Format = new VideoFormat(this);
-            Codec = new VideoCodec(this);
+            FormatInfo = new VideoFormat(this);
+            CodecInfo = new VideoCodec(this);
             WidthInfo = new SizeInfo(this, SizeType.Width);
             HeightInfo = new SizeInfo(this, SizeType.Height);
             FrameRateInfo = new VideoFrameRateInfo(this);
@@ -38,8 +38,8 @@ namespace Frost.SharpMediaInfo.Output {
         }
 
         /// <summary>Info about the Format used</summary>
-        public VideoFormat Format { get; private set; }
-        public VideoCodec Codec { get; private set; }
+        public VideoFormat FormatInfo { get; private set; }
+        public VideoCodec CodecInfo { get; private set; }
 
         /// <summary>Multiview, profile of the base stream</summary>
         public string MultiViewBaseProfile { get { return this["MultiView_BaseProfile"]; } }
@@ -55,7 +55,7 @@ namespace Frost.SharpMediaInfo.Output {
         public string MuxingMode { get { return this["MuxingMode"]; } }
 
         /// <summary>Play time of the stream in ms</summary>
-        public long? Duration { get { return TryParseLong("Duration"); } }
+        public TimeSpan? Duration { get { return TryParseTimeSpan("Duration"); } }
         public ExtendedDurationInfo DurationInfo { get; private set; }
 
         /// <summary>Source Play time of the stream</summary>
@@ -119,18 +119,36 @@ namespace Frost.SharpMediaInfo.Output {
         public long? BitDepth { get { return TryParseLong("BitDepth"); } }
         /// <summary>16/24/32 bits</summary>
         public string BitDepthString { get { return this["BitDepth/String"]; } }
-        
-        public string ScanType { get { return this["ScanType"]; } }
+
+        public ScanType ScanType {
+            get {
+                switch (this["ScanType"]) {
+                    case "Interlaced":
+                        return ScanType.Interlaced;
+                    case "Progressive":
+                        return ScanType.Progresive;
+                    case "MBAFF":
+                        return ScanType.MBAFF;
+                    case "Mixed":
+                        return ScanType.Mixed;
+                    default:
+                        return ScanType.Unknown;
+                }
+            }
+        }
+
         public Info ScanTypeInfo { get; private set; }
-        
+
+        /// <example>\eg{ <c>"TFF"</c>, <c>"BFF"</c>, <c>"2:3 Pulldown"</c>, <c>"2:2:2:2:2:2:2:2:2:2:2:3 Pulldown"</c>, <c>"Top field only"</c>, <c>"Bottom field only"</c></example>
         public string ScanOrder { get { return this["ScanOrder"]; } }
         public Info ScanOrderInfo { get; private set; }
 
+        /// <example>\eg{ <c>"MBAFF"</c>, <c>"PPF"</c>, <c>"Interalced"</c>, <c>"TFF"</c>, <c>"BFF"</c>, <c>"Progressive"</c>, <c>"Mixed"</c></example>
         public string Interlacement { get { return this["Interlacement"]; } }
         public string InterlacementString { get { return this["Interlacement/String"]; } }
         
         /// <summary>Compression mode (Lossy or Lossless)</summary>
-        public string CompressionMode { get { return this["Compression_Mode"]; } }
+        public CompressionMode CompressionMode { get { return ParseCompressionMode("Compression_Mode"); } }
         /// <summary>Compression mode (Lossy or Lossless)</summary>
         public string CompressionModeString { get { return this["Compression_Mode/String"]; } }
 
@@ -141,15 +159,15 @@ namespace Frost.SharpMediaInfo.Output {
         public float? BitsPerPixelFrame { get{ return TryParseFloat("Bits__Pixel_Frame_"); } }
 
         /// <summary>Delay fixed in the stream (relative) IN MS</summary>
-        public long? Delay { get { return TryParseLong("Delay"); } }
+        public TimeSpan? Delay { get { return TryParseTimeSpan("Delay"); } }
         public DelayInfo DelayInfo { get; private set; }
         
         /// <summary>Delay fixed in the raw stream (relative) IN MS</summary>
-        public long? DelayOriginal { get { return TryParseLong("Delay_Original"); } }
+        public TimeSpan? DelayOriginal { get { return TryParseTimeSpan("Delay_Original"); } }
         public DelayInfo DelayOriginalInfo { get; private set; }
         
         /// <summary>TimeStamp fixed in the stream (relative) IN MS</summary>
-        public long? TimeStampFirstFrame { get { return TryParseLong("TimeStamp_FirstFrame"); } }
+        public TimeSpan? TimeStampFirstFrame { get { return TryParseTimeSpan("TimeStamp_FirstFrame"); } }
         /// <summary>TimeStamp with measurement</summary>
         public string TimeStampFirstFrameString { get { return this["TimeStamp_FirstFrame/String"]; } }
         /// <summary>TimeStamp with measurement</summary>

@@ -1,10 +1,12 @@
 ﻿namespace Frost.SharpMediaInfo.Output.Properties.Codecs {
+
     public class GeneralCodec : Codec {
-        public GeneralCodec(Media mediaMenu) : base(mediaMenu) {
+
+        internal GeneralCodec(Media mediaMenu) : base(mediaMenu) {
         }
 
-        public string CodecExtensions { get { return MediaStream["Codec/Extensions"]; } }
-        public string CodecSettings { get { return MediaStream["Codec_Settings"]; } }
-        public string CodecSettingsAutomatic { get { return MediaStream["Codec_Settings_Automatic"]; } }
+        public string[] Extensions { get { return MediaStream.ParseStringList("Codec/Extensions", " "); } }
+        public string[] Settings { get { return MediaStream.ParseStringList("Codec_Settings"); } }
+        public string SettingsAutomatic { get { return MediaStream["Codec_Settings_Automatic"]; } }
     }
 }

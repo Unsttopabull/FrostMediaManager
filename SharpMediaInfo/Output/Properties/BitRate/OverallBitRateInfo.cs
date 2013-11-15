@@ -1,4 +1,5 @@
 ﻿namespace Frost.SharpMediaInfo.Output.Properties.BitRate {
+
     public class OverallBitRateInfo {
         protected readonly Media MediaStream;
         private readonly bool _general;
@@ -12,7 +13,19 @@
         public string String { get { return _general ? MediaStream["OverallBitRate/String"] : MediaStream["BitRate/String"]; } }
 
         /// <summary>Bit rate mode (VBR, CBR)</summary>
-        public string Mode { get { return _general ? MediaStream["OverallBitRate_Mode"] : MediaStream["BitRate_Mode"]; } }
+        public BitOrFrameRateMode Mode {
+            get {
+                string mode = _general ? MediaStream["OverallBitRate_Mode"] : MediaStream["BitRate_Mode"];
+                switch (mode) {
+                    case "VBR":
+                        return BitOrFrameRateMode.Variable;
+                    case "CFR":
+                        return BitOrFrameRateMode.Constant;
+                    default:
+                        return BitOrFrameRateMode.Unknown;
+                }
+            }
+        }
         /// <summary>Bit rate mode (Constant, Variable)</summary>
         public string ModeString { get { return _general ? MediaStream["OverallBitRate_Mode/String"] : MediaStream["BitRate_Mode/String"]; } }
 

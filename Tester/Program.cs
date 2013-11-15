@@ -172,80 +172,97 @@ namespace Frost.Tester {
         }
 
         static void TestMediaInfo() {
-            string filePath = @"E:\Torrenti\FILMI\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi.avi";
-            string filePath2 = @"E:\Torrenti\FILMI\Intersections 2013 CROSubs.DVDRip XViD juggs\Intersections 2013 CROSubs.DVDRip XViD juggs.avi";
+            const string FILE_PATH = @"E:\Torrenti\FILMI\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi.avi";
+            const string FILE_PATH2 = @"E:\Torrenti\FILMI\Intersections 2013 CROSubs.DVDRip XViD juggs\Intersections 2013 CROSubs.DVDRip XViD juggs.avi";
+            const string FILE_PATH3 = @"Z:\Filmi\(500) Days of Summer (2009) - 500 dni z Summer\(500)Days of Summer.[2009].RETAIL.DVDRIP.XVID.[Eng]-DUQA.avi";
+            const string FILE_PATH4 = @"E:\Torrenti\FILMI\Oz.the.Great.and.Powerful.2013.SLOSubs.DVDRip.XviD-DrSi\Oz.the.Great.and.Powerful.2013.SLOSubs.DVDRip.XviD-DrSi.avi";;
+            const string FILE_PATH5 = @"E:\Torrenti\FILMI\The Wolverine 2013 SLOSubs.EXTENDED BRRip XviD-ETRG\The Wolverine 2013 SLOSubs.EXTENDED BRRip XviD-ETRG.avi"; ;
 
-            using (MediaFile mf = new MediaFile(filePath2, true)) {
-                string title = mf.Audio.Title;
 
-                StringBuilder sb = new StringBuilder(148000);
-                sb.AppendLine(mf.Options.Custom("Info_Version", "0.7.13;MediaInfoDLL_Example_MSVC;0.7.13"));
-                sb.AppendLine();
+            using (MediaFile mf = new MediaFile(FILE_PATH5, true)) {
+                mf.Options.InformPreset = InformPreset.HTML;
+                mf.Options.ShowAllInfo = true;
 
-                sb.AppendLine("Info_Parameters");
-                sb.AppendLine(mf.Info.KnownParameters);
-                sb.AppendLine();
+                TimeSpan? timeSpan = mf.Audio.Interleave.Duration;
+                string timeSpans = mf.Audio.Interleave.VideoFrames;
 
-                sb.AppendLine("Info Codecs");
-                sb.AppendLine(mf.Info.KnownCodecs);
-                sb.AppendLine();
-
-                sb.AppendLine("Open");
-
-                sb.AppendLine();
-
-                if (mf.IsOpen) {
-                    sb.AppendLine("Inform with Complete=false");
-                    mf.Options.ShowAllInfo = false;
-                    sb.AppendLine(mf.Inform());
-                    sb.AppendLine();
-
-                    sb.AppendLine("Inform with Complete=true");
-                    mf.Options.ShowAllInfo = true;
-                    sb.AppendLine(mf.Inform());
-                    sb.AppendLine();
-
-                    sb.AppendLine("Custom Inform");
-                    mf.Options.Inform = "General;Example : FileSize=%FileSize%";
-                    sb.AppendLine(mf.Inform());
-                    sb.AppendLine();
-
-                    sb.AppendLine("Get with Stream=General and Parameter=\"FileSize\"");
-                    sb.AppendLine(mf.General["FileSize"]);
-
-                    sb.AppendLine("GetI with Stream=General and Parameter=46");
-                    sb.AppendLine(mf.General[46]);
-
-                    sb.AppendLine("Count_Get with StreamKind=Stream_Audio");
-                    sb.AppendLine(mf.Audio.StreamCount.ToString(CultureInfo.InvariantCulture));
-
-                    sb.AppendLine("Get with Stream=General and Parameter=\"AudioCount\"");
-                    sb.AppendLine(mf.General["AudioCount"]);
-
-                    sb.AppendLine("Get with Stream=Audio and Parameter=\"StreamCount\"");
-                    sb.AppendLine(mf.Audio["StreamCount"]);
-
-                    sb.AppendLine("Moj Get Codec");
-                    sb.AppendLine(mf.Audio.Codec.Name);
-
-                    sb.AppendLine("Moj Fomat");
-                    sb.AppendLine(mf.General.Format.Summary);
-
-                    sb.AppendLine("Are there menues?");
-                    sb.AppendLine(mf.Menu.Any.ToString());
-
-                    sb.AppendLine("Close");
-
-                    Console.Write(sb.ToString());
+                foreach (KeyValuePair<string, string> kvp in mf.General) {
+                    Console.WriteLine(@"{0} : {1}", kvp.Key, kvp.Value);
                 }
-                else {
-                    sb.AppendLine("Napaka med odprianjem");
-                    Console.Write(sb.ToString());
-                }
+
+                //DllTest(mf);
             }
             Console.WriteLine();
             Console.WriteLine("----------Končal----------");
             //Console.Read();
         }
+
+        private static void DllTest(MediaFile mf) {
+            StringBuilder sb = new StringBuilder(148000);
+            sb.AppendLine(mf.Options.Custom("Info_Version", "0.7.13;MediaInfoDLL_Example_MSVC;0.7.13"));
+            sb.AppendLine();
+
+            sb.AppendLine("Info_Parameters");
+            sb.AppendLine(mf.Info.KnownParameters);
+            sb.AppendLine();
+
+            sb.AppendLine("Info Codecs");
+            sb.AppendLine(mf.Info.KnownCodecs);
+            sb.AppendLine();
+
+            sb.AppendLine("Open");
+
+            sb.AppendLine();
+
+            if (mf.IsOpen) {
+                sb.AppendLine("Inform with Complete=false");
+                mf.Options.ShowAllInfo = false;
+                sb.AppendLine(mf.Inform());
+                sb.AppendLine();
+
+                sb.AppendLine("Inform with Complete=true");
+                mf.Options.ShowAllInfo = true;
+                sb.AppendLine(mf.Inform());
+                sb.AppendLine();
+
+                sb.AppendLine("Custom Inform");
+                mf.Options.Inform = "General;Example : FileSize=%FileSize%";
+                sb.AppendLine(mf.Inform());
+                sb.AppendLine();
+
+                sb.AppendLine("Get with Stream=General and Parameter=\"FileSize\"");
+                sb.AppendLine(mf.General["FileSize"]);
+
+                sb.AppendLine("GetI with Stream=General and Parameter=46");
+                sb.AppendLine(mf.General[46]);
+
+                sb.AppendLine("Count_Get with StreamKind=Stream_Audio");
+                sb.AppendLine(mf.Audio.StreamCount.ToString(CultureInfo.InvariantCulture));
+
+                sb.AppendLine("Get with Stream=General and Parameter=\"AudioCount\"");
+                sb.AppendLine(mf.General["AudioCount"]);
+
+                sb.AppendLine("Get with Stream=Audio and Parameter=\"StreamCount\"");
+                sb.AppendLine(mf.Audio["StreamCount"]);
+
+                sb.AppendLine("Moj Get Codec");
+                sb.AppendLine(mf.Audio.Codec.Name);
+
+                sb.AppendLine("Moj Fomat");
+                sb.AppendLine(mf.General.Format.Name);
+
+                sb.AppendLine("Are there menues?");
+                sb.AppendLine(mf.Menu.Any.ToString());
+
+                sb.AppendLine("Close");
+
+                Console.Write(sb.ToString());
+            }
+            else {
+                sb.AppendLine("Napaka med odprianjem");
+                Console.Write(sb.ToString());
+            }
+        }
+
     }
 }

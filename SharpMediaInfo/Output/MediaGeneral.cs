@@ -1,4 +1,5 @@
-﻿using Frost.SharpMediaInfo.Output.Properties;
+﻿using System;
+using Frost.SharpMediaInfo.Output.Properties;
 using Frost.SharpMediaInfo.Output.Properties.BitRate;
 using Frost.SharpMediaInfo.Output.Properties.Codecs;
 using Frost.SharpMediaInfo.Output.Properties.Delay;
@@ -11,7 +12,7 @@ using Frost.SharpMediaInfo.Output.Properties.General;
 namespace Frost.SharpMediaInfo.Output {
     public class MediaGeneral : Media {
 
-        public MediaGeneral(MediaFile mediaInfo) : base(mediaInfo, StreamKind.General) {
+        internal MediaGeneral(MediaFile mediaInfo) : base(mediaInfo, StreamKind.General) {
             CachedStreamCount = 1;
             Format = new GeneralFormat(this);
             Codec = new GeneralCodec(this);
@@ -31,82 +32,30 @@ namespace Frost.SharpMediaInfo.Output {
             CoverInfo = new CoverInfo(this);
             OriginalSourceInfo = new OriginalSourceInfo(this);
             FileInfo = new FileInfo(this);
+
+            Video = new GeneralInfo(this, StreamKind.Video);
+            Audio = new GeneralInfo(this, StreamKind.Audio);
+            Text = new GeneralInfo(this, StreamKind.Text);
+            Other = new GeneralInfo(this, StreamKind.Other);
+            Image = new GeneralInfo(this, StreamKind.Image);
+            Menu = new GeneralInfo(this, StreamKind.Menu);
         }
 
         /// <summary>Number of general streams</summary>
         public long? GeneralCount { get { return TryParseLong("GeneralCount"); } }
 
-        /// <summary>Number of video streams</summary>
-        public long? VideoCount { get { return TryParseLong("VideoCount"); } }
-        /// <summary>Video Codecs in this file, separated by /</summary>
-        public string VideoFormatList { get { return this["Video_Format_List"]; } }
-        /// <summary>Video Codecs in this file with popular name (hint), separated by /</summary>
-        public string VideoFormatWithHintList { get { return this["Video_Format_WithHint_List"]; } }
-        /// <summary>Deprecated, do not use in new projects</summary>
-        public string VideoCodecList { get { return this["Video_Codec_List"]; } }
-        /// <summary>Video languagesin this file, full names, separated by /</summary>
-        public string VideoLanguageList { get { return this["Video_Language_List"]; } }
-
-        /// <summary>Number of audio streams</summary>
-        public long? AudioCount { get { return TryParseLong("AudioCount"); } }
-        /// <summary>Audio Codecs in this file,separated by /</summary>
-        public string AudioFormatList { get { return this["Audio_Format_List"]; } }
-        /// <summary>Audio Codecs in this file with popular name (hint), separated by /</summary>
-        public string AudioFormatWithHintList { get { return this["Audio_Format_WithHint_List"]; } }
-        /// <summary>Deprecated, do not use in new projects</summary>
-        public string AudioCodecList { get { return this["Audio_Codec_List"]; } }
-        /// <summary>Audio languages in this file separated by /</summary>
-        public string AudioLanguageList { get { return this["Audio_Language_List"]; } }
-
-        /// <summary>Number of text streams</summary>
-        public long? TextCount { get { return TryParseLong("TextCount"); } }
-        /// <summary>Text Codecs in this file, separated by /</summary>
-        public string TextFormatList { get { return this["Text_Format_List"]; } }
-        /// <summary>Text Codecs in this file with popular name (hint),separated by /</summary>
-        public string TextFormatWithHintList { get { return this["Text_Format_WithHint_List"]; } }
-        /// <summary>Deprecated, do not use in new projects</summary>
-        public string TextCodecList { get { return this["Text_Codec_List"]; } }
-        /// <summary>Text languages in this file, separated by /</summary>
-        public string TextLanguageList { get { return this["Text_Language_List"]; } }
-
-        /// <summary>Number of other streams</summary>
-        public long? OtherCount { get { return TryParseLong("OtherCount"); } }
-        /// <summary>Other formats in this file, separated by /</summary>
-        public string OtherFormatList { get { return this["Other_Format_List"]; } }
-        /// <summary>Other formats in this file with popular name (hint), separated by /</summary>
-        public string OtherFormatWithHintList { get { return this["Other_Format_WithHint_List"]; } }
-        /// <summary>Deprecated, do not use in new projects</summary>
-        public string OtherCodecList { get { return this["Other_Codec_List"]; } }
-        /// <summary>Chapters languages in this file, separated by /</summary>
-        public string OtherLanguageList { get { return this["Other_Language_List"]; } }
-
-        /// <summary>Number of image streams</summary>
-        public long? ImageCount { get { return TryParseLong("ImageCount"); } }
-        /// <summary>Image Codecs in this file, separated by /</summary>
-        public string ImageFormatList { get { return this["Image_Format_List"]; } }
-        /// <summary>Image Codecs in this file with popular name (hint), separated by /</summary>
-        public string ImageFormatWithHintList { get { return this["Image_Format_WithHint_List"]; } }
-        /// <summary>Deprecated, do not use in new projects</summary>
-        public string ImageCodecList { get { return this["Image_Codec_List"]; } }
-        /// <summary>Image languages in this file, separated by /</summary>
-        public string ImageLanguageList { get { return this["Image_Language_List"]; } }
-
-        /// <summary>Number of menu streams</summary>
-        public long? MenuCount { get { return TryParseLong("MenuCount"); } }
-        /// <summary>Menu Codecsin this file, separated by /</summary>
-        public string MenuFormatList { get { return this["Menu_Format_List"]; } }
-        /// <summary>Menu Codecs in this file with popular name (hint),separated by /</summary>
-        public string MenuFormatWithHintList { get { return this["Menu_Format_WithHint_List"]; } }
-        /// <summary>Deprecated, do not use in new projects</summary>
-        public string MenuCodecList { get { return this["Menu_Codec_List"]; } }
-        /// <summary>Menu languages in this file, separated by /</summary>
-        public string MenuLanguageList { get { return this["Menu_Language_List"]; } }
+        public GeneralInfo Video { get; private set; }
+        public GeneralInfo Audio { get; private set; }
+        public GeneralInfo Text { get; private set; }
+        public GeneralInfo Other { get; private set; }
+        public GeneralInfo Image { get; private set; }
+        public GeneralInfo Menu { get; private set; }
 
         /// <summary>Format used</summary>
         public GeneralFormat Format { get; private set; }
 
         /// <summary>Internet Media Type (aka MIME Type, Content-Type)</summary>
-        public string InternetMediaType { get { return this["InternetMediaType"]; } }
+        public string MIME { get { return this["InternetMediaType"]; } }
 
         /// <summary>If Audio and video are muxed</summary>
         public string Interleaved { get { return this["Interleaved"]; } }
@@ -115,7 +64,7 @@ namespace Frost.SharpMediaInfo.Output {
         public GeneralCodec Codec { get; private set; }
 
         /// <summary>Play time of the stream in ms</summary>
-        public long? Duration { get { return TryParseLong("Duration"); } }
+        public TimeSpan? Duration { get { return TryParseTimeSpan("Duration"); } }
         public GeneralDurationInfo DurationInfo { get; private set; }
 
         /// <summary>Bit rate of all streams in bps</summary>

@@ -10,7 +10,7 @@ namespace Frost.SharpMediaInfo.Output.Properties.Formats {
         }
 
         /// <summary>Format used</summary>
-        public string Summary { get { return MediaStream["Format"]; } }
+        public string Name { get { return MediaStream["Format"]; } }
 
         /// <summary>Info about the format</summary>
         public string Info { get { return MediaStream["Format/Info"]; } }
@@ -34,6 +34,6 @@ namespace Frost.SharpMediaInfo.Output.Properties.Formats {
         public string Compression { get { return MediaStream["Format_Compression"]; } }
 
         /// <summary>Settings needed for decoder used, summary</summary>
-        public string Settings { get { return MediaStream["Format_Settings"]; } }
+        public string[] Settings { get { return MediaStream.ParseStringList("Format_Settings"); } }
     }
 }

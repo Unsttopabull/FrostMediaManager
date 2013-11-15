@@ -1,4 +1,5 @@
-﻿using Frost.SharpMediaInfo.Output.Properties;
+﻿using System;
+using Frost.SharpMediaInfo.Output.Properties;
 using Frost.SharpMediaInfo.Output.Properties.Duration;
 using Frost.SharpMediaInfo.Output.Properties.Formats;
 
@@ -22,7 +23,7 @@ namespace Frost.SharpMediaInfo.Output {
         public string MuxingMode { get { return this["MuxingMode"]; } }
 
         /// <summary>Play time of the stream in ms</summary>
-        public long? Duration { get { return TryParseLong("Duration"); } }
+        public TimeSpan? Duration { get { return TryParseTimeSpan("Duration"); } }
         public GeneralDurationInfo DurationInfo { get; private set; }
 
         /// <summary>Frames per second</summary>

@@ -9,13 +9,16 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         #region Constructors
 
         /// <summary>Initializes a new instance of the <see cref="Video"/> class.</summary>
+        public Video() {
+            Movie = new Movie();
+            File = new File();            
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="Video"/> class.</summary>
         /// <param name="codec">The codec this video is encoded in.</param>
         /// <param name="width">The width of the video.</param>
         /// <param name="height">The height of the video.</param>
-        public Video(string codec, int width, int height) {
-            Movie = new Movie();
-            File = new File();
-
+        public Video(string codec, int width, int height) : this() {
             Codec = codec;
 
             if (height > 0) {

@@ -7,7 +7,7 @@
         }
 
         public string Name { get { return _media["Season"]; } }
-        public string Position { get { return _media["Season_Position"]; } }
+        public long? Position { get { return _media.TryParseLong("Season_Position"); } }
         public long? PositionTotal { get { return _media.TryParseLong("Season_Position_Total"); } }
     }
 }

@@ -10,7 +10,9 @@ namespace Frost.FeatureDetector {
         }
 
         public Video GetVideInfo() {
-            return null;
+            Video v = new Video();
+
+            return v;
         }
     }
 }

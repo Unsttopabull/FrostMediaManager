@@ -19,6 +19,6 @@
         public string Date { get { return _media["Encoded_Library/Date"]; } }
 
         /// <summary>Parameters used by the software</summary>
-        public string Settings { get { return _media["Encoded_Library_Settings"]; } }
+        public string[] Settings { get { return _media.ParseStringList("Encoded_Library_Settings"); } }
     }
 }

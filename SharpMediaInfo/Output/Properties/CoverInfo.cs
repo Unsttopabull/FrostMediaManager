@@ -1,14 +1,16 @@
-﻿namespace Frost.SharpMediaInfo.Output.Properties {
-    public class CoverInfo {
-        private MediaGeneral _media;
+﻿
+namespace Frost.SharpMediaInfo.Output.Properties {
 
-        public CoverInfo(MediaGeneral mediaGeneral) {
+    public class CoverInfo {
+        private Media _media;
+
+        public CoverInfo(Media mediaGeneral) {
             _media = mediaGeneral;
         }
 
-        public string CoverDescription { get { return _media["Cover_Description"]; } }
-        public string CoverType { get { return _media["Cover_Type"]; } }
-        public string CoverMime { get { return _media["Cover_Mime"]; } }
-        public string CoverData { get { return _media["Cover_Data"]; } }
+        public string Description { get { return _media["Cover_Description"]; } }
+        public string Type { get { return _media["Cover_Type"]; } }
+        public string Mime { get { return _media["Cover_Mime"]; } }
+        public string Data { get { return _media["Cover_Data"]; } }
     }
 }

@@ -43,6 +43,6 @@
         public string String5 { get { return _media[_propNames[5]]; } }
 
         /// <summary>Stream size divided by file size</summary>
-        public string Proportion { get { return _media[_propNames[6]]; } }
+        public float? Proportion { get { return _media.TryParseLong(_propNames[6]); } }
     }
 }

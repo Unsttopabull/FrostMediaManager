@@ -1,4 +1,6 @@
-﻿namespace Frost.SharpMediaInfo.Output.Properties.General {
+﻿using System;
+
+namespace Frost.SharpMediaInfo.Output.Properties.General {
     public class FileInfo {
         private readonly Media _media;
 
@@ -8,23 +10,23 @@
         }
 
         /// <summary>The time that the file was created on the file system</summary>
-        public string CreatedDate { get { return _media["File_Created_Date"]; } }
+        public DateTime? CreatedDate { get { return _media.TryParseDateTime("File_Created_Date", true); } }
         /// <summary>The time that the file was created on the file system (Warning: this field depends of local configuration, do not use it in an international database)</summary>
-        public string CreatedDateLocal { get { return _media["File_Created_Date_Local"]; } }
+        public DateTime? CreatedDateLocal { get { return _media.TryParseDateTime("File_Created_Date_Local", false); } }
 
         /// <summary>The time that the file was modified on the file system</summary>
-        public string ModifiedDate { get { return _media["File_Modified_Date"]; } }
+        public DateTime? ModifiedDate { get { return _media.TryParseDateTime("File_Modified_Date", true); } }
         /// <summary>The time that the file was modified on the file system (Warning: this field depends of local configuration, do not use it in an international database)</summary>
-        public string FileModifiedDateLocal { get { return _media["File_Modified_Date_Local"]; } }
+        public DateTime? ModifiedDateLocal { get { return _media.TryParseDateTime("File_Modified_Date_Local", false); } }
 
         /// <summary>File size in bytes</summary>
-        public string FileSize { get { return _media["FileSize"]; } }
+        public long? FileSize { get { return _media.TryParseLong("FileSize"); } }
         public FileSizeInfo FileSizeInfo { get; private set; }
 
         /// <summary>Complete name (Folder+Name+Extension)</summary>
-        public string CompleteName { get { return _media["CompleteName"]; } }
+        public string FullPath { get { return _media["CompleteName"]; } }
         /// <summary>Complete name (Folder+Name+Extension) of the last file (in the case of a sequence of files)</summary>
-        public string CompleteNameLast { get { return _media["CompleteName_Last"]; } }
+        public string FullPathLast { get { return _media["CompleteName_Last"]; } }
 
         /// <summary>Folder name only</summary>
         public string FolderName { get { return _media["FolderName"]; } }

@@ -7,7 +7,7 @@
         }
 
         /// <summary>Codec ID (found in some containers)</summary>
-        public string Value { get { return _media["CodecID"]; } }
+        public string ID { get { return _media["CodecID"]; } }
 
         /// <summary>Codec ID (found in some containers)</summary>
         public string String { get { return _media["CodecID/String"]; } }

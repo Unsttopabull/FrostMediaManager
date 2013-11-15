@@ -1,4 +1,5 @@
-﻿namespace Frost.SharpMediaInfo.Output.Properties.FrameRate {
+﻿
+namespace Frost.SharpMediaInfo.Output.Properties.FrameRate {
 
     public class FrameRateInfo {
         protected readonly Media Media;
@@ -16,7 +17,18 @@
         public string OriginalString { get { return Media["FrameRate_Original/String"]; } }
 
         /// <summary>Frame rate mode (CFR, VFR)</summary>
-        public string Mode { get { return Media["FrameRate_Mode"]; } }
+        public BitOrFrameRateMode Mode {
+            get {
+                switch (Media["FrameRate_Mode"]) {
+                    case "VBR":
+                        return BitOrFrameRateMode.Variable;
+                    case "CFR":
+                        return BitOrFrameRateMode.Constant;
+                    default:
+                        return BitOrFrameRateMode.Unknown;
+                }
+            }
+        }
         /// <summary>Frame rate mode (Constant, Variable)</summary>
         public string ModeString { get { return Media["FrameRate_Mode/String"]; } }
 

@@ -43,9 +43,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LibraryInfo.cs" />
+    <Compile Include="Output\Properties\Codecs\AudioCodecSettings.cs" />
+    <Compile Include="Output\Properties\Codecs\VideoCodecSettings.cs" />
     <Compile Include="Output\Properties\CoverInfo.cs" />
     <Compile Include="Output\Properties\Duration\FrameDuration.cs" />
     <Compile Include="Output\Properties\General\FileInfo.cs" />
+    <Compile Include="Output\Properties\General\GeneralInfo.cs" />
     <Compile Include="Output\Properties\OriginalSourceInfo.cs" />
     <Compile Include="Output\Properties\PartInfo.cs" />
     <Compile Include="Output\Properties\General\Album.cs" />
