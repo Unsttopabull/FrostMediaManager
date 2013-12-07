@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SharpJDK")]
+[assembly: AssemblyTitle("Frost.SharpLanguageDetect")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SharpJDK")]
+[assembly: AssemblyProduct("Frost.SharpLanguageDetect")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("4b90261d-6b72-4c8c-bfbb-e4d0fc449edb")]
+[assembly: Guid("3896de97-417b-45e8-9c95-70b5ef29d0cc")]
 
 // Version information for an assembly consists of the following four values:
 //
