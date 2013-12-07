@@ -17,15 +17,15 @@ namespace Frost.SharpMediaInfo.Output.Properties.FrameRate {
         public string OriginalString { get { return Media["FrameRate_Original/String"]; } }
 
         /// <summary>Frame rate mode (CFR, VFR)</summary>
-        public BitOrFrameRateMode Mode {
+        public FrameOrBitRateMode Mode {
             get {
                 switch (Media["FrameRate_Mode"]) {
                     case "VBR":
-                        return BitOrFrameRateMode.Variable;
+                        return FrameOrBitRateMode.Variable;
                     case "CFR":
-                        return BitOrFrameRateMode.Constant;
+                        return FrameOrBitRateMode.Constant;
                     default:
-                        return BitOrFrameRateMode.Unknown;
+                        return FrameOrBitRateMode.Unknown;
                 }
             }
         }

@@ -21,6 +21,7 @@ namespace Frost.SharpMediaInfo.Output.Properties.General {
 
         /// <summary>File size in bytes</summary>
         public long? FileSize { get { return _media.TryParseLong("FileSize"); } }
+        /// <summary>Gets the file size information.</summary>
         public FileSizeInfo FileSizeInfo { get; private set; }
 
         /// <summary>Complete name (Folder+Name+Extension)</summary>
@@ -29,18 +30,18 @@ namespace Frost.SharpMediaInfo.Output.Properties.General {
         public string FullPathLast { get { return _media["CompleteName_Last"]; } }
 
         /// <summary>Folder name only</summary>
-        public string FolderName { get { return _media["FolderName"]; } }
+        public string FolderPath { get { return _media["FolderName"]; } }
         /// <summary>Folder name only of the last file (in the case of a sequence of files)</summary>
-        public string FolderNameLast { get { return _media["FolderName_Last"]; } }
+        public string FolderPathLast { get { return _media["FolderName_Last"]; } }
 
-        /// <summary>File name only</summary>
+        /// <summary>File name without extension</summary>
         public string FileName { get { return _media["FileName"]; } }
-        /// <summary>File name only of the last file (in the case of a sequence of files)</summary>
+        /// <summary>File name without extension of the last file (in the case of a sequence of files)</summary>
         public string FileNameLast { get { return _media["FileName_Last"]; } }
 
         /// <summary>File extension only</summary>
-        public string FileExtension { get { return _media["FileExtension"]; } }
+        public string Extension { get { return _media["FileExtension"]; } }
         /// <summary>File extension only of the last file (in the case of a sequence of files)</summary>
-        public string FileExtensionLast { get { return _media["FileExtension_Last"]; } }
+        public string ExtensionLast { get { return _media["FileExtension_Last"]; } }
     }
 }

@@ -58,7 +58,22 @@
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Models\CertificationBase.cs" />
+    <Compile Include="Models\DB\Jukebox\XjbGenreInit.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Models\DB\Jukebox\XjbMovie.cs" />
+    <Compile Include="Models\DB\MovieVo\GenreInit.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\DB\MovieVo\ISO\ISO3166_1.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\DB\MovieVo\ISO\ISO639.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\DB\MovieVo\Language.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Models\DB\MovieVo\People\Actor.cs" />
     <Compile Include="Models\DB\MovieVo\People\MovieActor.cs" />
     <Compile Include="Models\DB\MovieVo\Arts\Cover.cs" />
@@ -137,6 +152,24 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SeedInitializer.cs" />
+    <Compile Include="Util\ISO\ISOCode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\ISO\ISOCodes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\ISO\ISOCountryCode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\ISO\ISOCountryCodes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\ISO\ISOLanguageCode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\ISO\ISOLanguageCodes.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="XmlIndentedTextWriter.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -165,7 +198,12 @@
     <Content Include="Models\DB\XBMC\extendSettings.sql" />
     <Content Include="Models\DB\XBMC\extendStreamDetails.sql" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SharpMediaInfo\SharpMediaInfo.csproj">
+      <Project>{4EA24C1B-3AF2-4EB0-AA98-62EAFB0C2682}</Project>
+      <Name>SharpMediaInfo</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

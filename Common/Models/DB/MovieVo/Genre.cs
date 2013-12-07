@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.ModelConfiguration;
+using Frost.Common.Models.DB.Jukebox;
 
 namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents a movie genre.</summary>
-    public class Genre : IEquatable<Genre> {
+    public partial class Genre : IEquatable<Genre> {
 
         /// <summary>Initializes a new instance of the <see cref="Genre"/> class.</summary>
         public Genre() {
@@ -68,6 +69,17 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <returns>An instance of <see cref="Genre"/> with string as a genre name</returns>
         public static implicit operator Genre(string genreName) {
             return new Genre(genreName);
+        }
+
+        /// <summary>Converts a <see cref="Genre"/> instance to an instance of <see cref="Frost.Common.Models.DB.Jukebox.XjbGenre">XjbGenre</see>.</summary>
+        /// <param name="genre">The genre to convert.</param>
+        /// <returns>An instance of <see cref="Frost.Common.Models.DB.Jukebox.XjbGenre">XjbGenre</see> converted from <see cref="Genre"/>.</returns>
+        public static explicit operator XjbGenre(Genre genre) {
+            string lower = genre.Name.ToLower();
+
+            return GenreTags.ContainsKey(lower)
+                    ? new XjbGenre(GenreTags[lower])
+                    : new XjbGenre(genre.Name);
         }
 
         internal class GenreConfiguration : EntityTypeConfiguration<Genre> {

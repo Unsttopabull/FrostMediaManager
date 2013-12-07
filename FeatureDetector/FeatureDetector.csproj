@@ -7,7 +7,7 @@
     <ProjectGuid>{8542C013-AA9A-4852-98FA-6F05CC037A91}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Frost.FeatureDetector</RootNamespace>
+    <RootNamespace>Frost.DetectFeatures</RootNamespace>
     <AssemblyName>Frost.FeatureDetector</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -45,6 +45,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FeatureDetector.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="FeatureDetector.Subtitles.cs" />
+    <Compile Include="FeatureDetector.Video.cs" />
+    <Compile Include="FileNameParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -43,6 +43,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LibraryInfo.cs" />
+    <Compile Include="MediaFileBase.cs" />
+    <Compile Include="MediaListFile.cs" />
+    <Compile Include="Output\EnumerableMedia.cs" />
     <Compile Include="Output\Properties\Codecs\AudioCodecSettings.cs" />
     <Compile Include="Output\Properties\Codecs\VideoCodecSettings.cs" />
     <Compile Include="Output\Properties\CoverInfo.cs" />

@@ -1,24 +1,34 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.ModelConfiguration;
 
 namespace Frost.Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents information about a subtitle stream in a file.</summary>
     public class Subtitle : IEquatable<Subtitle> {
 
-        /// <summary>Initializes a new instance of the <see cref="Subtitle"/> class.</summary>
-        public Subtitle() {
+        /// <summary>Initializes a new instance of the <see cref="Subtitle" /> class.</summary>
+        /// <param name="lang">The language info of this subtitle.</param>
+        public Subtitle(Language lang = null) {
             Movie = new Movie();
             File = new File();
+
+            if (lang == null) {
+                Language = new Language();
+            }
+            else {
+                Language = lang;
+            }
         }
 
         /// <summary>Initializes a new instance of the <see cref="Subtitle"/> class.</summary>
         /// <param name="language">The language of this subtitle.</param>
-        /// <param name="embededInVideo">If the subtitle is embeded in the video set to <c>true</c></param>
-        /// <param name="forHearingImpaired"></param>
-        public Subtitle(string language, bool embededInVideo = false, bool forHearingImpaired = false) {
-            Language = language;
+        /// <param name="typeFormat">The type or format of the subtitle.</param>
+        /// <param name="embededInVideo">If the subtitle is embeded in the video set to <c>true</c>.</param>
+        /// <param name="forHearingImpaired">If the subtitle is for people that are hearing impaired.</param>
+        public Subtitle(string language, string typeFormat = null, bool embededInVideo = false, bool forHearingImpaired = false) : this(new Language(language)) {
+            Format = typeFormat;
             EmbededInVideo = embededInVideo;
             ForHearingImpaired = forHearingImpaired;
         }
@@ -30,9 +40,13 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         [Key]
         public long Id { get; set; }
 
-        /// <summary>Gets or sets the language this subtitle is in.</summary>
-        /// <value>The language of this subtitle.</value>
-        public string Language { get; set; }
+        /// <summary>Gets or sets the type or format of the subtitle.</summary>
+        /// <value>The type or format of the subtitle.</value>
+        public string Format { get; set; }
+
+        /// <summary>Gets or sets the character set this subtitle is encoded in.</summary>
+        /// <value>The character set this subtitle is encoded in</value>
+        public string Encoding { get; set; }
 
         /// <summary>Gets or sets a value indicating whether this subtitle is embeded in the movie video.</summary>
         /// <value>Is <c>true</c> if this subtitle is embeded in the movie video; otherwise, <c>false</c>.</value>
@@ -45,6 +59,9 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         #endregion
 
         #region Foreign Keys
+        /// <summary>Gets or sets the language foreign key.</summary>
+        /// <value>The language foreign key.</value>
+        public long? LanguageId { get; set; }
 
         /// <summary>Gets or sets the movie foreign key.</summary>
         /// <value>The movie foreign key.</value>
@@ -57,6 +74,11 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         #endregion
 
         #region Associations/Related tables
+
+        /// <summary>Gets or sets the language this subtitle is in.</summary>
+        /// <value>The language of this subtitle.</value>
+        [ForeignKey("LanguageId")]
+        public Language Language { get; set; }
 
         /// <summary>Gets or sets the file this subtitle is contained in.</summary>
         /// <value>The file this subtitle is contained in.</value>
@@ -93,6 +115,12 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
                    FileId == other.FileId;
         }
 
+        internal class Configuration : EntityTypeConfiguration<Subtitle> {
+            public Configuration() {
+                HasOptional(s => s.Language);
+            }
+
+        }
     }
 
 }

@@ -1,14 +1,56 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace Frost.SharpMediaInfo {
-    public class MediaInfoList {
-        //Import of DLL functions. DO NOT USE until you know what you do (MediaInfo DLL do NOT use CoTaskMemAlloc to allocate memory)
-        private readonly IntPtr _handle;
 
-        public MediaInfoList() {
+    public class MediaInfoList : IDisposable, IEnumerable<MediaListFile> {
+
+        private readonly IntPtr _handle;
+        private MediaListFile[] _mediaList;
+        private bool _isDisposed;
+        private readonly int _count;
+
+        #region Constructors
+        private MediaInfoList() {
             _handle = MediaInfoList_New();
         }
+
+        public MediaInfoList(string fileOrFolderPath, InfoFileOptions options = InfoFileOptions.Nothing, bool cacheInfom = true, bool allInfoCache = true) : this() {
+            _count = Open(fileOrFolderPath, options);
+
+            InitFiles(cacheInfom, allInfoCache);
+        }
+
+        public MediaInfoList(IEnumerable<string> filePaths, InfoFileOptions options = InfoFileOptions.Nothing, bool cacheInfom = true, bool allInfoCache = true) : this() {
+            //opening multiple files in a single go currently not supported (even if documentation says otherwise)
+            foreach (string filePath in filePaths) {
+                if (Open(filePath, options) > 0) {
+                    _count++;
+                }
+            }
+
+            InitFiles(cacheInfom, allInfoCache);
+        }
+
+        private void InitFiles(bool cacheInfom, bool allInfoCache) {
+            _mediaList = new MediaListFile[_count];
+            for (int fileNum = 0; fileNum < _count; fileNum++) {
+                _mediaList[fileNum] = new MediaListFile(_handle, fileNum, cacheInfom, allInfoCache);
+            }
+        }
+
+        #endregion
+
+        #region P/Invoke C Functions
+
+        //Import of DLL functions. DO NOT USE until you know what you do (MediaInfo DLL do NOT use CoTaskMemAlloc to allocate memory)
+
+        [DllImport("MediaInfo.dll")]
+        private static extern IntPtr MediaInfoList_Open(IntPtr handle, [MarshalAs(UnmanagedType.LPWStr)] string fileName, IntPtr options);
 
         [DllImport("MediaInfo.dll")]
         private static extern IntPtr MediaInfoList_New();
@@ -17,171 +59,122 @@ namespace Frost.SharpMediaInfo {
         private static extern void MediaInfoList_Delete(IntPtr handle);
 
         [DllImport("MediaInfo.dll")]
-        private static extern IntPtr MediaInfoList_Open(IntPtr handle, [MarshalAs(UnmanagedType.LPWStr)] string fileName, IntPtr options);
-
-        [DllImport("MediaInfo.dll")]
         private static extern void MediaInfoList_Close(IntPtr handle, IntPtr filePos);
 
-        [DllImport("MediaInfo.dll")]
-        private static extern IntPtr MediaInfoList_Inform(IntPtr handle, IntPtr filePos, IntPtr reserved);
+        #endregion
 
-        [DllImport("MediaInfo.dll")]
-        private static extern IntPtr MediaInfoList_GetI(IntPtr handle, IntPtr filePos, IntPtr streamKind, IntPtr streamNumber, IntPtr parameter, IntPtr kindOfInfo);
+        #region Find files
+        public MediaListFile GetFirstFileWithPattern(string regex) {
+            return _mediaList.FirstOrDefault(mlf => Regex.IsMatch(mlf.General.FileInfo.FullPath, regex));
+        }
 
-        [DllImport("MediaInfo.dll")]
-        private static extern IntPtr MediaInfoList_Get(IntPtr handle, IntPtr filePos, IntPtr streamKind, IntPtr streamNumber, [MarshalAs(UnmanagedType.LPWStr)] string parameter, IntPtr kindOfInfo, IntPtr kindOfSearch);
+        public MediaListFile GetFirstFileWithPattern(Regex regex) {
+            return _mediaList.FirstOrDefault(mlf => regex.IsMatch(mlf.General.FileInfo.FullPath));
+        }
 
-        [DllImport("MediaInfo.dll")]
-        private static extern IntPtr MediaInfoList_Option(IntPtr handle, [MarshalAs(UnmanagedType.LPWStr)] string option, [MarshalAs(UnmanagedType.LPWStr)] string value);
+        public IEnumerable<MediaListFile> GetFilesWithPattern(string regex) {
+            return _mediaList.Where(mlf => Regex.IsMatch(mlf.General.FileInfo.FullPath, regex));
+        }
 
-        [DllImport("MediaInfo.dll")]
-        private static extern IntPtr MediaInfoList_State_Get(IntPtr handle);
+        public IEnumerable<MediaListFile> GetFilesWithPattern(Regex regex) {
+            return _mediaList.Where(mlf => regex.IsMatch(mlf.General.FileInfo.FullPath));
+        }
+        #endregion
 
-        [DllImport("MediaInfo.dll")]
-        private static extern IntPtr MediaInfoList_Count_Get(IntPtr handle, IntPtr filePos, IntPtr streamKind, IntPtr streamNumber);
+        #region Properties / Methods
 
-        //MediaInfo class
+        /// <summary>Gets the file paths of files in the list.</summary>
+        /// <returns>Filepaths of files in the list.</returns>
+        public IEnumerable<string> GetFilePaths() {
+            return _mediaList.Select(ml => ml.General.FileInfo.FullPath);
+        }
+
+        /// <summary>Gets the number of files in this list.</summary>
+        /// <returns>The number of files in this list.</returns>
+        public int Count() {
+            return _count;
+        }
+
+        /// <summary>Gets a value indicating whether any of the files in the list are still open.</summary>
+        /// <value>Is <c>true</c> if any of the files in the list are still open; otherwise, <c>false</c>.</value>
+        public bool AnyOpen { get { return NumberOfOpenFiles > 0; } }
+
+        /// <summary>Gets the number of open files in a list.</summary>
+        /// <value>The number of open files in a list.</value>
+        public int NumberOfOpenFiles {
+            get { return _mediaList.Count(mlf => mlf.IsOpen); }
+        }
+        #endregion
+
+        #region Indexers
+        public MediaListFile this[int filePos] {
+            get { return _mediaList[filePos]; }
+        }
+
+        public MediaListFile this[string fullPath] {
+            get { return _mediaList.FirstOrDefault(mlf => mlf.IsOpen && mlf.General.FileInfo.FullPath == fullPath); }
+        }
+
+        #endregion
+
+        #region MediaInfo List Interop
+
+        /// <summary>Open one or more files and collect information about them (technical information and tags).</summary>
+        /// <param name="pathNames">Full name of file(s) to open or Full name of folder(s) to open (if multiple names, names must be separated by "|").</param>
+        /// <param name="options">FileOption_Recursive = Recursive mode for folders FileOption_Close = Close all already opened files before.</param>
+        /// <returns>Number	of files successfuly added.</returns>
+        private int Open(String pathNames, InfoFileOptions options = InfoFileOptions.Nothing) {
+            return (int) MediaInfoList_Open(_handle, pathNames, (IntPtr) options);
+        }
+
+        #endregion
+
+        #region IDisposable
+
+        public bool IsDisposed {
+            get { return _isDisposed; }
+            private set { _isDisposed = value; }
+        }
+
+        /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
+        void IDisposable.Dispose() {
+            Close();
+        }
+
+        /// <summary>Closes all files in the list and disposes all allocated resources.</summary>
+        public void Close() {
+            if (IsDisposed) {
+                const int ALL_FILES = -1;
+                MediaInfoList_Close(_handle, (IntPtr) ALL_FILES);
+
+                MediaInfoList_Delete(_handle);
+                IsDisposed = true;
+
+                GC.SuppressFinalize(this);
+            }
+        }
 
         ~MediaInfoList() {
-            MediaInfoList_Delete(_handle);
+            Close();
         }
 
-        //Default values, if you know how to set default values in C#, say me
-        /// <summary>Open one or more files and collect information about them (technical information and tags)</summary>
-        /// <param name="fileName">Full name of file(s) to open or Full name of folder(s) to open (if multiple names, names must be separated by "|")</param>
-        /// <returns>Number	of files successfuly added</returns>
-        public void Open(String fileName) {
-            Open(fileName, 0);
+        #endregion
+
+        #region IEnumerable
+
+        /// <summary>Returns an enumerator that iterates through the collection.</summary>
+        /// <returns>A <see cref="T:System.Collections.Generic.IEnumerator`1">IEnumerator&lt;out T&gt;</see> that can be used to iterate through the collection.</returns>
+        public IEnumerator<MediaListFile> GetEnumerator() {
+            return ((IEnumerable<MediaListFile>) _mediaList).GetEnumerator();
         }
 
-        /// <summary>Open one or more files and collect information about them (technical information and tags)</summary>
-        /// <param name="fileName">Full name of file(s) to open or Full name of folder(s) to open (if multiple names, names must be separated by "|")</param>
-        /// <param name="options">FileOption_Recursive = Recursive mode for folders FileOption_Close = Close all already opened files before</param>
-        /// <returns>Number	of files successfuly added</returns>
-        public int Open(String fileName, InfoFileOptions options) {
-            return (int) MediaInfoList_Open(_handle, fileName, (IntPtr) options);
+        /// <summary>Returns an enumerator that iterates through a collection.</summary>
+        /// <returns>An <see cref="System.Collections.IEnumerator">IEnumerator</see> object that can be used to iterate through the collection.</returns>
+        IEnumerator IEnumerable.GetEnumerator() {
+            return GetEnumerator();
         }
 
-        /// <summary>(NOT IMPLEMENTED YET) Save all files</summary>
-        /// <param name="filePos">File position </param>
-        public void Close(int filePos) {
-            MediaInfoList_Close(_handle, (IntPtr) filePos);
-        }
-
-        /// <summary>Get all details about a file in one string</summary>
-        /// <param name="filePos">File position</param>
-        /// <remarks>you can know the position in searching the filename with MediaInfoList::Get(FilePos, 0, 0, "CompleteName")</remarks>
-        /// <remarks>You can change default presentation with Inform_Set()</remarks>
-        /// <returns></returns>
-        public String Inform(int filePos) {
-            return Marshal.PtrToStringUni(MediaInfoList_Inform(_handle, (IntPtr) filePos, (IntPtr) 0));
-        }
-
-        /// <summary>Get a piece of information about a file (parameter is an integer)</summary>
-        /// <param name="filePos">File position</param>
-        /// <param name="streamKind">Kind of stream (general, video, audio...)</param>
-        /// <param name="streamNumber">Stream number in Kind of stream (first, second...)</param>
-        /// <param name="parameter">Parameter you are looking for in the stream (Codec, width, bitrate...), in integer format (first parameter, second parameter...)</param>
-        /// <param name="kindOfInfo">Kind of information you want about the parameter (the text, the measure, the help...)</param>
-        /// <param name="kindOfSearch">Where to look for the parameter</param>
-        /// <returns>a string about information you search, an empty string if there is a problem</returns>
-        public String Get(int filePos, StreamKind streamKind, int streamNumber, String parameter, InfoKind kindOfInfo, InfoKind kindOfSearch) {
-            return Marshal.PtrToStringUni(MediaInfoList_Get(_handle, (IntPtr) filePos, (IntPtr) streamKind, (IntPtr) streamNumber, parameter, (IntPtr) kindOfInfo, (IntPtr) kindOfSearch));
-        }
-
-        /// <summary>Get a piece of information about a file (parameter is an integer)</summary>
-        /// <param name="filePos">File position</param>
-        /// <param name="streamKind">Kind of stream (general, video, audio...)</param>
-        /// <param name="streamNumber">Stream number in Kind of stream (first, second...)</param>
-        /// <param name="parameter">arameter you are looking for in the stream (Codec, width, bitrate...), in integer format (first parameter, second parameter...)</param>
-        /// <param name="kindOfInfo">Kind of information you want about the parameter (the text, the measure, the help...)</param>
-        /// <returns>a string about information you search, an empty string if there is a problem</returns>
-        public String Get(int filePos, StreamKind streamKind, int streamNumber, int parameter, InfoKind kindOfInfo) {
-            return Marshal.PtrToStringUni(MediaInfoList_GetI(_handle, (IntPtr) filePos, (IntPtr) streamKind, (IntPtr) streamNumber, (IntPtr) parameter, (IntPtr) kindOfInfo));
-        }
-
-        /// <summary>Get a piece of information about a file (parameter is an integer)</summary>
-        /// <param name="filePos">File position</param>
-        /// <param name="streamKind">Kind of stream (general, video, audio...)</param>
-        /// <param name="streamNumber">Stream number in Kind of stream (first, second...)</param>
-        /// <param name="parameter">Parameter you are looking for in the stream (Codec, width, bitrate...), in integer format (first parameter, second parameter...)</param>
-        /// <param name="kindOfInfo">Kind of information you want about the parameter (the text, the measure, the help...)</param>
-        /// <returns>a string about information you search, an empty string if there is a problem</returns>
-        public String Get(int filePos, StreamKind streamKind, int streamNumber, String parameter, InfoKind kindOfInfo) {
-            return Get(filePos, streamKind, streamNumber, parameter, kindOfInfo, InfoKind.Name);
-        }
-
-        /// <summary>Get a piece of information about a file (parameter is an integer)</summary>
-        /// <param name="filePos">File position</param>
-        /// <param name="streamKind">Kind of stream (general, video, audio...)</param>
-        /// <param name="streamNumber">Stream number in Kind of stream (first, second...)</param>
-        /// <param name="parameter">Parameter you are looking for in the stream (Codec, width, bitrate...), in integer format (first parameter, second parameter...)</param>
-        /// <returns>a string about information you search, an empty string if there is a problem</returns>
-        public String Get(int filePos, StreamKind streamKind, int streamNumber, String parameter) {
-            return Get(filePos, streamKind, streamNumber, parameter, InfoKind.Text, InfoKind.Name);
-        }
-
-        /// <summary>Get a piece of information about a file (parameter is an integer)</summary>
-        /// <param name="filePos">File position</param>
-        /// <param name="streamKind">Kind of stream (general, video, audio...)</param>
-        /// <param name="streamNumber">Stream number in Kind of stream (first, second...)</param>
-        /// <param name="parameter">Parameter you are looking for in the stream (Codec, width, bitrate...), in integer format (first parameter, second parameter...)</param>
-        /// <returns>a string about information you search, an empty string if there is a problem</returns>
-        public String Get(int filePos, StreamKind streamKind, int streamNumber, int parameter) {
-            return Get(filePos, streamKind, streamNumber, parameter, InfoKind.Text);
-        }
-
-        /// <summary>Configure or get information about MediaInfoLib</summary>
-        /// <param name="option">The name of option</param>
-        /// <param name="value">The value of option</param>
-        /// <returns>Depend of the option: by default "" (nothing) means No, other means Yes</returns>
-        public String Option(String option, String value) {
-            return Marshal.PtrToStringUni(MediaInfoList_Option(_handle, option, value));
-        }
-
-        /// <summary>Get the state of the library</summary>
-        /// <remarks>NOT IMPLEMENTED YET</remarks>
-        /// <returns> 
-        /// <pre><b>below 1000</b> => No information is available for the file yet</pre>
-        /// <pre><b>>= 1000 to 4999</b> => Only local (into the file) information is available, getting Internet information (titles only) is no finished yet</pre>
-        /// <pre><b>5000</b> => (only if Internet connection is accepted) User interaction is needed (use Option() with "Internet_Title_Get") </pre>
-        /// <pre><b>Warning:</b> even there is only one possible, user interaction (or the software) is needed</pre>
-        /// <pre><b>5001 to 10000</b> =>	Only local (into the file) information is available, getting Internet information (all) is no finished yet</pre>
-        /// <pre><b>below 10000</b> => Done</pre>
-        /// </returns>
-        public int StateGet() {
-            return (int) MediaInfoList_State_Get(_handle);
-        }
-
-        /// <summary>Count of streams, or count of piece of information in this stream.</summary>
-        /// <param name="filePos">File position</param>
-        /// <param name="streamKind">Kind of stream (general, video, audio...)</param>
-        /// <param name="streamNumber">Stream number in this kind of stream (first, second...)</param>
-        /// <remarks>you can know the position in searching the filename with MediaInfoList::Get(FilePos, 0, 0, "CompleteName")</remarks>
-        /// <returns></returns>
-        public int CountGet(int filePos, StreamKind streamKind, int streamNumber) {
-            return (int) MediaInfoList_Count_Get(_handle, (IntPtr) filePos, (IntPtr) streamKind, (IntPtr) streamNumber);
-        }
-
-        /// <summary>Get the count of opened files.</summary>
-        /// <param name="filePos">File position</param>
-        /// <param name="streamKind">Kind of stream (general, video, audio...)</param>
-        /// <remarks>you can know the position in searching the filename with MediaInfoList::Get(FilePos, 0, 0, "CompleteName")</remarks>
-        /// <returns></returns>
-        public int CountGet(int filePos, StreamKind streamKind) {
-            return CountGet(filePos, streamKind, -1);
-        }
-
-        /// <summary>(NOT IMPLEMENTED YET) Save all files opened before with Open() (modifications of tags)</summary>
-        public void Close() {
-            Close(-1);
-        }
-
-        /// <summary>Configure or get information about MediaInfoLib</summary>
-        /// <param name="option">The name of option</param>
-        /// <returns>Depend of the option: by default "" (nothing) means No, other means Yes</returns>
-        public String Option(String option) {
-            return Option(option, "");
-        }
+        #endregion
     }
+
 }

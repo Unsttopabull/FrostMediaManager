@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using File = Frost.Common.Models.DB.MovieVo.Files.File;
@@ -11,20 +12,6 @@ namespace Frost.Common {
 
     /// <summary>Contains extension methods to be used in this assembly.</summary>
     public static class Extensions {
-
-        /// <summary>Removes the file extension from the filename.</summary>
-        /// <param name="filename">The filename to remove extension from.</param>
-        /// <returns>A filename without an extension.</returns>
-        public static string WithoutExtension(this string filename) {
-            //get the last occurence of '.' character
-            int extSeparatorIndex = filename.LastIndexOf('.');
-
-            //if '.' was in string return everthing left of it
-            //otherwise return the same filename
-            return extSeparatorIndex != -1
-                ? filename.Substring(0, extSeparatorIndex)
-                : filename;
-        }
 
         /// <summary>Checks if the file is a SAMBA path and converts it to Windows compatible path.</summary>
         /// <param name="fn">The filename to convert to Windows compatible path.</param>
@@ -51,7 +38,8 @@ namespace Frost.Common {
         private static extern long StrFormatByteSize(
             long fileSize,
             [MarshalAs(UnmanagedType.LPTStr)] StringBuilder buffer,
-            int bufferSize);
+            int bufferSize
+        );
 
         /// <summary>Formats the file size in bytes as a pretty printed string.</summary>
         /// <param name="size">The size in bytes.</param>
@@ -68,6 +56,7 @@ namespace Frost.Common {
         /// <typeparam name="T">The type of the object from which to get a string represetation from.</typeparam>
         /// <param name="obj">An IConvertible to get a string representation from.</param>
         /// <returns>A string representation of the object in a culture invariant form.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string ToICString<T>(this T obj) where T : IConvertible {
             return obj.ToString(CultureInfo.InvariantCulture);
         }
@@ -76,6 +65,7 @@ namespace Frost.Common {
         /// <param name="str">The string to split.</param>
         /// <param name="delimiters">The delimiters to split on.</param>
         /// <returns>Array of strings that resulted in the split without empty entries.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string[] SplitWithoutEmptyEntries(this string str, params string[] delimiters) {
             return str.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
         }
@@ -84,6 +74,16 @@ namespace Frost.Common {
         /// <param name="str">The string to split.</param>
         /// <param name="delimiters">The delimiters to split on.</param>
         /// <returns>Array of strings that resulted in the split without empty entries.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<string> SplitWithoutEmptyEntries(this string str, IEnumerable<string> delimiters) {
+            return str.Split(delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        /// <summary>Splits the string on specified delimiters and removes empty entires.</summary>
+        /// <param name="str">The string to split.</param>
+        /// <param name="delimiters">The delimiters to split on.</param>
+        /// <returns>Array of strings that resulted in the split without empty entries.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string[] SplitWithoutEmptyEntries(this string str, params char[] delimiters) {
             return str.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
         }
@@ -114,6 +114,7 @@ namespace Frost.Common {
         /// <returns>A <see cref="HashSet{TTo}"/> with items casted from <b>TFrom</b> to <b>TTo</b>. Elements which fail the cast will be <b>null</b>.</returns>
         /// <remarks>Will throw an exception if the specified cast does not exist.</remarks>
         /// <exception cref="InvalidCastException">Thrown when the specified conversion is not available (eg. the conversion operators are not defined).</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static HashSet<TTo> ToHashSet<TTo, TFrom>(this IEnumerable<TFrom> enumerable) where TTo : class {
             return new HashSet<TTo>(enumerable.Select(a => a as TTo));
         }
@@ -122,6 +123,7 @@ namespace Frost.Common {
         /// <param name="lhs">string to compare.</param>
         /// <param name="compareTo">string to compare to.</param>
         /// <returns>Returns <b>true</b> if strings match, <b>false</b> otherwise.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool OrdinalEquals(this string lhs, string compareTo) {
             return string.Equals(lhs, compareTo, StringComparison.OrdinalIgnoreCase);
         }
@@ -147,6 +149,7 @@ namespace Frost.Common {
         /// <returns>A <see cref="IEnumerable{TTo}"/> with items casted from <b>TFrom</b> to <b>TTo</b>. Elements which fail the cast will be <b>null</b>.</returns>
         /// <remarks>Will throw an exception if the specified cast does not exist.</remarks>
         /// <exception cref="InvalidCastException">Thrown when the specified conversion is not available (eg. the conversion operators are not defined).</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEnumerable<TTo> ConvertIEnumerable<TTo, TFrom>(this IEnumerable<TFrom> enumerable) where TTo : class {
             return enumerable.Select(e => e as TTo);
         }

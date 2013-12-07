@@ -6,16 +6,16 @@ using Frost.SharpMediaInfo.Output.Properties.Formats;
 #pragma warning disable 1591
 
 namespace Frost.SharpMediaInfo.Output {
-    public class MediaOther : Media {
+    public class MediaOther : EnumerableMedia<MediaOther> {
 
-        public MediaOther(MediaFile mediaInfo) : base(mediaInfo, StreamKind.Other) {
-            Format = new Format(this);
+        public MediaOther(MediaFileBase mediaInfo) : base(mediaInfo, StreamKind.Other) {
+            FormatInfo = new Format(this);
             DurationInfo = new GeneralDurationInfo(this);
             LanguageInfo = new LanguageInfo(this);
         }
 
         /// <summary>Info about the Format used</summary>
-        public Format Format { get; private set; }
+        public Format FormatInfo { get; private set; }
 
         public string Type { get { return this["Type"]; } }
 

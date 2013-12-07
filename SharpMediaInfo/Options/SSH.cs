@@ -1,8 +1,8 @@
 ﻿namespace Frost.SharpMediaInfo.Options {
     public class SSH {
-        private readonly MediaFile _mf;
+        private readonly MediaFileBase _mf;
 
-        internal SSH(MediaFile mf) {
+        internal SSH(MediaFileBase mf) {
             _mf = mf;
         }
         

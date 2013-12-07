@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Frost.SharpMediaInfo;
 
 namespace Frost.Common.Models.DB.MovieVo.Files {
 
@@ -11,7 +12,8 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <summary>Initializes a new instance of the <see cref="Video"/> class.</summary>
         public Video() {
             Movie = new Movie();
-            File = new File();            
+            File = new File();
+            Language = new Language();
         }
 
         /// <summary>Initializes a new instance of the <see cref="Video"/> class.</summary>
@@ -36,13 +38,14 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <param name="height">The height of the video.</param>
         /// <param name="aspect">The aspect ratio of the video (width / height)</param>
         /// <param name="fps">The Frames per second of this video</param>
-        /// <param name="format">Resolution and format of the video</param>
+        /// <param name="resolution">Resolution and format of the video</param>
         /// <param name="type">The type of the video (DVD, BR, XVID, ...)</param>
         /// <param name="source">With or from what this video was made from (CAM, TS, DVDRip ...)</param>
-        public Video(string codec, int width, int height, double aspect, float? fps, string format, string type, string source) : this(codec, width, height) {
-            Format = format;
+        public Video(string codec, int width, int height, double aspect, float? fps, string resolution, string type, string source) : this(codec, width, height) {
+            Resolution = resolution;
             Type = type;
             Source = source;
+            FPS = fps;
 
             if (aspect > 0) {
                 Aspect = aspect;
@@ -78,8 +81,8 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         public string Type { get; set; }
 
         /// <summary>Resolution and format of the video</summary>
-        /// <example>\eg{ <c>720p, 1080p, 720i, 1080i, PAL, HDTV, INTERLACED, LETTERBOX</c>}</example>
-        public string Format { get; set; }
+        /// <example>\eg{ <c>720p, 1080p, 720i, 1080i, PAL, HDTV, NTSC</c>}</example>
+        public string Resolution { get; set; }
 
         /// <summary>Gets or sets the frames per second in this video.</summary>
         /// <value>The Frames per second.</value>
@@ -87,19 +90,15 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         /// <summary>Gets or sets the video bit rate.</summary>
         /// <value>The bit rate in Kbps.</value>
-        public long BitRate { get; set; }
+        public float? BitRate { get; set; }
 
         /// <summary>Gets or sets the video bit rate mode.</summary>
         /// <value>The bit rate mode</value>
-        public BitRateMode BitRateMode { get; set; }
-
-        /// <summary>Gets or sets the video sampling rate.</summary>
-        /// <value>The sampling rate in KHz.</value>
-        public long SamplingRate { get; set; }
+        public FrameOrBitRateMode BitRateMode { get; set; }
 
         /// <summary>Gets or sets the video bit depth.</summary>
         /// <value>The video depth in bits.</value>
-        public long BitDepth { get; set; }
+        public long? BitDepth { get; set; }
 
         /// <summary>Gets or sets the compression mode of this video.</summary>
         /// <value>The compression mode of this video.</value>
@@ -107,7 +106,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         /// <summary>Gets or sets the video duration in miliseconds.</summary>
         /// <value>The video duration in miliseconds.</value>
-        public long Duration { get; set; }
+        public long? Duration { get; set; }
 
         /// <summary>Gets or sets the video scan type.</summary>
         /// <value>The type video scan type.</value>
@@ -136,13 +135,12 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <value>The height of the video.</value>
         public int? Height { get; set; }
 
-        /// <summary>Gets or sets the language of this video.</summary>
-        /// <value>The language of this video.</value>
-        public string Language { get; set; }
-
         #endregion
 
         #region Foreign Keys
+        /// <summary>Gets or sets the language foreign key.</summary>
+        /// <value>The language foreign key.</value>
+        public long? LanguageId { get; set; }
 
         /// <summary>Gets or sets the movie foreign key.</summary>
         /// <value>The movie foreign key.</value>
@@ -155,6 +153,11 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         #endregion
 
         #region Relation tables
+
+        /// <summary>Gets or sets the language of this video.</summary>
+        /// <value>The language of this video.</value>
+        [ForeignKey("LanguageId")]
+        public Language Language { get; set; }
 
         /// <summary>Gets or sets the file this video is contained in.</summary>
         /// <value>The file this video is contained in.</value>
@@ -187,11 +190,10 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
             return Source == other.Source &&
                    Type == other.Type &&
-                   Format == other.Format &&
+                   Resolution == other.Resolution &&
                    FPS == other.FPS &&
                    BitRate == other.BitRate &&
                    BitRateMode == other.BitRateMode &&
-                   SamplingRate == other.SamplingRate &&
                    BitDepth == other.BitDepth &&
                    CompressionMode == other.CompressionMode &&
                    Duration == other.Duration &&

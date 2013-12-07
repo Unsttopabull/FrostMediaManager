@@ -13,16 +13,16 @@
         public string String { get { return _general ? MediaStream["OverallBitRate/String"] : MediaStream["BitRate/String"]; } }
 
         /// <summary>Bit rate mode (VBR, CBR)</summary>
-        public BitOrFrameRateMode Mode {
+        public FrameOrBitRateMode Mode {
             get {
                 string mode = _general ? MediaStream["OverallBitRate_Mode"] : MediaStream["BitRate_Mode"];
                 switch (mode) {
                     case "VBR":
-                        return BitOrFrameRateMode.Variable;
+                        return FrameOrBitRateMode.Variable;
                     case "CFR":
-                        return BitOrFrameRateMode.Constant;
+                        return FrameOrBitRateMode.Constant;
                     default:
-                        return BitOrFrameRateMode.Unknown;
+                        return FrameOrBitRateMode.Unknown;
                 }
             }
         }

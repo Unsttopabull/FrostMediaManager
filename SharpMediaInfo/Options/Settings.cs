@@ -5,9 +5,9 @@ namespace Frost.SharpMediaInfo.Options {
 
     public class Settings {
 
-        private readonly MediaFile _mf;
+        private readonly MediaFileBase _mf;
 
-        internal Settings(MediaFile mf) {
+        internal Settings(MediaFileBase mf) {
             _mf = mf;
 
             MpegTS = new MpegTS(_mf);

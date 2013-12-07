@@ -1,49 +1,5 @@
 ﻿namespace Frost.Common {
 
-    /// <summary>The compression mode used.</summary>
-    public enum CompressionMode : long {
-
-        /// <summary>An unknown compression mode.</summary>
-        Unknown,
-
-        /// <summary>The compression mode that allows perfect reconsturction to an original.</summary>
-        Lossless,
-
-        /// <summary>The compression mode that only aproximates the original and the compression can't be reverted.</summary>
-        Lossy
-
-    }
-
-    /// <summary>The way of displaying/drawing video frames on the screen.</summary>
-    public enum ScanType : long {
-
-        /// <summary>An Unknown scan type.</summary>
-        Unknown,
-
-        /// <summary>The intelaced scan type. Has two fields (odd and even rows). Each frame only one is shown (they are alternating).</summary>
-        /// <remarks>Has to be deinterlaced on non CRT/Plasma screens.</remarks>
-        Interlaced,
-
-        /// <summary>The progressive (noninterlaced) scan type. All rows of the drawn for each frame.</summary>
-        /// <remarks>Supported on all screens.</remarks>
-        Progressive
-
-    }
-
-    /// <summary>The bitrate mode that was used when ecoding.</summary>
-    public enum BitRateMode : long {
-
-        /// <summary>The bitrate mode is unknown.</summary>
-        Unknown,
-
-        /// <summary>The constant/static bit rate.</summary>
-        Constant,
-
-        /// <summary>The bitrate that has more bits for complex segments and less for less complex ones. Bitrate therefore varies (is not constant).</summary>
-        Variable
-
-    }
-
     /// <summary>The type of the media stream or file.</summary>
     public enum MediaType {
 

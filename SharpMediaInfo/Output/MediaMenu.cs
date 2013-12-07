@@ -8,20 +8,20 @@ using Frost.SharpMediaInfo.Output.Properties.Formats;
 #pragma warning disable 1591
 
 namespace Frost.SharpMediaInfo.Output {
-    public class MediaMenu : Media {
+    public class MediaMenu : EnumerableMedia<MediaMenu> {
 
-        public MediaMenu(MediaFile mediaInfo) : base(mediaInfo, StreamKind.Menu) {
-            Codec = new Codec(this);
-            Format = new Format(this);
+        public MediaMenu(MediaFileBase mediaInfo) : base(mediaInfo, StreamKind.Menu) {
+            CodecInfo = new Codec(this);
+            FormatInfo = new Format(this);
             DurationInfo = new GeneralDurationInfo(this);
             LanguageInfo = new LanguageInfo(this);
             ServiceInfo = new ServiceInfo(this);
             DelayInfo = new DelayInfo(this, false);
         }
 
-        public Codec Codec { get; private set; }
+        public Codec CodecInfo { get; private set; }
         /// <summary>Info about the Format used</summary>
-        public Format Format { get; private set; }
+        public Format FormatInfo { get; private set; }
 
         /// <summary>Play time of the stream in ms</summary>
         public TimeSpan? Duration { get { return TryParseTimeSpan("Duration"); } }

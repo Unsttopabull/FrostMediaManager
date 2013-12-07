@@ -11,9 +11,9 @@ using Frost.SharpMediaInfo.Output.Properties.Formats;
 namespace Frost.SharpMediaInfo.Output {
 
     // ReSharper disable UnusedMember.Global
-    public class MediaAudio : Media {
+    public class MediaAudio : EnumerableMedia<MediaAudio> {
 
-        internal MediaAudio(MediaFile mediaInfo) : base(mediaInfo, StreamKind.Audio) {
+        internal MediaAudio(MediaFileBase mediaInfo) : base(mediaInfo, StreamKind.Audio) {
             Format = new AudioFormat(this);
             Codec = new AudioCodec(this);
             BitRateInfo = new BitRateInfo(this);

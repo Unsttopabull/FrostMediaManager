@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
@@ -10,21 +9,29 @@ using Frost.SharpMediaInfo.Output.Properties.Codecs;
 
 namespace Frost.SharpMediaInfo.Output {
 
-    public abstract class Media : IEnumerable<KeyValuePair<string, string>> {
+    public abstract class Media {
 
-        private readonly MediaFile _mediaFile;
+        private readonly MediaFileBase _mediaFile;
         private readonly StreamKind _streamKind;
-        protected int CachedStreamCount = -1;
-        private Dictionary<string, string>[] _properties;
-        private bool _cached;
+        private readonly Dictionary<string, string>[] _properties;
+        private readonly bool[] _cached;
+        protected int CachedStreamCount;
 
-        protected Media(MediaFile mediaInfo, StreamKind streamKind) {
+        protected Media(MediaFileBase mediaInfo, StreamKind streamKind) {
             _mediaFile = mediaInfo;
             _streamKind = streamKind;
             StreamNumber = 0;
-            _properties = new Dictionary<string, string>[StreamCount];
-            CachedStreamCount = StreamCount;
-            CodecID = new CodecID(this);
+
+            CachedStreamCount = -1;
+            int count = Count;
+            _properties = new Dictionary<string, string>[count];
+            for (int streamNum = 0; streamNum < count; streamNum++) {
+                _properties[streamNum] = new Dictionary<string, string>();
+            }
+
+            _cached = new bool[count];
+
+            CodecIDInfo = new CodecID(this);
         }
 
         #region Properties
@@ -32,10 +39,15 @@ namespace Frost.SharpMediaInfo.Output {
         /// <summary>Bit field (0=IsAccepted, 1=IsFilled, 2=IsUpdated, 3=IsFinished)</summary>
         public string Status { get { return this["Status"]; } }
 
+        /// <summary>Number of the stream kind stream (base=0)</summary>
+        /// <example>\eg{ <c>1</c> for a second stream of this type.}</example>
         public string StreamKindID { get { return this["StreamKindID"]; } }
 
+        /// <summary>When multiple streams, number of the stream (base=1)</summary>
+        /// <example>\eg{ <c>1</c> for a first stream of this type.}</example>
         public string StreamKindPos { get { return this["StreamKindPos"]; } }
 
+        /// <summary>Stream order in the file, whatever is the kind of stream (base=0).</summary>
         public long? StreamOrder { get { return TryParseLong("StreamOrder"); } }
 
         public long? FirstPacketOrder { get { return TryParseLong("FirstPacketOrder"); } }
@@ -55,8 +67,8 @@ namespace Frost.SharpMediaInfo.Output {
         /// <summary>The default stream number to use when accessing media info through properties</summary>
         public int StreamNumber { get; set; }
 
-        /// <summary>Count of Stream Kind streams</summary>
-        public int StreamCount {
+        /// <summary>The number of <see cref="Frost.SharpMediaInfo.StreamKind">StreamKind</see> streams.</summary>
+        public int Count {
             get {
                 if (CachedStreamCount == -1) {
                     CachedStreamCount = _mediaFile.CountGet(_streamKind);
@@ -65,13 +77,13 @@ namespace Frost.SharpMediaInfo.Output {
             }
         }
 
-        public CodecID CodecID { get; private set; }
+        public CodecID CodecIDInfo { get; private set; }
 
         /// <summary>Gets a value indicating whether information exists about this kind of stream</summary>
-        /// <value><c>true</c> if info is available; otherwise, <c>false</c>.</value>
+        /// <value>Is <c>true</c> if info is available; otherwise, <c>false</c>.</value>
         /// <remarks>Equivalent to checking if StreamCount is equal to 0</remarks>
         public bool Any {
-            get { return StreamCount != 0; }
+            get { return Count != 0; }
         }
 
         #endregion
@@ -83,7 +95,7 @@ namespace Frost.SharpMediaInfo.Output {
         public string this[string parameter] {
             get {
                 //if caching is enabled and the parameter exists in cache return cached value
-                if (_cached && _properties[StreamNumber].ContainsKey(parameter)) {
+                if (_cached[StreamNumber] && _properties[StreamNumber].ContainsKey(parameter)) {
                     return _properties[StreamNumber][parameter];
                 }
 
@@ -92,7 +104,7 @@ namespace Frost.SharpMediaInfo.Output {
 
                 //if the returned string is not empty or null we return the value (and optional cache it)
                 if (!string.IsNullOrEmpty(value)) {
-                    if (_cached) {
+                    if (_cached[StreamNumber]) {
                         //we tested if the dictionary already contains this key
                         //so no need to check again
                         _properties[StreamNumber].Add(parameter, value);
@@ -117,14 +129,34 @@ namespace Frost.SharpMediaInfo.Output {
 
         #endregion
 
-        #region MediaInfo Getters & Functions
+        #region Caching / Inform Parsing
 
-        internal virtual void ParseInform(XElement track, int streamNumber) {
-            if (_cached) {
+        /// <summary>Clears the cache all the cached values of this stream and optionaly all steams of this kind.</summary>
+        /// <param name="allStreamsOfThisType">If set to <c>true</c> clears cache for all the streams of this kind.</param>
+        public void ClearCache(bool allStreamsOfThisType = false) {
+            if (allStreamsOfThisType) {
+                foreach (Dictionary<string, string> dictionary in _properties) {
+                    dictionary.Clear();
+                }
+                return;
+            }
+            _properties[StreamNumber].Clear();
+        }
+
+        /// <summary>Gets the all the cached values as a key-value pair with the key as the xml MediaInfo property key.</summary>
+        /// <value>All the cached values as a key-value pair with the key as the xml MediaInfo property key.</value>
+        public IEnumerable<KeyValuePair<string, string>> CachedValues {
+            get { return _properties[StreamNumber]; }
+        }
+
+        internal void ParseInform(XElement track, int streamNumber) {
+            if (_cached[streamNumber]) {
                 return;
             }
 
-            _properties[streamNumber] = new Dictionary<string, string>();
+            if (track == null) {
+                return;
+            }
 
             Dictionary<string, int> multipleOccurances = new Dictionary<string, int>();
             foreach (XElement xElement in track.Nodes()) {
@@ -146,8 +178,11 @@ namespace Frost.SharpMediaInfo.Output {
 
                 _properties[streamNumber][tagName] = xElement.Value;
             }
-            _cached = true;
+            _cached[streamNumber] = true;
         }
+        #endregion
+
+        #region MediaInfo Getters & Functions
 
         /// <summary>Get a piece of information about an image</summary>
         /// <param name="parameter">Parameter you are looking for in the stream (Codec, width, bitrate...), in string format ("Codec", "Width"...) </param>
@@ -164,22 +199,6 @@ namespace Frost.SharpMediaInfo.Output {
         /// <returns>a string about information you search, an empty string if there is a problem</returns>
         public string Get(int parameter, InfoKind kindOfInfo) {
             return _mediaFile.Get(_streamKind, StreamNumber, parameter, kindOfInfo);
-        }
-
-        #endregion
-
-        #region IEnumerable
-
-        /// <summary>Returns an enumerator that iterates through the collection.</summary>
-        /// <returns>A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.</returns>
-        public IEnumerator<KeyValuePair<string, string>> GetEnumerator() {
-            return _properties[StreamNumber].GetEnumerator();
-        }
-
-        /// <summary>Returns an enumerator that iterates through a collection.</summary>
-        /// <returns>An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.</returns>
-        IEnumerator IEnumerable.GetEnumerator() {
-            return GetEnumerator();
         }
 
         #endregion
@@ -265,15 +284,15 @@ namespace Frost.SharpMediaInfo.Output {
 
         #endregion
 
-        /// <summary>Returns a string that represents the current object.</summary>
-        /// <returns>A string that represents the current object.</returns>
-        public override string ToString() {
-            StringBuilder sb = new StringBuilder(10000);
-            foreach (KeyValuePair<string, string> kvp in _properties[StreamNumber]) {
-                sb.AppendLine(kvp.Key + " : " + kvp.Value);
-            }
-            return sb.ToString();
-        }
+        ///// <summary>Returns a string that represents the current object.</summary>
+        ///// <returns>A string that represents the current object.</returns>
+        //public override string ToString() {
+        //    StringBuilder sb = new StringBuilder(10000);
+        //    foreach (KeyValuePair<string, string> kvp in _properties[StreamNumber]) {
+        //        sb.AppendLine(kvp.Key + " : " + kvp.Value);
+        //    }
+        //    return sb.ToString();
+        //}
 
     }
 

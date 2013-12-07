@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
+using Frost.Common.Models.DB.MovieVo;
 
 namespace Frost.Common.Models.DB.Jukebox {
 
-    /// <summary>Represents a movie genre.</summary>
+    /// <summary>Represents a Xtreamer Movie Jukebox genre.</summary>
     [Table("genres")]
-    public class XjbGenre : IEquatable<XjbGenre> {
+    public partial class XjbGenre : IEquatable<XjbGenre> {
 
         /// <summary>Initializes a new instance of the <see cref="XjbGenre"/> class.</summary>
         /// <param name="name">The name of the genre abbreviation.</param>
@@ -22,8 +23,8 @@ namespace Frost.Common.Models.DB.Jukebox {
         [Column("id")]
         public long Id { get; set; }
 
-        /// <summary>Gets or sets the genre abbreviation.</summary>
-        /// <value>The name of the genre abbreviation.</value>
+        /// <summary>Gets or sets the genre 4 letter abbreviation.</summary>
+        /// <value>The name of the genre 4 letter abbreviation.</value>
         /// <example>\eg{ <c>"docu"</c> for documentary, <c>"come"</c> for comedy.}</example>
         [Column("name")]
         public string Name { get; set; }
@@ -49,6 +50,15 @@ namespace Frost.Common.Models.DB.Jukebox {
             }
 
             return Name == other.Name;
+        }
+
+        /// <summary>Converts a <see cref="XjbGenre"/> instance to an instance of <see cref="Frost.Common.Models.DB.MovieVo.Genre">Genre</see>.</summary>
+        /// <param name="genre">The genre to convert.</param>
+        /// <returns>An instance of <see cref="Frost.Common.Models.DB.MovieVo.Genre">Genre</see> converted from <see cref="XjbGenre"/>.</returns>
+        public static explicit operator Genre(XjbGenre genre) {
+            return GenreTags.ContainsKey(genre.Name)
+                    ? new Genre(GenreTags[genre.Name])
+                    : new Genre(genre.Name);
         }
 
         internal class Configuration : EntityTypeConfiguration<XjbGenre> {

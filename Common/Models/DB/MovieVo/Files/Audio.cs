@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Frost.Common.Models.XML.XBMC;
+using Frost.SharpMediaInfo;
 
 namespace Frost.Common.Models.DB.MovieVo.Files {
 
@@ -18,12 +19,12 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         public Audio(string source, string type, string codec, string channelSetup, string language) {
             File = new File();
             Movie = new Movie();
+            Language = new Language(language);
 
             Source = source;
             Type = type;
             ChannelSetup = channelSetup;
             Codec = codec;
-            Language = language;
         }
 
         /// <summary>Initializes a new instance of the <see cref="Audio"/> class.</summary>
@@ -104,13 +105,12 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <value>The audio duration in miliseconds.</value>
         public long Duration { get; set; }
 
-        /// <summary>Gets or sets the language of this audio.</summary>
-        /// <value>The language of this audio.</value>
-        public string Language { get; set; }
-
         #endregion
 
         #region Foreign Keys
+        /// <summary>Gets or sets the language foreign key.</summary>
+        /// <value>The language foreign key.</value>
+        public long? LanguageId { get; set; }
 
         /// <summary>Gets or sets the movie foreign key.</summary>
         /// <value>The movie foreign key.</value>
@@ -123,6 +123,11 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         #endregion
 
         #region Relation tables
+
+        /// <summary>Gets or sets the language of this audio.</summary>
+        /// <value>The language of this audio.</value>
+        [ForeignKey("LanguageId")]
+        public Language Language { get; set; }
 
         /// <summary>Gets or sets the file this audio is contained in.</summary>
         /// <value>The file this audio is contained in.</value>
@@ -171,7 +176,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <param name="audio">The audio to convert</param>
         /// <returns>An instance of <see cref="Common.Models.XML.XBMC.XbmcXmlAudioInfo">XbmcXmlAudioInfo</see> converted from <see cref="Audio"/></returns>
         public static explicit operator XbmcXmlAudioInfo(Audio audio) {
-            return new XbmcXmlAudioInfo(audio.Codec, audio.NumberOfChannels, audio.Language);
+            return new XbmcXmlAudioInfo(audio.Codec, audio.NumberOfChannels, audio.Language.ISO639.Alpha3);
         }
 
     }

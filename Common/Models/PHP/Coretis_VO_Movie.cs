@@ -59,7 +59,7 @@ namespace Frost.Common.Models.PHP {
                     subtitleLang = subtitle.Replace("SUBBED", "").Trim();
                 }
 
-                mov.Subtitles.Add(new Subtitle(subtitleLang, embeded));
+                mov.Subtitles.Add(new Subtitle(subtitleLang, null, embeded));
             }
 
             //Split the specials string where "/" or "," 

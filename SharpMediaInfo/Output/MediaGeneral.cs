@@ -12,9 +12,9 @@ using Frost.SharpMediaInfo.Output.Properties.General;
 namespace Frost.SharpMediaInfo.Output {
     public class MediaGeneral : Media {
 
-        internal MediaGeneral(MediaFile mediaInfo) : base(mediaInfo, StreamKind.General) {
+        internal MediaGeneral(MediaFileBase mediaInfo) : base(mediaInfo, StreamKind.General) {
             CachedStreamCount = 1;
-            Format = new GeneralFormat(this);
+            FormatInfo = new GeneralFormat(this);
             Codec = new GeneralCodec(this);
             DurationInfo = new GeneralDurationInfo(this);
             DelayInfo = new GeneralDelayInfo(this);
@@ -52,7 +52,7 @@ namespace Frost.SharpMediaInfo.Output {
         public GeneralInfo Menu { get; private set; }
 
         /// <summary>Format used</summary>
-        public GeneralFormat Format { get; private set; }
+        public GeneralFormat FormatInfo { get; private set; }
 
         /// <summary>Internet Media Type (aka MIME Type, Content-Type)</summary>
         public string MIME { get { return this["InternetMediaType"]; } }

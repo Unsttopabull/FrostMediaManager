@@ -2,21 +2,37 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.ModelConfiguration;
+using Frost.Common.Models.DB.MovieVo.ISO;
+using Frost.Common.Util.ISO;
 
 namespace Frost.Common.Models.DB.MovieVo {
 
-    /// <summary>Represents a country a movie was shot or/and produced in.</summary>
+    /// <summary> Represents a country a movie was shot and/or produced in.</summary>
     public class Country : IEquatable<Country> {
 
         /// <summary>Initializes a new instance of the <see cref="Country"/> class.</summary>
         public Country() {
             Movies = new HashSet<Movie>();
+            ISO3166_1 = new ISO3166_1();
         }
 
         /// <summary>Initializes a new instance of the <see cref="Country"/> class.</summary>
         /// <param name="name">The name of the country.</param>
-        public Country(string name) : this() {
+        public Country(string name) {
+            Movies = new HashSet<Movie>();
+
             Name = name;
+            ISO3166_1 = new ISO3166_1(name);
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="Country"/> class.</summary>
+        /// <param name="name">The name of the country.</param>
+        /// <param name="alpha2">The ISO3166-1 2-letter country code.</param>
+        /// <param name="alpha3">The ISO3166-1 3-letter country code.</param>
+        public Country(string name, string alpha2, string alpha3) : this() {
+            Name = name;
+            ISO3166_1.Alpha2 = alpha2;
+            ISO3166_1.Alpha3 = alpha3;
         }
 
         /// <summary>Gets or sets the database Country Id.</summary>
@@ -27,6 +43,10 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets or sets the country name.</summary>
         /// <value>The name of the country.</value>
         public string Name { get; set; }
+
+        /// <summary>Gets or sets the ISO 3166-1 Information.</summary>
+        /// <value>The ISO 3166-1 Information.</value>
+        public ISO3166_1 ISO3166_1 { get; set; }
 
         /// <summary>Gets or sets the movies shot in this country.</summary>
         /// <value>The country movies</value>
@@ -63,6 +83,16 @@ namespace Frost.Common.Models.DB.MovieVo {
             }
 
             return countries;
+        }
+
+        /// <summary>Get an instance of <see cref="Country"/> from an ISO 3166-1 2 letter code.</summary>
+        /// <param name="iso3166">The ISO 3166-1 2 letter code.</param>
+        /// <returns>Returns a country information from ISO 3166-1 2 letter code. If an inapropriate string is passed it returns <c>null</c>.</returns>
+        public static Country FromISO3166(string iso3166) {
+            ISOLanguageCode iso = ISOLanguageCodes.Instance.GetByISOCode(iso3166);
+            return iso != null
+                ? new Country(iso.EnglishName, iso.Alpha2, iso.Alpha3)
+                : null;
         }
 
         internal class CountryConfiguration : EntityTypeConfiguration<Country> {

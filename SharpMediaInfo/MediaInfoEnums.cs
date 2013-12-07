@@ -62,8 +62,12 @@ namespace Frost.SharpMediaInfo {
     }
 
     public enum InfoFileOptions {
+        /// <summary>No option.</summary>
         Nothing = 0x00,
+        /// <summary>Do not browse folders recursively.</summary>
         NoRecursive = 0x01,
+
+        /// <summary>Close all open files before new Open() call.</summary>
         CloseAll = 0x02,
         Max = 0x04
     };
@@ -94,24 +98,44 @@ namespace Frost.SharpMediaInfo {
         Mpeg7
     }
 
-    public enum ScanType {
+    /// <summary>The way of displaying/drawing video frames on the screen.</summary>
+    public enum ScanType : long {
+        /// <summary>An Unknown scan type.</summary>
         Unknown,
-        Progresive,
+
+        /// <summary>The intelaced scan type. Has two fields (odd and even rows). Each frame only one is shown (they are alternating).</summary>
+        /// <remarks>Has to be deinterlaced on non CRT/Plasma screens.</remarks>
         Interlaced,
+
+        /// <summary>The progressive (noninterlaced) scan type. All rows of the drawn for each frame.</summary>
+        /// <remarks>Supported on all screens.</remarks>
+        Progressive,
         MBAFF,
         Mixed
     }
 
-    public enum BitOrFrameRateMode {
+    /// <summary>The bitrate mode that was used when ecoding.</summary>
+    public enum FrameOrBitRateMode : long {
+
+        /// <summary>The bitrate mode is unknown.</summary>
         Unknown,
+
+        /// <summary>The constant/static bit rate.</summary>
         Constant,
+
+        /// <summary>The bitrate that has more bits for complex segments and less for less complex ones. Bitrate therefore varies (is not constant).</summary>
         Variable
+
     }
 
-    public enum CompressionMode {
+    /// <summary>The compression mode used.</summary>
+    public enum CompressionMode : long {
+        /// <summary>An unknown compression mode.</summary>
         Unknown,
-        Lossy,
+        /// <summary>The compression mode that allows perfect reconsturction to an original.</summary>
         Lossless,
+        /// <summary>The compression mode that only aproximates the original and the compression can't be reverted.</summary>
+        Lossy
     }
 
     public enum AudioAlignment {

@@ -82,7 +82,7 @@ namespace Frost.UI {
             if (movieFiles != null) {
                 File file = movieFiles.FirstOrDefault();
                 if (file != null) {
-                    TryLoadCover(file.FolderPath, file.Name.WithoutExtension());
+                    TryLoadCover(file.FolderPath, Path.GetFileNameWithoutExtension(file.Name));
                 }
             }
         }

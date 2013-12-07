@@ -5,11 +5,11 @@ using Frost.SharpMediaInfo.Output.Properties.Formats;
 
 namespace Frost.SharpMediaInfo.Output {
 
-    public class MediaImage : Media {
+    public class MediaImage : EnumerableMedia<MediaImage> {
 
-        internal MediaImage(MediaFile mediaInfo) : base(mediaInfo, StreamKind.Image) {
-            Format = new FormatWithWrapping(this);
-            Codec = new Codec(this);
+        internal MediaImage(MediaFileBase mediaInfo) : base(mediaInfo, StreamKind.Image) {
+            FormatInfo = new FormatWithWrapping(this);
+            CodecInfo = new Codec(this);
             WidthInfo = new SizeInfo(this, SizeType.Width);
             HeightInfo = new SizeInfo(this, SizeType.Height);
             StreamSizeInfo = new StreamSizeInfo(this);
@@ -23,12 +23,12 @@ namespace Frost.SharpMediaInfo.Output {
         public string Title { get { return this["Title"]; } }
 
         /// <summary>Info about the Format used</summary>
-        public FormatWithWrapping Format { get; private set; }
+        public FormatWithWrapping FormatInfo { get; private set; }
 
         /// <summary>Internet Media Type (aka MIME Type, Content-Type)</summary>
         public string MIME { get { return this["InternetMediaType"]; } }
 
-        public Codec Codec { get; private set; }
+        public Codec CodecInfo { get; private set; }
 
         /// <summary>Width (aperture size if present) in pixel</summary>
         public long? Width { get { return TryParseLong("Width"); } }

@@ -77,6 +77,7 @@ namespace Frost.Common.Models.DB.MovieVo {
             modelBuilder.Configurations.Add(new Country.CountryConfiguration());
             modelBuilder.Configurations.Add(new Studio.Configuration());
             modelBuilder.Configurations.Add(new Genre.GenreConfiguration());
+            modelBuilder.Configurations.Add(new Subtitle.Configuration());
 
             //Database.SetInitializer(new SeedInitializer());
 

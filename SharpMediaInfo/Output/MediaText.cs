@@ -11,11 +11,11 @@ using Frost.SharpMediaInfo.Output.Properties.FrameRate;
 
 namespace Frost.SharpMediaInfo.Output {
 
-    public class MediaText : Media {
+    public class MediaText : EnumerableMedia<MediaText> {
 
-        internal MediaText(MediaFile mediaInfo) : base(mediaInfo, StreamKind.Text) {
-            Format = new FormatWithWrapping(this);
-            Codec = new TextCodec(this);
+        internal MediaText(MediaFileBase mediaInfo) : base(mediaInfo, StreamKind.Text) {
+            FormatInfo = new FormatWithWrapping(this);
+            CodecInfo = new TextCodec(this);
             FrameRateInfo = new FrameRateInfo(this);
             BitRateInfo = new BitRateInfo(this);
             DurationInfo = new ExtendedDurationInfo(this, false);
@@ -34,8 +34,8 @@ namespace Frost.SharpMediaInfo.Output {
         }
 
         /// <summary>Info about the Format used</summary>
-        public FormatWithWrapping Format { get; private set; }
-        public TextCodec Codec { get; private set; }
+        public FormatWithWrapping FormatInfo { get; private set; }
+        public TextCodec CodecInfo { get; private set; }
 
         /// <summary>Internet Media Type (aka MIME Type, Content-Type)</summary>
         public string MIME { get { return this["InternetMediaType"]; } }

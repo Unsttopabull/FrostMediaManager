@@ -11,9 +11,9 @@ using Frost.SharpMediaInfo.Output.Properties.FrameRate;
 
 namespace Frost.SharpMediaInfo.Output {
 
-    public class MediaVideo : Media {
+    public class MediaVideo : EnumerableMedia<MediaVideo> {
 
-        internal MediaVideo(MediaFile mi) : base(mi, StreamKind.Video) {
+        internal MediaVideo(MediaFileBase mi) : base(mi, StreamKind.Video) {
             FormatInfo = new VideoFormat(this);
             CodecInfo = new VideoCodec(this);
             WidthInfo = new SizeInfo(this, SizeType.Width);
@@ -106,6 +106,9 @@ namespace Frost.SharpMediaInfo.Output {
         /// <summary>NTSC or PAL</summary>
         public string Standard { get { return this["Standard"]; } }
 
+        /// <summary>Gets the resolution in bits.</summary>
+        /// <value>The resolution in bits.</value>
+        /// <example>\eg{<c>8</c>}</example>
         public long? Resolution { get { return TryParseLong("Resolution"); } }
         public string ResolutionString { get { return this["Resolution/String"]; } }
         
@@ -126,7 +129,7 @@ namespace Frost.SharpMediaInfo.Output {
                     case "Interlaced":
                         return ScanType.Interlaced;
                     case "Progressive":
-                        return ScanType.Progresive;
+                        return ScanType.Progressive;
                     case "MBAFF":
                         return ScanType.MBAFF;
                     case "Mixed":

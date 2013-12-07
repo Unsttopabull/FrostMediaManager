@@ -1,8 +1,8 @@
 ﻿namespace Frost.SharpMediaInfo.Options {
     public class SSL {
-        private readonly MediaFile _mf;
+        private readonly MediaFileBase _mf;
 
-        internal SSL(MediaFile mf) {
+        internal SSL(MediaFileBase mf) {
             _mf = mf;
         }
 
