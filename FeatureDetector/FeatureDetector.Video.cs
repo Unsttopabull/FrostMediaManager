@@ -6,7 +6,7 @@ using Frost.SharpMediaInfo.Output;
 
 namespace Frost.DetectFeatures {
     public partial class FeatureDetector {
-        private List<Video> _video;
+        private readonly List<Video> _video;
 
         private Video GetFileVideoInfo(int filePos, int streamNumber = 0) {
             if (_video[streamNumber] != null) {

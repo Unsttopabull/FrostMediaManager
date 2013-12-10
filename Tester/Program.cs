@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.DetectFeatures;
+using Frost.DetectFeatures.Util;
 using Frost.SharpCharsetDetector;
 using Frost.SharpLanguageDetect;
 using File = System.IO.File;
@@ -360,6 +359,7 @@ namespace Frost.Tester {
                 @"E:\Torrenti\FILMI\Paranoia 2013 CROSubs.BRRip XViD-ETRG\Paranoia 2013 ENGSubs.BRRip XViD-ETRG.srt",
                 @"E:\Torrenti\FILMI\Hysteria.2011.SLOSubs.DVDRip.XviD-DrSi\Hysteria.2011.SLOSubs.DVDRip.XviD-DrSi.srt",
             };
+
             #endregion
 
             #region SubsFiles
@@ -683,6 +683,7 @@ namespace Frost.Tester {
             #endregion
 
             #region FileNames
+
             FileNames = new[] {
                 "Oz.the.Great.and.Powerful.2013.SLOSubs.DVDRip.XviD-DrSi",
                 "Trance.2013.SLOSubs.DVDRip.XviD-DrSi",
@@ -995,22 +996,10 @@ namespace Frost.Tester {
         }
 
         private static void Main() {
-            TestFileNameParser();
-        }
+            //FileNameParser fnp = new FileNameParser(@"C:\Users\Martin\Desktop\FMM\MovieSubs\Dead Man Walking [English] 1995.srt");
+            //fnp.Parse();
 
-        private static bool IsReleaseYear(string segment) {
-            if (segment.Length != 4) {
-                return false;
-            }
-            if (segment[0] < '1') {
-                return false;
-            }
-            //A year after 1800
-            if (segment[0] == '1' && segment[1] < '8') {
-                return false;
-            }
-            //every letter is a digit
-            return segment.All(ch => ch >= '0' && ch <= '9');
+            TestFileNameParser();
         }
 
         #region Language Detect
@@ -1073,7 +1062,6 @@ namespace Frost.Tester {
         }
 
         private static async Task<Encoding> DetectEncodingAsync(Stream fileStream) {
-
             byte[] firstKB = new byte[1024];
             int numBytes = await fileStream.ReadAsync(firstKB, 0, 1024);
 
@@ -1085,6 +1073,8 @@ namespace Frost.Tester {
                 ? cd.DetectedEncoding
                 : null;
         }
+
+        #region LangDetect Old
 
         //private static string DetectLangSingleFile(string fileName, Encoding encoding) {
         //    DetectorFactory.LoadProfilesFromFolder("profiles");
@@ -1252,7 +1242,7 @@ namespace Frost.Tester {
         //private static void TestLanguageDetectorParallel3(IEnumerable<string> fileNames) {
         //    //DetectorFactory.LoadProfilesFromFolder("profiles");
         //    DetectorFactory.LoadStaticProfiles();
-            
+
         //    List<Task> lst = new List<Task>();
         //    Parallel.ForEach(fileNames, fn => lst.Add(Detect(fn)));
 
@@ -1296,17 +1286,37 @@ namespace Frost.Tester {
         //        }
         //    });
         //}
+
+        #endregion
+
         #endregion
 
         #region FileNameParser / FeatureDetector
+
         private static void TestFileNameParser() {
             foreach (string fileName in LocalSubtitleFiles) {
-                Console.WriteLine("FileName: {0}", fileName);
+                //Console.WriteLine("FileName: {0}", fileName);
+                Console.Write(fileName + ";");
 
                 FileNameParser fnp = new FileNameParser(fileName);
                 fnp.Parse();
 
-                OutputDetected(fnp.DetectedSegments);
+                if (string.IsNullOrEmpty(fnp.DetectedTitle)) {
+                    Console.WriteLine("UNKNOWN;");
+                }
+                else {
+                    Console.WriteLine(fnp.DetectedTitle + ";");
+                }
+
+                //Console.WriteLine("\tTitle:");
+
+                //if (string.IsNullOrEmpty(fnp.DetectedTitle)) {
+                //    Console.WriteLine("\t\tUNKNOWN");
+                //}
+                //else {
+                //    Console.WriteLine("\t\t" + fnp.DetectedTitle);
+                //}
+                //OutputDetected(fnp.DetectedSegments);
             }
         }
 
@@ -1327,9 +1337,11 @@ namespace Frost.Tester {
                 List<Subtitle> subtitles = fd.GetSubtitlesForFile(FILE_PATH).ToList();
             }
         }
+
         #endregion
 
         #region Mediainfo
+
         /*
         private static void TestMediaInfoDisposed() {
             //WithoutCaching();
@@ -1529,7 +1541,8 @@ namespace Frost.Tester {
                 Console.Write(sb.ToString());
             }
         }
-         */
+        */
+
         #endregion
     }
 

@@ -43,8 +43,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <OutputType>Library</OutputType>
-    <AssemblyName>Ude</AssemblyName>
-    <RootNamespace>Ude</RootNamespace>
+    <RootNamespace>Frost.SharpCharsetDetector</RootNamespace>
+    <AssemblyName>Frost.SharpCharsetDetector</AssemblyName>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
     <DocumentationFile>bin\Debug\Frost.SharpCharsetDetector.xml</DocumentationFile>
@@ -57,9 +57,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <OutputType>Library</OutputType>
-    <AssemblyName>Ude</AssemblyName>
     <DebugSymbols>false</DebugSymbols>
-    <RootNamespace>Ude</RootNamespace>
+    <RootNamespace>Frost.SharpCharsetDetector</RootNamespace>
+    <AssemblyName>Frost.SharpCharsetDetector</AssemblyName>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
   </PropertyGroup>

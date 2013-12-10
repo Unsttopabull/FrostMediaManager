@@ -48,7 +48,8 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="FeatureDetector.Subtitles.cs" />
     <Compile Include="FeatureDetector.Video.cs" />
-    <Compile Include="FileNameParser.cs" />
+    <Compile Include="Util\AspectRatioDetector.cs" />
+    <Compile Include="Util\FileNameParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

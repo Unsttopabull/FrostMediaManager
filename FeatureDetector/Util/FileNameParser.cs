@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using Frost.Common;
 using Frost.Common.Util.ISO;
 
-namespace Frost.DetectFeatures {
+namespace Frost.DetectFeatures.Util {
 
     public enum SegmentType {
         Unknown,
-        Title,
         DVDRegion,
         ContentType,
         Genre,
@@ -24,7 +25,6 @@ namespace Frost.DetectFeatures {
         VideoQuality,
         VideoCodec,
 
-
         AudioSource,
         AudioCodec,
         AudioQuality,
@@ -32,26 +32,31 @@ namespace Frost.DetectFeatures {
         Special,
         ReleaseGroup,
         PartIdentifier,
-
     }
 
     public class FileNameParser {
-
         private static readonly ISOLanguageCodes ISOLanguageCodes = ISOLanguageCodes.Instance;
         private static readonly HashSet<string> SegmentExclusion;
         private static readonly HashSet<string> ReleaseGroups;
         private static readonly Dictionary<string, string> CustomLangMappings;
         private static readonly Dictionary<string, SegmentType> KnownSegments;
-        private readonly Dictionary<SegmentType, List<string>> _detectedSegments;
+        private static readonly HashSet<char> RegexReservedChars;
         private static readonly Regex ReleaseGroup = new Regex(@"-([^\. _\[\]-]{3,20})");
-        private static readonly Regex PartIdentifier = new Regex(@"[\. -](part\d+|cd\d+|disk\d+)[\. -]?", RegexOptions.IgnoreCase);
+        private static readonly Regex PartIdentifier = new Regex(@"[\. -](part ?\d+|cd ?\d+|disk ?\d+)[\. -]?", RegexOptions.IgnoreCase);
         private static readonly Regex UrlRegex = new Regex(@"((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)");
+        private readonly Dictionary<SegmentType, List<string>> _detectedSegments;
         private readonly string _fileName;
-        private List<string> _delimiters;
-        private List<string> _segments;
+        private readonly Regex _titleAndReleaseYear;
+        private List<char> _delimiters;
         private bool _releaseGroupFound;
+        private bool _releaseYearFound;
+        private List<string> _segments;
+        private bool _titleFound;
+        private static TextInfo _textInfo;
 
         static FileNameParser() {
+            RegexReservedChars = new HashSet<char> {'.', '^', '$', '*', '+', '?', '(', ')', '[', ']', '\\', '|', '}', '{', '-'};
+
             CustomLangMappings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
                 {"JAP", "jpn"},
                 {"srbski", "srp"},
@@ -60,7 +65,7 @@ namespace Frost.DetectFeatures {
 
             SegmentExclusion = new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
                 "the", "an", "to", "man", "men", "mr", "aka", "war", "art", "ii", "be",
-                "as"
+                "as", "my", "sin"
             };
 
             KnownSegments = new Dictionary<string, SegmentType>(StringComparer.OrdinalIgnoreCase) {
@@ -69,13 +74,23 @@ namespace Frost.DetectFeatures {
                 {"XXX", SegmentType.Genre},
                 {"SERIE", SegmentType.ContentType},
 
+                #region Specials
+
+                {"INTERNAL", SegmentType.Special },
+                {"PROPER", SegmentType.Special },
+                {"LIMITED", SegmentType.Special },
+                {"RECODE", SegmentType.Special },
+                {"REPACK", SegmentType.Special },
+
+                #endregion
+
                 #region Edithions
 
-                {"EXTENDED", SegmentType.Edithion},
-                {"UNCUT", SegmentType.Edithion},
-                {"REMASTERED", SegmentType.Edithion},
-                {"UNRATED", SegmentType.Edithion},
-                {"THEATRICAL", SegmentType.Edithion},
+                {"EXTENDED",SegmentType.Edithion},
+                {"UNCUT",SegmentType.Edithion},
+                {"REMASTERED",SegmentType.Edithion},
+                {"UNRATED",SegmentType.Edithion},
+                {"THEATRICAL",SegmentType.Edithion},
                 {"CHRONO", SegmentType.Edithion},
 
                 #endregion
@@ -225,16 +240,6 @@ namespace Frost.DetectFeatures {
                 {"DVDSCREENER", SegmentType.VideoSource},
                 {"DVDSCR", SegmentType.VideoSource},
                 {"BDSCR", SegmentType.VideoSource},
-
-                #endregion
-
-                #region Specials
-
-                {"INTERNAL", SegmentType.Special},
-                {"PROPER", SegmentType.Special},
-                {"LIMITED", SegmentType.Special},
-                {"RECODE", SegmentType.Special},
-                {"REPACK", SegmentType.Special},
 
                 #endregion
             };
@@ -399,7 +404,6 @@ namespace Frost.DetectFeatures {
                 "fls",
                 "fme",
                 "foa",
-                "football",
                 "fov",
                 "fqm",
                 "fragment",
@@ -409,6 +413,7 @@ namespace Frost.DetectFeatures {
                 "ftp",
                 "fua",
                 "fxm",
+                "fxg",
                 "fzero",
                 "gaygay",
                 "gdr",
@@ -700,22 +705,28 @@ namespace Frost.DetectFeatures {
             #endregion
         }
 
-        public FileNameParser(string fileName, bool isFolder = false) : this(fileName, isFolder, new[] {".", "-", ")", "(", "[", "]", "{", "}", "_", " "}) {
+        public FileNameParser(string fileName, bool isFolder = false) : this(fileName, isFolder, new[] {'.', '-', ')', '(', '[', ']', '{', '}', '_', ' '}) {
         }
 
-        public FileNameParser(string fileName, bool isFolder, params string[] delimiters) {
+        public FileNameParser(string fileName, bool isFolder, params char[] delimiters) {
+            _textInfo = CultureInfo.CurrentCulture.TextInfo;
+
+            _delimiters = new List<char>(delimiters);
+
+            _titleAndReleaseYear = GetTitleAndReleaseYearRegexWithDelimiters();
+
             fileName = UrlRegex.Replace(fileName, "");
 
             _fileName = isFolder
                 ? Path.GetDirectoryName(fileName)
                 : Path.GetFileNameWithoutExtension(fileName);
 
-            _delimiters = new List<string>(delimiters);
-
             _detectedSegments = new Dictionary<SegmentType, List<string>>();
         }
 
-        public ICollection<string> Delimiters {
+        public string DetectedTitle { get; private set; }
+
+        public ICollection<char> Delimiters {
             get { return _delimiters; }
             set { _delimiters = value.ToList(); }
         }
@@ -732,54 +743,204 @@ namespace Frost.DetectFeatures {
             KnownSegments.Add(value, type);
         }
 
+        private Regex GetTitleAndReleaseYearRegexWithDelimiters() {
+            StringBuilder sb = new StringBuilder(_delimiters.Count + 10);
+            foreach (char delimiter in _delimiters) {
+                if (RegexReservedChars.Contains(delimiter)) {
+                    sb.Append("\\" + delimiter);
+                }
+                else {
+                    sb.Append(delimiter);
+                }
+            }
+
+            string pattern = string.Format(@"(.+)[{0}]({1})[{0}]?", sb, @"1[89]\d{2}|2\d{3}");
+            return new Regex(pattern);
+        }
+
         public void Parse() {
             _segments = _fileName.SplitWithoutEmptyEntries(_delimiters).ToList();
+
+            if (TryGetTitleAndReleaseYear()) {
+                _titleFound = true;
+                _releaseYearFound = true;
+
+                RemoveKnownSegmentsFromTitle();
+            }
+            else {
+                int titleEndIndex = _fileName.IndexOfAny(new[] {'-', ')', '(', '[', ']', '{', '}'});
+                if (titleEndIndex > 0) {
+                    _titleFound = true;
+                    string title = _fileName.Substring(0, titleEndIndex)
+                                            .Replace('.', ' ')
+                                            .Replace('_', '_');
+
+
+                    DetectedTitle = title.Trim();
+                    RemoveKnownSegmentsFromTitle(false);
+                }
+            }
 
             _releaseGroupFound = CheckForReleaseGroup();
             CheckForPartIdentifier();
 
-            Console.WriteLine("Segments:");
+            //Console.WriteLine("Segments:");
 
             foreach (string segment in _segments) {
-                Console.WriteLine("\t"+segment);
-
-                if (CheckReleaseYear(segment)) {
-                    int yearStart = _fileName.IndexOf(segment, StringComparison.Ordinal) - 1;
-
-                    CheckAddDetectedKey(SegmentType.Title);
-                    string title = _fileName.Substring(0, yearStart).Replace('.', ' ');
-                    _detectedSegments[SegmentType.Title].Add(title);
-                    continue;
-                }
-
-                SegmentType type;
-                if (KnownSegments.TryGetValue(segment, out type)) {
-                    CheckAddDetectedKey(type);
-
-                    _detectedSegments[type].Add(segment);
-                    continue;
-                }
-
-                if (CheckSubtitlesLanguage(segment)) {
-                    continue;
-                }
-
-                if (CheckLanguage(segment)) {
-                    continue;
-                }
-
-                if (!_releaseGroupFound) {
-                    CheckReleaseGroup(segment);
-                }
+                CheckSegmentType(segment);
             }
-            ApplyFixes();
 
-            Console.WriteLine();
+            ApplyFixes();
 
             //remove detected segments
             foreach (string segment in DetectedSegments.Values.SelectMany(valueList => valueList)) {
                 _segments.Remove(segment);
             }
+
+            if (!_titleFound) {
+                string title = GetStringBeforeFirstDetectedSegment();
+                if (!string.IsNullOrEmpty(title)) {
+                    DetectedTitle = title.Replace('.', ' ')
+                                         .Replace('_', ' ')
+                                         .Trim();
+
+                    _titleFound = true;
+                }
+                else {
+                    DetectedTitle = string.Join(" ", UndetectedSegments);  
+                }
+            }
+
+            DetectedTitle = _textInfo.ToTitleCase(DetectedTitle);
+
+            //Console.WriteLine();
+        }
+
+        private string GetStringBeforeFirstDetectedSegment() {
+            int minIndex = _fileName.Length;
+
+            List<string> langs = null;
+            if (DetectedSegments.ContainsKey(SegmentType.Language)) {
+                langs = DetectedSegments[SegmentType.Language];
+            }
+
+            foreach (List<string> detectedSegmentTypes in DetectedSegments.Values) {
+                int minTypeIdx = detectedSegmentTypes.Min(segment => {
+                    //skip if its a detected lanugage (as its probably wrong, stuff like 'it', 'my' 'the', 'an') 
+                    if (langs != null && langs.Contains(segment)) {
+                        return minIndex;
+                    }
+                    int idx = _fileName.IndexOf(segment, StringComparison.Ordinal);
+                    return (idx < 0)
+                        ? minIndex
+                        : idx;
+                });
+
+                if (minTypeIdx < minIndex) {
+                    minIndex = minTypeIdx;
+                }
+            }
+
+            return (minIndex != _fileName.Length)
+                ? _fileName.Substring(0, minIndex)
+                : null;
+        }
+
+        private void RemoveKnownSegmentsFromTitle(bool releaseYearFound = true) {
+            int firstSegmentIdx = -1;
+            foreach (string titleSegment in DetectedTitle.SplitWithoutEmptyEntries(_delimiters)) {
+                SegmentType type;
+                if (KnownSegments.TryGetValue(titleSegment, out type)) {
+                    CheckAddDetectedKey(type);
+
+                    _detectedSegments[type].Add(titleSegment);
+
+                    if (firstSegmentIdx == -1) {
+                        firstSegmentIdx = DetectedTitle.IndexOf(titleSegment, StringComparison.Ordinal);
+                    }
+
+                    DetectedTitle = DetectedTitle.Replace(titleSegment, "").Trim();
+                }
+                else if (CheckLanguage(titleSegment)) {
+                    int langIdx = DetectedTitle.IndexOf(titleSegment, StringComparison.Ordinal) - 1;
+
+                    if (langIdx > 0) {
+                        char prevLang = DetectedTitle[langIdx];
+
+                        //only if language identifier is in brackets (to avoid colisions with the title)
+                        if (prevLang == '(' || prevLang == '[' || prevLang == '{') {
+                            CheckAddDetectedKey(SegmentType.Language);
+                            DetectedSegments[SegmentType.Language].Add(titleSegment);
+
+                            DetectedTitle = DetectedTitle.Remove(langIdx, titleSegment.Length + 2).Trim();
+                        }
+                    }
+                }
+
+                _segments.Remove(titleSegment);
+            }
+
+            //remove everything after the first known segment
+            //and preserve the title only
+            DetectedTitle = (firstSegmentIdx != -1 && firstSegmentIdx < DetectedTitle.Length)
+                ? DetectedTitle.Remove(firstSegmentIdx).Trim()
+                : DetectedTitle.Trim();
+
+            if (releaseYearFound) {
+                _segments.Remove(_detectedSegments[SegmentType.ReleaseYear].First());
+            }
+        }
+
+        private void CheckSegmentType(string segment) {
+            //Console.WriteLine("\t" + segment);
+
+            if (!_releaseYearFound && CheckReleaseYear(segment)) {
+                _releaseYearFound = true;
+                if (!_titleFound) {
+                    _titleFound = true;
+
+                    int yearStart = _fileName.IndexOf(segment, StringComparison.Ordinal) - 1;
+
+                    DetectedTitle = _fileName.Substring(0, yearStart)
+                                             .Replace('.', ' ')
+                                             .Replace('_', ' ')
+                                             .Trim();
+                    return;
+                }
+            }
+
+            SegmentType type;
+            if (KnownSegments.TryGetValue(segment, out type)) {
+                CheckAddDetectedKey(type);
+
+                _detectedSegments[type].Add(segment);
+                return;
+            }
+
+            if (CheckAndAddSubtitlesLanguage(segment)) {
+                return;
+            }
+
+            if (CheckAndAddLanguage(segment)) {
+                return;
+            }
+
+            if (!_releaseGroupFound) {
+                CheckReleaseGroup(segment);
+            }
+        }
+
+        private bool TryGetTitleAndReleaseYear() {
+            Match match = _titleAndReleaseYear.Match(_fileName);
+            if (match.Success) {
+                DetectedTitle = match.Groups[1].Value.Replace('.', ' ').Replace('_', ' ');
+
+                CheckAddDetectedKey(SegmentType.ReleaseYear);
+                _detectedSegments[SegmentType.ReleaseYear].Add(match.Groups[2].Value.Trim());
+
+                return true;
+            }
+            return false;
         }
 
         private bool CheckForReleaseGroup() {
@@ -792,7 +953,7 @@ namespace Frost.DetectFeatures {
                 if (releaseGroup.Length > 2 && !SegmentExclusion.Contains(releaseGroup)) {
                     CheckAddDetectedKey(SegmentType.ReleaseGroup);
 
-                    _detectedSegments[SegmentType.ReleaseGroup].Add(releaseGroup + "*");
+                    _detectedSegments[SegmentType.ReleaseGroup].Add(releaseGroup);
                     _segments.Remove(releaseGroup);
                     return true;
                 }
@@ -809,12 +970,7 @@ namespace Frost.DetectFeatures {
 
                 CheckAddDetectedKey(SegmentType.PartIdentifier);
 
-#if DEBUG
-                _detectedSegments[SegmentType.PartIdentifier].Add(partIdentifier + "*");
-#else
                 _detectedSegments[SegmentType.PartIdentifier].Add(partIdentifier);
-#endif
-
                 _segments.Remove(partIdentifier);
                 return true;
             }
@@ -825,15 +981,61 @@ namespace Frost.DetectFeatures {
             //check for any misdetected stuff
             //like having subs language be just "subs" while we detected a standalone lang
 
+            //handle misdetected lanugages
+            HandleMisdetectedLanguages();
         }
 
-        private bool CheckSubtitlesLanguage(string segment) {
+        private void HandleMisdetectedLanguages() {
+            if (DetectedSegments.ContainsKey(SegmentType.Language)) {
+                List<string> langs = DetectedSegments[SegmentType.Language];
+                int langCount = langs.Count;
+                if (langCount > 1) {
+                    int itIdx = langs.FindIndex(lang => lang.Equals("it", StringComparison.OrdinalIgnoreCase));
+                    int myIdx = langs.FindIndex(lang => lang.Equals("my", StringComparison.OrdinalIgnoreCase));
+
+                    if (langCount == 2) {
+                        //if IT was detectd but MY not then remove IT
+                        if (itIdx != -1 && myIdx == -1) {
+                            langs.Remove(langs[itIdx]);
+                        }
+                        //if MY was detected but IT not then remove MY
+                        else if (myIdx != -1 && itIdx == -1) {
+                            langs.Remove(langs[myIdx]);
+                        }
+                        //SPECIAL CASE: bot MY and IT detected
+                        //return the one with the bigger index
+                        //as it was further in to the file name and
+                        //has a higher probability.
+                        else if (myIdx != -1 && itIdx != -1) {
+                            if (itIdx > myIdx) {
+                                langs.Remove(langs[itIdx]);
+                            }
+                            else {
+                                langs.Remove(langs[myIdx]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private bool CheckAndAddSubtitlesLanguage(string segment) {
             if (segment.EndsWith("subs", StringComparison.OrdinalIgnoreCase) || segment.EndsWith("sub", StringComparison.OrdinalIgnoreCase)) {
                 CheckAddDetectedKey(SegmentType.SubtitleLanguage);
                 DetectedSegments[SegmentType.SubtitleLanguage].Add(segment);
                 return true;
             }
             return false;
+        }
+
+        private bool CheckAndAddLanguage(string segment) {
+            if (!CheckLanguage(segment)) {
+                return false;
+            }
+
+            CheckAddDetectedKey(SegmentType.Language);
+            DetectedSegments[SegmentType.Language].Add(segment);
+            return true;
         }
 
         private bool CheckLanguage(string segment) {
@@ -843,17 +1045,11 @@ namespace Frost.DetectFeatures {
 
             //ISO codes are 2 or 3 letters long
             if (segment.Length < 4 && ISOLanguageCodes.IsAnISOCode(segment)) {
-                CheckAddDetectedKey(SegmentType.Language);
-                DetectedSegments[SegmentType.Language].Add(segment);
                 return true;
             }
 
-            if (ISOLanguageCodes.IsAnISOEnglishLanguageName(segment) || CustomLangMappings.ContainsKey(segment)) {
-                CheckAddDetectedKey(SegmentType.Language);
-                DetectedSegments[SegmentType.Language].Add(segment);
-                return true;
-            }
-            return false;
+            return ISOLanguageCodes.IsAnISOEnglishLanguageName(segment) ||
+                   CustomLangMappings.ContainsKey(segment);
         }
 
         private bool CheckReleaseYear(string segment) {
@@ -900,7 +1096,6 @@ namespace Frost.DetectFeatures {
             //every letter is a digit
             return segment.All(ch => ch >= '0' && ch <= '9');
         }
-
     }
 
 }

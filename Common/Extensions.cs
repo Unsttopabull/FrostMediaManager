@@ -84,6 +84,15 @@ namespace Frost.Common {
         /// <param name="delimiters">The delimiters to split on.</param>
         /// <returns>Array of strings that resulted in the split without empty entries.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEnumerable<string> SplitWithoutEmptyEntries(this string str, IEnumerable<char> delimiters) {
+            return str.Split(delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        /// <summary>Splits the string on specified delimiters and removes empty entires.</summary>
+        /// <param name="str">The string to split.</param>
+        /// <param name="delimiters">The delimiters to split on.</param>
+        /// <returns>Array of strings that resulted in the split without empty entries.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string[] SplitWithoutEmptyEntries(this string str, params char[] delimiters) {
             return str.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
         }
