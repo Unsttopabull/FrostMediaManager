@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -1295,41 +1296,102 @@ namespace Frost.Tester {
 
         private static void TestFileNameParser() {
             foreach (string fileName in LocalSubtitleFiles) {
-                //Console.WriteLine("FileName: {0}", fileName);
-                Console.Write(fileName + ";");
+                Console.WriteLine("FileName: {0}", fileName);
+                //Console.Write(fileName + ";");
 
                 FileNameParser fnp = new FileNameParser(fileName);
-                fnp.Parse();
+                FileNameInfo fileNameInfo = fnp.Parse();
+                //if (fileNameInfo.VideoSources.Count > 1) {
+                //    Console.Error.WriteLine(fileName);
+                //}
 
-                if (string.IsNullOrEmpty(fnp.DetectedTitle)) {
-                    Console.WriteLine("UNKNOWN;");
-                }
-                else {
-                    Console.WriteLine(fnp.DetectedTitle + ";");
-                }
-
-                //Console.WriteLine("\tTitle:");
-
-                //if (string.IsNullOrEmpty(fnp.DetectedTitle)) {
-                //    Console.WriteLine("\t\tUNKNOWN");
+                //if (string.IsNullOrEmpty(fileNameInfo.Title)) {
+                //    Console.WriteLine("UNKNOWN;");
                 //}
                 //else {
-                //    Console.WriteLine("\t\t" + fnp.DetectedTitle);
+                //    Console.WriteLine(fileNameInfo.Title + ";");
                 //}
-                //OutputDetected(fnp.DetectedSegments);
+
+                Console.WriteLine("\tTitle:");
+
+                if (string.IsNullOrEmpty(fileNameInfo.Title)) {
+                    Console.WriteLine("\t\tUNKNOWN");
+                }
+                else {
+                    Console.WriteLine("\t\t" + fileNameInfo.Title);
+                }
+                OutputDetected(fileNameInfo);
+                Console.WriteLine();
+                Console.WriteLine(Filler);
             }
         }
 
-        private static void OutputDetected(Dictionary<SegmentType, List<string>> detectedSegments) {
-            foreach (KeyValuePair<SegmentType, List<string>> segmentType in detectedSegments) {
-                Console.WriteLine("\t{0}:", segmentType.Key);
-                foreach (string seg in segmentType.Value) {
-                    Console.WriteLine("\t\t{0}", seg);
-                }
+        private static void OutputDetected(FileNameInfo fnInfo) {
+            if (fnInfo.ReleaseYear.Year != 1) {
+                OutputString("Release Year:", fnInfo.ReleaseYear.Year.ToString(CultureInfo.InvariantCulture));
             }
 
-            Console.WriteLine();
-            Console.WriteLine(Filler);
+            OutputString("Release Group: ", fnInfo.ReleaseGroup);
+            OutputString("Edithion: ", fnInfo.Edithion);
+
+            if (fnInfo.Part != 0) {
+                OutputString("Part:", fnInfo.Part.ToString(CultureInfo.InvariantCulture));
+                OutputString("Part Type:", fnInfo.PartType);
+            }
+
+            if (fnInfo.Language != null) {
+                OutputString("Language: ", fnInfo.Language.EnglishName);
+            }
+
+            if (fnInfo.SubtitleLanguage != null) {
+                OutputString("Subtitle Language: ", fnInfo.SubtitleLanguage.EnglishName);
+            }
+
+            OutputList("Specials:", fnInfo.Specials);
+
+            OutputString("Genre: ",fnInfo.Genre);
+            OutputString("ContentType: ",fnInfo.ContentType);
+
+            if (fnInfo.DVDRegion != DVDRegion.Unknown) {
+                OutputString("DVDRegion: ", fnInfo.DVDRegion.ToString());
+            }
+
+            OutputString("VideoSource: ", fnInfo.VideoSource);
+            OutputString("VideoQuality: ", fnInfo.VideoQuality);
+            OutputString("VideoCodec:", fnInfo.VideoCodec);
+
+            OutputString("AudioSources:", fnInfo.AudioSources);
+            OutputString("AudioQuality:", fnInfo.AudioQuality);
+            OutputString("AudioCodec:",   fnInfo.AudioCodec);
+        }
+
+        public static void OutputString(string type, string str) {
+            if (!string.IsNullOrEmpty(str)) {
+                Console.WriteLine("\t"+type);
+                Console.WriteLine("\t\t"+str);
+            }
+        }
+
+        private static void OutputList(string type, ICollection<string> enumerable) {
+            if (enumerable.Count != 0) {
+                Console.WriteLine("\t"+type);
+                foreach (string str in enumerable) {
+                    Console.WriteLine("\t\t" + str);
+                }
+            }
+        }
+
+        public static void OutputIfNotDefault<T>(string type, T param) where T : struct {
+            if (!Equals(param, default(T))) {
+                Console.WriteLine(type);
+                Console.WriteLine("\t\t"+param);
+            }
+        }
+
+        public static void OutputIfNotNull<T>(string type, T param) where T : class {
+            if (param != null) {
+                Console.WriteLine(type + param);
+            }
         }
 
         private static void TestFeatureDetector() {
