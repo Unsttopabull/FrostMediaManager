@@ -13,6 +13,11 @@ namespace Frost.Common.Models.DB.MovieVo {
             ISO639 = new ISO639();
         }
 
+        public Language(ISOLanguageCode isoCode) {
+            Name = isoCode.EnglishName;
+            ISO639 = new ISO639(isoCode.Alpha2, isoCode.Alpha3);
+        }
+
         /// <summary>Initializes a new instance of the <see cref="Language"/> class.</summary>
         /// <param name="name">The english name of this language.</param>
         public Language(string name) {

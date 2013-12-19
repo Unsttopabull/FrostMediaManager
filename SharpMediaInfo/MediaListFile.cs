@@ -5,9 +5,6 @@ namespace Frost.SharpMediaInfo {
 
     /// <summary>Represents a MediaInfo file in a List.</summary>
     public class MediaListFile : MediaFileBase {
-
-        private readonly int _filePos;
-
         /// <summary>Initializes a new instance of the <see cref="MediaListFile"/> class.</summary>
         /// <param name="mediaInfoList">The handle to the MediaInfoList.</param>
         /// <param name="filePos">The file position in list.</param>
@@ -17,9 +14,11 @@ namespace Frost.SharpMediaInfo {
             DisposedMessage = FILE_CLOSED;
 
             IsOpen = true;
-            _filePos = filePos;
+            FileIndex = filePos;
             InitializeMediaStreams(cacheInfom, allInfoCache);
         }
+
+        public int FileIndex { get; private set; }
 
         #region P/Invoke C Functions
 
@@ -51,7 +50,7 @@ namespace Frost.SharpMediaInfo {
         /// <summary>Closes this instance and disposes all allocated resources.</summary>
         public override void Close() {
             if (IsOpen) {
-                MediaInfoList_Close(Handle, (IntPtr) _filePos);
+                MediaInfoList_Close(Handle, (IntPtr) FileIndex);
                 GC.SuppressFinalize(this);
                 IsOpen = false;
             }
@@ -66,7 +65,7 @@ namespace Frost.SharpMediaInfo {
         public override string Inform() {
             ThrowIfDisposed();
 
-            return Marshal.PtrToStringUni(MediaInfoList_Inform(Handle, (IntPtr) _filePos, (IntPtr) 0));
+            return Marshal.PtrToStringUni(MediaInfoList_Inform(Handle, (IntPtr) FileIndex, (IntPtr) 0));
         }
 
         /// <summary>Configure or get information about MediaInfoLib</summary>
@@ -105,7 +104,7 @@ namespace Frost.SharpMediaInfo {
         public override string Get(StreamKind streamKind, int streamNumber, string parameter, InfoKind kindOfInfo = InfoKind.Text, InfoKind kindOfSearch = InfoKind.Name) {
             ThrowIfDisposed();
 
-            return Marshal.PtrToStringUni(MediaInfoList_Get(Handle, (IntPtr) _filePos, (IntPtr) streamKind, (IntPtr) streamNumber, parameter, (IntPtr) kindOfInfo, (IntPtr) kindOfSearch));
+            return Marshal.PtrToStringUni(MediaInfoList_Get(Handle, (IntPtr) FileIndex, (IntPtr) streamKind, (IntPtr) streamNumber, parameter, (IntPtr) kindOfInfo, (IntPtr) kindOfSearch));
         }
 
         /// <summary>Get a piece of information about a file (parameter is an integer)</summary>
@@ -117,7 +116,7 @@ namespace Frost.SharpMediaInfo {
         public override string Get(StreamKind streamKind, int streamNumber, int parameter, InfoKind kindOfInfo = InfoKind.Text) {
             ThrowIfDisposed();
 
-            return Marshal.PtrToStringUni(MediaInfoList_GetI(Handle, (IntPtr) _filePos, (IntPtr) streamKind, (IntPtr) streamNumber, (IntPtr) parameter, (IntPtr) kindOfInfo));
+            return Marshal.PtrToStringUni(MediaInfoList_GetI(Handle, (IntPtr) FileIndex, (IntPtr) streamKind, (IntPtr) streamNumber, (IntPtr) parameter, (IntPtr) kindOfInfo));
         }
 
         /// <summary>Count of streams of a stream kind or count of piece of information in this stream.</summary>
@@ -127,11 +126,22 @@ namespace Frost.SharpMediaInfo {
         public override int CountGet(StreamKind streamKind, int streamNumber = -1) {
             ThrowIfDisposed();
 
-            return (int) MediaInfoList_Count_Get(Handle, (IntPtr) _filePos, (IntPtr) streamKind, (IntPtr) streamNumber);
+            return (int) MediaInfoList_Count_Get(Handle, (IntPtr) FileIndex, (IntPtr) streamKind, (IntPtr) streamNumber);
         }
 
         #endregion
 
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString() {
+            return General.FileInfo.FullPath;
+        }
+
+        public string ToString(bool full) {
+            return full
+                ? General.FileInfo.FullPath
+                : General.FileInfo.FileName+"."+General.FileInfo.Extension;
+        }
     }
 
 }

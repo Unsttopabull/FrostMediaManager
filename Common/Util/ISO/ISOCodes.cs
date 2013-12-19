@@ -26,7 +26,9 @@ namespace Frost.Common.Util.ISO {
         /// <param name="isoCode">The 2 or 3 letter ISO code.</param>
         /// <returns>An instance of <see cref="ISOCode"/> if found; otherwise <c>null</c>.</returns>
         public T GetByISOCode(string isoCode) {
-            return Codes.ContainsKey(isoCode) ? Codes[isoCode] : null;
+            return isoCode != null && Codes.ContainsKey(isoCode)
+                ? Codes[isoCode]
+                : null;
         }
 
         /// <summary>Determines whether the specified string is an ISO code.</summary>

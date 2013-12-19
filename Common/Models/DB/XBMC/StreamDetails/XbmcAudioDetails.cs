@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Frost.Common.Models.DB.XBMC.StreamDetails {
 
     /// <summary>Represents information about an audio stream in a file.</summary>
-    public class XbmcAudioDetails : XbmcStreamDetails, IEquatable<XbmcAudioDetails> {
+    public class XbmcAudioDetails : XbmcDbStreamDetails, IEquatable<XbmcAudioDetails> {
 
         /// <summary>Initializes a new instance of the <see cref="XbmcAudioDetails"/> class.</summary>
         /// <param name="codec">The codec this audio is encoded in.</param>

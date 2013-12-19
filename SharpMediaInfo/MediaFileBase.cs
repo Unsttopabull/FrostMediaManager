@@ -83,13 +83,18 @@ namespace Frost.SharpMediaInfo {
             string prevInform = Options.Inform;
 
             bool showAllInfo = Options.ShowAllInfo;
-            Options.ShowAllInfo = true;
+            if (allInfoInform) {
+                Options.ShowAllInfo = true;
+            }
 
             Options.InformPreset = InformPreset.XML;
 
             ParseInform(Inform());
 
-            Options.ShowAllInfo = showAllInfo;
+            if (allInfoInform) {
+                Options.ShowAllInfo = showAllInfo;
+            }
+
             Options.Inform = prevInform;
         }
 

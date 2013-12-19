@@ -31,6 +31,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Frost.SharpLanguageDetect.XML</DocumentationFile>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -54,6 +55,7 @@
     <Compile Include="DetectorFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ILanguageDetector.cs" />
     <Compile Include="JDK\CharacterSubset.cs" />
     <Compile Include="JDK\GaussianRandom.cs" />
     <Compile Include="JDK\UnicodeBlock.cs" />
@@ -123,6 +125,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Util\ILanguageProfile.cs" />
     <Compile Include="Util\LangProfile.cs" />
     <Compile Include="Util\NGram.cs" />
     <Compile Include="Util\TagExtractor.cs" />

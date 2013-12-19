@@ -2,35 +2,44 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
+using System.Text;
 
 namespace Frost.Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents information about a subtitle stream in a file.</summary>
     public class Subtitle : IEquatable<Subtitle> {
+        public Subtitle(File file = null) {
+            Movie = new Movie();
+            File = file ?? new File();
+            Language = new Language();
+        }
 
         /// <summary>Initializes a new instance of the <see cref="Subtitle" /> class.</summary>
+        /// <param name="file">The file this subtitle is contained in.</param>
         /// <param name="lang">The language info of this subtitle.</param>
-        public Subtitle(Language lang = null) {
-            Movie = new Movie();
-            File = new File();
-
-            if (lang == null) {
-                Language = new Language();
-            }
-            else {
-                Language = lang;
-            }
+        public Subtitle(File file = null, Language lang = null) : this(file) {
+            Language = lang;
         }
 
         /// <summary>Initializes a new instance of the <see cref="Subtitle"/> class.</summary>
+        /// <param name="file">The file this subtitle is contained in.</param>
         /// <param name="language">The language of this subtitle.</param>
         /// <param name="typeFormat">The type or format of the subtitle.</param>
         /// <param name="embededInVideo">If the subtitle is embeded in the video set to <c>true</c>.</param>
         /// <param name="forHearingImpaired">If the subtitle is for people that are hearing impaired.</param>
-        public Subtitle(string language, string typeFormat = null, bool embededInVideo = false, bool forHearingImpaired = false) : this(new Language(language)) {
+        public Subtitle(File file, Language language, string typeFormat = null, bool embededInVideo = false, bool forHearingImpaired = false) : this(file, language) {
             Format = typeFormat;
             EmbededInVideo = embededInVideo;
             ForHearingImpaired = forHearingImpaired;
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="Subtitle"/> class.</summary>
+        /// <param name="file">The file this subtitle is contained in.</param>
+        /// <param name="language">The language of this subtitle.</param>
+        /// <param name="typeFormat">The type or format of the subtitle.</param>
+        /// <param name="embededInVideo">If the subtitle is embeded in the video set to <c>true</c>.</param>
+        /// <param name="forHearingImpaired">If the subtitle is for people that are hearing impaired.</param>
+        public Subtitle(File file, string language, string typeFormat = null, bool embededInVideo = false, bool forHearingImpaired = false) : this(file, new Language(language), typeFormat, embededInVideo, forHearingImpaired) {
         }
 
         #region Properties/Columns
@@ -59,6 +68,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         #endregion
 
         #region Foreign Keys
+
         /// <summary>Gets or sets the language foreign key.</summary>
         /// <value>The language foreign key.</value>
         public long? LanguageId { get; set; }
@@ -115,11 +125,30 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
                    FileId == other.FileId;
         }
 
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString() {
+            StringBuilder sb = new StringBuilder(100);
+
+            sb.AppendLine("-----------------------------------------");
+            sb.Append(string.Format("Format: {0} ", Format ?? "*."+File.Extension));
+
+            if (!string.IsNullOrEmpty(Encoding)) {
+                sb.Append("(" + Encoding + ")");
+            }
+
+            if (Language != null) {
+                sb.AppendLine(" - " + Language.Name);
+            }
+            sb.AppendLine("-----------------------------------------");
+
+            return sb.ToString();
+        }
+
         internal class Configuration : EntityTypeConfiguration<Subtitle> {
             public Configuration() {
                 HasOptional(s => s.Language);
             }
-
         }
     }
 

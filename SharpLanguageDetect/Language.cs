@@ -20,9 +20,7 @@ namespace Frost.SharpLanguageDetect {
         }
 
         public override string ToString() {
-            return (LangCode == null)
-                ? ""
-                : LangCode + ":" + Probability;
+            return LangCode + ":" + Probability;
         }
 
     }

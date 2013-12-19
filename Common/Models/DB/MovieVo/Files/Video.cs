@@ -127,6 +127,10 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <example>\eg{ <c>1.333</c>}</example>
         public double? Aspect { get; set; }
 
+        /// <summary>Gets or sets the the commercial name of the aspect ratio.</summary>
+        /// <value>The the commercial name of the aspect ratio.</value>
+        public string AspectCommercialName { get; set; }
+
         /// <summary>Gets or sets the width of the video.</summary>
         /// <value>The width of the video.</value>
         public int? Width { get; set; }

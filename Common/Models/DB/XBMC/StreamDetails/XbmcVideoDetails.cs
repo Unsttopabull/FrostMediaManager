@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Frost.Common.Models.DB.XBMC.StreamDetails {
 
     /// <summary>Represents information about a video stream in a file.</summary>
-    public class XbmcVideoDetails : XbmcStreamDetails, IEquatable<XbmcVideoDetails> {
+    public class XbmcVideoDetails : XbmcDbStreamDetails, IEquatable<XbmcVideoDetails> {
 
         /// <summary>Initializes a new instance of the <see cref="XbmcVideoDetails"/> class.</summary>
         /// <param name="codec">The video codec.</param>

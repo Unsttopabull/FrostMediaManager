@@ -37,7 +37,7 @@ namespace Frost.Common.Models.DB.XBMC {
 
         /// <summary>Gets or sets the infromation about movie video/audio/subtitle stream details.</summary>
         /// <value>The infromation about movie video/audio/subtitle stream details.</value>
-        public DbSet<XbmcStreamDetails> StreamDetails { get; set; }
+        public DbSet<XbmcDbStreamDetails> StreamDetails { get; set; }
 
         /// <summary>Gets or sets the information about movie collections and sets in the XBMC library.</summary>
         /// <value>The information about movie collections and sets in the XBMC library.</value>
@@ -81,7 +81,7 @@ namespace Frost.Common.Models.DB.XBMC {
             modelBuilder.Configurations.Add(new XbmcBookmark.Configuration());
             modelBuilder.Configurations.Add(new XbmcFile.Configuration());
             modelBuilder.Configurations.Add(new XbmcMovie.Configuration());
-            modelBuilder.Configurations.Add(new XbmcStreamDetails.Configuration());
+            modelBuilder.Configurations.Add(new XbmcDbStreamDetails.Configuration());
             modelBuilder.Configurations.Add(new XbmcSet.Configuration());
             modelBuilder.Configurations.Add(new XbmcPath.Configuration());
             modelBuilder.Configurations.Add(new XbmcMovieActor.Configuration());

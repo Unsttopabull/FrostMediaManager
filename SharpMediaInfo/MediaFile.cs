@@ -99,7 +99,7 @@ namespace Frost.SharpMediaInfo {
 
         /// <summary>Open a file and collect information about it (technical information and tags)</summary>
         /// <param name="fileName">Full name of the file to open.</param>
-        /// <returns>Returns true if sucessfull, otherwise false</returns>
+        /// <returns>Returns <c>true</c> if sucessfull, otherwise <c>false</c></returns>
         protected bool Open(string fileName) {
             if (MustUseAnsi) {
                 IntPtr fileNamePtr = Marshal.StringToHGlobalAnsi(fileName);

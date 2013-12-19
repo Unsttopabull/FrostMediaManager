@@ -18,7 +18,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         }
 
         /// <summary>Initializes a new instance of the <see cref="File"/> class.</summary>
-        /// <param name="name">The filename in folder</param>
+        /// <param name="name">The filename in folder (without folder path)</param>
         /// <param name="extension">The file extension withot begining point</param>
         /// <param name="size">The file size in bytes.</param>
         /// <param name="pathOnDrive">The full path to the folder that contains the file with trailing '/' without quotes (" or ')</param>
@@ -27,6 +27,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
             Name = name;
             FolderPath = pathOnDrive;
             Size = size;
+            DateAdded = DateTime.Now;
         }
 
         #region Properties/Columns

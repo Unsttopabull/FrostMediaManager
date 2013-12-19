@@ -50,12 +50,12 @@ namespace Frost.SharpCharsetDetector {
     };
 
     public enum LanguageFilter {
-        ChineseSimplified = 1,
-        ChineseTraditional = 2,
-        Japanese = 4,
-        Korean = 8,
-        All = 31,
-        NonCjk = 16,
+        ChineseSimplified = 0x1,
+        ChineseTraditional = 0x2,
+        Japanese = 0x4,
+        Korean = 0x8,
+        All = 0x1f,
+        NonCjk = 0x10,
         Chinese = ChineseSimplified | ChineseTraditional,
         Cjk = Japanese | Korean | ChineseSimplified | ChineseTraditional
     }
@@ -92,7 +92,7 @@ namespace Frost.SharpCharsetDetector {
 
         /// <summary>Gets a value indicating whether the detected encoding is a supported encoding .NET.</summary>
         /// <value>Is <c>true</c> if the detected encoding is a supported encoding in .NET; otherwise, <c>false</c>.</value>
-        public bool IsSupportedEncoding {get { return _winCodePage > 0 || _winCodePage < 65535; }}
+        public bool IsSupportedEncoding {get { return _winCodePage > 0 && _winCodePage < 65535; }}
 
         public Encoding DetectedEncoding {
             get {

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Frost.Common.Models.DB.XBMC.StreamDetails {
 
     /// <summary>Represents information about a subtitle in a file.</summary>
-    public class XbmcSubtitleDetails : XbmcStreamDetails {
+    public class XbmcSubtitleDetails : XbmcDbStreamDetails {
 
         /// <summary>Initializes a new instance of the <see cref="XbmcSubtitleDetails"/> class.</summary>
         public XbmcSubtitleDetails() {

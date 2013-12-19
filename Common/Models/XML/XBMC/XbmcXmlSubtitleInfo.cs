@@ -41,7 +41,7 @@ namespace Frost.Common.Models.XML.XBMC {
         /// <param name="subtitle">The instance of <see cref="XbmcXmlAudioInfo"/> to convert</param>
         /// <returns>An instance of <see cref="Common.Models.DB.MovieVo.Files.Subtitle">Subtitle</see> converted from <see cref="XbmcXmlSubtitleInfo"/></returns>
         public static explicit operator Subtitle(XbmcXmlSubtitleInfo subtitle) {
-            return new Subtitle(subtitle.LongLanguage ?? subtitle.Language);
+            return new Subtitle(null, subtitle.LongLanguage ?? subtitle.Language);
         }
 
     }

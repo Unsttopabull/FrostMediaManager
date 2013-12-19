@@ -26,7 +26,7 @@ namespace Frost.Common.Models.DB.XBMC {
             Path = new XbmcPath();
             Movie = new XbmcMovie();
             Bookmark = new XbmcBookmark();
-            StreamDetails = new HashSet<XbmcStreamDetails>();
+            StreamDetails = new HashSet<XbmcDbStreamDetails>();
         }
 
         /// <summary>Initializes a new instance of the <see cref="XbmcFile"/> class.</summary>
@@ -169,7 +169,7 @@ namespace Frost.Common.Models.DB.XBMC {
 
         /// <summary>Gets or sets the stream details in this file (Audio/Video/Subtitle)</summary>
         /// <value>The stream details in this file (Audio/Video/Subtitle)</value>
-        public virtual HashSet<XbmcStreamDetails> StreamDetails { get; set; }
+        public virtual HashSet<XbmcDbStreamDetails> StreamDetails { get; set; }
 
         #endregion
 

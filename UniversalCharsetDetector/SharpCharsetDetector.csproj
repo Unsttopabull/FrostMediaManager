@@ -62,6 +62,7 @@
     <AssemblyName>Frost.SharpCharsetDetector</AssemblyName>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ContextAnalysers\EUCJPContextAnalyser.cs" />

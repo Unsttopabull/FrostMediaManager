@@ -1,22 +1,55 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.Files;
+using Frost.DetectFeatures.Util;
+using Frost.DetectFeatures.Util.AspectRatio;
 using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
+using Frost.SharpMediaInfo.Output.Properties.General;
 
 namespace Frost.DetectFeatures {
     public partial class FeatureDetector {
         private readonly List<Video> _video;
 
-        private Video GetFileVideoInfo(int filePos, int streamNumber = 0) {
-            if (_video[streamNumber] != null) {
-                return _video[streamNumber];
+        private void GetFileInfo(string fileName) {
+            if (fileName.EndsWith(".iso")) {
+                return;
             }
 
-            MediaVideo mv = _mf[filePos].Video;
-            _video[streamNumber] = new Video();
+            MediaListFile mediaFile = _mf.GetOrOpen(fileName);
 
-            Video currVideo = _video[streamNumber];
+            if (mediaFile != null) {
+                FileInfo fileInfo = mediaFile.General.FileInfo;
+                File f = new File(fileInfo.FileName, fileInfo.Extension, fileInfo.FolderPath, fileInfo.FileSize);
+
+                FileNameInfo fnInfo = GetFileNameInfo(fileName);
+
+                List<Video> fileVideoInfo = GetFileVideoInfo(mediaFile.Video);
+                foreach (Video video in fileVideoInfo) {
+                    video.File = f;
+                }
+
+                _video.AddRange(fileVideoInfo);
+            }
+            else {
+                Console.Error.WriteLine("Could not open file: "+fileName);
+            }
+        }
+
+        private List<Video> GetFileVideoInfo(IEnumerable<MediaVideo> videoInfo) {
+            List<Video> videos = new List<Video>();
+            foreach (MediaVideo mediaVideo in videoInfo) {
+                Video video = GetFileVideoStreamInfo(mediaVideo);
+                
+                videos.Add(video);
+            }
+            return videos;
+        }
+
+        private Video GetFileVideoStreamInfo(MediaVideo mv) {
+
+            Video currVideo = new Video();
             currVideo.Aspect = mv.PixelAspectRatio;
             currVideo.BitDepth = mv.BitDepth;
 
@@ -28,47 +61,30 @@ namespace Frost.DetectFeatures {
             currVideo.CompressionMode = mv.CompressionMode;
             currVideo.Duration = mv.Duration.HasValue ? (long?) mv.Duration.Value.TotalMilliseconds : null;
             currVideo.FPS = mv.FrameRate;
-            currVideo.Resolution = !string.IsNullOrEmpty(mv.Standard) ? mv.Standard : GetFileVideoResolution(filePos);
+            currVideo.Resolution = !string.IsNullOrEmpty(mv.Standard) ? mv.Standard : GetFileVideoResolution(mv);
             currVideo.Height = (int?) mv.Height;
             currVideo.Width = (int?) mv.Width;
             currVideo.Language = new Language(mv.Language, mv.LanguageInfo.ISO639_Alpha2, mv.LanguageInfo.ISO639_Alpha3);
             currVideo.ScanType = mv.ScanType;
-            currVideo.Type = GetFileVideoType(filePos, streamNumber);
+            currVideo.Aspect = mv.DisplayAspectRatio;
+
+            if (currVideo.Aspect.HasValue) {
+                AspectRatioInfo knownAspectRatio = AspectRatioDetector.GetKnownAspectRatio((float) currVideo.Aspect);
+                if (knownAspectRatio != null) {
+                    currVideo.AspectCommercialName = knownAspectRatio.ComercialName;
+                }
+            }
+
+            //currVideo.Type 
 
             return currVideo;
         }
 
-        private string GetFileVideoType(int filePos, int streamNumber) {
-            string fileName = _mf[filePos].General.FileInfo.FileName;
-            if (_mf[filePos].General.FormatInfo.Name.Contains("DVD") || fileName.Contains("HD2DVD", true)) {
-                return "DVD";
-            }
+        private string GetFileVideoResolution(MediaVideo mv) {
+            long h = mv.Height ?? 0;
+            long w = mv.Width ?? 0;
 
-            if (fileName.Contains("BRRip", true)) {
-                _video[streamNumber].Source = "Bluray";
-                return "BRRip";
-            }
-
-            if (fileName.Contains("DVDRip", true)) {
-                _video[streamNumber].Source = "DVD";
-                return "DVDRip";
-            }
-
-            if (fileName.ContainsAny(true, "BLUERAY", "BR", "BD", "Blu-ray")) {
-                return "Bluray";
-            }
-
-            if (fileName.Contains("X264")) {
-                return "X264";
-            }
-            return null;
-        }
-
-        private string GetFileVideoResolution(int filePos) {
-            long h = _mf[filePos].Video.Height ?? 0;
-            long w = _mf[filePos].Video.Width ?? 0;
-
-            switch (_mf[filePos].Video.ScanType) {
+            switch (mv.ScanType) {
                 case ScanType.Progressive:
                     if (h == 1080 && w == 1920) {
                         return "1080p";

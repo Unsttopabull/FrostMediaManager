@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Frost.Common;
 using Frost.Common.Util.ISO;
 
@@ -732,7 +733,7 @@ namespace Frost.DetectFeatures.Util {
                 : Path.GetFileNameWithoutExtension(fileName);
 
             _fileNameInfo = new FileNameInfo(_fileName.SplitWithoutEmptyEntries(_delimiters));
-            _detectedSegments = new List<string>(_fileNameInfo.Segments.Count);
+            _detectedSegments = new List<string>(_fileNameInfo.UndetectedSegments.Count);
         }
 
         public ICollection<char> Delimiters {
@@ -759,6 +760,10 @@ namespace Frost.DetectFeatures.Util {
             return new Regex(pattern);
         }
 
+        public Task<FileNameInfo> ParseAsync() {
+            return Task.Run(() => Parse());
+        }
+
         public FileNameInfo Parse() {
             if (TryGetTitleAndReleaseYear()) {
                 RemoveKnownSegmentsFromTitle();
@@ -782,7 +787,7 @@ namespace Frost.DetectFeatures.Util {
 
             //Console.WriteLine("Segments:");
 
-            foreach (string segment in _fileNameInfo.Segments) {
+            foreach (string segment in _fileNameInfo.UndetectedSegments) {
                 CheckSegmentType(segment);
             }
 
@@ -790,7 +795,7 @@ namespace Frost.DetectFeatures.Util {
 
             //remove detected segments
             foreach (string segment in _detectedSegments) {
-                _fileNameInfo.Segments.Remove(segment);
+                _fileNameInfo.UndetectedSegments.Remove(segment);
             }
 
             if (!_titleFound) {
@@ -856,7 +861,7 @@ namespace Frost.DetectFeatures.Util {
                     }
                 }
 
-                _fileNameInfo.Segments.Remove(titleSegment);
+                _fileNameInfo.UndetectedSegments.Remove(titleSegment);
             }
 
             //remove everything after the first known segment
@@ -866,7 +871,7 @@ namespace Frost.DetectFeatures.Util {
                 : _fileNameInfo.Title.Trim();
 
             if (releaseYearFound) {
-                _fileNameInfo.Segments.Remove(_fileNameInfo.ReleaseYear.ToString("yyyy"));
+                _fileNameInfo.UndetectedSegments.Remove(_fileNameInfo.ReleaseYear.ToString("yyyy"));
             }
         }
 
@@ -999,7 +1004,7 @@ namespace Frost.DetectFeatures.Util {
                     _fileNameInfo.VideoCodec = segment;
                     break;
                 case SegmentType.AudioSource:
-                    _fileNameInfo.AudioSources = segment;
+                    _fileNameInfo.AudioSource = segment;
                     break;
                 case SegmentType.AudioCodec:
                     _fileNameInfo.AudioCodec = segment;
@@ -1030,23 +1035,25 @@ namespace Frost.DetectFeatures.Util {
             }
             _detectedSegments.Add(partIdentifier);
 
-            _fileNameInfo.Segments.Remove(partIdentifier);
+            _fileNameInfo.UndetectedSegments.Remove(partIdentifier);
         }
 
         private bool CheckAndAddSubtitleLanguage(string segment) {
             string lang;
             if (segment.EndsWith("subs", StringComparison.OrdinalIgnoreCase)) {
-                lang = segment.Replace("subs", "");
+                int idx = segment.LastIndexOf("subs", StringComparison.OrdinalIgnoreCase);
+                lang = segment.Remove(idx);
             }
             else if (segment.EndsWith("sub", StringComparison.OrdinalIgnoreCase)) {
-                lang = segment.Replace("sub", "");
+                int idx = segment.LastIndexOf("sub", StringComparison.OrdinalIgnoreCase);
+                lang = segment.Remove(idx);
             }
             else {
                 return false;
             }
 
             _fileNameInfo.HasSubtitles = true;
-            CheckAndAddLanguage(lang);
+            CheckAndAddLanguage(lang, true);
 
             _detectedSegments.Add(segment);
             return true;
@@ -1121,7 +1128,7 @@ namespace Frost.DetectFeatures.Util {
 
                 if (releaseGroup.Length > 2 && !SegmentExclusion.Contains(releaseGroup)) {
                     _fileNameInfo.ReleaseGroup = releaseGroup;
-                    _fileNameInfo.Segments.Remove(releaseGroup);
+                    _fileNameInfo.UndetectedSegments.Remove(releaseGroup);
 
                     _detectedSegments.Add(releaseGroup);
                     return true;
@@ -1169,5 +1176,4 @@ namespace Frost.DetectFeatures.Util {
 
         #endregion
     }
-
 }

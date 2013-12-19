@@ -31,7 +31,7 @@ namespace Frost.DetectFeatures {
 
         /// <summary>Returns an enumerable collection of files information in this directory or any subdirectory.</summary>
         /// <returns>An enumerable collection of files in this directory or any subdirectory.</returns>
-        public static IEnumerable<FileInfo> EnumerateFilesRegex(this DirectoryInfo di) {
+        public static IEnumerable<FileInfo> EnumerateFilesRecursive(this DirectoryInfo di) {
             return di.EnumerateFiles("*", SearchOption.AllDirectories);            
         }
 

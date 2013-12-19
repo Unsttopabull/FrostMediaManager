@@ -163,6 +163,21 @@ namespace Frost.SharpLanguageDetect {
             }
         }
 
+        public static void LoadProfilesFromFile(string filePath) {
+            try {
+                JsonSerializer jsr = new JsonSerializer();
+                LangProfile[] langProfiles = jsr.Deserialize<LangProfile[]>(new JsonTextReader(File.OpenText("join_min.js")));
+
+                int langSize = langProfiles.Length;
+                for (int i = 0; i < langSize; i++) {
+                    AddProfile(langProfiles[i], i, langSize);
+                }
+            }
+            catch (IOException) {
+                throw new LangDetectException(ErrorCode.FileLoadError, string.Format("Can't open \"{0}\".", filePath));
+            }
+        }
+
         /**
          * @param profile
          * @param langsize 

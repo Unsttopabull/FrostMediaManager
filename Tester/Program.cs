@@ -1,38 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Frost.Common;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.DetectFeatures;
-using Frost.DetectFeatures.Util;
-using Frost.SharpCharsetDetector;
 using Frost.SharpLanguageDetect;
+using System.Diagnostics;
+using Frost.SharpMediaInfo;
+using Newtonsoft.Json;
 using File = System.IO.File;
 
 namespace Frost.Tester {
 
     internal class Program {
-        private const string FOLDER_PATH = @"E:\Torrenti\FILMI\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi\";
+        //private const string FOLDER_PATH = @"E:\Torrenti\FILMI\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi\";
 
-        private const string FILE_PATH = @"E:\Torrenti\FILMI\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi.avi";
-        private const string FILE_PATH2 = @"E:\Torrenti\FILMI\Intersections 2013 CROSubs.DVDRip XViD juggs\Intersections 2013 CROSubs.DVDRip XViD juggs.avi";
-        private const string FILE_PATH3 = @"Z:\Filmi\(500) Days of Summer (2009) - 500 dni z Summer\(500)Days of Summer.[2009].RETAIL.DVDRIP.XVID.[Eng]-DUQA.avi";
-        private const string FILE_PATH4 = @"E:\Torrenti\FILMI\Oz.the.Great.and.Powerful.2013.SLOSubs.DVDRip.XviD-DrSi\Oz.the.Great.and.Powerful.2013.SLOSubs.DVDRip.XviD-DrSi.avi";
-        private const string FILE_PATH5 = @"E:\Torrenti\FILMI\The Wolverine 2013 SLOSubs.EXTENDED BRRip XviD-ETRG\The Wolverine 2013 SLOSubs.EXTENDED BRRip XviD-ETRG.avi";
-        private const string FILE_PATH6 = @"Z:\Filmi\Avatar (2009) - Avatar\Avatar.2009.1080p.Slosubs.BluRay.DTS.x264-ESiR.mkv";
-        private static readonly string[] FileNames;
-        private static readonly List<string> SubtitleFiles;
+        //private const string FILE_PATH = @"E:\Torrenti\FILMI\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi.avi";
+        //private const string FILE_PATH2 = @"E:\Torrenti\FILMI\Intersections 2013 CROSubs.DVDRip XViD juggs\Intersections 2013 CROSubs.DVDRip XViD juggs.avi";
+        //private const string FILE_PATH3 = @"Z:\Filmi\(500) Days of Summer (2009) - 500 dni z Summer\(500)Days of Summer.[2009].RETAIL.DVDRIP.XVID.[Eng]-DUQA.avi";
+        //private const string FILE_PATH4 = @"E:\Torrenti\FILMI\Oz.the.Great.and.Powerful.2013.SLOSubs.DVDRip.XviD-DrSi\Oz.the.Great.and.Powerful.2013.SLOSubs.DVDRip.XviD-DrSi.avi";
+        //private const string FILE_PATH5 = @"E:\Torrenti\FILMI\The Wolverine 2013 SLOSubs.EXTENDED BRRip XviD-ETRG\The Wolverine 2013 SLOSubs.EXTENDED BRRip XviD-ETRG.avi";
+        //private const string FILE_PATH6 = @"Z:\Filmi\Avatar (2009) - Avatar\Avatar.2009.1080p.Slosubs.BluRay.DTS.x264-ESiR.mkv";
+        //private static readonly string[] FileNames;
+        private static readonly string[] FileNames2;
+        //private static readonly List<string> SubtitleFiles;
         private static readonly string Filler;
-        private static readonly List<string> LocalSubtitleFiles;
+        //private static readonly List<string> LocalSubtitleFiles;
 
         static Program() {
             Filler = string.Join("", Enumerable.Repeat("_", Console.BufferWidth));
 
             #region LocalSubs
 
+            /*
             LocalSubtitleFiles = new List<string> {
                 @"C:\Users\Martin\Desktop\FMM\MovieSubs\A Lot Like Love.srt",
                 @"C:\Users\Martin\Desktop\FMM\MovieSubs\A Separation 2011.srt",
@@ -361,10 +363,13 @@ namespace Frost.Tester {
                 @"E:\Torrenti\FILMI\Hysteria.2011.SLOSubs.DVDRip.XviD-DrSi\Hysteria.2011.SLOSubs.DVDRip.XviD-DrSi.srt",
             };
 
+             */
+
             #endregion
 
             #region SubsFiles
 
+            /*
             SubtitleFiles = new List<string> {
                 @"Z:\Filmi\28 Weeks Later (2007) - 28 tednov pozneje\28.Weeks.Later.2007.DVDRip.XviD-DrSi.srt",
                 @"Z:\Filmi\28 Weeks Later (2007) - 28 tednov pozneje\ENG\28.Weeks.Later.2007.DVDRip.XviD-DrSi.srt",
@@ -681,9 +686,422 @@ namespace Frost.Tester {
                 @"Z:\Filmi\21 Grams (2003) - 21 gramov\21.Grams.2003.PROPER.LiMiTED.DVDRip.XviD.DEiTY.srt",
             };
 
+             */
+
+            #endregion
+
+            #region FileNames2
+
+            FileNames2 = new[] {
+                @"E:\Torrenti\FILMI\Oz.the.Great.and.Powerful.2013.SLOSubs.DVDRip.XviD-DrSi\Oz.the.Great.and.Powerful.2013.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"E:\Torrenti\FILMI\Trance.2013.SLOSubs.DVDRip.XviD-DrSi\Trance.2013.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"E:\Torrenti\FILMI\G.I.Joe.Retaliation.2013.SLOSubs.DVDRip.XviD-DrSi\G.I.Joe.Retaliation.2013.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"E:\Torrenti\FILMI\Total.Recall.Extended.2012.SLOSubs.BRRip.XviD-DrSi\Total.Recall.Extended.2012.SLOSubs.BRRip.XviD-DrSi.avi",
+                @"E:\Torrenti\FILMI\Snow.White.and.the.Huntsman.2012.EXTENDED.SLOSubs.DVDRip.XviD-DrSi\Snow.White.and.the.Huntsman.2012.EXTENDED.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"E:\Torrenti\FILMI\Upside.Down.2012.SLOSubs.DVDRip.XviD-DrSi\Upside.Down.2012.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"E:\Torrenti\FILMI\The.Odd.Life.of.Timothy.Green.2012.SLOSubs.DVDRip.XviD-DrSi\The.Odd.Life.of.Timothy.Green.2012.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"E:\Torrenti\FILMI\Seeking.a.Friend.for.the.End.of.the.World.2012.SLOSubs.DVDRip.XviD-DrSi\Seeking.a.Friend.for.the.End.of.the.World.2012.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"E:\Torrenti\FILMI\Bachelorette.2012.SLOSubs.DVDRip.XviD-DrSi\Bachelorette.2012.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"E:\Torrenti\FILMI\Dunky\Dunky.avi",
+                @"E:\Torrenti\FILMI\Now You See Me 2013 SloSubs  EXTENDED BRRiP XViD UNiQUE\Now You See Me 2013 EXTENDED BRRiP XViD UNiQUE.avi",
+                @"E:\Torrenti\FILMI\Intersections 2013 CROSubs.DVDRip XViD juggs\Intersections 2013 CROSubs.DVDRip XViD juggs.avi",
+                @"E:\Torrenti\FILMI\Kick-Ass.2.2013.SRBSubs.R6.HDRip.XviD-S4A\Kick-Ass.2.2013.SRBSubs.R6.HDRip.XviD-S4A.avi",
+                @"E:\Torrenti\FILMI\R I P D 2013 WEBRiP XViD UNiQUE (SilverTorrent)\RIPD.avi",
+                @"E:\Torrenti\FILMI\Pacific Rim 2013 CROSubs.HDCam NewAudio XviD Feel-Free\Pacific Rim 2013 CROSubs.HDCam NewAudio XviD Feel-Free.avi",
+                @"E:\Torrenti\FILMI\Rise of the Guardians (2012)R5 DVDRip NL subs (Divx)NLtoppers\Rise of the Guardians (2012)R5 DVDRip NL subs (Divx)NLtoppers.avi",
+                @"E:\Torrenti\FILMI\A Serious Man (2009) - Zresni se\A.Serious.Man.2009.LiMiTED.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"E:\Torrenti\FILMI\Silver Linings Playbook (2012) - Za dežjem posije sonce\Silver Linings Playbook 2012 CROSubs.R5 XViD-PSiG.avi",
+                @"E:\Torrenti\FILMI\The.Hobbit.An.Unexpected.Journey.2012.SLOSubs.DVDSCRENER.XviD-metalcamp\The.Hobbit.An.Unexpected.Journey.2012.SLOSubs.DVDSCR.XviD-metalcamp.avi",
+                @"E:\Torrenti\FILMI\The World's End  2013 SRBSubs.BRRip XViD-ETRG\The World's End  2013 SRBSubs.BRRip XViD-ETRG.avi",
+                @"E:\Torrenti\FILMI\Escape.Plan.2013.SRBSubs.CAM.XviD-Tr0uNcE\Escape.Plan.2013.SRBSubs.CAM.XviD-Tr0uNcE.avi",
+                @"E:\Torrenti\FILMI\The Wolverine 2013 SLOSubs.EXTENDED BRRip XviD-ETRG\The Wolverine 2013 SLOSubs.EXTENDED BRRip XviD-ETRG.avi",
+                @"E:\Torrenti\FILMI\The.To.Do.List.2013.720p.BRRip.XviD.INSiDE\The.To.Do.List.2013.720p.BRRip.XviD.INSiDE.avi",
+                @"E:\Torrenti\FILMI\Paranoia 2013 CROSubs.BRRip XViD-ETRG\Paranoia 2013 CROSubs.BRRip XViD-ETRG.avi",
+                @"E:\Torrenti\FILMI\Hysteria.2011.SLOSubs.DVDRip.XviD-DrSi\Hysteria.2011.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"E:\Torrenti\FILMI\Girl.Most.Likely.2012.CROSubs.HDRip.XviD-S4A\Girl.Most.Likely.2012.CROSubs.HDRip.XviD-S4A.avi",
+                @"E:\Torrenti\FILMI\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi.avi",
+                @"Z:\Filmi\28 Weeks Later (2007) - 28 tednov pozneje\28.Weeks.Later.2007.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\50 50 (2011) - 50 50\50.50.2011.DVDScr.XviD-playXD.avi",
+                @"Z:\Filmi\88 Minutes (2007) - 88 minut\88.Minutes.2007.DVDRip.Eng-aXXo.avi",
+                @"Z:\Filmi\300 (2006) - 300\300 (2007).DVDSCR.XVID.avi",
+                @"Z:\Filmi\2012 (2009) - 2012\2012.ISO",
+                @"Z:\Filmi\A Lot Like Love (2005) - Več kot ljubezen\A Lot Like Love.avi",
+                @"Z:\Filmi\A Separation (2011) - Ločitev\A Separation 2011.avi",
+                @"Z:\Filmi\A Single Man (2010) - Samski moški\A Single Man.2010.DVDRip.XviD-T0XiC.avi",
+                @"Z:\Filmi\A Walk To Remember [2002] - Spomin v srcu\A Walk To Remember[2002].DvdRip.[yddam].avi",
+                @"Z:\Filmi\Adulthood [2008] - Odraslost\Adulthood[2008]DvDrip-aXXo.avi",
+                @"Z:\Filmi\ALFIE (2004) - Alfie\Alfie.avi",
+                @"Z:\Filmi\All About Eve (1950) - Vse o Evi\All About Eve.avi",
+                @"Z:\Filmi\Amen (2002) - Amen\Amen. 2002.iso",
+                @"Z:\Filmi\American History X (1999) - Generacija X\American History X.iso",
+                @"Z:\Filmi\American Pie 1 [1999] - Ameriška pita 1\American Pie 1[1999].avi",
+                @"Z:\Filmi\American Pie 2 [2001] - Ameriška pita 2\American Pie 2[2001].avi",
+                @"Z:\Filmi\American Pie 3 The Wedding [2003] - Ameriška pita 3 Poroka\American Pie 3 The Wedding[2003].avi",
+                @"Z:\Filmi\American Pie 4 Band Camp [2005] - Ameriška pita 4 Glasbeni tabor\American Pie 4 Band Camp[2005].avi",
+                @"Z:\Filmi\American Pie 5 The Naked Mile [2006] - Ameriška pita 5 Gola milija\American.Pie.5.The.Naked Mile.[2006].SLOsub.DvDrip[Eng]-BugZ.avi",
+                @"Z:\Filmi\American Pie Presents Beta House (2007) - Ameriška pita 6\American.Pie.Presents.Beta.House.2007.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\American Psycho (Uncut) (2000) - Ameriški psiho\AMERICAN PSYCHO - Uncut [2000-Eng-DVDrip]-haSak.avi",
+                @"Z:\Filmi\Amores Perros (2000) - Pasja ljubezen\Amores.Perros.2000.SLOSubs.DVDRip.XviD-DrSi.cd1.avi",
+                @"Z:\Filmi\Amores Perros (2000) - Pasja ljubezen\Amores.Perros.2000.SLOSubs.DVDRip.XviD-DrSi.cd2.avi",
+                @"Z:\Filmi\Anchorman The legend of Ron Burgundy [2004] - Anchorman\Anchorman The legend of Ron Burgundy[2004].avi",
+                @"Z:\Filmi\Another Year (2010) - Se eno leto\Another Year[2010]DvDrip[Eng]-FXG.avi",
+                @"Z:\Filmi\Argo (2012) - Argo\Argo.2012.PAL.MULTiSUBS.DVDR-DiSHON.iso",
+                @"Z:\Filmi\Atonement (2007) - Pokora\Atonement.2007.cd1.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\Atonement (2007) - Pokora\Atonement.2007.cd2.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\Atonement (2007) - Pokora\023eeffe04b6f470347bc977aafa7141.zip",
+                @"Z:\Filmi\Attack the Block - Napad na blok\attack.the.block-done.avi",
+                @"Z:\Filmi\Avatar (2009) - Avatar\Avatar.2009.1080p.Slosubs.BluRay.DTS.x264-ESiR.mkv",
+                @"Z:\Filmi\Babel (2006) - Babilon\Babel[2006]DvDrip[Eng]-aXXo.avi",
+                @"Z:\Filmi\Bal (2010) - Med\ltu-honey-xvid.avi",
+                @"Z:\Filmi\Barney's Version (2010) - Barneyjeva različica\Barney's Version 2010 720p BRRip x264 RmD (HDScene Release).mkv",
+                @"Z:\Filmi\Batman Begins (2005) - Batman na začetku\batman.begins-phrax.mp4",
+                @"Z:\Filmi\Becoming Jane (2008) - Ljubljena Jane\Becoming Jane.iso",
+                @"Z:\Filmi\Beginners (2011) - Začetniki\target-beginners-xvid.avi",
+                @"Z:\Filmi\Beowulf (2007) - Beowulf\Beowulf.2007.PAL.HD2DVD.DVDR.Custom.SLOSUBS-DiSHON.iso",
+                @"Z:\Filmi\Biutiful (2010) - Biutiful\Biutiful.2010.DVDRip.XviD.5rFF.avi",
+                @"Z:\Filmi\Black Hawk Down (2002) - Sestreljeni crni jastreb\Black Hawk Down.iso",
+                @"Z:\Filmi\Black Swan (2010) - Crni labod\Black.Swan.2010.DVDSCR.XviD-ViSiON.avi",
+                @"Z:\Filmi\Blue Valentine (2010) - Blue Valentine\Blue.Valentine.2010.DvdScr.AC3.Xvid {1337x}-Noir.avi",
+                @"Z:\Filmi\Cell 211 (2009) - Celica 211\Celda.211.2009.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Charlie And The Chocolate Factory (2005) - Carli in tovarna cokolade\Charlie And The Chocolate Factory (2005).avi",
+                @"Z:\Filmi\Children Of Men - Otroci clovestva\Children Of Men.avi",
+                @"Z:\Filmi\City of God (2006) - Božje mesto\City of God CD1.avi",
+                @"Z:\Filmi\City of God (2006) - Božje mesto\City of God CD2.avi",
+                @"Z:\Filmi\Cleaner (2007) - Cistilec\Cleaner.2007.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\Cloud Atlas (2012) - Atlas oblakov\hdt.cloud.atlas.2012.1080p.bluray.x264.mkv",
+                @"Z:\Filmi\Cold Mountain (2004) - Hladni vrh\Cold Mountain.iso",
+                @"Z:\Filmi\Collateral (2004) - Stranski učinki\Collateral.iso",
+                @"Z:\Filmi\Confucius (2010) - Konfucij\Confucius.2010.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Cowboys And Aliens (2011) - Kavboji in vesoljci\Cowboys.And.Aliens.EXTENDED.2011.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Crash (2004) - Usodna nesreča\Crash.2004.SLOSub.DVDRip.Xvid-DrSi.cd1.avi",
+                @"Z:\Filmi\Crash (2004) - Usodna nesreča\Crash.2004.SLOSub.DVDRip.Xvid-DrSi.cd2.avi",
+                @"Z:\Filmi\Das Weisse Band (2008) - Beli trak\The White Ribbon[2009]DvDrip[Ger]-FXG.avi",
+                @"Z:\Filmi\Dead Man Walking (1995) - Zadnji sprehod\Dead Man Walking [English] 1995.avi",
+                @"Z:\Filmi\Dear John (2010) - Samo tebe si zelim\Dear John.2010.DvdRip.Xvid {1337x}-Noir.avi",
+                @"Z:\Filmi\Deja Vu (2006) - Déja Vu\Deja Vu 2006.iso",
+                @"Z:\Filmi\Der Untergang (2005) - Propad\Der Untergang.iso",
+                @"Z:\Filmi\Despicable Me (2010) - Jaz, baraba\despicable.me.dvdrip.xvid-imbt.avi",
+                @"Z:\Filmi\Detachment (2011) - Odtujenost\Detachment[2011]BRRip XviD-ETRG.avi",
+                @"Z:\Filmi\Detachment (2011) - Odtujenost\ExtraTorrentRG.mp4",
+                @"Z:\Filmi\Disgrace (2008) - Sramota\Disgrace.2008.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\District 9 (2009) - Okrožje 9\District 9 (2009) DVDRip XviD-MAXSPEED www.torentz.3xforum.ro.avi",
+                @"Z:\Filmi\Django Unchained (2012) - Django brez okov\Django.Unchained.2012.SLOSubs.DVDSCR.XviD-metalcamp.avi",
+                @"Z:\Filmi\Doubt (2008) - Dvom\DOUBT_DEU.iso",
+                @"Z:\Filmi\Drive (2011) - Vožnja\Drive.2011.SCR.XviD-playXD.avi",
+                @"Z:\Filmi\Eat Pray Love (2010) - Jej, moli, ljubi\Eat.Pray.Love.2010.DC.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Efter brylluppet (2006) - Po poroki\After the Wedding 2006 DVDRip Xvid fasamoo LKRG.avi",
+                @"Z:\Filmi\El Orfanato (2007) - Sirotišnica\The.Orphanage.2007.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Elizabeth (1998) - Elizabeta\Elizabeth.1998.DVDRip.DivX-GarlicClan.slo.avi",
+                @"Z:\Filmi\English Patient (1996) - Angleški pacient\English Patient.iso",
+                @"Z:\Filmi\Eternal Sunshine Of The Spotless Mind (2004) - Večno sonce brezmadežnega uma\dvl-eotsm.avi",
+                @"Z:\Filmi\Everybody's Fine (2009) - Vsi so vredu\Everybodys.Fine.2009.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Factory Girl (2006)\Factory.Girl.2006.RETAiL.SLO.CROSub.PAL.DVD9-DrSi.iso",
+                @"Z:\Filmi\Factory Girl (2006)\Factory.Girl.2006.RETAiL.SLO.CROSub.PAL.DVD9-DrSi.mds",
+                @"Z:\Filmi\Fantastic Mr Fox - Fantastični gospod Lisjak\mrush-mrfox.avi",
+                @"Z:\Filmi\Fargo (1996) - Fargo\Fargo.1996.CUSTOM.SLOSUB.PAL.DVDR-DrSi.iso",
+                @"Z:\Filmi\Feast of Love (2007) - Praznik ljubezni\Feast.of.Love.2007.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\Felon (2008) - Zločinec\Felon.2008.cd1.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\Felon (2008) - Zločinec\Felon.2008.cd2.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\Fight Club (1999) - Klub golih pesti\Fight Club.mp4",
+                @"Z:\Filmi\Fighting (2009) - Borba\dash-fighting.avi",
+                @"Z:\Filmi\Finding Neverland (2005) - V iskanju dežele Nije\FindingNeverland.iso",
+                @"Z:\Filmi\Flags of our fathers (2006) - Zastave naših očetov\Flags of our fathers.iso",
+                @"Z:\Filmi\Flight (2012)\flight.2012.1080p.bluray.x264-sparks.mkv",
+                @"Z:\Filmi\Gangster Squad (2013) - Gangsterska enota\Gang.avi",
+                @"Z:\Filmi\Gomorra (2008) - Gomorra\Gomorra.iso",
+                @"Z:\Filmi\Gone Baby Gone (2007) - Zbogom, punčka\Gone Baby Gone.[2007].DVDRIP.XVID.[Eng]-DUQA.avi",
+                @"Z:\Filmi\Goodbye Bafana (2007) - Zbogom Bafana\Goodbye Bafana.iso",
+                @"Z:\Filmi\Gran Torino (2008) - Gran Torino\Gran.Torino.2008.DvDRip-FxM.avi",
+                @"Z:\Filmi\Grbavica (2006) - Grbavica\Grbavica.2006.DVDRip.XviD-XPTO.avi",
+                @"Z:\Filmi\Green Zone (2010) - Zelena cona\Green.Zone.2010.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Gremo mi po svoje (2010) - Gremo mi po svoje\Gremo.mi.po.svoje.2010.SLOVENiAN.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Guess Who (2005) - Ugani kdo\Guess.Who.2005.SLOSub.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\Hancock (2008) - Hancock\HR5.avi",
+                @"Z:\Filmi\Happy-Go-Lucky (2008) - Kar-brez-skrbi\Happy-Go-Lucky.mp4",
+                @"Z:\Filmi\Hard Candy (2006) - Prepovedan sadež\Hard.Candy.DVDRip.XviD-DiAMOND.avi",
+                @"Z:\Filmi\Head In the clouds (2004) - Z glavo v oblakih\HEADINTHECLOUDS.ISO",
+                @"Z:\Filmi\Headhunters (2011) - Lovci na glave\Headhunters.2011.BRRip.XviD-playXD.avi",
+                @"Z:\Filmi\Homeward Bound (1993) - Neverjetna pot domov\Homeward Bound.avi",
+                @"Z:\Filmi\How to Lose Friends and Alienate People (2008) - Kako izgubiti prijatelje in odtujiti ljudi\How.to.Lose.Friends.and.Alienate.People.2008.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Hugo (2011) - Hugo\Hugo 2011.720p.BrRip.X264.YIFY.mp4",
+                @"Z:\Filmi\I am legend (2007) - Jaz Legenda\I_AM_LEGEND.ISO",
+                @"Z:\Filmi\I'm Not There (2007) - Bob Dylan 7 obrazov\I'm.Not.There[2007]DvDrip[Eng]-aXXo.avi",
+                @"Z:\Filmi\Imagine That (2009) - Predstavljaj si to\Imagine That.2009.DvdRip.Xvid {1337x}-Noir.avi",
+                @"Z:\Filmi\In Bruges (2008) - V Brugesu\In Bruges.iso",
+                @"Z:\Filmi\Incendies (2010) - Zenska, ki poje\Incendies.2010.DVDRip.XviD.AC3.HORiZON-ArtSubs.avi",
+                @"Z:\Filmi\Inglourious Basterds (2009) - Naslavne barabe\Inglourious Basterds (2009) DVDRip XviD-MAXSPEED www.torentz.3xforum.ro.avi",
+                @"Z:\Filmi\Ip Man [2008] - Ip Man\IpMan -aot.avi",
+                @"Z:\Filmi\Iron Man (2008) - Iron Man\Iron.Man.2008.SLOSubs.DVDRip.XviD-DrSi.cd1.avi",
+                @"Z:\Filmi\Iron Man (2008) - Iron Man\Iron.Man.2008.SLOSubs.DVDRip.XviD-DrSi.cd2.avi",
+                @"Z:\Filmi\Iron Man 2 (2010) - Iron Man 2\Iron.Man.2.2010.DVDRip.XviD.AC3-ViSiON.avi",
+                @"Z:\Filmi\Iron Man 3 (2013) - Iron Man 3\Iron.Man.3.2013.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\It's Kind of a Funny Story (2010) - It's Kind of a Funny Story\Its.Kind.of.a.Funny.Story.2010.SLOSubs.BRRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Julie and Julia (2009) - Julie in Julia\Julie.and.Julia.2009.SLOSubs.DVDRip.XviD-DrSi .avi",
+                @"Z:\Filmi\Kidulthood (2006) - Otroštvo\Kidulthood.2006.DVDRip.XviD.(Cd1)-SAvAGE.avi",
+                @"Z:\Filmi\Kidulthood (2006) - Otroštvo\Kidulthood.2006.DVDRip.XviD.(Cd2)-SAvAGE.avi",
+                @"Z:\Filmi\Killers (2010) - Morilci\Killers.2010.R5.LiNE.Xvid-Noir.avi",
+                @"Z:\Filmi\Knowing (2009) - Prerokba\Knowing.2009.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Ko To Tamo Peva\Ko To Tamo Peva.iso",
+                @"Z:\Filmi\Kokuhaku Confessions (2010) - Priznanja\Confessions.2010.JAP.DVDRip.XviD-MOC.avi",
+                @"Z:\Filmi\La Délicatesse (2011)\La.Delicatesse.avi",
+                @"Z:\Filmi\La mala educación (2004) - Slaba vzgoja\Almodovar_Bad.Education_DVDrip.Xvid_eng.subbed_m^M^m.avi",
+                @"Z:\Filmi\La piel que habito (2011) - Koža v kateri zivim\The.Skin.I.Live.In.2011.720p.Bluray.x264.anoXmous.mp4",
+                @"Z:\Filmi\La Vita E Bella (1997) - Zivljenje je lepo\La Vita E Bella.iso",
+                @"Z:\Filmi\Lebanon (2009) - Libanon\Lebanon.2009.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Leon-The Professional (19949 - Leon\Leon-The Professional 1994 BDrip[A Release-Lounge H.264 By Titan].mp4",
+                @"Z:\Filmi\Les Amours Imaginaires (2010) - Namišljene ljubezni\Les Amours Imaginaires 2010 [DVDRip.XviD-miguel] [FR].avi",
+                @"Z:\Filmi\Limitless (2011) - Odklenjen\Limitless.UNRATED.2011.SLOSubs.BRRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Lincoln (2012) - Lincoln\Lincoln.2012.DVDSCR.XViD.AC3-MAGNAT.avi",
+                @"Z:\Filmi\Little Big Soldier (2010) - Mali veliki vojak\Little.Big.Soldier.2010.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Little children (2007) - Mali otroci\LITTLE_CHILDREN.ISO",
+                @"Z:\Filmi\Looper (2012) - Casovna zanka\Looper.2012.CUSTOM.SLOSUB.NTSC.DVDR-DrSi.iso",
+                @"Z:\Filmi\Love Actually (2003) - Pravzaprav ljubezen\Love Actually CD1.avi",
+                @"Z:\Filmi\Love Actually (2003) - Pravzaprav ljubezen\Love Actually CD2.avi",
+                @"Z:\Filmi\Lucky Number Slevin (2006) - Srečnež Slevin\Lucky.Number.Slevin.2006.SLOSubs.DVDRip.XviD-DrSi.cd1.avi",
+                @"Z:\Filmi\Lucky Number Slevin (2006) - Srečnež Slevin\Lucky.Number.Slevin.2006.SLOSubs.DVDRip.XviD-DrSi.cd2.avi",
+                @"Z:\Filmi\Magnolia [1999] -  Magnolija\Magnolia [1999] dvd rip nlx.avi",
+                @"Z:\Filmi\Man On Wire (2008) - Clovek na zici\Man.On.Wire.2008.DVDRip.XviD.avi",
+                @"Z:\Filmi\Mar Adentro (2004) - Morje v meni\Mar.Adentro (The.Sea.Inside) 2004.DVDRip.XviD.avi",
+                @"Z:\Filmi\Melancholia (2011) - Melanholija\psig-melancholia.2011.dvdrip.xvid.avi",
+                @"Z:\Filmi\Memento (2000) - Memento\Memento.DVDrip,XviD-contempt.avi",
+                @"Z:\Filmi\Midnight in Paris (2011) - Polnoč v Parizu\target-paris-xvid.avi",
+                @"Z:\Filmi\Milk [2008] - Milk\Milk[2008]DvDrip[Eng]-FXG.avi",
+                @"Z:\Filmi\Moon (2009) - Luna\Moon.2009.LiMiTED.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Mr.73 (2008) - MR73\Mr.73.iso",
+                @"Z:\Filmi\My Sassy Girl (2008)  - Moja cudna punca\carre-my.sassy.girl-xvid.avi",
+                @"Z:\Filmi\Ned Kelly (2003) - Ned Kelly\Ned Kelly.iso",
+                @"Z:\Filmi\Never Let Me Go (2010) - Ne zapusti me nikdar\Never.Let.Me.Go.2010.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Norwegian Wood (2010) - Norveški gozd\Norwegian.Wood.2010.JAP.DVDRip.XviD.AC3-BAUM.avi",
+                @"Z:\Filmi\Oblivion (2013) - Pozaba\Oblivion.2013.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Old Dogs (2009) - Stara mačka\Old.Dogs.2009.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Once (2006) - Enkrat\Once.2006.SLOSubs.DVDRip.XviD.avi",
+                @"Z:\Filmi\P.S. I Love You (2007) - P.S. Ljubim te\P.S.I.Love.You.2007.SLOSubs.DVDRip.XviD-DrSi.cd1.avi",
+                @"Z:\Filmi\P.S. I Love You (2007) - P.S. Ljubim te\P.S.I.Love.You.2007.SLOSubs.DVDRip.XviD-DrSi.cd2.avi",
+                @"Z:\Filmi\Paha Perhe aka Bad Family (2010) - Slaba družina\Paha.Perhe.aka.Bad.Family.2010.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Pan's Labyrinth (2006) - Panov labirint\Pan's.Labyrinth[2006]DvDrip[Eng.Sub]-aXXo.avi",
+                @"Z:\Filmi\Paul (2011) - Paul\Paul.2011.DVDRip.XviD-DiVERSiTY.avi",
+                @"Z:\Filmi\People vs Larry Flynt (1996) - Ljudstvo proti Larryju Flintu\The People vs Larry Flynt.avi",
+                @"Z:\Filmi\Perfume The Story Of A Murderer (2006) - Parfum Zgodba morilca\Perfume.The.Story.Of.A.Murderer.2006.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Petelinji zajtrk (2007)\Petelinji.Zajtrk.2007.DVDSCR.XviD-SpeeD-cd1.avi",
+                @"Z:\Filmi\Petelinji zajtrk (2007)\Petelinji.Zajtrk.2007.DVDSCR.XviD-SpeeD-cd2.avi",
+                @"Z:\Filmi\Pirates of the Carribean At World's End (2007) - Pirati s Karibov Na robu sveta\Pirates.Of.The.Caribbean-At.World's.End[2007]DvDrip[Eng]-aXXo.avi",
+                @"Z:\Filmi\Pirates of the Carribean Dead Man's Chest (2006) - Pirati s Karibov Mrtvečeva skrinja\Pirates.of.the.Caribbean-Dead.Man's.Chest[2006]DvDrip.avi",
+                @"Z:\Filmi\Poletje v skoljki (1985)\poletje v školjki 1\poletje v školjki 1.avi",
+                @"Z:\Filmi\Poletje v skoljki (1985)\poletje v školjki 2\poletje v skoljki 2.avi",
+                @"Z:\Filmi\Potovanje skozi plasti Zemlje (TV 2006)\Potovanje.Skozi.Plasti.Zemlje.Slosub.Xvid.avi",
+                @"Z:\Filmi\Premonition (2007) - Slutnja\Premonition.2007.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Pride and Prejudice (2005) - Prevzetnost in pristranost\Pride.and.Prejudice[2005]DvDrip[Eng]-aXXo.avi",
+                @"Z:\Filmi\Prince Of Persia The Sands Of Time (2010)  - Perzijski princ Sipine casa\Prince.Of.Persia.The.Sands.Of.Time.2010.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Public Enemies (2009) - Državni sovražniki\Public.Enemies.2009.DvDRip-FxM.avi",
+                @"Z:\Filmi\Push [2009] - Udarec\Push[2009]DvDrip[Eng]-FXG.avi",
+                @"Z:\Filmi\Rane (2003) - Rane\Rane.iso",
+                @"Z:\Filmi\Red (2010) - Upokojeni, oboroženi, nevarni (Red)\Red.2010.BRRip.XviD.AC3-MAGNAT.avi",
+                @"Z:\Filmi\Remember Me (2010) - Ne pozabi me\Remember Me (2010).avi",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\BlackFamilyRunsAway.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\ClintonAndPrincipal.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\ColumbineConnections.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\DaughterMarriedFriendOfDA.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\DaveThomasCorruptDA.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\DigustedWithCorruption.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\DoctorDeagle.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\FBIandATFinvolved.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\GirlSaw3BoysWithGuns.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\HalfOfStudentsDidntShowUp.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\HerExperienceWithDrugsPart2.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\HusbandOnDrugs.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\HusbandWantsToClean.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\JanetRenoVisitsButNoQuestions.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\KidsHungThemselves.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\KleboldOnDrugsCoachRapes.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\MikeMooreDeception.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\PeeingOnFood.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\RapedByCoach.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\SheIsJewish.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\SherrifCoveredItUp.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\ShooterOnRoof.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\SonReadsTorah.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\SonSensedSchoolWasWeird.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\SubwayShopKillings.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\SuicideInLabTestingDrugs.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\TaylorNotInReport.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\TenCommandentBears.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\VideoOfKillersTalking.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\VirginiaDavisTeddyBears.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\WarningCallToHospital.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\WarningOfShooting.mp3",
+                @"Z:\Filmi\Reminder of what Really happened at Columbine High School (2007) - Opomin na kar se je resnično zgodilo na Columbine\WereTheyUsefulIdiots.mp3",
+                @"Z:\Filmi\Reservoir Dogs (1992) - Stekli psi\Reservoir Dogs_1992_DVDrip_XviD-Ekolb.avi",
+                @"Z:\Filmi\Rise of the Guardians (2012) - Pet legend\Rise of the Guardians (2012)R5 DVDRip NL subs (Divx)NLtoppers.avi",
+                @"Z:\Filmi\Robin Hood (2010) - Robin Hood\Robin.Hood.Unrated.DC.2010.BRRip.XviD.AC3-MAGNAT.avi",
+                @"Z:\Filmi\RocknRolla [2008] - Rocknroller\RocknRolla[2008]DvDrip-aXXo.avi",
+                @"Z:\Filmi\Roger Dodger (2002) - Roger Dodger\Roger Dodger.avi",
+                @"Z:\Filmi\Rush Hour 3 (2007) - Ful gas 3\Rush.Hour.3.2007.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\Salt (2010) - Salt\Salt.2010.R5.LiNE.CUSTOM.SLOSUB.PAL.DVDR-metalcamp.iso",
+                @"Z:\Filmi\Scary Movie (2000) - Film, da te kap\Scary Movie.avi",
+                @"Z:\Filmi\Scott Pilgrim vs. the World (2010) - Scott Pilgrim proti vsem\Scott.Pilgrim.vs.the.World.2010.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\SEVEN [1995] - Sedem\SEVEN[1995]DvDrip[Eng]-NikonXP.avi",
+                @"Z:\Filmi\Seven Pounds (2008) - Sedem duš\Seven.Pounds.2008.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Seven Psychopaths (2012) - Sedem psihopatov\Seven.Psychopaths.2012.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Sex Drive (2008) - Ljubezenski klic\Sex.Drive.2008.UNRATED.DVDRip.XviD-ST4R.avi",
+                @"Z:\Filmi\Shakespeare in Love (1998) - Zaljubljeni Shakespeare\Shakespeare in Love.iso",
+                @"Z:\Filmi\Shame (2011) - Sramota\shame.2011.limited.dvdrip.xvid-amiable.avi",
+                @"Z:\Filmi\Sherlock (20010) TV Series Season 1\S01E01 - A Study In Pink.avi",
+                @"Z:\Filmi\Sherlock (20010) TV Series Season 1\S01E02 - The Blind Banker.avi",
+                @"Z:\Filmi\Sherlock (20010) TV Series Season 1\S01E03 - The Great Game.avi",
+                @"Z:\Filmi\Sherlock Holmes (2009) - Sherlock Holmes\Sherlock.Holmes.2009.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Sherlock Holmes A Game of Shadows (2011) - Sherlock Holmes Igra senc\Sherlock Holmes A Game of Shadows (2011) DVDRip XviD-MAXSPEED www.torentz.3xforum.ro.avi",
+                @"Z:\Filmi\She's Out Of My League (2010) - Predobra zame\Shes.Out.Of.My.League.2010.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\She's The Man(2006) - Mlada nogometašica\dmd-shestm-cd1.avi",
+                @"Z:\Filmi\She's The Man(2006) - Mlada nogometašica\dmd-shestm-cd2.avi",
+                @"Z:\Filmi\Shrek Forever After (2010) - Shrek za vedno\Shrek.Forever.After.2010.SLOSubs.TS.XviD.AC3-ViSiON.avi",
+                @"Z:\Filmi\Shutter Island (2010) - Zlovešči otok\Shutter.Island.2010.SLOSubs.R5.LiNE.XviD-metalcamp.avi",
+                @"Z:\Filmi\Side Effects (2013) - Stranski učinki\Side.Effects.2013.720p.WEB-DL.X264-WEBiOS.mkv",
+                @"Z:\Filmi\Silver Linings Playbook (2012) - Za dežjem posije sonce\Silver Linings Playbook 2012 CROSubs.R5 XViD-PSiG.avi",
+                @"Z:\Filmi\Sin City (2005) - Mesto greha\Sin City.avi",
+                @"Z:\Filmi\Skyfall (2012) - Skyfall\Skyfall.2012.iNT.CUSTOM.SLOSUB.NTSC.DVDR-DrSi.iso",
+                @"Z:\Filmi\Slovenka (2009)\Slovenka.2009.SLOVENiAN.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Slumdog Millionaire (2008) - Revni milijonar\Slumdog.Millionaire.2008.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Snatch [2000] - Pljuni in jo stisni\Snatch.avi",
+                @"Z:\Filmi\Sorority Boys (2002) - Sestre\Sorority.Boys.DVDRip.2002-DEiTY.xvid.avi",
+                @"Z:\Filmi\Spartan (2004) - Spartanec\Spartan.2004.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\STAR TREK 2 The Wrath Of Khan (1982) - Zvezdne steze 2 Khanov srd\StarTrek_The_Wrath_of_Khan.MULTISUBS.PAL.DVDR-SiHQ.iso",
+                @"Z:\Filmi\STAR TREK 8 First Contact (1996) - Zvezdne steze 8 Prvi stik\StarTrek_First_Contact.MULTISUBS.PAL.DVDR.iso",
+                @"Z:\Filmi\Star Trek Into Darkness (2013) - Zvezdne steze V temo\Star Trek.avi",
+                @"Z:\Filmi\Stargate Continuum (2008) - Zvezdna vrata, Continuum\Stargate.Continuum.2008.SLOSubs.DVDRip.XviD-DrSi.cd1.avi",
+                @"Z:\Filmi\Stargate Continuum (2008) - Zvezdna vrata, Continuum\Stargate.Continuum.2008.SLOSubs.DVDRip.XviD-DrSi.cd2.avi",
+                @"Z:\Filmi\Stargate The Ark Of Truth (2008) - Zvezdna vrata, Skrinja resnice\Stargate_the_ark_of_truth.iso",
+                @"Z:\Filmi\Step Up 2 The Streets (2008) - Odpleši svoje sanje 2\Step.Up.2.(The.Streets).2008.cd1.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\Step Up 2 The Streets (2008) - Odpleši svoje sanje 2\Step.Up.2.(The.Streets).2008.cd2.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\Street Kings (2008) - Kralji ulice\Street.Kings.2008.R5.cd1.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\Street Kings (2008) - Kralji ulice\Street.Kings.2008.R5.cd2.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\Sucker Punch (2011) - Prikriti udarec\Sucker Punch (2011) DVDRip XviD-MAXSPEED www.torentz.3xforum.ro.avi",
+                @"Z:\Filmi\Superbad [2007] - Superhudo\Superbad[2007][Unrated Editon]DvDrip[Eng]-FXG.avi",
+                @"Z:\Filmi\Superhero Movie (2008) - Film o superjunaku\Superhero.Movie.2008.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\Syriana (2005) - Syriana\syriana1.avi",
+                @"Z:\Filmi\Syriana (2005) - Syriana\syriana2.avi",
+                @"Z:\Filmi\Taken (2008) - Ugrabljena\Taken 2008.iso",
+                @"Z:\Filmi\Takers (2010) - Tatovi\Takers 2010 480p BRRip XviD AC3-FLAWL3SS.avi",
+                @"Z:\Filmi\Taking Chance (2009) - Spremljevalec\Taking Chance[2009]DvDrip[Eng]-FXG.avi",
+                @"Z:\Filmi\Tangled (2010) - Zlatolaska\Tangled.2010.SLOSiNHRO.BRRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Terminal (2004) - Terminal\TERMINAL.iso",
+                @"Z:\Filmi\The Accused (1988) - Obtožena\The.Accused.1988.SWESUB.AC3.DVDRip.XviD-Martin.avi",
+                @"Z:\Filmi\The American (2010) - Američan\The.American.2010.BRRip.XviD-Warrior.avi",
+                @"Z:\Filmi\The American President (1995) - Ameriški predsednik\The.American.President.DVDRiP.XviD-ASK.avi",
+                @"Z:\Filmi\The Art Of War II Betrayal (2008) - Umetnost vojne Izdaja\The.Art.Of.War.II.Betrayal.2008.STV.SLOSubs.DVDRip.XviD-DrSi.cd1.avi",
+                @"Z:\Filmi\The Art Of War II Betrayal (2008) - Umetnost vojne Izdaja\The.Art.Of.War.II.Betrayal.2008.STV.SLOSubs.DVDRip.XviD-DrSi.cd2.avi",
+                @"Z:\Filmi\The Artist (2011) - Umetnik\The_Artist_2011_DVDSCR_XviD_-_ZOMBiES.avi",
+                @"Z:\Filmi\The A-Team .2010.CUSTOM.SLOSUB. R5.PAL.DVDR-FG\The A-Team .2010.CUSTOM.SLOSUB. R5.PAL.DVDR-FG.iso",
+                @"Z:\Filmi\The Band (2009) - Bend\citrin-the.band.xvid.avi",
+                @"Z:\Filmi\The Bank Job (2008) - Bančni rop\The Bank Job.iso",
+                @"Z:\Filmi\The Beaver (2011) - Bober\The.Beaver.2011.720p.SLOSubs.BRRip.XviD-DrSi.avi",
+                @"Z:\Filmi\The Big Lebowski (1998) - Veliki Lebowski\The Big Lebowski.1998.HDRip.x264-VLiS.mkv",
+                @"Z:\Filmi\The Big Sleep (1946) - Velik spanec\The.Big.Sleep.1946.DVDRip.H264.AAC.Gopo.mp4",
+                @"Z:\Filmi\The Blind Side (2009) - The Blind Side\The.Blind.Side.2009.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\The Blues Brothers (1980) - Brata Blues\The Blues Brothers.iso",
+                @"Z:\Filmi\The Boat That Rocked (2009) - Piratski radio\The.Boat.That.Rocked.2009.DvDRip-FxM.avi",
+                @"Z:\Filmi\The Breakfast Club (1985) - Sobotni klub\The Breakfast Club [1985] DvdRip [Eng] - Thizz.avi",
+                @"Z:\Filmi\The Bridge (2006) - Most\The Bridge (2006) DVDRip XviD.[www.UsaBit.com].avi",
+                @"Z:\Filmi\The Brothers Bloom (2009) - Brata Bloom\The.Brothers.Bloom.2009.DvDRip-FxM.avi",
+                @"Z:\Filmi\The Curious Case of Benjamin Button [2008] - Nenavaden primer Benjamina Buttona\The Curious Case of Benjamin Button[2008]DvDrip[Eng]-FXG.avi",
+                @"Z:\Filmi\The Da Vinci Code (2006) - Da Vincijeva Sifra\The.Da.Vinci.Code.2006.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\The Dark Knight [2008] - Vitez teme\The Dark KnightThe Dark Knight[2008]DvDrip[Eng]-FXG.avi",
+                @"Z:\Filmi\The Descendants (2011) - Potomci\The.Descendants.2011.CUSTOM.SLOSUB.NTSC.DVDR-DrSi.iso",
+                @"Z:\Filmi\The Duchess (2008) - Vojvodinja\TheDuches.iso",
+                @"Z:\Filmi\The Fall (2006) - Padec\The.Fall[2006]DvDrip-aXXo.avi",
+                @"Z:\Filmi\The Football Factory (2004) - The Football Factory\The Football Factory.avi",
+                @"Z:\Filmi\The Ghost Writer (2010) - Pisatelj v senci\The.Ghost.Writer.2010.CUSTOM.SLOSUB.NTSC.DVDR-DrSi.iso",
+                @"Z:\Filmi\The Gospel of Judas (TV 2006) - Judežev evangelij\The Gospel of Judas.avi",
+                @"Z:\Filmi\The Great Gatsby (2013) - Veliki Gatsby\The Great Gatsby (2013) - Veliki Gatsby.iso",
+                @"Z:\Filmi\The Great Gatsby (2013) - Veliki Gatsby\The Great Gatsby (2013) - Veliki Gatsby.mds",
+                @"Z:\Filmi\The Guard (2011) - Policist\The.Guard.2011.LiMiTED.DVDRip.XviD-ViP3R.avi",
+                @"Z:\Filmi\The Hangover (2009) - Prekrokana noč\The.Hangover.2009.UNRATED.SLOSubs.BRRip.XviD-DrSi.avi",
+                @"Z:\Filmi\The Hangover 2 (2011) - Prekrokana noč 2\The Hangover 2 (2011) DVDRip XviD-MAXSPEED www.torentz.3xforum.ro.avi",
+                @"Z:\Filmi\The Happening (2008) - Dogodek\The Happening.iso",
+                @"Z:\Filmi\The holiday (2006) - Počitnice\The holiday.iso",
+                @"Z:\Filmi\The Horsemen [2009] - Jezdeci\The Horsemen[2009]DvDrip[Eng]-FXG.avi",
+                @"Z:\Filmi\The human stain (2003) - Cloveški madez\The Human Stain 2003 SLOSUB DVDRip-DeeJayTaurus.avi",
+                @"Z:\Filmi\The Hurt Locker (2008) - Bombna misija\The.Hurt.Locker.2008.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\The Interpreter (2005) - Prevajalka\The.Interpreter.(V.O).[DvDRip].[WwW.LiMiTeDiVx.CoM].avi",
+                @"Z:\Filmi\The Iron Lady (2011) - Zelezna Lady\The.Iron.Lady.2011.DVDR.PAL.SLOSUBS-DiSHON.iso",
+                @"Z:\Filmi\The Killing Room (2009) - Soba za ubijanje\The.Killing.Room.2009.DVDRip.XviD-VoMiT.NoRar.www.crazy-torrent.com.avi",
+                @"Z:\Filmi\The Kingdom (2007) - Kraljestvo\The.Kingdom.2007.cd1.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\The Kingdom (2007) - Kraljestvo\The.Kingdom.2007.cd2.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\The King's Speech (2010) - Kraljev govor\The.Kings.Speech.2010.NORDiC.DvDRip.x264-Makavalios.mkv",
+                @"Z:\Filmi\The Last House On The Left (2009) - Zadnja hiša na levi\The.Last.House.On.The.Left.UNRATED.DvDRip-FxM.avi",
+                @"Z:\Filmi\The Namesake (2007) - Usoda imena\The Namesake.iso",
+                @"Z:\Filmi\The Notebook (2004) - Beležnica\The Notebook (2004) [ENG] [DVDrip].avi",
+                @"Z:\Filmi\The Pacifier (2005) - Misija Cucelj\The Pacifier.avi",
+                @"Z:\Filmi\The Prestige (2006) - Nevidna sled\The Prestige 2006 BRRip x264 AC3-TheFalcon007 (Kingdom-Release).avi",
+                @"Z:\Filmi\The Rebound (2009) - The Rebound\The.Rebound.2009.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\The Red Shoes (1948) - Rdeci cevlji\The Red Shoes (1948) Eng.avi",
+                @"Z:\Filmi\The Score (2001) - Zadetek\The.Score.2001.SLOSubs.DVDRip.XviD-DrSi.CD1.avi",
+                @"Z:\Filmi\The Score (2001) - Zadetek\The.Score.2001.SLOSubs.DVDRip.XviD-DrSi.CD2.avi",
+                @"Z:\Filmi\The Shawshank Redemption (1994) - Kaznilnica odrešitve\The Shawshank Redemption dvd rip Xvid.Rets.avi",
+                @"Z:\Filmi\The Sixth Sense (1999) - Sesti cut\The.Sixth.Sense.1999.CUSTOM.SLOSUB.PAL.DVDR-DrSi.iso",
+                @"Z:\Filmi\The Smurfs (2011) - Smrkci\The.Smurfs.2011.SLOSubs.BRRip.XviD-DrSi.avi",
+                @"Z:\Filmi\The Social Network (2010) - Socialno omrežje\The.Social.Network.2010.DVDSCR.XViD-WBZ.avi",
+                @"Z:\Filmi\The Taking Of Pelham 123 [2009] - Ugrabitev Pelhama 123\The Taking Of Pelham 123[2009]DvDrip-LW.avi",
+                @"Z:\Filmi\The Tourist [2010] - Turist\The Tourist[2010]DvDrip[Eng]-FXG.avi",
+                @"Z:\Filmi\The Town (2010) - Mesto\The.Town.2010.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\The Transporter (2002) - Prenašalec 1\The Transporter.avi",
+                @"Z:\Filmi\The Transporter (2002) - Prenašalec 1\Transporter 3 (2008) DVDRip-HALESPONGE\Transporter 3 (2008) DVDRip-HALESPONGE.avi",
+                @"Z:\Filmi\The Transporter (2002) - Prenašalec 1\TRANSPORTER 2 [2005]DvDrip[Eng]-NikonXp\Transporter 2.avi",
+                @"Z:\Filmi\The Tree Of Life (2011) - Drevo življenja\The.Tree.Of.Life.2011.DVDR.PAL.SLOSUBS-DiSHON.iso",
+                @"Z:\Filmi\The Usual Suspects (1995) - Osumljenih 5\The Usual Suspects(Xvid).avi",
+                @"Z:\Filmi\The Wayward Cloud - Pobegli oblak\The Wayward Cloud.iso",
+                @"Z:\Filmi\The Woman in Black (2012) - Zenska v crnem\The Woman in Black 2012 BRRip XviD AbSurdiTy.avi",
+                @"Z:\Filmi\The.Expendables.2.2012.SLOSubs.BRRip.XviD-DrSi\The.Expendables.2.2012.SLOSubs.BRRip.XviD-DrSi.avi",
+                @"Z:\Filmi\The.Expendables.2010.SLOSubs.BRRip.XviD-DrSi\The.Expendables.2010.SLOSubs.BRRip.XviD-DrSi.avi",
+                @"Z:\Filmi\There Will Be Blood (2007) - Tekla bo kri\There.Will.Be.Blood.2007.SLOSubs.DVDRip.XviD-DrSi.cd2.avi",
+                @"Z:\Filmi\There Will Be Blood (2007) - Tekla bo kri\There.Will.Be.Blood.2007.SLOSubs.DVDRip.XviD-DrSi.cd1.avi",
+                @"Z:\Filmi\Thick As Thieves [2009] - Pretkani tatovi\Thick.As.Thieves[2009].avi",
+                @"Z:\Filmi\Time of the Gypsies (1998) - Dom za vešanje\Dom.za.vesanje.Xvid.DVD.QQZ.CD1.avi",
+                @"Z:\Filmi\Time of the Gypsies (1998) - Dom za vešanje\Dom.za.vesanje.Xvid.DVD.QQZ.CD2.avi",
+                @"Z:\Filmi\Tinker Tailor Soldier Spy (2011) - Kotlar, Krojac, Vojak, Vohun\Tinker.Tailor.Soldier.Spy.2011.DVDR.PAL.SLOSUBS-DiSHON.iso",
+                @"Z:\Filmi\Titus (1999) - Titus\Titus.iso",
+                @"Z:\Filmi\Traitor (2008) - Izdajalec\Traitor.2008.SLOSubs.DVDRip.XviD-aXXo.avi",
+                @"Z:\Filmi\Triage (2009) - Triaža\Triage.2009.DVDRip.XviD-Jaybob.avi",
+                @"Z:\Filmi\Tristan and Isolde [2006] - Tristan in Izolda\Tristan.and.Isolde[2006]DvDrip[Eng]-aXXo.avi",
+                @"Z:\Filmi\True Grit (2010) - Pravi pogum\True Grit (2010) DVDRip XviD-MAXSPEED www.torentz.3xforum.ro.avi",
+                @"Z:\Filmi\True Grit (2010) - Pravi pogum\TrueGritPoster.gif",
+                @"Z:\Filmi\Un Prophete (2009) - Prerok\Un.Prophete.2009.DVDRip.XviD.AC3.5.1.HORiZON-ArtSubs.avi",
+                @"Z:\Filmi\Unforgiven [1992] - Neoproščeno\Unforgiven [1992]DVDRip[Xvid]AC3 5.1[Eng]BlueLady.avi",
+                @"Z:\Filmi\United 93 (2006) - United 93\United.93[2006]DvDrip[Eng]-aXXo.avi",
+                @"Z:\Filmi\Unthinkable (2010) - Nepojmljivo\Unthinkable.2010.EXTENDED.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Up In The Air (2009) - V zraku\Up.In.The.Air.2009.SLOSubs.DVDSCR.RERIP.XviD-CAMELOT.cd2.avi",
+                @"Z:\Filmi\Up In The Air (2009) - V zraku\Up.In.The.Air.2009.SLOSubs.DVDSCR.RERIP.XviD-CAMELOT.cd1.avi",
+                @"Z:\Filmi\V For Vendetta (2005) - V kot vroče maščevanje\V.For.Vendetta[2005]DvDrip[Eng]-aXXo.avi",
+                @"Z:\Filmi\Valkyrie (2008) -  Operacija Valkira\Valkyrie.2008.R5.LINE.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Wall E (2008) - Wall E\Wall_E.avi",
+                @"Z:\Filmi\Wanted (2008) - Iskan\Wanted.2008.R5.cd1.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\Wanted (2008) - Iskan\Wanted.2008.R5.cd2.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\When A Man Falls In The Forest (2007) - Ko clovek pade v gozdu\When.A.Man.Falls.In.The.Forest.2007.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\When Harry Met Sally (1989) - Ko je Harry srečal Sally\When Harry Met Sally.avi",
+                @"Z:\Filmi\Where The Wild Things Are (2009) - V kraljestvu prečudnih zveri\nep-wtwta-scr.avi",
+                @"Z:\Filmi\Whip It (2009) - Divje mrhe\Whip It.mp4",
+                @"Z:\Filmi\Whip It (2009) - Divje mrhe\Audio 2 ch\Whip It audio trach 2ch.mp4",
+                @"Z:\Filmi\Wir Kinder vom Bahnhoff Zoo (1981) - Otroci s postaje Zoo\Wir Kinder vom Bahnhoff Zoo.iso",
+                @"Z:\Filmi\Witness Protection [2008] - Zaščita prič\Witless.Protection.2008.cd1.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\Witness Protection [2008] - Zaščita prič\Witless.Protection.2008.cd2.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\Wreck It Ralph (2012) - Razbijač Ralph\Wreck.It.Ralph.2012.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\You Dont Know Jack (2010) - Ne poznate Jacka\You.Dont.Know.Jack.2010.SLOSubs.DVDRip.XviD-DrSi.avi",
+                @"Z:\Filmi\Zodiac (2007) - Zodiac\Zodiac 2007.avi",
+                @"Z:\Filmi\Zombieland (2009) - Dežela zombijev\Zombieland (2009) DVDRip XviD-MAX www.torentz.3xforum.ro.avi",
+                @"Z:\Filmi\Zwartboek (2006) - Crna knjiga\Zwartboek.2006.SLOSub.DVDRip.XviD-bRiP.avi",
+                @"Z:\Filmi\(500) Days of Summer (2009) - 500 dni z Summer\(500)Days of Summer.[2009].RETAIL.DVDRIP.XVID.[Eng]-DUQA.avi",
+                @"Z:\Filmi\(500) Days of Summer (2009) - 500 dni z Summer\(500) Days of Summer (2009) Slo Retail.smi",
+                @"Z:\Filmi\(500) Days of Summer (2009) - 500 dni z Summer\500.Days.Of.Summer.BDRip.XviD-ARiGOLD.smi",
+                @"Z:\Filmi\9 Songs (2004) - 9 orgazmov\9.Songs.2004.SLOSubs.DVDRip.XviD-DJTimi.avi",
+                @"Z:\Filmi\10 things i hate about you (1999) - 10 razlogov, zakaj te sovražim\10 Things I Hate About You- Full Movie.AVI",
+                @"Z:\Filmi\21 (2008) - 21 Razpad Las Vegasa\21[2008]R5_DvDrip[Eng]-NikonXp.avi",
+                @"Z:\Filmi\21 Grams (2003) - 21 gramov\21.Grams.2003.PROPER.LiMiTED.DVDRip.XviD.DEiTY.avi",
+            };
+
             #endregion
 
             #region FileNames
+
+            /*
 
             FileNames = new[] {
                 "Oz.the.Great.and.Powerful.2013.SLOSubs.DVDRip.XviD-DrSi",
@@ -709,7 +1127,6 @@ namespace Frost.Tester {
                 "The Wolverine 2013 SLOSubs.EXTENDED BRRip XviD-ETRG",
                 "The.To.Do.List.2013.720p.BRRip.XviD.INSiDE",
                 "Paranoia 2013 CROSubs.BRRip XViD-ETRG",
-                "sample",
                 "Hysteria.2011.SLOSubs.DVDRip.XviD-DrSi",
                 "Girl.Most.Likely.2012.CROSubs.HDRip.XviD-S4A",
                 "Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi",
@@ -993,87 +1410,25 @@ namespace Frost.Tester {
                 "21.Grams.2003.PROPER.LiMiTED.DVDRip.XviD.DEiTY"
             };
 
+             */
+
             #endregion
         }
 
         private static void Main() {
-            //FileNameParser fnp = new FileNameParser(@"C:\Users\Martin\Desktop\FMM\MovieSubs\Dead Man Walking [English] 1995.srt");
-            //fnp.Parse();
+            FileStream debugLog = File.OpenWrite("debugLog.txt");
+            Debug.Listeners.Add(new TextWriterTraceListener(debugLog));
+            Debug.AutoFlush = true;
 
-            TestFileNameParser();
+            List<Video> videos = TestFeatureDetectorVideoDebug();
+
+            Console.WriteLine(Filler);
+            Console.WriteLine("FIN");
+            Console.WriteLine(Filler);
+            Console.Read();
         }
 
         #region Language Detect
-
-        private static async Task<string[]> TestLanguageDetectorAsync2() {
-            DetectorFactory.LoadStaticProfiles();
-
-            //IEnumerable<Task<string>> tasks = SubtitleFiles.Select(async subtitleFile => await DetectFileTextLang(subtitleFile));
-            //return await Task.WhenAll(tasks);
-
-            //int count = SubtitleFiles.Count;
-            int count = LocalSubtitleFiles.Count;
-            string[] langs = new string[count];
-
-            for (int i = 0; i < count; i++) {
-                langs[i] = await DetectFileTextLangAsync(LocalSubtitleFiles[i]);
-            }
-
-            return langs;
-        }
-
-        private static async Task<string[]> TestLanguageDetectorAsync() {
-            DetectorFactory.LoadProfilesFromFolder("profiles");
-
-            //int count = SubtitleFiles.Count;
-            int count = LocalSubtitleFiles.Count;
-            string[] langs = new string[count];
-            for (int i = 0; i < count; i++) {
-                langs[i] = await DetectFileTextLangAsync(LocalSubtitleFiles[i]);
-            }
-
-            return langs;
-        }
-
-        private static async Task<string> DetectFileTextLangAsync(string subtitleFile) {
-            string lang;
-            using (FileStream fs = File.OpenRead(subtitleFile)) {
-                Encoding enc = await DetectEncodingAsync(fs);
-
-                fs.Seek(0, SeekOrigin.Begin);
-                using (StreamReader sr = (enc == null) ? new StreamReader(fs) : new StreamReader(fs, enc)) {
-                    lang = await DetectLangAsync(sr);
-                }
-            }
-
-            return lang;
-        }
-
-        private static Task<string> DetectLangAsync(StreamReader sr) {
-            return Task.Run(() => {
-                try {
-                    Detector detector = DetectorFactory.Create(0.5);
-                    detector.Append(sr);
-                    return detector.Detect();
-                }
-                catch (LangDetectException) {
-                    return null;
-                }
-            });
-        }
-
-        private static async Task<Encoding> DetectEncodingAsync(Stream fileStream) {
-            byte[] firstKB = new byte[1024];
-            int numBytes = await fileStream.ReadAsync(firstKB, 0, 1024);
-
-            UniversalDetector cd = new UniversalDetector();
-            cd.Feed(firstKB, 0, numBytes);
-            cd.DataEnd();
-
-            return cd.IsSupportedEncoding
-                ? cd.DetectedEncoding
-                : null;
-        }
 
         #region LangDetect Old
 
@@ -1290,10 +1645,83 @@ namespace Frost.Tester {
 
         #endregion
 
+        /*
+        private static async Task<string[]> TestLanguageDetectorAsync2() {
+            DetectorFactory.LoadStaticProfiles();
+
+            //IEnumerable<Task<string>> tasks = SubtitleFiles.Select(async subtitleFile => await DetectFileTextLang(subtitleFile));
+            //return await Task.WhenAll(tasks);
+
+            //int count = SubtitleFiles.Count;
+            int count = LocalSubtitleFiles.Count;
+            string[] langs = new string[count];
+
+            for (int i = 0; i < count; i++) {
+                langs[i] = await DetectFileTextLangAsync(LocalSubtitleFiles[i]);
+            }
+
+            return langs;
+        }
+
+        private static async Task<string[]> TestLanguageDetectorAsync() {
+            DetectorFactory.LoadProfilesFromFolder("profiles");
+
+            //int count = SubtitleFiles.Count;
+            int count = LocalSubtitleFiles.Count;
+            string[] langs = new string[count];
+            for (int i = 0; i < count; i++) {
+                langs[i] = await DetectFileTextLangAsync(LocalSubtitleFiles[i]);
+            }
+
+            return langs;
+        }
+
+        private static async Task<string> DetectFileTextLangAsync(string subtitleFile) {
+            string lang;
+            using (FileStream fs = File.OpenRead(subtitleFile)) {
+                Encoding enc = await DetectEncodingAsync(fs);
+
+                fs.Seek(0, SeekOrigin.Begin);
+                using (StreamReader sr = (enc == null) ? new StreamReader(fs) : new StreamReader(fs, enc)) {
+                    lang = await DetectLangAsync(sr);
+                }
+            }
+
+            return lang;
+        }
+
+        private static Task<string> DetectLangAsync(StreamReader sr) {
+            return Task.Run(() => {
+                try {
+                    Detector detector = DetectorFactory.Create(0.5);
+                    detector.Append(sr);
+                    return detector.Detect();
+                }
+                catch (LangDetectException) {
+                    return null;
+                }
+            });
+        }
+
+        private static async Task<Encoding> DetectEncodingAsync(Stream fileStream) {
+            byte[] firstKB = new byte[1024];
+            int numBytes = await fileStream.ReadAsync(firstKB, 0, 1024);
+
+            UniversalDetector cd = new UniversalDetector();
+            cd.Feed(firstKB, 0, numBytes);
+            cd.DataEnd();
+
+            return cd.IsSupportedEncoding
+                ? cd.DetectedEncoding
+                : null;
+        }
+        */
+
         #endregion
 
-        #region FileNameParser / FeatureDetector
+        #region FileNameParser
 
+        /*
         private static void TestFileNameParser() {
             foreach (string fileName in LocalSubtitleFiles) {
                 Console.WriteLine("FileName: {0}", fileName);
@@ -1349,8 +1777,8 @@ namespace Frost.Tester {
 
             OutputList("Specials:", fnInfo.Specials);
 
-            OutputString("Genre: ",fnInfo.Genre);
-            OutputString("ContentType: ",fnInfo.ContentType);
+            OutputString("Genre: ", fnInfo.Genre);
+            OutputString("ContentType: ", fnInfo.ContentType);
 
             if (fnInfo.DVDRegion != DVDRegion.Unknown) {
                 OutputString("DVDRegion: ", fnInfo.DVDRegion.ToString());
@@ -1360,21 +1788,21 @@ namespace Frost.Tester {
             OutputString("VideoQuality: ", fnInfo.VideoQuality);
             OutputString("VideoCodec:", fnInfo.VideoCodec);
 
-            OutputString("AudioSources:", fnInfo.AudioSources);
+            OutputString("AudioSources:", fnInfo.AudioSource);
             OutputString("AudioQuality:", fnInfo.AudioQuality);
-            OutputString("AudioCodec:",   fnInfo.AudioCodec);
+            OutputString("AudioCodec:", fnInfo.AudioCodec);
         }
 
         public static void OutputString(string type, string str) {
             if (!string.IsNullOrEmpty(str)) {
-                Console.WriteLine("\t"+type);
-                Console.WriteLine("\t\t"+str);
+                Console.WriteLine("\t" + type);
+                Console.WriteLine("\t\t" + str);
             }
         }
 
         private static void OutputList(string type, ICollection<string> enumerable) {
             if (enumerable.Count != 0) {
-                Console.WriteLine("\t"+type);
+                Console.WriteLine("\t" + type);
                 foreach (string str in enumerable) {
                     Console.WriteLine("\t\t" + str);
                 }
@@ -1384,7 +1812,7 @@ namespace Frost.Tester {
         public static void OutputIfNotDefault<T>(string type, T param) where T : struct {
             if (!Equals(param, default(T))) {
                 Console.WriteLine(type);
-                Console.WriteLine("\t\t"+param);
+                Console.WriteLine("\t\t" + param);
             }
         }
 
@@ -1393,10 +1821,174 @@ namespace Frost.Tester {
                 Console.WriteLine(type + param);
             }
         }
+        */
 
-        private static void TestFeatureDetector() {
-            using (FeatureDetector fd = new FeatureDetector(FOLDER_PATH)) {
-                List<Subtitle> subtitles = fd.GetSubtitlesForFile(FILE_PATH).ToList();
+        #endregion
+
+        #region FeatureDetector
+
+        private static List<Video> TestFeatureDetectorVideoDebug() {
+            List<Video> vids = new List<Video>();
+
+            int numFiles = FileNames2.Length;
+            for (int i = 0; i < numFiles; i++) {
+                int count = 0;
+                using (FeatureDetector fd = new FeatureDetector(FileNames2[i])) {
+                    fd.Detect();
+
+                    List<Video> vid = fd.Videos.ToList();
+                    count = vid.Count;
+                    OutputVids(vid);
+
+                    vids.AddRange(vid);
+                }
+                Debug.WriteLineIf(count != 0, Filler);
+                Debug.Flush();
+                Console.WriteLine(i);
+            }
+            return vids;
+        }
+
+        private static void OutputVids(List<Video> vid) {
+            if (vid.Count > 0) {
+                Debug.WriteLine("");
+                Debug.WriteLine("#region {0}.{1}", vid[0].File.Name, vid[0].File.Extension);
+
+                foreach (Video video in vid) {
+                    Debug.Indent();
+                    OutputVid(video);
+                    Debug.Unindent();
+
+                    Debug.WriteLine("");
+                }
+
+                Debug.WriteLine("#endregion");
+            }
+        }
+
+        private static void OutputVid(Video video) {
+            Debug.WriteLine("File:");
+            Debug.Indent();
+            OutputFileInfo(video);
+            Debug.Unindent();
+
+            Debug.WriteLine("Video:");
+            Debug.Indent();
+
+            Debug.WriteLineIf(!string.IsNullOrEmpty(video.Source), "Source: "+ video.Source);
+            Debug.WriteLineIf(!string.IsNullOrEmpty(video.Type), "Type: "+ video.Type);
+            Debug.WriteLineIf(!string.IsNullOrEmpty(video.Resolution), "Resoulution: "+ video.Resolution);
+            Debug.WriteLineIf(video.FPS.HasValue, "FPS: "+ video.FPS);
+            Debug.WriteLineIf(video.BitRate.HasValue, "BitRate: "+ video.BitRate);
+            Debug.WriteLineIf(video.BitRateMode != FrameOrBitRateMode.Unknown, "BitRateMode: "+video.BitRateMode);
+            Debug.WriteLineIf(video.BitDepth.HasValue, "BitDepth: "+ video.BitDepth);
+            Debug.WriteLineIf(video.CompressionMode != CompressionMode.Unknown,"CompressionMode: "+video.CompressionMode);
+
+            Debug.WriteLineIf(video.Duration.HasValue, string.Format("Durration: {0} ({0:hh'h 'mm'm 'ss's 'fff'ms'})", TimeSpan.FromMilliseconds(video.Duration ?? 0)));
+            Debug.WriteLine("ScanType: "+video.ScanType);
+            Debug.WriteLineIf(!string.IsNullOrEmpty(video.ColorSpace), "ColorSpace: "+ video.ColorSpace);
+            Debug.WriteLineIf(!string.IsNullOrEmpty(video.Codec), "Codec: "+ video.Codec);
+            Debug.WriteLineIf(video.Aspect.HasValue, "Aspect: "+ video.Aspect);
+            Debug.WriteLineIf(!string.IsNullOrEmpty(video.AspectCommercialName), "AspectName: "+ video.AspectCommercialName);
+            Debug.WriteLineIf(video.Width.HasValue, "Width: "+ video.Width);
+            Debug.WriteLineIf(video.Height.HasValue, "Height: "+ video.Height);
+
+            Debug.Unindent();
+        }
+
+        private static void OutputFileInfo(Video video) {
+            Debug.WriteLine("FileName: " + video.File.Name);
+            Debug.WriteLine("Extension: " + video.File.Extension);
+            Debug.WriteLine("FolderPath: " + video.File.FolderPath);
+            Debug.WriteLineIf(video.File.Size != null, "FileSize: " + (video.File.Size ?? 0).FormatFileSizeAsString());
+        }
+
+        private static List<Video> TestFeatureDetectorVideo() {
+            List<Video> vids = new List<Video>();
+            object syncRoot = new object();
+
+            int subsCounter = 0;
+            int numFiles = FileNames2.Length;
+            //Parallel.For(0, numFiles, i => {
+            for (int i = 0; i < numFiles; i++) {
+                int numDetectedVids;
+                using (FeatureDetector fd = new FeatureDetector(FileNames2[i])) {
+                    fd.Detect();
+
+                    ICollection<Video> vid = fd.Videos;
+                    numDetectedVids = vid.Count;
+
+                    //lock (subs) {
+                        vids.AddRange(vid);
+                    //}
+                }
+
+                int subCount;
+                //lock (syncRoot) {
+                    subsCounter += numDetectedVids;
+                    subCount = subsCounter;
+                //}
+                Console.Error.WriteLine("{0} ({1}) / {2} : {3}", subCount, numDetectedVids, numFiles, i);
+            }//);
+            return vids;
+        }
+
+        private static List<Subtitle> TestFeatureDetectorSubtitles() {
+            List<Subtitle> subs = new List<Subtitle>();
+            object syncRoot = new object();
+
+            int subsCounter = 0;
+            int numFiles = FileNames2.Length;
+            Parallel.For(0, numFiles, i => {
+                int numDetectedSubs;
+                using (FeatureDetector fd = new FeatureDetector(FileNames2[i])) {
+                    fd.Detect();
+
+                    ICollection<Subtitle> sub = fd.Subtitles;
+                    numDetectedSubs = sub.Count;
+
+                    lock (subs) {
+                        subs.AddRange(sub);
+                    }
+                }
+
+                int subCount;
+                lock (syncRoot) {
+                    subsCounter += numDetectedSubs;
+                    subCount = subsCounter;
+                }
+                Console.Error.WriteLine("{0} ({1}) / {2} : {3}", subCount, numDetectedSubs, numFiles, i);
+            });
+            return subs;
+        }
+
+        private static List<Subtitle> TestFeatureDetectorPerf() {
+            List<Subtitle> subs = new List<Subtitle>();
+
+            int numFiles = FileNames2.Length;
+            Parallel.For(0, numFiles, i => {
+                using (FeatureDetector fd = new FeatureDetector(FileNames2[i])) {
+                    fd.Detect();
+                    lock (subs) {
+                        subs.AddRange(fd.Subtitles);
+                    }
+                }
+            });
+            return subs;
+        }
+
+        private static void OutputSubs(string fileName, ICollection<Subtitle> s) {
+            if (s.Count > 0) {
+                Console.WriteLine(Filler);
+                Console.WriteLine();
+                Console.WriteLine("#region " + fileName);
+
+                foreach (Subtitle subtitle in s) {
+                    Console.WriteLine(subtitle);
+                }
+
+                Console.WriteLine("#endregion");
+                Console.WriteLine(Filler);
             }
         }
 

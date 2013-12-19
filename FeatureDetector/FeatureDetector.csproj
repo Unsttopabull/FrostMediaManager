@@ -35,6 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -48,19 +49,36 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="FeatureDetector.Subtitles.cs" />
     <Compile Include="FeatureDetector.Video.cs" />
-    <Compile Include="Util\AspectRatioDetector.cs" />
-    <Compile Include="Util\FileNameInfo.cs" />
+    <Compile Include="Util\AspectRatio\AspectRatioComparer.cs" />
+    <Compile Include="Util\AspectRatio\AspectRatioDetector.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\AspectRatio\AspectRatioInfo.cs" />
+    <Compile Include="Util\FileNameInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Util\FileNameParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\SubtitleLanguage.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SharpLanguageDetect\SharpLanguageDetect.csproj">
+      <Project>{977BDAC0-B1E4-4198-A0AD-6B93E30EF480}</Project>
+      <Name>SharpLanguageDetect</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharpMediaInfo\SharpMediaInfo.csproj">
       <Project>{4ea24c1b-3af2-4eb0-aa98-62eafb0c2682}</Project>
       <Name>SharpMediaInfo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UniversalCharsetDetector\SharpCharsetDetector.csproj">
+      <Project>{7BECB850-389A-44FC-8523-3EF0B2540F07}</Project>
+      <Name>SharpCharsetDetector</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
