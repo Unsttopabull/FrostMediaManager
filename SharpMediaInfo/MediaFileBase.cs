@@ -172,7 +172,9 @@ namespace Frost.SharpMediaInfo {
         }
 
         /// <summary>Closes this instance and disposes all allocated resources.</summary>
-        public abstract void Close();
+        internal virtual void Close() {
+            throw new NotImplementedException("Should be overriden in a inherited class.");
+        }
 
         ~MediaFileBase() {
             Close();

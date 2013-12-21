@@ -5,6 +5,7 @@ namespace Frost.SharpMediaInfo {
 
     /// <summary>Represents a MediaInfo file in a List.</summary>
     public class MediaListFile : MediaFileBase {
+
         /// <summary>Initializes a new instance of the <see cref="MediaListFile"/> class.</summary>
         /// <param name="mediaInfoList">The handle to the MediaInfoList.</param>
         /// <param name="filePos">The file position in list.</param>
@@ -18,7 +19,7 @@ namespace Frost.SharpMediaInfo {
             InitializeMediaStreams(cacheInfom, allInfoCache);
         }
 
-        public int FileIndex { get; private set; }
+        public int FileIndex { get; internal set; }
 
         #region P/Invoke C Functions
 
@@ -48,7 +49,7 @@ namespace Frost.SharpMediaInfo {
         #region IDisposable
 
         /// <summary>Closes this instance and disposes all allocated resources.</summary>
-        public override void Close() {
+        internal override void Close() {
             if (IsOpen) {
                 MediaInfoList_Close(Handle, (IntPtr) FileIndex);
                 GC.SuppressFinalize(this);

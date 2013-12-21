@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\MediaFileCollection.cs" />
     <Compile Include="LibraryInfo.cs" />
     <Compile Include="MediaFileBase.cs" />
     <Compile Include="MediaListFile.cs" />

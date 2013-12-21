@@ -1831,20 +1831,18 @@ namespace Frost.Tester {
             List<Video> vids = new List<Video>();
 
             int numFiles = FileNames2.Length;
-            for (int i = 0; i < numFiles; i++) {
-                int count = 0;
-                using (FeatureDetector fd = new FeatureDetector(FileNames2[i])) {
-                    fd.Detect();
+            using (FeatureDetector fd = new FeatureDetector()) {
+                for (int i = 0; i < numFiles; i++) {
+                    fd.Detect(FileNames2[i]);
 
                     List<Video> vid = fd.Videos.ToList();
-                    count = vid.Count;
                     OutputVids(vid);
 
                     vids.AddRange(vid);
+
+                    Debug.WriteLineIf(vid.Count != 0, Filler);
+                    Console.WriteLine(i);
                 }
-                Debug.WriteLineIf(count != 0, Filler);
-                Debug.Flush();
-                Console.WriteLine(i);
             }
             return vids;
         }
@@ -1903,79 +1901,79 @@ namespace Frost.Tester {
             Debug.WriteLineIf(video.File.Size != null, "FileSize: " + (video.File.Size ?? 0).FormatFileSizeAsString());
         }
 
-        private static List<Video> TestFeatureDetectorVideo() {
-            List<Video> vids = new List<Video>();
-            object syncRoot = new object();
+        //private static List<Video> TestFeatureDetectorVideo() {
+        //    List<Video> vids = new List<Video>();
+        //    object syncRoot = new object();
 
-            int subsCounter = 0;
-            int numFiles = FileNames2.Length;
-            //Parallel.For(0, numFiles, i => {
-            for (int i = 0; i < numFiles; i++) {
-                int numDetectedVids;
-                using (FeatureDetector fd = new FeatureDetector(FileNames2[i])) {
-                    fd.Detect();
+        //    int subsCounter = 0;
+        //    int numFiles = FileNames2.Length;
+        //    //Parallel.For(0, numFiles, i => {
+        //    for (int i = 0; i < numFiles; i++) {
+        //        int numDetectedVids;
+        //        using (FeatureDetector fd = new FeatureDetector(FileNames2[i])) {
+        //            fd.Detect();
 
-                    ICollection<Video> vid = fd.Videos;
-                    numDetectedVids = vid.Count;
+        //            ICollection<Video> vid = fd.Videos;
+        //            numDetectedVids = vid.Count;
 
-                    //lock (subs) {
-                        vids.AddRange(vid);
-                    //}
-                }
+        //            //lock (subs) {
+        //                vids.AddRange(vid);
+        //            //}
+        //        }
 
-                int subCount;
-                //lock (syncRoot) {
-                    subsCounter += numDetectedVids;
-                    subCount = subsCounter;
-                //}
-                Console.Error.WriteLine("{0} ({1}) / {2} : {3}", subCount, numDetectedVids, numFiles, i);
-            }//);
-            return vids;
-        }
+        //        int subCount;
+        //        //lock (syncRoot) {
+        //            subsCounter += numDetectedVids;
+        //            subCount = subsCounter;
+        //        //}
+        //        Console.Error.WriteLine("{0} ({1}) / {2} : {3}", subCount, numDetectedVids, numFiles, i);
+        //    }//);
+        //    return vids;
+        //}
 
-        private static List<Subtitle> TestFeatureDetectorSubtitles() {
-            List<Subtitle> subs = new List<Subtitle>();
-            object syncRoot = new object();
+        //private static List<Subtitle> TestFeatureDetectorSubtitles() {
+        //    List<Subtitle> subs = new List<Subtitle>();
+        //    object syncRoot = new object();
 
-            int subsCounter = 0;
-            int numFiles = FileNames2.Length;
-            Parallel.For(0, numFiles, i => {
-                int numDetectedSubs;
-                using (FeatureDetector fd = new FeatureDetector(FileNames2[i])) {
-                    fd.Detect();
+        //    int subsCounter = 0;
+        //    int numFiles = FileNames2.Length;
+        //    Parallel.For(0, numFiles, i => {
+        //        int numDetectedSubs;
+        //        using (FeatureDetector fd = new FeatureDetector(FileNames2[i])) {
+        //            fd.Detect();
 
-                    ICollection<Subtitle> sub = fd.Subtitles;
-                    numDetectedSubs = sub.Count;
+        //            ICollection<Subtitle> sub = fd.Subtitles;
+        //            numDetectedSubs = sub.Count;
 
-                    lock (subs) {
-                        subs.AddRange(sub);
-                    }
-                }
+        //            lock (subs) {
+        //                subs.AddRange(sub);
+        //            }
+        //        }
 
-                int subCount;
-                lock (syncRoot) {
-                    subsCounter += numDetectedSubs;
-                    subCount = subsCounter;
-                }
-                Console.Error.WriteLine("{0} ({1}) / {2} : {3}", subCount, numDetectedSubs, numFiles, i);
-            });
-            return subs;
-        }
+        //        int subCount;
+        //        lock (syncRoot) {
+        //            subsCounter += numDetectedSubs;
+        //            subCount = subsCounter;
+        //        }
+        //        Console.Error.WriteLine("{0} ({1}) / {2} : {3}", subCount, numDetectedSubs, numFiles, i);
+        //    });
+        //    return subs;
+        //}
 
-        private static List<Subtitle> TestFeatureDetectorPerf() {
-            List<Subtitle> subs = new List<Subtitle>();
+        //private static List<Subtitle> TestFeatureDetectorPerf() {
+        //    List<Subtitle> subs = new List<Subtitle>();
 
-            int numFiles = FileNames2.Length;
-            Parallel.For(0, numFiles, i => {
-                using (FeatureDetector fd = new FeatureDetector(FileNames2[i])) {
-                    fd.Detect();
-                    lock (subs) {
-                        subs.AddRange(fd.Subtitles);
-                    }
-                }
-            });
-            return subs;
-        }
+        //    int numFiles = FileNames2.Length;
+        //    Parallel.For(0, numFiles, i => {
+        //        using (FeatureDetector fd = new FeatureDetector(FileNames2[i])) {
+        //            fd.Detect();
+        //            lock (subs) {
+        //                subs.AddRange(fd.Subtitles);
+        //            }
+        //        }
+        //    });
+        //    return subs;
+        //}
 
         private static void OutputSubs(string fileName, ICollection<Subtitle> s) {
             if (s.Count > 0) {

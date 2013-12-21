@@ -13,9 +13,9 @@ namespace Frost.DetectFeatures {
     public partial class FeatureDetector : IDisposable {
 
         private readonly MediaInfoList _mf;
-        private readonly string _filePath;
-        private readonly string _directoryRegex;
-        private readonly DirectoryInfo _directoryInfo;
+        private string _filePath;
+        private string _directoryRegex;
+        private DirectoryInfo _directoryInfo;
         private readonly Dictionary<string, FileNameInfo> _fileNameInfos;
 
         static FeatureDetector() {
@@ -41,30 +41,38 @@ namespace Frost.DetectFeatures {
         }
 
         /// <summary>Initializes a new instance of the <see cref="FeatureDetector"/> class.</summary>
-        /// <param name="filepath">The filepath of the file to check for features.</param>
-        public FeatureDetector(string filepath) {
-            if (string.IsNullOrEmpty(filepath)) {
-                throw new ArgumentNullException("filepath");
-            }
-
-            _filePath = filepath;
-            _directoryInfo = new DirectoryInfo(Path.GetDirectoryName(filepath) ?? "");
-            string directoryPath = _directoryInfo.FullName.Replace("\\", "/");
-
-            _directoryRegex = Regex.Escape(directoryPath).Replace("/", @"[\\/]");
-
-            FileNameParser fnp = new FileNameParser(_filePath);
-            FileNameInfo fileNameInfo = fnp.Parse();
-            _fileNameInfos = new Dictionary<string, FileNameInfo> {{_filePath, fileNameInfo}};
+        public FeatureDetector() {
+            _fileNameInfos = new Dictionary<string, FileNameInfo>();
             _mf = new MediaInfoList();
 
             _video = new List<Video>();
             _subtitles = new List<Subtitle>();
         }
 
-        public void Detect() {
+        /// <param name="filepath">The filepath of the file to check for features.</param>
+        public void Detect(string filepath) {
+            if (string.IsNullOrEmpty(filepath)) {
+                throw new ArgumentNullException("filepath");
+            }
+            InitForFile(filepath);
+
             //GetSubtitlesForFile(_filePath);
             GetFileInfo(_filePath);
+        }
+
+        private void InitForFile(string filepath) {
+            _filePath = filepath;
+            _directoryInfo = new DirectoryInfo(Path.GetDirectoryName(filepath) ?? "");
+            string directoryPath = _directoryInfo.FullName.Replace("\\", "/");
+
+            _directoryRegex = Regex.Escape(directoryPath).Replace("/", @"[\\/]");
+
+            if (!_fileNameInfos.ContainsKey(filepath)) {
+                FileNameParser fnp = new FileNameParser(_filePath);
+                FileNameInfo fileNameInfo = fnp.Parse();
+
+                _fileNameInfos.Add(filepath, fileNameInfo);
+            }
         }
 
         private FileNameInfo GetFileNameInfo(string fileName) {
@@ -95,7 +103,7 @@ namespace Frost.DetectFeatures {
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         public void Dispose() {
             if (!IsDisposed) {
-                _mf.Close();
+                _mf.RemoveAll();
                 GC.SuppressFinalize(this);
                 IsDisposed = true;
             }

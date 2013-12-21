@@ -5,33 +5,29 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Frost.SharpMediaInfo.Collections;
 
 namespace Frost.SharpMediaInfo {
 
     public class MediaInfoList : IDisposable, IEnumerable<MediaListFile> {
 
         private readonly IntPtr _handle;
-        private List<MediaListFile> _mediaList;
+        private readonly MediaFileCollection _files;
         private bool _isDisposed;
 
         #region Constructors
         public MediaInfoList() {
             _handle = MediaInfoList_New();
-            _mediaList = new List<MediaListFile>();
+            _files = new MediaFileCollection();
         }
 
-        public MediaInfoList(string fileOrFolderPath, InfoFileOptions options = InfoFileOptions.Nothing, bool cacheInfom = true, bool allInfoCache = true) {
-            _handle = MediaInfoList_New();
-
+        public MediaInfoList(string fileOrFolderPath, InfoFileOptions options = InfoFileOptions.Nothing, bool cacheInfom = true, bool allInfoCache = true) : this() {
             int count = Open(fileOrFolderPath, options);
-
             InitFiles(count, cacheInfom, allInfoCache);
         }
 
-        public MediaInfoList(IEnumerable<string> filePaths, InfoFileOptions options = InfoFileOptions.Nothing, bool cacheInfom = true, bool allInfoCache = true) {
-            _handle = MediaInfoList_New();
+        public MediaInfoList(IEnumerable<string> filePaths, InfoFileOptions options = InfoFileOptions.Nothing, bool cacheInfom = true, bool allInfoCache = true) : this() {
             int count = 0;
-
             //opening multiple files in a single go currently not supported (even if documentation says otherwise)
             foreach (string filePath in filePaths) {
                 Open(filePath, options);
@@ -41,18 +37,16 @@ namespace Frost.SharpMediaInfo {
             InitFiles(count, cacheInfom, allInfoCache);
         }
 
+        //Should only be called by a constructor
         private void InitFiles(int count, bool cacheInform, bool allInfoCache) {
-            _mediaList = new List<MediaListFile>(count);
             for (int fileNum = 0; fileNum < count; fileNum++) {
-                _mediaList.Add(new MediaListFile(_handle, fileNum, cacheInform, allInfoCache));
+                _files.Add(new MediaListFile(_handle, fileNum, cacheInform, allInfoCache));
             }
         }
 
         #endregion
 
         #region P/Invoke C Functions
-
-        //Import of DLL functions. DO NOT USE until you know what you do (MediaInfo DLL do NOT use CoTaskMemAlloc to allocate memory)
 
         [DllImport("MediaInfo.dll")]
         private static extern IntPtr MediaInfoList_Open(IntPtr handle, [MarshalAs(UnmanagedType.LPWStr)] string fileName, IntPtr options);
@@ -68,13 +62,79 @@ namespace Frost.SharpMediaInfo {
 
         #endregion
 
-        #region Find files
+        #region Open Files
 
-        /// <summary>Checks if the list contains a file with the specified path.</summary>
-        /// <param name="filePath">The file path to check for.</param>
-        /// <returns>If found returns the file index in list; otherwise returns <c>-1</c>.</returns>
-        public int Contains(string filePath) {
-            return _mediaList.FindIndex(mlf => mlf.General.FileInfo.FullPath == filePath);
+        /// <summary>Add the file to the list and collects information about it (technical information and tags). The Inform() call can be optionaly cached to reduce further calls to the DLL.</summary>
+        /// <param name="fileName">Full name of the file to open.</param>
+        /// <param name="cacheInform">If set to <c>true</c> caches the Inform() call.</param>
+        /// <param name="allInfoCache">if set to <c>true</c> ShowAllInfo ("Complete_Get") is set to <c>true</c> before the Inform() call and reset afterwards.</param>
+        /// <returns>Returns <c>true</c> if sucessfull, otherwise <c>false</c></returns>
+        public MediaListFile Add(string fileName, bool cacheInform, bool allInfoCache) {
+            if (Open(fileName) > 0) {
+                MediaListFile file = new MediaListFile(_handle, _files.Count, cacheInform, allInfoCache);
+                _files.Add(file);
+                return file;
+            }
+            return null;
+        }
+
+        /// <summary>Add the file to the list and collects information about it (technical information and tags). The Inform() call can be optionaly cached to reduce further calls to the DLL.</summary>
+        /// <param name="fileName">Full name of the file to open.</param>
+        /// <param name="cacheInform">If set to <c>true</c> caches the Inform() call.</param>
+        /// <param name="allInfoCache">if set to <c>true</c> ShowAllInfo ("Complete_Get") is set to <c>true</c> before the Inform() call and reset afterwards.</param>
+        /// <returns>Returns <c>true</c> if sucessfull, otherwise <c>false</c></returns>
+        public Task<MediaListFile> AddAsync(string fileName, bool cacheInform, bool allInfoCache) {
+            return Task.Run(() => Add(fileName, cacheInform, allInfoCache));
+        }
+        
+        #endregion
+
+        #region Close / Remove
+
+        public void Remove(int filePos) {
+            _files.Close(filePos);
+        }
+
+        public bool Remove(string filePath) {
+            if (_files.Contains(filePath)) {
+                _files.Close(_files[filePath].FileIndex);
+                return true;
+            }
+            return false;
+        }
+
+        public bool Remove(MediaListFile file) {
+            int idx = _files.IndexOf(file);
+
+            if (idx != -1) {
+                _files.Close(idx);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>Closes all files in the list and disposes all allocated resources.</summary>
+        public void RemoveAll() {
+            if (!IsDisposed) {
+                _files.Clear();
+
+                const int ALL_FILES = -1;
+                MediaInfoList_Close(_handle, (IntPtr) ALL_FILES);
+
+                MediaInfoList_Delete(_handle);
+                IsDisposed = true;
+
+                GC.SuppressFinalize(this);
+            }
+        }
+        #endregion
+
+        #region Getters
+
+        /// <summary>Gets the full paths of the files in list in order they've been added.</summary>
+        /// <returns>The full paths of the files in list in order they've been added.</returns>
+        public string[] GetFilePaths() {
+            return _files.GetFilePaths().ToArray();
         }
 
         /// <summary>
@@ -92,92 +152,51 @@ namespace Frost.SharpMediaInfo {
         /// </param>
         /// <returns></returns>
         public MediaListFile GetOrOpen(string fileName, bool cacheInform = true, bool allInfoCache = true) {
-            int idx = Contains(fileName);
-            if (idx > -1) {
-                return _mediaList[idx];
-            }
-
-            return Open(fileName, cacheInform, allInfoCache)
-                ? _mediaList[_mediaList.Count - 1]
-                : null;
-        }
-
-        public MediaListFile GetFirstFileWithPattern(string regex) {
-            return _mediaList.FirstOrDefault(mlf => Regex.IsMatch(mlf.General.FileInfo.FullPath, regex));
+            return _files.Contains(fileName)
+                ? _files[fileName]
+                : Add(fileName, cacheInform, allInfoCache);
         }
 
         public MediaListFile GetFirstFileWithPattern(Regex regex) {
-            return _mediaList.FirstOrDefault(mlf => regex.IsMatch(mlf.General.FileInfo.FullPath));
+            return _files.GetFirstFileWithPattern(regex);
+        }
+
+        public MediaListFile GetFirstFileWithPattern(string regex) {
+            return _files.GetFirstFileWithPattern(new Regex(regex));
+        }
+        
+        public IEnumerable<MediaListFile> GetFilesWithPattern(Regex regex) {
+            return _files.GetFilesWithPattern(regex);
         }
 
         public IEnumerable<MediaListFile> GetFilesWithPattern(string regex) {
-            return _mediaList.Where(mlf => Regex.IsMatch(mlf.General.FileInfo.FullPath, regex));
+            return _files.GetFilesWithPattern(new Regex(regex));
         }
 
-        public IEnumerable<MediaListFile> GetFilesWithPattern(Regex regex) {
-            return _mediaList.Where(mlf => regex.IsMatch(mlf.General.FileInfo.FullPath));
-        }
         #endregion
 
-        #region Open Files
+        #region Contains / Count
 
-        /// <summary>Open a file and collect information about it (technical information and tags). The Inform() call can be optionaly cached to reduce further calls to the DLL.</summary>
-        /// <param name="fileName">Full name of the file to open.</param>
-        /// <param name="cacheInform">If set to <c>true</c> caches the Inform() call.</param>
-        /// <param name="allInfoCache">if set to <c>true</c> ShowAllInfo ("Complete_Get") is set to <c>true</c> before the Inform() call and reset afterwards.</param>
-        /// <returns>Returns <c>true</c> if sucessfull, otherwise <c>false</c></returns>
-        public bool Open(string fileName, bool cacheInform, bool allInfoCache) {
-            if (Open(fileName) > 0) {
-                _mediaList.Add(new MediaListFile(_handle, _mediaList.Count, cacheInform, allInfoCache));
-                return true;
-            }
-            return false;
+        public int Count { get { return _files.Count; } }
+
+        public bool Contains(string fullPath) {
+            return _files.Contains(fullPath);
         }
 
-        /// <summary>Open a file and collect information about it (technical information and tags). The Inform() call can be optionaly cached to reduce further calls to the DLL.</summary>
-        /// <param name="fileName">Full name of the file to open.</param>
-        /// <param name="cacheInform">If set to <c>true</c> caches the Inform() call.</param>
-        /// <param name="allInfoCache">if set to <c>true</c> ShowAllInfo ("Complete_Get") is set to <c>true</c> before the Inform() call and reset afterwards.</param>
-        /// <returns>Returns <c>true</c> if sucessfull, otherwise <c>false</c></returns>
-        public Task<bool> OpenAsync(string fileName, bool cacheInform, bool allInfoCache) {
-            return Task.Run(() => Open(fileName, cacheInform, allInfoCache));
-        }
-        #endregion
-
-        #region Properties / Methods
-
-        /// <summary>Gets the file paths of files in the list.</summary>
-        /// <returns>Filepaths of files in the list.</returns>
-        public IEnumerable<string> GetFilePaths() {
-            return _mediaList.Select(ml => ml.General.FileInfo.FullPath);
+        public bool Contains(MediaListFile file) {
+            return _files.Contains(file);
         }
 
-        /// <summary>Gets the number of files in this list.</summary>
-        /// <returns>The number of files in this list.</returns>
-        public int Count() {
-            return _mediaList.Count;
-        }
-
-        /// <summary>Gets a value indicating whether any of the files in the list are still open.</summary>
-        /// <value>Is <c>true</c> if any of the files in the list are still open; otherwise, <c>false</c>.</value>
-        public bool AnyOpen {
-            get { return _mediaList.FirstOrDefault(mlf => mlf.IsOpen) != null; } 
-        }
-
-        /// <summary>Gets the number of open files in a list.</summary>
-        /// <value>The number of open files in a list.</value>
-        public int NumberOfOpenFiles {
-            get { return _mediaList.Count(mlf => mlf.IsOpen); }
-        }
         #endregion
 
         #region Indexers
+
         public MediaListFile this[int filePos] {
-            get { return _mediaList[filePos]; }
+            get { return _files[filePos]; }
         }
 
         public MediaListFile this[string fullPath] {
-            get { return _mediaList.FirstOrDefault(mlf => mlf.IsOpen && mlf.General.FileInfo.FullPath == fullPath); }
+            get { return _files[fullPath]; }
         }
 
         #endregion
@@ -203,24 +222,11 @@ namespace Frost.SharpMediaInfo {
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         void IDisposable.Dispose() {
-            Close();
-        }
-
-        /// <summary>Closes all files in the list and disposes all allocated resources.</summary>
-        public void Close() {
-            if (IsDisposed) {
-                const int ALL_FILES = -1;
-                MediaInfoList_Close(_handle, (IntPtr) ALL_FILES);
-
-                MediaInfoList_Delete(_handle);
-                IsDisposed = true;
-
-                GC.SuppressFinalize(this);
-            }
+            RemoveAll();
         }
 
         ~MediaInfoList() {
-            Close();
+            RemoveAll();
         }
 
         #endregion
@@ -228,18 +234,19 @@ namespace Frost.SharpMediaInfo {
         #region IEnumerable
 
         /// <summary>Returns an enumerator that iterates through the collection.</summary>
-        /// <returns>A <see cref="T:System.Collections.Generic.IEnumerator`1">IEnumerator&lt;out T&gt;</see> that can be used to iterate through the collection.</returns>
+        /// <returns>A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.</returns>
         public IEnumerator<MediaListFile> GetEnumerator() {
-            return _mediaList.GetEnumerator();
+            return _files.GetEnumerator();
         }
 
         /// <summary>Returns an enumerator that iterates through a collection.</summary>
-        /// <returns>An <see cref="System.Collections.IEnumerator">IEnumerator</see> object that can be used to iterate through the collection.</returns>
+        /// <returns>An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator() {
             return GetEnumerator();
         }
 
         #endregion
+
     }
 
 }

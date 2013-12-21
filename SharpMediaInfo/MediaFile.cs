@@ -80,7 +80,7 @@ namespace Frost.SharpMediaInfo {
         #region IDisposable
 
         /// <summary>Closes this instance and disposes all allocated resources.</summary>
-        public override void Close() {
+        public new void Close() {
             if (!_isDisposed) {
                 if (IsOpen) {
                     MediaInfo_Close(Handle);
