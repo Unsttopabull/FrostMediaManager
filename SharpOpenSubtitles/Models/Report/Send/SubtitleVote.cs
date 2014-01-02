@@ -11,6 +11,11 @@ namespace Frost.SharpOpenSubtitles.Models.Report.Send {
         /// <summary>Subtitle rating, must be in interval 1 (worst) to 10 (best).</summary>
         [XmlRpcMember("score")]
         public double Score;
+
+        public SubtitleVote(string subtitleID, double score) {
+            SubtitleID = subtitleID;
+            Score = score;
+        }
     }
 
 }

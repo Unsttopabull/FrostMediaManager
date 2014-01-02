@@ -68,6 +68,10 @@
       <Project>{10711252-7056-44A6-AC29-5C7C203B0095}</Project>
       <Name>SharpOpenSubtitles</Name>
     </ProjectReference>
+    <ProjectReference Include="..\xml-rpc.net.3.0.0\xmlrpc.csproj">
+      <Project>{1b4b0a58-0afb-4090-91dd-18912cc7de65}</Project>
+      <Name>xmlrpc</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -31,15 +31,15 @@ namespace Frost.SharpOpenSubtitles.Models.Movies {
 
         /// <summary></summary>
         [XmlRpcMember("cast")]
-        public XmlRpcStruct Cast; //ImdbCast
+        public ImdbCast Cast; //ImdbCast
 
         /// <summary></summary>
         [XmlRpcMember("directors")]
-        public XmlRpcStruct Directors; //ImdbDirectors
+        public ImdbDirectors Directors; //ImdbDirectors
 
         /// <summary></summary>
         [XmlRpcMember("writers")]
-        public XmlRpcStruct Writers; //ImdbWriters
+        public ImdbWriters Writers; //ImdbWriters
 
         /// <summary></summary>
         [XmlRpcMember("awards")]

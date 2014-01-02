@@ -66,6 +66,14 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <example>\eg{ ''<c>Pirates of the Caribbean: The Curse of the Black Pearl</c>'' becomes ''<c>Pirates of the Caribbean 1</c>''}</example>
         public string SortTitle { get; set; }
 
+        /// <summary>Gets or sets the goofs.</summary>
+        /// <value>The goofs.</value>
+        public string Goofs { get; set; }
+
+        /// <summary>Gets or sets the trivia.</summary>
+        /// <value>The trivia.</value>
+        public string Trivia { get; set; }
+
         /// <summary>Gets or sets the year this movie was released in.</summary>
         /// <value>The year this movie was released in.</value>
         public int? ReleaseYear { get; set; }

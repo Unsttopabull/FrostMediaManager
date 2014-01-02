@@ -7,7 +7,6 @@ using Frost.SharpOpenSubtitles.Models.Search.Receive;
 using Frost.SharpOpenSubtitles.Models.Search.Send;
 using Frost.SharpOpenSubtitles.Models.Session.Receive;
 using Frost.SharpOpenSubtitles.Models.UI.Receive;
-using Frost.SharpOpenSubtitles.Models.Upload;
 using Frost.SharpOpenSubtitles.Models.Upload.Receive;
 using Frost.SharpOpenSubtitles.Models.Upload.Send;
 
@@ -124,11 +123,29 @@ namespace Frost.SharpOpenSubtitles {
             return _rpc.Proxy.SubtitlesVote(_rpc.Token, vote);
         }
 
+        /// <summary>Allows registered users to rate subtitle idsubtitle giving a score score where <c>1</c> is worst and <c>10</c> is best.</summary>
+        /// <param name="subtitleID">ID of subtitle (NOT subtitle file) user wants to rate.</param>
+        /// <param name="score">Subtitle rating, must be in interval 1 (worst) to 10 (best).</param>
+        /// <remarks>Users cannot rate subtitles they uploaded and each user can rate a specific subtitle only once.</remarks>
+        /// <returns>TBD</returns>
+        public VoteInfo Vote(string subtitleID, double score) {
+            return _rpc.Proxy.SubtitlesVote(_rpc.Token, new SubtitleVote(subtitleID, score));
+        }
+
         /// <summary>Allows registered users to add a new comment to subtitle.</summary>
         /// <param name="data">Comment input data structure.</param>
         /// <returns>TBD</returns>
         public SessionInfo AddComment(SubtitleComment data) {
             return _rpc.Proxy.AddComment(_rpc.Token, data);
+        }
+
+        /// <summary>Allows registered users to add a new comment to subtitle.</summary>
+        /// <param name="subtitleID">Subtitle identifier [BEWARE! this is not the ID of subtitle file but of the whole subtitle (a subtitle can contain multiple subtitle files)].</param>
+        /// <param name="comment">User's comment.</param>
+        /// <param name="badSubtitle">Optional parameter. If set to 1, subtitles are marked as bad.</param>
+        /// <returns>TBD</returns>
+        public SessionInfo AddComment(int subtitleID, string comment, bool badSubtitle = false) {
+            return _rpc.Proxy.AddComment(_rpc.Token, new SubtitleComment(subtitleID, comment, badSubtitle));
         }
 
         #endregion
@@ -170,6 +187,12 @@ namespace Frost.SharpOpenSubtitles {
 
         #region Checking
 
+        /// <summary>Check if given subtitle files are already stored in the database.</summary>
+        /// <param name="hashes">Array of subtitle file hashes (MD5 hashes of subtitle file contents)</param>
+        /// <returns>
+        /// This function returns subtitle file IDs for given subtitle file hashes.<br />
+        /// This can be used to quickly check (for a large list of subtitle files) which subtitle files are already stored in the database (e.g. before uploading).
+        /// </returns>
         public SubtitleHashInfo CheckSubHash(string[] hashes) {
             return _rpc.Proxy.CheckSubHash(_rpc.Token, hashes);
         }

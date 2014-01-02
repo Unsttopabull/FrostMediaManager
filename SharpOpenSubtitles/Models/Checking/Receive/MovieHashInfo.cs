@@ -7,7 +7,7 @@ namespace Frost.SharpOpenSubtitles.Models.Checking.Receive {
 
         /// <summary>List of movie info structures.</summary>
         [XmlRpcMember("data")]
-        public XmlRpcStruct Data; //MovieResult
+        public MovieResult Data; //MovieResult
     }
 
 }

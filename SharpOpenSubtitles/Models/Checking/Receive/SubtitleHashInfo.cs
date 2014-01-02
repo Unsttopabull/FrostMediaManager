@@ -7,7 +7,7 @@ namespace Frost.SharpOpenSubtitles.Models.Checking.Receive {
 
         /// <summary>Contains key/value pairs where key is the subtitle file hash and value is subtitle file ID (if found).</summary>
         [XmlRpcMember("data")]
-        public XmlRpcStruct Data; //SubtitleHashes
+        public SubtitleHashes Data; //SubtitleHashes
     }
 
 }

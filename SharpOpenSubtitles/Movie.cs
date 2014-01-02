@@ -1,4 +1,5 @@
-﻿using CookComputing.XmlRpc;
+﻿using System.Globalization;
+using CookComputing.XmlRpc;
 using Frost.SharpOpenSubtitles.Models.Checking.Receive;
 using Frost.SharpOpenSubtitles.Models.Movies.Receive;
 using Frost.SharpOpenSubtitles.Models.Movies.Send;
@@ -33,6 +34,16 @@ namespace Frost.SharpOpenSubtitles {
             return _rpc.Proxy.GetIMDBMovieDetails(_rpc.Token, imdbID);
         }
 
+        /// <summary>Get details about given movie.</summary>
+        /// <param name="imdbID">MDb ID of requested movie, can be taken from results of <see cref="SearchOnIMDB">SearchOnIMDB(string)</see></param>
+        /// <returns>
+        /// Returns structure with movie information about given movie <paramref name="imdbID"/> containing movie title, release year, directors, cast, ...<br />
+        /// All information is gathered from ​<a href="www.imdb.com">IMDb</a>.
+        /// </returns>
+        public ImdbMovieDetailsInfo GetImdbDetails(int imdbID) {
+            return _rpc.Proxy.GetIMDBMovieDetails(_rpc.Token, imdbID.ToString(CultureInfo.InvariantCulture));
+        }
+
         /// <summary>Allows registered users to insert new movies (not stored in IMDb) to the database.</summary>
         /// <param name="movieinfo">Information about the movie to be inserted.</param>
         /// <remarks>
@@ -47,6 +58,23 @@ namespace Frost.SharpOpenSubtitles {
         /// <returns>TBD</returns>
         public InsertMovieStatus Insert(InsertMovieInfo movieinfo) {
             return _rpc.Proxy.InsertMovie(_rpc.Token, movieinfo);
+        }
+
+        /// <summary>Allows registered users to insert new movies (not stored in IMDb) to the database.</summary>
+        /// <param name="movieName">The movie title.</param>
+        /// <param name="movieYear">The movie release year.</param>
+        /// <remarks>
+        /// Guidelines for implementation:
+        /// <list type="bullet">
+        ///     <item><description>When loading a movie first try to auto-detect IMDb ID from .NFO files accompanying the release.</description></item>
+        ///     <item><description>When uploading without IMDb ID user enters a movie title (and year) first call SearchMoviesOnIMDB().</description></item>
+        ///     <item><description>If this returns no matches and user checks that the movie doesn't exist on IMDb, allow to insert a new movie using this function.</description></item>
+        ///     <item><description>This needs to be done to avoid duplicates.</description></item>
+        /// </list>
+        /// </remarks>
+        /// <returns>TBD</returns>
+        public InsertMovieStatus Insert(string movieName, string movieYear) {
+            return _rpc.Proxy.InsertMovie(_rpc.Token, new InsertMovieInfo(movieName, movieYear));
         }
 
         /// <summary>Checks if given video file hashes <paramref name="hashes"/> are already stored in the database.</summary>

@@ -4,9 +4,9 @@ namespace Frost.SharpOpenSubtitles.Models.Report.Send {
 
     public class SubtitleComment {
 
-        /// <summary>Subtitle identifier [BEWARE! this is not the ID of subtitle file but of the whole subtitle (a subtitle can contain multiple subtitle files)]</summary>
+        /// <summary>Subtitle identifier [BEWARE! this is not the ID of subtitle file but of the whole subtitle (a subtitle can contain multiple subtitle files)].</summary>
         [XmlRpcMember("idsubtitle")]
-        public int IDSubtitle;
+        public int SubtitleID;
 
         /// <summary>User's comment.</summary>
         [XmlRpcMember("comment")]
@@ -16,6 +16,15 @@ namespace Frost.SharpOpenSubtitles.Models.Report.Send {
         [XmlRpcMember("badsubtitle")]
         [XmlRpcMissingMapping(MappingAction.Ignore)]
         public int? BadSubtitle;
+
+        public SubtitleComment(int subtitleID, string comment, bool badSubtitle) {
+            SubtitleID = subtitleID;
+            Comment = comment;
+
+            if (badSubtitle) {
+                BadSubtitle = 1;
+            }
+        }
     }
 
 }

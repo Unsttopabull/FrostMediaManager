@@ -3,7 +3,6 @@
 namespace Frost.SharpOpenSubtitles.Models.Movies.Send {
 
     public class InsertMovieInfo {
-
         /// <summary>The movie title.</summary>
         [XmlRpcMember("moviename")]
         public string MovieName;
@@ -11,5 +10,11 @@ namespace Frost.SharpOpenSubtitles.Models.Movies.Send {
         /// <summary>The movie release year.</summary>
         [XmlRpcMember("movieyear")]
         public string MovieYear;
+
+        public InsertMovieInfo(string movieName, string movieYear) {
+            MovieName = movieName;
+            MovieYear = movieYear;
+        }
     }
+
 }

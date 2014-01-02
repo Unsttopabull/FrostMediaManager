@@ -7,7 +7,7 @@ namespace Frost.SharpOpenSubtitles.Models.UI.Receive {
 
         /// <summary>Structure of subtitle languages.</summary>
         [XmlRpcMember("data")]
-        public XmlRpcStruct Data; //TranslationInfos
+        public TranslationInfos Data; //TranslationInfos
     }
 
 }

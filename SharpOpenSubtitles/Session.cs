@@ -54,6 +54,18 @@ namespace Frost.SharpOpenSubtitles {
             return logIn;
         }
 
+        /// <summary>
+        /// Login anonymously communicating in language <paramref name="language"/> and working in client application useragent <paramref name="userAgent"/>.<br />
+        /// This function should be always called when starting communication with OSDb server to identify user, specify application and start a new session (either registered user or anonymous).<br />
+        /// If user has no account, blank username and password should be used.
+        /// </summary>
+        /// <param name="language">​ISO639 2-letter language code to specify the language all subsequent communication should use (mainly for error messages).</param>
+        /// <param name="userAgent">Identifier of application/useragent that is trying to execute this operation, must be specified, empty parameter is not allowed.</param>
+        /// <returns>A status of the request and a session token if successfull.</returns>
+        public LogInInfo LogInAnonymous(string language, string userAgent) {
+            return LogIn("", "", language, userAgent);
+        }
+
 
         /// <summary>This will logout user identified by token token. This function should be called just before exiting/closing client application.</summary>
         /// <returns>TBD</returns>

@@ -8,7 +8,6 @@ using Frost.SharpOpenSubtitles.Models.Search.Receive;
 using Frost.SharpOpenSubtitles.Models.Search.Send;
 using Frost.SharpOpenSubtitles.Models.Session.Receive;
 using Frost.SharpOpenSubtitles.Models.UI.Receive;
-using Frost.SharpOpenSubtitles.Models.Upload;
 using Frost.SharpOpenSubtitles.Models.Upload.Receive;
 using Frost.SharpOpenSubtitles.Models.Upload.Send;
 
