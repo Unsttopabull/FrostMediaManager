@@ -60,6 +60,10 @@
       <Project>{8542C013-AA9A-4852-98FA-6F05CC037A91}</Project>
       <Name>FeatureDetector</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Podnapisi.NET API\Podnapisi.NET API.csproj">
+      <Project>{950be2eb-25f5-4ac1-b1d0-eb644889ba99}</Project>
+      <Name>Podnapisi.NET API</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SharpMediaInfo\SharpMediaInfo.csproj">
       <Project>{4EA24C1B-3AF2-4EB0-AA98-62EAFB0C2682}</Project>
       <Name>SharpMediaInfo</Name>

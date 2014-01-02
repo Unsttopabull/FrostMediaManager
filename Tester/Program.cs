@@ -7,9 +7,9 @@ using Frost.Common;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.DetectFeatures;
 using System.Diagnostics;
+using Frost.PodnapisiNET;
+using Frost.PodnapisiNET.Models;
 using Frost.SharpMediaInfo;
-using Frost.SharpOpenSubtitles;
-using Frost.SharpOpenSubtitles.Models.Movies.Receive;
 
 using File = System.IO.File;
 using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
@@ -404,10 +404,8 @@ namespace Frost.Tester {
         }
 
         private static void TestOpenSubtitlesProtocol() {
-            OpenSubtitlesClient rpc = new OpenSubtitlesClient(false);
-            rpc.Session.LogInAnonymous("en", Session.DEBUG_UA);
-
-            ImdbMovieDetailsInfo imdbInfo = rpc.Movie.GetImdbDetails(1440728);
+            PodnapisiNetClient pcli = new PodnapisiNetClient();
+            LogInInfo logInInfo = pcli.Session.Initiate("FMM");
         }
 
         private static TimeSpan TestFeatureDetector() {

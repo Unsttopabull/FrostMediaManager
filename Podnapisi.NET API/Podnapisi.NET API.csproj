@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CookComputing.XmlRpcV2">
-      <HintPath>..\Libraries\Xml-RPC-NET\CookComputing.XmlRpcV2.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,8 +39,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Extensions.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IPodnapisiNet.cs" />
+    <Compile Include="Models\AuthenticationInfo.cs" />
+    <Compile Include="Models\LogInInfo.cs" />
+    <Compile Include="Models\SearchResult.cs" />
+    <Compile Include="Models\StatusInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\MovieMatch.cs" />
+    <Compile Include="Models\MovieResults.cs" />
+    <Compile Include="Models\SubtitleResult.cs" />
+    <Compile Include="PodnapisiNetClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Session.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\xml-rpc.net.3.0.0\xmlrpc.csproj">
+      <Project>{1B4B0A58-0AFB-4090-91DD-18912CC7DE65}</Project>
+      <Name>xmlrpc</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
