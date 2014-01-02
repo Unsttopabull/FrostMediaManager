@@ -5,47 +5,52 @@ namespace Frost.Common.Models.DB.MovieVo.People {
 
     /// <summary>Represents an actor in a movie.</summary>
     public class Actor : Person, IEquatable<Actor> {
-
-        private string _character;
+        private readonly MovieActor _ma;
 
         /// <summary>Initializes a new instance of the <see cref="Actor"/> class.</summary>
         /// <param name="name">The full name of the actor.</param>
         public Actor(string name) : base(name) {
+            _ma = new MovieActor(null, this);
         }
 
         /// <summary>Initializes a new instance of the <see cref="Actor"/> class.</summary>
         /// <param name="name">The full name of the actor.</param>
         /// <param name="thumb">The thumbnail image.</param>
         public Actor(string name, string thumb) : base(name, thumb) {
+            _ma = new MovieActor(null, this);
         }
 
         public Actor(string name, string thumb, string character) : base(name, thumb) {
-            _character = character;
+            _ma = new MovieActor(null, this, character);
         }
 
         /// <summary>Initializes a new instance of the <see cref="Actor"/> class.</summary>
         /// <param name="person">The person portraying the character.</param>
         /// <param name="character">The character the actor is portraying in this movie.</param>
         public Actor(Person person, string character) : base(person.Id, person.Name, person.Thumb) {
-            _character = character;
+           _ma = new MovieActor(null, this, character);
+        }
+
+        public Actor(MovieActor movieActor) {
+            _ma = movieActor;
         }
 
         /// <summary>Gets or sets the character the actor is portraying in this movie.</summary>
         /// <value>The character the actor is portraying in this movie.</value>
         public string Character {
             get {
-                return string.IsNullOrEmpty(_character)
+                return string.IsNullOrEmpty(_ma.Character)
                     ? null
-                    : _character;
+                    : _ma.Character;
             }
-            set { _character = value; }
+            set { _ma.Character = value; }
         }
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
         /// <param name="other">An object to compare with this object.</param>
         public bool Equals(Actor other) {
-            return base.Equals(other) && _character == other._character;
+            return base.Equals(other) && _ma.Character == other.Character;
         }
 
         /// <summary>Returns a string that represents the current object.</summary>

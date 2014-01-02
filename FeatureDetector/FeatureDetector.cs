@@ -1,97 +1,57 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.RegularExpressions;
-using Frost.Common.Models.DB.MovieVo.Files;
+using System.Threading.Tasks;
+using Frost.Common.Models.DB.MovieVo;
 using Frost.DetectFeatures.Util;
-using Frost.SharpLanguageDetect;
 using Frost.SharpMediaInfo;
 
 namespace Frost.DetectFeatures {
 
+    /// <summary>Represents how the <see cref="FeatureDetector"/> will used the information in a NFO file if found.</summary>
+    public enum NFOPriority {
+        /// <summary>Ignore the NFO file completely.</summary>
+        Ignore,
+        /// <summary>If <see cref="FeatureDetector"/> and NFO both contain informaton about a particular feature use the one in the NFO.</summary>
+        OverrideDetected,
+        /// <summary>Use NFO information only for things not detected by <see cref="FeatureDetector"/>.</summary>
+        OnlyNotDetected
+    }
+
     /// <summary>A class used for detecting file information and features.</summary>
-    public partial class FeatureDetector : IDisposable {
+    public class FeatureDetector : IDisposable {
 
-        private readonly MediaInfoList _mf;
-        private string _filePath;
-        private string _directoryRegex;
-        private DirectoryInfo _directoryInfo;
-        private readonly Dictionary<string, FileNameInfo> _fileNameInfos;
-
-        static FeatureDetector() {
-            //known subtitle extensions already sorted
-            KnownSubtitleExtensions = new[] {
-                "890", "aqt", "asc", "ass", "dat", "dks", "js", "jss", "lrc", "mpl", "ovr", "pan",
-                "pjs", "psb", "rt", "rtf", "s2k", "sami", "sbt", "scr", "smi", "son", "srt", "ssa",
-                "sst", "ssts", "stl", "sub", "tts", "txt", "vkt", "vsf", "xas", "zeg"
-            };
-
-            //known subtitle format names already sorted
-            KnownSubtitleFormats = new[] {
-                "Adobe encore DVD", "Advanced Substation Alpha", "AQTitle",
-                "ASS", "Captions Inc", "Cheeta", "Cheetah", "CPC Captioning",
-                "CPC-600", "EBU Subtitling Format", "N19", "SAMI",
-                "Sami Captioning", "SSA", "SubRip", "SubStation Alpha"
-            };
-
-            SubtitleExtensionsRegex = string.Format(@"\.({0})", string.Join("|", KnownSubtitleExtensions));
-
-            //DetectorFactory.LoadStaticProfiles();
-            DetectorFactory.LoadProfilesFromFolder("profiles");
-        }
+        internal readonly MediaInfoList MediaList;
+        internal readonly Dictionary<string, FileNameInfo> FileNameInfos;
 
         /// <summary>Initializes a new instance of the <see cref="FeatureDetector"/> class.</summary>
         public FeatureDetector() {
-            _fileNameInfos = new Dictionary<string, FileNameInfo>();
-            _mf = new MediaInfoList();
-
-            _video = new List<Video>();
-            _subtitles = new List<Subtitle>();
+            FileNameInfos = new Dictionary<string, FileNameInfo>();
+            MediaList = new MediaInfoList();
         }
 
-        /// <param name="filepath">The filepath of the file to check for features.</param>
-        public void Detect(string filepath) {
-            if (string.IsNullOrEmpty(filepath)) {
-                throw new ArgumentNullException("filepath");
+        /// <param name="filePath">The filepath of the file to check for features.</param>
+        /// <param name="nfoPriority">How to handle information in a NFO file if found.</param>
+        public FileFeatures Detect(string filePath, NFOPriority nfoPriority = NFOPriority.OnlyNotDetected) {
+            if (string.IsNullOrEmpty(filePath)) {
+                throw new ArgumentNullException("filePath");
             }
-            InitForFile(filepath);
 
-            //GetSubtitlesForFile(_filePath);
-            GetFileInfo(_filePath);
+            FileFeatures file = new FileFeatures(filePath, nfoPriority, this);
+            file.Detect();
+
+            return file;
         }
 
-        private void InitForFile(string filepath) {
-            _filePath = filepath;
-            _directoryInfo = new DirectoryInfo(Path.GetDirectoryName(filepath) ?? "");
-            string directoryPath = _directoryInfo.FullName.Replace("\\", "/");
-
-            _directoryRegex = Regex.Escape(directoryPath).Replace("/", @"[\\/]");
-
-            if (!_fileNameInfos.ContainsKey(filepath)) {
-                FileNameParser fnp = new FileNameParser(_filePath);
-                FileNameInfo fileNameInfo = fnp.Parse();
-
-                _fileNameInfos.Add(filepath, fileNameInfo);
+        /// <param name="filePath">The filepath of the file to check for features.</param>
+        /// <param name="nfoPriority">How to handle information in a NFO file if found.</param>
+        public Task<Movie> DetectAsync(string filePath, NFOPriority nfoPriority = NFOPriority.OnlyNotDetected) {
+            if (string.IsNullOrEmpty(filePath)) {
+                throw new ArgumentNullException("filePath");
             }
-        }
 
-        private FileNameInfo GetFileNameInfo(string fileName) {
-            FileNameInfo fnInfo;
-            if (!_fileNameInfos.TryGetValue(fileName, out fnInfo)) {
-                FileNameParser fnp = new FileNameParser(fileName);
-                fnInfo = fnp.Parse();
+            FileFeatures file = new FileFeatures(filePath, nfoPriority, this);
 
-                _fileNameInfos.Add(fileName, fnInfo);
-            }
-            return fnInfo;
-        }
-
-        public ICollection<Subtitle> Subtitles {
-            get { return new List<Subtitle>(_subtitles); }
-        }
-
-        public ICollection<Video> Videos {
-            get { return new List<Video>(_video); }
+            return file.DetectAsync();
         }
 
         #region IDisposable
@@ -103,7 +63,7 @@ namespace Frost.DetectFeatures {
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         public void Dispose() {
             if (!IsDisposed) {
-                _mf.RemoveAll();
+                MediaList.Close();
                 GC.SuppressFinalize(this);
                 IsDisposed = true;
             }

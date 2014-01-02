@@ -27,7 +27,6 @@ namespace Frost.Common.Models.DB.Jukebox {
                 {"real", "reality-tv"},
                 {"roma", "romance"},
                 {"scif", "sci-fi"},
-                {"scif", "science fiction"},
                 {"spor", "sport"},
                 {"talk", "talk-show"},
                 {"thri", "thriller"},

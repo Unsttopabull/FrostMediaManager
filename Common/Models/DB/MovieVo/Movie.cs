@@ -30,6 +30,7 @@ namespace Frost.Common.Models.DB.MovieVo {
             Certifications = new HashSet<Certification>();
             Genres = new HashSet<Genre>();
             Videos = new HashSet<Video>();
+            Subtitles = new HashSet<Subtitle>();
             Files = new HashSet<File>();
             Countries = new HashSet<Country>();
             Studios = new HashSet<Studio>();
@@ -67,11 +68,20 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the year this movie was released in.</summary>
         /// <value>The year this movie was released in.</value>
-        public int? Year { get; set; }
+        public int? ReleaseYear { get; set; }
 
         /// <summary>Gets or sets the date the movie was released in the cinemas.</summary>
         /// <value>The date the movie was released in the cinemas.</value>
         public DateTime ReleaseDate { get; set; }
+
+        /// <summary>Gets or sets the movie edithion.</summary>
+        /// <value>The movie edithion.</value>
+        /// <example>\eg{Extended, Directors cut, Retail ...}</example>
+        public string Edithion { get; set; }
+
+        /// <summary>Gets or sets the DVD region of this movie or source.</summary>
+        /// <value>The DVD region of this movie or source.</value>
+        public DVDRegion DvdRegion { get; set; }
 
         /// <summary>Gets or sets the date and time the movie was last played.</summary>
         /// <value>The date and time the movie was last played.</value>
@@ -79,7 +89,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the date and time the movie was first publicly shown.</summary>
         /// <value>The date and time the movie was first publicly shown.</value>
-        public DateTime Permiered { get; set; }
+        public DateTime Premiered { get; set; }
 
         /// <summary>Gets or sets the date and time the movie was first shown on TV.</summary>
         /// <value>The date and time the movie was first shown on TV.</value>
@@ -117,6 +127,18 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <value>The Movie Databse identifier of this movie.</value>
         public string TmdbID { get; set; }
 
+        /// <summary>Gets or sets the release group.</summary>
+        /// <value>The release group.</value>
+        public string ReleaseGroup { get; set; }
+
+        /// <summary>Gets or sets a value indicating whether this movie is comprised of multiple files.</summary>
+        /// <value>Is <c>true</c> if the movie is comprised of multiple files; otherwise, <c>false</c>.</value>
+        public bool IsMultipart { get; set; }
+
+        /// <summary>Gets or sets the part types.</summary>
+        /// <value>If the movie is Multipart it represents the type of the parts.</value>
+        /// <example>\eg{DVD, CD, ...}</example>
+        public string PartTypes { get; set; }
         #endregion
 
         #region Foreign Keys
@@ -217,6 +239,12 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         #region Utility Functions
 
+        /// <summary>Computes the average critic rating.</summary>
+        /// <returns>The average critic rating.</returns>
+        public double ComputeAverageRating() {
+            return Ratings.Average(r => r.Value);
+        }
+
         /// <summary>Gets the US MPAA movie rating.</summary>
         /// <returns>A string with the MPAA movie rating</returns>
         public string GetMPAARating() {
@@ -230,7 +258,10 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets the file size summed from all the movie files.</summary>
         /// <returns>The movie file size in bytes summed from all its files</returns>
         public long GetFileSizeSum() {
-            return Files.Where(f => f.Size != null).Sum(f => f.Size).Value;
+            long? sum = Files.Where(f => f.Size != null).Sum(f => f.Size);
+            return sum.HasValue
+                ? sum.Value
+                : 0;
         }
 
         /// <summary>Gets the file size in pretty printed format formatted.</summary>
@@ -284,10 +315,20 @@ namespace Frost.Common.Models.DB.MovieVo {
             return Actors.Select(a => (XjbXmlActor) a);
         }
 
+        /// <summary>Gets the runtime sum of all the video parts in this movie in miliseconds.</summary>
+        /// <returns>Full runtime sum of video parts in this movie in miliseconds.</returns>
+        public long? GetVideoRuntimeSum() {
+            long l = Videos.Where(v => v.Duration.HasValue).Sum(v => v.Duration.Value);
+
+            return (l > 0)
+                ? (long?) l
+                : null;
+        }
+
         #endregion
 
         public override string ToString() {
-            return string.Format("{0} ({1})", Title, Year);
+            return string.Format("{0} ({1})", Title, ReleaseYear);
         }
 
         #region Serialization
@@ -296,12 +337,12 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <param name="system">The system to serialize to.</param>
         /// <param name="xmlSaveLocation">Where to save the serialized xml.</param>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <c><paramref name="system"/></c> is out of range (has an unknown enmum value)</exception>
-        public void Serialize(XmlSystem system, string xmlSaveLocation) {
+        public void Serialize(NFOSystem system, string xmlSaveLocation) {
             switch (system) {
-                case XmlSystem.Xtreamer:
+                case NFOSystem.Xtreamer:
                     ((XjbXmlMovie) this).Serialize(xmlSaveLocation);
                     break;
-                case XmlSystem.XBMC:
+                case NFOSystem.XBMC:
                     ((XbmcXmlMovie) this).Serialize(xmlSaveLocation);
                     break;
                 default:
@@ -314,11 +355,11 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <param name="xmlLocation">Filepath to the serialized xml.</param>
         /// <exception cref="ArgumentOutOfRangeException">Throws if the <c><paramref name="system"/></c> is out of range (has an unknown enmum value)</exception>
         /// <exception cref="System.IO.FileNotFoundException">Throws if the file specified with <c><paramref name="xmlLocation"/></c> can't be found</exception>
-        public Movie Load(XmlSystem system, string xmlLocation) {
+        public Movie Load(NFOSystem system, string xmlLocation) {
             switch (system) {
-                case XmlSystem.Xtreamer:
+                case NFOSystem.Xtreamer:
                     return XjbXmlMovie.LoadAsMovie(xmlLocation);
-                case XmlSystem.XBMC:
+                case NFOSystem.XBMC:
                     return XbmcXmlMovie.LoadAsMovie(xmlLocation);
                 default:
                     throw new ArgumentOutOfRangeException("system");
@@ -374,7 +415,7 @@ namespace Frost.Common.Models.DB.MovieVo {
                 Certifications = movie.Certifications.ToArray(),
                 Director = movie.GetDirectorNames(),
                 GenreString = movie.GetGenreNames(),
-                ID = movie.ImdbID,
+                ImdbId = movie.ImdbID,
                 OriginalTitle = movie.OriginalTitle,
                 Outline = movie.MainPlot.Summary,
                 Plot = movie.MainPlot.Full,
@@ -388,7 +429,7 @@ namespace Frost.Common.Models.DB.MovieVo {
                 Studio = movie.GetStudioNamesFormatted(),
                 Tagline = movie.MainPlot.Summary,
                 Title = movie.Title,
-                Year = movie.Year ?? 0,
+                Year = movie.ReleaseYear ?? 0,
                 Actors = movie.GetXjbXmlActors().ToArray(),
                 MPAA = movie.GetMPAARating(),
                 Credits = String.Join(SEPARATOR, movie.Writers.Select(p => p.Name)),

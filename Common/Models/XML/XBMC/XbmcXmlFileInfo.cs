@@ -10,7 +10,6 @@ namespace Frost.Common.Models.XML.XBMC {
     [Serializable]
     [XmlType(AnonymousType = true)]
     public class XbmcXmlFileInfo {
-
         private const string SEPARATOR = " / ";
 
         /// <summary>Initializes a new instance of the <see cref="XbmcXmlFileInfo"/> class.</summary>
@@ -58,8 +57,8 @@ namespace Frost.Common.Models.XML.XBMC {
         public string[] GetSubtitleLanguages() {
             if (Subtitles != null) {
                 return Subtitles.Where(s => s.Language != null)
-                    .Select(s => s.Language)
-                    .ToArray();
+                                .Select(s => s.Language)
+                                .ToArray();
             }
             return null;
         }
@@ -69,8 +68,8 @@ namespace Frost.Common.Models.XML.XBMC {
         public string GetSubtitleLanguagesFormatted() {
             string[] langs = GetSubtitleLanguages();
             return langs != null
-                ? string.Join(SEPARATOR, langs)
-                : null;
+                       ? string.Join(SEPARATOR, langs)
+                       : null;
         }
 
         /// <summary>Gets the information if a stream details with specified <c><paramref name="type">type</paramref></c> exists or not.</summary>
@@ -89,7 +88,5 @@ namespace Frost.Common.Models.XML.XBMC {
                     throw new ArgumentOutOfRangeException("type");
             }
         }
-
     }
-
 }

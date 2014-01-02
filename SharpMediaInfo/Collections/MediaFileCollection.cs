@@ -9,6 +9,15 @@ namespace Frost.SharpMediaInfo.Collections {
 
         #region Get
 
+        /// <summary>Gets the value associated with the specified key.</summary>
+        /// <returns>Is <c>true</c> if the object that implements <see cref="T:System.Collections.Generic.IDictionary`2"/> contains an element with the specified key; otherwise, <c>false</c>.</returns>
+        /// <param name="key">The key whose value to get.</param>
+        /// <param name="file">When this method returns, the value associated with the specified key, if the key is found; otherwise, the default value for the type of the <paramref name="file"/> parameter. This parameter is passed uninitialized.</param>
+        /// <exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
+        public bool TryGetValue(string key, out MediaListFile file) {
+            return Dictionary.TryGetValue(key, out file);
+        }
+
         /// <summary>When implemented in a derived class, extracts the key from the specified element.</summary>
         /// <returns>The key for the specified element.</returns>
         /// <param name="item">The element from which to extract the key.</param>

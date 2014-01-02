@@ -103,6 +103,7 @@ namespace Frost.DetectFeatures.Util {
                 {"UNRATED", SegmentType.Edithion},
                 {"THEATRICAL", SegmentType.Edithion},
                 {"CHRONO", SegmentType.Edithion},
+                {"RETAIL", SegmentType.Edithion},
 
                 #endregion
 

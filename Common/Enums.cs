@@ -1,5 +1,18 @@
 ﻿namespace Frost.Common {
 
+    public enum DVDRegion {
+        Unknown,
+        R0,
+        R1,
+        R2,
+        R3,
+        R4,
+        R5,
+        R6,
+        R7,
+        R8,
+    }
+
     /// <summary>The type of the media stream or file.</summary>
     public enum MediaType {
 
@@ -29,7 +42,7 @@
     }
 
     /// <summary>The xml serialization system.</summary>
-    public enum XmlSystem {
+    public enum NFOSystem {
 
         /// <summary>The Xtreamer Movie Jukebox info xml system.</summary>
         Xtreamer,

@@ -24,10 +24,10 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <UseVSHostingProcess>true</UseVSHostingProcess>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -39,7 +39,6 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
@@ -61,17 +60,13 @@
       <Project>{8542C013-AA9A-4852-98FA-6F05CC037A91}</Project>
       <Name>FeatureDetector</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SharpLanguageDetect\SharpLanguageDetect.csproj">
-      <Project>{977bdac0-b1e4-4198-a0ad-6b93e30ef480}</Project>
-      <Name>SharpLanguageDetect</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SharpMediaInfo\SharpMediaInfo.csproj">
       <Project>{4EA24C1B-3AF2-4EB0-AA98-62EAFB0C2682}</Project>
       <Name>SharpMediaInfo</Name>
     </ProjectReference>
-    <ProjectReference Include="..\UniversalCharsetDetector\SharpCharsetDetector.csproj">
-      <Project>{7becb850-389a-44fc-8523-3ef0b2540f07}</Project>
-      <Name>SharpCharsetDetector</Name>
+    <ProjectReference Include="..\SharpOpenSubtitles\SharpOpenSubtitles.csproj">
+      <Project>{10711252-7056-44A6-AC29-5C7C203B0095}</Project>
+      <Name>SharpOpenSubtitles</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -161,3 +161,5 @@ VSdoc
 *.vsdoc
 /SharpMediaInfo/Excell
 /SharpMediaInfo/MediaInfoList_bckp.cs
+Doxygen
+Other

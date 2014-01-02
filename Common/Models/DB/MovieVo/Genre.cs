@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.ModelConfiguration;
+using System.Linq;
 using Frost.Common.Models.DB.Jukebox;
 
 namespace Frost.Common.Models.DB.MovieVo {
@@ -54,14 +55,8 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Converts genre names to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Genre"/></summary>
         /// <param name="genreNames">The genre names.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Genre"/> instances with specified genre names</returns>
-        public static IEnumerable<Genre> GetFromNames(string[] genreNames) {
-            int genreLength = genreNames.Length;
-            Genre[] genres = new Genre[genreLength];
-
-            for (int i = 0; i < genreLength; i++) {
-                genres[i] = genreNames[i];
-            }
-            return genres;
+        public static IEnumerable<Genre> GetFromNames(IEnumerable<string> genreNames) {
+            return genreNames.Select(genreName => new Genre(genreName));
         }
 
         /// <summary>Converts the genre name to a <see cref="Genre"/> instance</summary>
@@ -75,10 +70,10 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <param name="genre">The genre to convert.</param>
         /// <returns>An instance of <see cref="Frost.Common.Models.DB.Jukebox.XjbGenre">XjbGenre</see> converted from <see cref="Genre"/>.</returns>
         public static explicit operator XjbGenre(Genre genre) {
-            string lower = genre.Name.ToLower();
+            string genreName = genre.Name.ToLower();
 
-            return GenreTags.ContainsKey(lower)
-                    ? new XjbGenre(GenreTags[lower])
+            return GenreTags.ContainsKey(genreName)
+                    ? new XjbGenre(GenreTags[genreName])
                     : new XjbGenre(genre.Name);
         }
 

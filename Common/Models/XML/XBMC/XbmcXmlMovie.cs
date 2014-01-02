@@ -16,13 +16,11 @@ using Frost.Common.Models.DB.XBMC;
 using File = Frost.Common.Models.DB.MovieVo.Files.File;
 
 namespace Frost.Common.Models.XML.XBMC {
-
     /// <summary>Represents an information about a movie in XBMC library ready to be serialized.</summary>
     [Serializable]
     [XmlType(AnonymousType = true)]
     [XmlRoot("movie", Namespace = "", IsNullable = false)]
     public class XbmcXmlMovie {
-
         /// <summary>General separator between Genres, Names, Countries, Certifications ...</summary>
         private const string SEPARATOR = " / ";
 
@@ -99,7 +97,8 @@ namespace Frost.Common.Models.XML.XBMC {
         public DateTime ReleaseDate {
             get {
                 DateTime releaseDate;
-                DateTime.TryParseExact(ReleaseDateString, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out releaseDate);
+                DateTime.TryParseExact(ReleaseDateString, "dd.MM.yyyy", CultureInfo.InvariantCulture,
+                    DateTimeStyles.None, out releaseDate);
 
                 //if parsing failed returns default(DateTime)
                 return releaseDate;
@@ -169,16 +168,16 @@ namespace Frost.Common.Models.XML.XBMC {
                 long runtimeVal;
                 if (long.TryParse(runtimeInMinutes, out runtimeVal)) {
                     return runtimeVal > 0
-                        ? (long?) (runtimeVal * 60)
-                        : null;
+                               ? (long?) (runtimeVal*60)
+                               : null;
                 }
                 return null;
             }
             set {
                 //if not null we integer divide seconds by 60 and append text " min"
                 RuntimeString = (value.HasValue)
-                    ? (value / 60) + " min"
-                    : null;
+                                    ? (value/60) + " min"
+                                    : null;
             }
         }
 
@@ -371,16 +370,16 @@ namespace Frost.Common.Models.XML.XBMC {
         /// <returns>A <see cref="HashSet{Person}"/> containing <see cref="Person"/> instances with names of the credited writers.</returns>
         public HashSet<Person> GetWriters() {
             return new HashSet<Person>(from c in Credits
-                where !string.IsNullOrEmpty(c)
-                select new Person(c));
+                                       where !string.IsNullOrEmpty(c)
+                                       select new Person(c));
         }
 
         /// <summary>Converts director names into <see cref="Person"/> instances in a <see cref="HashSet{Person}"/>.</summary>
         /// <returns>A <see cref="HashSet{Person}"/> containing <see cref="Person"/> instances with names of the credited directors.</returns>
         public HashSet<Person> GetDirectors() {
             return new HashSet<Person>(from d in Directors
-                where !string.IsNullOrEmpty(d)
-                select new Person(d));
+                                       where !string.IsNullOrEmpty(d)
+                                       select new Person(d));
         }
 
         /// <summary>Gets the files containing the movie as a <see cref="HashSet{T}"/> with <see cref="Common.Models.DB.MovieVo.Files">File</see> elements.</summary>
@@ -409,61 +408,68 @@ namespace Frost.Common.Models.XML.XBMC {
             return files;
         }
 
-        /// <summary>Gets the movie's subtitles as a <see cref="HashSet{T}"/> with <see cref="Common.Models.DB.MovieVo.Files">File</see> elements.</summary>
-        /// <returns>A <see cref="HashSet{T}"/> with <see cref="Common.Models.DB.MovieVo.Files">Subtitle</see> elements.</returns>
-        public HashSet<Subtitle> GetSubtitles() {
+        /// <summary>Gets the movie's subtitles as a <see cref="HashSet{T}"/> with <see cref="Common.Models.DB.MovieVo.Files.Subtitle">Subtitle</see> elements.</summary>
+        /// <returns>A <see cref="HashSet{T}"/> with <see cref="Common.Models.DB.MovieVo.Files.Subtitle">Subtitle</see> elements.</returns>
+        public IEnumerable<Subtitle> GetSubtitles() {
             return FileInfo.InfoExists(MediaType.Subtitles)
-                ? FileInfo.Subtitles.ToHashSet<Subtitle, XbmcXmlSubtitleInfo>()
-                : new HashSet<Subtitle>();
+                       ? FileInfo.Subtitles.Select(xmlSub => (Subtitle)xmlSub)
+                       : new List<Subtitle>();
         }
 
         /// <summary>Gets the movie's video stream details as a <see cref="HashSet{T}"/> with <see cref="Common.Models.DB.MovieVo.Files.Video">Video</see> elements.</summary>
         /// <returns>A <see cref="HashSet{T}"/> with <see cref="Common.Models.DB.MovieVo.Files.Video">Video</see> elements.</returns>
-        public HashSet<Video> GetVideo() {
+        public IEnumerable<Video> GetVideo() {
             return FileInfo.InfoExists(MediaType.Video)
-                ? FileInfo.Videos.ToHashSet<Video, XbmcXmlVideoInfo>()
-                : new HashSet<Video>();
+                       ? FileInfo.Videos.Select(xmlVideo => (Video)xmlVideo)
+                       : new List<Video>();
         }
 
         /// <summary>Gets the movie's subtitles as a <see cref="HashSet{T}"/> with <see cref="Common.Models.DB.MovieVo.Files.Audio">Audio</see> elements.</summary>
         /// <returns>A <see cref="HashSet{T}"/> with <see cref="Common.Models.DB.MovieVo.Files.Audio">Audio</see> elements.</returns>
-        public HashSet<Audio> GetAudio() {
+        public IEnumerable<Audio> GetAudio() {
             return FileInfo.InfoExists(MediaType.Audio)
-                ? FileInfo.Audios.ToHashSet<Audio, XbmcXmlAudioInfo>()
-                : new HashSet<Audio>();
+                       ? FileInfo.Audios.Select(xmlAudio => (Audio)xmlAudio)
+                       : new List<Audio>();
         }
 
-        /// <summary>Gets the movie's subtitles as a <see cref="HashSet{T}"/> with <see cref="Common.Models.DB.MovieVo.Files">File</see> elements.</summary>
-        /// <returns>A <see cref="HashSet{T}"/> with <see cref="Common.Models.DB.MovieVo.Files">Subtitle</see> elements.</returns>
-        public HashSet<Certification> GetCertifications() {
+        /// <summary>Gets the movie's subtitles as an <see cref="IEnumerable{T}"/> with <see cref="Common.Models.DB.MovieVo.Certification">Certification</see> elements.</summary>
+        /// <returns>A <see cref="IEnumerable{T}"/> with <see cref="Common.Models.DB.MovieVo.Certification">Certification</see> elements.</returns>
+        public IEnumerable<Certification> GetCertifications() {
             return Certifications != null
-                ? Certifications.ToHashSet<Certification, XbmcXmlCertification>()
-                : new HashSet<Certification>();
+                       ? Certifications.Select(xmlCert => (Certification) xmlCert)
+                       : new List<Certification>();
         }
 
-        /// <summary>Gets the movie's subtitles as a <see cref="HashSet{T}"/> with <see cref="Common.Models.DB.MovieVo.Files">File</see> elements.</summary>
-        /// <returns>A <see cref="HashSet{T}"/> with <see cref="Common.Models.DB.MovieVo.Files">Subtitle</see> elements.</returns>
-        public HashSet<Art> GetArt() {
-            HashSet<Art> art = new HashSet<Art>();
+        /// <summary>Gets the movie's genres as a <see cref="IEnumerable{T}"/> with <see cref="Common.Models.DB.MovieVo.Genre">Genre</see> elements.</summary>
+        /// <returns>A <see cref="IEnumerable{T}"/> with <see cref="Common.Models.DB.MovieVo.Genre">Genre</see> elements.</returns>
+        public IEnumerable<Genre> GetGenres() {
+            return Genre.GetFromNames(Genres);
+        }
+
+        /// <summary>Gets the countries the movie has been shot or produced in as a <see cref="IEnumerable{T}"/> with <see cref="Common.Models.DB.MovieVo.Country">Country</see> elements.</summary>
+        /// <returns>A <see cref="IEnumerable{T}"/> with <see cref="Common.Models.DB.MovieVo.Country">Country</see> elements.</returns>
+        public IEnumerable<Country> GetCountries() {
+            return Country.GetFromNames(Countries);
+        }
+
+        /// <summary>Gets the movie's subtitles as a <see cref="IEnumerable{T}"/> with <see cref="Frost.Common.Models.DB.MovieVo.Arts.Art">Art</see> elements.</summary>
+        /// <returns>A <see cref="IEnumerable{T}"/> with <see cref="Frost.Common.Models.DB.MovieVo.Arts.Art">Art</see> elements.</returns>
+        public IEnumerable<Art> GetArt() {
+            List<Art> art = new List<Art>();
 
             //add all Thumbnails/Posters/Covers
             foreach (XbmcXmlThumb thumb in Thumbs) {
                 Art a;
                 switch (thumb.Aspect.ToLower()) {
                     case "poster":
-                        a = new Poster(thumb.Path);
+                        a = new Poster(thumb.Path, thumb.Preview);
                         break;
                     case "cover":
-                        a = new Cover(thumb.Path);
+                        a = new Cover(thumb.Path, thumb.Preview);
                         break;
                     default:
-                        a = new Art(thumb.Path, ArtType.Unknown);
+                        a = new Art(thumb.Path, thumb.Preview, ArtType.Unknown);
                         break;
-                }
-
-                //if preview (small copy) exists add it aswell
-                if (!string.IsNullOrEmpty(thumb.Preview)) {
-                    a.Preview = thumb.Preview;
                 }
 
                 art.Add(a);
@@ -509,8 +515,8 @@ namespace Frost.Common.Models.XML.XBMC {
         private XbmcXmlMovieDbId GetOnlineDbID(string dbName) {
             //if movieDb attribute doesn't exist (is null) the Id is for IMDB
             return dbName.OrdinalEquals("imdb")
-                ? Ids.FirstOrDefault(id => id.MovieDb.OrdinalEquals(dbName) || string.IsNullOrEmpty(id.MovieDb))
-                : Ids.FirstOrDefault(id => id.MovieDb.OrdinalEquals(dbName));
+                       ? Ids.FirstOrDefault(id => id.MovieDb.OrdinalEquals(dbName) || string.IsNullOrEmpty(id.MovieDb))
+                       : Ids.FirstOrDefault(id => id.MovieDb.OrdinalEquals(dbName));
         }
 
         /// <summary>Gets the folder path from a filepath.</summary>
@@ -547,7 +553,7 @@ namespace Frost.Common.Models.XML.XBMC {
         /// <summary>Serializes the current instance as XML in the specified location</summary>
         /// <param name="xmlSaveLocation">The XML save location.</param>
         public void Serialize(string xmlSaveLocation) {
-            XmlSerializer xs = new XmlSerializer(typeof(XbmcXmlMovie));
+            XmlSerializer xs = new XmlSerializer(typeof (XbmcXmlMovie));
             xs.Serialize(new XmlIndentedTextWriter(xmlSaveLocation), this);
         }
 
@@ -555,7 +561,7 @@ namespace Frost.Common.Models.XML.XBMC {
         /// <param name="xmlLocation">The file path of the serialied xml.</param>
         /// <returns>An instance of <see cref="XbmcXmlMovie"/> deserialized from XML at the specified location</returns>
         public static XbmcXmlMovie Load(string xmlLocation) {
-            XmlSerializer xs = new XmlSerializer(typeof(XbmcXmlMovie));
+            XmlSerializer xs = new XmlSerializer(typeof (XbmcXmlMovie));
 
             return (XbmcXmlMovie) xs.Deserialize(new XmlTextReader(xmlLocation));
         }
@@ -596,7 +602,7 @@ namespace Frost.Common.Models.XML.XBMC {
                 ImdbID = mx.ImdbId,
                 LastPlayed = mx.LastPlayed,
                 OriginalTitle = mx.OriginalTitle,
-                Permiered = mx.Premiered,
+                Premiered = mx.Premiered,
                 PlayCount = mx.PlayCount,
                 RatingAverage = mx.Rating,
                 ReleaseDate = mx.ReleaseDate,
@@ -608,19 +614,18 @@ namespace Frost.Common.Models.XML.XBMC {
                 Top250 = mx.Top250,
                 Trailer = mx.GetTrailerUrl(),
                 Watched = mx.Watched,
-                Year = mx.Year,
-                Art = mx.GetArt(),
+                ReleaseYear = mx.Year,
+                Art = new HashSet<Art>(mx.GetArt()),
                 Actors = mx.Actors.ToHashSet<Actor, XbmcXmlActor>(),
                 Directors = mx.GetDirectors(),
                 Writers = mx.GetWriters(),
-                //WARNING: ToArray() call copying
-                Genres = new HashSet<Genre>(Genre.GetFromNames(mx.Genres.ToArray())),
-                Studios = new HashSet<Studio>(Studio.GetFromNames(mx.Studios.ToArray())),
-                Countries = new HashSet<Country>(Country.GetFromNames(mx.Countries.ToArray())),
-                Certifications = mx.GetCertifications(),
-                Audio = mx.GetAudio(),
-                Videos = mx.GetVideo(),
-                Subtitles = mx.GetSubtitles(),
+                Genres = new HashSet<Genre>(Genre.GetFromNames(mx.Genres)),
+                Studios = new HashSet<Studio>(Studio.GetFromNames(mx.Studios)),
+                Countries = new HashSet<Country>(Country.GetFromNames(mx.Countries)),
+                Certifications = new HashSet<Certification>(mx.GetCertifications()),
+                Audio = new HashSet<Audio>(mx.GetAudio()),
+                Videos = new HashSet<Video>(mx.GetVideo()),
+                Subtitles = new HashSet<Subtitle>(mx.GetSubtitles()),
                 Files = mx.GetFiles()
             };
             mv.Plot.Add(new Plot(mx.Plot, mx.Outline, mx.Tagline, null));
@@ -683,5 +688,4 @@ namespace Frost.Common.Models.XML.XBMC {
 
         #endregion
     }
-
 }

@@ -45,7 +45,7 @@ namespace Frost.Common.Models.PHP {
             //convert the year to int if valid number
             int result;
             if (int.TryParse(year, out result)) {
-                mov.Year = result;
+                mov.ReleaseYear = result;
             }
 
             if (subtitle != null) {

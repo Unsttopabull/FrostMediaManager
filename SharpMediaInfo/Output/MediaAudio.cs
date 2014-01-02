@@ -15,7 +15,7 @@ namespace Frost.SharpMediaInfo.Output {
 
         internal MediaAudio(MediaFileBase mediaInfo) : base(mediaInfo, StreamKind.Audio) {
             Format = new AudioFormat(this);
-            Codec = new AudioCodec(this);
+            CodecInfo = new AudioCodec(this);
             BitRateInfo = new BitRateInfo(this);
             DurationInfo = new ExtendedDurationInfo(this, false);
             SourceDurationInfo = new ExtendedDurationInfo(this, true);
@@ -38,7 +38,7 @@ namespace Frost.SharpMediaInfo.Output {
         public AudioFormat Format { get; private set; }
 
         /// <summary>Codec used</summary>
-        public AudioCodec Codec { get; private set; }
+        public AudioCodec CodecInfo { get; private set; }
 
         /// <summary>Internet Media Type (aka MIME Type, Content-Type)</summary>
         public string MIME { get { return this["InternetMediaType"]; } }

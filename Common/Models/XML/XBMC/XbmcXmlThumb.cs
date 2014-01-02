@@ -16,17 +16,12 @@ namespace Frost.Common.Models.XML.XBMC {
         /// <param name="path">The path to this image (can be local or network or an URI).</param>
         /// <param name="aspect">The type of the image used as a discriminator.</param>
         /// <param name="preview">The path to the preview of the art (a smaller, lower resolution copy).</param>
-        public XbmcXmlThumb(string path, string aspect, string preview) {
+        public XbmcXmlThumb(string path, string aspect = null, string preview = null) {
             Aspect = aspect;
             Preview = preview;
             Path = path;
         }
 
-
-        /// <summary>Initializes a new instance of the <see cref="XbmcXmlThumb"/> class.</summary>
-        /// <param name="path">The path to this image (can be local or network or an URI).</param>
-        public XbmcXmlThumb(string path) : this(path, null, null) {
-        }
 
         /// <summary>Gets or sets the type of the image used as a discriminator.</summary>
         /// <value>The type of the image used as a discriminator.</value>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.ModelConfiguration;
+using System.Linq;
 
 namespace Frost.Common.Models.DB.MovieVo {
 
@@ -59,21 +60,21 @@ namespace Frost.Common.Models.DB.MovieVo {
                 return Id == other.Id;
             }
 
-            return Name == other.Name && Logo == other.Logo;
+            return Name == other.Name;
         }
 
         /// <summary>Converts studio names to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Studio"/></summary>
         /// <param name="studioNames">The studio names.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Studio"/> instances with specified studio names</returns>
-        public static IEnumerable<Studio> GetFromNames(string[] studioNames) {
-            int numStudios = studioNames.Length;
+        public static IEnumerable<Studio> GetFromNames(IEnumerable<string> studioNames) {
+            return studioNames.Select(studioName => new Studio(studioName));
+        }
 
-            Studio[] studios = new Studio[numStudios];
-            for (int i = 0; i < numStudios; i++) {
-                studios[i] = new Studio(studioNames[i]);
-            }
-
-            return studios;
+        /// <summary>Converts the studio name to a <see cref="Studio"/> instance</summary>
+        /// <param name="studioName">Name of the studio.</param>
+        /// <returns>An instance of <see cref="Studio"/> with string as a studio name</returns>
+        public static implicit operator Studio(string studioName) {
+            return new Studio(studioName);
         }
 
         internal class Configuration : EntityTypeConfiguration<Studio> {

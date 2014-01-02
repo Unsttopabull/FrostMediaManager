@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration;
+using System.Linq;
 
 namespace Frost.Common.Models.DB.MovieVo {
 
@@ -45,11 +46,24 @@ namespace Frost.Common.Models.DB.MovieVo {
             return Value == other.Value;
         }
 
+        /// <summary>Converts specials as string to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Special"/></summary>
+        /// <param name="specials">The specials values.</param>
+        /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Special"/> instances with specified specials values.</returns>
+        public static IEnumerable<Special> FromValues(IEnumerable<string> specials) {
+            return specials.Select(special => (Special) special).ToList();
+        }
+
         /// <summary>Converts a <see cref="string"/> to an instance of <see cref="Special"/></summary>
         /// <param name="specialName">The value of the special</param>
         /// <returns>An instance of <see cref="Special"/> converted from <see cref="string"/></returns>
         public static explicit operator Special(string specialName) {
             return new Special(specialName);
+        }
+
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString() {
+            return Value;
         }
 
         internal class Configuration : EntityTypeConfiguration<Special> {

@@ -10,7 +10,8 @@ namespace Frost.Common.Models.DB.MovieVo.People {
         /// <param name="movie">The movie the actor is preforming in</param>
         /// <param name="person">The person that is performing in the movie</param>
         /// <param name="character">The character the actor is portraing.</param>
-        public MovieActor(Movie movie, Person person, string character) {
+        public MovieActor(Movie movie, Person person, string character){
+            Movie = movie;
             Person = person;
             Character = character;
         }
@@ -62,7 +63,7 @@ namespace Frost.Common.Models.DB.MovieVo.People {
         /// Person information and the character they are portraying in the linked movie
         /// </returns>
         public static explicit operator Actor(MovieActor ma) {
-            return new Actor(ma.Person, ma.Character);
+            return new Actor(ma);
         }
 
     }

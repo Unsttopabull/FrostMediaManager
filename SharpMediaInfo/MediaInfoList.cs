@@ -112,20 +112,12 @@ namespace Frost.SharpMediaInfo {
             }
             return false;
         }
-
-        /// <summary>Closes all files in the list and disposes all allocated resources.</summary>
+        
         public void RemoveAll() {
-            if (!IsDisposed) {
-                _files.Clear();
+            _files.Clear();
 
-                const int ALL_FILES = -1;
-                MediaInfoList_Close(_handle, (IntPtr) ALL_FILES);
-
-                MediaInfoList_Delete(_handle);
-                IsDisposed = true;
-
-                GC.SuppressFinalize(this);
-            }
+            const int ALL_FILES = -1;
+            MediaInfoList_Close(_handle, (IntPtr) ALL_FILES);
         }
         #endregion
 
@@ -152,9 +144,11 @@ namespace Frost.SharpMediaInfo {
         /// </param>
         /// <returns></returns>
         public MediaListFile GetOrOpen(string fileName, bool cacheInform = true, bool allInfoCache = true) {
-            return _files.Contains(fileName)
-                ? _files[fileName]
-                : Add(fileName, cacheInform, allInfoCache);
+            MediaListFile mlf;
+            if (_files.TryGetValue(fileName, out mlf)) {
+                return mlf;
+            }
+            return Add(fileName, cacheInform, allInfoCache);
         }
 
         public MediaListFile GetFirstFileWithPattern(Regex regex) {
@@ -222,11 +216,23 @@ namespace Frost.SharpMediaInfo {
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         void IDisposable.Dispose() {
-            RemoveAll();
+            Close();
+        }
+
+        /// <summary>Closes all files in the list and disposes all allocated resources.</summary>
+        public void Close() {
+            if (!IsDisposed) {
+                RemoveAll();
+
+                MediaInfoList_Delete(_handle);
+                IsDisposed = true;
+
+                GC.SuppressFinalize(this);
+            }
         }
 
         ~MediaInfoList() {
-            RemoveAll();
+            Close();
         }
 
         #endregion

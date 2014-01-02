@@ -18,7 +18,7 @@
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}{0} ({1})">
                             <Binding Path="Title" TargetNullValue="N\A" FallbackValue="N\A" />
-                            <Binding Path="Year" TargetNullValue="N\A" FallbackValue="N\A" />
+                            <Binding Path="ReleaseYear" TargetNullValue="N\A" FallbackValue="N\A" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>

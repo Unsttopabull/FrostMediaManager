@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.ModelConfiguration;
+using System.Linq;
 using Frost.Common.Models.DB.MovieVo.ISO;
 using Frost.Common.Util.ISO;
 
@@ -74,15 +75,8 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Converts country names to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Country"/></summary>
         /// <param name="countryNames">The counry names.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Country"/> instances with specified country names</returns>
-        public static IEnumerable<Country> GetFromNames(string[] countryNames) {
-            int numCountries = countryNames.Length;
-
-            Country[] countries = new Country[numCountries];
-            for (int i = 0; i < numCountries; i++) {
-                countries[i] = new Country(countryNames[i]);
-            }
-
-            return countries;
+        public static IEnumerable<Country> GetFromNames(IEnumerable<string> countryNames) {
+            return countryNames.Select(countryName => new Country(countryName));
         }
 
         /// <summary>Get an instance of <see cref="Country"/> from an ISO 3166-1 2 letter code.</summary>

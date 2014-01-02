@@ -27,7 +27,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -36,6 +36,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <UseVSHostingProcess>true</UseVSHostingProcess>
+    <DocumentationFile>bin\Release\Frost.FeatureDetector.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -47,8 +48,11 @@
   <ItemGroup>
     <Compile Include="FeatureDetector.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="FeatureDetector.Subtitles.cs" />
-    <Compile Include="FeatureDetector.Video.cs" />
+    <Compile Include="Features\FileFeatures.Audio.cs" />
+    <Compile Include="Features\FileFeatures.cs" />
+    <Compile Include="Features\FileFeatures.Subtitles.cs" />
+    <Compile Include="Features\FileFeatures.NFO.cs" />
+    <Compile Include="Features\FileFeatures.Video.cs" />
     <Compile Include="Util\AspectRatio\AspectRatioComparer.cs" />
     <Compile Include="Util\AspectRatio\AspectRatioDetector.cs">
       <SubType>Code</SubType>
@@ -73,7 +77,7 @@
       <Name>SharpLanguageDetect</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpMediaInfo\SharpMediaInfo.csproj">
-      <Project>{4ea24c1b-3af2-4eb0-aa98-62eafb0c2682}</Project>
+      <Project>{4EA24C1B-3AF2-4EB0-AA98-62EAFB0C2682}</Project>
       <Name>SharpMediaInfo</Name>
     </ProjectReference>
     <ProjectReference Include="..\UniversalCharsetDetector\SharpCharsetDetector.csproj">

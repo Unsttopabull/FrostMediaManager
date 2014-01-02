@@ -8,6 +8,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents information about a subtitle stream in a file.</summary>
     public class Subtitle : IEquatable<Subtitle> {
+
         public Subtitle(File file = null) {
             Movie = new Movie();
             File = file ?? new File();
@@ -48,6 +49,8 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <value>The Id of this subtitle in the database</value>
         [Key]
         public long Id { get; set; }
+
+        public string MD5 { get; set; }
 
         /// <summary>Gets or sets the type or format of the subtitle.</summary>
         /// <value>The type or format of the subtitle.</value>
@@ -130,7 +133,6 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         public override string ToString() {
             StringBuilder sb = new StringBuilder(100);
 
-            sb.AppendLine("-----------------------------------------");
             sb.Append(string.Format("Format: {0} ", Format ?? "*."+File.Extension));
 
             if (!string.IsNullOrEmpty(Encoding)) {
@@ -138,9 +140,8 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
             }
 
             if (Language != null) {
-                sb.AppendLine(" - " + Language.Name);
+                sb.Append(" - " + Language.Name);
             }
-            sb.AppendLine("-----------------------------------------");
 
             return sb.ToString();
         }

@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{10711252-7056-44A6-AC29-5C7C203B0095}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Frost.SharpOpenSubtitles</RootNamespace>
+    <AssemblyName>Frost.SharpOpenSubtitles</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>169</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CookComputing.XmlRpcV2, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\Xml-RPC-NET\CookComputing.XmlRpcV2.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IOpenSubtitles.cs" />
+    <Compile Include="Models\Checking\Receive\MovieHashInfo.cs" />
+    <Compile Include="Models\Checking\MovieInfo.cs" />
+    <Compile Include="Models\Checking\MovieResult.cs" />
+    <Compile Include="Models\Checking\SubtitleHashes.cs" />
+    <Compile Include="Models\Movies\ImdbCast.cs" />
+    <Compile Include="Models\Movies\ImdbDirectors.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Movies\ImdbMovie.cs" />
+    <Compile Include="Models\Movies\ImdbMovieDetails.cs" />
+    <Compile Include="Models\Movies\Receive\ImdbMovieDetailsInfo.cs" />
+    <Compile Include="Models\Movies\Receive\ImdbSearchInfo.cs" />
+    <Compile Include="Models\Movies\ImdbWriters.cs" />
+    <Compile Include="Models\Movies\Receive\InsertMovieStatus.cs" />
+    <Compile Include="Models\Movies\Send\InsertMovieInfo.cs" />
+    <Compile Include="Models\Report\DownloadLimits.cs" />
+    <Compile Include="Models\Report\LastUpdate.cs" />
+    <Compile Include="Models\Report\Receive\ServerInfo.cs" />
+    <Compile Include="Models\Report\Send\SubtitleComment.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Report\SubtitleRating.cs" />
+    <Compile Include="Models\Report\Send\SubtitleVote.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Report\Receive\VoteInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Search\Receive\DownloadInfo.cs" />
+    <Compile Include="Models\Search\Receive\SearchSubtitleInfo.cs" />
+    <Compile Include="Models\Search\SubtitleContents.cs" />
+    <Compile Include="Models\Search\SubtitleInfo.cs" />
+    <Compile Include="Models\Search\Send\SubtitleLookupInfo.cs" />
+    <Compile Include="Models\Search\Send\VideoInfo.cs" />
+    <Compile Include="Models\Session\Receive\LogInInfo.cs" />
+    <Compile Include="Models\Session\Receive\SessionInfo.cs" />
+    <Compile Include="Models\UI\Receive\AvailableTranslationsInfo.cs" />
+    <Compile Include="Models\UI\Receive\LangDetectInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\UI\SubLanguage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\UI\Receive\SubLanguageInfo.cs" />
+    <Compile Include="Models\UI\Receive\Translation.cs" />
+    <Compile Include="Models\UI\TranslationInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\UI\TranslationLanguage.cs" />
+    <Compile Include="Models\UI\Receive\UpdateInfo.cs" />
+    <Compile Include="Models\Upload\BaseInfo.cs" />
+    <Compile Include="Models\Upload\ISubtitlePart.cs" />
+    <Compile Include="Models\Upload\Subtitle.cs" />
+    <Compile Include="Models\Upload\UploadedSubtitle.cs" />
+    <Compile Include="Models\Upload\SubFile.cs" />
+    <Compile Include="Models\Upload\Receive\TryUploadInfo.cs" />
+    <Compile Include="Models\Upload\Receive\UploadStatusInfo.cs" />
+    <Compile Include="Models\Upload\Send\UploadSubtitleInfo.cs" />
+    <Compile Include="Models\Checking\Receive\SubtitleHashInfo.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Session.cs" />
+    <Compile Include="Movie.cs" />
+    <Compile Include="Subtitle.cs" />
+    <Compile Include="Util\MovieHasher.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="OpenSubtitlesClient.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

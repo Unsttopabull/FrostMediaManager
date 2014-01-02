@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLanguageDetect", "Shar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCharsetDetector", "UniversalCharsetDetector\SharpCharsetDetector.csproj", "{7BECB850-389A-44FC-8523-3EF0B2540F07}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Podnapisi.NET API", "Podnapisi.NET API\Podnapisi.NET API.csproj", "{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpOpenSubtitles", "SharpOpenSubtitles\SharpOpenSubtitles.csproj", "{10711252-7056-44A6-AC29-5C7C203B0095}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -225,6 +229,42 @@ Global
 		{7BECB850-389A-44FC-8523-3EF0B2540F07}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7BECB850-389A-44FC-8523-3EF0B2540F07}.Release|Win32.ActiveCfg = Release|Any CPU
 		{7BECB850-389A-44FC-8523-3EF0B2540F07}.Release|x86.ActiveCfg = Release|Any CPU
+		{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}.Release No Installer|Any CPU.ActiveCfg = Release|Any CPU
+		{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}.Release No Installer|Any CPU.Build.0 = Release|Any CPU
+		{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}.Release No Installer|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}.Release No Installer|Mixed Platforms.Build.0 = Release|Any CPU
+		{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}.Release No Installer|Win32.ActiveCfg = Release|Any CPU
+		{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}.Release No Installer|x86.ActiveCfg = Release|Any CPU
+		{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}.Release|Win32.ActiveCfg = Release|Any CPU
+		{950BE2EB-25F5-4AC1-B1D0-EB644889BA99}.Release|x86.ActiveCfg = Release|Any CPU
+		{10711252-7056-44A6-AC29-5C7C203B0095}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10711252-7056-44A6-AC29-5C7C203B0095}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10711252-7056-44A6-AC29-5C7C203B0095}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{10711252-7056-44A6-AC29-5C7C203B0095}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{10711252-7056-44A6-AC29-5C7C203B0095}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{10711252-7056-44A6-AC29-5C7C203B0095}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{10711252-7056-44A6-AC29-5C7C203B0095}.Release No Installer|Any CPU.ActiveCfg = Release|Any CPU
+		{10711252-7056-44A6-AC29-5C7C203B0095}.Release No Installer|Any CPU.Build.0 = Release|Any CPU
+		{10711252-7056-44A6-AC29-5C7C203B0095}.Release No Installer|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{10711252-7056-44A6-AC29-5C7C203B0095}.Release No Installer|Mixed Platforms.Build.0 = Release|Any CPU
+		{10711252-7056-44A6-AC29-5C7C203B0095}.Release No Installer|Win32.ActiveCfg = Release|Any CPU
+		{10711252-7056-44A6-AC29-5C7C203B0095}.Release No Installer|x86.ActiveCfg = Release|Any CPU
+		{10711252-7056-44A6-AC29-5C7C203B0095}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10711252-7056-44A6-AC29-5C7C203B0095}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10711252-7056-44A6-AC29-5C7C203B0095}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{10711252-7056-44A6-AC29-5C7C203B0095}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{10711252-7056-44A6-AC29-5C7C203B0095}.Release|Win32.ActiveCfg = Release|Any CPU
+		{10711252-7056-44A6-AC29-5C7C203B0095}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

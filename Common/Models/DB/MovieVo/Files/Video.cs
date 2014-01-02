@@ -72,6 +72,8 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         [Key]
         public long Id { get; set; }
 
+        public string MovieHash { get; set; }
+
         /// <summary>With or from what this video was made from</summary>
         /// <example>\eg{ <c>TS, TC, TELESYNC, CAM, HDRIP, DVDRIP, BDRIP, DTV, HD2DVD, HDDVDRIP, HDTVRIP, VHS, SCREENER, RECODE</c>}</example>
         public string Source { get; set; }
@@ -116,6 +118,12 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <value>The video color space.</value>
         /// <example>\eg{ <c>YUV, YDbDr, YPbPr, YCbCr, RGB, CYMK</c>}</example>
         public string ColorSpace { get; set; }
+
+        /// <summary>Gets or sets the type of chroma subsampling.</summary>
+        /// <value>The chroma subsampling.</value>
+        public string ChromaSubsampling { get; set; }
+
+        public string Format { get; set; }
 
         /// <summary>Gets or sets the codec this video is encoded in.</summary>
         /// <value>The codec this video is encoded in.</value>

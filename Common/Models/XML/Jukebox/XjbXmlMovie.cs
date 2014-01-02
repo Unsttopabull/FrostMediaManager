@@ -48,7 +48,7 @@ namespace Frost.Common.Models.XML.Jukebox {
         /// <summary>Gets or sets Imdb ID</summary>
         /// <value>The IMDB Id</value>
         [XmlElement("id", Form = XmlSchemaForm.Unqualified)]
-        public string ID { get; set; }
+        public string ImdbId { get; set; }
 
         /// <summary>Gets or sets the year this movie was released in.</summary>
         /// <value>The year this movie was released in.</value>
@@ -235,10 +235,10 @@ namespace Frost.Common.Models.XML.Jukebox {
             Movie mv = new Movie {
                 Title = xm.Title,
                 OriginalTitle = xm.OriginalTitle,
-                Year = xm.Year,
+                ReleaseYear = xm.Year,
                 RatingAverage = xm.AverageRating,
                 Certifications = new HashSet<Certification>(xm.Certifications),
-                ImdbID = xm.ID,
+                ImdbID = xm.ImdbId,
                 Runtime = runtimeInSec
             };
 

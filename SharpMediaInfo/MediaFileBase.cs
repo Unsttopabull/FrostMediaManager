@@ -89,7 +89,10 @@ namespace Frost.SharpMediaInfo {
 
             Options.InformPreset = InformPreset.XML;
 
-            ParseInform(Inform());
+            string inform = Inform();
+            if(!string.IsNullOrEmpty(inform)) {
+                ParseInform(inform);
+            }
 
             if (allInfoInform) {
                 Options.ShowAllInfo = showAllInfo;
@@ -105,11 +108,12 @@ namespace Frost.SharpMediaInfo {
             }
             catch (Exception) {
                 Console.Error.WriteLine("Error while parshing/caching MediaInfo Inform.");
+                Console.Error.WriteLine(inform);
                 return;
             }
 
             //stream number counters for every stream kind (video, audio, text, menu ...)
-            int[] stevci = new int[7];
+            int[] counters = new int[7];
 
             foreach (XElement track in xNodes) {
                 XAttribute trackType = track.FirstAttribute;
@@ -126,25 +130,25 @@ namespace Frost.SharpMediaInfo {
 
                 switch (streamKind) {
                     case StreamKind.General:
-                        General.ParseInform(track, stevci[(int) StreamKind.General]++);
+                        General.ParseInform(track, counters[(int) StreamKind.General]++);
                         break;
                     case StreamKind.Video:
-                        Video.ParseInform(track, stevci[(int) StreamKind.Video]++);
+                        Video.ParseInform(track, counters[(int) StreamKind.Video]++);
                         break;
                     case StreamKind.Audio:
-                        Audio.ParseInform(track, stevci[(int) StreamKind.Audio]++);
+                        Audio.ParseInform(track, counters[(int) StreamKind.Audio]++);
                         break;
                     case StreamKind.Text:
-                        Text.ParseInform(track, stevci[(int) StreamKind.Text]++);
+                        Text.ParseInform(track, counters[(int) StreamKind.Text]++);
                         break;
                     case StreamKind.Other:
-                        Other.ParseInform(track, stevci[(int) StreamKind.Other]++);
+                        Other.ParseInform(track, counters[(int) StreamKind.Other]++);
                         break;
                     case StreamKind.Image:
-                        Image.ParseInform(track, stevci[(int) StreamKind.Image]++);
+                        Image.ParseInform(track, counters[(int) StreamKind.Image]++);
                         break;
                     case StreamKind.Menu:
-                        Menu.ParseInform(track, stevci[(int) StreamKind.Menu]++);
+                        Menu.ParseInform(track, counters[(int) StreamKind.Menu]++);
                         break;
                 }
             }

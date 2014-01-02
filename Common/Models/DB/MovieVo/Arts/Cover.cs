@@ -7,7 +7,13 @@ namespace Frost.Common.Models.DB.MovieVo.Arts {
 
         /// <summary>Initializes a new instance of the <see cref="Cover"/> class.</summary>
         /// <param name="path">The path to this art (can be local or network or an URI).</param>
-        public Cover(string path) : base(path, ArtType.Cover) {
+        /// <param name="preview">The path to a smaller version used as preview image</param>
+        public Cover(string path, string preview) : base(path, preview, ArtType.Cover) {
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="Cover"/> class.</summary>
+        /// <param name="path">The path to this art (can be local or network or an URI).</param>
+        public Cover(string path) : base(path, null, ArtType.Cover) {
         }
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>

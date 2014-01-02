@@ -42,6 +42,12 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         public Audio(string codec, string channels, string language) : this(null, null, codec, channels, language) {
         }
 
+        public Audio() {
+            Movie = new Movie();
+            File = new File();
+            Language = new Language();
+        }
+
         #endregion
 
         #region Propreties/Columns
@@ -68,7 +74,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         /// <summary>Gets or sets the number of chanells in the audio (5.1 has 6 chanels)</summary>
         /// <value>The number of chanells in the audio (5.1 has 6 chanels)</value>
-        public int NumberOfChannels { get; set; }
+        public int? NumberOfChannels { get; set; }
 
         /// <summary>Gets or sets the audio channel positions.</summary>
         /// <value>The audio channel positions.</value>
@@ -82,20 +88,20 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         /// <summary>Gets or sets the audio bit rate.</summary>
         /// <value>The bit rate in Kbps.</value>
-        public long BitRate { get; set; }
+        public float? BitRate { get; set; }
 
         /// <summary>Gets or sets the audio bit rate mode.</summary>
         /// <value>The bit rate mode</value>
         /// <example>\eg{ ''<c>Constant</c>'' or ''<c>Variable</c>''}</example>
-        public string BitRateMode { get; set; }
+        public FrameOrBitRateMode BitRateMode { get; set; }
 
         /// <summary>Gets or sets the audio sampling rate.</summary>
         /// <value>The sampling rate in KHz.</value>
-        public long SamplingRate { get; set; }
+        public long? SamplingRate { get; set; }
 
         /// <summary>Gets or sets the audio bit depth.</summary>
         /// <value>The audio depth in bits.</value>
-        public long BitDepth { get; set; }
+        public long? BitDepth { get; set; }
 
         /// <summary>Gets or sets the compression mode of this audio.</summary>
         /// <value>The compression mode of this audio.</value>
@@ -103,7 +109,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         /// <summary>Gets or sets the audio duration.</summary>
         /// <value>The audio duration in miliseconds.</value>
-        public long Duration { get; set; }
+        public long? Duration { get; set; }
 
         #endregion
 
@@ -176,7 +182,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <param name="audio">The audio to convert</param>
         /// <returns>An instance of <see cref="Common.Models.XML.XBMC.XbmcXmlAudioInfo">XbmcXmlAudioInfo</see> converted from <see cref="Audio"/></returns>
         public static explicit operator XbmcXmlAudioInfo(Audio audio) {
-            return new XbmcXmlAudioInfo(audio.Codec, audio.NumberOfChannels, audio.Language.ISO639.Alpha3);
+            return new XbmcXmlAudioInfo(audio.Codec, audio.NumberOfChannels ?? 0, audio.Language.ISO639.Alpha3);
         }
 
     }

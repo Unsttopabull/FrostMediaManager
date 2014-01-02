@@ -61,6 +61,18 @@ namespace Frost.Common.Models.DB.Jukebox {
                     : new Genre(genre.Name);
         }
 
+        /// <summary>Converts an Xtreamer Movie Jukebox genre abbreviation to the genre name.</summary>
+        /// <param name="genreAbbreviation">Genre abbreviation to convert.</param>
+        /// <returns>Returns a <see cref="Genre"/> instance converted from Xtreamer Movie Jukebox genre abbreviation or <c>null</c> if the abbreviation is unknown.</returns>
+        public static Genre FromGenreAbbreviation(string genreAbbreviation) {
+            string genreName;
+            GenreTags.TryGetValue(genreAbbreviation, out genreName);
+
+            return !string.IsNullOrEmpty(genreName)
+                ? genreName
+                : null;
+        }
+
         internal class Configuration : EntityTypeConfiguration<XjbGenre> {
 
             public Configuration() {

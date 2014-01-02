@@ -99,8 +99,29 @@ namespace Frost.Common.Models.DB.MovieVo.People {
                 return Id == other.Id;
             }
 
-            return Name == other.Name &&
-                   Thumb == other.Thumb;
+            return Name == other.Name;
+        }
+
+        /// <summary>Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.</summary>
+        /// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
+        /// <param name="obj">The object to compare with the current object. </param>
+        public override bool Equals(object obj) {
+            Person person = obj as Person;
+            return person != null && Equals(person);
+        }
+
+        /// <summary>Serves as a hash function for a particular type. </summary>
+        /// <returns>A hash code for the current <see cref="T:System.Object"/>.</returns>
+        public override int GetHashCode() {
+            unchecked {
+                return (Id.GetHashCode() * 397) ^ (Name != null ? Name.GetHashCode() : 0);
+            }
+        }
+
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString() {
+            return Name;
         }
 
         internal class Configuration : EntityTypeConfiguration<Person> {
