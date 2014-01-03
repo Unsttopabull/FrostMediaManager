@@ -1,5 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using CookComputing.XmlRpc;
 using Frost.PodnapisiNET.Models;
 
 namespace Frost.PodnapisiNET {
@@ -22,15 +23,24 @@ namespace Frost.PodnapisiNET {
             return logIn;
         }
 
-        AuthenticationInfo Authenticate(string session, string username, string password) {
-            string md5Hash = _md5.ComputeHash(Encoding.UTF8.GetBytes(username)).ToHexString();
-            byte[] hash = _sha256.ComputeHash(Encoding.UTF8.GetBytes(md5Hash + _rpc.Nonce));
+        public FilterInfo Authenticate(string username, string password) {
+            _rpc.CheckToken();
 
-            return _rpc.Proxy.Authenticate(session, username, password);
+            string md5Hash = _md5.ComputeHash(Encoding.UTF8.GetBytes(password)).ToHexString();
+            password = _sha256.ComputeHash(Encoding.UTF8.GetBytes(md5Hash + _rpc.Nonce)).ToHexString();
+
+
+            return _rpc.Proxy.Authenticate(_rpc.Token, username, password);
         }
 
-        AuthenticationInfo AuthenticateAnonymous(string session) {
-            return _rpc.Proxy.Authenticate(session, "", "");
+        public StatusInfo LogOut() {
+            _rpc.CheckToken();
+
+            return _rpc.Proxy.Terminate(_rpc.Token);
+        }
+
+        public FilterInfo AuthenticateAnonymous() {
+            return _rpc.Proxy.Authenticate(_rpc.Token, "", "");
         }
     }
 }

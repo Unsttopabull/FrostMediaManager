@@ -39,11 +39,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums.cs" />
     <Compile Include="Extensions.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IPodnapisiNet.cs" />
-    <Compile Include="Models\AuthenticationInfo.cs" />
+    <Compile Include="Models\DownloadInfo.cs" />
+    <Compile Include="Models\FilterInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\SupportedLanguage.cs" />
     <Compile Include="Models\LogInInfo.cs" />
     <Compile Include="Models\SearchResult.cs" />
     <Compile Include="Models\StatusInfo.cs">
@@ -51,10 +56,13 @@
     </Compile>
     <Compile Include="Models\MovieMatch.cs" />
     <Compile Include="Models\MovieResults.cs" />
+    <Compile Include="Models\SubtitleDownload.cs" />
     <Compile Include="Models\SubtitleResult.cs" />
+    <Compile Include="Models\SupportedLanguagesInfo.cs" />
     <Compile Include="PodnapisiNetClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Session.cs" />
+    <Compile Include="Subtitles.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\xml-rpc.net.3.0.0\xmlrpc.csproj">

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using CookComputing.XmlRpc;
 using Frost.Common;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.DetectFeatures;
@@ -10,7 +11,8 @@ using System.Diagnostics;
 using Frost.PodnapisiNET;
 using Frost.PodnapisiNET.Models;
 using Frost.SharpMediaInfo;
-
+using Frost.SharpOpenSubtitles.Util;
+using Headblender.XmlRpc;
 using File = System.IO.File;
 using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
 using Movie = Frost.Common.Models.DB.MovieVo.Movie;
@@ -405,7 +407,11 @@ namespace Frost.Tester {
 
         private static void TestOpenSubtitlesProtocol() {
             PodnapisiNetClient pcli = new PodnapisiNetClient();
-            LogInInfo logInInfo = pcli.Session.Initiate("FMM");
+            pcli.Session.Initiate("FMM");
+            FilterInfo filterInfo = pcli.Subtitles.SetFilters(LanguageId.Slovene, LanguageId.Croatian);
+            SearchResult searchResult = pcli.Subtitles.Search("e5c2e81bfc6ccf94");
+            pcli.Subtitles.DisableFilters();
+            SearchResult searchResult2 = pcli.Subtitles.Search("e5c2e81bfc6ccf94");
         }
 
         private static TimeSpan TestFeatureDetector() {

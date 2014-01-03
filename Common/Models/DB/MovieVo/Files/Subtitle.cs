@@ -50,6 +50,10 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         [Key]
         public long Id { get; set; }
 
+        public long PodnapisiId { get; set; }
+
+        public long OpenSubtitlesId { get; set; }
+
         public string MD5 { get; set; }
 
         /// <summary>Gets or sets the type or format of the subtitle.</summary>

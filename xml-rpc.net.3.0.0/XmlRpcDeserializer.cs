@@ -378,7 +378,7 @@ namespace CookComputing.XmlRpc
       MappingAction mappingAction, out Type mappedType)
     {
       mappedType = null;
-      XmlRpcStruct retObj = (XmlRpcStruct) (valType == typeof(XmlRpcStruct) ? new XmlRpcStruct() : Activator.CreateInstance(valType));
+      XmlRpcStruct retObj = (XmlRpcStruct) ((valType == null || valType == typeof(XmlRpcStruct)) ? new XmlRpcStruct() : Activator.CreateInstance(valType));
       mappingStack.Push("struct mapped to XmlRpcStruct");
       try
       {

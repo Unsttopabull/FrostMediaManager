@@ -13,7 +13,7 @@ namespace Frost.SharpOpenSubtitles.Util {
             foreach (byte b in hash) {
                 sb.Append(string.Format("{0:X}", b));
             }
-            return sb.ToString();
+            return sb.ToString().ToLower();
         }
 
         public static byte[] GetMovieHash(this Stream input) {
