@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using CookComputing.XmlRpc;
+using Frost.CinemaInfoParsers.Kolosej;
+using Frost.CinemaInfoParsers.PlanetTus;
 using Frost.Common;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.DetectFeatures;
@@ -11,8 +12,7 @@ using System.Diagnostics;
 using Frost.PodnapisiNET;
 using Frost.PodnapisiNET.Models;
 using Frost.SharpMediaInfo;
-using Frost.SharpOpenSubtitles.Util;
-using Headblender.XmlRpc;
+
 using File = System.IO.File;
 using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
 using Movie = Frost.Common.Models.DB.MovieVo.Movie;
@@ -397,7 +397,9 @@ namespace Frost.Tester {
             Debug.AutoFlush = true;
 
             //TimeSpan elapsed = TestFeatureDetector();
-            TestOpenSubtitlesProtocol();
+            //TestOpenSubtitlesProtocol();
+            TestKolosejParser();
+            //TestTusParser();
 
             Console.WriteLine(Filler);
             //Console.WriteLine(@"FIN: {0}", elapsed);
@@ -405,13 +407,30 @@ namespace Frost.Tester {
             Console.Read();
         }
 
+        private static void TestTusParser() {
+            PlanetTusClient pcli = new PlanetTusClient();
+            pcli.Parse();
+            pcli.PullAllMovieInfo();
+            pcli.Serialize("tus_info.js");
+        }
+
+        private static void TestKolosejParser() {
+            KolosejClient kcli = new KolosejClient();
+            kcli.Parse();
+            kcli.PullAllMovieInfo();
+            kcli.Serialize("kolosej_info.js");
+        }
+
         private static void TestOpenSubtitlesProtocol() {
             PodnapisiNetClient pcli = new PodnapisiNetClient();
-            pcli.Session.Initiate("FMM");
-            FilterInfo filterInfo = pcli.Subtitles.SetFilters(LanguageId.Slovene, LanguageId.Croatian);
-            SearchResult searchResult = pcli.Subtitles.Search("e5c2e81bfc6ccf94");
-            pcli.Subtitles.DisableFilters();
-            SearchResult searchResult2 = pcli.Subtitles.Search("e5c2e81bfc6ccf94");
+            LogInInfo inInfo = pcli.Session.Initiate("FMM");
+
+            FilterInfo info = pcli.Session.AuthenticateAnonymous();
+
+            FilterInfo filterInfo = pcli.Subtitles.SetFilters(LanguageId.Slovene);
+            DownloadInfo downloadInfo = pcli.Subtitles.Download(200294);
+
+            //200294
         }
 
         private static TimeSpan TestFeatureDetector() {

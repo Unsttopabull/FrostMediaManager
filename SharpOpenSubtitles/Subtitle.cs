@@ -142,7 +142,7 @@ namespace Frost.SharpOpenSubtitles {
         /// <summary>Allows registered users to add a new comment to subtitle.</summary>
         /// <param name="subtitleID">Subtitle identifier [BEWARE! this is not the ID of subtitle file but of the whole subtitle (a subtitle can contain multiple subtitle files)].</param>
         /// <param name="comment">User's comment.</param>
-        /// <param name="badSubtitle">Optional parameter. If set to 1, subtitles are marked as bad.</param>
+        /// <param name="badSubtitle">Optional parameter. If set to <c>true</c>, subtitles are marked as bad.</param>
         /// <returns>TBD</returns>
         public SessionInfo AddComment(int subtitleID, string comment, bool badSubtitle = false) {
             return _rpc.Proxy.AddComment(_rpc.Token, new SubtitleComment(subtitleID, comment, badSubtitle));
@@ -177,8 +177,7 @@ namespace Frost.SharpOpenSubtitles {
         ///     <item><description>Strings should be at least 4096 bytes long for good results - but you can send the whole subtitle contents.</description></item>
         /// </list>
         /// </param>
-        /// <remarks>Given an array of strings data the function will return a structure with detected languages for all the strings given as parameters.</remarks>
-        /// <returns>TBD</returns>
+        /// <returns>Given an array of strings data the function will return a structure with detected languages for all the strings given as parameters.</returns>
         public LangDetectInfo DetectLanguage(string[] data) {
             return _rpc.Proxy.DetectLanguage(_rpc.Token, data);
         }

@@ -24,7 +24,6 @@ namespace Frost.PodnapisiNET {
         /// <remarks>The search will use users language filters that are defined on the site by <see cref="SetFilters">SetFilters(string, bool, string[], bool)</see></remarks>
         /// <returns>TBD</returns>
         [XmlRpcMethod("search")]
-        //SearchResult Search(string session, string[] hashes);
         SearchResult Search(string session, string[] hashes);
 
         /// <summary>Sets the language filters to be used when searching.</summary>
@@ -50,7 +49,7 @@ namespace Frost.PodnapisiNET {
         /// <remarks>User needs to be authenticated to download subtitles through SSP.</remarks>
         /// <returns>TBD</returns>
         [XmlRpcMethod("download")]
-        DownloadInfo Download(string session, string[] subtitles);
+        DownloadInfo Download(string session, int[] subtitles);
 
         /// <summary>Get a list of supported languages.</summary>
         /// <param name="session">The session token obtained using <see cref="Initiate">Initiate(string)</see>.</param>

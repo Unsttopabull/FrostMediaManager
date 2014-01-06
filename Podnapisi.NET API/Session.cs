@@ -1,6 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿using System;
+using System.Security.Cryptography;
 using System.Text;
-using CookComputing.XmlRpc;
 using Frost.PodnapisiNET.Models;
 
 namespace Frost.PodnapisiNET {
@@ -26,11 +26,21 @@ namespace Frost.PodnapisiNET {
         public FilterInfo Authenticate(string username, string password) {
             _rpc.CheckToken();
 
-            string md5Hash = _md5.ComputeHash(Encoding.UTF8.GetBytes(password)).ToHexString();
-            password = _sha256.ComputeHash(Encoding.UTF8.GetBytes(md5Hash + _rpc.Nonce)).ToHexString();
-
+            password = HashPassword(password);
 
             return _rpc.Proxy.Authenticate(_rpc.Token, username, password);
+        }
+
+        public string HashPassword(string password, string nonce = null) {
+            string md5Hash = _md5.ComputeHash(Encoding.UTF8.GetBytes(password)).ToHexString();
+
+            nonce = nonce ?? _rpc.Nonce;
+            string join = md5Hash + nonce;
+            byte[] b = Encoding.UTF8.GetBytes(join);
+
+
+            password = _sha256.ComputeHash(b).ToHexString();
+            return password;
         }
 
         public StatusInfo LogOut() {

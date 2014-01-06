@@ -14,11 +14,11 @@ namespace Frost.SharpLanguageDetect {
      * This class manages an initialization and constructions of {@link Detector}. 
      * 
      * Before using language detection library, 
-     * load profiles with {@link DetectorFactory#loadProfile(string)} method
+     * load profiles with {@link DetectorFactory#LoadProfilesFromFolder(string)} method
      * and set initialization parameters.
      * 
      * When the language detection,
-     * construct Detector instance via {@link DetectorFactory#create()}.
+     * construct Detector instance via {@link DetectorFactory#Create()}.
      * See also {@link Detector}'s sample code.
      * 
      * <ul>
@@ -179,10 +179,10 @@ namespace Frost.SharpLanguageDetect {
         }
 
         /**
-         * @param profile
-         * @param langsize 
-         * @param index 
-         * @throws LangDetectException 
+         * @param profile The profile to load
+         * @param index  The profile index
+         * @param langsize The number of profiles
+         * @throws LangDetectException Throws if the profile is a duplicate of an already loaded profile
          */
         private static void AddProfile(ILanguageProfile profile, int index, int langsize) {
             string lang = profile.Name;

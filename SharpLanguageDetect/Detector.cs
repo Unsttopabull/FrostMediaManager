@@ -332,6 +332,8 @@ namespace Frost.SharpLanguageDetect {
         /**
          * update language probabilities with N-gram string(N=1,2,3)
          * @param word N-gram string
+         * @param prob probabiliy array
+         * @param alpha the smoothing parameter
          */
         private bool UpdateLangProb(double[] prob, string word, double alpha) {
             if (word == null || !_wordLangProbMap.ContainsKey(word)) {
