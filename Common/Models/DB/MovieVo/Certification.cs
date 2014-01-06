@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents a movie certification/restriction in a certain country.</summary>
+    [Table("Certifications")]
     public class Certification : CertificationBase, IEquatable<Certification> {
 
         /// <summary>Initializes a new instance of the <see cref="Certification"/> class.</summary>

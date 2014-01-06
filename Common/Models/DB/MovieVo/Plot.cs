@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Contains information about movie story/plot.</summary>
+    [Table("Plots")]
     public class Plot : IEquatable<Plot> {
 
         /// <summary>Initializes a new instance of the <see cref="Plot"/> class.</summary>

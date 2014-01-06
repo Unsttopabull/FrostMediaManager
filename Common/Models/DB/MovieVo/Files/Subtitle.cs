@@ -7,6 +7,7 @@ using System.Text;
 namespace Frost.Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents information about a subtitle stream in a file.</summary>
+    [Table("Subtitles")]
     public class Subtitle : IEquatable<Subtitle> {
 
         public Subtitle(File file = null) {
@@ -50,9 +51,9 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         [Key]
         public long Id { get; set; }
 
-        public long PodnapisiId { get; set; }
+        public long? PodnapisiId { get; set; }
 
-        public long OpenSubtitlesId { get; set; }
+        public long? OpenSubtitlesId { get; set; }
 
         public string MD5 { get; set; }
 

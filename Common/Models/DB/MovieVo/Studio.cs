@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 
@@ -80,6 +81,8 @@ namespace Frost.Common.Models.DB.MovieVo {
         internal class Configuration : EntityTypeConfiguration<Studio> {
 
             public Configuration() {
+                ToTable("Studios");
+
                 //Join tabela za Movie <--> Studio
                 HasMany(m => m.Movies)
                     .WithMany(g => g.Studios)

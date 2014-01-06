@@ -77,6 +77,7 @@ namespace Frost.Common.Models.DB.MovieVo.Arts {
         internal class Configuration : EntityTypeConfiguration<Art> {
 
             public Configuration() {
+                ToTable("Arts");
                 Map<Cover>(m => m.Requires("Type").HasValue(1));
                 Map<Poster>(m => m.Requires("Type").HasValue(2));
                 Map<Fanart>(m => m.Requires("Type").HasValue(3));

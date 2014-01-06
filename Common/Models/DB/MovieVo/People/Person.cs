@@ -127,6 +127,8 @@ namespace Frost.Common.Models.DB.MovieVo.People {
         internal class Configuration : EntityTypeConfiguration<Person> {
 
             public Configuration() {
+                ToTable("People");
+
                 // Movie <--> Director link
                 HasMany(p => p.MoviesAsDirector)
                     .WithMany(m => m.Directors)
@@ -144,15 +146,6 @@ namespace Frost.Common.Models.DB.MovieVo.People {
                         m.MapLeftKey("WriterId");
                         m.MapRightKey("MovieId");
                     });
-
-                //// Movie <--> Actor link
-                //HasMany(p => p.MoviesAsActor)
-                //.WithMany()
-                //.Map(m => {
-                //    m.ToTable("MovieWriters");
-                //    m.MapLeftKey("WriterId");
-                //    m.MapRightKey("MovieId");
-                //});
             }
 
         }

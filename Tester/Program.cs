@@ -396,13 +396,7 @@ namespace Frost.Tester {
             Debug.Listeners.Add(new TextWriterTraceListener(debugLog));
             Debug.AutoFlush = true;
 
-            //TimeSpan elapsed = TestFeatureDetector();
-            //TestOpenSubtitlesProtocol();
-            TestKolosejParser();
-            //TestTusParser();
-
             Console.WriteLine(Filler);
-            //Console.WriteLine(@"FIN: {0}", elapsed);
             Console.WriteLine(Filler);
             Console.Read();
         }

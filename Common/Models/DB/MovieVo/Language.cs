@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using Frost.Common.Models.DB.MovieVo.ISO;
 using Frost.Common.Util.ISO;
@@ -7,6 +8,7 @@ using Frost.Common.Util.ISO;
 namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents a language information.</summary>
+    [Table("Languages")]
     public class Language : IEquatable<Language> {
 
         /// <summary>Initializes a new instance of the <see cref="Language"/> class.</summary>
@@ -57,7 +59,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the foreign key to the language's country.</summary>
         /// <value>The foreign key to the language's country</value>
-        public long CountryId { get; set; }
+        public long? CountryId { get; set; }
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>

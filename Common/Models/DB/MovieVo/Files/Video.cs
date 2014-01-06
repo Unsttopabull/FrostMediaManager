@@ -6,6 +6,7 @@ using Frost.SharpMediaInfo;
 namespace Frost.Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents information about a video stream in a file.</summary>
+    [Table("Videos")]
     public class Video : IEquatable<Video> {
         #region Constructors
 

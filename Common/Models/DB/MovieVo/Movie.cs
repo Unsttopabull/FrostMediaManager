@@ -15,6 +15,7 @@ using Frost.Common.Models.XML.XBMC;
 namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents an information about a movie in the library.</summary>
+    [Table("Movies")]
     public class Movie {
 
         /// <summary>Separator between multiple genres, certifications, person names ...</summary>

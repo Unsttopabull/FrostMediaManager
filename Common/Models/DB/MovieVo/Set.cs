@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents a movie set or collection.</summary>
+    [Table("Sets")]
     public class Set : IEquatable<Set> {
 
         /// <summary>Initializes a new instance of the <see cref="Set"/> class.</summary>

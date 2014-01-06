@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using Frost.Common.Models.DB.Jukebox;
@@ -80,6 +81,8 @@ namespace Frost.Common.Models.DB.MovieVo {
         internal class GenreConfiguration : EntityTypeConfiguration<Genre> {
 
             public GenreConfiguration() {
+                ToTable("Genres");
+
                 //Join table for Movie <--> Genre
                 HasMany(m => m.Movies)
                     .WithMany(g => g.Genres)

@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Frost.Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents an information about a file.</summary>
+    [Table("Files")]
     public class File : IEquatable<File> {
 
         /// <summary>Initializes a new instance of the <see cref="File"/> class.</summary>

@@ -2,25 +2,26 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using Frost.Common.Models.DB.MovieVo.Files;
-using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.Util;
 using Frost.SharpCharsetDetector;
 using Frost.SharpLanguageDetect;
 using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
-
+using Frost.SharpOpenSubtitles.Util;
 using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
 using FileInfo = Frost.SharpMediaInfo.Output.Properties.General.FileInfo;
 using Language = Frost.Common.Models.DB.MovieVo.Language;
 
 namespace Frost.DetectFeatures {
-    public partial class FileFeatures {
+    public partial class FileFeatures : IDisposable {
         private static readonly string[] KnownSubtitleExtensions;
         private static readonly string SubtitleExtensionsRegex;
         private static readonly string[] KnownSubtitleFormats;
+        private static readonly MD5 Md5 = MD5.Create();
 
         private void GetSubtitles() {
             //regex from matching files with the same name but with a known subtitle extension
@@ -115,9 +116,13 @@ namespace Frost.DetectFeatures {
             }
 
             int numRead;
+            string md5;
             byte[] data = new byte[maxTextLength];
             using (FileStream fs = System.IO.File.OpenRead(path)) {
                 numRead = fs.Read(data, 0, maxTextLength);
+
+                fs.Seek(0, SeekOrigin.Begin);
+                md5 = Md5.ComputeHash(fs).Aggregate("", (str, b) => str + b.ToString("x2"));
             }
 
             Encoding enc = DetectEncoding(data, numRead) ?? Encoding.UTF8;
@@ -130,10 +135,11 @@ namespace Frost.DetectFeatures {
             catch (LangDetectException) {
             }
 
-            return new SubtitleLanguage(enc, detectedLang);
+            return new SubtitleLanguage(enc, detectedLang, md5);
         }
 
         private Encoding DetectEncoding(byte[] data, int count) {
+            //if number of bytes is less than 1kB use all; otherwise use 1kB
             int numBytes = (count < 1024) ? count : 1024;
 
             UniversalDetector ud = new UniversalDetector();
@@ -143,6 +149,11 @@ namespace Frost.DetectFeatures {
             return ud.IsSupportedEncoding
                 ? ud.DetectedEncoding
                 : null;
+        }
+
+        /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
+        public void Dispose() {
+            Md5.Dispose();
         }
     }
 }

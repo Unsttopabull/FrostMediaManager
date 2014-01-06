@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using Frost.Common.Models.DB.MovieVo.ISO;
@@ -9,6 +10,7 @@ using Frost.Common.Util.ISO;
 namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary> Represents a country a movie was shot and/or produced in.</summary>
+    [Table("Country")]
     public class Country : IEquatable<Country> {
 
         /// <summary>Initializes a new instance of the <see cref="Country"/> class.</summary>

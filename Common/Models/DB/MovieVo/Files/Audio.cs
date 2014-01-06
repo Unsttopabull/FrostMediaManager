@@ -7,6 +7,7 @@ using Frost.SharpMediaInfo;
 namespace Frost.Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents information about an audio stream in a file.</summary>
+    [Table("Audios")]
     public class Audio : IEquatable<Audio> {
         #region Constructors
 

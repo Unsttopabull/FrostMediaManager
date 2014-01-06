@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 
@@ -69,6 +70,7 @@ namespace Frost.Common.Models.DB.MovieVo {
         internal class Configuration : EntityTypeConfiguration<Special> {
 
             public Configuration() {
+                ToTable("Specials");
                 HasMany(s => s.Movies)
                     .WithMany(m => m.Specials)
                     .Map(m => {

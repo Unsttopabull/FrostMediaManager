@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Frost.Common.Models.DB.MovieVo.People {
 
     /// <summary>Represents a link table between a movie and a person containing the name of the person's charater.</summary>
+    [Table("MovieActors")]
     public class MovieActor {
 
         /// <summary>Initializes a new instance of the <see cref="MovieActor"/> class.</summary>

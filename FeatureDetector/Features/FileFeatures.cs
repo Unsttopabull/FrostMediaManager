@@ -8,7 +8,7 @@ using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.Util;
 using Frost.SharpLanguageDetect;
 using Frost.SharpMediaInfo;
-
+using Frost.SharpOpenSubtitles.Util;
 using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
 using Language = Frost.Common.Models.DB.MovieVo.Language;
 
@@ -23,6 +23,7 @@ namespace Frost.DetectFeatures {
         private readonly Dictionary<string, FileNameInfo> _fileNameInfos;
         private readonly string _filePath;
         private readonly NFOPriority _nfoPriority;
+        private readonly string _movieHash;
 
         static FileFeatures() {
             //known subtitle extensions already sorted
@@ -48,6 +49,8 @@ namespace Frost.DetectFeatures {
 
         internal FileFeatures(string filePath, NFOPriority nfoPriority, FeatureDetector fd) {
             Movie = new Movie();
+
+            _movieHash = MovieHasher.ComputeMovieHashAsHexString(filePath);
 
             _filePath = filePath;
             _nfoPriority = nfoPriority;

@@ -7,6 +7,7 @@ namespace Frost.Common.Models.DB.MovieVo {
     /// <summary>
     /// Represents a movie's rating from a certain critic.
     /// </summary>
+    [Table("Ratings")]
     public class Rating : IEquatable<Rating> {
 
         /// <summary>Initializes a new instance of the <see cref="Rating"/> class.</summary>
