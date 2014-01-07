@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -22,10 +22,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <DocumentationFile>bin\Debug\Frost.Common.XML</DocumentationFile>
-    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
+    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,26 +36,26 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <UseVSHostingProcess>true</UseVSHostingProcess>
+    <DocumentationFile>bin\Release\Frost.Common.XML</DocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\EF\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlAgilityPack">
-      <HintPath>..\Libraries\HtmlAgilityPack\Net45\HtmlAgilityPack.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite, Version=1.0.85.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\SQLite\System.Data.SQLite.dll</HintPath>
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\Libraries\SQLite\NET4.5\x64\System.Data.SQLite.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="System.Data.SQLite.Linq, Version=1.0.85.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\SQLite\System.Data.SQLite.Linq.dll</HintPath>
+    <Reference Include="System.Data.SQLite.Linq">
+      <HintPath>..\Libraries\SQLite\NET4.5\x64\System.Data.SQLite.Linq.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -199,15 +199,41 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\Libraries\SQLite\NET4.5\x64\System.Data.SQLite.dll">
+      <Link>x64\System.Data.SQLite.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Libraries\SQLite\NET4.5\x64\System.Data.SQLite.Linq.dll">
+      <Link>x64\System.Data.SQLite.Linq.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Libraries\SQLite\NET4.5\x64\System.Data.SQLite.Linq.pdb">
+      <Link>x64\System.Data.SQLite.Linq.pdb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Libraries\SQLite\NET4.5\x64\System.Data.SQLite.pdb">
+      <Link>x64\System.Data.SQLite.pdb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Libraries\SQLite\NET4.5\x86\System.Data.SQLite.dll">
+      <Link>x86\System.Data.SQLite.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Libraries\SQLite\NET4.5\x86\System.Data.SQLite.Linq.dll">
+      <Link>x86\System.Data.SQLite.Linq.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Libraries\SQLite\NET4.5\x86\System.Data.SQLite.Linq.pdb">
+      <Link>x86\System.Data.SQLite.Linq.pdb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Libraries\SQLite\NET4.5\x86\System.Data.SQLite.pdb">
+      <Link>x86\System.Data.SQLite.pdb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Models\DB\MovieVo\MovieVo.edmx.sql" />
     <Content Include="Models\DB\XBMC\extendSettings.sql" />
     <Content Include="Models\DB\XBMC\extendStreamDetails.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SharpMediaInfo\SharpMediaInfo.csproj">
-      <Project>{4EA24C1B-3AF2-4EB0-AA98-62EAFB0C2682}</Project>
-      <Name>SharpMediaInfo</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

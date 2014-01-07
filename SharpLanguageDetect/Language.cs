@@ -3,7 +3,7 @@ namespace Frost.SharpLanguageDetect {
 
     /**
      * {@link Language} is to store the detected language.
-     * {@link Detector#GetProbabilities()} returns an {@link List<T>} of {@link Language}s.
+     * {@link Detector#GetProbabilities()} returns an List&lt;T&gt; of {@link Language}s.
      *  
      * @see Detector#getProbabilities()
      * @author Nakatani Shuyo

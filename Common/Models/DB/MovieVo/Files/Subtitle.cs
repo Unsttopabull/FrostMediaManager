@@ -10,6 +10,10 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
     [Table("Subtitles")]
     public class Subtitle : IEquatable<Subtitle> {
 
+        public Subtitle() {
+            
+        }
+
         public Subtitle(File file = null) {
             Movie = new Movie();
             File = file ?? new File();

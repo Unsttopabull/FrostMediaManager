@@ -5,6 +5,8 @@ using Frost.DetectFeatures.Util;
 using Frost.DetectFeatures.Util.AspectRatio;
 using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
+using CompressionMode = Frost.Common.CompressionMode;
+using FrameOrBitRateMode = Frost.Common.FrameOrBitRateMode;
 
 namespace Frost.DetectFeatures {
 
@@ -22,6 +24,7 @@ namespace Frost.DetectFeatures {
             if (_mediaFile != null) {
                 foreach (MediaVideo mediaVideo in _mediaFile.Video) {
                     Video video = GetFileVideoStreamInfo(mediaVideo);
+                    video.MovieHash = _movieHash;
 
                     Movie.Videos.Add(video);
                 }
@@ -42,12 +45,12 @@ namespace Frost.DetectFeatures {
 
             //convert from bps to Kbps if value exists otherwise return null
             currVideo.BitRate = mv.BitRate.HasValue ? mv.BitRate / 1024.0f : null;
-            currVideo.BitRateMode = mv.BitRateInfo.Mode;
+            currVideo.BitRateMode = (FrameOrBitRateMode) mv.BitRateInfo.Mode;
             currVideo.Format = mv.FormatInfo.Name;
             currVideo.Codec = mv.CodecIDInfo.Hint ?? mv.CodecInfo.NameString ?? currVideo.Codec;
             currVideo.ColorSpace = mv.ColorSpace;
             currVideo.ChromaSubsampling = mv.ChromaSubsampling;
-            currVideo.CompressionMode = mv.CompressionMode;
+            currVideo.CompressionMode = (CompressionMode) mv.CompressionMode;
             currVideo.Duration = mv.Duration.HasValue ? (long?) mv.Duration.Value.TotalMilliseconds : null;
             currVideo.FPS = mv.FrameRate;
             currVideo.Resolution = !string.IsNullOrEmpty(mv.Standard) ? mv.Standard : GetFileVideoResolution(mv) ?? currVideo.Resolution;
@@ -55,7 +58,7 @@ namespace Frost.DetectFeatures {
             currVideo.Width = (int?) mv.Width;
             currVideo.Language = GetLanguage(false, mv.Language, null, _fnInfo.SubtitleLanguage, _fnInfo.Language);
 
-            currVideo.ScanType = mv.ScanType;
+            currVideo.ScanType = (Common.ScanType) mv.ScanType;
             currVideo.Aspect = mv.DisplayAspectRatio;
 
             if (currVideo.Aspect.HasValue) {

@@ -77,7 +77,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the year this movie was released in.</summary>
         /// <value>The year this movie was released in.</value>
-        public int? ReleaseYear { get; set; }
+        public long? ReleaseYear { get; set; }
 
         /// <summary>Gets or sets the date the movie was released in the cinemas.</summary>
         /// <value>The date the movie was released in the cinemas.</value>
@@ -110,7 +110,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the movie ranking on IMDB Top 250 list.</summary>
         /// <value>The movie ranking on IMDB Top 250 list.</value>
-        public int? Top250 { get; set; }
+        public long? Top250 { get; set; }
 
         /// <summary>Gets or sets the runtime of the movie</summary>
         /// <value>The runtime of the movie</value>
@@ -122,7 +122,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the number of times this movie has been played.</summary>
         /// <value>The number of times this movie has been played.</value>
-        public int PlayCount { get; set; }
+        public long PlayCount { get; set; }
 
         /// <summary>Gets or sets the average movie rating</summary>
         /// <value>Average movie rating</value>
@@ -159,7 +159,7 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets or sets the main plot foreign key.</summary>
         /// <value>The movie main plot foreign key.</value>
         [ForeignKey("MainPlot")]
-        public long MainPlotID { get; set; }
+        public long? MainPlotID { get; set; }
 
         #endregion
 
@@ -438,7 +438,7 @@ namespace Frost.Common.Models.DB.MovieVo {
                 Studio = movie.GetStudioNamesFormatted(),
                 Tagline = movie.MainPlot.Summary,
                 Title = movie.Title,
-                Year = movie.ReleaseYear ?? 0,
+                Year = (int)(movie.ReleaseYear ?? 0),
                 Actors = movie.GetXjbXmlActors().ToArray(),
                 MPAA = movie.GetMPAARating(),
                 Credits = String.Join(SEPARATOR, movie.Writers.Select(p => p.Name)),

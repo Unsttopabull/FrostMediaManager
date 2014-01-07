@@ -10,6 +10,10 @@ namespace Frost.Common.Models.DB.MovieVo {
     [Table("Ratings")]
     public class Rating : IEquatable<Rating> {
 
+        public Rating() {
+            
+        }
+
         /// <summary>Initializes a new instance of the <see cref="Rating"/> class.</summary>
         /// <param name="critic">The name of the critic.</param>
         /// <param name="rating">The rating value</param>

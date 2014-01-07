@@ -5,13 +5,13 @@ namespace Frost.SharpMediaInfo {
 
     /// <summary>Represents a MediaInfo file in a List.</summary>
     public class MediaListFile : MediaFileBase {
-
         /// <summary>Initializes a new instance of the <see cref="MediaListFile"/> class.</summary>
         /// <param name="mediaInfoList">The handle to the MediaInfoList.</param>
         /// <param name="filePos">The file position in list.</param>
         /// <param name="cacheInfom">If set to <c>true</c> the Iform() call will get cached to limit calls to DLL when cached.</param>
         /// <param name="allInfoCache">If set to <c>true</c> the Inform() call will get cached with ShowAllInfo set to <c>true</c>.</param>
-        internal MediaListFile(IntPtr mediaInfoList, int filePos, bool cacheInfom, bool allInfoCache = true) : base(mediaInfoList){
+        internal MediaListFile(IntPtr mediaInfoList, int filePos, bool cacheInfom, bool allInfoCache = true)
+            : base(mediaInfoList) {
             DisposedMessage = FILE_CLOSED;
 
             IsOpen = true;
@@ -19,30 +19,56 @@ namespace Frost.SharpMediaInfo {
             InitializeMediaStreams(cacheInfom, allInfoCache);
         }
 
+        /// <summary>Index of the file in the list.</summary>
         public int FileIndex { get; internal set; }
 
-        #region P/Invoke C Functions
+        #region P/Invoke C Functions x86
 
-        [DllImport("MediaInfo.dll")]
+        [DllImport("x86/MediaInfo.dll")]
         private static extern void MediaInfoList_Close(IntPtr handle, IntPtr filePos);
 
-        [DllImport("MediaInfo.dll")]
+        [DllImport("x86/MediaInfo.dll")]
         private static extern IntPtr MediaInfoList_Inform(IntPtr handle, IntPtr filePos, IntPtr reserved);
 
-        [DllImport("MediaInfo.dll")]
+        [DllImport("x86/MediaInfo.dll")]
         private static extern IntPtr MediaInfoList_GetI(IntPtr handle, IntPtr filePos, IntPtr streamKind, IntPtr streamNumber, IntPtr parameter, IntPtr kindOfInfo);
 
-        [DllImport("MediaInfo.dll")]
+        [DllImport("x86/MediaInfo.dll")]
         private static extern IntPtr MediaInfoList_Get(IntPtr handle, IntPtr filePos, IntPtr streamKind, IntPtr streamNumber, [MarshalAs(UnmanagedType.LPWStr)] string parameter, IntPtr kindOfInfo, IntPtr kindOfSearch);
 
-        [DllImport("MediaInfo.dll")]
+        [DllImport("x86/MediaInfo.dll")]
         private static extern IntPtr MediaInfoList_Option(IntPtr handle, [MarshalAs(UnmanagedType.LPWStr)] string option, [MarshalAs(UnmanagedType.LPWStr)] string value);
 
-        [DllImport("MediaInfo.dll")]
+        [DllImport("x86/MediaInfo.dll")]
         private static extern IntPtr MediaInfoList_State_Get(IntPtr handle);
 
-        [DllImport("MediaInfo.dll")]
+        [DllImport("x86/MediaInfo.dll")]
         private static extern IntPtr MediaInfoList_Count_Get(IntPtr handle, IntPtr filePos, IntPtr streamKind, IntPtr streamNumber);
+
+        #endregion
+
+        #region P/Invoke C Functions x64
+
+        [DllImport("x64/MediaInfo.dll", EntryPoint = "MediaInfoList_Close")]
+        private static extern void MediaInfoList_Close_x64(IntPtr handle, IntPtr filePos);
+
+        [DllImport("x64/MediaInfo.dll", EntryPoint = "MediaInfoList_Inform")]
+        private static extern IntPtr MediaInfoList_Inform_x64(IntPtr handle, IntPtr filePos, IntPtr reserved);
+
+        [DllImport("x64/MediaInfo.dll", EntryPoint = "MediaInfoList_GetI")]
+        private static extern IntPtr MediaInfoList_GetI_x64(IntPtr handle, IntPtr filePos, IntPtr streamKind, IntPtr streamNumber, IntPtr parameter, IntPtr kindOfInfo);
+
+        [DllImport("x64/MediaInfo.dll", EntryPoint = "MediaInfoList_Get")]
+        private static extern IntPtr MediaInfoList_Get_x64(IntPtr handle, IntPtr filePos, IntPtr streamKind, IntPtr streamNumber, [MarshalAs(UnmanagedType.LPWStr)] string parameter, IntPtr kindOfInfo, IntPtr kindOfSearch);
+
+        [DllImport("x64/MediaInfo.dll", EntryPoint = "MediaInfoList_Option")]
+        private static extern IntPtr MediaInfoList_Option_x64(IntPtr handle, [MarshalAs(UnmanagedType.LPWStr)] string option, [MarshalAs(UnmanagedType.LPWStr)] string value);
+
+        [DllImport("x64/MediaInfo.dll", EntryPoint = "MediaInfoList_State_Get")]
+        private static extern IntPtr MediaInfoList_State_Get_x64(IntPtr handle);
+
+        [DllImport("x64/MediaInfo.dll", EntryPoint = "MediaInfoList_Count_Get")]
+        private static extern IntPtr MediaInfoList_Count_Get_x64(IntPtr handle, IntPtr filePos, IntPtr streamKind, IntPtr streamNumber);
 
         #endregion
 
@@ -51,7 +77,12 @@ namespace Frost.SharpMediaInfo {
         /// <summary>Closes this instance and disposes all allocated resources.</summary>
         internal override void Close() {
             if (IsOpen) {
-                MediaInfoList_Close(Handle, (IntPtr) FileIndex);
+                if (Environment.Is64BitProcess) {
+                    MediaInfoList_Close_x64(Handle, (IntPtr) FileIndex);
+                }
+                else {
+                    MediaInfoList_Close(Handle, (IntPtr) FileIndex);
+                }
                 GC.SuppressFinalize(this);
                 IsOpen = false;
             }
@@ -66,7 +97,9 @@ namespace Frost.SharpMediaInfo {
         public override string Inform() {
             ThrowIfDisposed();
 
-            return Marshal.PtrToStringUni(MediaInfoList_Inform(Handle, (IntPtr) FileIndex, (IntPtr) 0));
+            return Marshal.PtrToStringUni(Environment.Is64BitProcess
+                                              ? MediaInfoList_Inform_x64(Handle, (IntPtr) FileIndex, (IntPtr) 0)
+                                              : MediaInfoList_Inform(Handle, (IntPtr) FileIndex, (IntPtr) 0));
         }
 
         /// <summary>Configure or get information about MediaInfoLib</summary>
@@ -76,7 +109,9 @@ namespace Frost.SharpMediaInfo {
         internal override string Option(String option, String value = "") {
             ThrowIfDisposed();
 
-            return Marshal.PtrToStringUni(MediaInfoList_Option(Handle, option, value));
+            return Marshal.PtrToStringUni(Environment.Is64BitProcess
+                                              ? MediaInfoList_Option_x64(Handle, option, value)
+                                              : MediaInfoList_Option(Handle, option, value));
         }
 
         /// <summary>Get the state of the library</summary>
@@ -92,7 +127,9 @@ namespace Frost.SharpMediaInfo {
         public override int StateGet() {
             ThrowIfDisposed();
 
-            return (int) MediaInfoList_State_Get(Handle);
+            return (int) (Environment.Is64BitProcess
+                              ? MediaInfoList_State_Get_x64(Handle)
+                              : MediaInfoList_State_Get(Handle));
         }
 
         /// <summary>Get a piece of information about a file (parameter is an integer)</summary>
@@ -102,10 +139,13 @@ namespace Frost.SharpMediaInfo {
         /// <param name="kindOfInfo">Kind of information you want about the parameter (the text, the measure, the help...)</param>
         /// <param name="kindOfSearch">Where to look for the parameter</param>
         /// <returns>a string about information you search, an empty string if there is a problem</returns>
-        public override string Get(StreamKind streamKind, int streamNumber, string parameter, InfoKind kindOfInfo = InfoKind.Text, InfoKind kindOfSearch = InfoKind.Name) {
+        public override string Get(StreamKind streamKind, int streamNumber, string parameter,
+                                   InfoKind kindOfInfo = InfoKind.Text, InfoKind kindOfSearch = InfoKind.Name) {
             ThrowIfDisposed();
 
-            return Marshal.PtrToStringUni(MediaInfoList_Get(Handle, (IntPtr) FileIndex, (IntPtr) streamKind, (IntPtr) streamNumber, parameter, (IntPtr) kindOfInfo, (IntPtr) kindOfSearch));
+            return Marshal.PtrToStringUni(Environment.Is64BitProcess
+                                              ? MediaInfoList_Get_x64(Handle, (IntPtr) FileIndex, (IntPtr) streamKind, (IntPtr) streamNumber, parameter, (IntPtr) kindOfInfo, (IntPtr) kindOfSearch)
+                                              : MediaInfoList_Get(Handle, (IntPtr) FileIndex, (IntPtr) streamKind, (IntPtr) streamNumber, parameter, (IntPtr) kindOfInfo, (IntPtr) kindOfSearch));
         }
 
         /// <summary>Get a piece of information about a file (parameter is an integer)</summary>
@@ -117,7 +157,9 @@ namespace Frost.SharpMediaInfo {
         public override string Get(StreamKind streamKind, int streamNumber, int parameter, InfoKind kindOfInfo = InfoKind.Text) {
             ThrowIfDisposed();
 
-            return Marshal.PtrToStringUni(MediaInfoList_GetI(Handle, (IntPtr) FileIndex, (IntPtr) streamKind, (IntPtr) streamNumber, (IntPtr) parameter, (IntPtr) kindOfInfo));
+            return Marshal.PtrToStringUni(Environment.Is64BitProcess
+                ? MediaInfoList_GetI_x64(Handle, (IntPtr) FileIndex, (IntPtr) streamKind, (IntPtr) streamNumber, (IntPtr) parameter, (IntPtr) kindOfInfo)
+                : MediaInfoList_GetI(Handle, (IntPtr) FileIndex, (IntPtr) streamKind, (IntPtr) streamNumber, (IntPtr) parameter, (IntPtr) kindOfInfo));
         }
 
         /// <summary>Count of streams of a stream kind or count of piece of information in this stream.</summary>
@@ -127,7 +169,9 @@ namespace Frost.SharpMediaInfo {
         public override int CountGet(StreamKind streamKind, int streamNumber = -1) {
             ThrowIfDisposed();
 
-            return (int) MediaInfoList_Count_Get(Handle, (IntPtr) FileIndex, (IntPtr) streamKind, (IntPtr) streamNumber);
+            return (int) (Environment.Is64BitProcess
+                ? MediaInfoList_Count_Get_x64(Handle, (IntPtr) FileIndex, (IntPtr) streamKind, (IntPtr) streamNumber)
+                : MediaInfoList_Count_Get(Handle, (IntPtr) FileIndex, (IntPtr) streamKind, (IntPtr) streamNumber));
         }
 
         #endregion
@@ -138,10 +182,11 @@ namespace Frost.SharpMediaInfo {
             return General.FileInfo.FullPath;
         }
 
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <param name="full">If <c>true</c> returns full path; otherwise returns filename with extension.</param>
+        /// <returns>A string that represents the current object.</returns>
         public string ToString(bool full) {
-            return full
-                ? General.FileInfo.FullPath
-                : General.FileInfo.FileName+"."+General.FileInfo.Extension;
+            return full ? General.FileInfo.FullPath : (General.FileInfo.FileName + "." + General.FileInfo.Extension);
         }
     }
 

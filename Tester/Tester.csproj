@@ -29,7 +29,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -54,8 +54,17 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\EF\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\JsonNET\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -82,10 +91,6 @@
     <ProjectReference Include="..\Podnapisi.NET API\Podnapisi.NET API.csproj">
       <Project>{950be2eb-25f5-4ac1-b1d0-eb644889ba99}</Project>
       <Name>Podnapisi.NET API</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpMediaInfo\SharpMediaInfo.csproj">
-      <Project>{4EA24C1B-3AF2-4EB0-AA98-62EAFB0C2682}</Project>
-      <Name>SharpMediaInfo</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

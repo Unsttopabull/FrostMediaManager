@@ -61,23 +61,33 @@ namespace Frost.Common.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 
-        ///-- --------------------------------------------------
-        ///-- Date Created: 07/04/2013 15:07:20
-        ///-- compatible SQLite
-        ///-- Generated from EDMX file: E:\Workspace\Ostalo\Projects\WPF_Jukebox\ObdelajXtreamerProdatke\Models\MovieVo\MovieVo.edmx
-        ///-- --------------------------------------------------
-        ///-- Dropping existing tables
-        ///-- --------------------------------------------------
+        ///   Looks up a localized string similar to     DROP TABLE if exists &quot;Sets&quot;;
+        ///    
+        ///    DROP TABLE if exists Specials;
+        ///    
+        ///    DROP TABLE if exists MovieSpecials;
+        ///    
+        ///    DROP TABLE if exists Countries;
+        ///    
+        ///    DROP TABLE if exists Languages;
+        ///    
+        ///    DROP TABLE if exists Movies;
         ///
-        ///    
-        ///	DROP TABLE if exists [Movies];
-        ///    
-        ///	DROP TABLE if exists [Audios];
-        ///    
-        ///	DROP TABLE if exists [Files];
-        ///    
-        ///	DROP TAB [rest of string was truncated]&quot;;.
+        ///    DROP TABLE if exists Audios;
+        ///
+        ///    DROP TABLE if exists Files;
+        ///
+        ///    DROP TABLE if exists Videos;
+        ///
+        ///    DROP TABLE if exists Subtitles;
+        ///
+        ///    DROP TABLE if exists Arts;
+        ///
+        ///    DROP TABLE if exists Ratings;
+        ///
+        ///    DROP TABLE if exists Specials;
+        ///
+        ///    DR [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string MovieVoSQL {
             get {

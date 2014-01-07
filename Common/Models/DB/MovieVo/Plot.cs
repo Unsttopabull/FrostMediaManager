@@ -8,6 +8,10 @@ namespace Frost.Common.Models.DB.MovieVo {
     [Table("Plots")]
     public class Plot : IEquatable<Plot> {
 
+        public Plot() {
+            
+        }
+
         /// <summary>Initializes a new instance of the <see cref="Plot"/> class.</summary>
         /// <param name="full">The full plot.</param>
         /// <param name="summary">A short story summary, the plot outline</param>

@@ -14,7 +14,7 @@ namespace Frost.SharpLanguageDetect {
      * LangDetect Command Line Interface
      * <p>
      * This is a command line interface of Language Detection Library "LandDetect".
-     * 
+     * </p>
      * 
      * @author Nakatani Shuyo
      *

@@ -44,7 +44,7 @@ namespace Frost.DetectFeatures {
             SubtitleExtensionsRegex = string.Format(@"\.({0})", string.Join("|", KnownSubtitleExtensions));
 
             //DetectorFactory.LoadStaticProfiles();
-            DetectorFactory.LoadProfilesFromFolder("profiles");
+            DetectorFactory.LoadProfilesFromFolder("LanguageProfiles");
         }
 
         internal FileFeatures(string filePath, NFOPriority nfoPriority, FeatureDetector fd) {

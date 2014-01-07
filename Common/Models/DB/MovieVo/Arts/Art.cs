@@ -8,6 +8,10 @@ namespace Frost.Common.Models.DB.MovieVo.Arts {
     /// <summary>Represents a promotional movie art.</summary>
     public class Art : IEquatable<Art> {
 
+        public Art() {
+            
+        }
+
         /// <summary>Initializes a new instance of the <see cref="Art"/> class with specified path.</summary>
         /// <param name="path">The path to this art (can be local or network or an URI).</param>
         /// <param name="preview">The path to a smaller version used as preview image</param>
@@ -21,6 +25,7 @@ namespace Frost.Common.Models.DB.MovieVo.Arts {
 
         /// <summary>Initializes a new instance of the <see cref="Art"/> class with specified path and type.</summary>
         /// <param name="path">The path to this art (can be local or network or an URI).</param>
+        /// <param name="preview">The path to a smaller version used as preview image</param>
         /// <param name="type">The type used as a discriminator.</param>
         public Art(string path, string preview, ArtType type) : this(path, preview) {
             Type = type;

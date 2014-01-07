@@ -1,4 +1,5 @@
 ﻿using System;
+using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.Common.Util.ISO;
@@ -37,12 +38,12 @@ namespace Frost.DetectFeatures {
 
             a.BitDepth = ma.BitDepth;
             a.BitRate = ma.BitRate.HasValue ? ma.BitRate / 1024.0f : null;
-            a.BitRateMode = ma.BitRateInfo.Mode;
+            a.BitRateMode = (FrameOrBitRateMode) ma.BitRateInfo.Mode;
             a.ChannelPositions = ma.ChannelInfo.Positions;
             a.ChannelSetup = ma.ChannelInfo.PositionsString2;
             a.NumberOfChannels = (int?)ma.NumberOfChannels;
             a.Codec = ma.CodecIDInfo.Hint ?? ma.CodecInfo.NameString ?? a.Codec;
-            a.CompressionMode = ma.CompressionMode;
+            a.CompressionMode = (CompressionMode) ma.CompressionMode;
             a.Duration = ma.Duration.HasValue ? (long?)ma.Duration.Value.TotalMilliseconds : null;
             a.Language = ma.Language != null
                                      ? new Language(ma.Language, ma.LanguageInfo.ISO639_Alpha2, ma.LanguageInfo.ISO639_Alpha3)

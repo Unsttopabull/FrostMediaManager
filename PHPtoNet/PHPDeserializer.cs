@@ -28,7 +28,7 @@ namespace Frost.PHPtoNET {
         /// <param name="scanner">Scanner with the ability to reset to the beginning of the stream</param>
         /// <param name="rewind">Rewind the source stream to the beginning if it supports seeking</param>
         /// <param name="className">if set to <c>true</c> and type is an object return the class name instead of "object".</param>
-        /// <returns>The string representation of the type serialized, if type is an object and<see cref="className" /> is <c>true</c> returns the object name</returns>
+        /// <returns>The string representation of the type serialized, if type is an object and <paramref name="className"/> is <c>true</c> returns the object name</returns>
         public static string GetSerializedType(IResetableScanner scanner, bool rewind = false, bool className = true) {
             if (rewind) {
                 scanner.Reset();

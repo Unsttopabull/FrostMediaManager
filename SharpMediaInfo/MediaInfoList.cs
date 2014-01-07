@@ -17,7 +17,7 @@ namespace Frost.SharpMediaInfo {
 
         #region Constructors
         public MediaInfoList() {
-            _handle = MediaInfoList_New();
+            _handle = Environment.Is64BitProcess ? MediaInfoList_New_x64() : MediaInfoList_New();
             _files = new MediaFileCollection();
         }
 
@@ -46,19 +46,35 @@ namespace Frost.SharpMediaInfo {
 
         #endregion
 
-        #region P/Invoke C Functions
+        #region P/Invoke C Functions x86
 
-        [DllImport("MediaInfo.dll")]
+        [DllImport("x86/MediaInfo.dll")]
         private static extern IntPtr MediaInfoList_Open(IntPtr handle, [MarshalAs(UnmanagedType.LPWStr)] string fileName, IntPtr options);
 
-        [DllImport("MediaInfo.dll")]
+        [DllImport("x86/MediaInfo.dll")]
         private static extern IntPtr MediaInfoList_New();
 
-        [DllImport("MediaInfo.dll")]
+        [DllImport("x86/MediaInfo.dll")]
         private static extern void MediaInfoList_Delete(IntPtr handle);
 
-        [DllImport("MediaInfo.dll")]
+        [DllImport("x86/MediaInfo.dll")]
         private static extern void MediaInfoList_Close(IntPtr handle, IntPtr filePos);
+
+        #endregion
+
+        #region P/Invoke C Functions x64
+
+        [DllImport("x64/MediaInfo.dll", EntryPoint = "MediaInfoList_Open")]
+        private static extern IntPtr MediaInfoList_Open_x64(IntPtr handle, [MarshalAs(UnmanagedType.LPWStr)] string fileName, IntPtr options);
+
+        [DllImport("x64/MediaInfo.dll", EntryPoint = "MediaInfoList_New")]
+        private static extern IntPtr MediaInfoList_New_x64();
+
+        [DllImport("x64/MediaInfo.dll", EntryPoint = "MediaInfoList_Delete")]
+        private static extern void MediaInfoList_Delete_x64(IntPtr handle);
+
+        [DllImport("x64/MediaInfo.dll", EntryPoint = "MediaInfoList_Close")]
+        private static extern void MediaInfoList_Close_x64(IntPtr handle, IntPtr filePos);
 
         #endregion
 
@@ -117,7 +133,13 @@ namespace Frost.SharpMediaInfo {
             _files.Clear();
 
             const int ALL_FILES = -1;
-            MediaInfoList_Close(_handle, (IntPtr) ALL_FILES);
+
+            if (Environment.Is64BitProcess) {
+                MediaInfoList_Close_x64(_handle, (IntPtr) ALL_FILES);
+            }
+            else {
+                MediaInfoList_Close(_handle, (IntPtr) ALL_FILES);
+            }
         }
         #endregion
 
@@ -202,6 +224,9 @@ namespace Frost.SharpMediaInfo {
         /// <param name="options">FileOption_Recursive = Recursive mode for folders FileOption_Close = Close all already opened files before.</param>
         /// <returns>Number	of files successfuly added.</returns>
         private int Open(string pathNames, InfoFileOptions options = InfoFileOptions.Nothing) {
+            if (Environment.Is64BitProcess) {
+                return (int) MediaInfoList_Open_x64(_handle, pathNames, (IntPtr) options);
+            }
             return (int) MediaInfoList_Open(_handle, pathNames, (IntPtr) options);
         }
 
@@ -224,7 +249,12 @@ namespace Frost.SharpMediaInfo {
             if (!IsDisposed) {
                 RemoveAll();
 
-                MediaInfoList_Delete(_handle);
+                if (Environment.Is64BitProcess) {
+                    MediaInfoList_Delete_x64(_handle);
+                }
+                else {
+                    MediaInfoList_Delete(_handle);
+                }
                 IsDisposed = true;
 
                 GC.SuppressFinalize(this);

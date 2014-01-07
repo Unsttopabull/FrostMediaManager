@@ -9,6 +9,10 @@ namespace Frost.Common.Models.DB.MovieVo {
     /// <summary>Represents a special information about a movie's release or type.</summary>
     public class Special : IEquatable<Special> {
 
+        public Special() {
+            
+        }
+
         /// <summary>Initializes a new instance of the <see cref="Special"/> class.</summary>
         /// <param name="value">The value of the special</param>
         public Special(string value) {

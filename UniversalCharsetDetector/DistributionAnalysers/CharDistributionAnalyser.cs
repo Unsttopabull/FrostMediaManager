@@ -50,9 +50,6 @@ namespace Frost.SharpCharsetDetector.DistributionAnalysers {
         /// <summary>Mapping table to get frequency order from char order (get from GetOrder())</summary>
         protected int[] CharToFreqOrder;
 
-        /// <summary>If this flag is set to true, detection is done and conclusion has been made</summary>
-        private bool _done;
-
         /// <summary>The number of characters whose frequency order is less than 512</summary>
         private int _freqChars;
 
@@ -84,6 +81,7 @@ namespace Frost.SharpCharsetDetector.DistributionAnalysers {
         /// <summary>Feed a character with known length</summary>
         /// <param name="buf">A <see cref="System.Byte"/></param>
         /// <param name="offset">buf offset</param>
+        /// <param name="charLen"></param>
         public void HandleOneChar(byte[] buf, int offset, int charLen) {
             //we only care about 2-bytes character in our distribution analysis
             int order = (charLen == 2) ? GetOrder(buf, offset) : -1;
@@ -99,7 +97,6 @@ namespace Frost.SharpCharsetDetector.DistributionAnalysers {
         }
 
         public void Reset() {
-            _done = false;
             _totalChars = 0;
             _freqChars = 0;
         }

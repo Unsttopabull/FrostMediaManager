@@ -18,10 +18,11 @@ namespace Frost.SharpLanguageDetect {
     * the detector provides the language detection results for target text via {@link #detect()} or {@link #getProbabilities()}.
     * {@link #detect()} method returns a single language name which has the highest probability.
     * {@link #getProbabilities()} methods returns a list of multiple languages and their probabilities.
-    * <p>  
+    * </p><p>  
     * The detector has some parameters for language detection.
     * See {@link #setAlpha(double)}, {@link #setMaxTextLength(int)} and {@link #setPriorMap(Dictionary)}.
-    * 
+    * </p>
+     * 
     * <pre>
     * import java.util.List;
     * import com.cybozu.labs.langdetect.Detector;
@@ -37,7 +38,7 @@ namespace Frost.SharpLanguageDetect {
     *         detector.append(text);
     *         return detector.detect();
     *     }
-    *     public List<Language> detectLangs(string text) throws LangDetectException {
+    *     public List&lt;Language&gt; detectLangs(string text) throws LangDetectException {
     *         Detector detector = DetectorFactory.create();
     *         detector.append(text);
     *         return detector.getProbabilities();
