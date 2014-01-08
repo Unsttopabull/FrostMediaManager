@@ -24,7 +24,7 @@ namespace Frost.DetectFeatures {
                 foreach (MediaAudio mediaVideo in _mediaFile.Audio) {
                     Audio audio = GetFileAudioStreamInfo(mediaVideo);
 
-                    Movie.Audio.Add(audio);
+                    Movie.Audios.Add(audio);
                 }
             }
             else {

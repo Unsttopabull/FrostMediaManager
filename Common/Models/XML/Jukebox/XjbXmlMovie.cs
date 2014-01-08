@@ -247,7 +247,7 @@ namespace Frost.Common.Models.XML.Jukebox {
             }
 
             //add all available plot info (constructor will omit null/empty ones)
-            mv.Plot.Add(new Plot(xm.Plot, xm.Outline, xm.Tagline, language: null));
+            mv.Plots.Add(new Plot(xm.Plot, xm.Outline, xm.Tagline, language: null));
 
             if (!string.IsNullOrEmpty(xm.Director)) {
                 mv.Directors.Add(new Person(xm.Director));

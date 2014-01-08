@@ -498,12 +498,17 @@ namespace Frost.Tester {
 
         private static void TestDB() {
             MovieVoContainer mvc = new MovieVoContainer();
-            
-            IEnumerable<Movie> movies = TestFeatureDetectorVideoDebug();
+
+            Movie movie;
+            using (FeatureDetector fd = new FeatureDetector()) {
+                movie = fd.Detect(@"E:\Torrenti\FILMI\Amazing.Grace.2006.SLOSub.DvdRip.Xvid\Amazing.Grace.2006.SLOSub.DvdRip.Xvid.avi").Movie;
+            }
+
+            mvc.Movies.Add(movie);
+            //IEnumerable<Movie> movies = TestFeatureDetectorVideoDebug();
             //Serialize(movies);
 
             //List<Movie> movies = Deserialize(@"E:\Workspace\Ostalo\Repos\Git\FrostMediaManager\Tester\bin\Debug\movie_.js");
-
 
             //foreach (Movie movie in movies) {
             //    mvc.Movies.Add(movie);
@@ -639,7 +644,7 @@ namespace Frost.Tester {
             OutputMovieInfo(movie);
 
             OutputVideo(movie.Videos.FirstOrDefault());
-            OutputAudio(movie.Audio.FirstOrDefault());
+            OutputAudio(movie.Audios.FirstOrDefault());
             OutputSubtitles(movie.Subtitles);
             Debug.WriteLine(Filler);
         }

@@ -23,9 +23,6 @@ namespace Frost.Common.Models.DB.XBMC {
 
         /// <summary> Initializes a new instance of the <see cref="XbmcFile"/> class.</summary>
         public XbmcFile() {
-            Path = new XbmcPath();
-            Movie = new XbmcMovie();
-            Bookmark = new XbmcBookmark();
             StreamDetails = new HashSet<XbmcDbStreamDetails>();
         }
 

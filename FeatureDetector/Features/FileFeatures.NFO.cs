@@ -112,7 +112,7 @@ namespace Frost.DetectFeatures {
                 }
             }
 
-            Movie.Plot.Add(new Plot(xjbMovie.Plot, xjbMovie.Outline, xjbMovie.Tagline, null));
+            Movie.Plots.Add(new Plot(xjbMovie.Plot, xjbMovie.Outline, xjbMovie.Tagline, null));
         }
 
         private void CheckAddXjbGenres(XjbXmlMovie xjbMovie, bool @override = false) {
@@ -186,7 +186,7 @@ namespace Frost.DetectFeatures {
                 }
             }
 
-            Movie.Plot.Add(new Plot(xjbMovie.Plot, xjbMovie.Outline, xjbMovie.Tagline, null));
+            Movie.Plots.Add(new Plot(xjbMovie.Plot, xjbMovie.Outline, xjbMovie.Tagline, null));
         }
 
         #endregion
@@ -250,7 +250,7 @@ namespace Frost.DetectFeatures {
             Movie.Aired = FilterDate(xbmcMovie.Aired);
             Movie.Trailer = xbmcMovie.GetTrailerUrl();
 
-            Movie.Art.UnionWith(xbmcMovie.GetArt());
+            Movie.Arts.UnionWith(xbmcMovie.GetArt());
             Movie.Certifications.UnionWith(xbmcMovie.GetCertifications());
             Movie.Countries.UnionWith(xbmcMovie.GetCountries());
             
@@ -292,7 +292,7 @@ namespace Frost.DetectFeatures {
             }
 
 
-            Movie.Plot.Add(new Plot(xbmcMovie.Plot, xbmcMovie.Outline, xbmcMovie.Tagline, null));
+            Movie.Plots.Add(new Plot(xbmcMovie.Plot, xbmcMovie.Outline, xbmcMovie.Tagline, null));
         }
 
         private void AddNotDetectedNfoInfo(XbmcXmlMovie xbmcMovie) {
@@ -313,7 +313,7 @@ namespace Frost.DetectFeatures {
             Movie.Aired = FilterDate(xbmcMovie.Aired);
             Movie.Trailer = xbmcMovie.GetTrailerUrl();
 
-            Movie.Art.UnionWith(xbmcMovie.GetArt());
+            Movie.Arts.UnionWith(xbmcMovie.GetArt());
             Movie.Certifications.UnionWith(xbmcMovie.GetCertifications());
             Movie.Countries.UnionWith(xbmcMovie.GetCountries());
             
@@ -357,7 +357,7 @@ namespace Frost.DetectFeatures {
                 }
             }
 
-            Movie.Plot.Add(new Plot(xbmcMovie.Plot, xbmcMovie.Outline, xbmcMovie.Tagline, null));
+            Movie.Plots.Add(new Plot(xbmcMovie.Plot, xbmcMovie.Outline, xbmcMovie.Tagline, null));
         }
         #endregion
     }

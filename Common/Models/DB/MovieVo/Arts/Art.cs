@@ -19,8 +19,6 @@ namespace Frost.Common.Models.DB.MovieVo.Arts {
             Type = ArtType.Unknown;
             Preview = preview;
             Path = path;
-
-            Movie = new Movie();
         }
 
         /// <summary>Initializes a new instance of the <see cref="Art"/> class with specified path and type.</summary>
@@ -83,9 +81,13 @@ namespace Frost.Common.Models.DB.MovieVo.Arts {
 
             public Configuration() {
                 ToTable("Arts");
-                Map<Cover>(m => m.Requires("Type").HasValue(1));
-                Map<Poster>(m => m.Requires("Type").HasValue(2));
-                Map<Fanart>(m => m.Requires("Type").HasValue(3));
+                Map<Cover>(m => m.Requires("Type").HasValue((int)ArtType.Cover));
+                Map<Poster>(m => m.Requires("Type").HasValue((int)ArtType.Poster));
+                Map<Fanart>(m => m.Requires("Type").HasValue((int)ArtType.Fanart));
+
+                HasRequired(a => a.Movie)
+                    .WithMany(m => m.Arts)
+                    .HasForeignKey(a => a.MovieId);
             }
 
         }

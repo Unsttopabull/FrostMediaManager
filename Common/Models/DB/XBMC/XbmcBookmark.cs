@@ -10,7 +10,6 @@ namespace Frost.Common.Models.DB.XBMC {
     public class XbmcBookmark : IEquatable<XbmcBookmark> {
 
         public XbmcBookmark() {
-            File = new XbmcFile();
         }
 
         /// <summary>Gets or sets the Id of the bookmark in the database.</summary>

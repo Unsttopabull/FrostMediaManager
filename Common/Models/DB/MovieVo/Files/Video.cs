@@ -1,19 +1,16 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.ModelConfiguration;
 
 namespace Frost.Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents information about a video stream in a file.</summary>
-    [Table("Videos")]
     public class Video : IEquatable<Video> {
         #region Constructors
 
         /// <summary>Initializes a new instance of the <see cref="Video"/> class.</summary>
         public Video() {
-            Movie = new Movie();
-            File = new File();
-            Language = new Language();
         }
 
         /// <summary>Initializes a new instance of the <see cref="Video"/> class.</summary>
@@ -173,7 +170,6 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         /// <summary>Gets or sets the file this video is contained in.</summary>
         /// <value>The file this video is contained in.</value>
-        [ForeignKey("FileId")]
         public virtual File File { get; set; }
 
         /// <summary>Gets or sets the movie this video is from.</summary>
@@ -216,6 +212,22 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
                    Width == other.Width &&
                    Height == other.Height &&
                    Language == other.Language;
+        }
+
+        internal class Configuration : EntityTypeConfiguration<Video> {
+            public Configuration() {
+                ToTable("Videos");
+
+                HasRequired(v => v.Movie)
+                    .WithMany(m => m.Videos)
+                    .HasForeignKey(v => v.MovieId);
+
+                HasRequired(v => v.File)
+                    .WithMany(f => f.VideoDetails)
+                    .HasForeignKey(v => v.FileId);
+
+                HasOptional(v => v.Language);
+            }
         }
     }
 

@@ -1,12 +1,12 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.ModelConfiguration;
 using Frost.Common.Models.XML.XBMC;
 
 namespace Frost.Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents information about an audio stream in a file.</summary>
-    [Table("Audios")]
     public class Audio : IEquatable<Audio> {
         #region Constructors
 
@@ -17,8 +17,6 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <param name="channelSetup">The audio channels setting. (2, 6, 5.1, ...)</param>
         /// <param name="language">The language of this audio.</param>
         public Audio(string source, string type, string codec, string channelSetup, string language) {
-            File = new File();
-            Movie = new Movie();
             Language = new Language(language);
 
             Source = source;
@@ -43,9 +41,6 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         }
 
         public Audio() {
-            Movie = new Movie();
-            File = new File();
-            Language = new Language();
         }
 
         #endregion
@@ -185,6 +180,22 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
             return new XbmcXmlAudioInfo(audio.Codec, audio.NumberOfChannels ?? 0, audio.Language.ISO639.Alpha3);
         }
 
+
+        internal class Configuration : EntityTypeConfiguration<Audio> {
+            public Configuration() {
+                ToTable("Audios");
+
+                HasRequired(a => a.Movie)
+                    .WithMany(m => m.Audios)
+                    .HasForeignKey(a => a.MovieId);
+
+                HasRequired(a => a.File)
+                    .WithMany(f => f.AudioDetails)
+                    .HasForeignKey(a => a.MovieId);
+
+                HasOptional(a => a.Language);
+            }
+        }
     }
 
 }

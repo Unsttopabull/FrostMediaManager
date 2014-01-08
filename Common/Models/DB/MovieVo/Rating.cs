@@ -41,7 +41,6 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the movie this rating is for.</summary>
         /// <value>The movie this rating is for.</value>
-        [ForeignKey("MovieId")]
         public virtual Movie Movie { get; set; }
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>

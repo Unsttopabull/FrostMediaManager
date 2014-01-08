@@ -105,7 +105,7 @@ namespace Frost.Common.Models.PHP {
         }
 
         private void AddAudioVideoInfo(Movie mov) {
-            mov.Audio.Add(new Audio(
+            mov.Audios.Add(new Audio(
                 audioSource,
                 audioType,
                 acodec,
@@ -126,16 +126,16 @@ namespace Frost.Common.Models.PHP {
 
         private void AddArt(Movie mov) {
             if (!string.IsNullOrEmpty(pathCover)) {
-                mov.Art.Add(new Cover(pathCover));
+                mov.Arts.Add(new Cover(pathCover));
             }
 
             if (pathScreenArr != null) {
                 //if the array is not null we add all art as Fanart
-                mov.Art.UnionWith(pathScreenArr.Select(screen => new Fanart(screen)));
+                mov.Arts.UnionWith(pathScreenArr.Select(screen => new Fanart(screen)));
             }
 
             if (pathFanartArr != null) {
-                mov.Art.UnionWith(pathFanartArr.Select(fanart => new Fanart(fanart)));
+                mov.Arts.UnionWith(pathFanartArr.Select(fanart => new Fanart(fanart)));
             }
         }
 
@@ -152,7 +152,7 @@ namespace Frost.Common.Models.PHP {
 
             //if the full plot summary exists add new plot otherwise we discard all plot info 
             if (!string.IsNullOrEmpty(m.plotFull)) {
-                mov.Plot.Add(new Plot(m.plotFull, m.plotSummary, null));
+                mov.Plots.Add(new Plot(m.plotFull, m.plotSummary, null));
             }
 
             m.GetInfo(mov);

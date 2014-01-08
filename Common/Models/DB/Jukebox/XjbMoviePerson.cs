@@ -11,8 +11,6 @@ namespace Frost.Common.Models.DB.Jukebox {
     public class XjbMoviePerson {
 
         public XjbMoviePerson() {
-            Person = new XjbPerson();
-            Movie = new XjbMovie();
         }
 
         #region Properties/Columns

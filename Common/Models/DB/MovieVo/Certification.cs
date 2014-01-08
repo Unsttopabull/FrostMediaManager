@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.ModelConfiguration;
 
 namespace Frost.Common.Models.DB.MovieVo {
 
@@ -10,8 +11,6 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Initializes a new instance of the <see cref="Certification"/> class.</summary>
         public Certification() {
-            Movie = new Movie();
-            Country = new Country();
         }
 
         /// <summary>Initializes a new instance of the <see cref="Certification"/> class.</summary>
@@ -24,7 +23,6 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <param name="country">The coutry this certification applies to.</param>
         /// <param name="rating">The rating value.</param>
         public Certification(Country country, string rating) {
-            Movie = new Movie();
             Country = country;
 
             Rating = rating;
@@ -49,7 +47,6 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the movie this certification applies to.</summary>
         /// <value>The movie this certification applies to.</value>
-        [ForeignKey("MovieId")]
         public virtual Movie Movie { get; set; }
 
         /// <summary>Gets or sets the coutry this certification applies to.</summary>
@@ -99,6 +96,17 @@ namespace Frost.Common.Models.DB.MovieVo {
             return new Certification(country, rating) as T;
         }
 
+        internal class Configuration : EntityTypeConfiguration<Certification> {
+            public Configuration() {
+                ToTable("Certifications");
+
+                HasRequired(c => c.Movie)
+                    .WithMany(m => m.Certifications)
+                    .HasForeignKey(c => c.MovieId);
+
+                HasRequired(c => c.Country);
+            }
+        }
     }
 
 }

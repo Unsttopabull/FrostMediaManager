@@ -115,11 +115,11 @@
   <ItemGroup>
     <Content Include="..\Libraries\MediaInfo\x64\MediaInfo.dll">
       <Link>x64\MediaInfo.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Libraries\MediaInfo\x86\MediaInfo.dll">
       <Link>x86\MediaInfo.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -7,7 +7,6 @@ using System.Text;
 namespace Frost.Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents information about a subtitle stream in a file.</summary>
-    [Table("Subtitles")]
     public class Subtitle : IEquatable<Subtitle> {
 
         public Subtitle() {
@@ -15,8 +14,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         }
 
         public Subtitle(File file = null) {
-            Movie = new Movie();
-            File = file ?? new File();
+            File = file;
             Language = new Language();
         }
 
@@ -104,12 +102,10 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         /// <summary>Gets or sets the file this subtitle is contained in.</summary>
         /// <value>The file this subtitle is contained in.</value>
-        [ForeignKey("FileId")]
         public virtual File File { get; set; }
 
         /// <summary>Gets or sets the movie this subtitle if for.</summary>
         /// <value>The movie this subtitle if for.</value>
-        [ForeignKey("MovieId")]
         public virtual Movie Movie { get; set; }
 
         #endregion
@@ -157,7 +153,18 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         internal class Configuration : EntityTypeConfiguration<Subtitle> {
             public Configuration() {
-                HasOptional(s => s.Language);
+                ToTable("Subtitles");
+                
+                //Movie <--> Subtitles
+                HasRequired(s => s.Movie)
+                    .WithMany(m => m.Subtitles)
+                    .HasForeignKey(fk => fk.MovieId);
+
+                HasRequired(s => s.File)
+                    .WithMany(f => f.Subtitles)
+                    .HasForeignKey(fk => fk.FileId);
+
+                HasOptional(s => s.Language).WithMany();
             }
         }
     }

@@ -19,9 +19,6 @@ namespace Frost.Common.Models.DB.XBMC {
 
         /// <summary>Initializes a new instance of the <see cref="XbmcMovie"/> class.</summary>
         public XbmcMovie() {
-            File = new XbmcFile();
-            Set = new XbmcSet();
-            Path = new XbmcPath();
             Actors = new HashSet<XbmcMovieActor>();
             Writers = new HashSet<XbmcPerson>();
             Directors = new HashSet<XbmcPerson>();

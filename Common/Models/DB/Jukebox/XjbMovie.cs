@@ -9,7 +9,6 @@ namespace Frost.Common.Models.DB.Jukebox {
     public class XjbMovie {
 
         public XjbMovie() {
-            Drive = new XjbDrive();
             Genres = new HashSet<XjbGenre>();
             Cast = new HashSet<XjbMoviePerson>();
         }

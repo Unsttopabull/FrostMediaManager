@@ -1,4 +1,6 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
+using System.Reflection;
 using Frost.Common.Models.DB.MovieVo.Arts;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.Common.Models.DB.MovieVo.People;
@@ -7,6 +9,17 @@ namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents a context used for manipulation of the database.</summary>
     public class MovieVoContainer : DbContext {
+
+        static MovieVoContainer() {
+            if (Environment.Is64BitProcess) {
+                Assembly.LoadFrom("x64/System.Data.SQLite.dll");
+                Assembly.LoadFrom("x64/System.Data.SQLite.Linq.dll");
+            }
+            else {
+                Assembly.LoadFrom("x86/System.Data.SQLite.dll");
+                Assembly.LoadFrom("x86/System.Data.SQLite.Linq.dll");                
+            }            
+        }
 
         /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
         public MovieVoContainer() : base("name=MovieVoContainer") {
@@ -71,6 +84,10 @@ namespace Frost.Common.Models.DB.MovieVo {
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
+            modelBuilder.Configurations.Add(new Audio.Configuration());
+            modelBuilder.Configurations.Add(new Video.Configuration());
+            modelBuilder.Configurations.Add(new Certification.Configuration());
+            modelBuilder.Configurations.Add(new Movie.Configuration());
             modelBuilder.Configurations.Add(new Art.Configuration());
             modelBuilder.Configurations.Add(new Special.Configuration());
             modelBuilder.Configurations.Add(new Person.Configuration());

@@ -615,7 +615,7 @@ namespace Frost.Common.Models.XML.XBMC {
                 Trailer = mx.GetTrailerUrl(),
                 Watched = mx.Watched,
                 ReleaseYear = mx.Year,
-                Art = new HashSet<Art>(mx.GetArt()),
+                Arts = new HashSet<Art>(mx.GetArt()),
                 Actors = mx.Actors.ToHashSet<Actor, XbmcXmlActor>(),
                 Directors = mx.GetDirectors(),
                 Writers = mx.GetWriters(),
@@ -623,12 +623,12 @@ namespace Frost.Common.Models.XML.XBMC {
                 Studios = new HashSet<Studio>(Studio.GetFromNames(mx.Studios)),
                 Countries = new HashSet<Country>(Country.GetFromNames(mx.Countries)),
                 Certifications = new HashSet<Certification>(mx.GetCertifications()),
-                Audio = new HashSet<Audio>(mx.GetAudio()),
+                Audios = new HashSet<Audio>(mx.GetAudio()),
                 Videos = new HashSet<Video>(mx.GetVideo()),
                 Subtitles = new HashSet<Subtitle>(mx.GetSubtitles()),
                 Files = mx.GetFiles()
             };
-            mv.Plot.Add(new Plot(mx.Plot, mx.Outline, mx.Tagline, null));
+            mv.Plots.Add(new Plot(mx.Plot, mx.Outline, mx.Tagline, null));
 
             return mv;
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.ModelConfiguration;
 using System.Globalization;
 using System.Linq;
 using Frost.Common.Models.DB.Jukebox;
@@ -15,8 +16,7 @@ using Frost.Common.Models.XML.XBMC;
 namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents an information about a movie in the library.</summary>
-    [Table("Movies")]
-    public class Movie {
+    public partial class Movie {
 
         /// <summary>Separator between multiple genres, certifications, person names ...</summary>
         private const string SEPARATOR = " / ";
@@ -24,10 +24,10 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Initializes a new instance of the <see cref="Movie"/> class.</summary>
         public Movie() {
             // ReSharper disable DoNotCallOverridableMethodsInConstructor
-            Audio = new HashSet<Audio>();
+            Audios = new HashSet<Audio>();
             Ratings = new HashSet<Rating>();
-            Plot = new HashSet<Plot>();
-            Art = new HashSet<Art>();
+            Plots = new HashSet<Plot>();
+            Arts = new HashSet<Art>();
             Certifications = new HashSet<Certification>();
             Genres = new HashSet<Genre>();
             Videos = new HashSet<Video>();
@@ -158,20 +158,14 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the main plot foreign key.</summary>
         /// <value>The movie main plot foreign key.</value>
-        [ForeignKey("MainPlot")]
         public long? MainPlotID { get; set; }
 
         #endregion
 
         #region Relation tables
 
-        /// <summary>Gets or sets the movie main plot.</summary>
-        /// <value>The main plot of the movie.</value>
-        public virtual Plot MainPlot { get; set; }
-
         /// <summary>Gets or sets the set this movie is a part of.</summary>
         /// <value>The set this movie is a part of.</value>
-        [ForeignKey("SetId")]
         public virtual Set Set { get; set; }
 
         /// <summary>Gets or sets the movie subtitles.</summary>
@@ -196,7 +190,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the information about audio streams of this movie.</summary>
         /// <value>The information about audio streams of this movie</value>
-        public virtual HashSet<Audio> Audio { get; set; }
+        public virtual HashSet<Audio> Audios { get; set; }
 
         /// <summary>Gets or sets the information about this movie's critics and their ratings</summary>
         /// <value>The information about this movie's critics and their ratings</value>
@@ -204,11 +198,11 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets this movie's story and plot with summary and a tagline.</summary>
         /// <value>This movie's story and plot with summary and a tagline</value>
-        public virtual HashSet<Plot> Plot { get; set; }
+        public virtual HashSet<Plot> Plots { get; set; }
 
         /// <summary>Gets or sets the movie promotional images.</summary>
         /// <value>The movie promotional images</value>
-        public virtual HashSet<Art> Art { get; set; }
+        public virtual HashSet<Art> Arts { get; set; }
 
         /// <summary>Gets or sets the information about this movie's certification ratings/restrictions in certain countries.</summary>
         /// <value>The information about this movie's certification ratings/restrictions in certain countries.</value>
@@ -216,12 +210,10 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the name of the credited writer(s).</summary>
         /// <value>The names of the credited script writer(s)</value>
-        [InverseProperty("MoviesAsWriter")]
         public virtual HashSet<Person> Writers { get; set; }
 
         /// <summary>Gets or sets the movie directors.</summary>
         /// <value>People that directed this movie.</value>
-        [InverseProperty("MoviesAsDirector")]
         public virtual HashSet<Person> Directors { get; set; }
 
         /// <summary>Gets or sets the Person to Movie link with payload as in character name the person is protraying.</summary>
@@ -299,7 +291,7 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets the cover image path name.</summary>
         /// <returns>The path to the fist cover image</returns>
         public string GetCoverPath() {
-            Cover cover = Art.OfType<Cover>().FirstOrDefault();
+            Cover cover = Arts.OfType<Cover>().FirstOrDefault();
             return (cover != null)
                 ? cover.Path
                 : null;
@@ -426,8 +418,8 @@ namespace Frost.Common.Models.DB.MovieVo {
                 GenreString = movie.GetGenreNames(),
                 ImdbId = movie.ImdbID,
                 OriginalTitle = movie.OriginalTitle,
-                Outline = movie.MainPlot.Summary,
-                Plot = movie.MainPlot.Full,
+                //Outline = movie.MainPlot.Summary,
+                //Plot = movie.MainPlot.Full,
                 AverageRating = (float) (movie.RatingAverage ?? 0),
                 //TODO: CHECK FOR CORECT FORMAT
                 ReleaseDate = movie.ReleaseDate.ToString(CultureInfo.InvariantCulture),
@@ -436,7 +428,7 @@ namespace Frost.Common.Models.DB.MovieVo {
                     : 0,
                 SortTitle = movie.Title,
                 Studio = movie.GetStudioNamesFormatted(),
-                Tagline = movie.MainPlot.Summary,
+                //Tagline = movie.MainPlot.Summary,
                 Title = movie.Title,
                 Year = (int)(movie.ReleaseYear ?? 0),
                 Actors = movie.GetXjbXmlActors().ToArray(),

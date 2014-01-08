@@ -181,6 +181,7 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <Compile Include="Models\DB\MovieVo\Movie.Configuration.cs" />
     <None Include="Models\XML\XBMC\XSD\xbmcXmlMovie.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -201,37 +202,37 @@
   <ItemGroup>
     <Content Include="..\Libraries\SQLite\NET4.5\x64\System.Data.SQLite.dll">
       <Link>x64\System.Data.SQLite.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Libraries\SQLite\NET4.5\x64\System.Data.SQLite.Linq.dll">
       <Link>x64\System.Data.SQLite.Linq.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Libraries\SQLite\NET4.5\x64\System.Data.SQLite.Linq.pdb">
       <Link>x64\System.Data.SQLite.Linq.pdb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Libraries\SQLite\NET4.5\x64\System.Data.SQLite.pdb">
       <Link>x64\System.Data.SQLite.pdb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Libraries\SQLite\NET4.5\x86\System.Data.SQLite.dll">
       <Link>x86\System.Data.SQLite.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Libraries\SQLite\NET4.5\x86\System.Data.SQLite.Linq.dll">
       <Link>x86\System.Data.SQLite.Linq.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Libraries\SQLite\NET4.5\x86\System.Data.SQLite.Linq.pdb">
       <Link>x86\System.Data.SQLite.Linq.pdb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\Libraries\SQLite\NET4.5\x86\System.Data.SQLite.pdb">
       <Link>x86\System.Data.SQLite.pdb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Models\DB\MovieVo\MovieVo.edmx.sql" />
+    <Content Include="Models\DB\MovieVo\MovieVo.sql" />
     <Content Include="Models\DB\XBMC\extendSettings.sql" />
     <Content Include="Models\DB\XBMC\extendStreamDetails.sql" />
   </ItemGroup>

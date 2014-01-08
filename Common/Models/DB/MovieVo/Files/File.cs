@@ -11,8 +11,6 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         /// <summary>Initializes a new instance of the <see cref="File"/> class.</summary>
         public File() {
-            Movie = new Movie();
-
             AudioDetails = new HashSet<Audio>();
             VideoDetails = new HashSet<Video>();
             Subtitles = new HashSet<Subtitle>();
