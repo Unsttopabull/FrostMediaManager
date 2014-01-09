@@ -45,6 +45,7 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets or sets the database plot Id.</summary>
         /// <value>The database plot Id</value>
         [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         /// <summary>Gets or sets the tagline (short one-liner).</summary>

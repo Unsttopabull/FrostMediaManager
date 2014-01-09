@@ -32,7 +32,7 @@ namespace Frost.Common.Models.DB.MovieVo {
             Genres = new HashSet<Genre>();
             Videos = new HashSet<Video>();
             Subtitles = new HashSet<Subtitle>();
-            Files = new HashSet<File>();
+            //Files = new HashSet<File>();
             Countries = new HashSet<Country>();
             Studios = new HashSet<Studio>();
             Specials = new HashSet<Special>();
@@ -41,7 +41,7 @@ namespace Frost.Common.Models.DB.MovieVo {
             Writers = new HashSet<Person>();
             ActorsLink = new HashSet<MovieActor>();
 
-            Actors = new HashSet<Actor>();
+            //Actors = new HashSet<Actor>();
             // ReSharper restore DoNotCallOverridableMethodsInConstructor
         }
 
@@ -50,11 +50,13 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets or sets the database movie Id.</summary>
         /// <value>The database movie Id</value>
         [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         /// <summary>Gets or sets the title of the movie in the local language.</summary>
         /// <value>The title of the movie in the local language.</value>
         /// <example>\eg{ ''<c>Downfall</c>''}</example>
+        [Required]
         public string Title { get; set; }
 
         /// <summary>Gets or sets the title in the original language.</summary>
@@ -81,7 +83,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the date the movie was released in the cinemas.</summary>
         /// <value>The date the movie was released in the cinemas.</value>
-        public DateTime ReleaseDate { get; set; }
+        public DateTime? ReleaseDate { get; set; }
 
         /// <summary>Gets or sets the movie edithion.</summary>
         /// <value>The movie edithion.</value>
@@ -94,15 +96,15 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the date and time the movie was last played.</summary>
         /// <value>The date and time the movie was last played.</value>
-        public DateTime LastPlayed { get; set; }
+        public DateTime? LastPlayed { get; set; }
 
         /// <summary>Gets or sets the date and time the movie was first publicly shown.</summary>
         /// <value>The date and time the movie was first publicly shown.</value>
-        public DateTime Premiered { get; set; }
+        public DateTime? Premiered { get; set; }
 
         /// <summary>Gets or sets the date and time the movie was first shown on TV.</summary>
         /// <value>The date and time the movie was first shown on TV.</value>
-        public DateTime Aired { get; set; }
+        public DateTime? Aired { get; set; }
 
         /// <summary>Gets or sets the URL to the movie trailer.</summary>
         /// <value>The URL to the movie trailer.</value>
@@ -156,10 +158,6 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <value>The Set foreign key.</value>
         public long? SetId { get; set; }
 
-        /// <summary>Gets or sets the main plot foreign key.</summary>
-        /// <value>The movie main plot foreign key.</value>
-        public long? MainPlotID { get; set; }
-
         #endregion
 
         #region Relation tables
@@ -184,9 +182,9 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <value>The information about video streams of this movie</value>
         public virtual HashSet<Video> Videos { get; set; }
 
-        /// <summary>Gets or sets the information about files containing this movie.</summary>
-        /// <value>The information about files containing this movie.</value>
-        public virtual HashSet<File> Files { get; set; }
+        ///// <summary>Gets or sets the information about files containing this movie.</summary>
+        ///// <value>The information about files containing this movie.</value>
+        //public virtual HashSet<File> Files { get; set; }
 
         /// <summary>Gets or sets the information about audio streams of this movie.</summary>
         /// <value>The information about audio streams of this movie</value>
@@ -228,13 +226,13 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <value>The movie genres.</value>
         public virtual HashSet<Genre> Genres { get; set; }
 
-        /// <summary>Gets or sets the actors that starred in the movie.</summary>
-        /// <value>The actors that preformed in this movie.</value>
-        [NotMapped]
-        public HashSet<Actor> Actors {
-            get { return new HashSet<Actor>(ActorsLink.Select(ma => (Actor) ma)); }
-            set { ActorsLink.UnionWith(value.Select(a => new MovieActor(this, a))); }
-        }
+        ///// <summary>Gets or sets the actors that starred in the movie.</summary>
+        ///// <value>The actors that preformed in this movie.</value>
+        //[NotMapped]
+        //public HashSet<Actor> Actors {
+        //    get { return new HashSet<Actor>(ActorsLink.Select(ma => (Actor) ma)); }
+        //    set { ActorsLink.UnionWith(value.Select(a => new MovieActor(this, a))); }
+        //}
 
         #endregion
 
@@ -259,10 +257,11 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets the file size summed from all the movie files.</summary>
         /// <returns>The movie file size in bytes summed from all its files</returns>
         public long GetFileSizeSum() {
-            long? sum = Files.Where(f => f.Size != null).Sum(f => f.Size);
-            return sum.HasValue
-                ? sum.Value
-                : 0;
+            long sumA = Audios.Where(f => f.File != null && f.File.Size.HasValue).Sum(f => f.File.Size.Value);
+            long sumV = Videos.Where(f => f.File != null && f.File.Size.HasValue).Sum(f => f.File.Size.Value);
+            long sumS = Subtitles.Where(f => f.File != null && f.File.Size.HasValue).Sum(f => f.File.Size.Value);
+
+            return sumA + sumV + sumS;
         }
 
         /// <summary>Gets the file size in pretty printed format formatted.</summary>
@@ -313,7 +312,7 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets the movie actors as an <see cref="IEnumerable{T}"/> of <see cref="Common.Models.XML.Jukebox.XjbXmlActor">XjbXmlActor</see> instances.</summary>
         /// <returns>An <see cref="IEnumerable{T}"/> of this movie actors as <see cref="Common.Models.XML.Jukebox.XjbXmlActor">XjbXmlActor</see> instances</returns>
         public IEnumerable<XjbXmlActor> GetXjbXmlActors() {
-            return Actors.Select(a => (XjbXmlActor) a);
+            return ActorsLink.Select(a => (XjbXmlActor) (Actor)a);
         }
 
         /// <summary>Gets the runtime sum of all the video parts in this movie in miliseconds.</summary>
@@ -422,7 +421,7 @@ namespace Frost.Common.Models.DB.MovieVo {
                 //Plot = movie.MainPlot.Full,
                 AverageRating = (float) (movie.RatingAverage ?? 0),
                 //TODO: CHECK FOR CORECT FORMAT
-                ReleaseDate = movie.ReleaseDate.ToString(CultureInfo.InvariantCulture),
+                ReleaseDate = movie.ReleaseDate.HasValue ? movie.ReleaseDate.Value.ToString(CultureInfo.InvariantCulture) : null,
                 Runtime = movie.Runtime.HasValue
                     ? (movie.Runtime / 60)
                     : 0,

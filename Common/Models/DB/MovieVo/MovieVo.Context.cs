@@ -77,6 +77,10 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <value>The information about movie collections and sets in the library.</value>
         public DbSet<Set> Sets { get; set; }
 
+        /// <summary>Gets or sets the scene release tags of a movie.</summary>
+        /// <value>The information about scene release tags of a movie.</value>
+        public DbSet<Special> Specials { get; set; }
+
         /// <summary>Gets or sets the information about people that participated in the movies in the library.</summary>
         /// <value>The information about people that participated in the movies in the library</value>
         public DbSet<Person> People { get; set; }
@@ -84,6 +88,8 @@ namespace Frost.Common.Models.DB.MovieVo {
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
+            modelBuilder.Configurations.Add(new File.Configuration());
+            modelBuilder.Configurations.Add(new Language.Configuration());
             modelBuilder.Configurations.Add(new Audio.Configuration());
             modelBuilder.Configurations.Add(new Video.Configuration());
             modelBuilder.Configurations.Add(new Certification.Configuration());

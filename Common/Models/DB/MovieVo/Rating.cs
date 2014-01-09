@@ -25,6 +25,7 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets or sets the database rating Id.</summary>
         /// <value>The database rating Id</value>
         [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         /// <summary>Gets or sets the name of the critic.</summary>

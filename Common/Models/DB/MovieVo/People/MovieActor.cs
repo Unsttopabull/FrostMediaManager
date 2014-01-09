@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.ModelConfiguration;
 
 namespace Frost.Common.Models.DB.MovieVo.People {
 
@@ -33,6 +34,7 @@ namespace Frost.Common.Models.DB.MovieVo.People {
         /// <summary>Gets or sets the database Id of this link entry.</summary>
         /// <value>The database Id of this link entry</value>
         [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         /// <summary>Gets or sets the character the person is portraying in this movie.</summary>
@@ -49,12 +51,10 @@ namespace Frost.Common.Models.DB.MovieVo.People {
 
         /// <summary>Gets or sets the movie where the linked person is portraying that character.</summary>
         /// <value>The movie where the linked person is portraying that character.</value>
-        [ForeignKey("MovieId")]
         public virtual Movie Movie { get; set; }
 
         /// <summary>Gets or sets the person that is portraying that character in the linked movie</summary>
         /// <value>The person that is portraying that character in the linked movie</value>
-        [ForeignKey("PersonId")]
         public virtual Person Person { get; set; }
 
         /// <summary>Converts an instance of <see cref="MovieActor"/> into <see cref="Actor"/></summary>
@@ -67,6 +67,21 @@ namespace Frost.Common.Models.DB.MovieVo.People {
             return new Actor(ma);
         }
 
+        internal class Configuration : EntityTypeConfiguration<MovieActor> {
+            public Configuration() {
+                ToTable("MovieActor");
+
+                HasRequired(ma => ma.Movie)
+                    .WithMany(m => m.ActorsLink)
+                    .HasForeignKey(fk => fk.MovieId)
+                    .WillCascadeOnDelete();
+
+                HasRequired(ma => ma.Person)
+                    .WithMany(p => p.MoviesLink)
+                    .HasForeignKey(fk => fk.PersonId)
+                    .WillCascadeOnDelete();
+            }
+        }
     }
 
 }

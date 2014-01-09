@@ -32,6 +32,7 @@ namespace Frost.Common.Models.DB.MovieVo.Arts {
         /// <summary>Gets or sets the database Art Id.</summary>
         /// <value>The database art Id</value>
         [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         /// <summary>Gets or sets the path to this art (can be local or network or an URI).</summary>
@@ -55,26 +56,58 @@ namespace Frost.Common.Models.DB.MovieVo.Arts {
         [ForeignKey("MovieId")]
         public virtual Movie Movie { get; set; }
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <summary>
+        /// Indicates whether the current object is equal to another object of the same type.
+        /// </summary>
+        /// <returns>
+        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+        /// </returns>
         /// <param name="other">An object to compare with this object.</param>
         public bool Equals(Art other) {
-            if (other == null) {
+            if (ReferenceEquals(null, other)) {
                 return false;
             }
-
             if (ReferenceEquals(this, other)) {
                 return true;
             }
+            return Id == other.Id && string.Equals(Path, other.Path) && Type == other.Type && MovieId == other.MovieId && string.Equals(Preview, other.Preview);
+        }
 
-            if (Id != 0 && other.Id != 0) {
-                return Id == other.Id;
+        /// <summary>
+        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <returns>
+        /// true if the specified object  is equal to the current object; otherwise, false.
+        /// </returns>
+        /// <param name="obj">The object to compare with the current object. </param>
+        public override bool Equals(object obj) {
+            if (ReferenceEquals(null, obj)) {
+                return false;
             }
+            if (ReferenceEquals(this, obj)) {
+                return true;
+            }
+            if (obj.GetType() != this.GetType()) {
+                return false;
+            }
+            return Equals((Art) obj);
+        }
 
-            return Path == other.Path &&
-                   Preview == other.Preview &&
-                   Type == other.Type &&
-                   MovieId == other.MovieId;
+        /// <summary>
+        /// Serves as a hash function for a particular type. 
+        /// </summary>
+        /// <returns>
+        /// A hash code for the current <see cref="T:System.Object"/>.
+        /// </returns>
+        public override int GetHashCode() {
+            unchecked {
+                int hashCode = Id.GetHashCode();
+                hashCode = (hashCode * 397) ^ (Path != null ? Path.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ Type.GetHashCode();
+                hashCode = (hashCode * 397) ^ MovieId.GetHashCode();
+                hashCode = (hashCode * 397) ^ (Preview != null ? Preview.GetHashCode() : 0);
+                return hashCode;
+            }
         }
 
         internal class Configuration : EntityTypeConfiguration<Art> {
@@ -87,7 +120,8 @@ namespace Frost.Common.Models.DB.MovieVo.Arts {
 
                 HasRequired(a => a.Movie)
                     .WithMany(m => m.Arts)
-                    .HasForeignKey(a => a.MovieId);
+                    .HasForeignKey(a => a.MovieId)
+                    .WillCascadeOnDelete();
             }
 
         }

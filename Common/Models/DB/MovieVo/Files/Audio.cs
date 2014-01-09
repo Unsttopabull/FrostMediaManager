@@ -50,6 +50,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <summary>Gets or sets the database audio Id.</summary>
         /// <value>The database audio Id</value>
         [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         /// <summary>Gets or sets the source of the audio</summary>
@@ -109,6 +110,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         #endregion
 
         #region Foreign Keys
+
         /// <summary>Gets or sets the language foreign key.</summary>
         /// <value>The language foreign key.</value>
         public long? LanguageId { get; set; }
@@ -146,31 +148,76 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
         /// <param name="other">An object to compare with this object.</param>
         public bool Equals(Audio other) {
-            if (other == null) {
+            if (ReferenceEquals(null, other)) {
                 return false;
             }
-
             if (ReferenceEquals(this, other)) {
                 return true;
             }
-
-            if (Id != 0 && other.Id != 0) {
-                return Id == other.Id;
-            }
-
-            return Source == other.Source &&
-                   Type == other.Type &&
-                   ChannelSetup == other.ChannelSetup &&
+            return Id == other.Id &&
+                   string.Equals(Source, other.Source) &&
+                   string.Equals(Type, other.Type) &&
+                   string.Equals(ChannelSetup, other.ChannelSetup) &&
                    NumberOfChannels == other.NumberOfChannels &&
-                   ChannelPositions == other.ChannelPositions &&
-                   Codec == other.Codec &&
-                   BitRate == other.BitRate &&
+                   string.Equals(ChannelPositions, other.ChannelPositions) &&
+                   string.Equals(Codec, other.Codec) &&
+                   BitRate.Equals(other.BitRate) &&
                    BitRateMode == other.BitRateMode &&
                    SamplingRate == other.SamplingRate &&
                    BitDepth == other.BitDepth &&
                    CompressionMode == other.CompressionMode &&
                    Duration == other.Duration &&
-                   Language == other.Language;
+                   LanguageId == other.LanguageId &&
+                   MovieId == other.MovieId &&
+                   FileId == other.FileId;
+        }
+
+        /// <summary>
+        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <returns>
+        /// true if the specified object  is equal to the current object; otherwise, false.
+        /// </returns>
+        /// <param name="obj">The object to compare with the current object. </param>
+        public override bool Equals(object obj) {
+            if (ReferenceEquals(null, obj)) {
+                return false;
+            }
+            if (ReferenceEquals(this, obj)) {
+                return true;
+            }
+            if (obj.GetType() != this.GetType()) {
+                return false;
+            }
+            return Equals((Audio) obj);
+        }
+
+        /// <summary>
+        /// Serves as a hash function for a particular type. 
+        /// </summary>
+        /// <returns>
+        /// A hash code for the current <see cref="T:System.Object"/>.
+        /// </returns>
+        public override int GetHashCode() {
+            unchecked {
+                int hashCode = Id.GetHashCode();
+                hashCode = (hashCode * 397) ^ (Source != null ? Source.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Type != null ? Type.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (ChannelSetup != null ? ChannelSetup.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ NumberOfChannels.GetHashCode();
+                hashCode = (hashCode * 397) ^ (ChannelPositions != null ? ChannelPositions.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Codec != null ? Codec.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ BitRate.GetHashCode();
+                hashCode = (hashCode * 397) ^ BitRateMode.GetHashCode();
+                hashCode = (hashCode * 397) ^ SamplingRate.GetHashCode();
+                hashCode = (hashCode * 397) ^ BitDepth.GetHashCode();
+                hashCode = (hashCode * 397) ^ CompressionMode.GetHashCode();
+                hashCode = (hashCode * 397) ^ Duration.GetHashCode();
+                hashCode = (hashCode * 397) ^ LanguageId.GetHashCode();
+                hashCode = (hashCode * 397) ^ MovieId.GetHashCode();
+                hashCode = (hashCode * 397) ^ FileId.GetHashCode();
+                return hashCode;
+            }
         }
 
         /// <summary>Converts and instance of <see cref="Audio"/> to an instance of <see cref="Common.Models.XML.XBMC.XbmcXmlAudioInfo">XbmcXmlAudioInfo</see></summary>
@@ -180,18 +227,19 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
             return new XbmcXmlAudioInfo(audio.Codec, audio.NumberOfChannels ?? 0, audio.Language.ISO639.Alpha3);
         }
 
-
         internal class Configuration : EntityTypeConfiguration<Audio> {
             public Configuration() {
                 ToTable("Audios");
 
                 HasRequired(a => a.Movie)
                     .WithMany(m => m.Audios)
-                    .HasForeignKey(a => a.MovieId);
+                    .HasForeignKey(a => a.MovieId)
+                    .WillCascadeOnDelete();
 
                 HasRequired(a => a.File)
                     .WithMany(f => f.AudioDetails)
-                    .HasForeignKey(a => a.MovieId);
+                    .HasForeignKey(a => a.MovieId)
+                    .WillCascadeOnDelete();
 
                 HasOptional(a => a.Language);
             }

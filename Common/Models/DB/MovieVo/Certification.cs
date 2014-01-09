@@ -31,6 +31,7 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets or sets the database certification Id.</summary>
         /// <value>The database certification Id</value>
         [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         /// <summary>Gets or sets the rating in the specified county.</summary>
@@ -102,7 +103,8 @@ namespace Frost.Common.Models.DB.MovieVo {
 
                 HasRequired(c => c.Movie)
                     .WithMany(m => m.Certifications)
-                    .HasForeignKey(c => c.MovieId);
+                    .HasForeignKey(c => c.MovieId)
+                    .WillCascadeOnDelete();
 
                 HasRequired(c => c.Country);
             }

@@ -25,6 +25,7 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets or sets the database Genre Id.</summary>
         /// <value>The database genre Id</value>
         [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         /// <summary>Gets or sets the genre name.</summary>

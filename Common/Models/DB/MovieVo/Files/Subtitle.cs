@@ -51,6 +51,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <summary>Gets or sets the Id of this subtitle in the database.</summary>
         /// <value>The Id of this subtitle in the database</value>
         [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         public long? PodnapisiId { get; set; }
@@ -114,25 +115,57 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
         /// <param name="other">An object to compare with this object.</param>
         public bool Equals(Subtitle other) {
-            if (other == null) {
+            if (ReferenceEquals(null, other)) {
                 return false;
             }
-
             if (ReferenceEquals(this, other)) {
                 return true;
             }
-
-            if (Id != 0 && other.Id != 0) {
-                return Id == other.Id;
-            }
-
-            return Language == other.Language &&
-                   EmbededInVideo == other.EmbededInVideo &&
-                   ForHearingImpaired == other.ForHearingImpaired &&
-                   MovieId == other.MovieId &&
-                   FileId == other.FileId;
+            return Id == other.Id && PodnapisiId == other.PodnapisiId && OpenSubtitlesId == other.OpenSubtitlesId && string.Equals(MD5, other.MD5) && string.Equals(Format, other.Format) && string.Equals(Encoding, other.Encoding) && ForHearingImpaired.Equals(other.ForHearingImpaired) && EmbededInVideo.Equals(other.EmbededInVideo) && LanguageId == other.LanguageId && MovieId == other.MovieId && FileId == other.FileId;
         }
 
+        /// <summary>
+        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <returns>
+        /// true if the specified object  is equal to the current object; otherwise, false.
+        /// </returns>
+        /// <param name="obj">The object to compare with the current object. </param>
+        public override bool Equals(object obj) {
+            if (ReferenceEquals(null, obj)) {
+                return false;
+            }
+            if (ReferenceEquals(this, obj)) {
+                return true;
+            }
+            if (obj.GetType() != this.GetType()) {
+                return false;
+            }
+            return Equals((Subtitle) obj);
+        }
+
+        /// <summary>
+        /// Serves as a hash function for a particular type. 
+        /// </summary>
+        /// <returns>
+        /// A hash code for the current <see cref="T:System.Object"/>.
+        /// </returns>
+        public override int GetHashCode() {
+            unchecked {
+                int hashCode = Id.GetHashCode();
+                hashCode = (hashCode * 397) ^ PodnapisiId.GetHashCode();
+                hashCode = (hashCode * 397) ^ OpenSubtitlesId.GetHashCode();
+                hashCode = (hashCode * 397) ^ (MD5 != null ? MD5.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Format != null ? Format.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Encoding != null ? Encoding.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ ForHearingImpaired.GetHashCode();
+                hashCode = (hashCode * 397) ^ EmbededInVideo.GetHashCode();
+                hashCode = (hashCode * 397) ^ LanguageId.GetHashCode();
+                hashCode = (hashCode * 397) ^ MovieId.GetHashCode();
+                hashCode = (hashCode * 397) ^ FileId.GetHashCode();
+                return hashCode;
+            }
+        }
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString() {
@@ -158,11 +191,13 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
                 //Movie <--> Subtitles
                 HasRequired(s => s.Movie)
                     .WithMany(m => m.Subtitles)
-                    .HasForeignKey(fk => fk.MovieId);
+                    .HasForeignKey(fk => fk.MovieId)
+                    .WillCascadeOnDelete();
 
                 HasRequired(s => s.File)
                     .WithMany(f => f.Subtitles)
-                    .HasForeignKey(fk => fk.FileId);
+                    .HasForeignKey(fk => fk.FileId)
+                    .WillCascadeOnDelete();
 
                 HasOptional(s => s.Language).WithMany();
             }

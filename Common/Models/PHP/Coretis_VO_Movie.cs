@@ -79,7 +79,7 @@ namespace Frost.Common.Models.PHP {
             foreach (Coretis_VO_Person cPerson in personArr) {
                 if (cPerson.job.OrdinalEquals("actor")) {
                     Actor actor = new Actor(cPerson.name, null, cPerson.character);
-                    mov.Actors.Add(actor);
+                    mov.ActorsLink.Add(new MovieActor(mov, actor));
                     continue;
                 }
 
@@ -158,7 +158,7 @@ namespace Frost.Common.Models.PHP {
             m.GetInfo(mov);
             m.AddAudioVideoInfo(mov);
 
-            mov.Files.Add(new File(m.fileName, m.fileExtension, m.filePathOnDrive, (long) m.fileSize));
+            //mov.Files.Add(new File(m.fileName, m.fileExtension, m.filePathOnDrive, (long) m.fileSize));
 
             m.AddArt(mov);
             return mov;

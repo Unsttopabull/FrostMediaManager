@@ -616,7 +616,6 @@ namespace Frost.Common.Models.XML.XBMC {
                 Watched = mx.Watched,
                 ReleaseYear = mx.Year,
                 Arts = new HashSet<Art>(mx.GetArt()),
-                Actors = mx.Actors.ToHashSet<Actor, XbmcXmlActor>(),
                 Directors = mx.GetDirectors(),
                 Writers = mx.GetWriters(),
                 Genres = new HashSet<Genre>(Genre.GetFromNames(mx.Genres)),
@@ -626,8 +625,9 @@ namespace Frost.Common.Models.XML.XBMC {
                 Audios = new HashSet<Audio>(mx.GetAudio()),
                 Videos = new HashSet<Video>(mx.GetVideo()),
                 Subtitles = new HashSet<Subtitle>(mx.GetSubtitles()),
-                Files = mx.GetFiles()
+                //Files = mx.GetFiles()
             };
+            mv.ActorsLink.UnionWith(mx.Actors.Select(a => new MovieActor(mv, new Person(a.Name, a.Thumb), a.Role)));
             mv.Plots.Add(new Plot(mx.Plot, mx.Outline, mx.Tagline, null));
 
             return mv;

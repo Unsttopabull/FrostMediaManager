@@ -12,25 +12,23 @@ namespace Frost.Common.Models.DB.MovieVo {
                     .WithMany(s => s.Movies)
                     .HasForeignKey(movie => movie.SetId);
 
-				//Movie <--> Files
-                HasMany(m => m.Files)
-                    .WithRequired(f => f.Movie)
-                    .HasForeignKey(f => f.MovieId);
-
 				//Movie <--> Ratings
                 HasMany(m => m.Ratings)
                     .WithRequired(r => r.Movie)
-                    .HasForeignKey(r => r.MovieId);
+                    .HasForeignKey(r => r.MovieId)
+                    .WillCascadeOnDelete();
 
                 //Movie <--> Plots
                 HasMany(m => m.Plots)
                     .WithRequired(p => p.Movie)
-                    .HasForeignKey(p => p.MovieId);
+                    .HasForeignKey(p => p.MovieId)
+                    .WillCascadeOnDelete();
 
 				//Movie <--> ActorsLink
                 HasMany(m => m.ActorsLink)
                     .WithRequired(al => al.Movie)
-                    .HasForeignKey(fk => fk.MovieId);
+                    .HasForeignKey(fk => fk.MovieId)
+                    .WillCascadeOnDelete();
             }
         }
     }

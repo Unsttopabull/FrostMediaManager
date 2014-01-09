@@ -67,6 +67,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <summary>Gets or sets the database video Id.</summary>
         /// <value>The database video Id</value>
         [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         public string MovieHash { get; set; }
@@ -174,8 +175,6 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         /// <summary>Gets or sets the movie this video is from.</summary>
         /// <value>The movie this video is from.</value>
-        [Required]
-        [ForeignKey("MovieId")]
         public virtual Movie Movie { get; set; }
 
         #endregion
@@ -220,11 +219,13 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
                 HasRequired(v => v.Movie)
                     .WithMany(m => m.Videos)
-                    .HasForeignKey(v => v.MovieId);
+                    .HasForeignKey(v => v.MovieId)
+                    .WillCascadeOnDelete();
 
                 HasRequired(v => v.File)
                     .WithMany(f => f.VideoDetails)
-                    .HasForeignKey(v => v.FileId);
+                    .HasForeignKey(v => v.FileId)
+                    .WillCascadeOnDelete();
 
                 HasOptional(v => v.Language);
             }

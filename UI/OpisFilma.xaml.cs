@@ -78,13 +78,13 @@ namespace Frost.UI {
                 return;
             }
 
-            var movieFiles = _xjb.Movies.Where(m => m.Id == mv.Id).Select(m => m.Files).FirstOrDefault();
-            if (movieFiles != null) {
-                File file = movieFiles.FirstOrDefault();
-                if (file != null) {
-                    TryLoadCover(file.FolderPath, Path.GetFileNameWithoutExtension(file.Name));
-                }
-            }
+            //var movieFiles = _xjb.Movies.Where(m => m.Id == mv.Id).Select(m => m.Files).FirstOrDefault();
+            //if (movieFiles != null) {
+            //    File file = movieFiles.FirstOrDefault();
+            //    if (file != null) {
+            //        TryLoadCover(file.FolderPath, Path.GetFileNameWithoutExtension(file.Name));
+            //    }
+            //}
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
@@ -21,6 +22,8 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the database Specials Id.</summary>
         /// <value>The database Special Id</value>
+        [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         ///<summary>Gets or sets special addithions or types</summary>

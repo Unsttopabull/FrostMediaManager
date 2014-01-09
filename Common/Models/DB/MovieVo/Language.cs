@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.ModelConfiguration;
 using System.Text;
 using Frost.Common.Models.DB.MovieVo.ISO;
 using Frost.Common.Util.ISO;
@@ -46,6 +47,7 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets or sets the Id of this language in the database.</summary>
         /// <value>The Id of this language in the database</value>
         [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         /// <summary>Gets or sets the name of this language.</summary>
@@ -60,6 +62,8 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets or sets the foreign key to the language's country.</summary>
         /// <value>The foreign key to the language's country</value>
         public long? CountryId { get; set; }
+
+        public virtual Country Country { get; set; }
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
@@ -77,7 +81,24 @@ namespace Frost.Common.Models.DB.MovieVo {
                 return Id == other.Id;
             }
 
-            return Name == other.Name;
+            return string.Compare(Name, other.Name, StringComparison.OrdinalIgnoreCase) == 0;
+        }
+
+        /// <summary>Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.</summary>
+        /// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
+        /// <param name="obj">The object to compare with the current object. </param>
+        public override bool Equals(object obj) {
+            Language lang = obj as Language;
+
+            return lang != null && Equals(lang);
+        }
+
+        /// <summary>Serves as a hash function for a particular type. </summary>
+        /// <returns>A hash code for the current <see cref="T:System.Object"/>.</returns>
+        public override int GetHashCode() {
+            return !string.IsNullOrEmpty(Name) 
+                ? Name.GetHashCode() 
+                : 0;
         }
 
         /// <summary>Get an instance of <see cref="Language"/> from an ISO 639 2 or 3 letter code.</summary>
@@ -111,6 +132,16 @@ namespace Frost.Common.Models.DB.MovieVo {
                 sb.Append(")");
             }
             return sb.ToString();
+        }
+
+        internal class Configuration : EntityTypeConfiguration<Language> {
+            public Configuration() {
+                ToTable("Languages");
+
+                HasOptional(l => l.Country)
+                    .WithMany()
+                    .HasForeignKey(l => l.CountryId);
+            }
         }
     }
 

@@ -45,6 +45,7 @@ namespace Frost.Common.Models.DB.MovieVo.People {
         /// <summary>Gets or sets the database person Id.</summary>
         /// <value>The database person Id</value>
         [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         /// <summary>Gets or sets the full name of the person.</summary>
@@ -146,6 +147,11 @@ namespace Frost.Common.Models.DB.MovieVo.People {
                         m.MapLeftKey("WriterId");
                         m.MapRightKey("MovieId");
                     });
+
+                HasMany(p => p.MoviesLink)
+                    .WithRequired(ml => ml.Person)
+                    .HasForeignKey(fk => fk.PersonId)
+                    .WillCascadeOnDelete();
             }
 
         }

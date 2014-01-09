@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
-using System.Management.Instrumentation;
 using System.Threading.Tasks;
 using Frost.CinemaInfoParsers.Kolosej;
 using Frost.CinemaInfoParsers.PlanetTus;
 using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.Files;
+using Frost.Common.Properties;
 using Frost.DetectFeatures;
 using System.Diagnostics;
 using Frost.PodnapisiNET;
 using Frost.PodnapisiNET.Models;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using CompressionMode = Frost.Common.CompressionMode;
 using File = System.IO.File;
 using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
@@ -82,12 +84,6 @@ namespace Frost.Tester {
                 @"E:\Torrenti\FILMI\The holiday (2006) - Počitnice\The holiday.iso",
                 @"E:\Torrenti\FILMI\The Horsemen [2009] - Jezdeci\The Horsemen[2009]DvDrip[Eng]-FXG.avi",
                 @"E:\Torrenti\FILMI\The human stain (2003) - Cloveški madez\The Human Stain 2003 SLOSUB DVDRip-DeeJayTaurus.avi",
-                @"E:\Torrenti\FILMI\The Hunger Games (2012) - Igre lakote\VIDEO_TS\VTS_01_0.VOB",
-                @"E:\Torrenti\FILMI\The Hunger Games (2012) - Igre lakote\VIDEO_TS\VTS_01_1.VOB",
-                @"E:\Torrenti\FILMI\The Hunger Games (2012) - Igre lakote\VIDEO_TS\VTS_01_2.VOB",
-                @"E:\Torrenti\FILMI\The Hunger Games (2012) - Igre lakote\VIDEO_TS\VTS_01_3.VOB",
-                @"E:\Torrenti\FILMI\The Hunger Games (2012) - Igre lakote\VIDEO_TS\VTS_01_4.VOB",
-                @"E:\Torrenti\FILMI\The Hunger Games (2012) - Igre lakote\VIDEO_TS\VTS_01_5.VOB",
                 @"E:\Torrenti\FILMI\The Hurt Locker (2008) - Bombna misija\The.Hurt.Locker.2008.SLOSubs.DVDRip.XviD-DrSi.avi",
                 @"E:\Torrenti\FILMI\The Interpreter (2005) - Prevajalka\The.Interpreter.(V.O).[DvDRip].[WwW.LiMiTeDiVx.CoM].avi",
                 @"E:\Torrenti\FILMI\The Iron Lady (2011) - Zelezna Lady\The.Iron.Lady.2011.DVDR.PAL.SLOSUBS-DiSHON.iso",
@@ -137,12 +133,6 @@ namespace Frost.Tester {
                 @"E:\Torrenti\FILMI\True Grit (2010) - Pravi pogum\True Grit (2010) DVDRip XviD-MAXSPEED www.torentz.3xforum.ro.avi",
                 @"E:\Torrenti\FILMI\Un Prophete (2009) - Prerok\Un.Prophete.2009.DVDRip.XviD.AC3.5.1.HORiZON-ArtSubs.avi",
                 @"E:\Torrenti\FILMI\United 93 (2006) - United 93\United.93[2006]DvDrip[Eng]-aXXo.avi",
-                @"E:\Torrenti\FILMI\Unknown.2011.RETAiL.MULTiSUBS.PAL.DVD9-DrSi\VIDEO_TS\VTS_01_1.VOB",
-                @"E:\Torrenti\FILMI\Unknown.2011.RETAiL.MULTiSUBS.PAL.DVD9-DrSi\VIDEO_TS\VTS_01_2.VOB",
-                @"E:\Torrenti\FILMI\Unknown.2011.RETAiL.MULTiSUBS.PAL.DVD9-DrSi\VIDEO_TS\VTS_01_3.VOB",
-                @"E:\Torrenti\FILMI\Unknown.2011.RETAiL.MULTiSUBS.PAL.DVD9-DrSi\VIDEO_TS\VTS_01_4.VOB",
-                @"E:\Torrenti\FILMI\Unknown.2011.RETAiL.MULTiSUBS.PAL.DVD9-DrSi\VIDEO_TS\VTS_01_5.VOB",
-                @"E:\Torrenti\FILMI\Unknown.2011.RETAiL.MULTiSUBS.PAL.DVD9-DrSi\VIDEO_TS\VTS_01_6.VOB",
                 @"E:\Torrenti\FILMI\Unthinkable (2010) - Nepojmljivo\Unthinkable.2010.EXTENDED.SLOSubs.DVDRip.XviD-DrSi.avi",
                 @"E:\Torrenti\FILMI\Up In The Air (2009) - V zraku\Up.In.The.Air.2009.SLOSubs.DVDSCR.RERIP.XviD-CAMELOT.cd1.avi",
                 @"E:\Torrenti\FILMI\Up In The Air (2009) - V zraku\Up.In.The.Air.2009.SLOSubs.DVDSCR.RERIP.XviD-CAMELOT.cd2.avi",
@@ -197,17 +187,6 @@ namespace Frost.Tester {
                 @"F:\Torrenti\FILMI\Amores Perros (2000) - Pasja ljubezen\Amores.Perros.2000.SLOSubs.DVDRip.XviD-DrSi.cd1.avi",
                 @"F:\Torrenti\FILMI\Amores Perros (2000) - Pasja ljubezen\Amores.Perros.2000.SLOSubs.DVDRip.XviD-DrSi.cd2.avi",
                 @"F:\Torrenti\FILMI\Anchorman The legend of Ron Burgundy [2004] - Anchorman\Anchorman The legend of Ron Burgundy[2004].avi",
-                @"F:\Torrenti\FILMI\Anna.Karenina (2012)\VIDEO_TS\VTS_05_1.VOB",
-                @"F:\Torrenti\FILMI\Anna.Karenina (2012)\VIDEO_TS\VTS_07_1.VOB",
-                @"F:\Torrenti\FILMI\Anna.Karenina (2012)\VIDEO_TS\VTS_08_0.VOB",
-                @"F:\Torrenti\FILMI\Anna.Karenina (2012)\VIDEO_TS\VTS_08_1.VOB",
-                @"F:\Torrenti\FILMI\Anna.Karenina (2012)\VIDEO_TS\VTS_08_2.VOB",
-                @"F:\Torrenti\FILMI\Anna.Karenina (2012)\VIDEO_TS\VTS_08_3.VOB",
-                @"F:\Torrenti\FILMI\Anna.Karenina (2012)\VIDEO_TS\VTS_08_4.VOB",
-                @"F:\Torrenti\FILMI\Anna.Karenina (2012)\VIDEO_TS\VTS_08_5.VOB",
-                @"F:\Torrenti\FILMI\Anna.Karenina (2012)\VIDEO_TS\VTS_08_6.VOB",
-                @"F:\Torrenti\FILMI\Anna.Karenina (2012)\VIDEO_TS\VTS_09_1.VOB",
-                @"F:\Torrenti\FILMI\Anna.Karenina (2012)\VIDEO_TS\VTS_10_1.VOB",
                 @"F:\Torrenti\FILMI\Another Year (2010) - Se eno leto\Another Year[2010]DvDrip[Eng]-FXG.avi",
                 @"F:\Torrenti\FILMI\Argo (2012) - Argo\Argo.2012.PAL.MULTiSUBS.DVDR-DiSHON.iso",
                 @"F:\Torrenti\FILMI\Atonement (2007) - Pokora\Atonement.2007.cd1.DVDRip.XviD-bRiP.avi",
@@ -243,11 +222,6 @@ namespace Frost.Tester {
                 @"F:\Torrenti\FILMI\Dead Man Walking (1995) - Zadnji sprehod\Dead Man Walking [English] 1995.avi",
                 @"F:\Torrenti\FILMI\Dear John (2010) - Samo tebe si zelim\Dear John.2010.DvdRip.Xvid {1337x}-Noir.avi",
                 @"F:\Torrenti\FILMI\Deja Vu (2006) - Déja Vu\Deja Vu 2006.iso",
-                @"F:\Torrenti\FILMI\Departed (2006) - Dvojna Igra\VIDEO_TS\VTS_01_1.VOB",
-                @"F:\Torrenti\FILMI\Departed (2006) - Dvojna Igra\VIDEO_TS\VTS_01_2.VOB",
-                @"F:\Torrenti\FILMI\Departed (2006) - Dvojna Igra\VIDEO_TS\VTS_01_3.VOB",
-                @"F:\Torrenti\FILMI\Departed (2006) - Dvojna Igra\VIDEO_TS\VTS_01_4.VOB",
-                @"F:\Torrenti\FILMI\Departed (2006) - Dvojna Igra\VIDEO_TS\VTS_01_5.VOB",
                 @"F:\Torrenti\FILMI\Der Untergang (2005) - Propad\Der Untergang.iso",
                 @"F:\Torrenti\FILMI\Despicable Me (2010) - Jaz, baraba\despicable.me.dvdrip.xvid-imbt.avi",
                 @"F:\Torrenti\FILMI\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi\Despicable.Me.2.2013.CROSubs.BRRip.XviD.AC3-SANTi.avi",
@@ -301,12 +275,6 @@ namespace Frost.Tester {
                 @"F:\Torrenti\FILMI\Imagine That (2009) - Predstavljaj si to\Imagine That.2009.DvdRip.Xvid {1337x}-Noir.avi",
                 @"F:\Torrenti\FILMI\In Bruges (2008) - V Brugesu\In Bruges.iso",
                 @"F:\Torrenti\FILMI\Incendies (2010) - Zenska, ki poje\Incendies.2010.DVDRip.XviD.AC3.HORiZON-ArtSubs.avi",
-                @"F:\Torrenti\FILMI\Inception (2010) - Izvor\VIDEO_TS\VTS_01_0.VOB",
-                @"F:\Torrenti\FILMI\Inception (2010) - Izvor\VIDEO_TS\VTS_01_1.VOB",
-                @"F:\Torrenti\FILMI\Inception (2010) - Izvor\VIDEO_TS\VTS_01_2.VOB",
-                @"F:\Torrenti\FILMI\Inception (2010) - Izvor\VIDEO_TS\VTS_01_3.VOB",
-                @"F:\Torrenti\FILMI\Inception (2010) - Izvor\VIDEO_TS\VTS_01_4.VOB",
-                @"F:\Torrenti\FILMI\Inception (2010) - Izvor\VIDEO_TS\VTS_01_5.VOB",
                 @"F:\Torrenti\FILMI\Inglourious Basterds (2009) - Naslavne barabe\Inglourious Basterds (2009) DVDRip XviD-MAXSPEED www.torentz.3xforum.ro.avi",
                 @"F:\Torrenti\FILMI\Intersections 2013 CROSubs.DVDRip XViD juggs\Intersections 2013 CROSubs.DVDRip XViD juggs.avi",
                 @"F:\Torrenti\FILMI\Ip Man [2008] - Ip Man\IpMan -aot.avi",
@@ -327,14 +295,6 @@ namespace Frost.Tester {
                 @"F:\Torrenti\FILMI\La mala educación (2004) - Slaba vzgoja\Almodovar_Bad.Education_DVDrip.Xvid_eng.subbed_m^M^m.avi",
                 @"F:\Torrenti\FILMI\La piel que habito (2011) - Koža v kateri zivim\The.Skin.I.Live.In.2011.720p.Bluray.x264.anoXmous.mp4",
                 @"F:\Torrenti\FILMI\La Vita E Bella (1997) - Zivljenje je lepo\La Vita E Bella.iso",
-                @"F:\Torrenti\FILMI\Lawless.2012.CUSTOM.SLOSUB.NTSC.DVDR-DrSi\VIDEO_TS\VTS_01_0.VOB",
-                @"F:\Torrenti\FILMI\Lawless.2012.CUSTOM.SLOSUB.NTSC.DVDR-DrSi\VIDEO_TS\VTS_01_1.VOB",
-                @"F:\Torrenti\FILMI\Lawless.2012.CUSTOM.SLOSUB.NTSC.DVDR-DrSi\VIDEO_TS\VTS_01_2.VOB",
-                @"F:\Torrenti\FILMI\Lawless.2012.CUSTOM.SLOSUB.NTSC.DVDR-DrSi\VIDEO_TS\VTS_01_3.VOB",
-                @"F:\Torrenti\FILMI\Lawless.2012.CUSTOM.SLOSUB.NTSC.DVDR-DrSi\VIDEO_TS\VTS_01_4.VOB",
-                @"F:\Torrenti\FILMI\Lawless.2012.CUSTOM.SLOSUB.NTSC.DVDR-DrSi\VIDEO_TS\VTS_01_5.VOB",
-                @"F:\Torrenti\FILMI\Lawless.2012.CUSTOM.SLOSUB.NTSC.DVDR-DrSi\VIDEO_TS\VTS_02_1.VOB",
-                @"F:\Torrenti\FILMI\Lawless.2012.CUSTOM.SLOSUB.NTSC.DVDR-DrSi\VIDEO_TS\VTS_03_1.VOB",
                 @"F:\Torrenti\FILMI\Lebanon (2009) - Libanon\Lebanon.2009.SLOSubs.DVDRip.XviD-DrSi.avi",
                 @"F:\Torrenti\FILMI\Leon-The Professional (19949 - Leon\Leon-The Professional 1994 BDrip[A Release-Lounge H.264 By Titan].mp4",
                 @"F:\Torrenti\FILMI\Les Amours Imaginaires (2010) - Namišljene ljubezni\Les Amours Imaginaires 2010 [DVDRip.XviD-miguel] [FR].avi",
@@ -343,27 +303,12 @@ namespace Frost.Tester {
                 @"F:\Torrenti\FILMI\Little Big Soldier (2010) - Mali veliki vojak\Little.Big.Soldier.2010.SLOSubs.DVDRip.XviD-DrSi.avi",
                 @"F:\Torrenti\FILMI\Little children (2007) - Mali otroci\LITTLE_CHILDREN.ISO",
                 @"F:\Torrenti\FILMI\Looper (2012) - Casovna zanka\Looper.2012.CUSTOM.SLOSUB.NTSC.DVDR-DrSi.iso",
-                @"F:\Torrenti\FILMI\Lost In Translation (2003) - Zgubljeno v prevodu\VIDEO_TS\VTS_01_0.VOB",
-                @"F:\Torrenti\FILMI\Lost In Translation (2003) - Zgubljeno v prevodu\VIDEO_TS\VTS_01_1.VOB",
-                @"F:\Torrenti\FILMI\Lost In Translation (2003) - Zgubljeno v prevodu\VIDEO_TS\VTS_01_2.VOB",
-                @"F:\Torrenti\FILMI\Lost In Translation (2003) - Zgubljeno v prevodu\VIDEO_TS\VTS_01_3.VOB",
-                @"F:\Torrenti\FILMI\Lost In Translation (2003) - Zgubljeno v prevodu\VIDEO_TS\VTS_01_4.VOB",
-                @"F:\Torrenti\FILMI\Lost In Translation (2003) - Zgubljeno v prevodu\VIDEO_TS\VTS_01_5.VOB",
-                @"F:\Torrenti\FILMI\Lost In Translation (2003) - Zgubljeno v prevodu\VIDEO_TS\VTS_02_1.VOB",
-                @"F:\Torrenti\FILMI\Lost In Translation (2003) - Zgubljeno v prevodu\VIDEO_TS\VTS_03_1.VOB",
-                @"F:\Torrenti\FILMI\Lost In Translation (2003) - Zgubljeno v prevodu\VIDEO_TS\VTS_03_2.VOB",
-                @"F:\Torrenti\FILMI\Lost In Translation (2003) - Zgubljeno v prevodu\VIDEO_TS\VTS_04_1.VOB",
                 @"F:\Torrenti\FILMI\Love Actually (2003) - Pravzaprav ljubezen\Love Actually CD1.avi",
                 @"F:\Torrenti\FILMI\Love Actually (2003) - Pravzaprav ljubezen\Love Actually CD2.avi",
                 @"F:\Torrenti\FILMI\Lucky Number Slevin (2006) - Srečnež Slevin\Lucky.Number.Slevin.2006.SLOSubs.DVDRip.XviD-DrSi.cd1.avi",
                 @"F:\Torrenti\FILMI\Lucky Number Slevin (2006) - Srečnež Slevin\Lucky.Number.Slevin.2006.SLOSubs.DVDRip.XviD-DrSi.cd2.avi",
                 @"F:\Torrenti\FILMI\Magnolia [1999] -  Magnolija\Magnolia [1999] dvd rip nlx.avi",
                 @"F:\Torrenti\FILMI\Man On Wire (2008) - Clovek na zici\Man.On.Wire.2008.DVDRip.XviD.avi",
-                @"F:\Torrenti\FILMI\Man.of.Steel.2013.DVDR.PAL.SLOSUBS-DiSHON\VIDEO_TS\VTS_01_1.VOB",
-                @"F:\Torrenti\FILMI\Man.of.Steel.2013.DVDR.PAL.SLOSUBS-DiSHON\VIDEO_TS\VTS_01_2.VOB",
-                @"F:\Torrenti\FILMI\Man.of.Steel.2013.DVDR.PAL.SLOSUBS-DiSHON\VIDEO_TS\VTS_01_3.VOB",
-                @"F:\Torrenti\FILMI\Man.of.Steel.2013.DVDR.PAL.SLOSUBS-DiSHON\VIDEO_TS\VTS_01_4.VOB",
-                @"F:\Torrenti\FILMI\Man.of.Steel.2013.DVDR.PAL.SLOSUBS-DiSHON\VIDEO_TS\VTS_01_5.VOB",
                 @"F:\Torrenti\FILMI\Mar Adentro (2004) - Morje v meni\Mar.Adentro (The.Sea.Inside) 2004.DVDRip.XviD.avi",
                 @"F:\Torrenti\FILMI\Melancholia (2011) - Melanholija\psig-melancholia.2011.dvdrip.xvid.avi",
                 @"F:\Torrenti\FILMI\Memento (2000) - Memento\Memento.DVDrip,XviD-contempt.avi",
@@ -411,12 +356,6 @@ namespace Frost.Tester {
                 @"F:\Torrenti\FILMI\RocknRolla [2008] - Rocknroller\RocknRolla[2008]DvDrip-aXXo.avi",
                 @"F:\Torrenti\FILMI\Roger Dodger (2002) - Roger Dodger\Roger Dodger.avi",
                 @"F:\Torrenti\FILMI\Rush Hour 3 (2007) - Ful gas 3\Rush.Hour.3.2007.DVDRip.XviD-bRiP.avi",
-                @"F:\Torrenti\FILMI\Safety.Not.Guaranteed.2012.CUSTOM.SLOSUB.LiMiTED.COMPLETE.NTSC.DVDR-DrSi\VIDEO_TS\VTS_01_1.VOB",
-                @"F:\Torrenti\FILMI\Safety.Not.Guaranteed.2012.CUSTOM.SLOSUB.LiMiTED.COMPLETE.NTSC.DVDR-DrSi\VIDEO_TS\VTS_01_2.VOB",
-                @"F:\Torrenti\FILMI\Safety.Not.Guaranteed.2012.CUSTOM.SLOSUB.LiMiTED.COMPLETE.NTSC.DVDR-DrSi\VIDEO_TS\VTS_01_3.VOB",
-                @"F:\Torrenti\FILMI\Safety.Not.Guaranteed.2012.CUSTOM.SLOSUB.LiMiTED.COMPLETE.NTSC.DVDR-DrSi\VIDEO_TS\VTS_02_1.VOB",
-                @"F:\Torrenti\FILMI\Safety.Not.Guaranteed.2012.CUSTOM.SLOSUB.LiMiTED.COMPLETE.NTSC.DVDR-DrSi\VIDEO_TS\VTS_03_1.VOB",
-                @"F:\Torrenti\FILMI\Safety.Not.Guaranteed.2012.CUSTOM.SLOSUB.LiMiTED.COMPLETE.NTSC.DVDR-DrSi\VIDEO_TS\VTS_04_1.VOB",
                 @"F:\Torrenti\FILMI\Salt (2010) - Salt\Salt.2010.R5.LiNE.CUSTOM.SLOSUB.PAL.DVDR-metalcamp.iso",
                 @"F:\Torrenti\FILMI\Scary Movie (2000) - Film, da te kap\Scary Movie.avi",
                 @"F:\Torrenti\FILMI\Scott Pilgrim vs. the World (2010) - Scott Pilgrim proti vsem\Scott.Pilgrim.vs.the.World.2010.SLOSubs.DVDRip.XviD-DrSi.avi",
@@ -443,12 +382,6 @@ namespace Frost.Tester {
                 @"F:\Torrenti\FILMI\Snatch [2000] - Pljuni in jo stisni\Snatch.avi",
                 @"F:\Torrenti\FILMI\Snow.White.and.the.Huntsman.2012.EXTENDED.SLOSubs.DVDRip.XviD-DrSi\Snow.White.and.the.Huntsman.2012.EXTENDED.SLOSubs.DVDRip.XviD-DrSi.avi",
                 @"F:\Torrenti\FILMI\Sorority Boys (2002) - Sestre\Sorority.Boys.DVDRip.2002-DEiTY.xvid.avi",
-                @"F:\Torrenti\FILMI\Source Code (2011) - Izvorna koda\VIDEO_TS\VTS_01_0.VOB",
-                @"F:\Torrenti\FILMI\Source Code (2011) - Izvorna koda\VIDEO_TS\VTS_01_1.VOB",
-                @"F:\Torrenti\FILMI\Source Code (2011) - Izvorna koda\VIDEO_TS\VTS_01_2.VOB",
-                @"F:\Torrenti\FILMI\Source Code (2011) - Izvorna koda\VIDEO_TS\VTS_01_3.VOB",
-                @"F:\Torrenti\FILMI\Source Code (2011) - Izvorna koda\VIDEO_TS\VTS_01_4.VOB",
-                @"F:\Torrenti\FILMI\Source Code (2011) - Izvorna koda\VIDEO_TS\VTS_01_5.VOB",
                 @"F:\Torrenti\FILMI\Spartan (2004) - Spartanec\Spartan.2004.SLOSubs.DVDRip.XviD-DrSi.avi",
                 @"F:\Torrenti\FILMI\STAR TREK 2 The Wrath Of Khan (1982) - Zvezdne steze 2 Khanov srd\StarTrek_The_Wrath_of_Khan.MULTISUBS.PAL.DVDR-SiHQ.iso",
                 @"F:\Torrenti\FILMI\STAR TREK 8 First Contact (1996) - Zvezdne steze 8 Prvi stik\StarTrek_First_Contact.MULTISUBS.PAL.DVDR.iso",
@@ -473,12 +406,6 @@ namespace Frost.Tester {
                 @"F:\Torrenti\FILMI\The.Hobbit.An.Unexpected.Journey.2012.SLOSubs.DVDSCRENER.XviD-metalcamp\The.Hobbit.An.Unexpected.Journey.2012.SLOSubs.DVDSCR.XviD-metalcamp.avi",
                 @"F:\Torrenti\FILMI\The.Odd.Life.of.Timothy.Green.2012.SLOSubs.DVDRip.XviD-DrSi\The.Odd.Life.of.Timothy.Green.2012.SLOSubs.DVDRip.XviD-DrSi.avi",
                 @"F:\Torrenti\FILMI\The.To.Do.List.2013.720p.BRRip.XviD.INSiDE\The.To.Do.List.2013.720p.BRRip.XviD.INSiDE.avi",
-                @"F:\Torrenti\FILMI\[REQ]Ne.Joči.Peter.1964.DVD-R\VIDEO_TS\VTS_01_1.VOB",
-                @"F:\Torrenti\FILMI\[REQ]Ne.Joči.Peter.1964.DVD-R\VIDEO_TS\VTS_01_2.VOB",
-                @"F:\Torrenti\FILMI\[REQ]Ne.Joči.Peter.1964.DVD-R\VIDEO_TS\VTS_01_3.VOB",
-                @"F:\Torrenti\FILMI\[REQ]Ne.Joči.Peter.1964.DVD-R\VIDEO_TS\VTS_01_4.VOB",
-                @"F:\Torrenti\FILMI\[REQ]Ne.Joči.Peter.1964.DVD-R\VIDEO_TS\VTS_02_1.VOB",
-                @"F:\Torrenti\FILMI\[REQ]Ne.Joči.Peter.1964.DVD-R\VIDEO_TS\VTS_03_1.VOB",
             };
 
             #endregion
@@ -492,29 +419,52 @@ namespace Frost.Tester {
             TestDB();
 
             Console.WriteLine(Filler);
+            Console.WriteLine("\tFIN");
             Console.WriteLine(Filler);
             Console.Read();
         }
 
         private static void TestDB() {
+            //Console.ForegroundColor = ConsoleColor.White;
+            
             MovieVoContainer mvc = new MovieVoContainer();
+            InitializeDatabase(mvc);
 
-            Movie movie;
-            using (FeatureDetector fd = new FeatureDetector()) {
-                movie = fd.Detect(@"E:\Torrenti\FILMI\Amazing.Grace.2006.SLOSub.DvdRip.Xvid\Amazing.Grace.2006.SLOSub.DvdRip.Xvid.avi").Movie;
-            }
-
-            mvc.Movies.Add(movie);
-            //IEnumerable<Movie> movies = TestFeatureDetectorVideoDebug();
+            List<Movie> movies = TestFeatureDetectorVideoDebug().ToList();
             //Serialize(movies);
 
             //List<Movie> movies = Deserialize(@"E:\Workspace\Ostalo\Repos\Git\FrostMediaManager\Tester\bin\Debug\movie_.js");
 
-            //foreach (Movie movie in movies) {
-            //    mvc.Movies.Add(movie);
-            //}
-            //IEnumerable<DbEntityValidationResult> errors = mvc.GetValidationErrors();
-            //mvc.SaveChanges();
+            Adder add = new Adder(mvc);
+            foreach (Movie movie in movies) {
+                add.Add(movie);
+            }
+
+            try {
+                mvc.SaveChanges();
+            }
+            catch (DbUpdateException e) {
+                Exception innerException = e.InnerException.InnerException;
+                IEnumerable<DbEntityEntry> entries = e.Entries;
+
+                Console.Error.WriteLine();
+                Console.Error.WriteLine(e.InnerException.InnerException);
+            }
+        }
+
+        public static void InitializeDatabase(MovieVoContainer context) {
+            try {
+                if (File.Exists("MovieVo.db3")) {
+                    Console.WriteLine(@"Cache file exists");
+                    return;
+                }
+                File.Delete("MovieVo.db3");
+                SQLiteConnection.CreateFile("MovieVo.db3");
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.Message);
+            }
+            SQLiteCommand.Execute(File.ReadAllText("MovieVo.sql"), SQLiteExecuteType.NonQuery, context.Database.Connection.ConnectionString, new object());
         }
 
         private static List<Movie> Deserialize(string fn) {
@@ -658,15 +608,15 @@ namespace Frost.Tester {
             Debug.WriteLineIf(movie.SortTitle != null, "Sort Title: " + movie.SortTitle);
 
             Debug.WriteLineIf(movie.ReleaseYear != null, "Release Year: " + movie.ReleaseYear);
-            Debug.WriteLineIf(movie.ReleaseDate != default(DateTime), "Release Date: " + movie.ReleaseDate);
+            //Debug.WriteLineIf(movie.ReleaseDate != default(DateTime), "Release Date: " + movie.ReleaseDate);
 
             Debug.WriteLineIf(!string.IsNullOrEmpty(movie.Edithion), "Edithion: " + movie.Edithion);
             Debug.WriteLineIf(movie.DvdRegion != DVDRegion.Unknown, "DVD Region: " + movie.DvdRegion);
 
             Debug.WriteLine("Play count: " + movie.PlayCount);
-            Debug.WriteLineIf(movie.LastPlayed != default(DateTime), "Last Played: " + movie.LastPlayed);
-            Debug.WriteLineIf(movie.LastPlayed != default(DateTime), "Premiered: " + movie.Premiered);
-            Debug.WriteLineIf(movie.Aired != default(DateTime), "Aired: " + movie.Aired);
+            //Debug.WriteLineIf(movie.LastPlayed != default(DateTime), "Last Played: " + movie.LastPlayed);
+            //Debug.WriteLineIf(movie.LastPlayed != default(DateTime), "Premiered: " + movie.Premiered);
+            //Debug.WriteLineIf(movie.Aired != default(DateTime), "Aired: " + movie.Aired);
 
             Debug.WriteLineIf(!string.IsNullOrEmpty(movie.Trailer), "Trailer: " + movie.Trailer);
 

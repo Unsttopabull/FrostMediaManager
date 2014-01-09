@@ -31,6 +31,7 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets or sets the Id of this studio in the database.</summary>
         /// <value>The Id of this studio in the database</value>
         [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         /// <summary>Gets or sets the name of the studio.</summary>

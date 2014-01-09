@@ -11,7 +11,7 @@ using Frost.SharpCharsetDetector;
 using Frost.SharpLanguageDetect;
 using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
-using Frost.SharpOpenSubtitles.Util;
+
 using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
 using FileInfo = Frost.SharpMediaInfo.Output.Properties.General.FileInfo;
 using Language = Frost.Common.Models.DB.MovieVo.Language;

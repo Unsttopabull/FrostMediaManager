@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -38,8 +39,8 @@ namespace Frost.DetectFeatures {
             try {
                 xjbMovie = XjbXmlMovie.Load(xtNfo);
             }
-            catch (Exception e) {
-                Console.Error.WriteLine(string.Format("File \"{0}\" is not a valid NFO. ({1})", xtNfo, e.Message), "ERROR");
+            catch (Exception) {
+                Console.Error.WriteLine(string.Format("File \"{0}\" is not a valid NFO.", xtNfo), "ERROR");
             }
 
             if (xjbMovie != null) {
@@ -94,23 +95,17 @@ namespace Frost.DetectFeatures {
                 Movie.Studios.Add(xjbMovie.Studio);
             }
 
-            Person director = new Person(xjbMovie.Director);
-            if (!Movie.Directors.Contains(director)) {
-                Movie.Directors.Add(director);
+            if (!string.IsNullOrEmpty(xjbMovie.Director)) {
+                Person director = new Person(xjbMovie.Director);
+                if (!Movie.Directors.Contains(director)) {
+                    Movie.Directors.Add(director);
+                }
             }
 
             //minutes to miliseconds
             Movie.Runtime = Movie.Runtime ?? xjbMovie.Runtime * 60000;
 
-            foreach (XjbXmlActor actor in xjbMovie.Actors) {
-                Actor movieActor = Movie.Actors.FirstOrDefault(a => a.Name == actor.Name);
-                if (movieActor != null && movieActor.Character == null) {
-                    movieActor.Character = actor.Role;
-                }
-                else {
-                    Movie.Actors.Add((Actor)actor);
-                }
-            }
+            AddActors(xjbMovie.Actors);
 
             Movie.Plots.Add(new Plot(xjbMovie.Plot, xjbMovie.Outline, xjbMovie.Tagline, null));
         }
@@ -169,27 +164,52 @@ namespace Frost.DetectFeatures {
                 Movie.Studios.Add(xjbMovie.Studio);
             }
 
-            Person director = new Person(xjbMovie.Director);
-            if (!Movie.Directors.Contains(director)) {
-                Movie.Directors.Add(director);
+            if (!string.IsNullOrEmpty(xjbMovie.Director)) {
+                Person director = new Person(xjbMovie.Director);
+                if (!Movie.Directors.Contains(director)) {
+                    Movie.Directors.Add(director);
+                }
             }
 
             Movie.Runtime = xjbMovie.Runtime ?? Movie.Runtime;
 
-            foreach (XjbXmlActor actor in xjbMovie.Actors) {
-                Actor movieActor = Movie.Actors.FirstOrDefault(a => a.Name == actor.Name);
+            OverrideActors(xjbMovie.Actors);
+
+            Movie.Plots.Add(new Plot(xjbMovie.Plot, xjbMovie.Outline, xjbMovie.Tagline, null));
+        }
+        #endregion
+
+        private void AddActors<T>(IEnumerable<T> actors) where T : XbmcXmlActor {
+            foreach (T actor in actors) {
+                if (string.IsNullOrEmpty(actor.Name)) {
+                    continue;
+                }
+
+                MovieActor movieActor = Movie.ActorsLink.FirstOrDefault(a => a.Person.Name == actor.Name);
                 if (movieActor != null) {
                     movieActor.Character = actor.Role ?? movieActor.Character;
                 }
                 else {
-                    Movie.Actors.Add((Actor)actor);
+                    Movie.ActorsLink.Add(new MovieActor(Movie, new Person(actor.Name, actor.Thumb), actor.Role));
                 }
             }
-
-            Movie.Plots.Add(new Plot(xjbMovie.Plot, xjbMovie.Outline, xjbMovie.Tagline, null));
         }
 
-        #endregion
+        private void OverrideActors<T>(IEnumerable<T> actors) where T : XbmcXmlActor {
+            foreach (T actor in actors) {
+                if (string.IsNullOrEmpty(actor.Name)) {
+                    continue;
+                }
+
+                MovieActor movieActor = Movie.ActorsLink.FirstOrDefault(al => al.Person.Name == actor.Name);
+                if (movieActor != null && movieActor.Character == null) {
+                    movieActor.Character = actor.Role;
+                }
+                else {
+                    Movie.ActorsLink.Add(new MovieActor(Movie, new Person(actor.Name, actor.Thumb), actor.Role));
+                }
+            }
+        }
 
         #region XBMC
         private void GetXbmcNfoInfo(FileInfo[] xbmcNfo) {
@@ -210,8 +230,8 @@ namespace Frost.DetectFeatures {
             try {
                 xbmcMovie = XbmcXmlMovie.Load(filePath);
             }
-            catch (Exception e) {
-                Console.Error.WriteLine(string.Format("File \"{0}\" is not a valid NFO. ({1})", filePath, e.Message), "ERROR");
+            catch (Exception) {
+                Console.Error.WriteLine(string.Format("File \"{0}\" is not a valid NFO.", filePath), "ERROR");
             }
 
             if (xbmcMovie != null) {
@@ -244,7 +264,10 @@ namespace Frost.DetectFeatures {
             Movie.TmdbID = xbmcMovie.TmdbId;
             Movie.ImdbID = xbmcMovie.ImdbId;
             Movie.Watched = xbmcMovie.Watched;
-            Movie.Set = new Set(xbmcMovie.Set);
+
+            if (!string.IsNullOrEmpty(xbmcMovie.Set)) {
+                Movie.Set = new Set(xbmcMovie.Set);
+            }
 
             Movie.Premiered = FilterDate(xbmcMovie.Premiered);
             Movie.Aired = FilterDate(xbmcMovie.Aired);
@@ -273,7 +296,7 @@ namespace Frost.DetectFeatures {
             }
 
             foreach (Person director in xbmcMovie.GetDirectors()) {
-                if (!Movie.Directors.Contains(director)) {
+                if (!string.IsNullOrEmpty(director.Name) && !Movie.Directors.Contains(director)) {
                     Movie.Directors.Add(director);
                 }
             }
@@ -281,19 +304,13 @@ namespace Frost.DetectFeatures {
             //convert minutes to milisecodns
             Movie.Runtime = xbmcMovie.RuntimeInSeconds * 60000 ?? Movie.GetVideoRuntimeSum();
 
-            foreach (XbmcXmlActor actor in xbmcMovie.Actors) {
-                Actor movieActor = Movie.Actors.FirstOrDefault(a => a.Name == actor.Name);
-                if (movieActor != null && movieActor.Character == null) {
-                    movieActor.Character = actor.Role;
-                }
-                else {
-                    Movie.Actors.Add((Actor)actor);
-                }
-            }
+            OverrideActors(xbmcMovie.Actors);
 
 
             Movie.Plots.Add(new Plot(xbmcMovie.Plot, xbmcMovie.Outline, xbmcMovie.Tagline, null));
         }
+
+
 
         private void AddNotDetectedNfoInfo(XbmcXmlMovie xbmcMovie) {
             Movie.Title = Movie.Title ?? xbmcMovie.Title;
@@ -308,7 +325,11 @@ namespace Frost.DetectFeatures {
             Movie.TmdbID = xbmcMovie.TmdbId;
             Movie.ImdbID = xbmcMovie.ImdbId;
             Movie.Watched = xbmcMovie.Watched;
-            Movie.Set = new Set(xbmcMovie.Set);
+
+            if (!string.IsNullOrWhiteSpace(xbmcMovie.Set)) {
+                Movie.Set = new Set(xbmcMovie.Set);
+            }
+
             Movie.Premiered = FilterDate(xbmcMovie.Premiered);
             Movie.Aired = FilterDate(xbmcMovie.Aired);
             Movie.Trailer = xbmcMovie.GetTrailerUrl();
@@ -339,7 +360,7 @@ namespace Frost.DetectFeatures {
             }
 
             foreach (Person director in xbmcMovie.GetDirectors()) {
-                if (!Movie.Directors.Contains(director)) {
+                if (!string.IsNullOrEmpty(director.Name) && !Movie.Directors.Contains(director)) {
                     Movie.Directors.Add(director);
                 }
             }
@@ -347,15 +368,7 @@ namespace Frost.DetectFeatures {
             //convert seconds to milisecodns
             Movie.Runtime = Movie.GetVideoRuntimeSum() ?? xbmcMovie.RuntimeInSeconds * 1000;
 
-            foreach (XbmcXmlActor actor in xbmcMovie.Actors) {
-                Actor movieActor = Movie.Actors.FirstOrDefault(a => a.Name == actor.Name);
-                if (movieActor != null) {
-                    movieActor.Character = actor.Role ?? movieActor.Character;
-                }
-                else {
-                    Movie.Actors.Add((Actor)actor);
-                }
-            }
+            AddActors(xbmcMovie.Actors);
 
             Movie.Plots.Add(new Plot(xbmcMovie.Plot, xbmcMovie.Outline, xbmcMovie.Tagline, null));
         }

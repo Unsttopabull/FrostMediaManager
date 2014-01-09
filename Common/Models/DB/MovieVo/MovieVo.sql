@@ -1,133 +1,86 @@
 /*
-
 Target Server Type    : SQLite
 Target Server Version : 30706
 File Encoding         : 65001
 
-Date: 2014-01-06 19:53:18
+Date: 2014-01-08 15:45:38
 */
-
-/*PRAGMA foreign_keys = OFF;*/
 
 -- ----------------------------
 -- Table structure for "Arts"
 -- ----------------------------
 DROP TABLE "Arts";
-CREATE TABLE Arts (
-    Id integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    Type integer   NOT NULL ,
-    Path TEXT   NOT NULL ,
-    Preview TEXT NOT NULL,
-    MovieId integer   NOT NULL
-
-        ,CONSTRAINT FK_MovieArt
-            FOREIGN KEY (MovieId)
-            REFERENCES Movie (Id)
-
+CREATE TABLE "Arts" (
+	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	"Type"  integer NOT NULL,
+	"Path"  TEXT NOT NULL,
+	"Preview"  TEXT NULL,
+	"MovieId"  integer NOT NULL,
+	CONSTRAINT "FK_MovieArt" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- ----------------------------
--- Records of Arts
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for "Audios"
 -- ----------------------------
 DROP TABLE "Audios";
-CREATE TABLE Audios (
-    Id integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    Source TEXT   NULL ,
-    Type TEXT   NULL ,
-    ChannelSetup TEXT   NULL ,
-    NumberOfChannels integer   NULL ,
-    ChannelPositions TEXT   NULL ,
-    Codec TEXT   NULL ,
-    BitRate float   NULL ,
-    BitRateMode integer NOT NULL,
-    SamplingRate integer NULL,
-    BitDepth integer NULL,
-    CompressionMode integer NOT NULL,
-    Duration integer NULL,
-    LanguageId integer NULL,
-    MovieId integer   NOT NULL,
-    FileId integer   NOT NULL
-
-        ,CONSTRAINT FK_LanguageAudio
-            FOREIGN KEY (LanguageId)
-            REFERENCES Language (Id)
-
-        ,CONSTRAINT FK_MovieAudio
-            FOREIGN KEY (MovieId)
-            REFERENCES Movie (Id)
-
-        ,CONSTRAINT FK_AudioFile
-            FOREIGN KEY (FileId)
-            REFERENCES File (Id)
+CREATE TABLE "Audios" (
+	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	"Source"  TEXT,
+	"Type"  TEXT,
+	"ChannelSetup"  TEXT,
+	"NumberOfChannels"  integer,
+	"ChannelPositions"  TEXT,
+	"Codec"  TEXT,
+	"BitRate"  float,
+	"BitRateMode"  integer NOT NULL,
+	"SamplingRate"  integer,
+	"BitDepth"  integer,
+	"CompressionMode"  integer NOT NULL,
+	"Duration"  integer,
+	"LanguageId"  integer,
+	"MovieId"  integer NOT NULL,
+	"FileId"  integer NOT NULL,
+	CONSTRAINT "FK_LanguageAudio" FOREIGN KEY ("LanguageId") REFERENCES "Languages" ("Id") ON DELETE SET NULL ON UPDATE CASCADE,
+	CONSTRAINT "FK_MovieAudio" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT "FK_AudioFile" FOREIGN KEY ("FileId") REFERENCES "Files" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- ----------------------------
--- Records of Audios
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for "Certifications"
 -- ----------------------------
 DROP TABLE "Certifications";
-CREATE TABLE Certifications (
-    Id integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    Rating float      NOT NULL,
-    MovieId integer   NOT NULL,
-    CountryId integer NOT NULL
-
-        ,CONSTRAINT FK_MovieCertification
-            FOREIGN KEY (MovieId)
-            REFERENCES Movie (Id)
-
-        ,CONSTRAINT FK_CertificationLanguage
-            FOREIGN KEY (CountryId)
-            REFERENCES Country (Id)
+CREATE TABLE "Certifications" (
+	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	"Rating"  float NOT NULL,
+	"MovieId"  integer NOT NULL,
+	"CountryId"  integer NOT NULL,
+	CONSTRAINT "FK_MovieCertification" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT "FK_CertificationLanguage" FOREIGN KEY ("CountryId") REFERENCES "Countries" ("Id") ON DELETE SET NULL ON UPDATE CASCADE
 );
-
--- ----------------------------
--- Records of Certifications
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for "Countries"
 -- ----------------------------
 DROP TABLE "Countries";
-CREATE TABLE Countries (
-    Id integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    Name TEXT NULL,
-    Alpha2 TEXT NULL,
-    Alpha3 TEXT NULL
+CREATE TABLE "Countries" (
+	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	"Name"  TEXT,
+	"ISO3166_Alpha2"  TEXT,
+	"ISO3166_Alpha3"  TEXT
 );
-
--- ----------------------------
--- Records of Countries
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for "Files"
 -- ----------------------------
 DROP TABLE "Files";
-CREATE TABLE Files (
-    Id integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    Extension TEXT   NOT NULL ,
-    Name TEXT   NOT NULL ,
-    FolderPath TEXT   NOT NULL ,
-    Size integer   NULL,
-    DateAdded TEXT NULL,
-    MovieId integer NOT NULL,
-
-    CONSTRAINT FK_MovieFile
-        FOREIGN KEY (MovieId)
-        REFERENCES Movie (Id)
+CREATE TABLE "Files" (
+	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	"Extension"  TEXT NOT NULL,
+	"Name"  TEXT NOT NULL,
+	"FolderPath"  TEXT NOT NULL,
+	"Size"  integer,
+	"DateAdded"  TEXT,
 );
-
--- ----------------------------
--- Records of Files
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for "Genres"
@@ -139,228 +92,137 @@ CREATE TABLE Genres (
 );
 
 -- ----------------------------
--- Records of Genres
--- ----------------------------
-
--- ----------------------------
 -- Table structure for "Languages"
 -- ----------------------------
 DROP TABLE "Languages";
-CREATE TABLE Languages (
-    Id integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    Name TEXT NULL,
-    Alpha2 TEXT NULL,
-    Alpha3 TEXT NULL,
-    CountryId integer NULL,
-
-    CONSTRAINT FK_LanguageCountry
-        FOREIGN KEY (CountryId)
-        REFERENCES Country(Id)
+CREATE TABLE "Languages" (
+	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	"Name"  TEXT,
+	"ISO639_Alpha2"  TEXT,
+	"ISO639_Alpha3"  TEXT,
+	"CountryId"  integer,
+	CONSTRAINT "FK_LanguageCountry" FOREIGN KEY ("CountryId") REFERENCES "Countries" ("Id") ON DELETE SET NULL ON UPDATE CASCADE
 );
-
--- ----------------------------
--- Records of Languages
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for "MovieActors"
 -- ----------------------------
 DROP TABLE "MovieActors";
-CREATE TABLE MovieActors (
-    Id integer PRIMARY KEY NOT NULL,
-    PersonId integer NOT NULL,
-    MovieId integer NOT NULL,
-    Character TEXT NULL,
-
-    CONSTRAINT FK_ActorPerson
-        FOREIGN KEY (PersonId)
-        REFERENCES People(Id)
-
-    ,CONSTRAINT FK_ActorMovie
-        FOREIGN KEY (MovieId)
-        REFERENCES Movie(Id)
+CREATE TABLE "MovieActors" (
+	"Id"  integer NOT NULL,
+	"PersonId"  integer NOT NULL,
+	"MovieId"  integer NOT NULL,
+	"Character"  TEXT,
+	PRIMARY KEY ("Id" ASC),
+	CONSTRAINT "FK_ActorPerson" FOREIGN KEY ("PersonId") REFERENCES "People" ("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT "FK_ActorMovie" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- ----------------------------
--- Records of MovieActors
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for "MovieCountries"
 -- ----------------------------
 DROP TABLE "MovieCountries";
-CREATE TABLE MovieCountries (
-    MovieId integer   NOT NULL ,
-    CountryId integer   NOT NULL
- , PRIMARY KEY (MovieId, CountryId)
-
-        ,CONSTRAINT FK_MovieCountries_Movie
-            FOREIGN KEY (MovieId)
-            REFERENCES Movie (Id)
-
-
-        ,CONSTRAINT FK_MovieCountries_Genre
-            FOREIGN KEY (CountryId)
-            REFERENCES Country (Id)
-
+CREATE TABLE "MovieCountries" (
+	"MovieId"  integer NOT NULL,
+	"CountryId"  integer NOT NULL,
+	PRIMARY KEY ("MovieId" ASC, "CountryId" ASC),
+	CONSTRAINT "FK_MovieCountries_Movie" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT "FK_MovieCountries_Genre" FOREIGN KEY ("CountryId") REFERENCES "Countries" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- ----------------------------
--- Records of MovieCountries
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for "MovieDirectors"
 -- ----------------------------
 DROP TABLE "MovieDirectors";
-CREATE TABLE MovieDirectors (
-    MovieId integer   NOT NULL ,
-    DirectorId integer   NOT NULL
- , PRIMARY KEY (MovieId, DirectorId)
-
-        ,CONSTRAINT FK_MovieDirector_Movie
-            FOREIGN KEY (MovieId)
-            REFERENCES Movie (Id)
-
-
-        ,CONSTRAINT FK_MovieDirector_Genre
-            FOREIGN KEY (DirectorId)
-            REFERENCES People (Id)
+CREATE TABLE "MovieDirectors" (
+	"MovieId"  integer NOT NULL,
+	"DirectorId"  integer NOT NULL,
+	PRIMARY KEY ("MovieId" ASC, "DirectorId" ASC),
+	CONSTRAINT "FK_MovieDirector_Movie" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT "FK_MovieDirector_Genre" FOREIGN KEY ("DirectorId") REFERENCES "People" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- ----------------------------
--- Records of MovieDirectors
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for "MovieGenres"
 -- ----------------------------
 DROP TABLE "MovieGenres";
-CREATE TABLE MovieGenres (
-    MovieId integer   NOT NULL ,
-    GenreId integer   NOT NULL
- , PRIMARY KEY (MovieId, GenreId)
-
-        ,CONSTRAINT FK_MovieGenre_Movie
-            FOREIGN KEY (MovieId)
-            REFERENCES Movie (Id)
-
-
-        ,CONSTRAINT FK_MovieGenre_Genre
-            FOREIGN KEY (GenreId)
-            REFERENCES Genre (Id)
-
+CREATE TABLE "MovieGenres" (
+	"MovieId"  integer NOT NULL,
+	"GenreId"  integer NOT NULL,
+	PRIMARY KEY ("MovieId" ASC, "GenreId" ASC),
+	CONSTRAINT "FK_MovieGenre_Movie" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT "FK_MovieGenre_Genre" FOREIGN KEY ("GenreId") REFERENCES "Genres" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- ----------------------------
--- Records of MovieGenres
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for "Movies"
 -- ----------------------------
 DROP TABLE "Movies";
-CREATE TABLE "Movies" (
-"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-"ReleaseYear"  INTEGER,
-"Title"  TEXT NOT NULL,
-"OriginalTitle"  TEXT,
-"SortTitle"  TEXT,
-"Goofs"  TEXT,
-"Trivia"  TEXT,
-"Year"  integer,
-"ReleaseDate"  TEXT,
-"Edithion"  TEXT,
-"DvDRegion"  int NOT NULL,
-"LastPlayed"  TEXT,
-"Premiered"  TEXT,
-"Aired"  TEXT,
-"Trailer"  TEXT,
-"Top250"  integer,
-"Runtime"  integer,
-"Watched"  boolean NOT NULL,
-"PlayCount"  integer NOT NULL,
-"RatingAverage"  double,
-"ImdbID"  TEXT,
-"TmdbID"  TEXT,
-"ReleaseGroup"  TEXT,
-"IsMultipart"  boolean NOT NULL,
-"PartTypes"  TEXT,
-"SetId"  integer,
-"MainPlotId"  integer NOT NULL,
-CONSTRAINT "FK_MoviePlot" FOREIGN KEY ("MainPlotId") REFERENCES "Plot" ("Id"),
-CONSTRAINT "FK_MovieSet" FOREIGN KEY ("SetId") REFERENCES "Sets" ("Id")
+	CREATE TABLE "Movies" (
+	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	"Title"  TEXT,
+	"ReleaseYear"  INTEGER,
+	"OriginalTitle"  TEXT,
+	"SortTitle"  TEXT,
+	"Goofs"  TEXT,
+	"Trivia"  TEXT,
+	"Year"  integer,
+	"ReleaseDate"  TEXT,
+	"Edithion"  TEXT,
+	"DvDRegion"  int NOT NULL,
+	"LastPlayed"  TEXT,
+	"Premiered"  TEXT,
+	"Aired"  TEXT,
+	"Trailer"  TEXT,
+	"Top250"  integer,
+	"Runtime"  integer,
+	"Watched"  boolean NOT NULL,
+	"PlayCount"  integer NOT NULL,
+	"RatingAverage"  double,
+	"ImdbID"  TEXT,
+	"TmdbID"  TEXT,
+	"ReleaseGroup"  TEXT,
+	"IsMultipart"  boolean NOT NULL,
+	"PartTypes"  TEXT,
+	"SetId"  integer,
+	CONSTRAINT "FK_MovieSet" FOREIGN KEY ("SetId") REFERENCES "Sets" ("Id")
 );
 
 -- ----------------------------
 -- Table structure for "MovieSpecials"
 -- ----------------------------
 DROP TABLE "MovieSpecials";
-CREATE TABLE MovieSpecials (
-    MovieId integer   NOT NULL ,
-    SpecialId integer   NOT NULL
- , PRIMARY KEY (MovieId, SpecialId)
-
-        ,CONSTRAINT FK_MovieSpecial_Movie
-            FOREIGN KEY (MovieId)
-            REFERENCES Movie (Id)
-
-
-        ,CONSTRAINT FK_MovieSpecial_Special
-            FOREIGN KEY (SpecialId)
-            REFERENCES Special (Id)
+CREATE TABLE "MovieSpecials" (
+	"MovieId"  integer NOT NULL,
+	"SpecialId"  integer NOT NULL,
+	PRIMARY KEY ("MovieId" ASC, "SpecialId" ASC),
+	CONSTRAINT "FK_MovieSpecial_Movie" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT "FK_MovieSpecial_Special" FOREIGN KEY ("SpecialId") REFERENCES "Specials" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- ----------------------------
--- Records of MovieSpecials
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for "MovieStudios"
 -- ----------------------------
 DROP TABLE "MovieStudios";
-CREATE TABLE MovieStudios (
-    MovieId integer   NOT NULL ,
-    StudioId integer   NOT NULL
- , PRIMARY KEY (MovieId, StudioId)
-
-        ,CONSTRAINT FK_MovieStudios_Movie
-            FOREIGN KEY (MovieId)
-            REFERENCES Movie (Id)
-
-
-        ,CONSTRAINT FK_MovieStudios_Genre
-            FOREIGN KEY (StudioId)
-            REFERENCES Studio (Id)
-
+CREATE TABLE "MovieStudios" (
+	"MovieId"  integer NOT NULL,
+	"StudioId"  integer NOT NULL,
+	PRIMARY KEY ("MovieId" ASC, "StudioId" ASC),
+	CONSTRAINT "FK_MovieStudios_Movie" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT "FK_MovieStudios_Genre" FOREIGN KEY ("StudioId") REFERENCES "Studios" ("Id") ON DELETE CASCADE
 );
-
--- ----------------------------
--- Records of MovieStudios
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for "MovieWriters"
 -- ----------------------------
 DROP TABLE "MovieWriters";
-CREATE TABLE MovieWriters (
-    MovieId integer   NOT NULL ,
-    WriterId integer   NOT NULL
- , PRIMARY KEY (MovieId, WriterId)
-
-        ,CONSTRAINT FK_MovieWriter_Movie
-            FOREIGN KEY (MovieId)
-            REFERENCES Movie (Id)
-
-
-        ,CONSTRAINT FK_MovieWriter_Genre
-            FOREIGN KEY (WriterId)
-            REFERENCES People (Id)
+CREATE TABLE "MovieWriters" (
+	"MovieId"  integer NOT NULL,
+	"WriterId"  integer NOT NULL,
+	PRIMARY KEY ("MovieId" ASC, "WriterId" ASC),
+	CONSTRAINT "FK_MovieWriter_Movie" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT "FK_MovieWriter_Genre" FOREIGN KEY ("WriterId") REFERENCES "People" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- ----------------------------
--- Records of MovieWriters
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for "People"
@@ -373,50 +235,30 @@ CREATE TABLE People (
 );
 
 -- ----------------------------
--- Records of People
--- ----------------------------
-
--- ----------------------------
 -- Table structure for "Plots"
 -- ----------------------------
 DROP TABLE "Plots";
-CREATE TABLE Plots (
-    Id integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    Tagline TEXT   NULL ,
-    Summary TEXT   NULL ,
-    Full TEXT   NOT NULL ,
-    Language TEXT   NOT NULL ,
-    MovieId integer   NOT NULL
-
-        ,CONSTRAINT FK_MoviePlot
-            FOREIGN KEY (MovieId)
-            REFERENCES Movie (Id)
-
+CREATE TABLE "Plots" (
+	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	"Tagline"  TEXT,
+	"Summary"  TEXT,
+	"Full"  TEXT NOT NULL,
+	"Language"  TEXT NULL,
+	"MovieId"  integer NOT NULL,
+	CONSTRAINT "FK_MoviePlot" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- ----------------------------
--- Records of Plots
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for "Ratings"
 -- ----------------------------
 DROP TABLE "Ratings";
-CREATE TABLE Ratings (
-    Id integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    Critic TEXT   NOT NULL ,
-    Value float   NOT NULL ,
-    MovieId integer   NOT NULL
-
-        ,CONSTRAINT FK_MovieRating
-            FOREIGN KEY (MovieId)
-            REFERENCES Movie (Id)
-
+CREATE TABLE "Ratings" (
+	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	"Critic"  TEXT NOT NULL,
+	"Value"  float NOT NULL,
+	"MovieId"  integer NOT NULL,
+	CONSTRAINT "FK_MovieRating" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- ----------------------------
--- Records of Ratings
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for "Set"
@@ -428,10 +270,6 @@ CREATE TABLE "Set" (
 );
 
 -- ----------------------------
--- Records of Set
--- ----------------------------
-
--- ----------------------------
 -- Table structure for "Sets"
 -- ----------------------------
 DROP TABLE "Sets";
@@ -439,10 +277,6 @@ CREATE TABLE "Sets" (
     Id integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
     Name TEXT NOT NULL
 );
-
--- ----------------------------
--- Records of Sets
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for "Specials"
@@ -454,107 +288,65 @@ CREATE TABLE Specials (
 );
 
 -- ----------------------------
--- Records of Specials
--- ----------------------------
-
--- ----------------------------
--- Table structure for "sqlite_sequence"
--- ----------------------------
-DROP TABLE "sqlite_sequence";
-CREATE TABLE sqlite_sequence(name,seq);
-
--- ---------------------------
-
--- ----------------------------
 -- Table structure for "Studios"
 -- ----------------------------
 DROP TABLE "Studios";
 CREATE TABLE Studios (
     Id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
     Name TEXT NOT NULL,
-    Logo TEXT NOT NULL
+    Logo TEXT NULL
 );
-
--- ----------------------------
--- Records of Studios
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for "Subtitles"
 -- ----------------------------
 DROP TABLE "Subtitles";
-CREATE TABLE Subtitles (
-    Id integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    PodnapisiId integer NULL,
-    OpenSubtitlesId integer NULL,
-    MD5 TEXT NULL,
-    Format TEXT NULL,
-    Encoding TEXT NULL,
-    EmbededInVideo boolean NOT NULL,
-    ForHearingImpaired boolean NOT NULL,
-    LanguageId integer NULL,
-    MovieId integer NOT NULL,
-    FileId integer NOT NULL,
-
-    CONSTRAINT FK_SubtitleLanguage
-        FOREIGN KEY (LanguageId)
-        REFERENCES Language (Id)
-
-    ,CONSTRAINT FK_SubtitleMovie
-        FOREIGN KEY (MovieId)
-        REFERENCES Movie (Id)
-
-    ,CONSTRAINT FK_SubtitleFile
-        FOREIGN KEY (FileId)
-        REFERENCES File (Id)
+CREATE TABLE "Subtitles" (
+	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	"PodnapisiId"  integer,
+	"OpenSubtitlesId"  integer,
+	"MD5"  TEXT,
+	"Format"  TEXT,
+	"Encoding"  TEXT,
+	"EmbededInVideo"  boolean NOT NULL,
+	"ForHearingImpaired"  boolean NOT NULL,
+	"LanguageId"  integer,
+	"MovieId"  integer NOT NULL,
+	"FileId"  integer NOT NULL,
+	CONSTRAINT "FK_SubtitleLanguage" FOREIGN KEY ("LanguageId") REFERENCES "Languages" ("Id") ON DELETE SET NULL ON UPDATE CASCADE,
+	CONSTRAINT "FK_SubtitleMovie" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT "FK_SubtitleFile" FOREIGN KEY ("FileId") REFERENCES "Files" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- ----------------------------
--- Records of Subtitles
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for "Videos"
 -- ----------------------------
 DROP TABLE "Videos";
-CREATE TABLE Videos (
-    Id integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    MovieHash TEXT NOT NULL,
-    Source TEXT   NULL ,
-    Type TEXT   NULL ,
-    Resolution TEXT NULL,
-    FPS TEXT NULL,
-    BitRate float NULL,
-    BitRateMode integer NOT NULL,
-    BitDepth integer NULL,
-    CompressionMode integer NOT NULL,
-    Duration integer NULL,
-    ScanType integer NOT NULL,
-    ColorSpace TEXT NULL,
-    ChromaSubsampling TEXT NULL,
-    Format TEXT   NULL ,
-    Codec TEXT   NULL ,
-    Aspect float   NULL ,
-    AspectCommercialName string null,
-    Width integer   NULL ,
-    Height integer   NULL,
-    LanguageId integer NULL,
-    MovieId integer NOT NULL,
-    FileId integer NOT NULL,
-
-    CONSTRAINT FK_LanguageVideo
-        FOREIGN KEY (LanguageId)
-        REFERENCES Language (Id),
-
-    CONSTRAINT FK_MovieVideo
-        FOREIGN KEY (MovieId)
-        REFERENCES Movie (Id),
-
-    CONSTRAINT FK_VideoFile
-        FOREIGN KEY (FileId)
-        REFERENCES File (Id)
+CREATE TABLE "Videos" (
+	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+	"MovieHash"  TEXT NOT NULL,
+	"Source"  TEXT,
+	"Type"  TEXT,
+	"Resolution"  TEXT,
+	"FPS"  TEXT,
+	"BitRate"  float,
+	"BitRateMode"  integer NOT NULL,
+	"BitDepth"  integer,
+	"CompressionMode"  integer NOT NULL,
+	"Duration"  integer,
+	"ScanType"  integer NOT NULL,
+	"ColorSpace"  TEXT,
+	"ChromaSubsampling"  TEXT,
+	"Format"  TEXT,
+	"Codec"  TEXT,
+	"Aspect"  float,
+	"AspectCommercialName"  string,
+	"Width"  integer,
+	"Height"  integer,
+	"LanguageId"  integer,
+	"MovieId"  integer NOT NULL,
+	"FileId"  integer NOT NULL,
+	CONSTRAINT "FK_LanguageVideo" FOREIGN KEY ("LanguageId") REFERENCES "Languages" ("Id") ON DELETE SET NULL ON UPDATE CASCADE,
+	CONSTRAINT "FK_MovieVideo" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT "FK_VideoFile" FOREIGN KEY ("FileId") REFERENCES "Files" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- ----------------------------
--- Records of Videos
--- ----------------------------

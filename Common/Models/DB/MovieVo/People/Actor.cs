@@ -1,9 +1,11 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Frost.Common.Models.XML.Jukebox;
 
 namespace Frost.Common.Models.DB.MovieVo.People {
 
     /// <summary>Represents an actor in a movie.</summary>
+    [NotMapped]
     public class Actor : Person, IEquatable<Actor> {
         private readonly MovieActor _ma;
 

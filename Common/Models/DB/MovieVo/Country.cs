@@ -10,13 +10,13 @@ using Frost.Common.Util.ISO;
 namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary> Represents a country a movie was shot and/or produced in.</summary>
-    [Table("Country")]
+    [Table("Countries")]
     public class Country : IEquatable<Country> {
 
         /// <summary>Initializes a new instance of the <see cref="Country"/> class.</summary>
         public Country() {
             Movies = new HashSet<Movie>();
-            ISO3166_1 = new ISO3166_1();
+            ISO3166 = new ISO3166();
         }
 
         /// <summary>Initializes a new instance of the <see cref="Country"/> class.</summary>
@@ -25,7 +25,7 @@ namespace Frost.Common.Models.DB.MovieVo {
             Movies = new HashSet<Movie>();
 
             Name = name;
-            ISO3166_1 = new ISO3166_1(name);
+            ISO3166 = new ISO3166(name);
         }
 
         /// <summary>Initializes a new instance of the <see cref="Country"/> class.</summary>
@@ -34,13 +34,14 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <param name="alpha3">The ISO3166-1 3-letter country code.</param>
         public Country(string name, string alpha2, string alpha3) : this() {
             Name = name;
-            ISO3166_1.Alpha2 = alpha2;
-            ISO3166_1.Alpha3 = alpha3;
+            ISO3166.Alpha2 = alpha2;
+            ISO3166.Alpha3 = alpha3;
         }
 
         /// <summary>Gets or sets the database Country Id.</summary>
         /// <value>The database country Id</value>
         [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         /// <summary>Gets or sets the country name.</summary>
@@ -49,7 +50,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the ISO 3166-1 Information.</summary>
         /// <value>The ISO 3166-1 Information.</value>
-        public ISO3166_1 ISO3166_1 { get; set; }
+        public ISO3166 ISO3166 { get; set; }
 
         /// <summary>Gets or sets the movies shot in this country.</summary>
         /// <value>The country movies</value>

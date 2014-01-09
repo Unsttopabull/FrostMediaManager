@@ -23,6 +23,7 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets or sets the database Id of this set.</summary>
         /// <value>The database Id of this set</value>
         [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         /// <summary>Gets or sets the name of this set.</summary>

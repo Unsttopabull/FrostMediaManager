@@ -258,7 +258,9 @@ namespace Frost.Common.Models.XML.Jukebox {
 
             //Convert and Add XjbXmlActor array to HashSet<Actor>
             if (xm.Actors != null) {
-                mv.Actors = xm.Actors.ToHashSet<Actor, XjbXmlActor>();
+                foreach (XjbXmlActor actor in xm.Actors) {
+                    mv.ActorsLink.Add(new MovieActor(mv, new Person(actor.Name, actor.Thumb), actor.Role));
+                }
             }
 
             return mv;

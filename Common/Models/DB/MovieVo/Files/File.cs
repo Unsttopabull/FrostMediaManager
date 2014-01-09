@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.ModelConfiguration;
 
 namespace Frost.Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents an information about a file.</summary>
-    [Table("Files")]
     public class File : IEquatable<File> {
 
         /// <summary>Initializes a new instance of the <see cref="File"/> class.</summary>
@@ -34,6 +34,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <summary>Gets or sets the database file Id.</summary>
         /// <value>The database file Id</value>
         [Key]
+        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         ///<summary>The File Extension without beginning point</summary>
@@ -66,17 +67,15 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         #endregion
 
-        /// <summary>Gets or sets the movie foreign key.</summary>
-        /// <value>The movie foreign key.</value>
-        public long MovieId { get; set; }
+        ///// <summary>Gets or sets the movie foreign key.</summary>
+        ///// <value>The movie foreign key.</value>
+        //public long MovieId { get; set; }
 
         #region Relation Tables
 
-        /// <summary>Gets or sets the movie this file is from.</summary>
-        /// <value>The movie this file is from.</value>
-        [Required]
-        [ForeignKey("MovieId")]
-        public virtual Movie Movie { get; set; }
+        ///// <summary>Gets or sets the movie this file is from.</summary>
+        ///// <value>The movie this file is from.</value>
+        //public virtual Movie Movie { get; set; }
 
         /// <summary>Gets or sets the details about audio streams in this file</summary>
         /// <value>The details about audio streams in this file</value>
@@ -96,23 +95,51 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
         /// <param name="other">An object to compare with this object.</param>
         public bool Equals(File other) {
-            if (other == null) {
+            if (ReferenceEquals(null, other)) {
                 return false;
             }
-
             if (ReferenceEquals(this, other)) {
                 return true;
             }
+            return Id == other.Id && string.Equals(Extension, other.Extension) && string.Equals(Name, other.Name) && string.Equals(FolderPath, other.FolderPath) && Size == other.Size && DateAdded.Equals(other.DateAdded);
+        }
 
-            if (Id != 0 && other.Id != 0) {
-                return Id == other.Id;
+        /// <summary>
+        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+        /// </summary>
+        /// <returns>
+        /// true if the specified object  is equal to the current object; otherwise, false.
+        /// </returns>
+        /// <param name="obj">The object to compare with the current object. </param>
+        public override bool Equals(object obj) {
+            if (ReferenceEquals(null, obj)) {
+                return false;
             }
+            if (ReferenceEquals(this, obj)) {
+                return true;
+            }
+            if (obj.GetType() != this.GetType()) {
+                return false;
+            }
+            return Equals((File) obj);
+        }
 
-            return Extension == other.Extension &&
-                   Name == other.Name &&
-                   FolderPath == other.FolderPath &&
-                   DateAdded == other.DateAdded &&
-                   MovieId == other.MovieId;
+        /// <summary>
+        /// Serves as a hash function for a particular type. 
+        /// </summary>
+        /// <returns>
+        /// A hash code for the current <see cref="T:System.Object"/>.
+        /// </returns>
+        public override int GetHashCode() {
+            unchecked {
+                int hashCode = Id.GetHashCode();
+                hashCode = (hashCode * 397) ^ (Extension != null ? Extension.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Name != null ? Name.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (FolderPath != null ? FolderPath.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ Size.GetHashCode();
+                hashCode = (hashCode * 397) ^ DateAdded.GetHashCode();
+                return hashCode;
+            }
         }
 
         /// <summary>Gets the full path to the file.</summary>
@@ -124,6 +151,16 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
             return null;
         }
 
+        internal class Configuration : EntityTypeConfiguration<File> {
+            public Configuration() {
+                ToTable("Files");
+
+                //HasRequired(f => f.Movie)
+                //    .WithMany(m => m.Files)
+                //    .HasForeignKey(f => f.MovieId)
+                //    .WillCascadeOnDelete();
+            }
+        }
     }
 
 }
