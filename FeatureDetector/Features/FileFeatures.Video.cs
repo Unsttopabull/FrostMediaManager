@@ -16,7 +16,7 @@ namespace Frost.DetectFeatures {
         }
 
         private void GetVideoInfo() {
-            if (_file.Extension == "iso") {
+            if (_extension == "iso") {
                 GetISOVideoInfo();
                 return;
             }
@@ -36,7 +36,7 @@ namespace Frost.DetectFeatures {
 
         private Video GetFileVideoStreamInfo(MediaVideo mv) {
             Video currVideo = new Video();
-            currVideo.File = _file;
+            currVideo.FileId = _fileId;
 
             AddFileNameInfo(currVideo);
 
@@ -56,7 +56,7 @@ namespace Frost.DetectFeatures {
             currVideo.Resolution = !string.IsNullOrEmpty(mv.Standard) ? mv.Standard : GetFileVideoResolution(mv) ?? currVideo.Resolution;
             currVideo.Height = (int?) mv.Height;
             currVideo.Width = (int?) mv.Width;
-            currVideo.Language = GetLanguage(false, mv.Language, null, _fnInfo.SubtitleLanguage, _fnInfo.Language);
+            currVideo.Language = CheckLanguage(GetLanguage(false, mv.LanguageInfo.Full1, null, _fnInfo.SubtitleLanguage, _fnInfo.Language));
 
             currVideo.ScanType = (Common.ScanType) mv.ScanType;
             currVideo.Aspect = mv.DisplayAspectRatio;
@@ -78,7 +78,7 @@ namespace Frost.DetectFeatures {
             video.Resolution = _fnInfo.VideoQuality;
 
             if (_fnInfo.Language != null) {
-                video.Language = new Language(_fnInfo.Language);
+                video.Language = CheckLanguage(new Language(_fnInfo.Language));
             }
         }
 

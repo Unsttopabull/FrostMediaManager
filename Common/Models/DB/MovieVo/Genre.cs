@@ -30,6 +30,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the genre name.</summary>
         /// <value>The name of the genre.</value>
+        [Required]
         public string Name { get; set; }
 
         /// <summary>Gets or sets the movies of this genre.</summary>

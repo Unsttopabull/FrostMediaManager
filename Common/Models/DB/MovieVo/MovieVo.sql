@@ -9,7 +9,7 @@ Date: 2014-01-08 15:45:38
 -- ----------------------------
 -- Table structure for "Arts"
 -- ----------------------------
-DROP TABLE "Arts";
+DROP TABLE IF EXISTS "Arts";
 CREATE TABLE "Arts" (
 	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	"Type"  integer NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE "Arts" (
 -- ----------------------------
 -- Table structure for "Audios"
 -- ----------------------------
-DROP TABLE "Audios";
+DROP TABLE IF EXISTS "Audios";
 CREATE TABLE "Audios" (
 	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	"Source"  TEXT,
@@ -48,7 +48,7 @@ CREATE TABLE "Audios" (
 -- ----------------------------
 -- Table structure for "Certifications"
 -- ----------------------------
-DROP TABLE "Certifications";
+DROP TABLE IF EXISTS "Certifications";
 CREATE TABLE "Certifications" (
 	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	"Rating"  float NOT NULL,
@@ -61,53 +61,51 @@ CREATE TABLE "Certifications" (
 -- ----------------------------
 -- Table structure for "Countries"
 -- ----------------------------
-DROP TABLE "Countries";
+DROP TABLE IF EXISTS "Countries";
 CREATE TABLE "Countries" (
 	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	"Name"  TEXT,
-	"ISO3166_Alpha2"  TEXT,
-	"ISO3166_Alpha3"  TEXT
+	"ISO3166_Alpha2"  TEXT COLLATE NOCASE,
+	"ISO3166_Alpha3"  TEXT COLLATE NOCASE
 );
 
 -- ----------------------------
 -- Table structure for "Files"
 -- ----------------------------
-DROP TABLE "Files";
+DROP TABLE IF EXISTS "Files";
 CREATE TABLE "Files" (
 	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	"Extension"  TEXT NOT NULL,
 	"Name"  TEXT NOT NULL,
 	"FolderPath"  TEXT NOT NULL,
 	"Size"  integer,
-	"DateAdded"  TEXT,
+	"DateAdded"  TEXT
 );
 
 -- ----------------------------
 -- Table structure for "Genres"
 -- ----------------------------
-DROP TABLE "Genres";
+DROP TABLE IF EXISTS "Genres";
 CREATE TABLE Genres (
     Id integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    Name TEXT   NOT NULL
+    Name TEXT   NOT NULL  COLLATE NOCASE
 );
 
 -- ----------------------------
 -- Table structure for "Languages"
 -- ----------------------------
-DROP TABLE "Languages";
+DROP TABLE IF EXISTS "Languages";
 CREATE TABLE "Languages" (
 	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	"Name"  TEXT,
-	"ISO639_Alpha2"  TEXT,
-	"ISO639_Alpha3"  TEXT,
-	"CountryId"  integer,
-	CONSTRAINT "FK_LanguageCountry" FOREIGN KEY ("CountryId") REFERENCES "Countries" ("Id") ON DELETE SET NULL ON UPDATE CASCADE
+	"Name"  TEXT  COLLATE NOCASE,
+	"ISO639_Alpha2"  TEXT  COLLATE NOCASE,
+	"ISO639_Alpha3"  TEXT  COLLATE NOCASE
 );
 
 -- ----------------------------
 -- Table structure for "MovieActors"
 -- ----------------------------
-DROP TABLE "MovieActors";
+DROP TABLE IF EXISTS "MovieActors";
 CREATE TABLE "MovieActors" (
 	"Id"  integer NOT NULL,
 	"PersonId"  integer NOT NULL,
@@ -121,7 +119,7 @@ CREATE TABLE "MovieActors" (
 -- ----------------------------
 -- Table structure for "MovieCountries"
 -- ----------------------------
-DROP TABLE "MovieCountries";
+DROP TABLE IF EXISTS "MovieCountries";
 CREATE TABLE "MovieCountries" (
 	"MovieId"  integer NOT NULL,
 	"CountryId"  integer NOT NULL,
@@ -133,7 +131,7 @@ CREATE TABLE "MovieCountries" (
 -- ----------------------------
 -- Table structure for "MovieDirectors"
 -- ----------------------------
-DROP TABLE "MovieDirectors";
+DROP TABLE IF EXISTS "MovieDirectors";
 CREATE TABLE "MovieDirectors" (
 	"MovieId"  integer NOT NULL,
 	"DirectorId"  integer NOT NULL,
@@ -145,7 +143,7 @@ CREATE TABLE "MovieDirectors" (
 -- ----------------------------
 -- Table structure for "MovieGenres"
 -- ----------------------------
-DROP TABLE "MovieGenres";
+DROP TABLE IF EXISTS "MovieGenres";
 CREATE TABLE "MovieGenres" (
 	"MovieId"  integer NOT NULL,
 	"GenreId"  integer NOT NULL,
@@ -157,7 +155,7 @@ CREATE TABLE "MovieGenres" (
 -- ----------------------------
 -- Table structure for "Movies"
 -- ----------------------------
-DROP TABLE "Movies";
+DROP TABLE IF EXISTS "Movies";
 	CREATE TABLE "Movies" (
 	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	"Title"  TEXT,
@@ -191,7 +189,7 @@ DROP TABLE "Movies";
 -- ----------------------------
 -- Table structure for "MovieSpecials"
 -- ----------------------------
-DROP TABLE "MovieSpecials";
+DROP TABLE IF EXISTS "MovieSpecials";
 CREATE TABLE "MovieSpecials" (
 	"MovieId"  integer NOT NULL,
 	"SpecialId"  integer NOT NULL,
@@ -203,7 +201,7 @@ CREATE TABLE "MovieSpecials" (
 -- ----------------------------
 -- Table structure for "MovieStudios"
 -- ----------------------------
-DROP TABLE "MovieStudios";
+DROP TABLE IF EXISTS "MovieStudios";
 CREATE TABLE "MovieStudios" (
 	"MovieId"  integer NOT NULL,
 	"StudioId"  integer NOT NULL,
@@ -215,7 +213,7 @@ CREATE TABLE "MovieStudios" (
 -- ----------------------------
 -- Table structure for "MovieWriters"
 -- ----------------------------
-DROP TABLE "MovieWriters";
+DROP TABLE IF EXISTS "MovieWriters";
 CREATE TABLE "MovieWriters" (
 	"MovieId"  integer NOT NULL,
 	"WriterId"  integer NOT NULL,
@@ -227,17 +225,17 @@ CREATE TABLE "MovieWriters" (
 -- ----------------------------
 -- Table structure for "People"
 -- ----------------------------
-DROP TABLE "People";
+DROP TABLE IF EXISTS "People";
 CREATE TABLE People (
     Id integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    Name TEXT   NOT NULL,
+    Name TEXT   NOT NULL  COLLATE NOCASE,
     Thumb TEXT NULL
 );
 
 -- ----------------------------
 -- Table structure for "Plots"
 -- ----------------------------
-DROP TABLE "Plots";
+DROP TABLE IF EXISTS "Plots";
 CREATE TABLE "Plots" (
 	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	"Tagline"  TEXT,
@@ -251,7 +249,7 @@ CREATE TABLE "Plots" (
 -- ----------------------------
 -- Table structure for "Ratings"
 -- ----------------------------
-DROP TABLE "Ratings";
+DROP TABLE IF EXISTS "Ratings";
 CREATE TABLE "Ratings" (
 	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	"Critic"  TEXT NOT NULL,
@@ -259,48 +257,38 @@ CREATE TABLE "Ratings" (
 	"MovieId"  integer NOT NULL,
 	CONSTRAINT "FK_MovieRating" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- ----------------------------
--- Table structure for "Set"
--- ----------------------------
-DROP TABLE "Set";
-CREATE TABLE "Set" (
-    Id integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    Name TEXT NOT NULL
-);
-
 -- ----------------------------
 -- Table structure for "Sets"
 -- ----------------------------
-DROP TABLE "Sets";
+DROP TABLE IF EXISTS "Sets";
 CREATE TABLE "Sets" (
     Id integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    Name TEXT NOT NULL
+    Name TEXT NOT NULL  COLLATE NOCASE
 );
 
 -- ----------------------------
 -- Table structure for "Specials"
 -- ----------------------------
-DROP TABLE "Specials";
+DROP TABLE IF EXISTS "Specials";
 CREATE TABLE Specials (
     Id integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
-    Value TEXT NOT NULL
+    Value TEXT NOT NULL  COLLATE NOCASE
 );
 
 -- ----------------------------
 -- Table structure for "Studios"
 -- ----------------------------
-DROP TABLE "Studios";
+DROP TABLE IF EXISTS "Studios";
 CREATE TABLE Studios (
     Id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-    Name TEXT NOT NULL,
+    Name TEXT NOT NULL  COLLATE NOCASE,
     Logo TEXT NULL
 );
 
 -- ----------------------------
 -- Table structure for "Subtitles"
 -- ----------------------------
-DROP TABLE "Subtitles";
+DROP TABLE IF EXISTS "Subtitles";
 CREATE TABLE "Subtitles" (
 	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	"PodnapisiId"  integer,
@@ -321,7 +309,7 @@ CREATE TABLE "Subtitles" (
 -- ----------------------------
 -- Table structure for "Videos"
 -- ----------------------------
-DROP TABLE "Videos";
+DROP TABLE IF EXISTS "Videos";
 CREATE TABLE "Videos" (
 	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	"MovieHash"  TEXT NOT NULL,

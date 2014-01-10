@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.DetectFeatures.Util;
 using Frost.SharpMediaInfo;
@@ -40,18 +39,6 @@ namespace Frost.DetectFeatures {
             file.Detect();
 
             return file;
-        }
-
-        /// <param name="filePath">The filepath of the file to check for features.</param>
-        /// <param name="nfoPriority">How to handle information in a NFO file if found.</param>
-        public Task<Movie> DetectAsync(string filePath, NFOPriority nfoPriority = NFOPriority.OnlyNotDetected) {
-            if (string.IsNullOrEmpty(filePath)) {
-                throw new ArgumentNullException("filePath");
-            }
-
-            FileFeatures file = new FileFeatures(filePath, nfoPriority, this);
-
-            return file.DetectAsync();
         }
 
         #region IDisposable

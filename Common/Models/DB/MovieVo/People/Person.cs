@@ -50,6 +50,7 @@ namespace Frost.Common.Models.DB.MovieVo.People {
 
         /// <summary>Gets or sets the full name of the person.</summary>
         /// <value>The full name of the person.</value>
+        [Required]
         public string Name { get; set; }
 
         /// <summary>Gets or sets the persons thumbnail image.</summary>
@@ -147,11 +148,6 @@ namespace Frost.Common.Models.DB.MovieVo.People {
                         m.MapLeftKey("WriterId");
                         m.MapRightKey("MovieId");
                     });
-
-                HasMany(p => p.MoviesLink)
-                    .WithRequired(ml => ml.Person)
-                    .HasForeignKey(fk => fk.PersonId)
-                    .WillCascadeOnDelete();
             }
 
         }

@@ -36,6 +36,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the name of the studio.</summary>
         /// <value>The name of the studio.</value>
+        [Required]
         public string Name { get; set; }
 
         /// <summary>Gets or sets the URI to the studio's logo image.</summary>

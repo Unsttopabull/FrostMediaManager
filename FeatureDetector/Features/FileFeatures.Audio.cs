@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.Files;
-using Frost.Common.Util.ISO;
 using Frost.SharpMediaInfo.Output;
 
 using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
@@ -15,7 +15,7 @@ namespace Frost.DetectFeatures {
         }
 
         private void GetAudioInfo() {
-            if (_file.Extension == "iso") {
+            if (_extension == "iso") {
                 GetISOAudioInfo();
                 return;
             }
@@ -34,7 +34,7 @@ namespace Frost.DetectFeatures {
 
         private Audio GetFileAudioStreamInfo(MediaAudio ma) {
             Audio a = new Audio();
-            a.File = _file;
+            a.FileId = _fileId;
 
             a.BitDepth = ma.BitDepth;
             a.BitRate = ma.BitRate.HasValue ? ma.BitRate / 1024.0f : null;
@@ -45,13 +45,20 @@ namespace Frost.DetectFeatures {
             a.Codec = ma.CodecIDInfo.Hint ?? ma.CodecInfo.NameString ?? a.Codec;
             a.CompressionMode = (CompressionMode) ma.CompressionMode;
             a.Duration = ma.Duration.HasValue ? (long?)ma.Duration.Value.TotalMilliseconds : null;
-            a.Language = ma.Language != null
-                                     ? new Language(ma.Language, ma.LanguageInfo.ISO639_Alpha2, ma.LanguageInfo.ISO639_Alpha3)
-                                     : null;
+            a.Language = GetLangauge(ma);
 
             a.SamplingRate = ma.SamplingRate;
 
             return a;
+        }
+
+        private Language GetLangauge(MediaAudio ma) {
+            if (ma.Language != null && ma.Language != "Undefined") {
+                Language languageToCheck = new Language(ma.LanguageInfo.Full1.Trim(), ma.LanguageInfo.ISO639_Alpha2, ma.LanguageInfo.ISO639_Alpha3);
+                Language lang = CheckLanguage(languageToCheck);
+                return lang;
+            }
+            return null;
         }
     }
 }

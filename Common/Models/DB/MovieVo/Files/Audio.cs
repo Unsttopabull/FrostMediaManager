@@ -50,7 +50,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <summary>Gets or sets the database audio Id.</summary>
         /// <value>The database audio Id</value>
         [Key]
-        [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         /// <summary>Gets or sets the source of the audio</summary>

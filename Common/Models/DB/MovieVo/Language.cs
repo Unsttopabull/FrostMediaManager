@@ -26,8 +26,11 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <param name="name">The english name of this language.</param>
         public Language(string name) {
             if (!string.IsNullOrEmpty(name)) {
-                Name = name;
-                ISO639 = new ISO639(name);
+                Name = name.Trim();
+                ISO639 = new ISO639(Name);
+                if (!string.IsNullOrEmpty(ISO639.EnglishName) && string.Compare(Name, ISO639.EnglishName, StringComparison.OrdinalIgnoreCase) != 0) {
+                    Name = ISO639.EnglishName;
+                }
             }
             else {
                 ISO639 = new ISO639();
@@ -39,9 +42,18 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <param name="alpha2">The ISO639-2 2-letter language code.</param>
         /// <param name="alpha3">The ISO639-2 3-letter language code.</param>
         public Language(string name, string alpha2, string alpha3) : this() {
-            Name = name;
-            ISO639.Alpha2 = alpha2;
-            ISO639.Alpha3 = alpha3;
+            int idxName = name.IndexOf('/');
+            Name = idxName != -1 ? name.Substring(0, idxName - 1) : name;
+
+            if (!string.IsNullOrEmpty(alpha3)) {
+                int idxAlpha3 = alpha3.IndexOf('/');
+                ISO639.Alpha3 = idxAlpha3 != -1 ? alpha3.Substring(0, idxAlpha3 - 1) : alpha3;
+            }            
+
+            if (!string.IsNullOrEmpty(alpha2)) {
+                int idxAlpha2 = alpha2.IndexOf('/');
+                ISO639.Alpha2 = idxAlpha2 != -1 ? alpha2.Substring(0, idxAlpha2 - 1) : alpha2;
+            }
         }
 
         /// <summary>Gets or sets the Id of this language in the database.</summary>
@@ -58,12 +70,6 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets or sets the ISO639 language codes.</summary>
         /// <value>The ISO639 language codes.</value>
         public ISO639 ISO639 { get; set; }
-
-        /// <summary>Gets or sets the foreign key to the language's country.</summary>
-        /// <value>The foreign key to the language's country</value>
-        public long? CountryId { get; set; }
-
-        public virtual Country Country { get; set; }
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
@@ -137,10 +143,6 @@ namespace Frost.Common.Models.DB.MovieVo {
         internal class Configuration : EntityTypeConfiguration<Language> {
             public Configuration() {
                 ToTable("Languages");
-
-                HasOptional(l => l.Country)
-                    .WithMany()
-                    .HasForeignKey(l => l.CountryId);
             }
         }
     }

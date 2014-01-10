@@ -23,12 +23,6 @@ namespace Frost.Common.Models.DB.MovieVo {
                     .WithRequired(p => p.Movie)
                     .HasForeignKey(p => p.MovieId)
                     .WillCascadeOnDelete();
-
-				//Movie <--> ActorsLink
-                HasMany(m => m.ActorsLink)
-                    .WithRequired(al => al.Movie)
-                    .HasForeignKey(fk => fk.MovieId)
-                    .WillCascadeOnDelete();
             }
         }
     }

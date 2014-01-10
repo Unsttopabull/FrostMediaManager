@@ -43,14 +43,22 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\EF\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FeatureDetector.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Features\FileFeatures.Art.cs" />
     <Compile Include="Features\FileFeatures.Audio.cs" />
     <Compile Include="Features\FileFeatures.cs" />
+    <Compile Include="Features\FileFeatures.NFO.Xbmc.cs" />
+    <Compile Include="Features\FileFeatures.NFO.Xtreamer.cs" />
     <Compile Include="Features\FileFeatures.Subtitles.cs" />
     <Compile Include="Features\FileFeatures.NFO.cs" />
     <Compile Include="Features\FileFeatures.Video.cs" />

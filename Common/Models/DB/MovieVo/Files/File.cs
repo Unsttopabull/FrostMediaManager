@@ -14,6 +14,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
             AudioDetails = new HashSet<Audio>();
             VideoDetails = new HashSet<Video>();
             Subtitles = new HashSet<Subtitle>();
+            DateAdded = DateTime.Now;
         }
 
         /// <summary>Initializes a new instance of the <see cref="File"/> class.</summary>
@@ -26,7 +27,6 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
             Name = name;
             FolderPath = pathOnDrive;
             Size = size;
-            DateAdded = DateTime.Now;
         }
 
         #region Properties/Columns
@@ -40,11 +40,13 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         ///<summary>The File Extension without beginning point</summary>
         ///<value>The file extension withot begining point</value>
         ///<example>\eg{ ''<c>mp4</c>''}</example>
+        [Required]
         public string Extension { get; set; }
 
         /// <summary>Gets or sets the filename.</summary>
         /// <value>The filename in folder.</value>
         /// <example>\eg{ ''<c>Wall_E.avi</c>''}</example>
+        [Required]
         public string Name { get; set; }
 
         /// <summary>Gets or sets the path to the folder that contains this file</summary>
@@ -55,6 +57,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// 		<item><description>''<c>smb://MYXTREAMER/Xtreamer_PRO/sda1/Movies/</c>''</description></item>
         /// 	</list>}
         /// </example>
+        [Required]
         public string FolderPath { get; set; }
 
         /// <summary>Gets or sets the file size in bytes.</summary>
@@ -154,11 +157,6 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         internal class Configuration : EntityTypeConfiguration<File> {
             public Configuration() {
                 ToTable("Files");
-
-                //HasRequired(f => f.Movie)
-                //    .WithMany(m => m.Files)
-                //    .HasForeignKey(f => f.MovieId)
-                //    .WillCascadeOnDelete();
             }
         }
     }

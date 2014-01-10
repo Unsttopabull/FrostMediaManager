@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Frost.Common.Util.ISO {
 
@@ -412,7 +411,7 @@ namespace Frost.Common.Util.ISO {
                 new ISOLanguageCode("Somali", "so", "som"),
                 new ISOLanguageCode("Songhai languages", null, "son"),
                 new ISOLanguageCode("Sotho, Southern", "st", "sot"),
-                new ISOLanguageCode("Spanish, Castilian", "es", "spa"),
+                new ISOLanguageCode("Spanish", "es", "spa"),
                 new ISOLanguageCode("Sardinian", "sc", "srd"),
                 new ISOLanguageCode("Sranan Tongo", null, "srn"),
                 new ISOLanguageCode("Serbian", "sr", "srp"),
@@ -481,7 +480,7 @@ namespace Frost.Common.Util.ISO {
                 new ISOLanguageCode("Sorbian languages", null, "wen"),
                 new ISOLanguageCode("Walloon", "wa", "wln"),
                 new ISOLanguageCode("Wolof", "wo", "wol"),
-                new ISOLanguageCode("Kalmyk, Oirat", null, "xal"),
+                new ISOLanguageCode(null, "xal", null, "Kalmyk", "Oirat"),
                 new ISOLanguageCode("Xhosa", "xh", "xho"),
                 new ISOLanguageCode("Yao", null, "yao"),
                 new ISOLanguageCode("Yapese", null, "yap"),
@@ -489,18 +488,24 @@ namespace Frost.Common.Util.ISO {
                 new ISOLanguageCode("Yoruba", "yo", "yor"),
                 new ISOLanguageCode("Yupik languages", null, "ypk"),
                 new ISOLanguageCode("Zapotec", null, "zap"),
-                new ISOLanguageCode("Blissymbols, Blissymbolics, Bliss", null, "zbl"),
+                new ISOLanguageCode(null, "zbl", null, "Blissymbols", "Blissymbolics", "Bliss"),
                 new ISOLanguageCode("Zenaga", null, "zen"),
                 new ISOLanguageCode("Standard Moroccan Tamazight", null, "zgh"),
-                new ISOLanguageCode("Zhuang, Chuang", "za", "zha"),
+                new ISOLanguageCode("za", "zha", null, "Zhuang", "Chuang"),
                 new ISOLanguageCode("Zande languages", null, "znd"),
                 new ISOLanguageCode("Zulu", "zu", "zul"),
                 new ISOLanguageCode("Zuni", null, "zun"),
-                new ISOLanguageCode("Zaza, Dimili, Dimli, Kirdki, Kirmanjki, Zazaki", null, "zza"),
+                new ISOLanguageCode(null, "zza", null, "Zaza", "Dimili", "Dimli", "Kirdki", "Kirmanjki", "Zazaki"),
 
                 #endregion
             };
 
+            LanguageNames.Add("Espanol", "spa");
+            LanguageNames.Add("Castilian", "spa");
+            LanguageNames.Add("Espańol", "spa");
+            LanguageNames.Add("Dansk", "dan");
+            LanguageNames.Add("Deutsch", "ger");
+            LanguageNames.Add("Français", "fre");
             foreach (ISOLanguageCode languageCode in ilc) {
                 //if 2 letter code exists
                 if (languageCode.Alpha2 != null) {
@@ -514,7 +519,9 @@ namespace Frost.Common.Util.ISO {
 
                 Codes.Add(languageCode.Alpha3, languageCode);
 
-                LanguageNames.Add(languageCode.EnglishName, languageCode.Alpha3);
+                foreach (string languageName in languageCode.Languages) {
+                    LanguageNames.Add(languageName, languageCode.Alpha3);
+                }
             }
         }
 

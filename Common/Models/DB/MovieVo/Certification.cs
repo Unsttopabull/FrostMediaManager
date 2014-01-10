@@ -8,7 +8,6 @@ namespace Frost.Common.Models.DB.MovieVo {
     /// <summary>Represents a movie certification/restriction in a certain country.</summary>
     [Table("Certifications")]
     public class Certification : CertificationBase, IEquatable<Certification> {
-
         /// <summary>Initializes a new instance of the <see cref="Certification"/> class.</summary>
         public Certification() {
         }
@@ -36,6 +35,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the rating in the specified county.</summary>
         /// <value>The rating in the specified country.</value>
+        [Required]
         public string Rating { get; set; }
 
         /// <summary>Gets or sets the movie foreign key.</summary>
@@ -52,6 +52,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the coutry this certification applies to.</summary>
         /// <value>The coutry this certification applies to.</value>
+        [Required]
         [ForeignKey("CountryId")]
         public virtual Country Country { get; set; }
 

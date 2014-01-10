@@ -37,6 +37,7 @@ namespace Frost.Common.Models.DB.MovieVo.Arts {
 
         /// <summary>Gets or sets the path to this art (can be local or network or an URI).</summary>
         /// <value>The path to this art (can be local or network or an URI).</value>
+        [Required]
         public string Path { get; set; }
 
         /// <summary>Gets or sets the path to the preview of the art (a smaller, lower resolution copy).</summary>
@@ -45,6 +46,7 @@ namespace Frost.Common.Models.DB.MovieVo.Arts {
 
         /// <summary>Gets or sets the type used as a discriminator.</summary>
         /// <value>The type used as a discriminator.</value>
+        [Required]
         protected ArtType Type { get; set; }
 
         /// <summary>Gets or sets the movie foreign key.</summary>

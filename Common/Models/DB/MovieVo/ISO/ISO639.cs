@@ -6,6 +6,8 @@ namespace Frost.Common.Models.DB.MovieVo.ISO {
     /// <summary>Holds an ISO language code information</summary>
     [ComplexType]
     public class ISO639 {
+        [NotMapped]
+        internal readonly string EnglishName;
 
         /// <summary>Initializes a new instance of the <see cref="ISO639" /> class.</summary>
         public ISO639() {
@@ -16,6 +18,7 @@ namespace Frost.Common.Models.DB.MovieVo.ISO {
         public ISO639(string englishName) {
             ISOLanguageCode iso = ISOLanguageCodes.Instance.GetByEnglishName(englishName);
             if (iso != null) {
+                EnglishName = iso.EnglishName;
                 Alpha2 = iso.Alpha2;
                 Alpha3 = iso.Alpha3;
             }

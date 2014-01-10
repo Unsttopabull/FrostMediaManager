@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using Frost.Common.Util;
 using Frost.Common.Util.ISO;
 
 namespace Frost.Common.Models.DB.MovieVo.ISO {
@@ -7,6 +6,9 @@ namespace Frost.Common.Models.DB.MovieVo.ISO {
     /// <summary>Holds an ISO country code information</summary>
     [ComplexType]
     public class ISO3166 {
+
+        [NotMapped]
+        internal string EnglishName;
 
         /// <summary>Initializes a new instance of the <see cref="ISO3166" /> class.</summary>
         public ISO3166() {
@@ -17,6 +19,7 @@ namespace Frost.Common.Models.DB.MovieVo.ISO {
         public ISO3166(string countryName) {
             ISOCountryCode icc = ISOCountryCodes.Instance.GetByEnglishName(countryName);
             if (icc != null) {
+                EnglishName = icc.EnglishName;
                 Alpha2 = icc.Alpha2;
                 Alpha3 = icc.Alpha3;
             }

@@ -15,7 +15,6 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         public Subtitle(File file = null) {
             File = file;
-            Language = new Language();
         }
 
         /// <summary>Initializes a new instance of the <see cref="Subtitle" /> class.</summary>
@@ -199,7 +198,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
                     .HasForeignKey(fk => fk.FileId)
                     .WillCascadeOnDelete();
 
-                HasOptional(s => s.Language).WithMany();
+                HasOptional(s => s.Language);
             }
         }
     }

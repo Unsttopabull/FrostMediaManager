@@ -17,6 +17,7 @@ using Frost.DetectFeatures;
 using System.Diagnostics;
 using Frost.PodnapisiNET;
 using Frost.PodnapisiNET.Models;
+using HibernatingRhinos.Profiler.Appender.EntityFramework;
 using Newtonsoft.Json;
 using CompressionMode = Frost.Common.CompressionMode;
 using File = System.IO.File;
@@ -412,11 +413,14 @@ namespace Frost.Tester {
         }
 
         private static void Main() {
+            EntityFrameworkProfiler.Initialize();
+
             FileStream debugLog = File.OpenWrite("debugLogOSubs.txt");
             Debug.Listeners.Add(new TextWriterTraceListener(debugLog));
             Debug.AutoFlush = true;
 
             TestDB();
+            //TestMovie();
 
             Console.WriteLine(Filler);
             Console.WriteLine("\tFIN");
@@ -424,47 +428,70 @@ namespace Frost.Tester {
             Console.Read();
         }
 
-        private static void TestDB() {
-            //Console.ForegroundColor = ConsoleColor.White;
-            
+        private static void TestMovie() {
             MovieVoContainer mvc = new MovieVoContainer();
-            InitializeDatabase(mvc);
+            Movie mov = new Movie();
+            mov.Title = "Amazing Grace";
+            mvc.Movies.Add(mov);
 
-            List<Movie> movies = TestFeatureDetectorVideoDebug().ToList();
-            //Serialize(movies);
-
-            //List<Movie> movies = Deserialize(@"E:\Workspace\Ostalo\Repos\Git\FrostMediaManager\Tester\bin\Debug\movie_.js");
-
-            Adder add = new Adder(mvc);
-            foreach (Movie movie in movies) {
-                add.Add(movie);
-            }
+            FileVo file = new FileVo("Amazing.Grace.2006.SLOSub.DvdRip.Xvid", "avi", @"E:\Torrenti\FILMI\Amazing.Grace.2006.SLOSub.DvdRip.Xvid\");
+            Language lang = new Language("Slovene", "sl", "slv");
+            mov.Subtitles.Add(new Subtitle(file, lang, "SubRip"));
 
             try {
                 mvc.SaveChanges();
             }
-            catch (DbUpdateException e) {
-                Exception innerException = e.InnerException.InnerException;
-                IEnumerable<DbEntityEntry> entries = e.Entries;
-
-                Console.Error.WriteLine();
-                Console.Error.WriteLine(e.InnerException.InnerException);
+            catch (DbEntityValidationException e) {
             }
         }
 
-        public static void InitializeDatabase(MovieVoContainer context) {
-            try {
-                if (File.Exists("MovieVo.db3")) {
-                    Console.WriteLine(@"Cache file exists");
-                    return;
-                }
-                File.Delete("MovieVo.db3");
-                SQLiteConnection.CreateFile("MovieVo.db3");
+        private static void TestDB() {
+            //Console.ForegroundColor = ConsoleColor.White;
+            SQLiteLog.Enabled = true;
+            SQLiteLog.Initialize();
+            SQLiteLog.Log += SQLiteLog_Log;
+
+
+            TestFeatureDetectorVideoDebugDB();
+
+            //try {
+            //    mvc.SaveChanges();
+            //}
+            //catch (DbUpdateException e) {
+            //    Exception innerException = e.InnerException.InnerException;
+            //    IEnumerable<DbEntityEntry> entries = e.Entries;
+
+            //    Console.Error.WriteLine();
+            //    Console.Error.WriteLine(e.InnerException.InnerException);
+            //}
+            //catch (InvalidOperationException e) {
+            //    Console.Error.WriteLine(e.Message);
+
+            //    if (e.InnerException != null) {
+            //        Console.Error.WriteLine(e.InnerException.Message);
+            //    }
+            //}
+        }
+
+        static void SQLiteLog_Log(object sender, LogEventArgs e) {
+            Console.WriteLine(e.Message);
+        }
+
+        private static void TestFeatureDetectorVideoDebugDB() {
+            using (FeatureDetector fd = new FeatureDetector()) {
+                //const string fileName = @"E:\Torrenti\FILMI\The Big Lebowski (1998) - Veliki Lebowski\The Big Lebowski.1998.HDRip.x264-VLiS.mkv";
+                //fd.Detect(fileName);
+                DetectMany(fd);
             }
-            catch (Exception e) {
-                Console.WriteLine(e.Message);
+        }
+
+        private static void DetectMany(FeatureDetector fd) {
+            int i = 0;
+            foreach (string fileName in FileNames2) {
+                fd.Detect(fileName);
+
+                Console.WriteLine("{0}: \t{1}", ++i, Path.GetFileName(fileName));
             }
-            SQLiteCommand.Execute(File.ReadAllText("MovieVo.sql"), SQLiteExecuteType.NonQuery, context.Database.Connection.ConnectionString, new object());
         }
 
         private static List<Movie> Deserialize(string fn) {
@@ -538,50 +565,6 @@ namespace Frost.Tester {
                     Console.WriteLine("{0}: \t{1}", ++i, Path.GetFileName(fileName));
                 }
             }
-            return movies;
-        }
-
-        private static List<Movie> TestFeatureDetectorVideoDebugAsync() {
-            List<Movie> movies = new List<Movie>();
-
-            using (FeatureDetector fd = new FeatureDetector()) {
-                int i = 0;
-                foreach (string fileName in FileNames2) {
-                    Task<Movie> info = fd.DetectAsync(fileName);
-
-                    movies.Add(info.Result);
-
-                    Debug.WriteLine(Filler);
-                    Console.WriteLine("{0}: \t{1}", ++i, Path.GetFileName(fileName));
-                }
-            }
-            return movies;
-        }
-
-        private static IEnumerable<Movie> TestFeatureDetectorVideoDebugAsyncP() {
-            Movie[] movies = new Movie[FileNames2.Length];
-            Task[] arr = new Task[FileNames2.Length];
-
-            using (FeatureDetector fd = new FeatureDetector()) {
-                int i = 0;
-                foreach (string fileName in FileNames2) {
-                    int num = i;
-                    string path = fileName;
-
-                    Task<Movie> info = fd.DetectAsync(fileName);
-                    arr[i++] = info;
-
-                    info.ContinueWith(tsk => {
-                        Movie m = tsk.Result;
-
-                        lock (movies) {
-                            movies[num] = m;
-                        }
-                        Console.WriteLine("{0}: \t{1}", num + 1, Path.GetFileName(path));
-                    });
-                }
-            }
-            Task.WaitAll(arr);
             return movies;
         }
 

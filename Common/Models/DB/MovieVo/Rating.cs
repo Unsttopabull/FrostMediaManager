@@ -30,10 +30,12 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the name of the critic.</summary>
         /// <value>The name of the critic.</value>
+        [Required]
         public string Critic { get; set; }
 
         /// <summary>Gets or sets the value of the rating.</summary>
         /// <value>The rating value</value>
+        [Required]
         public double Value { get; set; }
 
         /// <summary>Gets or sets the movie foreign key.</summary>

@@ -58,6 +58,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the full plot.</summary>
         /// <value>The full plot.</value>
+        [Required]
         public string Full { get; set; }
 
         /// <summary>Gets or sets the language of this plot.</summary>

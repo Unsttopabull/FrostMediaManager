@@ -11,12 +11,12 @@ namespace Frost.Common.Models.DB.MovieVo {
     public class Special : IEquatable<Special> {
 
         public Special() {
-            
+            Movies = new HashSet<Movie>();
         }
 
         /// <summary>Initializes a new instance of the <see cref="Special"/> class.</summary>
         /// <param name="value">The value of the special</param>
-        public Special(string value) {
+        public Special(string value) : this() {
             Value = value;
         }
 

@@ -70,6 +70,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
+        [Required]
         public string MovieHash { get; set; }
 
         /// <summary>With or from what this video was made from</summary>

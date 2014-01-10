@@ -11,12 +11,12 @@ using Frost.SharpCharsetDetector;
 using Frost.SharpLanguageDetect;
 using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
-
 using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
 using FileInfo = Frost.SharpMediaInfo.Output.Properties.General.FileInfo;
 using Language = Frost.Common.Models.DB.MovieVo.Language;
 
 namespace Frost.DetectFeatures {
+
     public partial class FileFeatures : IDisposable {
         private static readonly string[] KnownSubtitleExtensions;
         private static readonly string SubtitleExtensionsRegex;
@@ -25,13 +25,9 @@ namespace Frost.DetectFeatures {
 
         private void GetSubtitles() {
             //regex from matching files with the same name but with a known subtitle extension
-            string regex = string.Format(@"{0}{1}", Regex.Escape(_file.Name), SubtitleExtensionsRegex);
+            string regex = string.Format(@"{0}{1}", Regex.Escape(_fileName), SubtitleExtensionsRegex);
             IEnumerable<MediaListFile> mediaFiles = _directoryInfo.EnumerateFilesRegex(regex)
-                                                                  .Select(fi => {
-                                                                      lock(_mf) {
-                                                                        return _mf.GetOrOpen(fi.FullName);
-                                                                      }
-                                                                  })
+                                                                  .Select(fi => _mf.GetOrOpen(fi.FullName))
                                                                   .Where(mediaFile => mediaFile != null);
 
             //if (filesWithPattern.Count > 0) {
@@ -69,39 +65,51 @@ namespace Frost.DetectFeatures {
             SubtitleLanguage subLang = GetLanguageAndEncoding(mediaFile.General.FileInfo.FullPath);
 
             FileInfo fi = mediaFile.General.FileInfo;
-            FileVo file = new FileVo(fi.FileName, fi.Extension, fi.FolderPath, fi.FileSize);
+            //FileVo file = new FileVo(fi.FileName, fi.Extension, fi.FolderPath, fi.FileSize);
 
+            Subtitle sub = null;
             if (mediaFile.Text.Count > 0) {
                 foreach (MediaText text in mediaFile.Text) {
-                    Language lang = GetLanguage(true, text.Language, subLang.Language, fnInfo.SubtitleLanguage, fnInfo.Language);
+                    Language languageToCheck = GetLanguage(true, text.Language, subLang.Language, fnInfo.SubtitleLanguage, fnInfo.Language);
+                    Language lang = CheckLanguage(languageToCheck);
+                    //Language lang = null;
 
-                    Subtitle sub;
+
                     string mediaFormat = text.FormatInfo.Name;
 
                     //if MediaInfo detected a format and it is a known subtitle format
                     if (mediaFormat != null && Array.BinarySearch(KnownSubtitleFormats, mediaFormat) >= 0) {
-                        sub = new Subtitle(file, lang, mediaFormat);
+                        sub = new Subtitle(null, lang, mediaFormat);
+                        sub.FileId = _fileId;
                     }
                     else {
                         //TODO:check format if its a subtitle
-                        sub = new Subtitle(file, lang);
+                        sub = new Subtitle(null, lang);
+                        sub.FileId = _fileId;
                     }
-
-                    if (subLang.Encoding != null) {
-                        sub.Encoding = subLang.Encoding.WebName;
-                    }
-
-                    //Console.WriteLine(sub);
-                    Movie.Subtitles.Add(sub);
                 }
             }
             else {
-                Language lang = GetLanguage(true, null, subLang.Language, fnInfo.SubtitleLanguage, fnInfo.Language);
-                Subtitle sub = new Subtitle(file, lang);
+                Language languageToCheck = GetLanguage(true, null, subLang.Language, fnInfo.SubtitleLanguage, fnInfo.Language);
+                Language lang = CheckLanguage(languageToCheck);
+                //Language lang = null;
+
+                sub = new Subtitle(null, lang);
+                sub.FileId = _fileId;
 
                 if (subLang.Encoding != null) {
                     sub.Encoding = subLang.Encoding.WebName;
                 }
+
+                //Console.WriteLine(sub);
+                Movie.Subtitles.Add(sub);
+            }
+
+            if (sub != null) {
+                if (subLang.Encoding != null) {
+                    sub.Encoding = subLang.Encoding.WebName;
+                }
+                sub.MD5 = subLang.MD5;
 
                 //Console.WriteLine(sub);
                 Movie.Subtitles.Add(sub);
@@ -147,13 +155,20 @@ namespace Frost.DetectFeatures {
             ud.DataEnd();
 
             return ud.IsSupportedEncoding
-                ? ud.DetectedEncoding
-                : null;
+                       ? ud.DetectedEncoding
+                       : null;
         }
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         public void Dispose() {
-            Md5.Dispose();
+            if (Md5 != null) {
+                Md5.Dispose();
+            }
+
+            if (_mvc != null) {
+                _mvc.Dispose();
+            }
         }
     }
+
 }

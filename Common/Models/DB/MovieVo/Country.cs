@@ -26,6 +26,9 @@ namespace Frost.Common.Models.DB.MovieVo {
 
             Name = name;
             ISO3166 = new ISO3166(name);
+            if (!string.IsNullOrEmpty(ISO3166.EnglishName) && string.Compare(Name, ISO3166.EnglishName, StringComparison.OrdinalIgnoreCase) != 0) {
+                Name = ISO3166.EnglishName;
+            }
         }
 
         /// <summary>Initializes a new instance of the <see cref="Country"/> class.</summary>
@@ -38,6 +41,11 @@ namespace Frost.Common.Models.DB.MovieVo {
             ISO3166.Alpha3 = alpha3;
         }
 
+        /// <summary>Initializes a new instance of the <see cref="Country"/> class.</summary>
+        /// <param name="code">ISO 3166 Language code.</param>
+        public Country(ISOCountryCode code) : this(code.EnglishName, code.Alpha2, code.Alpha3) {
+        }
+
         /// <summary>Gets or sets the database Country Id.</summary>
         /// <value>The database country Id</value>
         [Key]
@@ -46,6 +54,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the country name.</summary>
         /// <value>The name of the country.</value>
+        [Required]
         public string Name { get; set; }
 
         /// <summary>Gets or sets the ISO 3166-1 Information.</summary>
@@ -86,10 +95,20 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <param name="iso3166">The ISO 3166-1 2 letter code.</param>
         /// <returns>Returns a country information from ISO 3166-1 2 letter code. If an inapropriate string is passed it returns <c>null</c>.</returns>
         public static Country FromISO3166(string iso3166) {
-            ISOLanguageCode iso = ISOLanguageCodes.Instance.GetByISOCode(iso3166);
+            ISOCountryCode iso = ISOCountryCodes.Instance.GetByISOCode(iso3166);
             return iso != null
                 ? new Country(iso.EnglishName, iso.Alpha2, iso.Alpha3)
                 : null;
+        }
+
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>
+        /// A string that represents the current object.
+        /// </returns>
+        public override string ToString() {
+            return string.Format("{0} ({1} / {2})", Name, ISO3166.Alpha2, ISO3166.Alpha3);
         }
 
         internal class CountryConfiguration : EntityTypeConfiguration<Country> {

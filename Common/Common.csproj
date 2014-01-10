@@ -44,6 +44,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\EF\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="HibernatingRhinos.Profiler.Appender">
+      <HintPath>..\..\..\..\..\..\Libraries\Martin\Downloads\EntityFramework.Profiler-v2.0-Build-2224\HibernatingRhinos.Profiler.Appender.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -163,16 +166,16 @@
     <Compile Include="Util\ISO\ISOCodes.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Util\ISO\ISOCountryCode.cs">
+    <Compile Include="Util\ISO\Country\ISOCountryCode.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Util\ISO\ISOCountryCodes.cs">
+    <Compile Include="Util\ISO\Country\ISOCountryCodes.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Util\ISO\ISOLanguageCode.cs">
+    <Compile Include="Util\ISO\Language\ISOLanguageCode.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Util\ISO\ISOLanguageCodes.cs">
+    <Compile Include="Util\ISO\Language\ISOLanguageCodes.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="XmlIndentedTextWriter.cs" />
@@ -232,7 +235,9 @@
       <Link>x86\System.Data.SQLite.pdb</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Models\DB\MovieVo\MovieVo.sql" />
+    <Content Include="Models\DB\MovieVo\MovieVo.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Models\DB\XBMC\extendSettings.sql" />
     <Content Include="Models\DB\XBMC\extendStreamDetails.sql" />
   </ItemGroup>

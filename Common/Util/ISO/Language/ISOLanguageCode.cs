@@ -11,7 +11,18 @@
         public ISOLanguageCode(string englishName, string alpha2, string alpha3B, string alpha3T = null) : base(englishName, alpha2, alpha3B) {
             Alpha3Terminology = alpha3T;
 
-            Languages = englishName.SplitWithoutEmptyEntries(',');
+            //Languages = englishName.SplitWithoutEmptyEntries(',');
+            Languages = new[] { englishName };
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="ISOCountryCode" /> class.</summary>
+        /// <param name="alpha2">The ISO 639-1 Two letter code.</param>
+        /// <param name="alpha3B">The ISO 639-2 Three letter code (Bibliographic).</param>
+        /// <param name="alpha3T">The ISO 639-2 Three letter code (Terminology).</param>
+        /// <param name="languageNames">The ISO 3166-1 language names in various languages or variants.</param>
+        public ISOLanguageCode(string alpha2, string alpha3B, string alpha3T, params string[] languageNames) : base(languageNames.Length != 0 ? languageNames[0] : null, alpha2, alpha3B) {
+            Alpha3Terminology = alpha3T;
+            Languages = languageNames;
         }
 
         /// <summary>Gets the ISO 3 letter code (Terminology).</summary>
