@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.Files;
@@ -15,7 +14,7 @@ namespace Frost.DetectFeatures {
         }
 
         private void GetAudioInfo() {
-            if (_extension == "iso") {
+            if (_file.Extension == "iso") {
                 GetISOAudioInfo();
                 return;
             }
@@ -34,7 +33,7 @@ namespace Frost.DetectFeatures {
 
         private Audio GetFileAudioStreamInfo(MediaAudio ma) {
             Audio a = new Audio();
-            a.FileId = _fileId;
+            a.File = _file;
 
             a.BitDepth = ma.BitDepth;
             a.BitRate = ma.BitRate.HasValue ? ma.BitRate / 1024.0f : null;

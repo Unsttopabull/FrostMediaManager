@@ -19,7 +19,7 @@ namespace Frost.DetectFeatures {
                 return;
             }
 
-            FileInfo xtNfo = _directoryInfo.EnumerateFiles(_fileName + "_xjb.xml").FirstOrDefault();
+            FileInfo xtNfo = _directoryInfo.EnumerateFiles(_file.Name + "_xjb.xml").FirstOrDefault();
             if (xtNfo == null) {
                 return;
             }

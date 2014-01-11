@@ -70,6 +70,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\DB\Jukebox\XjbMovie.cs" />
+    <Compile Include="Models\DB\MovieVo\Arts\Art.cs" />
     <Compile Include="Models\DB\MovieVo\GenreInit.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -108,7 +109,7 @@
     <Compile Include="Models\DB\Jukebox\XjbPerson.cs" />
     <Compile Include="Models\XML\Jukebox\XjbXmlMovie.cs" />
     <Compile Include="Models\XML\Jukebox\XjbXmlActor.cs" />
-    <Compile Include="Models\DB\MovieVo\Arts\Art.cs" />
+    <Compile Include="Models\DB\MovieVo\Arts\ArtBase.cs" />
     <Compile Include="Models\DB\MovieVo\Files\Audio.cs" />
     <Compile Include="Models\DB\MovieVo\Certification.cs" />
     <Compile Include="Models\DB\MovieVo\Country.cs" />

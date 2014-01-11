@@ -3,21 +3,20 @@ using System;
 namespace Frost.Common.Models.DB.MovieVo.Arts {
 
     /// <summary>Represents a movie fanart image (backround / backdrop).</summary>
-    public class Fanart : Art, IEquatable<Fanart> {
+    public class Fanart : ArtBase, IEquatable<Fanart> {
 
         public Fanart() {
-            
         }
 
         /// <summary>Initializes a new instance of the <see cref="Fanart"/> class.</summary>
         /// <param name="path">The path to this art (can be local or network or an URI).</param>
         /// <param name="preview">The path to a smaller version used as preview image</param>
-        public Fanart(string path, string preview) : base(path, preview, ArtType.Fanart) {
+        public Fanart(string path, string preview) : base(path, preview) {
         }
 
         /// <summary>Initializes a new instance of the <see cref="Fanart"/> class.</summary>
         /// <param name="path">The path to this art (can be local or network or an URI).</param>
-        public Fanart(string path) : base(path, null, ArtType.Fanart) {
+        public Fanart(string path) : base(path, null) {
         }
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>

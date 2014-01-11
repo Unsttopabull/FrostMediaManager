@@ -47,7 +47,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the information about promotional images in the library.</summary>
         /// <value>The information about promotional images in the library.</value>
-        public DbSet<Art> Art { get; set; }
+        public DbSet<ArtBase> Art { get; set; }
 
         /// <summary>Gets or sets the information about contries the movies in the library were shot and/or produced in.</summary>
         /// <value>The information about contries the movies in the library were shot and/or produced in.</value>
@@ -98,7 +98,7 @@ namespace Frost.Common.Models.DB.MovieVo {
             modelBuilder.Configurations.Add(new Video.Configuration());
             modelBuilder.Configurations.Add(new Certification.Configuration());
             modelBuilder.Configurations.Add(new Movie.Configuration());
-            modelBuilder.Configurations.Add(new Art.Configuration());
+            modelBuilder.Configurations.Add(new ArtBase.Configuration());
             modelBuilder.Configurations.Add(new Special.Configuration());
             modelBuilder.Configurations.Add(new Person.Configuration());
             modelBuilder.Configurations.Add(new Country.CountryConfiguration());

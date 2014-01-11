@@ -25,7 +25,7 @@ namespace Frost.DetectFeatures {
 
         private void GetSubtitles() {
             //regex from matching files with the same name but with a known subtitle extension
-            string regex = string.Format(@"{0}{1}", Regex.Escape(_fileName), SubtitleExtensionsRegex);
+            string regex = string.Format(@"{0}{1}", Regex.Escape(_file.Name), SubtitleExtensionsRegex);
             IEnumerable<MediaListFile> mediaFiles = _directoryInfo.EnumerateFilesRegex(regex)
                                                                   .Select(fi => _mf.GetOrOpen(fi.FullName))
                                                                   .Where(mediaFile => mediaFile != null);
@@ -72,30 +72,27 @@ namespace Frost.DetectFeatures {
                 foreach (MediaText text in mediaFile.Text) {
                     Language languageToCheck = GetLanguage(true, text.Language, subLang.Language, fnInfo.SubtitleLanguage, fnInfo.Language);
                     Language lang = CheckLanguage(languageToCheck);
-                    //Language lang = null;
-
 
                     string mediaFormat = text.FormatInfo.Name;
 
                     //if MediaInfo detected a format and it is a known subtitle format
                     if (mediaFormat != null && Array.BinarySearch(KnownSubtitleFormats, mediaFormat) >= 0) {
                         sub = new Subtitle(null, lang, mediaFormat);
-                        sub.FileId = _fileId;
+                        sub.File = _file;
                     }
                     else {
                         //TODO:check format if its a subtitle
                         sub = new Subtitle(null, lang);
-                        sub.FileId = _fileId;
+                        sub.File = _file;
                     }
                 }
             }
             else {
                 Language languageToCheck = GetLanguage(true, null, subLang.Language, fnInfo.SubtitleLanguage, fnInfo.Language);
                 Language lang = CheckLanguage(languageToCheck);
-                //Language lang = null;
 
                 sub = new Subtitle(null, lang);
-                sub.FileId = _fileId;
+                sub.File = _file;
 
                 if (subLang.Encoding != null) {
                     sub.Encoding = subLang.Encoding.WebName;

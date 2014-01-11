@@ -452,14 +452,14 @@ namespace Frost.Common.Models.XML.XBMC {
             return Country.GetFromNames(Countries);
         }
 
-        /// <summary>Gets the movie's subtitles as a <see cref="IEnumerable{T}"/> with <see cref="Frost.Common.Models.DB.MovieVo.Arts.Art">Art</see> elements.</summary>
-        /// <returns>A <see cref="IEnumerable{T}"/> with <see cref="Frost.Common.Models.DB.MovieVo.Arts.Art">Art</see> elements.</returns>
-        public IEnumerable<Art> GetArt() {
-            List<Art> art = new List<Art>();
+        /// <summary>Gets the movie's subtitles as a <see cref="IEnumerable{T}"/> with <see cref="ArtBase">Art</see> elements.</summary>
+        /// <returns>A <see cref="IEnumerable{T}"/> with <see cref="ArtBase">Art</see> elements.</returns>
+        public IEnumerable<ArtBase> GetArt() {
+            List<ArtBase> art = new List<ArtBase>();
 
             //add all Thumbnails/Posters/Covers
             foreach (XbmcXmlThumb thumb in Thumbs) {
-                Art a;
+                ArtBase a;
                 switch (thumb.Aspect.ToLower()) {
                     case "poster":
                         a = new Poster(thumb.Path, thumb.Preview);
@@ -468,7 +468,7 @@ namespace Frost.Common.Models.XML.XBMC {
                         a = new Cover(thumb.Path, thumb.Preview);
                         break;
                     default:
-                        a = new Art(thumb.Path, thumb.Preview, ArtType.Unknown);
+                        a = new Art(thumb.Path, thumb.Preview);
                         break;
                 }
 
@@ -615,7 +615,7 @@ namespace Frost.Common.Models.XML.XBMC {
                 Trailer = mx.GetTrailerUrl(),
                 Watched = mx.Watched,
                 ReleaseYear = mx.Year,
-                Arts = new HashSet<Art>(mx.GetArt()),
+                Arts = new HashSet<ArtBase>(mx.GetArt()),
                 Directors = mx.GetDirectors(),
                 Writers = mx.GetWriters(),
                 Genres = new HashSet<Genre>(Genre.GetFromNames(mx.Genres)),

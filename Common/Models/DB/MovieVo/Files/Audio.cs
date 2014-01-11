@@ -134,12 +134,10 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         /// <summary>Gets or sets the file this audio is contained in.</summary>
         /// <value>The file this audio is contained in.</value>
-        [ForeignKey("FileId")]
         public virtual File File { get; set; }
 
         /// <summary>Gets or sets the movie this audio is from.</summary>
         /// <value>The movie this audio is from.</value>
-        [ForeignKey("MovieId")]
         public virtual Movie Movie { get; set; }
 
         #endregion
@@ -238,7 +236,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
                 HasRequired(a => a.File)
                     .WithMany(f => f.AudioDetails)
-                    .HasForeignKey(a => a.MovieId)
+                    .HasForeignKey(a => a.FileId)
                     .WillCascadeOnDelete();
 
                 HasOptional(a => a.Language);

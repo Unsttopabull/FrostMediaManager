@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Frost.Common.Models.DB.MovieVo;
 using Frost.DetectFeatures.Util;
 using Frost.SharpMediaInfo;
 

@@ -9,7 +9,7 @@ namespace Frost.DetectFeatures {
     public partial class FileFeatures {
 
         private void GetXbmcNfoInfo(FileInfo[] xbmcNfo) {
-            FileInfo sameName = xbmcNfo.FirstOrDefault(fi => fi.Name.Equals(_fileName + ".nfo"));
+            FileInfo sameName = xbmcNfo.FirstOrDefault(fi => fi.Name.Equals(_file.Name + ".nfo"));
             if (sameName != null) {
                 GetXbmcNfo(sameName.FullName);
                 return;

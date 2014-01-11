@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.ModelConfiguration;
 using System.Globalization;
 using System.Linq;
 using Frost.Common.Models.DB.Jukebox;
@@ -27,7 +26,7 @@ namespace Frost.Common.Models.DB.MovieVo {
             Audios = new HashSet<Audio>();
             Ratings = new HashSet<Rating>();
             Plots = new HashSet<Plot>();
-            Arts = new HashSet<Art>();
+            Arts = new HashSet<ArtBase>();
             Certifications = new HashSet<Certification>();
             Genres = new HashSet<Genre>();
             Videos = new HashSet<Video>();
@@ -200,7 +199,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the movie promotional images.</summary>
         /// <value>The movie promotional images</value>
-        public virtual HashSet<Art> Arts { get; set; }
+        public virtual HashSet<ArtBase> Arts { get; set; }
 
         /// <summary>Gets or sets the information about this movie's certification ratings/restrictions in certain countries.</summary>
         /// <value>The information about this movie's certification ratings/restrictions in certain countries.</value>

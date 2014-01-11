@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Validation;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -9,7 +8,6 @@ using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.Util;
 using Frost.SharpLanguageDetect;
 using Frost.SharpMediaInfo;
-using Frost.SharpOpenSubtitles.Util;
 using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
 using Language = Frost.Common.Models.DB.MovieVo.Language;
 
@@ -22,11 +20,8 @@ namespace Frost.DetectFeatures {
         private readonly MediaInfoList _mf;
         private readonly string _filePath;
         private readonly NFOPriority _nfoPriority;
-        private readonly string _movieHash;
         private readonly MovieVoContainer _mvc;
-        private readonly long _fileId;
-        private readonly string _extension;
-        private readonly string _fileName;
+        private readonly FileVo _file;
 
         static FileFeatures() {
             //known subtitle extensions already sorted
@@ -51,8 +46,6 @@ namespace Frost.DetectFeatures {
         }
 
         internal FileFeatures(string filePath, NFOPriority nfoPriority, FeatureDetector fd) {
-
-            _movieHash = MovieHasher.ComputeMovieHashAsHexString(filePath);
             _mvc = new MovieVoContainer();
 
             _filePath = filePath;
@@ -75,23 +68,8 @@ namespace Frost.DetectFeatures {
             }
 
             if (file != null) {
-                _mvc.Files.Add(file);
-                try {
-                    _mvc.SaveChanges();
-                }
-                catch (InvalidOperationException e) {
-
-                }
-                catch (DbEntityValidationException e) {
-
-                }
-                catch (Exception e) {
-                    
-                }
-
-                _fileId = file.Id;
-                _extension = file.Extension;
-                _fileName = file.Name;
+                _file = file;
+                _file = _mvc.Files.Add(_file);
             }
 
             _directoryRegex = Regex.Escape(directoryPath.Replace("\\", "/"))
@@ -142,9 +120,9 @@ namespace Frost.DetectFeatures {
 
         public Movie Movie { get; set; }
 
-        internal void Detect() {
+        internal bool Detect() {
             GetFileNameInfo();
-            //
+            
             GetSubtitles();
             GetVideoInfo();
             GetAudioInfo();
@@ -153,13 +131,15 @@ namespace Frost.DetectFeatures {
             if (_nfoPriority != NFOPriority.Ignore) {
                 GetNfoInfo();
             }
-            
+
             try {
                 _mvc.SaveChanges();
+                return true;
             }
             catch (Exception e) {
                 Console.Error.WriteLine(e.Message);
             }
+            return false;
         }
 
         private void GetFileNameInfo() {
@@ -204,7 +184,7 @@ namespace Frost.DetectFeatures {
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString() {
-            return _fileName + "." + _extension;
+            return _file != null ? _file.ToString() : base.ToString();
         }
     }
 }

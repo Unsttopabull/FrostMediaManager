@@ -5,6 +5,7 @@ using Frost.DetectFeatures.Util;
 using Frost.DetectFeatures.Util.AspectRatio;
 using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
+using Frost.SharpOpenSubtitles.Util;
 using CompressionMode = Frost.Common.CompressionMode;
 using FrameOrBitRateMode = Frost.Common.FrameOrBitRateMode;
 
@@ -16,15 +17,16 @@ namespace Frost.DetectFeatures {
         }
 
         private void GetVideoInfo() {
-            if (_extension == "iso") {
+            if (_file.Extension == "iso") {
                 GetISOVideoInfo();
                 return;
             }
 
             if (_mediaFile != null) {
+                string movieHash = MovieHasher.ComputeMovieHashAsHexString(_filePath);
                 foreach (MediaVideo mediaVideo in _mediaFile.Video) {
                     Video video = GetFileVideoStreamInfo(mediaVideo);
-                    video.MovieHash = _movieHash;
+                    video.MovieHash = movieHash;
 
                     Movie.Videos.Add(video);
                 }
@@ -35,40 +37,40 @@ namespace Frost.DetectFeatures {
         }
 
         private Video GetFileVideoStreamInfo(MediaVideo mv) {
-            Video currVideo = new Video();
-            currVideo.FileId = _fileId;
+            Video v = new Video();
+            v.File = _file;
 
-            AddFileNameInfo(currVideo);
+            AddFileNameInfo(v);
 
-            currVideo.Aspect = mv.PixelAspectRatio;
-            currVideo.BitDepth = mv.BitDepth;
+            v.Aspect = mv.PixelAspectRatio;
+            v.BitDepth = mv.BitDepth;
 
             //convert from bps to Kbps if value exists otherwise return null
-            currVideo.BitRate = mv.BitRate.HasValue ? mv.BitRate / 1024.0f : null;
-            currVideo.BitRateMode = (FrameOrBitRateMode) mv.BitRateInfo.Mode;
-            currVideo.Format = mv.FormatInfo.Name;
-            currVideo.Codec = mv.CodecIDInfo.Hint ?? mv.CodecInfo.NameString ?? currVideo.Codec;
-            currVideo.ColorSpace = mv.ColorSpace;
-            currVideo.ChromaSubsampling = mv.ChromaSubsampling;
-            currVideo.CompressionMode = (CompressionMode) mv.CompressionMode;
-            currVideo.Duration = mv.Duration.HasValue ? (long?) mv.Duration.Value.TotalMilliseconds : null;
-            currVideo.FPS = mv.FrameRate;
-            currVideo.Resolution = !string.IsNullOrEmpty(mv.Standard) ? mv.Standard : GetFileVideoResolution(mv) ?? currVideo.Resolution;
-            currVideo.Height = (int?) mv.Height;
-            currVideo.Width = (int?) mv.Width;
-            currVideo.Language = CheckLanguage(GetLanguage(false, mv.LanguageInfo.Full1, null, _fnInfo.SubtitleLanguage, _fnInfo.Language));
+            v.BitRate = mv.BitRate.HasValue ? mv.BitRate / 1024.0f : null;
+            v.BitRateMode = (FrameOrBitRateMode) mv.BitRateInfo.Mode;
+            v.Format = mv.FormatInfo.Name;
+            v.Codec = mv.CodecIDInfo.Hint ?? mv.CodecInfo.NameString ?? v.Codec;
+            v.ColorSpace = mv.ColorSpace;
+            v.ChromaSubsampling = mv.ChromaSubsampling;
+            v.CompressionMode = (CompressionMode) mv.CompressionMode;
+            v.Duration = mv.Duration.HasValue ? (long?) mv.Duration.Value.TotalMilliseconds : null;
+            v.FPS = mv.FrameRate;
+            v.Resolution = !string.IsNullOrEmpty(mv.Standard) ? mv.Standard : GetFileVideoResolution(mv) ?? v.Resolution;
+            v.Height = (int?) mv.Height;
+            v.Width = (int?) mv.Width;
+            v.Language = CheckLanguage(GetLanguage(false, mv.LanguageInfo.Full1, null, _fnInfo.SubtitleLanguage, _fnInfo.Language));
 
-            currVideo.ScanType = (Common.ScanType) mv.ScanType;
-            currVideo.Aspect = mv.DisplayAspectRatio;
+            v.ScanType = (Common.ScanType) mv.ScanType;
+            v.Aspect = mv.DisplayAspectRatio;
 
-            if (currVideo.Aspect.HasValue) {
-                AspectRatioInfo knownAspectRatio = AspectRatioDetector.GetKnownAspectRatio((float) currVideo.Aspect);
+            if (v.Aspect.HasValue) {
+                AspectRatioInfo knownAspectRatio = AspectRatioDetector.GetKnownAspectRatio((float) v.Aspect);
                 if (knownAspectRatio != null) {
-                    currVideo.AspectCommercialName = knownAspectRatio.ComercialName;
+                    v.AspectCommercialName = knownAspectRatio.ComercialName;
                 }
             }
 
-            return currVideo;
+            return v;
         }
 
         private void AddFileNameInfo(Video video) {
