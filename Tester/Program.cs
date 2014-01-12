@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Data.SQLite;
 using System.IO;
+using System.IO.IsolatedStorage;
 using System.Linq;
 using Frost.CinemaInfoParsers.Kolosej;
 using Frost.CinemaInfoParsers.PlanetTus;
@@ -13,6 +14,12 @@ using Frost.DetectFeatures;
 using System.Diagnostics;
 using Frost.PodnapisiNET;
 using Frost.PodnapisiNET.Models;
+using Frost.SharpOpenSubtitles;
+using Frost.SharpOpenSubtitles.Models.Checking;
+using Frost.SharpOpenSubtitles.Models.Checking.Receive;
+using Frost.SharpOpenSubtitles.Models.Movies.Receive;
+using Frost.SharpOpenSubtitles.Models.UI;
+using Frost.SharpOpenSubtitles.Models.UI.Receive;
 using HibernatingRhinos.Profiler.Appender.EntityFramework;
 using Newtonsoft.Json;
 using CompressionMode = Frost.Common.CompressionMode;
@@ -415,7 +422,8 @@ namespace Frost.Tester {
             Debug.Listeners.Add(new TextWriterTraceListener(debugLog));
             Debug.AutoFlush = true;
 
-            TestDB();
+            TestOpenSubtitlesProtocol();
+            //TestDB();
             //TestMovie();
 
             Console.WriteLine(Filler);
@@ -521,7 +529,7 @@ namespace Frost.Tester {
             kcli.Serialize("kolosej_info.js");
         }
 
-        private static void TestOpenSubtitlesProtocol() {
+        private static void TestPodnapisiSubtitlesProtocol() {
             PodnapisiNetClient pcli = new PodnapisiNetClient();
             LogInInfo inInfo = pcli.Session.Initiate("FMM");
 
@@ -531,6 +539,12 @@ namespace Frost.Tester {
             DownloadInfo downloadInfo = pcli.Subtitles.Download(200294);
 
             //200294
+        }
+
+        private static void TestOpenSubtitlesProtocol() {
+            OpenSubtitlesClient cli = new OpenSubtitlesClient(false);
+            cli.Session.LogInAnonymous("sl", "OS Test User Agent");
+            ImdbMovieDetailsInfo imdbDetails = cli.Movie.GetImdbDetails(0993846);
         }
 
         private static TimeSpan TestFeatureDetector() {

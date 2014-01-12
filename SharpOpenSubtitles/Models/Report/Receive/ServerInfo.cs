@@ -66,7 +66,7 @@ namespace Frost.SharpOpenSubtitles.Models.Report.Receive {
 
         /// <summary>Structure containing information about last updates of translations.</summary>
         [XmlRpcMember("last_update_strings")]
-        public XmlRpcStruct LastUpdateStrings;
+        public LastUpdates LastUpdateStrings;
 
         /// <summary></summary>
         [XmlRpcMember("download_limits")]

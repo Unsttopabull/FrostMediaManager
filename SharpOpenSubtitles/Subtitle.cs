@@ -192,7 +192,7 @@ namespace Frost.SharpOpenSubtitles {
         /// This function returns subtitle file IDs for given subtitle file hashes.<br />
         /// This can be used to quickly check (for a large list of subtitle files) which subtitle files are already stored in the database (e.g. before uploading).
         /// </returns>
-        public SubtitleHashInfo CheckSubHash(string[] hashes) {
+        public SubtitleHashInfo CheckSubHash(params string[] hashes) {
             return _rpc.Proxy.CheckSubHash(_rpc.Token, hashes);
         }
 

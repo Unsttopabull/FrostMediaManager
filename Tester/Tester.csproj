@@ -100,6 +100,14 @@
       <Project>{950be2eb-25f5-4ac1-b1d0-eb644889ba99}</Project>
       <Name>Podnapisi.NET API</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SharpOpenSubtitles\SharpOpenSubtitles.csproj">
+      <Project>{10711252-7056-44A6-AC29-5C7C203B0095}</Project>
+      <Name>SharpOpenSubtitles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\xml-rpc.net.3.0.0\xmlrpc.csproj">
+      <Project>{1B4B0A58-0AFB-4090-91DD-18912CC7DE65}</Project>
+      <Name>xmlrpc</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

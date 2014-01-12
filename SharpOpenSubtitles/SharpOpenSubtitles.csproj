@@ -38,21 +38,20 @@
     <Compile Include="IOpenSubtitles.cs" />
     <Compile Include="Models\Checking\Receive\MovieHashInfo.cs" />
     <Compile Include="Models\Checking\MovieInfo.cs" />
-    <Compile Include="Models\Checking\MovieResult.cs" />
+    <Compile Include="Models\Checking\MovieResults.cs" />
+    <Compile Include="Models\Checking\SubInfo.cs" />
     <Compile Include="Models\Checking\SubtitleHashes.cs" />
-    <Compile Include="Models\Movies\ImdbCast.cs" />
-    <Compile Include="Models\Movies\ImdbDirectors.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Models\Movies\ImdbPeople.cs" />
     <Compile Include="Models\Movies\ImdbMovie.cs" />
     <Compile Include="Models\Movies\ImdbMovieDetails.cs" />
+    <Compile Include="Models\Movies\ImdbPerson.cs" />
     <Compile Include="Models\Movies\Receive\ImdbMovieDetailsInfo.cs" />
     <Compile Include="Models\Movies\Receive\ImdbSearchInfo.cs" />
-    <Compile Include="Models\Movies\ImdbWriters.cs" />
     <Compile Include="Models\Movies\Receive\InsertMovieStatus.cs" />
     <Compile Include="Models\Movies\Send\InsertMovieInfo.cs" />
     <Compile Include="Models\Report\DownloadLimits.cs" />
     <Compile Include="Models\Report\LastUpdate.cs" />
+    <Compile Include="Models\Report\LastUpdates.cs" />
     <Compile Include="Models\Report\Receive\ServerInfo.cs" />
     <Compile Include="Models\Report\Send\SubtitleComment.cs">
       <SubType>Code</SubType>

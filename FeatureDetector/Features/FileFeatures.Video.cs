@@ -1,13 +1,14 @@
 ﻿using System;
+using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.DetectFeatures.Util;
 using Frost.DetectFeatures.Util.AspectRatio;
-using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
 using Frost.SharpOpenSubtitles.Util;
 using CompressionMode = Frost.Common.CompressionMode;
 using FrameOrBitRateMode = Frost.Common.FrameOrBitRateMode;
+using ScanType = Frost.SharpMediaInfo.ScanType;
 
 namespace Frost.DetectFeatures {
 
@@ -74,7 +75,14 @@ namespace Frost.DetectFeatures {
         }
 
         private void AddFileNameInfo(Video video) {
-            video.Source = _fnInfo.VideoSource ?? _fnInfo.DVDRegion.ToString();
+            if (_fnInfo.VideoSource != null) {
+                video.Source = _fnInfo.VideoSource;
+            }
+            else {
+                video.Source = _fnInfo.DVDRegion != DVDRegion.Unknown
+                    ? _fnInfo.DVDRegion.ToString()
+                    : null;
+            }
 
             video.Codec = _fnInfo.VideoCodec;
             video.Resolution = _fnInfo.VideoQuality;
