@@ -6,7 +6,7 @@ using Frost.Common.Models.XML.Jukebox;
 
 namespace Frost.DetectFeatures {
 
-    public partial class FileFeatures {
+    public partial class FileFeatures : IDisposable {
 
         private void GetXtreamerNfoInfo(string xtNfo) {
             XjbXmlMovie xjbMovie = null;
@@ -14,7 +14,7 @@ namespace Frost.DetectFeatures {
                 xjbMovie = XjbXmlMovie.Load(xtNfo);
             }
             catch (Exception) {
-                Console.Error.WriteLine(string.Format("File \"{0}\" is not a valid NFO.", xtNfo), "ERROR");
+                //Console.Error.WriteLine(string.Format("File \"{0}\" is not a valid NFO.", xtNfo), "ERROR");
             }
 
             if (xjbMovie != null) {

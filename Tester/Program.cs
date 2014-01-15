@@ -5,6 +5,7 @@ using System.Data.SQLite;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Linq;
+using System.Threading.Tasks;
 using Frost.CinemaInfoParsers.Kolosej;
 using Frost.CinemaInfoParsers.PlanetTus;
 using Frost.Common;
@@ -12,6 +13,7 @@ using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.DetectFeatures;
 using System.Diagnostics;
+using Frost.DetectFeatures.Util;
 using Frost.PodnapisiNET;
 using Frost.PodnapisiNET.Models;
 using Frost.SharpOpenSubtitles;
@@ -112,8 +114,8 @@ namespace Frost.Tester {
                 @"E:\Torrenti\FILMI\The Tourist [2010] - Turist\The Tourist[2010]DvDrip[Eng]-FXG.avi",
                 @"E:\Torrenti\FILMI\The Town (2010) - Mesto\The.Town.2010.SLOSubs.DVDRip.XviD-DrSi.avi",
                 @"E:\Torrenti\FILMI\The Transporter (2002) - Prenašalec 1\The Transporter.avi",
-                @"E:\Torrenti\FILMI\The Transporter (2002) - Prenašalec 1\TRANSPORTER 2 [2005]DvDrip[Eng]-NikonXp\Transporter 2.avi",
-                @"E:\Torrenti\FILMI\The Transporter (2002) - Prenašalec 1\Transporter 3 (2008) DVDRip-HALESPONGE\Transporter 3 (2008) DVDRip-HALESPONGE.avi",
+                @"E:\Torrenti\FILMI\The Transporter 2 (2005) - Prenašalec 2\The TRANSPORTER 2 [2005]DvDrip[Eng]-NikonXp.avi",
+                @"E:\Torrenti\FILMI\The Transporter 3 (2008) - Prenašalec 3\Transporter 3 (2008) DVDRip-HALESPONGE.avi",
                 @"E:\Torrenti\FILMI\The Tree Of Life (2011) - Drevo življenja\The.Tree.Of.Life.2011.DVDR.PAL.SLOSUBS-DiSHON.iso",
                 @"E:\Torrenti\FILMI\The Usual Suspects (1995) - Osumljenih 5\The Usual Suspects(Xvid).avi",
                 @"E:\Torrenti\FILMI\The Wayward Cloud - Pobegli oblak\The Wayward Cloud.iso",
@@ -418,11 +420,14 @@ namespace Frost.Tester {
         private static void Main() {
             EntityFrameworkProfiler.Initialize();
 
-            FileStream debugLog = File.OpenWrite("debugLogOSubs.txt");
+            FileStream debugLog = File.Create("debugSearch.txt");
             Debug.Listeners.Add(new TextWriterTraceListener(debugLog));
+            Debug.Listeners.Add(new ConsoleTraceListener());
             Debug.AutoFlush = true;
 
-            TestOpenSubtitlesProtocol();
+            //Test();
+            TestMediaSearcher();
+            //TestOpenSubtitlesProtocol();
             //TestDB();
             //TestMovie();
 
@@ -430,6 +435,17 @@ namespace Frost.Tester {
             Console.WriteLine("\tFIN");
             Console.WriteLine(Filler);
             Console.Read();
+        }
+
+        private static void Test() {
+            const string file = @"F:\Torrenti\FILMI\[REQ]Ne.Joči.Peter.1964.DVD-R\VIDEO_TS\VIDEO_TS.IFO";
+            FileNameParser fnp = new FileNameParser(file, true);
+            FileNameInfo info = fnp.Parse();
+        }
+
+        private static void TestMediaSearcher() {
+            FeatureDetector ms = new FeatureDetector(@"E:\Torrenti\FILMI", @"F:\Torrenti\FILMI");
+            ms.Search();
         }
 
         private static void TestMovie() {
@@ -451,9 +467,9 @@ namespace Frost.Tester {
 
         private static void TestDB() {
             //Console.ForegroundColor = ConsoleColor.White;
-            SQLiteLog.Enabled = true;
-            SQLiteLog.Initialize();
-            SQLiteLog.Log += SQLiteLog_Log;
+            //SQLiteLog.Enabled = true;
+            //SQLiteLog.Initialize();
+            //SQLiteLog.Log += SQLiteLog_Log;
 
 
             TestFeatureDetectorVideoDebugDB();
@@ -482,20 +498,48 @@ namespace Frost.Tester {
         }
 
         private static void TestFeatureDetectorVideoDebugDB() {
-            using (FeatureDetector fd = new FeatureDetector()) {
-                //const string fileName = @"E:\Torrenti\FILMI\The Big Lebowski (1998) - Veliki Lebowski\The Big Lebowski.1998.HDRip.x264-VLiS.mkv";
-                //fd.Detect(fileName);
-                DetectMany(fd);
-            }
+            FeatureDetector fd = new FeatureDetector();
+            //const string fileName = @"E:\Torrenti\FILMI\The Big Lebowski (1998) - Veliki Lebowski\The Big Lebowski.1998.HDRip.x264-VLiS.mkv";
+            //fd.Detect(fileName);
+            DetectMany(fd);
         }
 
         private static void DetectMany(FeatureDetector fd) {
             int i = 0;
             foreach (string fileName in FileNames2) {
-                fd.Detect(fileName);
+                try{
+                    fd.Detect(fileName);
 
-                Console.WriteLine("{0}: \t{1}", ++i, Path.GetFileName(fileName));
+                    Console.WriteLine("{0}: \t{1}", ++i, Path.GetFileName(fileName));
+                }
+                catch(FileNotFoundException e){
+                    if (File.Exists(e.FileName)) {
+                        ConsoleColor clr = Console.ForegroundColor;
+                        Console.ForegroundColor = ConsoleColor.Red;
+
+                        Console.WriteLine("FILE EXITS");
+
+                        Console.ForegroundColor = clr;
+                    }
+                    else {
+                        Console.WriteLine("{0}: \t{1} NOT FOUND", ++i, Path.GetFileName(fileName));
+                    }
+                }
             }
+        }
+
+        private static void DetectManyP(FeatureDetector fd) {
+            Parallel.For(0, FileNames2.Length, i => {
+                string fileName = FileNames2[i];
+                try {
+                    fd.Detect(fileName);
+
+                    Console.WriteLine("{0}: \t{1}", ++i, Path.GetFileName(fileName));
+                }
+                catch (FileNotFoundException e) {
+                    Console.WriteLine("{0}: \t{1} NOT FOUND", ++i, Path.GetFileName(fileName));
+                }
+            });
         }
 
         private static List<Movie> Deserialize(string fn) {
@@ -565,15 +609,16 @@ namespace Frost.Tester {
         private static IEnumerable<Movie> TestFeatureDetectorVideoDebug() {
             List<Movie> movies = new List<Movie>();
 
-            using (FeatureDetector fd = new FeatureDetector()) {
-                int i = 0;
-                foreach (string fileName in FileNames2) {
-                    FileFeatures info = fd.Detect(fileName);
+            FeatureDetector fd = new FeatureDetector();
+            int i = 0;
+            foreach (string fileName in FileNames2) {
+                Movie info = fd.Detect(fileName);
 
-                    movies.Add(info.Movie);
-
-                    Console.WriteLine("{0}: \t{1}", ++i, Path.GetFileName(fileName));
+                if (info != null) {
+                    movies.Add(info);
                 }
+
+                Console.WriteLine("{0}: \t{1}", ++i, Path.GetFileName(fileName));
             }
             return movies;
         }

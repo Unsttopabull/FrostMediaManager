@@ -94,6 +94,30 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         #endregion
 
+        #region Utility Properties
+
+        /// <summary>Gets the full path to the file.</summary>
+        /// <value>A full path filename to the fille or <b>null</b> if any of <b>FolderPath</b> or <b>FileName</b> are null</value>
+        public string FullPath {
+            get {
+                if (FolderPath != null && Name != null) {
+                    if (FolderPath.EndsWith("/") || FolderPath.EndsWith("\\")) {
+                        return FolderPath + Name + "." + Extension;
+                    }
+                    return FolderPath + "/" + Name + "." + Extension;
+                }
+                return null;                
+            }
+        }
+
+        /// <summary>Gets the name with extension.</summary>
+        /// <value>The name with extension.</value>
+        public string NameWithExtension {
+            get { return Name + "." + Extension; }
+        }
+
+        #endregion
+
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
         /// <param name="other">An object to compare with this object.</param>
@@ -143,15 +167,6 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
                 hashCode = (hashCode * 397) ^ DateAdded.GetHashCode();
                 return hashCode;
             }
-        }
-
-        /// <summary>Gets the full path to the file.</summary>
-        /// <returns>A full path filename to the fille or <b>null</b> if any of <b>FolderPath</b> or <b>FileName</b> are null</returns>
-        public string GetFullPath() {
-            if (FolderPath != null && Name != null) {
-                return FolderPath + Name;
-            }
-            return null;
         }
 
         /// <summary>Returns a string that represents the current object.</summary>

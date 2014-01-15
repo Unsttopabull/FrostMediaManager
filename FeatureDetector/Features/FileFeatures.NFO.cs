@@ -11,15 +11,15 @@ using Frost.Common.Util.ISO;
 
 namespace Frost.DetectFeatures {
 
-    public partial class FileFeatures {
-        private void GetNfoInfo() {
+    public partial class FileFeatures : IDisposable {
+        private void GetNfoInfo(string fileNameWithoutExt) {
             FileInfo[] xbmcNfo = _directoryInfo.EnumerateFiles("*.nfo").ToArray();
             if (xbmcNfo.Length > 0) {
-                GetXbmcNfoInfo(xbmcNfo);
+                GetXbmcNfoInfo(fileNameWithoutExt, xbmcNfo);
                 return;
             }
 
-            FileInfo xtNfo = _directoryInfo.EnumerateFiles(_file.Name + "_xjb.xml").FirstOrDefault();
+            FileInfo xtNfo = _directoryInfo.EnumerateFiles(fileNameWithoutExt + "_xjb.xml").FirstOrDefault();
             if (xtNfo == null) {
                 return;
             }

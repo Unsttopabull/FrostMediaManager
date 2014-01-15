@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Frost.Common;
 using Frost.Common.Models.DB.MovieVo.Arts;
@@ -7,7 +8,7 @@ using File = System.IO.File;
 
 namespace Frost.DetectFeatures {
 
-    public partial class FileFeatures {
+    public partial class FileFeatures  : IDisposable {
         //private const string XJB_ART_REGEX = "_xjb_(cover|fanart|poster).jpg";
         private const string XJB_ART_REGEX = "(_xjb_)?(cover|fanart|poster).(jpg|bmp|png)";
 

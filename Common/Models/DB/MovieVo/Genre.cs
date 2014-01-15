@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
+using System.Globalization;
 using System.Linq;
 using Frost.Common.Models.DB.Jukebox;
 
@@ -19,7 +20,11 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Initializes a new instance of the <see cref="Genre"/> class.</summary>
         /// <param name="name">The name of the genre.</param>
         public Genre(string name) : this() {
-            Name = name;
+            if (string.IsNullOrEmpty(name)) {
+                throw new ArgumentNullException("name");
+            }
+
+            Name = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(name);
         }
 
         /// <summary>Gets or sets the database Genre Id.</summary>

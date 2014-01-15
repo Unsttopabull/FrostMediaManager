@@ -61,197 +61,212 @@ namespace Frost.DetectFeatures.Util {
         private bool _releaseYearFound;
         private bool _titleFound;
         private readonly FileNameInfo _fileNameInfo;
+        private static readonly char[] EnclosingDelimiters;
 
         static FileNameParser() {
-            RegexReservedChars = new HashSet<char> {'.', '^', '$', '*', '+', '?', '(', ')', '[', ']', '\\', '|', '}', '{', '-'};
+            RegexReservedChars = new HashSet<char> { '.', '^', '$', '*', '+', '?', '(', ')', '[', ']', '\\', '|', '}', '{', '-' };
+            EnclosingDelimiters = new[] { '[', ']', '(', ')', '{', '}' };
 
             CustomLangMappings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
-                {"JAP", "jpn"},
-                {"srbski", "srp"},
-                {"SER", "srp"},
-                {"hrvatski", "hrv"},
-                {"SLO", "slv"},
-                {"CRO", "hrv"}
+                { "JAP", "jpn" },
+                { "srbski", "srp" },
+                { "SER", "srp" },
+                { "hrvatski", "hrv" },
+                { "SLO", "slv" },
+                { "CRO", "hrv" }
             };
 
             SegmentExclusion = new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
-                "the", "an", "to", "man", "men", "mr", "aka", "war", "art", "ii", "be",
-                "as", "my", "sin"
+                "the",
+                "an",
+                "to",
+                "man",
+                "men",
+                "mr",
+                "aka",
+                "war",
+                "art",
+                "ii",
+                "be",
+                "as",
+                "my",
+                "sin"
             };
 
             KnownSegments = new Dictionary<string, SegmentType>(StringComparer.OrdinalIgnoreCase) {
-                {"DOKU", SegmentType.Genre},
-                {"MANGA", SegmentType.Genre},
-                {"XXX", SegmentType.Genre},
-                {"SERIE", SegmentType.ContentType},
+                { "DOKU", SegmentType.Genre },
+                { "MANGA", SegmentType.Genre },
+                { "XXX", SegmentType.Genre },
+                { "SERIE", SegmentType.ContentType },
 
                 #region Specials
 
-                {"INTERNAL", SegmentType.Special},
-                {"PROPER", SegmentType.Special},
-                {"LIMITED", SegmentType.Special},
-                {"RECODE", SegmentType.Special},
-                {"REPACK", SegmentType.Special},
+                { "INTERNAL", SegmentType.Special },
+                { "PROPER", SegmentType.Special },
+                { "LIMITED", SegmentType.Special },
+                { "RECODE", SegmentType.Special },
+                { "REPACK", SegmentType.Special },
+                { "REQ", SegmentType.Special },
 
                 #endregion
 
                 #region Edithions
 
-                {"EXTENDED", SegmentType.Edithion},
-                {"UNCUT", SegmentType.Edithion},
-                {"REMASTERED", SegmentType.Edithion},
-                {"UNRATED", SegmentType.Edithion},
-                {"THEATRICAL", SegmentType.Edithion},
-                {"CHRONO", SegmentType.Edithion},
-                {"RETAIL", SegmentType.Edithion},
+                { "EXTENDED", SegmentType.Edithion },
+                { "UNCUT", SegmentType.Edithion },
+                { "REMASTERED", SegmentType.Edithion },
+                { "UNRATED", SegmentType.Edithion },
+                { "THEATRICAL", SegmentType.Edithion },
+                { "CHRONO", SegmentType.Edithion },
+                { "RETAIL", SegmentType.Edithion },
 
                 #endregion
 
                 #region Audio
 
-                {"MD", SegmentType.AudioSource},
-                {"LINE", SegmentType.AudioSource},
-                {"LD", SegmentType.AudioSource},
+                { "MD", SegmentType.AudioSource },
+                { "LINE", SegmentType.AudioSource },
+                { "LD", SegmentType.AudioSource },
 
                 #endregion
 
                 #region AudioCodec
 
-                {"AC3", SegmentType.AudioCodec},
-                {"AC3D", SegmentType.AudioCodec},
-                {"DTS", SegmentType.AudioCodec},
-                {"AAC", SegmentType.AudioCodec},
+                { "AC3", SegmentType.AudioCodec },
+                { "AC3D", SegmentType.AudioCodec },
+                { "DTS", SegmentType.AudioCodec },
+                { "AAC", SegmentType.AudioCodec },
 
                 #endregion
 
                 #region Subtitles
 
-                {"DUBBED", SegmentType.AudioQuality},
-                {"SUBBED", SegmentType.VideoQuality},
+                { "DUBBED", SegmentType.AudioQuality },
+                { "SUBBED", SegmentType.VideoQuality },
 
                 #endregion
 
-                {"DL", SegmentType.Special},
-                {"DC", SegmentType.Special},
+                { "DL", SegmentType.Special },
+                { "DC", SegmentType.Special },
 
                 #region Video Codecs
 
-                {"XVID", SegmentType.VideoCodec},
-                {"DIVX", SegmentType.VideoCodec},
-                {"x264", SegmentType.VideoCodec},
-                {"h264", SegmentType.VideoCodec},
+                { "XVID", SegmentType.VideoCodec },
+                { "DIVX", SegmentType.VideoCodec },
+                { "x264", SegmentType.VideoCodec },
+                { "h264", SegmentType.VideoCodec },
 
                 #endregion
 
                 #region Video
 
                 //fullscreen
-                {"FS", SegmentType.VideoQuality},
+                { "FS", SegmentType.VideoQuality },
 
                 //widescreen
-                {"WS", SegmentType.VideoQuality},
+                { "WS", SegmentType.VideoQuality },
 
                 //other rips
-                {"DHRIP", SegmentType.VideoSource},
-                {"HDRIP", SegmentType.VideoSource},
+                { "DHRIP", SegmentType.VideoSource },
+                { "HDRIP", SegmentType.VideoSource },
 
                 //Web
-                {"WEBRIP", SegmentType.VideoSource},
-                {"WEB-Rip", SegmentType.VideoSource},
-                {"WEBDL", SegmentType.VideoSource},
+                { "WEBRIP", SegmentType.VideoSource },
+                { "WEB-Rip", SegmentType.VideoSource },
+                { "WEBDL", SegmentType.VideoSource },
                 
                 //Bluray
-                {"BLURAY", SegmentType.VideoSource},
-                {"BLUERAY", SegmentType.VideoSource},
-                {"BLURAYRIP", SegmentType.VideoSource},
-                {"BD", SegmentType.VideoSource},
-                {"BDRIP", SegmentType.VideoSource},
-                {"BRRIP", SegmentType.VideoSource},
-                {"Blu-Ray", SegmentType.VideoSource},
-                {"BDR", SegmentType.VideoSource},
-                {"BD5", SegmentType.VideoSource},
-                {"BD25", SegmentType.VideoSource},
-                {"BD9", SegmentType.VideoSource},
-                {"BD50", SegmentType.VideoSource},
+                { "BLURAY", SegmentType.VideoSource },
+                { "BLUERAY", SegmentType.VideoSource },
+                { "BLURAYRIP", SegmentType.VideoSource },
+                { "BD", SegmentType.VideoSource },
+                { "BDRIP", SegmentType.VideoSource },
+                { "BRRIP", SegmentType.VideoSource },
+                { "Blu-Ray", SegmentType.VideoSource },
+                { "BDR", SegmentType.VideoSource },
+                { "BD5", SegmentType.VideoSource },
+                { "BD25", SegmentType.VideoSource },
+                { "BD9", SegmentType.VideoSource },
+                { "BD50", SegmentType.VideoSource },
 
                 //Cam
-                {"HDCam", SegmentType.VideoSource},
-                {"HDCamRip", SegmentType.VideoSource},
-                {"CAM", SegmentType.VideoSource},
-                {"CAMRip", SegmentType.VideoSource},
+                { "HDCam", SegmentType.VideoSource },
+                { "HDCamRip", SegmentType.VideoSource },
+                { "CAM", SegmentType.VideoSource },
+                { "CAMRip", SegmentType.VideoSource },
 
                 //DVD
-                {"DVD5", SegmentType.VideoSource},
-                {"DVD9", SegmentType.VideoSource},
-                {"DVDRIP", SegmentType.VideoSource},
-                {"DVD", SegmentType.VideoSource},
-                {"DVDR", SegmentType.VideoSource},
-                {"DVD-Full", SegmentType.VideoSource},
-                {"Full-Rip", SegmentType.VideoSource},
-                {"ISORip", SegmentType.VideoSource},
-                {"HDDVD", SegmentType.VideoSource},
+                { "DVD5", SegmentType.VideoSource },
+                { "DVD9", SegmentType.VideoSource },
+                { "DVDRIP", SegmentType.VideoSource },
+                { "DVD", SegmentType.VideoSource },
+                { "DVDR", SegmentType.VideoSource },
+                { "DVD-Full", SegmentType.VideoSource },
+                { "Full-Rip", SegmentType.VideoSource },
+                { "ISORip", SegmentType.VideoSource },
+                { "HDDVD", SegmentType.VideoSource },
                 //regions
-                {"R0", SegmentType.DVDRegion},
-                {"R1", SegmentType.DVDRegion},
-                {"R2", SegmentType.DVDRegion},
-                {"R3", SegmentType.DVDRegion},
-                {"R4", SegmentType.DVDRegion},
-                {"R5", SegmentType.DVDRegion},
-                {"R6", SegmentType.DVDRegion},
-                {"R7", SegmentType.DVDRegion},
-                {"R8", SegmentType.DVDRegion},
+                { "R0", SegmentType.DVDRegion },
+                { "R1", SegmentType.DVDRegion },
+                { "R2", SegmentType.DVDRegion },
+                { "R3", SegmentType.DVDRegion },
+                { "R4", SegmentType.DVDRegion },
+                { "R5", SegmentType.DVDRegion },
+                { "R6", SegmentType.DVDRegion },
+                { "R7", SegmentType.DVDRegion },
+                { "R8", SegmentType.DVDRegion },
 
                 //TV
-                {"DTV", SegmentType.VideoSource},
-                {"TVRip", SegmentType.VideoSource},
-                {"HDTV", SegmentType.VideoSource},
-                {"HDTVRip", SegmentType.VideoSource},
-                {"PDTV", SegmentType.VideoSource},
-                {"DVBRip", SegmentType.VideoSource},
-                {"DVB", SegmentType.VideoSource},
-                {"SATRIP", SegmentType.VideoSource},
+                { "DTV", SegmentType.VideoSource },
+                { "TVRip", SegmentType.VideoSource },
+                { "HDTV", SegmentType.VideoSource },
+                { "HDTVRip", SegmentType.VideoSource },
+                { "PDTV", SegmentType.VideoSource },
+                { "DVBRip", SegmentType.VideoSource },
+                { "DVB", SegmentType.VideoSource },
+                { "SATRIP", SegmentType.VideoSource },
 
                 //straight to video / satelite tv
-                {"STV", SegmentType.ContentType},
+                { "STV", SegmentType.ContentType },
 
                 //Video on demand
-                {"VODRip", SegmentType.VideoSource},
-                {"VODR", SegmentType.VideoSource},
+                { "VODRip", SegmentType.VideoSource },
+                { "VODR", SegmentType.VideoSource },
 
                 //Digital Satelite
-                {"DSR", SegmentType.VideoSource},
-                {"DSRRip", SegmentType.VideoSource},
+                { "DSR", SegmentType.VideoSource },
+                { "DSRRip", SegmentType.VideoSource },
 
                 //DirectToHome
-                {"DTH", SegmentType.VideoSource},
-                {"DTHRip", SegmentType.VideoSource},
+                { "DTH", SegmentType.VideoSource },
+                { "DTHRip", SegmentType.VideoSource },
 
                 //WORKPRINT
-                {"WP", SegmentType.VideoSource},
-                {"WORKPRINT", SegmentType.VideoSource},
+                { "WP", SegmentType.VideoSource },
+                { "WORKPRINT", SegmentType.VideoSource },
                 
                 //TELECINE
-                {"TC", SegmentType.VideoSource},
-                {"TELECINE", SegmentType.VideoSource},
+                { "TC", SegmentType.VideoSource },
+                { "TELECINE", SegmentType.VideoSource },
 
                 //TELESYNC
-                {"TS", SegmentType.VideoSource},
-                {"TELESYNC", SegmentType.VideoSource},
-                {"PDVD", SegmentType.VideoSource},
+                { "TS", SegmentType.VideoSource },
+                { "TELESYNC", SegmentType.VideoSource },
+                { "PDVD", SegmentType.VideoSource },
 
                 //Video Quality
-                {"720i", SegmentType.VideoQuality},
-                {"720p", SegmentType.VideoQuality},
-                {"1080i", SegmentType.VideoQuality},
-                {"1080p", SegmentType.VideoQuality},
-                {"DDC", SegmentType.VideoSource},
+                { "720i", SegmentType.VideoQuality },
+                { "720p", SegmentType.VideoQuality },
+                { "1080i", SegmentType.VideoQuality },
+                { "1080p", SegmentType.VideoQuality },
+                { "DDC", SegmentType.VideoSource },
 
                 //screeners
-                {"SCREENER", SegmentType.VideoSource},
-                {"SCR", SegmentType.VideoSource},
-                {"DVDSCREENER", SegmentType.VideoSource},
-                {"DVDSCR", SegmentType.VideoSource},
-                {"BDSCR", SegmentType.VideoSource},
+                { "SCREENER", SegmentType.VideoSource },
+                { "SCR", SegmentType.VideoSource },
+                { "DVDSCREENER", SegmentType.VideoSource },
+                { "DVDSCR", SegmentType.VideoSource },
+                { "BDSCR", SegmentType.VideoSource },
 
                 #endregion
             };
@@ -717,24 +732,41 @@ namespace Frost.DetectFeatures.Util {
             #endregion
         }
 
-        public FileNameParser(string fileName, bool isFolder = false) : this(fileName, isFolder, new[] {'.', '-', ')', '(', '[', ']', '{', '}', '_', ' '}) {
+        public FileNameParser(string filePath, bool useDirectoryName = false) : this(filePath, useDirectoryName, new[] { '.', '-', ')', '(', '[', ']', '{', '}', '_', ' ' }) {
         }
 
-        public FileNameParser(string fileName, bool isFolder, params char[] delimiters) {
+        public FileNameParser(string filePath, bool useDirectoryName, params char[] delimiters) {
             _textInfo = CultureInfo.CurrentCulture.TextInfo;
 
             _delimiters = new List<char>(delimiters);
-
             _titleAndReleaseYear = GetTitleAndReleaseYearRegexWithDelimiters();
 
-            fileName = UrlRegex.Replace(fileName, "");
+            _fileName = useDirectoryName ? GetDirectoryName(filePath) : Path.GetFileNameWithoutExtension(filePath);
 
-            _fileName = isFolder
-                ? Path.GetDirectoryName(fileName)
-                : Path.GetFileNameWithoutExtension(fileName);
+            _fileNameInfo = new FileNameInfo(filePath, Path.GetFileName(filePath), _fileName.SplitWithoutEmptyEntries(_delimiters));
 
-            _fileNameInfo = new FileNameInfo(_fileName.SplitWithoutEmptyEntries(_delimiters));
+            _fileName = UrlRegex.Replace(_fileName ?? "", "");
             _detectedSegments = new List<string>(_fileNameInfo.UndetectedSegments.Count);
+        }
+
+        private string GetDirectoryName(string fileName) {
+            string dirPath = Path.GetDirectoryName(fileName);
+            if (dirPath == null) {
+                return fileName;
+            }
+
+            char[] dirSeparators = { '/', '\\' };
+            int idx = dirPath.LastIndexOfAny(dirSeparators);
+            fileName = dirPath.Substring(idx + 1);
+
+            if (fileName.OrdinalEquals("VIDEO_TS")) {
+                dirPath = Path.GetDirectoryName(dirPath);
+                if (dirPath != null) {
+                    idx = dirPath.LastIndexOfAny(dirSeparators);
+                    fileName = dirPath.Substring(idx + 1);
+                }
+            }
+            return fileName;
         }
 
         public ICollection<char> Delimiters {
@@ -770,15 +802,13 @@ namespace Frost.DetectFeatures.Util {
                 RemoveKnownSegmentsFromTitle();
             }
             else {
-                int titleEndIndex = _fileName.IndexOfAny(new[] {'-', ')', '(', '[', ']', '{', '}'});
+                int titleEndIndex = _fileName.IndexOfAny(new[] { '-', ')', '(', '[', ']', '{', '}' });
                 if (titleEndIndex > 0) {
                     _titleFound = true;
-                    string title = _fileName.Substring(0, titleEndIndex)
-                                            .Replace('.', ' ')
-                                            .Replace('_', '_');
+                    _fileNameInfo.Title = _fileName.Substring(0, titleEndIndex)
+                                                   .Replace('.', ' ')
+                                                   .Replace('_', '_');
 
-
-                    _fileNameInfo.Title = title.Trim();
                     RemoveKnownSegmentsFromTitle(false);
                 }
             }
@@ -803,8 +833,7 @@ namespace Frost.DetectFeatures.Util {
                 string title = GetStringBeforeFirstDetectedSegment();
                 if (!string.IsNullOrEmpty(title)) {
                     _fileNameInfo.Title = title.Replace('.', ' ')
-                                         .Replace('_', ' ')
-                                         .Trim();
+                                               .Replace('_', ' ');
 
                     _titleFound = true;
                 }
@@ -812,8 +841,6 @@ namespace Frost.DetectFeatures.Util {
                     _fileNameInfo.Title = string.Join(" ", _fileNameInfo.UndetectedSegments);
                 }
             }
-
-            _fileNameInfo.Title = _textInfo.ToTitleCase(_fileNameInfo.Title);
 
             return _fileNameInfo;
             //Console.WriteLine();
@@ -827,13 +854,13 @@ namespace Frost.DetectFeatures.Util {
             int minIndex = _detectedSegments.Min(segment => {
                 int idx = _fileName.IndexOf(segment, StringComparison.Ordinal);
                 return (idx < 0)
-                    ? _fileName.Length
-                    : idx;
+                           ? _fileName.Length
+                           : idx;
             });
 
             return (minIndex != _fileName.Length)
-                ? _fileName.Substring(0, minIndex)
-                : null;
+                       ? _fileName.Substring(0, minIndex)
+                       : null;
         }
 
         private void RemoveKnownSegmentsFromTitle(bool releaseYearFound = true) {
@@ -843,11 +870,26 @@ namespace Frost.DetectFeatures.Util {
                 if (KnownSegments.TryGetValue(titleSegment, out type)) {
                     AddSegmentType(titleSegment, type);
 
+                    int idx;
                     if (firstSegmentIdx == -1) {
                         firstSegmentIdx = _fileNameInfo.Title.IndexOf(titleSegment, StringComparison.Ordinal);
+                        idx = firstSegmentIdx;
+                    }
+                    else {
+                        idx = _fileNameInfo.Title.IndexOf(titleSegment, StringComparison.Ordinal);
                     }
 
-                    _fileNameInfo.Title = _fileNameInfo.Title.Replace(titleSegment, "").Trim();
+                    if (idx != 0 && EnclosingDelimiters.Contains(_fileNameInfo.Title[idx - 1]) && EnclosingDelimiters.Contains(_fileNameInfo.Title[idx + titleSegment.Length])) {
+                        _fileNameInfo.Title = _fileNameInfo.Title.Remove(idx - 1, idx + titleSegment.Length + 1);
+
+                        //segment is a prefix
+                        if(idx - 1 == 0){
+                            firstSegmentIdx = -1;
+                        }
+                    }
+                    else {
+                        _fileNameInfo.Title = _fileNameInfo.Title.Replace(titleSegment, "");
+                    }
                 }
                 else if (CheckLanguage(titleSegment) != LanguageCheck.NotALangauge) {
                     int langIdx = _fileNameInfo.Title.IndexOf(titleSegment, StringComparison.Ordinal) - 1;
@@ -857,7 +899,7 @@ namespace Frost.DetectFeatures.Util {
 
                         //only if language identifier is in brackets (to avoid collisions with the title)
                         if ((prevLang == '(' || prevLang == '[' || prevLang == '{') && CheckAndAddLanguage(titleSegment)) {
-                            _fileNameInfo.Title = _fileNameInfo.Title.Remove(langIdx, titleSegment.Length + 2).Trim();
+                            _fileNameInfo.Title = _fileNameInfo.Title.Remove(langIdx, titleSegment.Length + 2);
                         }
                     }
                 }
@@ -868,8 +910,8 @@ namespace Frost.DetectFeatures.Util {
             //remove everything after the first known segment
             //and preserve the title only
             _fileNameInfo.Title = (firstSegmentIdx != -1 && firstSegmentIdx < _fileNameInfo.Title.Length)
-                ? _fileNameInfo.Title.Remove(firstSegmentIdx).Trim()
-                : _fileNameInfo.Title.Trim();
+                                      ? _fileNameInfo.Title.Remove(firstSegmentIdx)
+                                      : _fileNameInfo.Title;
 
             if (releaseYearFound) {
                 _fileNameInfo.UndetectedSegments.Remove(_fileNameInfo.ReleaseYear.ToString("yyyy"));
@@ -884,15 +926,13 @@ namespace Frost.DetectFeatures.Util {
 
                 DateTime releaseYear;
                 if (DateTime.TryParseExact(match.Groups[2].Value.Trim(), "yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out releaseYear)) {
-                    
-
                     _releaseYearFound = true;
                     _fileNameInfo.ReleaseYear = releaseYear;
 
                     _detectedSegments.Add(match.Groups[2].Value);
                 }
                 else {
-                    Console.Error.WriteLine("Failed parsing date: "+match.Groups[2].Value.Trim());
+                    Console.Error.WriteLine("Failed parsing date: " + match.Groups[2].Value.Trim());
                 }
                 return true;
             }
@@ -954,9 +994,8 @@ namespace Frost.DetectFeatures.Util {
                     int yearStart = _fileName.IndexOf(segment, StringComparison.Ordinal) - 1;
 
                     _fileNameInfo.Title = _fileName.Substring(0, yearStart)
-                                             .Replace('.', ' ')
-                                             .Replace('_', ' ')
-                                             .Trim();
+                                                   .Replace('.', ' ')
+                                                   .Replace('_', ' ');
                     return;
                 }
             }
@@ -1177,4 +1216,5 @@ namespace Frost.DetectFeatures.Util {
 
         #endregion
     }
+
 }

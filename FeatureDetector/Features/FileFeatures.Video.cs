@@ -1,32 +1,46 @@
 ﻿using System;
+using System.IO;
 using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.DetectFeatures.Util;
 using Frost.DetectFeatures.Util.AspectRatio;
+using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
 using Frost.SharpOpenSubtitles.Util;
+
 using CompressionMode = Frost.Common.CompressionMode;
 using FrameOrBitRateMode = Frost.Common.FrameOrBitRateMode;
 using ScanType = Frost.SharpMediaInfo.ScanType;
+using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
 
 namespace Frost.DetectFeatures {
 
-    public partial class FileFeatures {
+    public partial class FileFeatures : IDisposable {
 
         private void GetISOVideoInfo() {
         }
 
-        private void GetVideoInfo() {
-            if (_file.Extension == "iso") {
+        private void GetVideoInfo(FileVo file) {
+            if (file.Extension == "iso") {
                 GetISOVideoInfo();
                 return;
             }
 
-            if (_mediaFile != null) {
-                string movieHash = MovieHasher.ComputeMovieHashAsHexString(_filePath);
-                foreach (MediaVideo mediaVideo in _mediaFile.Video) {
-                    Video video = GetFileVideoStreamInfo(mediaVideo);
+            MediaListFile mediaFile = _mf.GetOrOpen(file.FullPath);
+            FileNameInfo fnInfo = _fnInfos[file.NameWithExtension];
+            if (mediaFile != null) {
+                string movieHash;
+                try {
+                    movieHash = MovieHasher.ComputeMovieHashAsHexString(file.FullPath);
+                }
+                catch (FileNotFoundException e) {
+                    movieHash = null;
+                }
+
+                foreach (MediaVideo mediaVideo in mediaFile.Video) {
+                    Video video = GetFileVideoStreamInfo(fnInfo, mediaVideo);
+                    video.File = file;
                     video.MovieHash = movieHash;
 
                     Movie.Videos.Add(video);
@@ -37,11 +51,10 @@ namespace Frost.DetectFeatures {
             }
         }
 
-        private Video GetFileVideoStreamInfo(MediaVideo mv) {
+        private Video GetFileVideoStreamInfo(FileNameInfo fnInfo, MediaVideo mv) {
             Video v = new Video();
-            v.File = _file;
 
-            AddFileNameInfo(v);
+            AddFileNameInfo(fnInfo, v);
 
             v.Aspect = mv.PixelAspectRatio;
             v.BitDepth = mv.BitDepth;
@@ -59,7 +72,7 @@ namespace Frost.DetectFeatures {
             v.Resolution = !string.IsNullOrEmpty(mv.Standard) ? mv.Standard : GetFileVideoResolution(mv) ?? v.Resolution;
             v.Height = (int?) mv.Height;
             v.Width = (int?) mv.Width;
-            v.Language = CheckLanguage(GetLanguage(false, mv.LanguageInfo.Full1, null, _fnInfo.SubtitleLanguage, _fnInfo.Language));
+            v.Language = CheckLanguage(GetLanguage(false, mv.LanguageInfo.Full1, null, fnInfo.SubtitleLanguage, fnInfo.Language));
 
             v.ScanType = (Common.ScanType) mv.ScanType;
             v.Aspect = mv.DisplayAspectRatio;
@@ -74,21 +87,21 @@ namespace Frost.DetectFeatures {
             return v;
         }
 
-        private void AddFileNameInfo(Video video) {
-            if (_fnInfo.VideoSource != null) {
-                video.Source = _fnInfo.VideoSource;
+        private void AddFileNameInfo(FileNameInfo fnInfo, Video video) {
+            if (fnInfo.VideoSource != null) {
+                video.Source = fnInfo.VideoSource;
             }
             else {
-                video.Source = _fnInfo.DVDRegion != DVDRegion.Unknown
-                    ? _fnInfo.DVDRegion.ToString()
+                video.Source = fnInfo.DVDRegion != DVDRegion.Unknown
+                    ? fnInfo.DVDRegion.ToString()
                     : null;
             }
 
-            video.Codec = _fnInfo.VideoCodec;
-            video.Resolution = _fnInfo.VideoQuality;
+            video.Codec = fnInfo.VideoCodec;
+            video.Resolution = fnInfo.VideoQuality;
 
-            if (_fnInfo.Language != null) {
-                video.Language = CheckLanguage(new Language(_fnInfo.Language));
+            if (fnInfo.Language != null) {
+                video.Language = CheckLanguage(new Language(fnInfo.Language));
             }
         }
 

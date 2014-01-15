@@ -1,27 +1,31 @@
 ﻿using System;
-using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.Files;
+using Frost.DetectFeatures.Util;
+using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
-
+using CompressionMode = Frost.Common.CompressionMode;
 using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
+using FrameOrBitRateMode = Frost.Common.FrameOrBitRateMode;
 
 namespace Frost.DetectFeatures {
-    public partial class FileFeatures {
+    public partial class FileFeatures : IDisposable {
 
         private void GetISOAudioInfo() {
             
         }
 
-        private void GetAudioInfo() {
-            if (_file.Extension == "iso") {
+        private void GetAudioInfo(FileVo file) {
+            if (file.Extension == "iso") {
                 GetISOAudioInfo();
                 return;
             }
 
-            if (_mediaFile != null) {
-                foreach (MediaAudio mediaVideo in _mediaFile.Audio) {
-                    Audio audio = GetFileAudioStreamInfo(mediaVideo);
+            MediaListFile mediaFile = _mf.GetOrOpen(file.FullPath);
+            if (mediaFile != null) {
+                foreach (MediaAudio mediaVideo in mediaFile.Audio) {
+                    Audio audio = GetFileAudioStreamInfo(_fnInfos[file.NameWithExtension], mediaVideo);
+                    audio.File = file;
 
                     Movie.Audios.Add(audio);
                 }
@@ -31,9 +35,10 @@ namespace Frost.DetectFeatures {
             }            
         }
 
-        private Audio GetFileAudioStreamInfo(MediaAudio ma) {
+        private Audio GetFileAudioStreamInfo(FileNameInfo fnInfo, MediaAudio ma) {
             Audio a = new Audio();
-            a.File = _file;
+
+            AddFileNameInfo(fnInfo, a);
 
             a.BitDepth = ma.BitDepth;
             a.BitRate = ma.BitRate.HasValue ? ma.BitRate / 1024.0f : null;
@@ -49,6 +54,19 @@ namespace Frost.DetectFeatures {
             a.SamplingRate = ma.SamplingRate;
 
             return a;
+        }
+
+        private void AddFileNameInfo(FileNameInfo fnInfo, Audio audio) {
+            if (fnInfo.AudioSource != null) {
+                audio.Source = fnInfo.AudioSource;
+            }
+
+            audio.Codec = fnInfo.AudioCodec;
+            audio.Type = fnInfo.AudioQuality;
+
+            if (fnInfo.Language != null) {
+                audio.Language = CheckLanguage(new Language(fnInfo.Language));
+            }
         }
 
         private Language GetLangauge(MediaAudio ma) {

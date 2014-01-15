@@ -6,10 +6,10 @@ using Frost.Common.Models.XML.XBMC;
 
 namespace Frost.DetectFeatures {
 
-    public partial class FileFeatures {
+    public partial class FileFeatures : IDisposable {
 
-        private void GetXbmcNfoInfo(FileInfo[] xbmcNfo) {
-            FileInfo sameName = xbmcNfo.FirstOrDefault(fi => fi.Name.Equals(_file.Name + ".nfo"));
+        private void GetXbmcNfoInfo(string fileName, FileInfo[] xbmcNfo) {
+            FileInfo sameName = xbmcNfo.FirstOrDefault(fi => fi.Name.Equals(fileName + ".nfo"));
             if (sameName != null) {
                 GetXbmcNfo(sameName.FullName);
                 return;
@@ -27,7 +27,7 @@ namespace Frost.DetectFeatures {
                 xbmcMovie = XbmcXmlMovie.Load(filePath);
             }
             catch (Exception) {
-                Console.Error.WriteLine(string.Format("File \"{0}\" is not a valid NFO.", filePath), "ERROR");
+                //Console.Error.WriteLine(string.Format("File \"{0}\" is not a valid NFO.", filePath), "ERROR");
             }
 
             if (xbmcMovie != null) {

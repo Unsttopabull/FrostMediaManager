@@ -95,7 +95,7 @@ namespace Frost.SharpMediaInfo.Output {
         public string this[string parameter] {
             get {
                 //if caching is enabled and the parameter exists in cache return cached value
-                if (/*_cached.Length > 0 &&*/ _cached[StreamNumber] && _properties[StreamNumber].ContainsKey(parameter)) {
+                if (_cached.Length > 0 && _cached[StreamNumber] && _properties[StreamNumber].ContainsKey(parameter)) {
                     return _properties[StreamNumber][parameter];
                 }
 
