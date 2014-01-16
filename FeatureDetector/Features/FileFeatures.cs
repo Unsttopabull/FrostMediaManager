@@ -116,8 +116,11 @@ namespace Frost.DetectFeatures {
                 FileVo f = _mvc.Files.Add(file);
                 _files.Add(f);
             }
-            else if(File.Exists(filePath)){
-                
+            else if (File.Exists(filePath)) {
+
+            }
+            else {
+                _files.Add(null);
             }
         }
 
@@ -144,12 +147,14 @@ namespace Frost.DetectFeatures {
                 return directoryPath;
             }
 
-            string withoutExtension = Path.GetFileNameWithoutExtension(fi.Name);
-            withoutExtension = string.IsNullOrEmpty(withoutExtension)
-                                       ? fi.Name.Substring(0, fi.Name.LastIndexOf('.'))
-                                       : withoutExtension;
+            if(file == null){
+                string withoutExtension = Path.GetFileNameWithoutExtension(fi.Name);
+                withoutExtension = string.IsNullOrEmpty(withoutExtension)
+                                           ? fi.Name.Substring(0, fi.Name.LastIndexOf('.'))
+                                           : withoutExtension;
 
-            file = new FileVo(withoutExtension, fi.Extension.Substring(1), fi.DirectoryName, fi.Length);
+                file = new FileVo(withoutExtension, fi.Extension.Substring(1), fi.DirectoryName, fi.Length);
+            }
             return directoryPath;
         }
 

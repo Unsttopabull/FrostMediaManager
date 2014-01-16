@@ -17,7 +17,13 @@ namespace Frost.SharpMediaInfo {
 
         #region Constructors
         public MediaInfoList() {
-            _handle = Environment.Is64BitProcess ? MediaInfoList_New_x64() : MediaInfoList_New();
+            bool is64 = Environment.Is64BitProcess;
+            try{
+                _handle = is64 ? MediaInfoList_New_x64() : MediaInfoList_New();
+            }
+            catch (BadImageFormatException) {
+                _handle = is64 ? MediaInfoList_New() : MediaInfoList_New_x64();
+            }
             _files = new MediaFileCollection();
         }
 

@@ -9,6 +9,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents a context used for manipulation of the database.</summary>
     public class MovieVoContainer : DbContext {
+        private readonly bool _dropCreate;
 
         static MovieVoContainer() {
             if (Environment.Is64BitProcess) {
@@ -22,7 +23,12 @@ namespace Frost.Common.Models.DB.MovieVo {
         }
 
         /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
-        public MovieVoContainer() : base("name=MovieVoContainer") {
+        public MovieVoContainer(string connectionString, bool dropCreate = true) : base(connectionString) {
+            _dropCreate = dropCreate;
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
+        public MovieVoContainer(bool dropCreate = true) : this("name=MovieVoContainer", dropCreate) {
         }
 
         /// <summary>Gets or sets the information about the movies in the library.</summary>
@@ -106,7 +112,9 @@ namespace Frost.Common.Models.DB.MovieVo {
             modelBuilder.Configurations.Add(new Genre.GenreConfiguration());
             modelBuilder.Configurations.Add(new Subtitle.Configuration());
 
-            Database.SetInitializer(new SeedInitializer());
+            if (_dropCreate) {
+                Database.SetInitializer(new SeedInitializer());
+            }
 
             base.OnModelCreating(modelBuilder);
         }

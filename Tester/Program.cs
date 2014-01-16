@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Validation;
-using System.Data.SQLite;
 using System.IO;
-using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Threading.Tasks;
 using Frost.CinemaInfoParsers.Kolosej;
@@ -17,11 +14,7 @@ using Frost.DetectFeatures.Util;
 using Frost.PodnapisiNET;
 using Frost.PodnapisiNET.Models;
 using Frost.SharpOpenSubtitles;
-using Frost.SharpOpenSubtitles.Models.Checking;
-using Frost.SharpOpenSubtitles.Models.Checking.Receive;
 using Frost.SharpOpenSubtitles.Models.Movies.Receive;
-using Frost.SharpOpenSubtitles.Models.UI;
-using Frost.SharpOpenSubtitles.Models.UI.Receive;
 using HibernatingRhinos.Profiler.Appender.EntityFramework;
 using Newtonsoft.Json;
 using CompressionMode = Frost.Common.CompressionMode;
@@ -425,14 +418,15 @@ namespace Frost.Tester {
             Debug.Listeners.Add(new ConsoleTraceListener());
             Debug.AutoFlush = true;
 
+            TimeSpan time = default(TimeSpan);
             //Test();
-            TestMediaSearcher();
+            //time = TestMediaSearcher();
             //TestOpenSubtitlesProtocol();
             //TestDB();
-            //TestMovie();
+            TestMovie();
 
             Console.WriteLine(Filler);
-            Console.WriteLine("\tFIN");
+            Console.WriteLine("\tFIN: " + time);
             Console.WriteLine(Filler);
             Console.Read();
         }
@@ -443,26 +437,18 @@ namespace Frost.Tester {
             FileNameInfo info = fnp.Parse();
         }
 
-        private static void TestMediaSearcher() {
+        private static TimeSpan TestMediaSearcher() {
+            Stopwatch sw = Stopwatch.StartNew();
             FeatureDetector ms = new FeatureDetector(@"E:\Torrenti\FILMI", @"F:\Torrenti\FILMI");
             ms.Search();
+
+            sw.Stop();
+            return sw.Elapsed;
         }
 
         private static void TestMovie() {
-            MovieVoContainer mvc = new MovieVoContainer();
-            Movie mov = new Movie();
-            mov.Title = "Amazing Grace";
-            mvc.Movies.Add(mov);
-
-            FileVo file = new FileVo("Amazing.Grace.2006.SLOSub.DvdRip.Xvid", "avi", @"E:\Torrenti\FILMI\Amazing.Grace.2006.SLOSub.DvdRip.Xvid\");
-            Language lang = new Language("Slovene", "sl", "slv");
-            mov.Subtitles.Add(new Subtitle(file, lang, "SubRip"));
-
-            try {
-                mvc.SaveChanges();
-            }
-            catch (DbEntityValidationException e) {
-            }
+            MovieVoContainer mvc = new MovieVoContainer("data source=movieVo.db3;", false);
+            var movies = mvc.Movies.Select(mv => mv);
         }
 
         private static void TestDB() {
@@ -491,10 +477,6 @@ namespace Frost.Tester {
             //        Console.Error.WriteLine(e.InnerException.Message);
             //    }
             //}
-        }
-
-        static void SQLiteLog_Log(object sender, LogEventArgs e) {
-            Console.WriteLine(e.Message);
         }
 
         private static void TestFeatureDetectorVideoDebugDB() {

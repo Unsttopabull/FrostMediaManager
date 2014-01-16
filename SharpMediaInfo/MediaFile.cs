@@ -1,8 +1,5 @@
 ﻿using System;
-using System.IO;
 using System.Runtime.InteropServices;
-using Frost.SharpMediaInfo.Options;
-using Frost.SharpMediaInfo.Output;
 
 namespace Frost.SharpMediaInfo {
 
@@ -20,7 +17,7 @@ namespace Frost.SharpMediaInfo {
         /// <param name="filePath">The full path to the file from which to detect features.</param>
         /// <param name="cacheInfom">If set to <c>true</c> the Iform() call will get cached to limit calls to DLL when cached.</param>
         /// <param name="allInfoCache">If set to <c>true</c> the Inform() call will get cached with ShowAllInfo set to <c>true</c>.</param>
-        public MediaFile(string filePath, bool cacheInfom, bool allInfoCache = true) : base(MediaInfo_New()) {
+        public MediaFile(string filePath, bool cacheInfom, bool allInfoCache = true) : base(InitializeHandle()) {
             DisposedMessage = HANDLE_DISPOSED;
 
             IsOpen = Open(filePath);
@@ -133,10 +130,10 @@ namespace Frost.SharpMediaInfo {
         public new void Close() {
             if (!_isDisposed) {
                 if (IsOpen) {
-                    MediaInfo_Close(Handle);
+                    CloseHandle(Handle);
                     IsOpen = false;
                 }                
-                MediaInfo_Delete(Handle);
+                DeleteHandle(Handle);
 
                 GC.SuppressFinalize(this);
                 _isDisposed = true;
@@ -146,6 +143,45 @@ namespace Frost.SharpMediaInfo {
         #endregion
 
         #region MediaInfo Interop
+
+        private static IntPtr InitializeHandle() {
+            IntPtr handle;
+            if (Environment.Is64BitProcess) {
+                try {
+                    handle = MediaInfo_New_x64();
+                }
+                catch (BadImageFormatException) {
+                    handle = MediaInfo_New();
+                }
+            }
+            else {
+                try {
+                    handle = MediaInfo_New();
+                }
+                catch (BadImageFormatException) {
+                    handle = MediaInfo_New_x64();
+                }
+            }
+            return handle;
+        }
+
+        private void CloseHandle(IntPtr handle) {
+            if (Environment.Is64BitProcess) {
+                MediaInfo_Close_x64(handle);
+            }
+            else {
+                MediaInfo_Close(handle);
+            }
+        }
+
+        private void DeleteHandle(IntPtr handle) {
+            if (Environment.Is64BitProcess) {
+                MediaInfo_Delete_x64(handle);
+            }
+            else {
+                MediaInfo_Delete(handle);
+            }
+        }
 
         /// <summary>Open a file and collect information about it (technical information and tags)</summary>
         /// <param name="fileName">Full name of the file to open.</param>
@@ -158,7 +194,7 @@ namespace Frost.SharpMediaInfo {
 
                 return toReturn == 1;
             }
-            return (int) MediaInfo_Open(Handle, fileName) == 1;
+            return (int) (Environment.Is64BitProcess ? MediaInfo_Open_x64(Handle, fileName) : MediaInfo_Open(Handle, fileName)) == 1;
         }
 
         /// <summary>Get all details about a file in one string</summary>
