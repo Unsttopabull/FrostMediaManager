@@ -1,6 +1,4 @@
-﻿using System;
-using System.Data.Entity;
-using System.Reflection;
+﻿using System.Data.Entity;
 using Frost.Common.Models.DB.MovieVo.Arts;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.Common.Models.DB.MovieVo.People;
@@ -10,17 +8,6 @@ namespace Frost.Common.Models.DB.MovieVo {
     /// <summary>Represents a context used for manipulation of the database.</summary>
     public class MovieVoContainer : DbContext {
         private readonly bool _dropCreate;
-
-        static MovieVoContainer() {
-            if (Environment.Is64BitProcess) {
-                Assembly.LoadFrom("x64/System.Data.SQLite.dll");
-                Assembly.LoadFrom("x64/System.Data.SQLite.Linq.dll");
-            }
-            else {
-                Assembly.LoadFrom("x86/System.Data.SQLite.dll");
-                Assembly.LoadFrom("x86/System.Data.SQLite.Linq.dll");                
-            }            
-        }
 
         /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
         public MovieVoContainer(string connectionString, bool dropCreate = true) : base(connectionString) {
