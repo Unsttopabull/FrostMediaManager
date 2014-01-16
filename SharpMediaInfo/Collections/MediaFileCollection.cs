@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Linq;
 
@@ -15,6 +16,10 @@ namespace Frost.SharpMediaInfo.Collections {
         /// <param name="file">When this method returns, the value associated with the specified key, if the key is found; otherwise, the default value for the type of the <paramref name="file"/> parameter. This parameter is passed uninitialized.</param>
         /// <exception cref="T:System.ArgumentNullException"><paramref name="key"/> is null.</exception>
         public bool TryGetValue(string key, out MediaListFile file) {
+            if (Dictionary == null) {
+                file = null;
+                return false;
+            }
             return Dictionary.TryGetValue(key, out file);
         }
 
@@ -26,16 +31,23 @@ namespace Frost.SharpMediaInfo.Collections {
         }
 
         public MediaListFile GetFirstFileWithPattern(Regex regex) {
-            return Dictionary.FirstOrDefault(kvp => regex.IsMatch(kvp.Key)).Value;
+            return Dictionary != null
+                ? Dictionary.FirstOrDefault(kvp => regex.IsMatch(kvp.Key)).Value
+                : null;
         }
 
         /// <summary>Gets the file paths of files in the list.</summary>
         /// <returns>Filepaths of files in the list.</returns>
         public IEnumerable<string> GetFilePaths() {
-            return Dictionary.Keys;
+            return Dictionary == null
+                ? Enumerable.Empty<string>()
+                : Dictionary.Keys;
         }
 
         public IEnumerable<MediaListFile> GetFilesWithPattern(Regex regex) {
+            if (Dictionary == null) {
+                return Enumerable.Empty<MediaListFile>();
+            }
             return Dictionary.Where(kvp => regex.IsMatch(kvp.Key))
                              .Select(kvp => kvp.Value);
         }

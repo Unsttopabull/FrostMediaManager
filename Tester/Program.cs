@@ -15,7 +15,6 @@ using Frost.PodnapisiNET;
 using Frost.PodnapisiNET.Models;
 using Frost.SharpOpenSubtitles;
 using Frost.SharpOpenSubtitles.Models.Movies.Receive;
-using HibernatingRhinos.Profiler.Appender.EntityFramework;
 using Newtonsoft.Json;
 using CompressionMode = Frost.Common.CompressionMode;
 using File = System.IO.File;
@@ -411,7 +410,7 @@ namespace Frost.Tester {
         }
 
         private static void Main() {
-            EntityFrameworkProfiler.Initialize();
+            //EntityFrameworkProfiler.Initialize();
 
             FileStream debugLog = File.Create("debugSearch.txt");
             Debug.Listeners.Add(new TextWriterTraceListener(debugLog));
@@ -420,10 +419,10 @@ namespace Frost.Tester {
 
             TimeSpan time = default(TimeSpan);
             //Test();
-            //time = TestMediaSearcher();
+            time = TestMediaSearcher();
             //TestOpenSubtitlesProtocol();
             //TestDB();
-            TestMovie();
+            //TestMovie();
 
             Console.WriteLine(Filler);
             Console.WriteLine("\tFIN: " + time);
