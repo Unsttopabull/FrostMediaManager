@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -419,10 +420,11 @@ namespace Frost.Tester {
 
             TimeSpan time = default(TimeSpan);
             //Test();
-            time = TestMediaSearcher();
+            //time = TestMediaSearcher();
             //TestOpenSubtitlesProtocol();
             //TestDB();
             //TestMovie();
+            //TestSQLiteConn();
 
             Console.WriteLine(Filler);
             Console.WriteLine("\tFIN: " + time);
@@ -446,8 +448,9 @@ namespace Frost.Tester {
         }
 
         private static void TestMovie() {
-            MovieVoContainer mvc = new MovieVoContainer("data source=movieVo.db3;", false);
-            var movies = mvc.Movies.Select(mv => mv);
+            using (MovieVoContainer mvc = new MovieVoContainer(false, @"E:\Workspace\Ostalo\Repos\Git\FrostMediaManager\Tester\bin\Debug\movieVo.db3")) {
+                var movies = mvc.Movies.Select(mv => mv);
+            }
         }
 
         private static void TestDB() {

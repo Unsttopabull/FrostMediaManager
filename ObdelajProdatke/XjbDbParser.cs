@@ -31,9 +31,7 @@ namespace Frost.ProcessDatabase {
         }
 
         protected override void Process(string dbLoc) {
-            ChangeConnectionString(dbLoc);
-
-            XjbEntities xjb = new XjbEntities();
+            XjbEntities xjb = new XjbEntities(dbLoc);
             string[] phpFilmi = xjb.Movies.Select(mov => mov.MovieVo).ToArray();
 
             int stFilmov = phpFilmi.Length;
@@ -54,14 +52,6 @@ namespace Frost.ProcessDatabase {
 
                 ObdelaniFilmi.Add(mv);
             }
-        }
-
-        protected override void ChangeConnectionString(string databaseLocation) {
-            Configuration conf = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            conf.ConnectionStrings.ConnectionStrings["xjbEntities"].ConnectionString = "data source=" + databaseLocation;
-            conf.Save(ConfigurationSaveMode.Modified, true);
-
-            ConfigurationManager.RefreshSection("connectionStrings");
         }
     }
 }

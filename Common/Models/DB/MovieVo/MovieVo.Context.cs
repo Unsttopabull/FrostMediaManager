@@ -1,4 +1,7 @@
-﻿using System.Data.Entity;
+﻿using System.Data.Common;
+using System.Data.Entity;
+using System.Data.SQLite;
+using System.Diagnostics;
 using Frost.Common.Models.DB.MovieVo.Arts;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.Common.Models.DB.MovieVo.People;
@@ -7,11 +10,19 @@ namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents a context used for manipulation of the database.</summary>
     public class MovieVoContainer : DbContext {
-        private readonly bool _dropCreate;
+
+        /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
+        public MovieVoContainer(bool dropCreate, string filePath) : base(GetSQLiteConnection(filePath), true) {
+            if (dropCreate) {
+                Database.SetInitializer(new SeedInitializer());
+            }   
+        }
 
         /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
         public MovieVoContainer(string connectionString, bool dropCreate = true) : base(connectionString) {
-            _dropCreate = dropCreate;
+            if (dropCreate) {
+                Database.SetInitializer(new SeedInitializer());
+            }
         }
 
         /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
@@ -81,6 +92,16 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <value>The information about people that participated in the movies in the library</value>
         public DbSet<Person> People { get; set; }
 
+        private static DbConnection GetSQLiteConnection(string filePath) {
+            SQLiteConnection sqliteConn = new SQLiteConnection("data source=" + filePath);
+            sqliteConn.Trace += sqliteConn_Trace;
+            return sqliteConn;
+        }
+
+        static void sqliteConn_Trace(object sender, TraceEventArgs e) {
+            Debug.WriteLine(e.Statement, "SQL");
+        }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
@@ -99,13 +120,8 @@ namespace Frost.Common.Models.DB.MovieVo {
             modelBuilder.Configurations.Add(new Genre.GenreConfiguration());
             modelBuilder.Configurations.Add(new Subtitle.Configuration());
 
-            if (_dropCreate) {
-                Database.SetInitializer(new SeedInitializer());
-            }
-
             base.OnModelCreating(modelBuilder);
         }
-
     }
 
 }

@@ -1,13 +1,17 @@
 ﻿using System.Data.Entity;
+using System.Data.SQLite;
 
 namespace Frost.Common.Models.DB.Jukebox {
 
     public class XjbEntities : DbContext {
 
+        /// <summary>Initializes a new instance of the <see cref="XjbEntities"/> class.</summary>
         public XjbEntities() : base("name=xjbEntities") {
         }
 
-        public XjbEntities(string connectionString) : base(connectionString) {
+        /// <summary>Initializes a new instance of the <see cref="XjbEntities"/> class.</summary>
+        /// <param name="filePath">The path to the SQLite database file.</param>
+        public XjbEntities(string filePath) : base(new SQLiteConnection("data source="+filePath), true) {
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {

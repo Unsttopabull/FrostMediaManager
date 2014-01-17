@@ -24,45 +24,19 @@ namespace Frost.DetectFeatures {
         private static readonly string[] KnownSubtitleFormats;
         private readonly MD5 _md5 = MD5.Create();
 
-        private void GetSubtitles(string fileName) {
+        private void GetSubtitles(FileVo file) {
             //regex from matching files with the same name but with a known subtitle extension
-            string regex = string.Format(@"{0}{1}", Regex.Escape(Path.GetFileNameWithoutExtension(fileName) ?? ""), SubtitleExtensionsRegex);
+            string regex = string.Format(@"{0}{1}", Regex.Escape(Path.GetFileNameWithoutExtension(file.NameWithExtension) ?? ""), SubtitleExtensionsRegex);
             IEnumerable<MediaListFile> mediaFiles = _directoryInfo.EnumerateFilesRegex(regex)
                                                                   .Select(fi => _mf.GetOrOpen(fi.FullName))
                                                                   .Where(mediaFile => mediaFile != null);
 
-            //if (filesWithPattern.Count > 0) {
             foreach (MediaListFile mediaFile in mediaFiles) {
-                GetSubtitlesInFile(mediaFile, _fnInfos[fileName]);
+                GetSubtitlesInFile(file, mediaFile, _fnInfos[file.NameWithExtension]);
             }
-            //}
-            //else {
-            //    OutputError(fileInfo, fileName, fileNameRegex);
-            //}
         }
 
-        private void OutputError(FileFeatures fileFeatures, string fileName, string fileNameRegex) {
-            Console.Error.WriteLine("#region " + fileName);
-            Console.Error.WriteLine("Matching files not found!");
-            Console.Error.WriteLine("Searched for: {0}[\\/]{1}", fileFeatures._directoryRegex, fileNameRegex);
-
-            Console.Error.WriteLine();
-            Console.Error.WriteLine("Listing files in the directory:");
-
-            try {
-                foreach (string file in fileFeatures._directoryInfo.EnumerateFiles().Select(fi => fi.Name)) {
-                    Console.Error.WriteLine("\t" + file);
-                }
-            }
-            catch (IOException e) {
-                Console.Error.WriteLine("ERROR: " + e.Message);
-            }
-            Console.Error.WriteLine();
-            Console.Error.WriteLine("#endregion");
-            Console.Error.WriteLine();
-        }
-
-        private void GetSubtitlesInFile(MediaListFile mediaFile, FileNameInfo fnInfo) {
+        private void GetSubtitlesInFile(FileVo file, MediaListFile mediaFile, FileNameInfo fnInfo) {
             SubtitleLanguage subLang = GetLanguageAndEncoding(mediaFile.General.FileInfo.FullPath);
 
             FileInfo fi = mediaFile.General.FileInfo;
@@ -78,12 +52,12 @@ namespace Frost.DetectFeatures {
                     //if MediaInfo detected a format and it is a known subtitle format
                     if (mediaFormat != null && Array.BinarySearch(KnownSubtitleFormats, mediaFormat) >= 0) {
                         sub = new Subtitle(null, lang, mediaFormat);
-                        sub.File = _files[fnInfo.FileOrFolderName];
+                        sub.File = file;
                     }
                     else {
                         //TODO:check format if its a subtitle
                         sub = new Subtitle(null, lang);
-                        sub.File = _files[fnInfo.FileOrFolderName];
+                        sub.File = file;
                     }
 
                     if (subLang.Encoding != null) {
@@ -99,7 +73,7 @@ namespace Frost.DetectFeatures {
                 Language lang = CheckLanguage(languageToCheck);
 
                 Subtitle sub = new Subtitle(null, lang);
-                sub.File = _files[fnInfo.FileOrFolderName];
+                sub.File = file;
 
                 if (subLang.Encoding != null) {
                     sub.Encoding = subLang.Encoding.WebName;

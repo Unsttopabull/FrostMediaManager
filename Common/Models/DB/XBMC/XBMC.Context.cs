@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Data.SQLite;
 using Frost.Common.Models.DB.XBMC.Actor;
 using Frost.Common.Models.DB.XBMC.StreamDetails;
 using Frost.Common.Models.DB.XBMC.Tag;
@@ -14,9 +15,8 @@ namespace Frost.Common.Models.DB.XBMC {
         }
 
         /// <summary>Initializes a new instance of the <see cref="XbmcContainer"/> class.</summary>
-        /// <param name="connString">The connection string.</param>
-        public XbmcContainer(string connString) : base(connString) {
-            Configuration.LazyLoadingEnabled = false;
+        /// <param name="filePath">The path to the SQLite database file.</param>
+        public XbmcContainer(string filePath) : base(new SQLiteConnection("data source="+filePath), true) {
         }
 
         /// <summary>Gets or sets the information about the movies in the XBMC library.</summary>

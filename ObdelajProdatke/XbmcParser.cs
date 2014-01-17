@@ -24,9 +24,7 @@ namespace Frost.ProcessDatabase {
         }
 
         protected override void Process(string dbLoc) {
-            ChangeConnectionString(dbLoc);
-
-            XbmcContainer xc = new XbmcContainer();
+            XbmcContainer xc = new XbmcContainer(dbLoc);
             var z = xc.Files.Where(f => f.Bookmark != null)
                             .Select(f => new {f.FileNameString, f.Bookmark.Id});
 
@@ -39,14 +37,6 @@ namespace Frost.ProcessDatabase {
             //            Languages = from sd3 in sd2 select sd3.SubtitleLanguage
             //        };
             var zz = z.ToArray();
-        }
-
-        protected override void ChangeConnectionString(string databaseLocation) {
-            Configuration conf = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            conf.ConnectionStrings.ConnectionStrings["XbmcEntities"].ConnectionString = "data source=" + databaseLocation;
-            conf.Save(ConfigurationSaveMode.Modified, true);
-
-            ConfigurationManager.RefreshSection("connectionStrings");
         }
     }
 }

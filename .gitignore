@@ -168,3 +168,6 @@ Other
 /Libraries/protobuf-net
 /PHPtoNet/string.txt
 /Common/Models/XML/XBMC/2012.xml
+!Libraries/**/x64
+!Libraries/**/*.pdb
+!Libraries

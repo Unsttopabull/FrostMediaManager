@@ -70,15 +70,13 @@ namespace Frost.DetectFeatures.Util {
         /// <returns>A string that represents the current object.</returns>
         public override string ToString() {
             if (Part != 0) {
-                if (ReleaseYear != default(DateTime)) {
-                    return string.Format("{0} [{1}] ({2} {3})", Title, ReleaseYear.Year, PartType, Part);
-                }
-                return string.Format("{0} ({1} {2})", Title, PartType, Part);
+                return ReleaseYear != default(DateTime)
+                    ? string.Format("{0} [{1}] ({2} {3})", Title, ReleaseYear.Year, PartType, Part)
+                    : string.Format("{0} ({1} {2})", Title, PartType, Part);
             }
-            if (ReleaseYear != default(DateTime)) {
-                return string.Format("{0} [{1}]", Title, ReleaseYear.Year);
-            }
-            return Title;
+            return ReleaseYear != default(DateTime)
+                ? string.Format("{0} [{1}]", Title, ReleaseYear.Year)
+                : Title;
         }
     }
 }

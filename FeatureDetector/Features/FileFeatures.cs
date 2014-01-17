@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -17,13 +19,13 @@ namespace Frost.DetectFeatures {
     public partial class FileFeatures : IDisposable {
         private DirectoryInfo _directoryInfo;
         private string _directoryRegex;
-        private readonly GenericKeyedCollection<string, FileNameInfo> _fnInfos;
+        private readonly Dictionary<string, FileNameInfo> _fnInfos;
         private readonly MediaInfoList _mf;
-        private string[] _filePaths;
         private readonly NFOPriority _nfoPriority;
         private readonly MovieVoContainer _mvc;
-        private readonly GenericKeyedCollection<string, FileVo> _files;
+        private readonly FileVo[] _files;
         private bool _error;
+        private bool _manualParse;
 
         static FileFeatures() {
             //known subtitle extensions already sorted
@@ -52,58 +54,71 @@ namespace Frost.DetectFeatures {
             _nfoPriority = nfoPriority;
             _mf = new MediaInfoList();
 
-            _fnInfos = new GenericKeyedCollection<string, FileNameInfo>(fnInfo => fnInfo.FileOrFolderName);
-            _files = new GenericKeyedCollection<string, FileVo>(fv => fv.NameWithExtension);            
+            _fnInfos = new Dictionary<string, FileNameInfo>();
         }
 
         internal FileFeatures(NFOPriority nfoPriority, params string[] fileNames) : this(nfoPriority) {
-            GetMediaFileNameInfos(fileNames);
+            _files = new FileVo[fileNames.Length];
+
+            foreach (string filenName in fileNames) {
+                FileNameParser fnp = new FileNameParser(filenName);
+                FileNameInfo nameInfo = fnp.Parse();
+                _fnInfos.Add(nameInfo.FileOrFolderName, nameInfo);
+            }
 
             Init(fileNames);
         }
 
         internal FileFeatures(NFOPriority nfoPriority, params FileNameInfo[] fileNameInfos) : this(nfoPriority){
-            _fnInfos.AddRange(fileNameInfos);
+            _files = new FileVo[fileNameInfos.Length];
+
+            foreach (FileNameInfo nameInfo in fileNameInfos) {
+                _fnInfos.Add(nameInfo.FileOrFolderName, nameInfo);
+            }
 
             Init(fileNameInfos.Select(fnInfo => fnInfo.FilePath).ToArray());
         }
 
         private void Init(string[] filePaths) {
             int length = filePaths.Length;
-            _filePaths = new string[length];
 
             for (int i = 0; i < length && !_error; i++) {
-                _filePaths[i] = filePaths[i];
-                InitFile(_filePaths[i]);
+                InitFile(i, filePaths[i]);
             }
 
-            Movie = new Movie();
-            _mvc.Movies.Add(Movie);            
+            Movie = _mvc.Movies.Add(new Movie());            
         }
 
-        private void InitFile(string filePath) {
+        private void InitFile(int idx, string filePath) {
             if (!File.Exists(filePath)) {
                 _error = true;
                 return;
             }
 
+            _manualParse = false;
             string directoryPath = null;
             FileVo file = null;
             if (!filePath.EndsWith(".iso")) {
                 MediaListFile mFile = _mf.Add(filePath, true, true);
 
-                if (mFile != null) {
-                    file = new FileVo(mFile.General.FileInfo.FileName, mFile.General.FileInfo.Extension, mFile.General.FileInfo.FolderPath +"/", mFile.General.FileInfo.FileSize);
+                if (mFile != null && !string.IsNullOrEmpty(mFile.General.FileInfo.FileName)) {
+                    file = new FileVo(mFile.General.FileInfo.FileName, mFile.General.FileInfo.Extension, mFile.General.FileInfo.FolderPath + "/", mFile.General.FileInfo.FileSize);
+                }
+                else {
+                    directoryPath = ParseInfoFromPath(filePath, ref file);
                 }
 
                 if (_directoryInfo == null) {
-                    _directoryInfo = new DirectoryInfo(Path.GetDirectoryName(filePath) ?? "");
+                    _directoryInfo = new DirectoryInfo(directoryPath ?? Path.GetDirectoryName(filePath) ?? "");
                     directoryPath = _directoryInfo.FullName;
                 }
             }
 
             if (_directoryRegex == null) {
-                directoryPath = directoryPath ?? ParseInfoFromPath(filePath, ref file);
+                if (directoryPath == null) {
+                    directoryPath = ParseInfoFromPath(filePath, ref file);
+                }
+
                 _directoryRegex = Regex.Escape(directoryPath.Replace("\\", "/"))
                                        .Replace("/", @"[\\/]");
 
@@ -112,22 +127,13 @@ namespace Frost.DetectFeatures {
                 }
             }
 
-            if (file != null) {
-                FileVo f = _mvc.Files.Add(file);
-                _files.Add(f);
+            if (file != null && file.ToString() != ".") {
+                _files[idx] = _mvc.Files.Add(file);
             }
             else if (File.Exists(filePath)) {
 
             }
             else {
-                _files.Add(null);
-            }
-        }
-
-        private void GetMediaFileNameInfos(IEnumerable<string> filenNames) {
-            foreach (string filenName in filenNames) {
-                FileNameParser fnp = new FileNameParser(filenName);
-                _fnInfos.Add(fnp.Parse());
             }
         }
 
@@ -140,14 +146,15 @@ namespace Frost.DetectFeatures {
                 _directoryInfo = fi.Directory;
                 directoryPath = _directoryInfo != null
                                     ? _directoryInfo.FullName
-                                    : _filePaths[0].Substring(0, _filePaths[0].LastIndexOfAny(new[] { '\\', '/' }));
+                                    : filePath.Substring(0, filePath.LastIndexOfAny(new[] { '\\', '/' }));
             }
             catch (Exception e) {
-                directoryPath = _filePaths[0].Substring(0, _filePaths[0].LastIndexOfAny(new[] { '\\', '/' }));
+                directoryPath = filePath.Substring(0, filePath.LastIndexOfAny(new[] { '\\', '/' }));
                 return directoryPath;
             }
 
-            if(file == null){
+            if(file == null) {
+                _manualParse = true;
                 string withoutExtension = Path.GetFileNameWithoutExtension(fi.Name);
                 withoutExtension = string.IsNullOrEmpty(withoutExtension)
                                            ? fi.Name.Substring(0, fi.Name.LastIndexOf('.'))
@@ -158,15 +165,15 @@ namespace Frost.DetectFeatures {
             return directoryPath;
         }
 
-        public Movie Movie { get; set; }
+        public Movie Movie { get; private set; }
 
         internal bool Detect() {
             if (_error) {
                 return false;
             }
 
-            for (int i = 0; i < _filePaths.Length; i++) {
-                DetectFile(_files[i]);
+            foreach (FileVo file in _files) {
+                DetectFile(file);
             }
 
             try {
@@ -182,7 +189,7 @@ namespace Frost.DetectFeatures {
         private void DetectFile(FileVo file) {
             GetFileNameInfo();
 
-            GetSubtitles(file.NameWithExtension);
+            GetSubtitles(file);
             GetVideoInfo(file);
             GetAudioInfo(file);
             GetArtInfo();
@@ -193,7 +200,7 @@ namespace Frost.DetectFeatures {
         }
 
         private void GetFileNameInfo() {
-            foreach (FileNameInfo fnInfo in _fnInfos) {
+            foreach (FileNameInfo fnInfo in _fnInfos.Values) {
                 if (fnInfo.Part != 0) {
                     Movie.IsMultipart = true;
                     Movie.PartTypes = fnInfo.PartType;
@@ -285,8 +292,9 @@ namespace Frost.DetectFeatures {
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString() {
-            return _fnInfos.Count > 0
-                ? _fnInfos[0].ToString()
+            FileNameInfo fnInfo = _fnInfos.Values.FirstOrDefault();
+            return fnInfo != null
+                ? fnInfo.ToString()
                 : base.ToString();
         }
     }

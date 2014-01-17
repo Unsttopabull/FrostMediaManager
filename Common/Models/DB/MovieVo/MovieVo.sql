@@ -7,6 +7,25 @@ Date: 2014-01-08 15:45:38
 */
 
 -- ----------------------------
+-- Table structure for "EdmMetadata"
+-- ----------------------------
+DROP TABLE IF EXISTS "EdmMetadata";
+CREATE TABLE "EdmMetadata" (
+	"Id"  TEXT,
+	"ModelHash"  TEXT
+);
+
+-- ----------------------------
+-- Table structure for "__MigrationHistory"
+-- ----------------------------
+DROP TABLE IF EXISTS "__MigrationHistory";
+CREATE TABLE "__MigrationHistory" (
+	"MigrationId"  TEXT NOT NULL,
+	"Model"  BLOB NOT NULL,
+	"ProductVersion"  TEXT NOT NULL
+);
+
+-- ----------------------------
 -- Table structure for "Arts"
 -- ----------------------------
 DROP TABLE IF EXISTS "Arts";

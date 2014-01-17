@@ -35,6 +35,5 @@ namespace Frost.ProcessDatabase {
         }
 
         protected abstract void Process(string dbLoc);
-        protected abstract void ChangeConnectionString(string databaseLocation);
     }
 }
