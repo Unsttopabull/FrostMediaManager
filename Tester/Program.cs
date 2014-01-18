@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Frost.CinemaInfoParsers.Kolosej;
 using Frost.CinemaInfoParsers.PlanetTus;
 using Frost.Common;
+using Frost.Common.Models.DB.Jukebox;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.Files;
+using Frost.Common.Models.XML.XBMC;
 using Frost.DetectFeatures;
 using System.Diagnostics;
 using Frost.DetectFeatures.Util;
+using Frost.PHPtoNET;
 using Frost.PodnapisiNET;
 using Frost.PodnapisiNET.Models;
 using Frost.SharpOpenSubtitles;
@@ -419,12 +423,12 @@ namespace Frost.Tester {
             Debug.AutoFlush = true;
 
             TimeSpan time = default(TimeSpan);
-            //Test();
+            TestPHPSerialize();
+            //TestXjb();
             //time = TestMediaSearcher();
             //TestOpenSubtitlesProtocol();
             //TestDB();
             //TestMovie();
-            //TestSQLiteConn();
 
             Console.WriteLine(Filler);
             Console.WriteLine("\tFIN: " + time);
@@ -432,10 +436,65 @@ namespace Frost.Tester {
             Console.Read();
         }
 
-        private static void Test() {
-            const string file = @"F:\Torrenti\FILMI\[REQ]Ne.Joči.Peter.1964.DVD-R\VIDEO_TS\VIDEO_TS.IFO";
-            FileNameParser fnp = new FileNameParser(file, true);
-            FileNameInfo info = fnp.Parse();
+        private static void TestPHPSerialize() {
+            XbmcXmlMovie mv = new XbmcXmlMovie {
+                Actors = new List<XbmcXmlActor>(new[] {
+                    new XbmcXmlActor("alal", "malal", "file://c:/cd.jph"),
+                    new XbmcXmlActor("blal", "nalal", "file://c:/cd.jph"),
+                    new XbmcXmlActor("clal", "oalal", "file://c:/cd.jph"),
+                    new XbmcXmlActor("dlal", "palal", "file://c:/cd.jph")
+                }),
+                Aired = DateTime.Now,
+                CertificationsString = "US:PG-13",
+                Countries = new List<string>(new[] { "US", "Mexico", "Canada" }),
+                Credits = new List<string>(new[] { "Alfred H", "Malibu C" }),
+                DateAdded = DateTime.Now.ToString("yyyy-dd.MM HH:ii:ss"),
+                Directors = new List<string>(new[] { "Alan C", "Norick B" }),
+                FilenameAndPath = "file://c:/naodoa.jpg",
+                Genres = new List<string>(new[] { "Comedy", "Adventure", "Sci-Fi" }),
+                LastPlayed = DateTime.Now,
+                MPAA = "Rated R",
+                OriginalTitle = "Dunky",
+                Outline = "dsfljasdlf dsfa",
+                PlayCount = 11111111,
+                Plot = "fsjlakjglajslgjasdčlgjalsdjgdas",
+                Premiered = DateTime.Now,
+                Rating = 9.9f,
+                ReleaseDate = DateTime.Now,
+                RuntimeString = "105 min",
+                Set = "The Dunkys",
+                SortTitle = "Dunky 1",
+                Studios = new List<string>(new[] { "Fox", "WB" }),
+                Tagline = "The best dunky ever",
+                Title = "Dunky",
+                Top250 = 1,
+                Trailer = "plugin://langubga.cm",
+                Votes = 2000000.ToString(CultureInfo.InvariantCulture),
+                Watched = true,
+                Year = DateTime.Now.Year,
+                FileInfo = new XbmcXmlFileInfo {
+                    StreamDetails = new XbmcStreamDetails {
+                        Audio = new List<XbmcXmlAudioInfo>(new[] { new XbmcXmlAudioInfo("ac3", 6, "en") }),
+                        Subtitles = new List<XbmcXmlSubtitleInfo>(new[] { new XbmcXmlSubtitleInfo("en") }),
+                        Video = new List<XbmcXmlVideoInfo>(new[] { new XbmcXmlVideoInfo("xvid", 5.5, 300, 400, 30000) })
+                    }
+                }
+            };
+
+            PHPSerializer<XbmcXmlMovie> phpSer = new PHPSerializer<XbmcXmlMovie>(mv);
+            string serialize = phpSer.Serialize();
+
+            File.WriteAllText("serOut.txt", serialize);
+        }
+
+        #region FeatureDetector
+
+        private static void TestXjb() {
+            XjbEntities xjb = new XjbEntities("xjb.db3");
+            //IQueryable<XjbMovie> xjbMovies = xjb.Movies.Where(m => m.Id < 500);
+            IQueryable<XjbMovie> xjbMovies = xjb.Movies.Where(m => m.Id == 334);
+            string traceString = xjbMovies.ToString();
+            XjbMovie movie = xjbMovies.FirstOrDefault();
         }
 
         private static TimeSpan TestMediaSearcher() {
@@ -491,12 +550,12 @@ namespace Frost.Tester {
         private static void DetectMany(FeatureDetector fd) {
             int i = 0;
             foreach (string fileName in FileNames2) {
-                try{
+                try {
                     fd.Detect(fileName);
 
                     Console.WriteLine("{0}: \t{1}", ++i, Path.GetFileName(fileName));
                 }
-                catch(FileNotFoundException e){
+                catch (FileNotFoundException e) {
                     if (File.Exists(e.FileName)) {
                         ConsoleColor clr = Console.ForegroundColor;
                         Console.ForegroundColor = ConsoleColor.Red;
@@ -587,8 +646,6 @@ namespace Frost.Tester {
             }
             return sw.Elapsed;
         }
-
-        #region FeatureDetector
 
         private static IEnumerable<Movie> TestFeatureDetectorVideoDebug() {
             List<Movie> movies = new List<Movie>();
@@ -715,11 +772,11 @@ namespace Frost.Tester {
             Debug.WriteLineIf(video.CompressionMode != CompressionMode.Unknown, "CompressionMode: " + video.CompressionMode);
 
             Debug.WriteLineIf(video.Duration.HasValue,
-                              string.Format("Durration: {0} ({1:hh'h 'mm'm 'ss's 'fff'ms'})",
-                                            video.Duration ?? 0,
-                                            TimeSpan.FromMilliseconds(video.Duration ?? 0)
-                                           )
-                              );
+                string.Format("Durration: {0} ({1:hh'h 'mm'm 'ss's 'fff'ms'})",
+                    video.Duration ?? 0,
+                    TimeSpan.FromMilliseconds(video.Duration ?? 0)
+                    )
+                );
 
             Debug.WriteLine("ScanType: " + video.ScanType);
             Debug.WriteLineIf(!string.IsNullOrEmpty(video.ColorSpace), "ColorSpace: " + video.ColorSpace);

@@ -9,8 +9,7 @@ Date: 2014-01-08 15:45:38
 -- ----------------------------
 -- Table structure for "EdmMetadata"
 -- ----------------------------
-DROP TABLE IF EXISTS "EdmMetadata";
-CREATE TABLE "EdmMetadata" (
+CREATE TABLE IF NOT EXISTS "EdmMetadata" (
 	"Id"  TEXT,
 	"ModelHash"  TEXT
 );
@@ -18,8 +17,7 @@ CREATE TABLE "EdmMetadata" (
 -- ----------------------------
 -- Table structure for "__MigrationHistory"
 -- ----------------------------
-DROP TABLE IF EXISTS "__MigrationHistory";
-CREATE TABLE "__MigrationHistory" (
+CREATE TABLE IF NOT EXISTS "__MigrationHistory" (
 	"MigrationId"  TEXT NOT NULL,
 	"Model"  BLOB NOT NULL,
 	"ProductVersion"  TEXT NOT NULL

@@ -160,7 +160,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SeedInitializer.cs" />
+    <Compile Include="SQLiteInitializer.cs" />
     <Compile Include="Util\ISO\ISOCode.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -220,6 +220,7 @@
       <Link>x86\SQLite.Interop.pdb</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Models\DB\Jukebox\fixMovieYear.sql" />
     <Content Include="Models\DB\MovieVo\MovieVo.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

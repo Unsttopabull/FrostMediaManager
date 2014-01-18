@@ -5,6 +5,7 @@ using System.Diagnostics;
 using Frost.Common.Models.DB.MovieVo.Arts;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.Common.Models.DB.MovieVo.People;
+using Frost.Common.Properties;
 
 namespace Frost.Common.Models.DB.MovieVo {
 
@@ -14,14 +15,14 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
         public MovieVoContainer(bool dropCreate, string filePath) : base(GetSQLiteConnection(filePath), true) {
             if (dropCreate) {
-                Database.SetInitializer(new SeedInitializer());
+                Database.SetInitializer(new SQLiteInitializer(Resources.MovieVoSQL));
             }   
         }
 
         /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
         public MovieVoContainer(string connectionString, bool dropCreate = true) : base(connectionString) {
             if (dropCreate) {
-                Database.SetInitializer(new SeedInitializer());
+                Database.SetInitializer(new SQLiteInitializer(Resources.MovieVoSQL));
             }
         }
 

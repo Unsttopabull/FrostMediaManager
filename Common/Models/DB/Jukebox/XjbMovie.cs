@@ -7,7 +7,6 @@ namespace Frost.Common.Models.DB.Jukebox {
     /// <summary>Represents a movie in the Xtreamer Movie Jukebox library.</summary>
     [Table("movies")]
     public class XjbMovie {
-
         public XjbMovie() {
             Genres = new HashSet<XjbGenre>();
             Cast = new HashSet<XjbMoviePerson>();
@@ -56,7 +55,7 @@ namespace Frost.Common.Models.DB.Jukebox {
         /// <summary>Gets or sets the filesize of the movie.</summary>
         /// <value>The filesize of the movie</value>
         [Column("filesize")]
-        public int? Filesize { get; set; }
+        public long? Filesize { get; set; }
 
         /// <summary>Gets or sets the title of the movie in the local language.</summary>
         /// <value>The title of the movie in the local language.</value>
@@ -95,7 +94,7 @@ namespace Frost.Common.Models.DB.Jukebox {
         /// <summary>Gets or sets the year this movie was released in.</summary>
         /// <value>The year this movie was released in.</value>
         [Column("year")]
-        public short? Year { get; set; }
+        public long? Year { get; set; }
 
         /// <summary>Gets or sets the movie rating in 0 to 100.</summary>
         /// <value>The movie rating in 0 to 100</value>
@@ -105,7 +104,7 @@ namespace Frost.Common.Models.DB.Jukebox {
         /// <summary>Gets or sets the duration of the movie in seconds.</summary>
         /// <value>The duration of the movie in seconds.</value>
         [Column("runtime")]
-        public short? Runtime { get; set; }
+        public long? Runtime { get; set; }
 
         /// <summary>Gets or sets the movie story and plot.</summary>
         /// <value>The movie story and plot.</value>

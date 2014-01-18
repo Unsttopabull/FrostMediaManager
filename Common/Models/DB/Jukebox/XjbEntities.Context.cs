@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Data.SQLite;
+using Frost.Common.Properties;
 
 namespace Frost.Common.Models.DB.Jukebox {
 
@@ -7,11 +8,13 @@ namespace Frost.Common.Models.DB.Jukebox {
 
         /// <summary>Initializes a new instance of the <see cref="XjbEntities"/> class.</summary>
         public XjbEntities() : base("name=xjbEntities") {
+            Database.SetInitializer(new SQLiteInitializer(Resources.FixXjbSQL));
         }
 
         /// <summary>Initializes a new instance of the <see cref="XjbEntities"/> class.</summary>
         /// <param name="filePath">The path to the SQLite database file.</param>
         public XjbEntities(string filePath) : base(new SQLiteConnection("data source="+filePath), true) {
+            Database.SetInitializer(new SQLiteInitializer(Resources.FixXjbSQL));
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {

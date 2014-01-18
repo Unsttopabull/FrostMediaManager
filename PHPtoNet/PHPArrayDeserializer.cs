@@ -45,22 +45,22 @@ namespace Frost.PHPtoNET {
                                     return ht;
                                 }
                                 t = scanner.CurrToken();
-                                throw new ParsingException("\"}\"", t.Lexem, t.Line, t.Column);
+                                throw new ParsingException("\"}\"", t);
                             }
                             t = scanner.CurrToken();
-                            throw new ParsingException("\"{\"", t.Lexem, t.Line, t.Column);
+                            throw new ParsingException("\"{\"", t);
                         }
                         t = scanner.CurrToken();
-                        throw new ParsingException("\":\"", t.Lexem, t.Line, t.Column);
+                        throw new ParsingException("\":\"", t);
                     }
                     t = scanner.CurrToken();
-                    throw new ParsingException("an Integer", t.Lexem, t.Line, t.Column);
+                    throw new ParsingException("an Integer", t);
                 }
                 t = scanner.CurrToken();
-                throw new ParsingException("\":\"", t.Lexem, t.Line, t.Column);
+                throw new ParsingException("\":\"", t);
             }
             t = scanner.CurrToken();
-            throw new ParsingException("\"a\"", t.Lexem, t.Line, t.Column);
+            throw new ParsingException("\"a\"", t);
         }
 
         /// <summary>Parses integer or string keyed array. Order is not preserved</summary>
@@ -87,22 +87,22 @@ namespace Frost.PHPtoNET {
                                     return ht;
                                 }
                                 t = scanner.CurrToken();
-                                throw new ParsingException("\"}\"", t.Lexem, t.Line, t.Column);
+                                throw new ParsingException("\"}\"", t);
                             }
                             t = scanner.CurrToken();
-                            throw new ParsingException("\"{\"", t.Lexem, t.Line, t.Column);
+                            throw new ParsingException("\"{\"", t);
                         }
                         t = scanner.CurrToken();
-                        throw new ParsingException("\":\"", t.Lexem, t.Line, t.Column);
+                        throw new ParsingException("\":\"", t);
                     }
                     t = scanner.CurrToken();
-                    throw new ParsingException("an Integer", t.Lexem, t.Line, t.Column);
+                    throw new ParsingException("an Integer", t);
                 }
                 t = scanner.CurrToken();
-                throw new ParsingException("\":\"", t.Lexem, t.Line, t.Column);
+                throw new ParsingException("\":\"", t);
             }
             t = scanner.CurrToken();
-            throw new ParsingException("\"a\"", t.Lexem, t.Line, t.Column);
+            throw new ParsingException("\"a\"", t);
         }
 
         /// <summary>Parses the elements of single value type unsigned integer keyed array</summary>
@@ -167,7 +167,7 @@ namespace Frost.PHPtoNET {
                         return key;
                     default:
                         Token t = scanner.CurrToken();
-                        throw new ParsingException("Integer or String key", t.Lexem, t.Line, t.Column);
+                        throw new ParsingException("Integer or String key", t);
                 }
             }
             catch (InvalidCastException) {

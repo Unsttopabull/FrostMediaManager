@@ -27,6 +27,15 @@ namespace Frost.PHPtoNET {
             _typeNames = null;
         }
 
+        public ParsingException(string expected, Token token) {
+            _read = token.Lexem;
+            _line = token.Line;
+            _column = token.Column;
+            _expected = expected;
+            _msg = true;
+            _typeNames = null;
+        }
+
         public ParsingException(string expected, string found) {
             _typeNames = new[] {expected, found};
             _msg = false;

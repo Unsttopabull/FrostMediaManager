@@ -95,8 +95,7 @@ namespace Frost.PHPtoNET {
                     PHPObjectParser objectParser = new PHPObjectParser(scanner);
                     return objectParser.ParseObjByType(memberType);
                 default:
-                    Token t = scanner.CurrToken();
-                    throw new ParsingException("Type declaration", t.Lexem, t.Line, t.Column);
+                    throw new ParsingException("Type declaration", scanner.CurrToken());
             }
         }
 
@@ -125,21 +124,21 @@ namespace Frost.PHPtoNET {
                                     return str;
                                 }
                                 t = scanner.CurrToken();
-                                throw new ParsingException("\";\"", t.Lexem, t.Line, t.Column);
+                                throw new ParsingException("\";\"", t);
                             }
-                            throw new ParsingException("a String", t.Lexem, t.Line, t.Column);
+                            throw new ParsingException("a String", t);
                         }
                         t = scanner.CurrToken();
-                        throw new ParsingException("\":\"", t.Lexem, t.Line, t.Column);
+                        throw new ParsingException("\":\"", t);
                     }
                     t = scanner.CurrToken();
-                    throw new ParsingException("an Integer", t.Lexem, t.Line, t.Column);
+                    throw new ParsingException("an Integer", t);
                 }
                 t = scanner.CurrToken();
-                throw new ParsingException("\":\"", t.Lexem, t.Line, t.Column);
+                throw new ParsingException("\":\"", t);
             }
             t = scanner.CurrToken();
-            throw new ParsingException("\"s\"", t.Lexem, t.Line, t.Column);
+            throw new ParsingException("\"s\"", t);
         }
 
         /// <summary> Parses the PHP serialize() of a boolean.</summary>
@@ -169,15 +168,15 @@ namespace Frost.PHPtoNET {
                             return boolean;
                         }
                         t = scanner.CurrToken();
-                        throw new ParsingException("\";\"", t.Lexem, t.Line, t.Column);
+                        throw new ParsingException("\";\"", t);
                     }
                     throw new ParsingException("boolean", Enum.GetName(typeof(Tokens), t.TokenType));
                 }
                 t = scanner.CurrToken();
-                throw new ParsingException("\":\"", t.Lexem, t.Line, t.Column);
+                throw new ParsingException("\":\"", t);
             }
             t = scanner.CurrToken();
-            throw new ParsingException("\"b\"", t.Lexem, t.Line, t.Column);
+            throw new ParsingException("\"b\"", t);
         }
 
         /// <summary>Parses the PHP serialize() of a floating point number.</summary>
@@ -197,15 +196,15 @@ namespace Frost.PHPtoNET {
                             return dbl;
                         }
                         t = scanner.CurrToken();
-                        throw new ParsingException("\";\"", t.Lexem, t.Line, t.Column);
+                        throw new ParsingException("\";\"", t);
                     }
-                    throw new ParsingException("a Double", t.Lexem, t.Line, t.Column);
+                    throw new ParsingException("a Double", t);
                 }
                 t = scanner.CurrToken();
-                throw new ParsingException("\":\"", t.Lexem, t.Line, t.Column);
+                throw new ParsingException("\":\"", t);
             }
             t = scanner.CurrToken();
-            throw new ParsingException("\"d\"", t.Lexem, t.Line, t.Column);
+            throw new ParsingException("\"d\"", t);
         }
 
         /// <summary>Parses the PHP serialize() of an integer.</summary>
@@ -226,15 +225,15 @@ namespace Frost.PHPtoNET {
                             return integer;
                         }
                         t = scanner.CurrToken();
-                        throw new ParsingException("\";\"", t.Lexem, t.Line, t.Column);
+                        throw new ParsingException("\";\"", t);
                     }
-                    throw new ParsingException("an Integer", t.Lexem, t.Line, t.Column);
+                    throw new ParsingException("an Integer", t);
                 }
                 t = scanner.CurrToken();
-                throw new ParsingException("\":\"", t.Lexem, t.Line, t.Column);
+                throw new ParsingException("\":\"", t);
             }
             t = scanner.CurrToken();
-            throw new ParsingException("\"i\"", t.Lexem, t.Line, t.Column);
+            throw new ParsingException("\"i\"", t);
         }
 
         /// <summary>Parses the PHP serialize() of a NULL.</summary>
@@ -248,10 +247,10 @@ namespace Frost.PHPtoNET {
                     return null;
                 }
                 t = scanner.CurrToken();
-                throw new ParsingException("\";\"", t.Lexem, t.Line, t.Column);
+                throw new ParsingException("\";\"", t);
             }
             t = scanner.CurrToken();
-            throw new ParsingException("\"N\"", t.Lexem, t.Line, t.Column);
+            throw new ParsingException("\"N\"", t);
         }
         #endregion
     }
