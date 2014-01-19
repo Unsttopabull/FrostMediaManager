@@ -447,7 +447,7 @@ namespace Frost.Tester {
 
         private static void TestPHPDeserialize2() {
             PHPDeserializer2 des2 = new PHPDeserializer2();
-            object deserialize = des2.Deserialize(new PHPSerializedStream(File.ReadAllBytes("dict.txt"), Encoding.UTF8));
+            dynamic deserialize = des2.Deserialize(new PHPSerializedStream(File.ReadAllBytes("serOut.txt"), Encoding.UTF8));
         }
 
         private static void TestPHPSerialize() {

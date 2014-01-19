@@ -48,7 +48,7 @@ namespace Frost.PHPtoNET {
             int byteLength = ReadIntegerValue();
             CheckChar(':');
 
-            string readString = ReadStringContents(byteLength+2);
+            string readString = ReadStringContents(byteLength + 2);
             CheckChar(';');
 
             return readString;
@@ -61,7 +61,11 @@ namespace Frost.PHPtoNET {
 
             string readString = Encoding.UTF8.GetString(read);
             if (readBytes < byteLength || readBytes == 0) {
-                throw new ParsingException("a string of byte lenght "+byteLength, readString, 0, _ms.Position);
+                throw new ParsingException("a string of byte lenght " + byteLength, readString, 0, _ms.Position);
+            }
+
+            if (!string.IsNullOrEmpty(readString)) {
+                readString = readString.Trim('"');
             }
 
             return readString;
@@ -171,7 +175,7 @@ namespace Frost.PHPtoNET {
                 throw new ParsingException("boolean value of '1' or '0'", bVal.ToString(CultureInfo.InvariantCulture), 0, _ms.Position);
             }
 
-            CheckChar(',');
+            CheckChar(';');
 
             return b;
         }
@@ -220,7 +224,7 @@ namespace Frost.PHPtoNET {
         private object ReadKey() {
             char peek = Peek();
             if (peek == 's') {
-                return ReadString().Trim('"');
+                return ReadString();
             }
 
             if (peek == 'i') {
@@ -270,15 +274,16 @@ namespace Frost.PHPtoNET {
         public dynamic ReadObject() {
             CheckString("O:");
             int nameByteLenght = ReadIntegerValue();
+            CheckChar(':');
 
-            string objName = ReadStringContents(nameByteLenght + 2).Trim('"');
+            string objName = ReadStringContents(nameByteLenght + 2);
             CheckChar(':');
 
             int numFields = ReadIntegerValue();
             CheckString(":{");
 
             dynamic dyn = new ExpandoObject();
-            dyn.Name = objName;
+            dyn.__ClassName = objName;
 
             for (int i = 0; i < numFields; i++) {
                 string key = ReadKey().ToString();
@@ -286,6 +291,8 @@ namespace Frost.PHPtoNET {
 
                 ((IDictionary<string, object>) dyn).Add(key, value);
             }
+
+            CheckChar('}');
 
             return dyn;
         }
