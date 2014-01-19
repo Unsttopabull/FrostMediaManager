@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Globalization;
@@ -29,6 +30,12 @@ using Movie = Frost.Common.Models.DB.MovieVo.Movie;
 using Subtitle = Frost.Common.Models.DB.MovieVo.Files.Subtitle;
 
 namespace Frost.Tester {
+
+    public struct Smth {
+        public int val;
+        public double valD;
+        public float valF;
+    }
 
     internal class Program {
         private static readonly string[] FileNames2;
@@ -437,6 +444,31 @@ namespace Frost.Tester {
         }
 
         private static void TestPHPSerialize() {
+            PHPSerializer phpSer = new PHPSerializer();
+
+            SerXmlXbmcMovie(phpSer);
+            SerHashtable(phpSer);
+
+            Smth s = new Smth { val = 1, valD = 1.5, valF = 1.5f };
+
+            string serialize = phpSer.Serialize(s);
+
+            int? val = 1;
+            string serialize2 = phpSer.Serialize(val);
+        }
+
+        private static void SerHashtable(PHPSerializer phpSer) {
+            Hashtable dict = new Hashtable();
+            dict.Add("fasfa1", 2131);
+            dict.Add("fasfa2", 2134);
+            dict.Add("fasfa3", 2135);
+            dict.Add("fasfa4", 2136);
+
+            string serialize = phpSer.Serialize(dict);
+            File.WriteAllText("dict.txt", serialize);
+        }
+
+        private static void SerXmlXbmcMovie(PHPSerializer phpSer) {
             XbmcXmlMovie mv = new XbmcXmlMovie {
                 Actors = new List<XbmcXmlActor>(new[] {
                     new XbmcXmlActor("alal", "malal", "file://c:/cd.jph"),
@@ -448,7 +480,7 @@ namespace Frost.Tester {
                 CertificationsString = "US:PG-13",
                 Countries = new List<string>(new[] { "US", "Mexico", "Canada" }),
                 Credits = new List<string>(new[] { "Alfred H", "Malibu C" }),
-                DateAdded = DateTime.Now.ToString("yyyy-dd.MM HH:ii:ss"),
+                DateAdded = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                 Directors = new List<string>(new[] { "Alan C", "Norick B" }),
                 FilenameAndPath = "file://c:/naodoa.jpg",
                 Genres = new List<string>(new[] { "Comedy", "Adventure", "Sci-Fi" }),
@@ -481,8 +513,7 @@ namespace Frost.Tester {
                 }
             };
 
-            PHPSerializer<XbmcXmlMovie> phpSer = new PHPSerializer<XbmcXmlMovie>(mv);
-            string serialize = phpSer.Serialize();
+            string serialize = phpSer.Serialize(mv);
 
             File.WriteAllText("serOut.txt", serialize);
         }
