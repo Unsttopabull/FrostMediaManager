@@ -8,7 +8,7 @@ namespace Frost.PHPtoNET {
     internal class ParsingException : Exception {
         private const string MSG = "Error occured while parsing, expected {0}, found \"{1}\" on line {2} column {3}.";
         private const string MSG2 = "Expcted value of type {0} got {1}";
-        private readonly int _column;
+        private readonly long _column;
         private readonly bool _custom;
         private readonly string _customMessage = "";
         private readonly string _expected;
@@ -18,7 +18,7 @@ namespace Frost.PHPtoNET {
         private readonly string[] _typeNames;
 
 
-        public ParsingException(string expected, string read, int line, int column) {
+        public ParsingException(string expected, string read, int line, long column) {
             _read = read;
             _line = line;
             _column = column;

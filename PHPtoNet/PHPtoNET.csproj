@@ -63,8 +63,10 @@
   <ItemGroup>
     <Compile Include="ParsingException.cs" />
     <Compile Include="PHPArrayDeserializer.cs" />
+    <Compile Include="PHPDeserialize2\PHPSerializedStream.cs" />
     <Compile Include="PHPDeserializer.cs" />
     <Compile Include="Extend.cs" />
+    <Compile Include="PHPDeserialize2\PHPDeserializer2.cs" />
     <Compile Include="PHPObjectParser.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="PHPSerializer.cs" />

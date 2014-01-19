@@ -11,7 +11,6 @@ namespace Frost.PHPtoNET {
     public class PHPSerializer {
         private bool _private;
         private bool _static;
-        private static readonly Type _stringType = typeof(string);
         private const BindingFlags PUBLIC_FLAGS = BindingFlags.GetField | BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
         private BindingFlags _usedFlags;
 
@@ -101,7 +100,7 @@ namespace Frost.PHPtoNET {
         }
 
         private string SerailizeMemberInfo(Type memberType, object value) {
-            if (memberType == _stringType) {
+            if (memberType == typeof(string)) {
                 return SerializeString(value as string);
             }
 
@@ -171,50 +170,31 @@ namespace Frost.PHPtoNET {
             string postfix = null;
             switch (memberType.Name) {
                 case "Boolean":
-                    postfix = SerializeBoolean((bool) value);
+                    postfix = (bool) value ? "b:1;" : "b:0;";
                     break;
                 case "Byte":
                 case "SByte":
                 case "Int16":
                 case "UInt16":
                 case "Int32":
-                    postfix = SerializeInteger(Convert.ToInt32(value));
+                    postfix = string.Format("i:{0};", Convert.ToInt32(value).ToString(CultureInfo.InvariantCulture));
                     break;
                 case "UInt32":
-                    postfix = SerializeUInt((uint) value);
+                    uint value1 = (uint) value;
+                    postfix = string.Format((value1 > int.MaxValue) ? "d:{0};" : "i:{0};", value1.ToString(CultureInfo.InvariantCulture));
                     break;
                 case "Char":
-                    postfix = SerializeString(new string(new[] { (char) value }));
+                    postfix = SerializeString(((char) value).ToString(CultureInfo.InvariantCulture));
                     break;
                 case "Int64":
                 case "UInt64":
                 case "Single":
                 case "Double":
-                    postfix = SerializeDouble(Convert.ToDouble(value));
+                    postfix = string.Format("d:{0};", Convert.ToDouble(value).ToString(CultureInfo.InvariantCulture));
                     break;
             }
             return postfix;
         }
-
-        #region Serialize Primitives
-
-        private string SerializeUInt(uint value) {
-            return string.Format((value > int.MaxValue) ? "d:{0};" : "i:{0};", value.ToString(CultureInfo.InvariantCulture));
-        }
-
-        private string SerializeDouble(double value) {
-            return string.Format("d:{0};", value.ToString(CultureInfo.InvariantCulture));
-        }
-
-        private string SerializeInteger(int value) {
-            return string.Format("i:{0};", value.ToString(CultureInfo.InvariantCulture));
-        }
-
-        private string SerializeBoolean(bool value) {
-            return value ? "b:1;" : "b:0;";
-        }
-
-        #endregion
 
         private string SerializeString(string value) {
             return string.IsNullOrEmpty(value)
@@ -246,7 +226,7 @@ namespace Frost.PHPtoNET {
                     sb.AppendFormat("i:{0};", (int) key);
                 }
                 else {
-                    sb.AppendFormat("s:{0};", key);
+                    sb.AppendFormat(SerializeString(key.ToString()));
                 }
 
                 if (valType == null) {

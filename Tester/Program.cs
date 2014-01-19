@@ -5,6 +5,7 @@ using System.Data.SQLite;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Frost.CinemaInfoParsers.Kolosej;
 using Frost.CinemaInfoParsers.PlanetTus;
@@ -430,7 +431,8 @@ namespace Frost.Tester {
             Debug.AutoFlush = true;
 
             TimeSpan time = default(TimeSpan);
-            TestPHPSerialize();
+            //TestPHPSerialize();
+            TestPHPDeserialize2();
             //TestXjb();
             //time = TestMediaSearcher();
             //TestOpenSubtitlesProtocol();
@@ -441,6 +443,11 @@ namespace Frost.Tester {
             Console.WriteLine("\tFIN: " + time);
             Console.WriteLine(Filler);
             Console.Read();
+        }
+
+        private static void TestPHPDeserialize2() {
+            PHPDeserializer2 des2 = new PHPDeserializer2();
+            object deserialize = des2.Deserialize(new PHPSerializedStream(File.ReadAllBytes("dict.txt"), Encoding.UTF8));
         }
 
         private static void TestPHPSerialize() {
