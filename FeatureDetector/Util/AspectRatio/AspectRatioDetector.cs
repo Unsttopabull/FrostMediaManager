@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using Frost.DetectFeatures.Util.AspectRatio;
 
 namespace Frost.DetectFeatures.Util {
@@ -59,7 +57,7 @@ namespace Frost.DetectFeatures.Util {
 
         public static AspectRatioInfo GetKnownAspectRatio(float aspect) {
             int idx = Array.BinarySearch(KnownAspectRatios, aspect, _aspectRatioComparer);
-            return (idx > 0)
+            return (idx >= 0)
                 ? KnownAspectRatios[idx]
                 : null;
         }

@@ -17,6 +17,14 @@ namespace Frost.PHPtoNET {
         private readonly string _read;
         private readonly string[] _typeNames;
 
+        public ParsingException(Type expectedType, string read, long column) {
+            _read = read;
+            _line = 0;
+            _column = column;
+            _expected = string.Format("a serialized type '{0}'", expectedType.Name);
+            _msg = true;
+            _typeNames = null;            
+        }
 
         public ParsingException(string expected, string read, int line, long column) {
             _read = read;

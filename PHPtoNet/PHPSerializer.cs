@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace Frost.PHPtoNET {
 
@@ -67,18 +68,20 @@ namespace Frost.PHPtoNET {
                                            .Where(mi => mi.MemberType != MemberTypes.Method &&
                                                         mi.MemberType != MemberTypes.Constructor &&
                                                         mi.MemberType != MemberTypes.NestedType &&
-                                                        mi.MemberType != MemberTypes.TypeInfo)
+                                                        mi.MemberType != MemberTypes.TypeInfo &&
+                                                        !mi.IsDefined(typeof(NonSerializedAttribute), false) &&
+                                                        !mi.IsDefined(typeof(XmlIgnoreAttribute), false) &&
+                                                        !mi.Name.EndsWith(">__BackingField")
+                                                        )
                                            .ToArray();
 
             StringBuilder sb = new StringBuilder();
             sb.Append(string.Format("O:{0}:\"{1}\":{2}:{{", Encoding.UTF8.GetByteCount(type.Name), type.Name, memberInfos.Length));
 
             foreach (MemberInfo member in memberInfos) {
-                if (member.IsDefined(typeof(NonSerializedAttribute), false) || member.Name.EndsWith("__BackingField")) {
-                    continue;
-                }
                 sb.Append(SerializeMember(obj, member));
             }
+
             sb.Append("}");
             return sb.ToString();
         }

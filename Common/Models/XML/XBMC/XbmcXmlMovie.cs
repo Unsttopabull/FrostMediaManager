@@ -513,6 +513,10 @@ namespace Frost.Common.Models.XML.XBMC {
         /// <para>If the movie does not have the <c><paramref name="dbName"/></c> id set yet it returns <c>null</c>.</para>
         /// </returns>
         private XbmcXmlMovieDbId GetOnlineDbID(string dbName) {
+            if (Ids == null) {
+                return null;
+            }
+
             //if movieDb attribute doesn't exist (is null) the Id is for IMDB
             return dbName.OrdinalEquals("imdb")
                        ? Ids.FirstOrDefault(id => id.MovieDb.OrdinalEquals(dbName) || string.IsNullOrEmpty(id.MovieDb))

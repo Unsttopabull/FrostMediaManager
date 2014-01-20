@@ -21,6 +21,10 @@
                     throw new ParsingException("Uknown type or malformed data detected.");
             }
         }
+
+        public T Deserialize<T>(PHPSerializedStream s) {
+            return s.DeserializeElement<T>();
+        }
     }
 
 }

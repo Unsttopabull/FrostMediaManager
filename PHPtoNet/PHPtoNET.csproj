@@ -59,10 +59,13 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ParsingException.cs" />
     <Compile Include="PHPArrayDeserializer.cs" />
+    <Compile Include="PHPDeserialize2\IPHPSerializable.cs" />
+    <Compile Include="PHPDeserialize2\PHPNonSerializable.cs" />
     <Compile Include="PHPDeserialize2\PHPSerializedStream.cs" />
     <Compile Include="PHPDeserializer.cs" />
     <Compile Include="Extend.cs" />
