@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Text;
 using Frost.Common;
 using Frost.Common.Models.DB.Jukebox;
 using Frost.Common.Models.DB.MovieVo;
@@ -38,16 +39,18 @@ namespace Frost.ProcessDatabase {
             ObdelaniFilmi = new List<CoretisMovie>(stFilmov);
 
 
+            PHPDeserializer2 objParser = new PHPDeserializer2();
             for (int i = 0; i < stFilmov; i++) {
                 phpFilmi[i] = phpFilmi[i].Replace('\n', ' ');
-                PHPObjectParser objParser = new PHPObjectParser(new Scanner(phpFilmi[i]));
-
-                CoretisMovie mv = new CoretisMovie();
-                try {
-                    objParser.Obj(ref mv);
-                }
-                catch (Exception) {
-                    continue;
+                
+                CoretisMovie mv;
+                using (PHPSerializedStream phpStream = new PHPSerializedStream(phpFilmi[i], Encoding.UTF8)) {
+                    try {
+                        mv = objParser.Deserialize<CoretisMovie>(phpStream);
+                    }
+                    catch (Exception) {
+                        continue;
+                    }
                 }
 
                 ObdelaniFilmi.Add(mv);

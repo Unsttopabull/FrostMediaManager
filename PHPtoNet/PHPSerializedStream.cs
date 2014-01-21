@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Frost.PHPtoNET.PHPDeserialize2;
 
 namespace Frost.PHPtoNET {
 
@@ -94,7 +93,7 @@ namespace Frost.PHPtoNET {
 
             string readString = Encoding.UTF8.GetString(read);
             if (readBytes < byteLength || readBytes == 0) {
-                throw new ParsingException("a string of byte lenght " + byteLength, readString, 0, _ms.Position);
+                throw new ParsingException("a string of byte lenght " + byteLength, readString, _ms.Position);
             }
 
             if (!string.IsNullOrEmpty(readString)) {
@@ -120,7 +119,7 @@ namespace Frost.PHPtoNET {
             int value;
             string strValue = new string(chars.ToArray());
             if (!int.TryParse(strValue, out value)) {
-                throw new ParsingException("an integer value", strValue, 0, _ms.Position);
+                throw new ParsingException("an integer value", strValue, _ms.Position);
             }
             return value;
         }
@@ -147,7 +146,7 @@ namespace Frost.PHPtoNET {
             double value;
             string strValue = new string(chars.ToArray());
             if (!double.TryParse(strValue, out value)) {
-                throw new ParsingException("an integer value", strValue, 0, _ms.Position);
+                throw new ParsingException("an integer value", strValue, _ms.Position);
             }
             return value;
         }
@@ -155,7 +154,7 @@ namespace Frost.PHPtoNET {
         private void CheckChar(char expected) {
             char read = ReadChar();
             if (read != expected) {
-                throw new ParsingException(expected.ToString(CultureInfo.InvariantCulture), read.ToString(CultureInfo.InvariantCulture), 0, _ms.Position);
+                throw new ParsingException(expected.ToString(CultureInfo.InvariantCulture), read.ToString(CultureInfo.InvariantCulture), _ms.Position);
             }
         }
 
@@ -165,7 +164,7 @@ namespace Frost.PHPtoNET {
 
             string readString = _enc.GetString(str);
             if (string.Compare(expected, readString, StringComparison.Ordinal) != 0) {
-                throw new ParsingException("\""+expected+"\"", readString, 0, _ms.Position);
+                throw new ParsingException("\""+expected+"\"", readString, _ms.Position);
             }
         }
 
@@ -205,7 +204,7 @@ namespace Frost.PHPtoNET {
                 b = false;
             }
             else {
-                throw new ParsingException("boolean value of '1' or '0'", bVal.ToString(CultureInfo.InvariantCulture), 0, _ms.Position);
+                throw new ParsingException("boolean value of '1' or '0'", bVal.ToString(CultureInfo.InvariantCulture), _ms.Position);
             }
 
             CheckChar(';');
@@ -288,7 +287,7 @@ namespace Frost.PHPtoNET {
             if (peek == 'i') {
                 return ReadInteger();
             }
-            throw new ParsingException("an integer or string key", peek.ToString(CultureInfo.InvariantCulture), 0, _ms.Position);
+            throw new ParsingException("an integer or string key", peek.ToString(CultureInfo.InvariantCulture), _ms.Position);
         }
 
         private bool ReadArrayElements(int len, out object[] arr) {
@@ -876,7 +875,7 @@ namespace Frost.PHPtoNET {
             if (peek == 's' && typeof(T) == StringType) {
                 return ReadString().CastAs<T>();
             }
-            throw new ParsingException("an integer or string key ('i' or 's')", peek.ToString(CultureInfo.InvariantCulture), 0, _ms.Position);
+            throw new ParsingException("an integer or string key ('i' or 's')", peek.ToString(CultureInfo.InvariantCulture), _ms.Position);
         }
         #endregion
 

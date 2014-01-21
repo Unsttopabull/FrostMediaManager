@@ -18,12 +18,6 @@ using FrameOrBitRateMode = Frost.Common.FrameOrBitRateMode;
 using Movie = Frost.Common.Models.DB.MovieVo.Movie;
 using Subtitle = Frost.Common.Models.DB.MovieVo.Files.Subtitle;
 
-namespace System {
-    public class Test {
-        public int? val = null;
-    }
-}
-
 namespace Frost.Tester {
 
     internal class Program {
@@ -68,15 +62,9 @@ namespace Frost.Tester {
         private static void TestPHPDeserialize2() {
             PHPDeserializer2 des2 = new PHPDeserializer2();
 
-            Test t = new Test();
-
-            PHPSerializer ser = new PHPSerializer();
-            string serialize = ser.Serialize(t);
-
-            Test deserialize;
-            //using(PHPSerializedStream phpStream = new PHPSerializedStream(File.ReadAllBytes("serOut.txt"), Encoding.UTF8)){
-            using(PHPSerializedStream phpStream = new PHPSerializedStream(serialize, Encoding.UTF8)){
-                 deserialize = des2.Deserialize<Test>(phpStream);
+            XbmcXmlMovie deserialize;
+            using(PHPSerializedStream phpStream = new PHPSerializedStream(File.ReadAllBytes("serOut.txt"), Encoding.UTF8)){
+                 deserialize = des2.Deserialize<XbmcXmlMovie>(phpStream);
             }
         }
 

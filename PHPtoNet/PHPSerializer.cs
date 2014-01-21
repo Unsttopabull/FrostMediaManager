@@ -71,7 +71,8 @@ namespace Frost.PHPtoNET {
                                                         mi.MemberType != MemberTypes.TypeInfo &&
                                                         !mi.IsDefined(typeof(NonSerializedAttribute), false) &&
                                                         !mi.IsDefined(typeof(XmlIgnoreAttribute), false) &&
-                                                        !mi.Name.EndsWith(">__BackingField")
+                                                        !mi.IsDefined(typeof(PHPNonSerializedAttribute), false) &&
+                                                        !mi.Name.EndsWith(">__BackingField") //Auto-property backing field
                                                         )
                                            .ToArray();
 

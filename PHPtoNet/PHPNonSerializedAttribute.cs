@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Frost.PHPtoNET.PHPDeserialize2 {
+namespace Frost.PHPtoNET {
 
     public class PHPNonSerializedAttribute : Attribute {
     }

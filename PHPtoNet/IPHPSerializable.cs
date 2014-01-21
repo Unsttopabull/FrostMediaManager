@@ -1,4 +1,4 @@
-﻿namespace Frost.PHPtoNET.PHPDeserialize2 {
+﻿namespace Frost.PHPtoNET {
     interface IPHPSerializable {
         object FromPHPSerializedString(string serializedData);
     }
