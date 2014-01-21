@@ -5,28 +5,24 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Frost.CinemaInfoParsers.Kolosej;
-using Frost.CinemaInfoParsers.PlanetTus;
 using Frost.Common;
-using Frost.Common.Models.DB.Jukebox;
-using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.Common.Models.XML.XBMC;
 using Frost.DetectFeatures;
 using System.Diagnostics;
 using Frost.PHPtoNET;
-using Frost.PodnapisiNET;
-using Frost.PodnapisiNET.Models;
-using Frost.SharpOpenSubtitles;
-using Frost.SharpOpenSubtitles.Models.Movies.Receive;
-using Newtonsoft.Json;
 using CompressionMode = Frost.Common.CompressionMode;
 using File = System.IO.File;
 using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
 using FrameOrBitRateMode = Frost.Common.FrameOrBitRateMode;
 using Movie = Frost.Common.Models.DB.MovieVo.Movie;
 using Subtitle = Frost.Common.Models.DB.MovieVo.Files.Subtitle;
+
+namespace System {
+    public class Test {
+        public int? val = null;
+    }
+}
 
 namespace Frost.Tester {
 
@@ -72,18 +68,15 @@ namespace Frost.Tester {
         private static void TestPHPDeserialize2() {
             PHPDeserializer2 des2 = new PHPDeserializer2();
 
-            Hashtable ht = new Hashtable();
-            ht.Add("fjskafas", "fasjkaf");
-            ht.Add("fdgasdg", "safsdg");
+            Test t = new Test();
+
             PHPSerializer ser = new PHPSerializer();
-            string serialize = ser.Serialize(ht);
+            string serialize = ser.Serialize(t);
 
-            File.WriteAllText("ht.txt", serialize);
-
-            Hashtable deserialize;
+            Test deserialize;
             //using(PHPSerializedStream phpStream = new PHPSerializedStream(File.ReadAllBytes("serOut.txt"), Encoding.UTF8)){
             using(PHPSerializedStream phpStream = new PHPSerializedStream(serialize, Encoding.UTF8)){
-                 deserialize = des2.Deserialize<Hashtable>(phpStream);
+                 deserialize = des2.Deserialize<Test>(phpStream);
             }
         }
 

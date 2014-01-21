@@ -24,6 +24,7 @@ namespace Frost.PHPtoNET {
         private static readonly Type DblType = typeof(double);
         private static readonly Type IntType = typeof(int);
         private static readonly Type HashTableType = typeof(Hashtable);
+        private const string COMMON_LANGUAGE_RUNTIME_LIBRARY = "CommonLanguageRuntimeLibrary";
 
         private const BindingFlags SET_FLAGS =
             BindingFlags.GetField | BindingFlags.GetProperty | BindingFlags.Public |
@@ -369,7 +370,7 @@ namespace Frost.PHPtoNET {
                 case 's': {
                     Debug.WriteLine("Found string:");
 
-                    if (t == StringType || t.FullName == "System.Object") {
+                    if (t == StringType || (t.FullName == "System.Object" && t.Module.ScopeName == COMMON_LANGUAGE_RUNTIME_LIBRARY)) {
                         obj = ReadString();
 
                         Debug.WriteLine("Finished deserializing string as String.");
@@ -389,8 +390,7 @@ namespace Frost.PHPtoNET {
                 }
                 case 'N': {
                     Debug.WriteLine("Found null:");
-
-                    if (t.IsClass || t == NullableType) {
+                    if (t.IsClass || (t.Name == "Nullable`1" && t.Namespace == "System" && t.Module.ScopeName == COMMON_LANGUAGE_RUNTIME_LIBRARY)) {
                         obj = ReadNull();
 
                         T tObj = (T) obj;
@@ -466,7 +466,7 @@ namespace Frost.PHPtoNET {
         private T DeserializeStructFromString<T>(Type t) {
             object obj;
             string str = ReadString();
-            if (t.Module.ScopeName == "CommonLanguageRuntimeLibrary") {
+            if (t.Module.ScopeName == COMMON_LANGUAGE_RUNTIME_LIBRARY) {
                 switch (t.Name) {
                     case "DateTime":
                         DateTime dt;
@@ -729,7 +729,7 @@ namespace Frost.PHPtoNET {
         }
 
         private T DeserializeInteger<T>(Type type) {
-            if (type.Module.ScopeName != "CommonLanguageRuntimeLibrary" || Array.BinarySearch(IntTypeNames, type.Name) < 0) {
+            if (type.Module.ScopeName != COMMON_LANGUAGE_RUNTIME_LIBRARY || Array.BinarySearch(IntTypeNames, type.Name) < 0) {
                 throw new ParsingException(type, "a serialized integer", _ms.Position);
             }
 
@@ -757,7 +757,7 @@ namespace Frost.PHPtoNET {
         }
 
         private T DeserializeDouble<T>(Type type) {
-            if (type.Module.ScopeName != "CommonLanguageRuntimeLibrary" || Array.BinarySearch(DoubleTypeNames, type.Name) < 0) {
+            if (type.Module.ScopeName != COMMON_LANGUAGE_RUNTIME_LIBRARY || Array.BinarySearch(DoubleTypeNames, type.Name) < 0) {
                 throw new ParsingException(type, "a serialized double", _ms.Position);
             }
 
