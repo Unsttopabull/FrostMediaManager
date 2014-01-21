@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Text;
 using Frost.Common;
@@ -32,12 +31,13 @@ namespace Frost.ProcessDatabase {
         }
 
         protected override void Process(string dbLoc) {
-            XjbEntities xjb = new XjbEntities(dbLoc);
-            string[] phpFilmi = xjb.Movies.Select(mov => mov.MovieVo).ToArray();
+            string[] phpFilmi;
+            using (XjbEntities xjb = new XjbEntities(dbLoc)) {
+                phpFilmi = xjb.Movies.Select(mov => mov.MovieVo).ToArray();
+            }
 
             int stFilmov = phpFilmi.Length;
             ObdelaniFilmi = new List<CoretisMovie>(stFilmov);
-
 
             PHPDeserializer2 objParser = new PHPDeserializer2();
             for (int i = 0; i < stFilmov; i++) {

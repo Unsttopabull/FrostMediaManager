@@ -14,11 +14,8 @@ namespace Frost.PHPtoNET {
     public class PHPSerializedStream : IDisposable {
         private readonly Encoding _enc;
         private readonly MemoryStream _ms;
-        private static readonly string[] IntTypeNames = { "Byte", "Int16", "Int32", "Nullable`1", "SByte", "UInt16", "UInt32"};
-        private static readonly string[] DoubleTypeNames = { "Double", "Int64", "Nullable`1", "Single"};
         private static Type _type = typeof(PHPSerializedStream);
         private static readonly Type StringType = typeof(string);
-        private static readonly Type NullableType = typeof(Nullable<>);
         private static readonly Type BoolType = typeof(bool);
         private static readonly Type DblType = typeof(double);
         private static readonly Type IntType = typeof(int);
@@ -164,7 +161,7 @@ namespace Frost.PHPtoNET {
 
             string readString = _enc.GetString(str);
             if (string.Compare(expected, readString, StringComparison.Ordinal) != 0) {
-                throw new ParsingException("\""+expected+"\"", readString, _ms.Position);
+                throw new ParsingException("\"" + expected + "\"", readString, _ms.Position);
             }
         }
 
@@ -361,7 +358,7 @@ namespace Frost.PHPtoNET {
         internal T DeserializeElement<T>(Type type = null) {
             Type t = type ?? typeof(T);
 
-            Debug.WriteLine("Deserializing element with expected type: "+t.FullName);
+            Debug.WriteLine("Deserializing element with expected type: " + t.FullName);
             Debug.Indent();
 
             object obj;
@@ -463,34 +460,26 @@ namespace Frost.PHPtoNET {
         }
 
         private T DeserializeStructFromString<T>(Type t) {
-            object obj;
             string str = ReadString();
-            if (t.Module.ScopeName == COMMON_LANGUAGE_RUNTIME_LIBRARY) {
-                switch (t.Name) {
-                    case "DateTime":
-                        DateTime dt;
-                        if (DateTime.TryParse(str, out dt)) {
-                            obj = dt;
-                            return (T) obj;
-                        }
-                        break;
-                    case "TimeSpan":
-                        TimeSpan ts;
-                        if (TimeSpan.TryParse(str, out ts)) {
-                            obj = ts;
-                            return (T) obj;
-                        }
-                        break;
-                }
-            }
 
             if (t.GetInterface("IPHPSerializable") != null) {
                 IPHPSerializable instance = (IPHPSerializable) Activator.CreateInstance(t);
-                obj = instance.FromPHPSerializedString(str);
+                object obj = instance.FromPHPSerializedString(str);
                 return (T) obj;
             }
 
-            throw new ParsingException(t, "the type to implement IPHPSerializable", _ms.Position);
+            MethodInfo mi = t.GetMethod("TryParse", new[] { StringType, t.MakeByRefType() });
+            if (mi != null) {
+                T tValue = default(T);
+
+                if ((bool) mi.Invoke(null, new object[] { str, tValue })) {
+                    return tValue;
+                }
+                throw new ParsingException(string.Format("The TryParse(string, out T) method failed when deserializing type: '{0}'", t.FullName));
+            }
+
+            throw new ParsingException(t, "the type that does not implement 'IPHPSerializable' or has a static method 'TryParse(string, out T)' that returns bool.",
+                _ms.Position);
         }
 
         private T DeserializeObject<T>(Type type) {
@@ -509,11 +498,31 @@ namespace Frost.PHPtoNET {
 
             T obj = (T) Activator.CreateInstance(type);
 
+            MemberInfo[] members = type.GetMembers(SET_FLAGS)
+                                       .Where(mi => mi.MemberType != MemberTypes.Method &&
+                                                    mi.MemberType != MemberTypes.Constructor &&
+                                                    mi.MemberType != MemberTypes.NestedType &&
+                                                    mi.MemberType != MemberTypes.TypeInfo)
+                                       .ToArray();
+
             for (int i = 0; i < numFields; i++) {
                 Debug.WriteLine("Starting to deserialize object member: " + i);
                 Debug.Indent();
 
-                DeserializeObjectMember(obj, type);
+                string fieldName = ReadString();
+
+                Debug.WriteLine("Member name: " + fieldName);
+                MemberInfo member = Array.Find(members, mi => GetMemberByName(mi, fieldName));
+
+                if (member != null) {
+                    DeserializeObjectMember(obj, member);
+                }
+                else {
+                    //the member with the same name does not exits
+                    //read but do nothing with the output
+                    Debug.WriteLine("Member missing on class.");
+                    ReadElement();
+                }
 
                 Debug.Unindent();
             }
@@ -523,52 +532,53 @@ namespace Frost.PHPtoNET {
             return obj;
         }
 
-        private void DeserializeObjectMember<T>(T obj, Type type) {
-            string fieldName = ReadString();
-            MemberInfo member = type.GetMember(fieldName, MemberTypes.Property | MemberTypes.Field, SET_FLAGS).FirstOrDefault();
+        private bool GetMemberByName(MemberInfo mi, string fieldName) {
+            if (mi.Name == fieldName) {
+                return true;
+            }
 
-            Debug.WriteLine("Member name: "+fieldName);
-
-            if (member != null) {
-                if (member.MemberType == MemberTypes.Field) {
-                    FieldInfo fieldInfo = (FieldInfo) member;
-                    Type memberType = fieldInfo.FieldType;
-
-                    Debug.WriteLine("Member type: Field");
-                    Debug.Indent();
-
-                    object value = InvokeGenericMethod("DeserializeElement", memberType, memberType);
-
-                    Debug.Unindent();
-                    Debug.WriteLine("Succesfully deserialized member");
-
-                    fieldInfo.SetValue(obj, value);
-                }
-                else if (member.MemberType == MemberTypes.Property) {
-                    PropertyInfo propertyInfo = (PropertyInfo) member;
-                    Type memberType = propertyInfo.PropertyType;
-
-                    Debug.WriteLine("Member type: Property");
-                    Debug.Indent();
-
-                    object value = InvokeGenericMethod("DeserializeElement", new[] { memberType }, memberType);
-
-                    Debug.Unindent();
-                    Debug.WriteLine("Succesfully deserialized member");
-
-                    propertyInfo.SetValue(obj, value, null);
+            if (mi.IsDefined(typeof(PHPNameAttribute), false)) {
+                string customName = ((PHPNameAttribute) mi.GetCustomAttributes(typeof(PHPNameAttribute), false)[0]).PHPName;
+                if (fieldName == customName) {
+                    return true;
                 }
             }
-            else {
-                //the member with the same name does not exits
-                //read but do nothing with the output
-                Debug.WriteLine("Member missing on class.");
-                ReadElement();
+            return false;
+        }
+
+        private void DeserializeObjectMember<T>(T obj, MemberInfo member) {
+            if (member.MemberType == MemberTypes.Field) {
+                FieldInfo fieldInfo = (FieldInfo) member;
+                Type memberType = fieldInfo.FieldType;
+
+                Debug.WriteLine("Member type: Field");
+                Debug.Indent();
+
+                object value = InvokeGenericMethod("DeserializeElement", memberType, memberType);
+
+                Debug.Unindent();
+                Debug.WriteLine("Succesfully deserialized member");
+
+                fieldInfo.SetValue(obj, value);
+            }
+            else if (member.MemberType == MemberTypes.Property) {
+                PropertyInfo propertyInfo = (PropertyInfo) member;
+                Type memberType = propertyInfo.PropertyType;
+
+                Debug.WriteLine("Member type: Property");
+                Debug.Indent();
+
+                object value = InvokeGenericMethod("DeserializeElement", new[] { memberType }, memberType);
+
+                Debug.Unindent();
+                Debug.WriteLine("Succesfully deserialized member");
+
+                propertyInfo.SetValue(obj, value, null);
             }
         }
 
         private T DeserializePHPArray<T>(Type type) {
-            Debug.WriteLine("Deserializing array with type: "+type.FullName);
+            Debug.WriteLine("Deserializing array with type: " + type.FullName);
 
             if (type.IsArray) {
                 Debug.WriteLine("Array is a plain array");
@@ -631,7 +641,6 @@ namespace Frost.PHPtoNET {
                 Hashtable ht = ReadAsociativeArray();
                 T tObj;
                 if (type == HashTableType) {
-
                     tObj = ht.CastAs<T>();
 
                     Debug.WriteLine("Array is a hashtable");
@@ -728,66 +737,59 @@ namespace Frost.PHPtoNET {
         }
 
         private T DeserializeInteger<T>(Type type) {
-            if (type.Module.ScopeName != COMMON_LANGUAGE_RUNTIME_LIBRARY || Array.BinarySearch(IntTypeNames, type.Name) < 0) {
-                throw new ParsingException(type, "a serialized integer", _ms.Position);
-            }
 
             object obj;
             if (type.Name == "Nullable`1") {
                 Type nullableType = type.GetGenericArguments()[0];
-                if (Array.BinarySearch(IntTypeNames, nullableType.Name) >= 0) {
-                    obj = ReadInteger();
-                    if (nullableType != IntType) {
+                obj = ReadInteger();
+                if (nullableType != IntType) {
+                    try {
                         obj = Convert.ChangeType(obj, nullableType);
                     }
-
-                    return (T) Activator.CreateInstance(type, obj);
+                    catch (Exception) {
+                        throw new ParsingException("Could not convert integer to the type " + type.FullName);
+                    }
                 }
-            }
-            else {
-                obj = ReadInteger();
 
-                if (type != IntType) {
-                    obj = Convert.ChangeType(obj, type);
-                }
-                return (T) obj;
+                return (T) Activator.CreateInstance(type, obj);
             }
-            throw new ParsingException(type, "a serialized integer", _ms.Position);
+            obj = ReadInteger();
+
+            if (type != IntType) {
+                obj = Convert.ChangeType(obj, type);
+            }
+            return (T) obj;
         }
 
         private T DeserializeDouble<T>(Type type) {
-            if (type.Module.ScopeName != COMMON_LANGUAGE_RUNTIME_LIBRARY || Array.BinarySearch(DoubleTypeNames, type.Name) < 0) {
-                throw new ParsingException(type, "a serialized double", _ms.Position);
-            }
-
             object obj;
             if (type.Name == "Nullable`1") {
-                if (Array.BinarySearch(DoubleTypeNames, type.GetGenericArguments()[0].Name) >= 0) {
-                    Type nullableType = type.GetGenericArguments()[0];
-                    obj = ReadDouble();
-                    if (nullableType != DblType) {
+                Type nullableType = type.GetGenericArguments()[0];
+                obj = ReadDouble();
+                if (nullableType != DblType) {
+                    try {
                         obj = Convert.ChangeType(obj, nullableType);
                     }
-
-                    return (T) Activator.CreateInstance(type, obj);
+                    catch (Exception e) {
+                        throw new ParsingException(string.Format("Could not convert double to the type {0}({1})", type.FullName, e.Message));
+                    }
                 }
-            }
-            else {
-                obj = ReadDouble();
 
-                if (type != DblType) {
-                    obj = Convert.ChangeType(obj, type);
-                }
-                return (T) obj;
+                return (T) Activator.CreateInstance(type, obj);
             }
-            throw new ParsingException(type, "a serialized double", _ms.Position);
+            obj = ReadDouble();
+
+            if (type != DblType) {
+                obj = Convert.ChangeType(obj, type);
+            }
+            return (T) obj;
         }
 
         public TElement[] DeserializeArray<TElement>() {
             CheckString("a:");
             int len = ReadIntegerValue();
             CheckString(":{");
-            
+
             Debug.WriteLine("Deserializing array with expected elements of type " + typeof(TElement).FullName);
             Debug.Indent();
 
@@ -809,7 +811,7 @@ namespace Frost.PHPtoNET {
             Debug.WriteLine("Deserializing dictionary with expected elements of type {0} and keys of type {1}", typeof(TValue).FullName, typeof(TKey).FullName);
             Debug.Indent();
 
-            IDictionary<TKey,TValue> dict = DeserializeDictionaryElements<TKey, TValue>(len);
+            IDictionary<TKey, TValue> dict = DeserializeDictionaryElements<TKey, TValue>(len);
 
             Debug.Unindent();
             Debug.WriteLine("Finished deserializing dictionary");
@@ -854,13 +856,13 @@ namespace Frost.PHPtoNET {
                     return null;
                 }
 
-                Debug.WriteLine("Deserializing element with index: "+idx);
+                Debug.WriteLine("Deserializing element with index: " + idx);
                 Debug.Indent();
 
                 elements[idx] = DeserializeElement<TElement>();
 
                 Debug.Unindent();
-                Debug.WriteLine("Finished deserializing element with index: "+idx);
+                Debug.WriteLine("Finished deserializing element with index: " + idx);
             }
             return elements;
         }
@@ -877,6 +879,7 @@ namespace Frost.PHPtoNET {
             }
             throw new ParsingException("an integer or string key ('i' or 's')", peek.ToString(CultureInfo.InvariantCulture), _ms.Position);
         }
+
         #endregion
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>

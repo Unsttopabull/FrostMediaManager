@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.Arts;
@@ -8,7 +9,6 @@ using Frost.Common.Models.DB.MovieVo.People;
 namespace Frost.Common.Models.PHP {
 
     public class Coretis_VO_Movie {
-
         /// <example>\eg{ <c>DOKU MANGA XXX MOVIE SERIE -> (S01E01 S01 staffel1 staffel.12 season folge1 folge.12 complete)</c>}</example>
         public string art;
 
@@ -21,12 +21,12 @@ namespace Frost.Common.Models.PHP {
 
         /// <summary>Languages available</summary>
         /// <example>\eg{ <c>GERMAN/DE</c> <c>ENGLISH/EN</c>}</example>
-        public Hashtable languageArr;
+        public string[] languageArr;
 
         /// <summary>Defines the unix timestamp of last scraper run on this object</summary>
         /// <remarks>array( 'Scraper_Name' => 'unixtimestamp')</remarks>
         /// <example>\eg{ <code>array ('Coretis_Scraper_Filename' => '946707734')</code>}</example>
-        public Hashtable scraperLastRun;
+        public Dictionary<string, long> scraperLastRun;
 
         /// <summary>Language and type of the subtitles</summary>
         /// <remarks>Language or Keyword ''<c>SUBBED</c>'' if language is the text-language with undefined audio language</remarks>
@@ -67,8 +67,8 @@ namespace Frost.Common.Models.PHP {
             mov.Specials = specials.SplitWithoutEmptyEntries("/", ",").ToHashSet<Special, string>();
 
             mov.Runtime = (length > 0)
-                ? length
-                : (long?) null;
+                              ? (long?)length
+                              : null;
 
             mov.RatingAverage = ratingAverage;
             mov.ImdbID = imdbId;
@@ -114,9 +114,9 @@ namespace Frost.Common.Models.PHP {
 
             mov.Videos.Add(new Video(
                 vcodec,
-                width,
-                height,
-                aspect,
+                width.HasValue ? width.Value : default(int),
+                height.HasValue ? height.Value : default(int),
+                aspect.HasValue ? aspect.Value : default(double),
                 fps,
                 videoFormat,
                 videoType,
@@ -206,16 +206,16 @@ namespace Frost.Common.Models.PHP {
 
         /// <summary>Aspect; ratio between width and height (width / height)</summary>
         /// <example>\eg{ <c>1.333</c>}</example>
-        public double aspect;
+        public double? aspect;
 
         /// <summary>frame count</summary>
-        public int fps;
+        public int? fps;
 
         /// <summary>The height of the video in pixel.</summary>
-        public int height;
+        public int? height;
 
         /// <summary>The length in seconds</summary>
-        public int length;
+        public double? length;
 
         /// <summary>Gets or sets the codec of the video is encoded in.</summary>
         /// <value>The codec of the video is encoded in.</value>
@@ -223,7 +223,7 @@ namespace Frost.Common.Models.PHP {
         public string vcodec;
 
         /// <summary>The width of the video in pixel.</summary>
-        public int width; // 
+        public int? width; // 
 
         #endregion
 
@@ -245,7 +245,7 @@ namespace Frost.Common.Models.PHP {
         public string pathSheet;
 
         /// <example>\eg{ <code>array ( 'de' => '/movies/Kill Bill/Kill Bill.srt')</code>}</example>
-        public Hashtable pathSubtitlesArr;
+        public string[] pathSubtitlesArr;
 
         #endregion
 
@@ -259,7 +259,7 @@ namespace Frost.Common.Models.PHP {
 
         /// <summary>The imdb rating</summary>
         /// <remarks>10-100</remarks>
-        public int imdbRating;
+        public double? imdbRating;
 
         ///<summary>The movie id at a online sources</summary>
         ///<example>\eg{ <code>array ( 'imdb' => 'tt0266697', 'tmbd => '70703', 'allocine' => '60502')</code>}</example>
@@ -269,7 +269,7 @@ namespace Frost.Common.Models.PHP {
 
         ///<summary>The ratings at online sources</summary>
         ///<example>\eg{ <code>array ( 'imdb' => '10', 'tmbd => '50', 'allocine' => '100')</code> from 10 to 100 (1-10 for view)}</example>
-        public Hashtable ratingArr;
+        public Dictionary<string, double> ratingArr;
 
         ///<summary> average of all scrapped ratings, if more ratings exist, use average of all aviabled</summary>
         public int ratingAverage;
@@ -280,7 +280,7 @@ namespace Frost.Common.Models.PHP {
 
         /// <remarks>Keys must be ISO 3166-1 like country codes, see here: http://www.iso.org/iso/english_country_names_and_code_elements </remarks>
         /// <example>\eg{ <code>array( 'us' => 'PG-13' )</code>}</example>
-        public Hashtable certificationArr;
+        public Dictionary<string, string> certificationArr;
 
         ///<remarks>In ISO 3166-1</remarks>
         /// <example>\eg{ <code>array('de', 'us', 'uk')</code>}</example>
@@ -307,7 +307,7 @@ namespace Frost.Common.Models.PHP {
 
         /// <summary>The text right to left</summary>
         /// <remarks>1 for using right text alignment</remarks>
-        public int textRightToLeft;
+        public int? textRightToLeft;
 
         /// <summary>alternate movie titles</summary>
         public string[] titleAlternateArr;

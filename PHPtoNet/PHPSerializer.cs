@@ -92,8 +92,11 @@ namespace Frost.PHPtoNET {
             object value = memberInfo.MemberType == MemberTypes.Property ? ((PropertyInfo) memberInfo).GetValue(obj, new object[] { }) : ((FieldInfo) memberInfo).GetValue(obj);
 
             //bool debug = memberType.Name != "String" && !memberType.IsPrimitive && !memberType.IsValueType && !memberType.IsArray;
+            string memberName = memberInfo.IsDefined(typeof(PHPNameAttribute), false)
+                                    ? ((PHPNameAttribute) memberInfo.GetCustomAttributes(typeof(PHPNameAttribute), false)[0]).PHPName
+                                    : memberInfo.Name;
 
-            string prefix = string.Format("s:{0}:\"{1}\";", Encoding.UTF8.GetByteCount(memberInfo.Name), memberInfo.Name);
+            string prefix = string.Format("s:{0}:\"{1}\";", Encoding.UTF8.GetByteCount(memberName), memberName);
 
             string memberInfoSer = SerailizeMemberInfo(value, memberType);
             if (!string.IsNullOrEmpty(memberInfoSer)) {

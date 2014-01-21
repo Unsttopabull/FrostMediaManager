@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="ParsingException.cs" />
     <Compile Include="IPHPSerializable.cs" />
+    <Compile Include="PHPNameAttribute.cs" />
     <Compile Include="PHPNonSerializedAttribute.cs" />
     <Compile Include="PHPSerializedStream.cs" />
     <Compile Include="Extend.cs" />
