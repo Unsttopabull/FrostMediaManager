@@ -17,16 +17,13 @@ namespace Frost.PHPtoNET {
         private readonly MemoryStream _ms;
         private static readonly string[] IntTypeNames = { "Byte", "Int16", "Int32", "Nullable`1", "SByte", "UInt16", "UInt32"};
         private static readonly string[] DoubleTypeNames = { "Double", "Int64", "Nullable`1", "Single"};
-        private static readonly Type Type = typeof(PHPSerializedStream);
-        private static readonly Type ListType = typeof(IList);
-        private static readonly Type DictType = typeof(IDictionary);
+        private static Type _type = typeof(PHPSerializedStream);
         private static readonly Type StringType = typeof(string);
         private static readonly Type NullableType = typeof(Nullable<>);
         private static readonly Type BoolType = typeof(bool);
         private static readonly Type DblType = typeof(double);
         private static readonly Type IntType = typeof(int);
         private static readonly Type HashTableType = typeof(Hashtable);
-        private string debug;
 
         private const BindingFlags SET_FLAGS =
             BindingFlags.GetField | BindingFlags.GetProperty | BindingFlags.Public |
@@ -34,7 +31,6 @@ namespace Frost.PHPtoNET {
             BindingFlags.NonPublic | BindingFlags.Static;
 
         public PHPSerializedStream(string searializedData, Encoding enc) : this(enc.GetBytes(searializedData), enc) {
-            debug = searializedData;
         }
 
         public PHPSerializedStream(byte[] serializedData, Encoding enc) {
@@ -43,6 +39,19 @@ namespace Frost.PHPtoNET {
         }
 
         public long Position { get { return _ms.Position; } }
+
+        private object InvokeGenericMethod(string methodName, Type genericArgument, params object[] methodParameters) {
+            return InvokeGenericMethod(methodName, new[] { genericArgument }, methodParameters);
+        }
+
+        private object InvokeGenericMethod(string methodName, Type[] genericArguments, params object[] methodParameters) {
+            if (_type == null) {
+                _type = typeof(PHPSerializedStream);
+            }
+
+            MethodInfo genericArrParse = _type.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).MakeGenericMethod(genericArguments);
+            return genericArrParse.Invoke(this, methodParameters);
+        }
 
         public char Peek() {
             char peek = ReadChar();
@@ -363,7 +372,7 @@ namespace Frost.PHPtoNET {
                     if (t == StringType || t.FullName == "System.Object") {
                         obj = ReadString();
 
-                        Debug.WriteLine("Read string as string.");
+                        Debug.WriteLine("Finished deserializing string as String.");
                         Debug.Unindent();
                         return (T) obj;
                     }
@@ -371,7 +380,7 @@ namespace Frost.PHPtoNET {
                     if (t.IsValueType) {
                         T tObj = DeserializeStructFromString<T>(t);
 
-                        Debug.WriteLine("Read string as struct.");
+                        Debug.WriteLine("Finished deserializing string as struct.");
                         Debug.Unindent();
                         return tObj;
                     }
@@ -386,7 +395,7 @@ namespace Frost.PHPtoNET {
 
                         T tObj = (T) obj;
 
-                        Debug.WriteLine("Read null.");
+                        Debug.WriteLine("Finished deserializing null.");
                         Debug.Unindent();
                         return tObj;
                     }
@@ -399,7 +408,7 @@ namespace Frost.PHPtoNET {
                     T tObj = DeserializeInteger<T>(t);
 
                     Debug.Unindent();
-                    Debug.WriteLine("Read integer.");
+                    Debug.WriteLine("Finished deserializing integer.");
                     Debug.Unindent();
                     return tObj;
                 }
@@ -410,7 +419,7 @@ namespace Frost.PHPtoNET {
                     T tObj = DeserializeDouble<T>(t);
 
                     Debug.Unindent();
-                    Debug.WriteLine("Read double.");
+                    Debug.WriteLine("Finished deserializing double.");
                     Debug.Unindent();
                     return tObj;
                 }
@@ -421,7 +430,7 @@ namespace Frost.PHPtoNET {
                         obj = ReadBoolean();
                         T tObj = (T) obj;
 
-                        Debug.WriteLine("Read bool");
+                        Debug.WriteLine("Finished deserializing bool");
                         Debug.Unindent();
                         return tObj;
                     }
@@ -434,7 +443,7 @@ namespace Frost.PHPtoNET {
                     T tObj = DeserializePHPArray<T>(t);
 
                     Debug.Unindent();
-                    Debug.WriteLine("Read Array");
+                    Debug.WriteLine("Finished deserializing Array");
                     Debug.Unindent();
                     return tObj;
                 }
@@ -445,7 +454,7 @@ namespace Frost.PHPtoNET {
                     T tObj = DeserializeObject<T>(t);
 
                     Debug.Unindent();
-                    Debug.WriteLine("Read Object");
+                    Debug.WriteLine("Finished deserializing Object");
                     Debug.Unindent();
                     return tObj;
                 }
@@ -529,10 +538,7 @@ namespace Frost.PHPtoNET {
                     Debug.WriteLine("Member type: Field");
                     Debug.Indent();
 
-                    MethodInfo deserializeMember = Type.GetMethod("DeserializeElement", BindingFlags.NonPublic | BindingFlags.Instance);
-                    deserializeMember = deserializeMember.MakeGenericMethod(memberType);
-
-                    object value = deserializeMember.Invoke(this, new object[] { memberType });
+                    object value = InvokeGenericMethod("DeserializeElement", memberType, memberType);
 
                     Debug.Unindent();
                     Debug.WriteLine("Succesfully deserialized member");
@@ -546,10 +552,7 @@ namespace Frost.PHPtoNET {
                     Debug.WriteLine("Member type: Property");
                     Debug.Indent();
 
-                    MethodInfo deserializeMember = Type.GetMethod("DeserializeElement", BindingFlags.NonPublic | BindingFlags.Instance);
-                    deserializeMember = deserializeMember.MakeGenericMethod(memberType);
-
-                    object value = deserializeMember.Invoke(this, new object[] { memberType });
+                    object value = InvokeGenericMethod("DeserializeElement", new[] { memberType }, memberType);
 
                     Debug.Unindent();
                     Debug.WriteLine("Succesfully deserialized member");
@@ -574,15 +577,14 @@ namespace Frost.PHPtoNET {
                 Debug.WriteLine("Starting to deserialize array.");
                 Debug.Indent();
 
-                MethodInfo methodInfo = Type.GetMethod("DeserializeArray").MakeGenericMethod(type.GetElementType());
-                T tObj = (T) methodInfo.Invoke(this, new object[] { });
+                T tObj = (T) InvokeGenericMethod("DeserializeArray", type.GetElementType());
 
                 Debug.Unindent();
                 Debug.WriteLine("Finished Deserializing array.");
                 return tObj;
             }
 
-            if (type.IsGenericType && type.Name == "List`1" && type.Namespace == "System.Collections.Generic") {
+            if (type.IsGenericType && type.GetInterface("IList`1") != null) {
                 Debug.WriteLine("Array is a generic list");
 
                 Debug.WriteLine("Starting to deserialize generic list.");
@@ -595,7 +597,7 @@ namespace Frost.PHPtoNET {
                 return tObj;
             }
 
-            if (type.IsAssignableFrom(ListType)) {
+            if (type.GetInterface("IList") != null) {
                 Debug.WriteLine("Array is an IList");
 
                 Debug.WriteLine("Starting to deserialize an IList.");
@@ -608,7 +610,7 @@ namespace Frost.PHPtoNET {
                 return tObj;
             }
 
-            if (type.IsGenericType && type.Name == "IDictionary`2" && type.Namespace == "System.Collections") {
+            if (type.IsGenericType && type.GetInterface("IDictionary`2") != null) {
                 Debug.WriteLine("Array is an generic dictionary");
 
                 Debug.WriteLine("Starting to deserialize a generic dictionary.");
@@ -621,7 +623,7 @@ namespace Frost.PHPtoNET {
                 return tObj;
             }
 
-            if (type.IsAssignableFrom(DictType)) {
+            if (type.GetInterface("IDictionary") != null) {
                 Debug.WriteLine("Array is an IDictionary");
 
                 Debug.WriteLine("Starting to deserialize an IDictionary.");
@@ -659,41 +661,69 @@ namespace Frost.PHPtoNET {
         private T DeserializeGenericDictionary<T>(Type type) {
             Type[] genericArguments = type.GetGenericArguments();
 
-            MethodInfo genericDicParse = Type.GetMethod("DeserializeDictionary").MakeGenericMethod(genericArguments);
-            IDictionary genericDict = (IDictionary) genericDicParse.Invoke(this, new object[] { });
+            Debug.WriteLine("Deserializing generic dictionary with expected type " + type.FullName);
+            Debug.Indent();
+
+            IDictionary genericDict = (IDictionary) InvokeGenericMethod("DeserializeDictionary", genericArguments);
+
+            Debug.Unindent();
+            Debug.WriteLine("Finished deserializing.");
+
+            Debug.WriteLine("Converting generic IDictionary to type: " + type.FullName);
 
             object instance = Activator.CreateInstance(type);
 
-            MethodInfo addToDict = type.GetMethod("Add").MakeGenericMethod(genericArguments);
+            MethodInfo addToDict = type.GetMethod("Add");
             foreach (DictionaryEntry entry in genericDict) {
                 addToDict.Invoke(instance, new[] { entry.Key, entry.Value });
             }
+
+            Debug.WriteLine("Finished converting.");
 
             return (T) instance;
         }
 
         private T DeserializeList<T>(Type t) {
+            Debug.WriteLine("Deserializing as an object array.");
+            Debug.Indent();
+
             object[] arr = DeserializeArray<object>();
+
+            Debug.Unindent();
+            Debug.WriteLine("Finished deserializing object array.");
+
+            Debug.WriteLine("Converting to: " + t.FullName);
 
             IList list = (IList) Activator.CreateInstance(t);
             foreach (object value in arr) {
                 list.Add(value);
             }
+
+            Debug.WriteLine("Finished converting");
             return (T) list;
         }
 
         private T DeserializeGenericList<T>(Type t) {
             Type[] genericArguments = t.GetGenericArguments();
 
-            MethodInfo genericArrParse = Type.GetMethod("DeserializeArray").MakeGenericMethod(genericArguments[0]);
-            object[] arr = (object[]) genericArrParse.Invoke(this, null);
+            Debug.WriteLine("Deserializing generic list of type: {0} with elements of type: {1}", t.FullName, genericArguments[0]);
+            Debug.Indent();
+
+            object[] arr = (object[]) InvokeGenericMethod("DeserializeArray", genericArguments);
+
+            Debug.Unindent();
+            Debug.WriteLine("Finished deserializing generic list");
 
             object genericList = Activator.CreateInstance(t);
+
+            Debug.WriteLine("Coverting generic IList to type: " + t.FullName);
 
             MethodInfo addToList = t.GetMethod("Add");
             foreach (object element in arr) {
                 addToList.Invoke(genericList, new[] { element });
             }
+
+            Debug.WriteLine("Finished coverting generic IList");
 
             return (T) genericList;
         }
@@ -777,7 +807,7 @@ namespace Frost.PHPtoNET {
             int len = ReadIntegerValue();
             CheckString(":{");
 
-            Debug.WriteLine("Deserializing dictionary with expected elements of type {0} and keys of type {1}", typeof(TValue).FullName, typeof(TKey));
+            Debug.WriteLine("Deserializing dictionary with expected elements of type {0} and keys of type {1}", typeof(TValue).FullName, typeof(TKey).FullName);
             Debug.Indent();
 
             IDictionary<TKey,TValue> dict = DeserializeDictionaryElements<TKey, TValue>(len);
@@ -785,7 +815,7 @@ namespace Frost.PHPtoNET {
             Debug.Unindent();
             Debug.WriteLine("Finished deserializing dictionary");
 
-            CheckChar(';');
+            CheckChar('}');
 
             return dict;
         }
@@ -793,8 +823,22 @@ namespace Frost.PHPtoNET {
         private IDictionary<TKey, TValue> DeserializeDictionaryElements<TKey, TValue>(int len) {
             IDictionary<TKey, TValue> dict = new Dictionary<TKey, TValue>();
             for (int i = 0; i < len; i++) {
+                Debug.WriteLine("Deserializing dictionary entry key.");
+                Debug.Indent();
+
                 TKey key = DeserializeKey<TKey>();
+
+                Debug.Unindent();
+                Debug.WriteLine("Finshed deserializing dictionary entry with value: " + key);
+
+                Debug.WriteLine("Deserializing dictionary entry value.");
+                Debug.Indent();
+
                 TValue value = DeserializeElement<TValue>();
+
+                Debug.Unindent();
+                Debug.WriteLine("Finshed deserializing dictionary entry value");
+
                 dict.Add(key, value);
             }
 

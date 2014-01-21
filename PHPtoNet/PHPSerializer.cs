@@ -60,7 +60,7 @@ namespace Frost.PHPtoNET {
                 return "N;";
             }
 
-            return SerailizeMemberInfo(obj.GetType(), obj);
+            return SerailizeMemberInfo(obj);
         }
 
         private string SerializeClass<T>(T obj, Type type) {
@@ -94,7 +94,7 @@ namespace Frost.PHPtoNET {
 
             string prefix = string.Format("s:{0}:\"{1}\";", Encoding.UTF8.GetByteCount(memberInfo.Name), memberInfo.Name);
 
-            string memberInfoSer = SerailizeMemberInfo(memberType, value);
+            string memberInfoSer = SerailizeMemberInfo(value, memberType);
             if (!string.IsNullOrEmpty(memberInfoSer)) {
                 string serializedMember = prefix + memberInfoSer;
                 return serializedMember;
@@ -102,7 +102,11 @@ namespace Frost.PHPtoNET {
             return "";
         }
 
-        private string SerailizeMemberInfo(Type memberType, object value) {
+        private string SerailizeMemberInfo(object value, Type memberType = null) {
+            if (memberType == null) {
+                memberType = value.GetType();
+            }
+
             if (memberType == typeof(string)) {
                 return SerializeString(value as string);
             }
@@ -134,12 +138,12 @@ namespace Frost.PHPtoNET {
                     Type[] arguments = memberType.GetGenericArguments();
 
                     return value != null
-                               ? SerializeIEnumerable((IEnumerable) value, arguments[0])
+                               ? SerializeICollection((IEnumerable) value, arguments[0])
                                : "N;";
                 }
 
                 return value != null
-                           ? SerializeIEnumerable((IEnumerable) value, memberType.GetElementType())
+                           ? SerializeICollection((IEnumerable) value)
                            : "N;";
             }
 
@@ -156,7 +160,7 @@ namespace Frost.PHPtoNET {
                 if (memberType.Module.ScopeName == "CommonLanguageRuntimeLibrary") {
                     if (memberType.Name == "Nullable`1") {
                         return value != null
-                            ? SerailizeMemberInfo(value.GetType(), value)
+                            ? SerailizeMemberInfo(value)
                             : "N;";
                     }
 
@@ -205,19 +209,18 @@ namespace Frost.PHPtoNET {
                        : string.Format("s:{0}:\"{1}\";", Encoding.UTF8.GetByteCount(value), value);
         }
 
-        private string SerializeIEnumerable(IEnumerable enumerable, Type elementType) {
+        private string SerializeICollection(IEnumerable enumerable, Type elementType = null) {
             StringBuilder sb = new StringBuilder();
 
             int i = 0;
             foreach (object val in enumerable) {
                 sb.AppendFormat("i:{0};", i++);
-                sb.Append(SerailizeMemberInfo(elementType, val) ?? "N;");
+                sb.Append(SerailizeMemberInfo(val, elementType) ?? "N;");
             }
 
             sb.Append("}");
             return string.Format("a:{0}:{{", i) + sb;
         }
-
 
         private string SerializeIDictionary(IDictionary value, Type valType = null) {
             StringBuilder sb = new StringBuilder();
@@ -233,10 +236,10 @@ namespace Frost.PHPtoNET {
                 }
 
                 if (valType == null) {
-                    sb.Append(SerailizeMemberInfo(val.Value.GetType(), val.Value) ?? "N;");
+                    sb.Append(SerailizeMemberInfo(val.Value) ?? "N;");
                 }
                 else {
-                    sb.Append(SerailizeMemberInfo(valType, val.Value) ?? "N;");
+                    sb.Append(SerailizeMemberInfo(val.Value, valType) ?? "N;");
                 }
                 i++;
             }

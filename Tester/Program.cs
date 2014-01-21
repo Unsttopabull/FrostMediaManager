@@ -72,9 +72,18 @@ namespace Frost.Tester {
         private static void TestPHPDeserialize2() {
             PHPDeserializer2 des2 = new PHPDeserializer2();
 
-            XbmcXmlMovie deserialize;
-            using(PHPSerializedStream phpStream = new PHPSerializedStream(File.ReadAllBytes("serOut.txt"), Encoding.UTF8)){
-                 deserialize = des2.Deserialize<XbmcXmlMovie>(phpStream);
+            Hashtable ht = new Hashtable();
+            ht.Add("fjskafas", "fasjkaf");
+            ht.Add("fdgasdg", "safsdg");
+            PHPSerializer ser = new PHPSerializer();
+            string serialize = ser.Serialize(ht);
+
+            File.WriteAllText("ht.txt", serialize);
+
+            Hashtable deserialize;
+            //using(PHPSerializedStream phpStream = new PHPSerializedStream(File.ReadAllBytes("serOut.txt"), Encoding.UTF8)){
+            using(PHPSerializedStream phpStream = new PHPSerializedStream(serialize, Encoding.UTF8)){
+                 deserialize = des2.Deserialize<Hashtable>(phpStream);
             }
         }
 
