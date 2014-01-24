@@ -199,6 +199,7 @@ DROP TABLE IF EXISTS "Movies";
 	"ReleaseGroup"  TEXT,
 	"IsMultipart"  boolean NOT NULL,
 	"PartTypes"  TEXT,
+	"DirectoryPath" TEXT NOT NULL,
 	"SetId"  integer,
 	CONSTRAINT "FK_MovieSet" FOREIGN KEY ("SetId") REFERENCES "Sets" ("Id")
 );

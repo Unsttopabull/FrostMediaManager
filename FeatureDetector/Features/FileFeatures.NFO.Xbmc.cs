@@ -52,7 +52,7 @@ namespace Frost.DetectFeatures {
             Movie.OriginalTitle = xbmcMovie.OriginalTitle ?? Movie.OriginalTitle;
             Movie.SortTitle = xbmcMovie.SortTitle ?? Movie.SortTitle;
             Movie.ImdbID = xbmcMovie.ImdbId ?? Movie.ImdbID;
-            Movie.ReleaseYear = xbmcMovie.Year != default(int) ? xbmcMovie.Year : Movie.ReleaseYear;
+            Movie.ReleaseYear = CheckReleaseYear(xbmcMovie.Year) ? xbmcMovie.Year : Movie.ReleaseYear;
             Movie.Top250 = xbmcMovie.Top250 != default(int) ? xbmcMovie.Top250 : Movie.Top250;
             Movie.PlayCount = xbmcMovie.PlayCount != default(int) ? xbmcMovie.PlayCount : Movie.PlayCount;
             Movie.ReleaseDate = xbmcMovie.ReleaseDate != default(DateTime) ? xbmcMovie.ReleaseDate : Movie.ReleaseDate;
@@ -73,7 +73,7 @@ namespace Frost.DetectFeatures {
             Movie.OriginalTitle = Movie.OriginalTitle ?? xbmcMovie.OriginalTitle;
             Movie.SortTitle = Movie.SortTitle ?? xbmcMovie.SortTitle;
             Movie.ImdbID = Movie.ImdbID ?? xbmcMovie.ImdbId;
-            Movie.ReleaseYear = Movie.ReleaseYear != default(int) ? Movie.ReleaseYear : xbmcMovie.Year;
+            Movie.ReleaseYear = CheckReleaseYear(Movie.ReleaseYear) ? Movie.ReleaseYear : xbmcMovie.Year;
             Movie.Top250 = Movie.Top250 != default(int) ? Movie.Top250 : xbmcMovie.Top250;
             Movie.PlayCount = Movie.PlayCount != default(int) ? Movie.PlayCount : xbmcMovie.PlayCount;
             Movie.ReleaseDate = Movie.ReleaseDate != default(DateTime) ? Movie.ReleaseDate : xbmcMovie.ReleaseDate;
@@ -128,7 +128,9 @@ namespace Frost.DetectFeatures {
             //convert seconds to milisecodns
             Movie.Runtime = Movie.GetVideoRuntimeSum() ?? xbmcMovie.RuntimeInSeconds * 1000;
 
-            Movie.Plots.Add(new Plot(xbmcMovie.Plot, xbmcMovie.Outline, xbmcMovie.Tagline, null));
+            if (xbmcMovie.Plot != null) {
+                Movie.Plots.Add(new Plot(xbmcMovie.Plot, xbmcMovie.Outline, xbmcMovie.Tagline, null));
+            }
         }
     }
 

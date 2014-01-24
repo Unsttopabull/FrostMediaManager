@@ -32,7 +32,7 @@ namespace Frost.DetectFeatures {
             Movie.OriginalTitle = Check(Movie.OriginalTitle, xjbMovie.OriginalTitle);
             Movie.SortTitle = Check(Movie.SortTitle, xjbMovie.SortTitle);
             Movie.ImdbID = Check(Movie.ImdbID, xjbMovie.ImdbId);
-            Movie.ReleaseYear = Movie.ReleaseYear ?? xjbMovie.Year;
+            Movie.ReleaseYear = CheckReleaseYear(Movie.ReleaseYear) ? Movie.ReleaseYear : xjbMovie.Year;
 
             Movie.RatingAverage = Movie.RatingAverage ?? xjbMovie.AverageRating;
             if(string.IsNullOrEmpty(Movie.GetMPAARating()) && !string.IsNullOrEmpty(xjbMovie.MPAA)) {
@@ -49,7 +49,7 @@ namespace Frost.DetectFeatures {
             Movie.OriginalTitle = xjbMovie.OriginalTitle ?? Movie.OriginalTitle;
             Movie.SortTitle = xjbMovie.SortTitle ?? Movie.SortTitle;
             Movie.ImdbID = xjbMovie.ImdbId ?? Movie.ImdbID;
-            Movie.ReleaseYear = xjbMovie.Year != default(int) ? xjbMovie.Year : Movie.ReleaseYear;
+            Movie.ReleaseYear = CheckReleaseYear(xjbMovie.Year) ? xjbMovie.Year : Movie.ReleaseYear;
 
             Movie.RatingAverage = Math.Abs(xjbMovie.AverageRating - default(float)) > 0.001 ? xjbMovie.AverageRating : Movie.RatingAverage;
             if(!string.IsNullOrEmpty(xjbMovie.MPAA)) {
@@ -85,7 +85,9 @@ namespace Frost.DetectFeatures {
 
             Movie.Runtime = xjbMovie.Runtime ?? Movie.Runtime;
 
-            Movie.Plots.Add(new Plot(xjbMovie.Plot, xjbMovie.Outline, xjbMovie.Tagline, null));
+            if (xjbMovie.Plot != null) {
+                Movie.Plots.Add(new Plot(xjbMovie.Plot, xjbMovie.Outline, xjbMovie.Tagline, null));
+            }
         }
 
 

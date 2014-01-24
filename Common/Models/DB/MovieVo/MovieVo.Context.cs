@@ -1,7 +1,9 @@
-﻿using System.Data.Common;
+﻿using System.Data;
+using System.Data.Common;
 using System.Data.Entity;
 using System.Data.SQLite;
 using System.Diagnostics;
+using System.Linq;
 using Frost.Common.Models.DB.MovieVo.Arts;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.Common.Models.DB.MovieVo.People;
@@ -11,12 +13,11 @@ namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents a context used for manipulation of the database.</summary>
     public class MovieVoContainer : DbContext {
-
         /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
         public MovieVoContainer(bool dropCreate, string filePath) : base(GetSQLiteConnection(filePath), true) {
             if (dropCreate) {
                 Database.SetInitializer(new SQLiteInitializer(Resources.MovieVoSQL));
-            }   
+            }
         }
 
         /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
@@ -28,6 +29,9 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
         public MovieVoContainer(bool dropCreate = true) : this("name=MovieVoContainer", dropCreate) {
+        }
+
+        public MovieVoContainer() : this("name=MovieVoContainer", false) {
         }
 
         /// <summary>Gets or sets the information about the movies in the library.</summary>
@@ -93,13 +97,19 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <value>The information about people that participated in the movies in the library</value>
         public DbSet<Person> People { get; set; }
 
+        public bool HasUnsavedChanges() {
+            return ChangeTracker.Entries().Any(e => e.State == EntityState.Added
+                                                         || e.State == EntityState.Modified
+                                                         || e.State == EntityState.Deleted);
+        }
+
         private static DbConnection GetSQLiteConnection(string filePath) {
             SQLiteConnection sqliteConn = new SQLiteConnection("data source=" + filePath);
             sqliteConn.Trace += sqliteConn_Trace;
             return sqliteConn;
         }
 
-        static void sqliteConn_Trace(object sender, TraceEventArgs e) {
+        private static void sqliteConn_Trace(object sender, TraceEventArgs e) {
             Debug.WriteLine(e.Statement, "SQL");
         }
 

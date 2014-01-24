@@ -4,9 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 
 namespace Trinet.Networking {
-    /// <summary>
-    /// A collection of shares
-    /// </summary>
+    /// <summary>A collection of shares</summary>
     public class ShareCollection : ReadOnlyCollectionBase
     {
         #region Platform

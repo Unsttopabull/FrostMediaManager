@@ -1,0 +1,85 @@
+﻿<UserControl x:Class="RibbonUI.Ribbon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="140" d:DesignWidth="500">
+    <Ribbon Title="Frost Media Manager">
+        <Ribbon.Background>
+            <SolidColorBrush Color="#FFDFE9F5"/>
+        </Ribbon.Background>
+        <!-- Help Pane, located at the right-hand side -->
+        <Ribbon.HelpPaneContent>
+            <RibbonButton SmallImageSource="Images/help.png" />
+        </Ribbon.HelpPaneContent>
+        <!-- Quick Access Toolbar - located at the upper-left corner -->
+        <!--<Ribbon.QuickAccessToolBar>
+            <RibbonQuickAccessToolBar>
+                <RibbonButton x:Name="Save" SmallImageSource="Images\save.png" />
+            </RibbonQuickAccessToolBar>
+        </Ribbon.QuickAccessToolBar>-->
+        <!-- Application Menu, located at the left-hand side (down arrow) -->
+        <Ribbon.ApplicationMenu>
+            <RibbonApplicationMenu>
+                <RibbonApplicationMenuItem Header="Options" ImageSource="Images\options.png" />
+                <!--<RibbonApplicationMenuItem Header="Export" ImageSource="Images\export.png" Height="300">
+                    </RibbonApplicationMenuItem>-->
+
+                <RibbonApplicationMenu.FooterPaneContent>
+                    <DockPanel LastChildFill="false">
+                        <RibbonButton Command="ApplicationCommands.Close"
+                                          Label="Exit"
+                                          ToolTipTitle="Exit the application"
+                                          SmallImageSource="Images/quit.png"
+                                          DockPanel.Dock="Right"
+                                          BorderBrush="#B8114EAF"
+                                          IsEnabled="True" />
+                    </DockPanel>
+                </RibbonApplicationMenu.FooterPaneContent>
+                <RibbonApplicationMenu.AuxiliaryPaneContent>
+                    <RibbonGallery />
+                </RibbonApplicationMenu.AuxiliaryPaneContent>
+            </RibbonApplicationMenu>
+        </Ribbon.ApplicationMenu>
+
+        <!-- Ribbon Tab #1: Home -->
+        <RibbonTab x:Name="Search" Header="Search" Margin="0,1,0,-1">
+            <!-- Home  group-->
+            <RibbonGroup x:Name="ClipboardGroup" Header="Home">
+                <RibbonMenuButton LargeImageSource="Images\paste.png" Label="Paste">
+                    <RibbonMenuItem ImageSource="Images\paste.png" Header="Keep Text Only" />
+                    <RibbonMenuItem ImageSource="Images\paste.png" Header="Paste Special..." />
+                </RibbonMenuButton>
+                <RibbonButton SmallImageSource="Images\cut.png" Label="Cut" />
+                <RibbonButton SmallImageSource="Images\copy.png" Label="Copy" />
+                <RibbonButton SmallImageSource="Images\format_painter.png" Label="Format Painter" />
+            </RibbonGroup>
+            <!-- Employee And Payroll group-->
+            <RibbonGroup x:Name="Employee" Header="Employee And Payroll">
+                <RibbonMenuButton LargeImageSource="Images\personal.png" Label="Employee">
+                    <RibbonMenuItem ImageSource="Images\paste.png" Header="Keep Text Only" />
+                    <RibbonMenuItem ImageSource="Images\paste.png" Header="Paste Special..." />
+                </RibbonMenuButton>
+                <RibbonButton SmallImageSource="Images\save.png" Label="Save" />
+                <RibbonButton SmallImageSource="Images\add.png" Label="Add"/>
+            </RibbonGroup>
+        </RibbonTab>
+
+        <!-- Ribbon Tab #2: -->
+
+        <!-- Ribbon Tab #3: -->
+        <RibbonTab x:Name="Detect" Header="Insert">
+            <RibbonGroup x:Name="Clippy" Header="Home" Background="#00000000" Height="86" Margin="0">
+                <RibbonMenuButton LargeImageSource="Images\paste.png" Label="Paste">
+                    <RibbonMenuItem ImageSource="Images\paste.png" Header="Keep Text Only" />
+                    <RibbonMenuItem ImageSource="Images\paste.png" Header="Paste Special..." />
+                </RibbonMenuButton>
+                <RibbonButton SmallImageSource="Images\cut.png" Label="Cut" />
+                <RibbonButton SmallImageSource="Images\copy.png" Label="Copy" />
+                <RibbonButton SmallImageSource="Images\format_painter.png" Label="Format Painter" />
+            </RibbonGroup>
+        </RibbonTab>
+        <RibbonTab x:Name="Export" Header="PageLayout" />
+    </Ribbon>
+</UserControl>

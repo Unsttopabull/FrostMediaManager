@@ -48,7 +48,7 @@ namespace Frost.DetectFeatures {
         }
 
         private FileFeatures(NFOPriority nfoPriority) {
-            _mvc = new MovieVoContainer();
+            _mvc = new MovieVoContainer(false);
             _nfoPriority = nfoPriority;
             _mf = new MediaInfoList();
 
@@ -84,7 +84,8 @@ namespace Frost.DetectFeatures {
                 InitFile(i, filePaths[i]);
             }
 
-            Movie = _mvc.Movies.Add(new Movie());            
+            Movie = _mvc.Movies.Add(new Movie());
+            Movie.DirectoryPath = _directoryInfo.FullName;
         }
 
         private void InitFile(int idx, string filePath) {

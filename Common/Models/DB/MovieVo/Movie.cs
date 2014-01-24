@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Frost.Common.Models.DB.Jukebox;
 using Frost.Common.Models.DB.MovieVo.Arts;
 using Frost.Common.Models.DB.MovieVo.Files;
@@ -149,6 +151,9 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <value>If the movie is Multipart it represents the type of the parts.</value>
         /// <example>\eg{DVD, CD, ...}</example>
         public string PartTypes { get; set; }
+
+        /// <summary>Gets or sets the directory path to this movie.</summary>
+        public string DirectoryPath { get; set; }
         #endregion
 
         #region Foreign Keys
@@ -235,7 +240,63 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         #endregion
 
-        #region Utility Functions
+        #region Utility Functions / Properties
+
+        /// <summary>Gets a value indicating whether this movie has a trailer video availale.</summary>
+        /// <value>Is <c>true</c> if the movie has a trailer video available; otherwise, <c>false</c>.</value>
+        [NotMapped]
+        public bool HasTrailer {
+            get { return !string.IsNullOrEmpty(Trailer); }
+        }
+
+        /// <summary>Gets a value indicating whether this movie has available subtitles.</summary>
+        /// <value>Is <c>true</c> if the movie has available subtitles; otherwise, <c>false</c>.</value>
+        [NotMapped]
+        public bool HasSubtitles {
+            get { return Subtitles.Count != 0; }
+        }
+
+        /// <summary>Gets a value indicating whether this movie has available fanart.</summary>
+        /// <value>Is <c>true</c> if the movie has available fanart; otherwise, <c>false</c>.</value>
+        [NotMapped]
+        public bool HasArt {
+            get { return Arts.Count != 0; }
+        }
+
+        [NotMapped]
+        public bool HasNfo {
+            get {
+                if (DirectoryPath == null) {
+                    return false;
+                }
+                return Directory.EnumerateFiles(DirectoryPath, "*.nfo").Any();
+            }
+        }
+
+        [NotMapped]
+        public string FirstTagline {
+            get { return Plots.Where(p => !string.IsNullOrEmpty(p.Tagline)).Select(p => p.Tagline).FirstOrDefault(); }
+        }
+
+        [NotMapped]
+        public string FirstStudioName {
+            get {
+                if (Studios.Count > 0) {
+                    return Studios.FirstOrDefault().Name;
+                }
+                return null;
+            }
+        }
+
+        [NotMapped]
+        public string FirstFanart {
+            get {
+                if (Arts.OfType<Fanart>().Any()) {
+                    return Arts.OfType<Fanart>().FirstOrDefault().Path;
+                }
+                return null;
+            }
+        }
 
         /// <summary>Computes the average critic rating.</summary>
         /// <returns>The average critic rating.</returns>

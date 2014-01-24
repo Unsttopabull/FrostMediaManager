@@ -1,0 +1,28 @@
+﻿<RibbonWindow x:Class="RibbonUI.MainWindow"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:local="clr-namespace:RibbonUI"
+              Title="MainWindow"
+              x:Name="RibbonWindow"
+              Icon="logo3.ico"
+              Width="1386" Height="794"
+              MinWidth="{Binding ElementName=ContentGrid, Path=MinRequiredWidth}" Loaded="RibbonWindowLoaded" Closing="RibbonWindowClosing">
+   
+    
+    <!--<RibbonWindow.MinWidth>
+        <MultiBinding Converter="{StaticResource SumConverter}">
+            <Binding ElementName="ContentGrid" Path="(local:ContentGrid.MovieFlags).MinRequiredWidth"/>
+            <Binding ElementName="ContentGrid" Path="TabViewMinWidth"/>
+        </MultiBinding>
+    </RibbonWindow.MinWidth>-->
+    
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <local:Ribbon x:Name="Ribbon"/>
+        <local:ContentGrid x:Name="ContentGrid" Grid.Row="1"/>
+    </Grid>
+</RibbonWindow>

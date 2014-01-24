@@ -34,11 +34,11 @@ namespace Frost.Tester {
 
             TimeSpan time = default(TimeSpan);
 
-            SerXmlXbmcMovie(new PHPSerializer());
-            TestPHPDeserialize2();
+            //SerXmlXbmcMovie(new PHPSerializer());
+            //TestPHPDeserialize2();
 
             //TestXjbDbParser();
-            //time = TestMediaSearcher();
+            time = TestMediaSearcher();
 
             sw.Stop();
 
@@ -148,8 +148,6 @@ namespace Frost.Tester {
             File.WriteAllText("serOut.txt", serialize);
         }
 
-        #region FeatureDetector
-
         private static TimeSpan TestMediaSearcher() {
             Stopwatch sw = Stopwatch.StartNew();
             FeatureDetector ms = new FeatureDetector(@"E:\Torrenti\FILMI", @"F:\Torrenti\FILMI");
@@ -158,8 +156,6 @@ namespace Frost.Tester {
             sw.Stop();
             return sw.Elapsed;
         }
-
-        #endregion
     }
 
 }

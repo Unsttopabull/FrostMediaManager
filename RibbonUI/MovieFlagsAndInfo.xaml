@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="RibbonUI.MovieFlagsAndInfo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RibbonUI"
+             mc:Ignorable="d" 
+             x:Name="FlagsInfo"
+             d:DesignHeight="75" d:DesignWidth="1070">
+    <DockPanel>
+        <DockPanel.Background>
+            <SolidColorBrush Color="{StaticResource {x:Static SystemColors.ControlDarkColorKey}}" />
+        </DockPanel.Background>
+
+        <Grid x:Name="MovieInfo" DockPanel.Dock="Left" Margin="10,0,10,10" VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Text="{Binding  ElementName=FlagsInfo, Path=Movie.Title, TargetNullValue=Unknown Title, FallbackValue=Unknown Title}"/>
+                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding ElementName=FlagsInfo, Path=Movie.ReleaseYear, StringFormat={}({0}), TargetNullValue=(?), FallbackValue=(?)}"/>
+            </StackPanel>
+            <TextBlock Grid.Row="1" FontSize="14" Text="{Binding ElementName=FlagsInfo, Path=Movie.FirstTagline, TargetNullValue=No Tagline, FallbackValue=No Tagline}"/>
+            <StackPanel Grid.Row="3" Orientation="Horizontal">
+                <local:StarRating Rating="{Binding ElementName=FlagsInfo, Path=Movie.RatingAverage}"/>
+                <TextBlock FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0">35.781 Votes</TextBlock>
+                <TextBlock FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0">Runtime: 2hrs 1mins</TextBlock>
+            </StackPanel>
+        </Grid>
+        <StackPanel x:Name="MovieFlags" DockPanel.Dock="Right" Orientation="Horizontal" FlowDirection="RightToLeft" Margin="10,0,0,0">
+            <StackPanel.Resources>
+                <BitmapImage x:Key="DefaultLogo" UriSource="pack://application:,,,/RibbonUI;component/Images/defaultscreen.png"></BitmapImage>
+            </StackPanel.Resources>
+            <Image DockPanel.Dock="Right" Source="{Binding ElementName=FlagsInfo, Path=Movie.FirstStudioName, StringFormat={}Images/StudiosE/{0}.png, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}}"
+                   StretchDirection="DownOnly" MaxWidth="150" MaxHeight="75" ToolTip="{Binding ElementName=FlagsInfo, Path=Movie.FirstStudioName, TargetNullValue=Unknown Studio, FallbackValue=Unknown Studio}"/>
+            <Image DockPanel.Dock="Right" Source="Images/flagsE/achan_6.png" StretchDirection="DownOnly" MaxWidth="150" MaxHeight="75"/>
+            <Image DockPanel.Dock="Right" Source="Images/flagsE/acodec_wmahd.png" StretchDirection="DownOnly" MaxWidth="150" MaxHeight="75"/>
+            <Image DockPanel.Dock="Right" Source="Images/flagsE/vres_1080p.png" StretchDirection="DownOnly" MaxWidth="150" MaxHeight="75"/>
+            <Image DockPanel.Dock="Right" Source="Images/flagsE/vcodec_wmva.png" StretchDirection="DownOnly" MaxWidth="150" MaxHeight="75"/>
+        </StackPanel>
+    </DockPanel>
+</UserControl>

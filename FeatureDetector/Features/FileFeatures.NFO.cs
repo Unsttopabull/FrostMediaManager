@@ -32,6 +32,10 @@ namespace Frost.DetectFeatures {
             }
         }
 
+        private bool CheckReleaseYear(long? year) {
+            return year != null && year != 0 && year != 1;
+        }
+
         private void AddActors<T>(IEnumerable<T> actors) where T : XbmcXmlActor {
             foreach (T actor in actors) {
                 if (string.IsNullOrEmpty(actor.Name)) {

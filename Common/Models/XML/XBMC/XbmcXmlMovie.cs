@@ -457,27 +457,31 @@ namespace Frost.Common.Models.XML.XBMC {
         public IEnumerable<ArtBase> GetArt() {
             List<ArtBase> art = new List<ArtBase>();
 
-            //add all Thumbnails/Posters/Covers
-            foreach (XbmcXmlThumb thumb in Thumbs) {
-                ArtBase a;
-                switch (thumb.Aspect.ToLower()) {
-                    case "poster":
-                        a = new Poster(thumb.Path, thumb.Preview);
-                        break;
-                    case "cover":
-                        a = new Cover(thumb.Path, thumb.Preview);
-                        break;
-                    default:
-                        a = new Art(thumb.Path, thumb.Preview);
-                        break;
-                }
+            if (Thumbs != null) {
+                //add all Thumbnails/Posters/Covers
+                foreach (XbmcXmlThumb thumb in Thumbs) {
+                    ArtBase a;
+                    switch (thumb.Aspect.ToLower()) {
+                        case "poster":
+                            a = new Poster(thumb.Path, thumb.Preview);
+                            break;
+                        case "cover":
+                            a = new Cover(thumb.Path, thumb.Preview);
+                            break;
+                        default:
+                            a = new Art(thumb.Path, thumb.Preview);
+                            break;
+                    }
 
-                art.Add(a);
+                    art.Add(a);
+                }
             }
 
-            //add fanart
-            foreach (XbmcXmlThumb thumb in Fanart.Thumbs) {
-                art.Add(new Fanart(thumb.Path));
+            if (Fanart != null && Fanart.Thumbs != null) {
+                //add fanart
+                foreach (XbmcXmlThumb thumb in Fanart.Thumbs) {
+                    art.Add(new Fanart(thumb.Path));
+                }
             }
 
             return art;
