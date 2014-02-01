@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.SQLite;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -13,36 +14,36 @@ using Frost.Common.Models.DB.MovieVo.People;
 using Frost.Common.Models.DB.XBMC;
 using Frost.Common.Models.XML.Jukebox;
 using Frost.Common.Models.XML.XBMC;
+using Frost.Common.Util;
 
 namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents an information about a movie in the library.</summary>
     public partial class Movie {
-
         /// <summary>Separator between multiple genres, certifications, person names ...</summary>
         private const string SEPARATOR = " / ";
 
         /// <summary>Initializes a new instance of the <see cref="Movie"/> class.</summary>
         public Movie() {
             // ReSharper disable DoNotCallOverridableMethodsInConstructor
-            Audios = new HashSet<Audio>();
-            Ratings = new HashSet<Rating>();
-            Plots = new HashSet<Plot>();
-            Arts = new HashSet<ArtBase>();
-            Certifications = new HashSet<Certification>();
-            Genres = new HashSet<Genre>();
-            Videos = new HashSet<Video>();
-            Subtitles = new HashSet<Subtitle>();
-            //Files = new HashSet<File>();
-            Countries = new HashSet<Country>();
-            Studios = new HashSet<Studio>();
-            Specials = new HashSet<Special>();
+            Audios = new ObservableHashSet<Audio>();
+            Ratings = new ObservableHashSet<Rating>();
+            Plots = new ObservableHashSet<Plot>();
+            Arts = new ObservableHashSet<ArtBase>();
+            Certifications = new ObservableHashSet<Certification>();
+            Genres = new ObservableHashSet<Genre>();
+            Awards = new ObservableHashSet<Award>();
+            Videos = new ObservableHashSet<Video>();
+            Subtitles = new ObservableHashSet<Subtitle>();
+            Countries = new ObservableHashSet<Country>();
+            Studios = new ObservableHashSet<Studio>();
+            Specials = new ObservableHashSet<Special>();
 
-            Directors = new HashSet<Person>();
-            Writers = new HashSet<Person>();
-            ActorsLink = new HashSet<MovieActor>();
+            Directors = new ObservableHashSet<Person>();
+            Writers = new ObservableHashSet<Person>();
+            ActorsLink = new ObservableHashSet<MovieActor>();
+            PromotionalVideos = new ObservableHashSet<PromotionalVideo>();
 
-            //Actors = new HashSet<Actor>();
             // ReSharper restore DoNotCallOverridableMethodsInConstructor
         }
 
@@ -69,6 +70,8 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <value>The title used for sorting</value>
         /// <example>\eg{ ''<c>Pirates of the Caribbean: The Curse of the Black Pearl</c>'' becomes ''<c>Pirates of the Caribbean 1</c>''}</example>
         public string SortTitle { get; set; }
+
+        public string Type { get; set; }
 
         /// <summary>Gets or sets the goofs.</summary>
         /// <value>The goofs.</value>
@@ -115,8 +118,8 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <value>The movie ranking on IMDB Top 250 list.</value>
         public long? Top250 { get; set; }
 
-        /// <summary>Gets or sets the runtime of the movie</summary>
-        /// <value>The runtime of the movie</value>
+        /// <summary>Gets or sets the runtime of the movie in miliseconds</summary>
+        /// <value>The runtime of the movie in miliseconds</value>
         public long? Runtime { get; set; }
 
         /// <summary>Gets or sets a value indicating whether has beed played before.</summary>
@@ -154,6 +157,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the directory path to this movie.</summary>
         public string DirectoryPath { get; set; }
+
         #endregion
 
         #region Foreign Keys
@@ -172,75 +176,103 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the movie subtitles.</summary>
         /// <value>The movie subtitles.</value>
-        public virtual HashSet<Subtitle> Subtitles { get; set; }
+        public virtual ObservableHashSet<Subtitle> Subtitles { get; set; }
 
         /// <summary>Gets or sets the countries that this movie was shot or/and produced in.</summary>
         /// <summary>The countries that this movie was shot or/and produced in.</summary>
-        public virtual HashSet<Country> Countries { get; set; }
+        public virtual ObservableHashSet<Country> Countries { get; set; }
 
         /// <summary>Gets or sets the studio(s) that produced the movie.</summary>
         /// <value>The studio(s) that produced the movie.</value>
-        public virtual HashSet<Studio> Studios { get; set; }
+        public virtual ObservableHashSet<Studio> Studios { get; set; }
 
         /// <summary>Gets or sets the information about video streams of this movie.</summary>
         /// <value>The information about video streams of this movie</value>
-        public virtual HashSet<Video> Videos { get; set; }
-
-        ///// <summary>Gets or sets the information about files containing this movie.</summary>
-        ///// <value>The information about files containing this movie.</value>
-        //public virtual HashSet<File> Files { get; set; }
+        public virtual ObservableHashSet<Video> Videos { get; set; }
 
         /// <summary>Gets or sets the information about audio streams of this movie.</summary>
         /// <value>The information about audio streams of this movie</value>
-        public virtual HashSet<Audio> Audios { get; set; }
+        public virtual ObservableHashSet<Audio> Audios { get; set; }
 
         /// <summary>Gets or sets the information about this movie's critics and their ratings</summary>
         /// <value>The information about this movie's critics and their ratings</value>
-        public virtual HashSet<Rating> Ratings { get; set; }
+        public virtual ObservableHashSet<Rating> Ratings { get; set; }
 
         /// <summary>Gets or sets this movie's story and plot with summary and a tagline.</summary>
         /// <value>This movie's story and plot with summary and a tagline</value>
-        public virtual HashSet<Plot> Plots { get; set; }
+        public virtual ObservableHashSet<Plot> Plots { get; set; }
 
         /// <summary>Gets or sets the movie promotional images.</summary>
         /// <value>The movie promotional images</value>
-        public virtual HashSet<ArtBase> Arts { get; set; }
+        public virtual ObservableHashSet<ArtBase> Arts { get; set; }
 
         /// <summary>Gets or sets the information about this movie's certification ratings/restrictions in certain countries.</summary>
         /// <value>The information about this movie's certification ratings/restrictions in certain countries.</value>
-        public virtual HashSet<Certification> Certifications { get; set; }
+        public virtual ObservableHashSet<Certification> Certifications { get; set; }
 
         /// <summary>Gets or sets the name of the credited writer(s).</summary>
         /// <value>The names of the credited script writer(s)</value>
-        public virtual HashSet<Person> Writers { get; set; }
+        public virtual ObservableHashSet<Person> Writers { get; set; }
 
         /// <summary>Gets or sets the movie directors.</summary>
         /// <value>People that directed this movie.</value>
-        public virtual HashSet<Person> Directors { get; set; }
+        public virtual ObservableHashSet<Person> Directors { get; set; }
 
         /// <summary>Gets or sets the Person to Movie link with payload as in character name the person is protraying.</summary>
         /// <value>The Person to Movie link with payload as in character name the person is protraying.</value>
-        public virtual HashSet<MovieActor> ActorsLink { get; set; }
+        public virtual ObservableHashSet<MovieActor> ActorsLink { get; set; }
 
         /// <summary>Gets or sets the special information about this movie release.</summary>
         /// <value>The special information about this movie release</value>
-        public virtual HashSet<Special> Specials { get; set; }
+        public virtual ObservableHashSet<Special> Specials { get; set; }
 
         /// <summary>Gets or sets the movie genres.</summary>
         /// <value>The movie genres.</value>
-        public virtual HashSet<Genre> Genres { get; set; }
+        public virtual ObservableHashSet<Genre> Genres { get; set; }
 
-        ///// <summary>Gets or sets the actors that starred in the movie.</summary>
-        ///// <value>The actors that preformed in this movie.</value>
-        //[NotMapped]
-        //public HashSet<Actor> Actors {
-        //    get { return new HashSet<Actor>(ActorsLink.Select(ma => (Actor) ma)); }
-        //    set { ActorsLink.UnionWith(value.Select(a => new MovieActor(this, a))); }
-        //}
+        public virtual ObservableHashSet<Award> Awards { get; set; }
+
+        public virtual ObservableHashSet<PromotionalVideo> PromotionalVideos { get; set; }
 
         #endregion
 
         #region Utility Functions / Properties
+
+        #region Awards
+
+        [NotMapped]
+        public int NumberOfOscarsWon {
+            get { return Awards.Count(a => a.Organization == "Oscar" && !a.IsNomination); }
+        }
+
+        [NotMapped]
+        public int NumberOfGoldenGlobesWon {
+            get { return Awards.Count(a => a.Organization == "Golden Globe" && !a.IsNomination); }
+        }
+
+        [NotMapped]
+        public int NumberOfGoldenGlobeNominations {
+            get { return Awards.Count(a => a.Organization == "Golden Globe" && a.IsNomination); }
+        }
+
+        [NotMapped]
+        public int NumberOfCannesAwards {
+            get { return Awards.Count(a => a.Organization == "Cannes" && !a.IsNomination); }
+        }
+
+        [NotMapped]
+        public int NumberOfCannesNominations {
+            get { return Awards.Count(a => a.Organization == "Cannes" && a.IsNomination); }
+        }
+
+        [NotMapped]
+        public int NumberOfOscarNominations {
+            get { return Awards.Count(a => a.Organization == "Oscar" && a.IsNomination); }
+        }
+
+        #endregion
+
+        #region Metadata/Columns
 
         /// <summary>Gets a value indicating whether this movie has a trailer video availale.</summary>
         /// <value>Is <c>true</c> if the movie has a trailer video available; otherwise, <c>false</c>.</value>
@@ -273,30 +305,143 @@ namespace Frost.Common.Models.DB.MovieVo {
             }
         }
 
+        #endregion
+
         [NotMapped]
-        public string FirstTagline {
-            get { return Plots.Where(p => !string.IsNullOrEmpty(p.Tagline)).Select(p => p.Tagline).FirstOrDefault(); }
+        public int? NumberOfAudioChannels {
+            get {
+                int num = 0;
+                foreach (Audio audio in Audios) {
+                    if (audio.NumberOfChannels.HasValue) {
+                        int val = audio.NumberOfChannels.Value;
+                        if (val > num) {
+                            num = val;
+                        }
+                    }
+                }
+
+                if (num != 0) {
+                    return num;
+                }
+                return null;
+            }
         }
+
+        [NotMapped]
+        public string AudioCodec {
+            get {
+                var mostFrequent = Audios.Where(v => v.CodecId != null)
+                                         .GroupBy(v => v.CodecId)
+                                         .OrderByDescending(g => g.Count())
+                                         .FirstOrDefault();
+
+                if (mostFrequent != null) {
+                    Audio video = mostFrequent.FirstOrDefault();
+
+                    if (video != null) {
+                        return video.CodecId;
+                    }
+                }
+
+                return null;
+            }
+        }
+
+        [NotMapped]
+        public string VideoResolution {
+            get {
+                var mostFrequent = Videos.Where(v => v.Resolution.HasValue)
+                                         .GroupBy(v => v.Resolution)
+                                         .OrderByDescending(g => g.Count())
+                                         .FirstOrDefault();
+
+                if (mostFrequent != null) {
+                    Video video = mostFrequent.FirstOrDefault();
+
+                    if (video != null) {
+                        string resolution = video.Resolution.ToString();
+                        switch (video.ScanType) {
+                            case ScanType.Interlaced:
+                                resolution = resolution + "p";
+                                break;
+                            case ScanType.Progressive:
+                                resolution = resolution + "i";
+                                break;
+                        }
+                        return resolution;
+                    }
+                }
+
+                return null;
+            }
+        }
+
+        [NotMapped]
+        public string VideoCodec {
+            get {
+                var mostFrequent = Videos.Where(v => v.CodecId != null)
+                                         .GroupBy(v => v.CodecId)
+                                         .OrderByDescending(g => g.Count())
+                                         .FirstOrDefault();
+
+                if (mostFrequent != null) {
+                    Video video = mostFrequent.FirstOrDefault();
+
+                    if (video != null) {
+                        return video.CodecId;
+                    }
+                }
+
+                return null;
+            }
+        }
+
+        #region First X
 
         [NotMapped]
         public string FirstStudioName {
             get {
-                if (Studios.Count > 0) {
-                    return Studios.FirstOrDefault().Name;
+                try {
+                    if (Studios.Count > 0) {
+                        return Studios.FirstOrDefault().Name;
+                    }
+                }
+                catch {
+                }
+
+                return null;
+            }
+        }
+
+        [NotMapped]
+        public Fanart FirstFanart {
+            get {
+                return Arts.OfType<Fanart>().Any()
+                           ? Arts.OfType<Fanart>().FirstOrDefault()
+                           : null;
+            }
+        }
+
+        [NotMapped]
+        public ArtBase FirstCoverOrPoster {
+            get {
+                if (Arts.OfType<Cover>().Any()) {
+                    return Arts.OfType<Cover>().FirstOrDefault();
+                }
+
+                if (Arts.OfType<Poster>().Any()) {
+                    return Arts.OfType<Poster>().FirstOrDefault();
                 }
                 return null;
             }
         }
 
         [NotMapped]
-        public string FirstFanart {
-            get {
-                if (Arts.OfType<Fanart>().Any()) {
-                    return Arts.OfType<Fanart>().FirstOrDefault().Path;
-                }
-                return null;
-            }
+        public Plot FirstPlot {
+            get { return Plots.Any() ? Plots.FirstOrDefault() : null; }
         }
+
+        #endregion
 
         /// <summary>Computes the average critic rating.</summary>
         /// <returns>The average critic rating.</returns>
@@ -305,13 +450,57 @@ namespace Frost.Common.Models.DB.MovieVo {
         }
 
         /// <summary>Gets the US MPAA movie rating.</summary>
-        /// <returns>A string with the MPAA movie rating</returns>
-        public string GetMPAARating() {
-            Certification mpaa = Certifications.FirstOrDefault(c => c.Country.Name.OrdinalEquals("United States"));
-            if (mpaa != null) {
-                return mpaa.Rating;
+        /// <value>A string with the MPAA movie rating</value>
+        [NotMapped]
+        public string MPAARating {
+            get {
+                Certification mpaa = null;
+                try {
+                    mpaa = mpaa = Certifications.FirstOrDefault(c => c.Country.Name.Equals("United States", StringComparison.OrdinalIgnoreCase));
+                }
+                catch (Exception e) {
+                    Console.WriteLine(e);
+                }
+
+                if (mpaa != null) {
+                    return mpaa.Rating;
+                }
+                return null;
             }
-            return null;
+        }
+
+        [NotMapped]
+        public string DurationFormatted {
+            get {
+                long? sum = Runtime ?? GetVideoRuntimeSum();
+
+                return sum.HasValue && sum.Value > 0
+                           ? TimeSpan.FromMilliseconds(Convert.ToDouble(sum)).ToString("h'h 'm'm'")
+                           : null;
+            }
+        }
+
+        [NotMapped]
+        public string MPAARatingImage {
+            get {
+                string rating = MPAARating;
+                if (!string.IsNullOrEmpty(rating)) {
+                    rating = rating.Replace("Rated ", "").ToUpper();
+                    switch (rating) {
+                        case "G":
+                            return "Images/RatingsE/usa/mpaag.png";
+                        case "NC-17":
+                            return "Images/RatingsE/usa/mpaanc17.png";
+                        case "PG":
+                            return "Images/RatingsE/usa/mpaapg.png";
+                        case "PG-13":
+                            return "Images/RatingsE/usa/mpaapg13.png";
+                        case "R":
+                            return "Images/RatingsE/usa/mpaar.png";
+                    }
+                }
+                return null;
+            }
         }
 
         /// <summary>Gets the file size summed from all the movie files.</summary>
@@ -343,8 +532,8 @@ namespace Frost.Common.Models.DB.MovieVo {
         public string GetDirectorNames() {
             string directorsJoin = string.Join(SEPARATOR, Directors.Select(d => d.Name));
             return string.IsNullOrEmpty(directorsJoin)
-                ? null
-                : directorsJoin;
+                       ? null
+                       : directorsJoin;
         }
 
         /// <summary>Gets the cover image path name.</summary>
@@ -352,8 +541,8 @@ namespace Frost.Common.Models.DB.MovieVo {
         public string GetCoverPath() {
             Cover cover = Arts.OfType<Cover>().FirstOrDefault();
             return (cover != null)
-                ? cover.Path
-                : null;
+                       ? cover.Path
+                       : null;
         }
 
         /// <summary>Gets the studio names in a formatted string.</summary>
@@ -372,7 +561,7 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets the movie actors as an <see cref="IEnumerable{T}"/> of <see cref="Common.Models.XML.Jukebox.XjbXmlActor">XjbXmlActor</see> instances.</summary>
         /// <returns>An <see cref="IEnumerable{T}"/> of this movie actors as <see cref="Common.Models.XML.Jukebox.XjbXmlActor">XjbXmlActor</see> instances</returns>
         public IEnumerable<XjbXmlActor> GetXjbXmlActors() {
-            return ActorsLink.Select(a => (XjbXmlActor) (Actor)a);
+            return ActorsLink.Select(a => (XjbXmlActor) (Actor) a);
         }
 
         /// <summary>Gets the runtime sum of all the video parts in this movie in miliseconds.</summary>
@@ -380,9 +569,13 @@ namespace Frost.Common.Models.DB.MovieVo {
         public long? GetVideoRuntimeSum() {
             long l = Videos.Where(v => v.Duration.HasValue).Sum(v => v.Duration.Value);
 
+            if (!Runtime.HasValue && l > 0) {
+                Runtime = l;
+            }
+
             return (l > 0)
-                ? (long?) l
-                : null;
+                       ? (long?) l
+                       : null;
         }
 
         #endregion
@@ -483,15 +676,15 @@ namespace Frost.Common.Models.DB.MovieVo {
                 //TODO: CHECK FOR CORECT FORMAT
                 ReleaseDate = movie.ReleaseDate.HasValue ? movie.ReleaseDate.Value.ToString(CultureInfo.InvariantCulture) : null,
                 Runtime = movie.Runtime.HasValue
-                    ? (movie.Runtime / 60)
-                    : 0,
+                              ? (movie.Runtime / 60)
+                              : 0,
                 SortTitle = movie.Title,
                 Studio = movie.GetStudioNamesFormatted(),
                 //Tagline = movie.MainPlot.Summary,
                 Title = movie.Title,
-                Year = (int)(movie.ReleaseYear ?? 0),
+                Year = (int) (movie.ReleaseYear ?? 0),
                 Actors = movie.GetXjbXmlActors().ToArray(),
-                MPAA = movie.GetMPAARating(),
+                MPAA = movie.MPAARating,
                 Credits = String.Join(SEPARATOR, movie.Writers.Select(p => p.Name)),
                 Fileinfo = ""
             };

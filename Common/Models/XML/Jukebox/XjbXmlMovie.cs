@@ -7,6 +7,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.People;
+using Frost.Common.Util;
 
 namespace Frost.Common.Models.XML.Jukebox {
 
@@ -237,7 +238,7 @@ namespace Frost.Common.Models.XML.Jukebox {
                 OriginalTitle = xm.OriginalTitle,
                 ReleaseYear = xm.Year,
                 RatingAverage = xm.AverageRating,
-                Certifications = new HashSet<Certification>(xm.Certifications),
+                Certifications = new ObservableHashSet<Certification>(xm.Certifications),
                 ImdbID = xm.ImdbId,
                 Runtime = runtimeInSec
             };

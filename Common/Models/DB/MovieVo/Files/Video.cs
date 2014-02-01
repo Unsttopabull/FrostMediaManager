@@ -39,7 +39,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <param name="type">The type of the video (DVD, BR, XVID, ...)</param>
         /// <param name="source">With or from what this video was made from (CAM, TS, DVDRip ...)</param>
         public Video(string codec, int width, int height, double aspect, float? fps, string resolution, string type, string source) : this(codec, width, height) {
-            Resolution = resolution;
+            Resolution = GetVideoResolution(resolution);
             Type = type;
             Source = source;
             FPS = fps;
@@ -83,7 +83,9 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         /// <summary>Resolution and format of the video</summary>
         /// <example>\eg{ <c>720p, 1080p, 720i, 1080i, PAL, HDTV, NTSC</c>}</example>
-        public string Resolution { get; set; }
+        public int? Resolution { get; set; }
+
+        public string Standard { get; set; } 
 
         /// <summary>Gets or sets the frames per second in this video.</summary>
         /// <value>The Frames per second.</value>
@@ -129,6 +131,11 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <example>\eg{ <c>WMV3 DIVX XVID H264 VP6 AVC</c>}</example>
         public string Codec { get; set; }
 
+        /// <summary>Gets or sets the codec tag this video is encoded in.</summary>
+        /// <value>The codec this video is encoded in.</value>
+        /// <example>\eg{ <c>x265, div3, dx50, mpeg2v</c>}</example>
+        public string CodecId { get; set; }
+
         /// <summary>The ratio between width and height (width / height)</summary>
         /// <value>Aspect ratio of the video</value>
         /// <example>\eg{ <c>1.333</c>}</example>
@@ -149,6 +156,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         #endregion
 
         #region Foreign Keys
+
         /// <summary>Gets or sets the language foreign key.</summary>
         /// <value>The language foreign key.</value>
         public long? LanguageId { get; set; }
@@ -179,7 +187,28 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         public virtual Movie Movie { get; set; }
 
         #endregion
-    
+
+        public int? GetVideoResolution(string resolution) {
+            if (!string.IsNullOrEmpty(resolution)) {
+                int res;
+                string vres = resolution.TrimEnd('p', 'i');
+
+                if (!int.TryParse(vres, out res)) {
+                    if (resolution.Equals("NTSC", StringComparison.OrdinalIgnoreCase)) {
+                        res = 480;
+                        ScanType = ScanType.Interlaced;
+                    }
+
+                    if (resolution.Equals("PAL", StringComparison.OrdinalIgnoreCase)) {
+                        res = 576;
+                        ScanType = ScanType.Interlaced;
+                    }
+                }
+                return res;
+            }
+            return null;
+        }
+
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
         /// <param name="other">An object to compare with this object.</param>

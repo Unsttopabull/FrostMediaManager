@@ -3,19 +3,20 @@ using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 
-namespace Frost.CinemaInfoParsers.PlanetTus {
+namespace Frost.MovieInfoParsers.PlanetTus {
 
     [Serializable]
     public class TusMovieInfo : ParsedMovieInfo {
 
-        public Task ParseMoviePage(string url) {
+        public Task<TusMovieInfo> ParseMoviePage(string url) {
+            TusMovieInfo info = this;
             return Task.Run(() => {
                 IsFinished = false;
 
                 HtmlDocument hd = DownloadWebPage(url);
 
                 if (hd == null) {
-                    return;
+                    return null;
                 }
 
                 HtmlNode center = hd.GetElementbyId("center");
@@ -23,6 +24,7 @@ namespace Frost.CinemaInfoParsers.PlanetTus {
                 GetInfo(center);
 
                 IsFinished = true;
+                return info;
             });
         }
 

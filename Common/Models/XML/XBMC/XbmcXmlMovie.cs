@@ -13,6 +13,7 @@ using Frost.Common.Models.DB.MovieVo.Arts;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.Common.Models.DB.MovieVo.People;
 using Frost.Common.Models.DB.XBMC;
+using Frost.Common.Util;
 using File = Frost.Common.Models.DB.MovieVo.Files.File;
 
 namespace Frost.Common.Models.XML.XBMC {
@@ -25,7 +26,7 @@ namespace Frost.Common.Models.XML.XBMC {
         private const string SEPARATOR = " / ";
 
         /// <summary>The XBMC YouTube plugin prefix for a movie trailer</summary>
-        private const string YT_TRAILER_PREFIX = "plugin://plugin.video.youtube/?action=play_video&amp;videoid=";
+        private const string YT_TRAILER_PREFIX = "plugin://plugin.video.youtube/?action=play_video&videoid=";
 
         /// <summary>Initializes a new instance of the <see cref="XbmcXmlMovie"/> class.</summary>
         public XbmcXmlMovie() {
@@ -162,13 +163,17 @@ namespace Frost.Common.Models.XML.XBMC {
         [XmlIgnore]
         public long? RuntimeInSeconds {
             get {
+                if (string.IsNullOrEmpty(RuntimeString)) {
+                    return null;
+                }
+
                 //runtime is saved as a string with seconds integer divided by 60 with appended text " min"
                 string runtimeInMinutes = RuntimeString.Replace(" min", "");
 
                 long runtimeVal;
                 if (long.TryParse(runtimeInMinutes, out runtimeVal)) {
                     return runtimeVal > 0
-                               ? (long?) (runtimeVal*60)
+                               ? (long?) (runtimeVal * 60)
                                : null;
                 }
                 return null;
@@ -368,24 +373,24 @@ namespace Frost.Common.Models.XML.XBMC {
 
         /// <summary>Converts writer names into <see cref="Person"/> instances in a <see cref="HashSet{Person}"/>.</summary>
         /// <returns>A <see cref="HashSet{Person}"/> containing <see cref="Person"/> instances with names of the credited writers.</returns>
-        public HashSet<Person> GetWriters() {
-            return new HashSet<Person>(from c in Credits
+        public ObservableHashSet<Person> GetWriters() {
+            return new ObservableHashSet<Person>(from c in Credits
                                        where !string.IsNullOrEmpty(c)
                                        select new Person(c));
         }
 
         /// <summary>Converts director names into <see cref="Person"/> instances in a <see cref="HashSet{Person}"/>.</summary>
         /// <returns>A <see cref="HashSet{Person}"/> containing <see cref="Person"/> instances with names of the credited directors.</returns>
-        public HashSet<Person> GetDirectors() {
-            return new HashSet<Person>(from d in Directors
+        public ObservableHashSet<Person> GetDirectors() {
+            return new ObservableHashSet<Person>(from d in Directors
                                        where !string.IsNullOrEmpty(d)
                                        select new Person(d));
         }
 
         /// <summary>Gets the files containing the movie as a <see cref="HashSet{T}"/> with <see cref="Common.Models.DB.MovieVo.Files">File</see> elements.</summary>
         /// <returns>A <see cref="HashSet{T}"/> with <see cref="Common.Models.DB.MovieVo.Files">File</see> elements.</returns>
-        public HashSet<File> GetFiles() {
-            HashSet<File> files = new HashSet<File>();
+        public ObservableHashSet<File> GetFiles() {
+            ObservableHashSet<File> files = new ObservableHashSet<File>();
             if (string.IsNullOrEmpty(FilenameAndPath)) {
                 return files;
             }
@@ -614,7 +619,7 @@ namespace Frost.Common.Models.XML.XBMC {
                 PlayCount = mx.PlayCount,
                 RatingAverage = mx.Rating,
                 ReleaseDate = mx.ReleaseDate,
-                Runtime = mx.RuntimeInSeconds,
+                Runtime = mx.RuntimeInSeconds * 1000,
                 Set = new Set(mx.Set),
                 SortTitle = mx.SortTitle,
                 Title = mx.Title,
@@ -623,16 +628,16 @@ namespace Frost.Common.Models.XML.XBMC {
                 Trailer = mx.GetTrailerUrl(),
                 Watched = mx.Watched,
                 ReleaseYear = mx.Year,
-                Arts = new HashSet<ArtBase>(mx.GetArt()),
+                Arts = new ObservableHashSet<ArtBase>(mx.GetArt()),
                 Directors = mx.GetDirectors(),
                 Writers = mx.GetWriters(),
-                Genres = new HashSet<Genre>(Genre.GetFromNames(mx.Genres)),
-                Studios = new HashSet<Studio>(Studio.GetFromNames(mx.Studios)),
-                Countries = new HashSet<Country>(Country.GetFromNames(mx.Countries)),
-                Certifications = new HashSet<Certification>(mx.GetCertifications()),
-                Audios = new HashSet<Audio>(mx.GetAudio()),
-                Videos = new HashSet<Video>(mx.GetVideo()),
-                Subtitles = new HashSet<Subtitle>(mx.GetSubtitles()),
+                Genres = new ObservableHashSet<Genre>(Genre.GetFromNames(mx.Genres)),
+                Studios = new ObservableHashSet<Studio>(Studio.GetFromNames(mx.Studios)),
+                Countries = new ObservableHashSet<Country>(Country.GetFromNames(mx.Countries)),
+                Certifications = new ObservableHashSet<Certification>(mx.GetCertifications()),
+                Audios = new ObservableHashSet<Audio>(mx.GetAudio()),
+                Videos = new ObservableHashSet<Video>(mx.GetVideo()),
+                Subtitles = new ObservableHashSet<Subtitle>(mx.GetSubtitles()),
                 //Files = mx.GetFiles()
             };
             mv.ActorsLink.UnionWith(mx.Actors.Select(a => new MovieActor(mv, new Person(a.Name, a.Thumb), a.Role)));

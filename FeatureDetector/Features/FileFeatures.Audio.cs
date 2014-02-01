@@ -1,4 +1,6 @@
 ﻿using System;
+using System.CodeDom;
+using System.Linq;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.DetectFeatures.Util;
@@ -9,10 +11,9 @@ using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
 using FrameOrBitRateMode = Frost.Common.FrameOrBitRateMode;
 
 namespace Frost.DetectFeatures {
-    public partial class FileFeatures : IDisposable {
 
+    public partial class FileFeatures : IDisposable {
         private void GetISOAudioInfo() {
-            
         }
 
         private void GetAudioInfo(FileVo file) {
@@ -32,7 +33,7 @@ namespace Frost.DetectFeatures {
             }
             else {
                 Console.Error.WriteLine("Could not process the file as MediaInfo is missing: " + this);
-            }            
+            }
         }
 
         private Audio GetFileAudioStreamInfo(FileNameInfo fnInfo, MediaAudio ma) {
@@ -45,15 +46,71 @@ namespace Frost.DetectFeatures {
             a.BitRateMode = (FrameOrBitRateMode) ma.BitRateInfo.Mode;
             a.ChannelPositions = ma.ChannelInfo.Positions;
             a.ChannelSetup = ma.ChannelInfo.PositionsString2;
-            a.NumberOfChannels = (int?)ma.NumberOfChannels;
-            a.Codec = ma.CodecIDInfo.Hint ?? ma.CodecInfo.NameString ?? a.Codec;
+            a.NumberOfChannels = (int?) ma.NumberOfChannels;
+            a.Codec = ma.CodecInfo.NameString ?? ma.CodecIDInfo.Hint ?? a.Codec;
+            a.CodecId = GetAudioCodecId(ma.CodecInfo.Name, ma.CodecIDInfo.ID);
             a.CompressionMode = (CompressionMode) ma.CompressionMode;
-            a.Duration = ma.Duration.HasValue ? (long?)ma.Duration.Value.TotalMilliseconds : null;
+            a.Duration = ma.Duration.HasValue ? (long?) ma.Duration.Value.TotalMilliseconds : null;
             a.Language = GetLangauge(ma);
 
             a.SamplingRate = ma.SamplingRate;
 
             return a;
+        }
+
+        private string GetAudioCodecId(string codec, string id) {
+            if (string.IsNullOrEmpty(id) || id.All(char.IsNumber)) {
+
+                switch (codec) {
+                    case "A_AAC":
+                    case "AAC LC":
+                    case "AAC LC-SBR":
+                        return "AAC";
+                    case "A_MPEG/L3":
+                        return "MP3";
+                    case "A_DTS":
+                        return "DTS";
+                    case "A_AC3":
+                        return "AC3";
+                    case "MPA1L3":
+                    case "MPA2L3":
+                        return "MP3";
+                    case "MPA1L2":
+                        return "MP2";
+                    case "MPA1L1":
+                        return "MP1";
+                    case "MPEG-2A":
+                        return "mpeg2";
+                    case "MPEG-1A":
+                        return "mpeg";
+                    case "161":
+                        return "wma";
+                    default:
+                        return codec;
+                }
+            }
+
+            switch (id) {
+                case "A_AAC":
+                case "AAC LC":
+                case "AAC LC-SBR":
+                    return "AAC";
+                case "A_MPEG/L3":
+                    return "MP3";
+                case "A_DTS":
+                    return "DTS";
+                case "A_AC3":
+                    return "AC3";
+                case "MPA1L3":
+                case "MPA2L3":
+                    return "MP3";
+                case "MPA1L2":
+                    return "MP2";
+                case "MPA1L1":
+                    return "MP1";
+                default:
+                    return id;
+            }
         }
 
         private void AddFileNameInfo(FileNameInfo fnInfo, Audio audio) {
@@ -78,4 +135,5 @@ namespace Frost.DetectFeatures {
             return null;
         }
     }
+
 }

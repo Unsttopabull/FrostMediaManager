@@ -67,6 +67,7 @@
     </Compile>
     <Compile Include="Models\DB\Jukebox\XjbMovie.cs" />
     <Compile Include="Models\DB\MovieVo\Arts\Art.cs" />
+    <Compile Include="Models\DB\MovieVo\Award.cs" />
     <Compile Include="Models\DB\MovieVo\GenreInit.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -84,6 +85,7 @@
     <Compile Include="Models\DB\MovieVo\Arts\Cover.cs" />
     <Compile Include="Models\DB\MovieVo\Arts\Fanart.cs" />
     <Compile Include="Models\DB\MovieVo\Arts\Poster.cs" />
+    <Compile Include="Models\DB\MovieVo\PromotionalVideo.cs" />
     <Compile Include="Models\DB\MovieVo\Set.cs" />
     <Compile Include="Models\DB\MovieVo\Special.cs" />
     <Compile Include="Models\DB\XBMC\Actor\XbmcActor.cs" />
@@ -175,6 +177,7 @@
     <Compile Include="Util\ISO\Language\ISOLanguageCodes.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Util\ObservableHashSet.cs" />
     <Compile Include="XmlIndentedTextWriter.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -4,10 +4,14 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Frost.Common.Models.DB.Jukebox;
+using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.XML.XBMC;
+using Frost.Common.Util.ISO;
 using Frost.DetectFeatures;
 using System.Diagnostics;
+using Frost.MovieInfoParsers.GremoVKino;
 using Frost.PHPtoNET;
 using File = System.IO.File;
 using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
@@ -19,15 +23,15 @@ namespace Frost.Tester {
         private static readonly string Filler;
 
         static Program() {
-             Filler = string.Join("", Enumerable.Repeat("_", Console.BufferWidth));            
+            Filler = string.Join("", Enumerable.Repeat("_", Console.BufferWidth));
         }
 
         private static void Main() {
             //EntityFrameworkProfiler.Initialize();
 
             FileStream debugLog = File.Create("debugDeserialize.txt");
-            //Debug.Listeners.Add(new TextWriterTraceListener(debugLog));
-            //Debug.Listeners.Add(new ConsoleTraceListener());
+            Debug.Listeners.Add(new TextWriterTraceListener(debugLog));
+            Debug.Listeners.Add(new ConsoleTraceListener());
             Debug.AutoFlush = true;
 
             Stopwatch sw = Stopwatch.StartNew();
@@ -39,6 +43,7 @@ namespace Frost.Tester {
 
             //TestXjbDbParser();
             time = TestMediaSearcher();
+            //TestGremoVKino();
 
             sw.Stop();
 
@@ -50,6 +55,17 @@ namespace Frost.Tester {
             Console.WriteLine("\tFIN: " + time);
             Console.WriteLine(Filler);
             Console.Read();
+        }
+
+        private static void TestGremoVKino() {
+            GremoVKinoClient cli = new GremoVKinoClient();
+            const string MOVIE_TITLE = "47 Ronin";
+            List<GremoVKinoMovie> kinoMovies = cli.Parse(MOVIE_TITLE);
+            GremoVKinoMovie kinoMovie = kinoMovies.FirstOrDefault(km => km.OriginalName == MOVIE_TITLE || km.SloveneName == MOVIE_TITLE);
+            if (kinoMovie != null) {
+                Task<GremoVKinoMovieInfo> movieInfo = kinoMovie.ParseMovieInfo();
+                movieInfo.Wait();
+            }
         }
 
         private static void TestXjbDbParser() {
@@ -93,8 +109,8 @@ namespace Frost.Tester {
             PHPDeserializer2 des2 = new PHPDeserializer2();
 
             XbmcXmlMovie deserialize;
-            using(PHPSerializedStream phpStream = new PHPSerializedStream(File.ReadAllBytes("serOut.txt"), Encoding.UTF8)){
-                 deserialize = des2.Deserialize<XbmcXmlMovie>(phpStream);
+            using (PHPSerializedStream phpStream = new PHPSerializedStream(File.ReadAllBytes("serOut.txt"), Encoding.UTF8)) {
+                deserialize = des2.Deserialize<XbmcXmlMovie>(phpStream);
             }
         }
 
@@ -149,6 +165,10 @@ namespace Frost.Tester {
         }
 
         private static TimeSpan TestMediaSearcher() {
+            using (MovieVoContainer mvc = new MovieVoContainer(true, "movieVo.db3")) {
+                int count = mvc.Movies.Count();
+            }
+
             Stopwatch sw = Stopwatch.StartNew();
             FeatureDetector ms = new FeatureDetector(@"E:\Torrenti\FILMI", @"F:\Torrenti\FILMI");
             ms.Search();

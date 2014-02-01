@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.Util;
@@ -175,6 +176,12 @@ namespace Frost.DetectFeatures {
                 DetectFile(file);
             }
 
+            if (!Movie.Runtime.HasValue) {
+                Movie.GetVideoRuntimeSum();
+            }
+
+            DetectMovieType();
+
             try {
                 _mvc.SaveChanges();
                 return true;
@@ -185,17 +192,34 @@ namespace Frost.DetectFeatures {
             }
         }
 
+        private void DetectMovieType() {
+            if (Movie.Videos.All(v => v.File.Extension.OrdinalEquals("vob") ||
+                                      v.File.Extension.OrdinalEquals("ifo") ||
+                                      v.File.Extension.OrdinalEquals("bup")) ||
+                Movie.Videos.All(v => v.Source.OrdinalEquals("DVD") ||
+                                      v.Source.OrdinalEquals("DVDR") ||
+                                      v.Source.OrdinalEquals("DVD-R"))) {
+                Movie.Type = "DVD";
+            }
+
+            Regex reg = new Regex(@"(Bluray|BlueRay|Blu-ray|BD(5|25|9|50|r)?)$", RegexOptions.IgnoreCase);
+            if (_fnInfos.Values.Any(fi => fi.VideoSource != null && reg.IsMatch(fi.VideoSource))) {
+                Movie.Type = "Bluray";
+            }
+        }
+
         private void DetectFile(FileVo file) {
             GetFileNameInfo();
 
             GetSubtitles(file);
             GetVideoInfo(file);
             GetAudioInfo(file);
-            GetArtInfo();
 
             if (_nfoPriority != NFOPriority.Ignore) {
                 GetNfoInfo(file.Name);
             }
+
+            GetArtInfo();
         }
 
         private void GetFileNameInfo() {
@@ -226,10 +250,13 @@ namespace Frost.DetectFeatures {
                 }
 
                 foreach (string special in fnInfo.Specials) {
-                    Special item = new Special(special);
-                    if (!Movie.Specials.Contains(item)) {
-                        Movie.Specials.Add(_mvc.Specials.FirstOrDefault(s => s.Value == special) ?? item);
+                    Special spec = Movie.Specials.FirstOrDefault(s => s.Value == special);
+                    if (spec != null) {
+                        continue;
                     }
+
+                    Special dbSpecial = _mvc.Specials.FirstOrDefault(s => s.Value == special);
+                    Movie.Specials.Add(dbSpecial ?? new Special(special));
                 }
             }
         }

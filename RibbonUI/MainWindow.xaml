@@ -21,8 +21,8 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
-        <local:Ribbon x:Name="Ribbon"/>
+
+        <local:Ribbon x:Name="Ribbon" Movie="{Binding ElementName=ContentGrid, Path=SelectedMovie}"/>
         <local:ContentGrid x:Name="ContentGrid" Grid.Row="1"/>
     </Grid>
 </RibbonWindow>

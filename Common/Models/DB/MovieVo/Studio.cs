@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
+using Frost.Common.Util;
 
 namespace Frost.Common.Models.DB.MovieVo {
 
@@ -12,7 +13,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Initializes a new instance of the <see cref="Studio"/> class.</summary>
         public Studio() {
-            Movies = new HashSet<Movie>();
+            Movies = new ObservableHashSet<Movie>();
         }
 
         /// <summary>Initializes a new instance of the <see cref="Studio"/> class with the specified studio name.</summary>
@@ -45,7 +46,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the movies this studio has produced.</summary>
         /// <value>The movies this studio has produced.</value>
-        public virtual HashSet<Movie> Movies { get; set; }
+        public virtual ObservableHashSet<Movie> Movies { get; set; }
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Frost.CinemaInfoParsers.PlanetTus {
+namespace Frost.MovieInfoParsers.PlanetTus {
 
     [Serializable]
-    public class TusMovie : ICinemaMovie {
+    public class TusMovie : IParsedMovie<TusMovieInfo> {
 
         public TusMovie() {
             
@@ -19,10 +19,10 @@ namespace Frost.CinemaInfoParsers.PlanetTus {
             MovieInfo = new TusMovieInfo();
         }
 
-        public Task ParseMovieInfo() {
+        public Task<TusMovieInfo> ParseMovieInfo() {
             return !string.IsNullOrEmpty(Url)
                 ? MovieInfo.ParseMoviePage(Url)
-                : new Task(() => { });
+                : Task.FromResult<TusMovieInfo>(null);
         }
 
         public bool MovieInfoAvailable { get { return MovieInfo.IsFinished; } }

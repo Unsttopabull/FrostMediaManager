@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Frost.Common.Util.ISO {
 
@@ -265,7 +266,7 @@ namespace Frost.Common.Util.ISO {
                 new ISOLanguageCode("Lithuanian", "lt", "lit"),
                 new ISOLanguageCode("Mongo", null, "lol"),
                 new ISOLanguageCode("Lozi", null, "loz"),
-                new ISOLanguageCode("Luxembourgish, Letzeburgesch", "lb", "ltz"),
+                new ISOLanguageCode("lb", "ltz", null, "Luxembourgish", "Letzeburgesch"), 
                 new ISOLanguageCode("Luba-Lulua", null, "lua"),
                 new ISOLanguageCode("Luba-Katanga", "lu", "lub"),
                 new ISOLanguageCode("Ganda", "lg", "lug"),
@@ -537,6 +538,12 @@ namespace Frost.Common.Util.ISO {
         public override ISOLanguageCode GetByEnglishName(string name) {
             string langCode;
             return LanguageNames.TryGetValue(name, out langCode) ? Codes[langCode] : null;
+        }
+
+        /// <summary>Gets all known ISO codes.</summary>
+        /// <returns>An information about all known ISO codes.</returns>
+        public new static IEnumerable<ISOLanguageCode> GetAllKnownCodes() {
+            return Codes.Values.Distinct();
         }
     }
 

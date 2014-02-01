@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Frost.Common;
 using Frost.Common.Models.DB.MovieVo.Arts;
+using Frost.Common.Models.DB.MovieVo.People;
 using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
 using File = System.IO.File;
 
@@ -32,6 +34,42 @@ namespace Frost.DetectFeatures {
 
                 if (art.Name.Contains("poster")) {
                     AddXjbArt(art, ArtType.Poster);
+                }
+            }
+
+            DirectoryInfo[] actorArt = _directoryInfo.GetDirectories(".actors");
+            if (actorArt.Length > 0) {
+                GetActorsThumbs(actorArt[0]);
+            }
+        }
+
+        private void GetActorsThumbs(DirectoryInfo actorsDir) {
+            foreach (FileInfo file in actorsDir.EnumerateFiles("*.jpg")) {
+                string actorName = Path.GetFileNameWithoutExtension(file.Name).Replace('_', ' ');
+
+                //Check if person has already been added to the movie's actor list
+                MovieActor actor = Movie.ActorsLink.FirstOrDefault(al => al.Person.Name == actorName);
+                if (actor != null) {
+                    //if the actor is missing a thumbnails add it
+                    if (string.IsNullOrEmpty(actor.Person.Thumb)) {
+                        actor.Person.Thumb = file.FullName;
+                    }
+                }
+                else {
+                    //check if a person with the same name already exists in the DB
+                    Person person = _mvc.People.FirstOrDefault(p => p.Name == actorName);
+                    if (person != null) {
+                        //if it does check for missing thumbnail
+                        if (string.IsNullOrEmpty(person.Thumb)) {
+                            person.Thumb = file.FullName;
+                        }
+                        //add the person to the movie as actor
+                        Movie.ActorsLink.Add(new MovieActor(Movie, person, null));
+                    }
+                    else {
+                        //add new person to the DB and add it to the movie's list of actors
+                        Movie.ActorsLink.Add(new MovieActor(Movie, new Person(actorName, file.FullName), null));
+                    }
                 }
             }
         }

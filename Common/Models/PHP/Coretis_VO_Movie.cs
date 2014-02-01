@@ -64,7 +64,7 @@ namespace Frost.Common.Models.PHP {
 
             //Split the specials string where "/" or "," 
             //and convert the resulting string array to a HashSet<Special>
-            mov.Specials = specials.SplitWithoutEmptyEntries("/", ",").ToHashSet<Special, string>();
+            mov.Specials = specials.SplitWithoutEmptyEntries("/", ",").ToObservableHashSet<Special, string>();
 
             mov.Runtime = (length > 0)
                               ? (long?)length
@@ -147,7 +147,7 @@ namespace Frost.Common.Models.PHP {
             Movie mov = new Movie();
 
             m.GetMovieTitle(mov);
-            mov.Genres = m.genreArr.ToHashSet<Genre, Coretis_VO_Genre>();
+            mov.Genres = m.genreArr.ToObservableHashSet<Genre, Coretis_VO_Genre>();
             m.AddNewCast(mov);
 
             //if the full plot summary exists add new plot otherwise we discard all plot info 

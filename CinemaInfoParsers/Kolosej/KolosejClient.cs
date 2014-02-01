@@ -6,9 +6,9 @@ using System.Text;
 using System.Xml.XPath;
 using HtmlAgilityPack;
 
-namespace Frost.CinemaInfoParsers.Kolosej {
+namespace Frost.MovieInfoParsers.Kolosej {
 
-    public class KolosejClient : CinemaClient<KolosejMovie> {
+    public class KolosejClient : ParsingClient<KolosejMovie, KolosejMovieInfo> {
         private const string URL = "http://www.kolosej.si{0}";
 
         public override List<KolosejMovie> Parse() {

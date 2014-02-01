@@ -58,12 +58,12 @@ namespace Frost.DetectFeatures {
             Movie.ReleaseDate = xbmcMovie.ReleaseDate != default(DateTime) ? xbmcMovie.ReleaseDate : Movie.ReleaseDate;
             Movie.LastPlayed = xbmcMovie.LastPlayed != default(DateTime) ? FilterDate(xbmcMovie.LastPlayed) : Movie.LastPlayed;
 
-            if(string.IsNullOrEmpty(Movie.GetMPAARating()) && !string.IsNullOrEmpty(xbmcMovie.MPAA)) {
+            if(string.IsNullOrEmpty(Movie.MPAARating) && !string.IsNullOrEmpty(xbmcMovie.MPAA)) {
                 Country usa = _mvc.Countries.FirstOrDefault(c => c.Name == "United States") ?? new Country("United States", "us", "usa");
                 Movie.Certifications.Add(new Certification(usa, xbmcMovie.MPAA));
             }
 
-            OverrideActors(xbmcMovie.Actors);
+            AddActors(xbmcMovie.Actors, true);
 
             AddNfoMovieCommon(xbmcMovie);
         }
@@ -80,7 +80,7 @@ namespace Frost.DetectFeatures {
             Movie.LastPlayed = Movie.LastPlayed != default(DateTime) ? Movie.LastPlayed : FilterDate(xbmcMovie.LastPlayed);
 
             if(!string.IsNullOrEmpty(xbmcMovie.MPAA)) {
-                if (!string.IsNullOrEmpty(Movie.GetMPAARating())) {
+                if (!string.IsNullOrEmpty(Movie.MPAARating)) {
                     Movie.Certifications.RemoveWhere(c => c.Country.Name == "United States");
                 }
                 Country usa = _mvc.Countries.FirstOrDefault(c => c.Name == "United States") ?? new Country("United States", "us", "usa");
@@ -125,8 +125,17 @@ namespace Frost.DetectFeatures {
                 AddDirector(director);
             }
 
-            //convert seconds to milisecodns
-            Movie.Runtime = Movie.GetVideoRuntimeSum() ?? xbmcMovie.RuntimeInSeconds * 1000;
+            if (xbmcMovie.RuntimeInSeconds.HasValue) {
+                //convert seconds to miliseconds
+                long? ms = xbmcMovie.RuntimeInSeconds * 1000;
+
+                if (Movie.IsMultipart) {
+                    Movie.Runtime += ms;
+                }
+                else {
+                    Movie.Runtime = ms;
+                }
+            }
 
             if (xbmcMovie.Plot != null) {
                 Movie.Plots.Add(new Plot(xbmcMovie.Plot, xbmcMovie.Outline, xbmcMovie.Tagline, null));

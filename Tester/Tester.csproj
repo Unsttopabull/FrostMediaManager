@@ -63,6 +63,7 @@
       <HintPath>..\Libraries\JsonNET\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite, Version=1.0.90.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
@@ -85,6 +86,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CinemaInfoParsers\MovieInfoParsers.csproj">
+      <Project>{005F252B-C8AD-49E0-9A88-47BC289F00D0}</Project>
+      <Name>MovieInfoParsers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>
@@ -92,10 +97,6 @@
     <ProjectReference Include="..\FeatureDetector\FeatureDetector.csproj">
       <Project>{8542C013-AA9A-4852-98FA-6F05CC037A91}</Project>
       <Name>FeatureDetector</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CinemaInfoParsers\CinemaInfoParsers.csproj">
-      <Project>{005F252B-C8AD-49E0-9A88-47BC289F00D0}</Project>
-      <Name>CinemaInfoParsers</Name>
     </ProjectReference>
     <ProjectReference Include="..\PHPtoNet\PHPtoNET.csproj">
       <Project>{4661dd6c-be69-4bcb-a835-53d192de841c}</Project>

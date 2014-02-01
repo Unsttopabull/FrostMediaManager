@@ -21,25 +21,28 @@
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal">
                 <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Text="{Binding  ElementName=FlagsInfo, Path=Movie.Title, TargetNullValue=Unknown Title, FallbackValue=Unknown Title}"/>
-                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding ElementName=FlagsInfo, Path=Movie.ReleaseYear, StringFormat={}({0}), TargetNullValue=(?), FallbackValue=(?)}"/>
+                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding  ElementName=FlagsInfo, Path=Movie.Edithion, StringFormat=[{0}], TargetNullValue={}}"/>
+                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding ElementName=FlagsInfo, Path=Movie.ReleaseYear, StringFormat=({0}), TargetNullValue=(?), FallbackValue=(?)}"/>
             </StackPanel>
-            <TextBlock Grid.Row="1" FontSize="14" Text="{Binding ElementName=FlagsInfo, Path=Movie.FirstTagline, TargetNullValue=No Tagline, FallbackValue=No Tagline}"/>
+            <TextBlock Grid.Row="1" FontSize="14" Text="{Binding ElementName=FlagsInfo, Path=Movie.FirstPlot.TaglineOrSummary, TargetNullValue=No Tagline, FallbackValue=No Tagline}"/>
             <StackPanel Grid.Row="3" Orientation="Horizontal">
                 <local:StarRating Rating="{Binding ElementName=FlagsInfo, Path=Movie.RatingAverage}"/>
                 <TextBlock FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0">35.781 Votes</TextBlock>
-                <TextBlock FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0">Runtime: 2hrs 1mins</TextBlock>
+                <TextBlock FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding ElementName=FlagsInfo, Path=Movie.DurationFormatted, StringFormat={}Runtime: {0}, FallbackValue=Runtime: Unknown, TargetNullValue=Runtime: Unknown}"/>
             </StackPanel>
         </Grid>
         <StackPanel x:Name="MovieFlags" DockPanel.Dock="Right" Orientation="Horizontal" FlowDirection="RightToLeft" Margin="10,0,0,0">
             <StackPanel.Resources>
-                <BitmapImage x:Key="DefaultLogo" UriSource="pack://application:,,,/RibbonUI;component/Images/defaultscreen.png"></BitmapImage>
+                <BitmapImage x:Key="DefaultLogo" UriSource="Images/defaultscreen.png"></BitmapImage>
+                <BitmapImage x:Key="DefaultSound" UriSource="Images/FlagsE/achan_defaultsound.png"></BitmapImage>
             </StackPanel.Resources>
-            <Image DockPanel.Dock="Right" Source="{Binding ElementName=FlagsInfo, Path=Movie.FirstStudioName, StringFormat={}Images/StudiosE/{0}.png, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}}"
-                   StretchDirection="DownOnly" MaxWidth="150" MaxHeight="75" ToolTip="{Binding ElementName=FlagsInfo, Path=Movie.FirstStudioName, TargetNullValue=Unknown Studio, FallbackValue=Unknown Studio}"/>
-            <Image DockPanel.Dock="Right" Source="Images/flagsE/achan_6.png" StretchDirection="DownOnly" MaxWidth="150" MaxHeight="75"/>
-            <Image DockPanel.Dock="Right" Source="Images/flagsE/acodec_wmahd.png" StretchDirection="DownOnly" MaxWidth="150" MaxHeight="75"/>
-            <Image DockPanel.Dock="Right" Source="Images/flagsE/vres_1080p.png" StretchDirection="DownOnly" MaxWidth="150" MaxHeight="75"/>
-            <Image DockPanel.Dock="Right" Source="Images/flagsE/vcodec_wmva.png" StretchDirection="DownOnly" MaxWidth="150" MaxHeight="75"/>
+            <Image DockPanel.Dock="Right" Source="{Binding ElementName=FlagsInfo, IsAsync=True, Path=Movie.FirstStudioName, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Studio, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}}"
+                   ToolTip="{Binding ElementName=FlagsInfo, IsAsync=True, Path=Movie.FirstStudioName, TargetNullValue=Unknown Studio, FallbackValue=Unknown Studio}" MaxWidth="150" MaxHeight="75" />
+            <Image Source="{Binding ElementName=FlagsInfo, IsAsync=True, Path=Movie.NumberOfAudioChannels, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioChannels, TargetNullValue={StaticResource DefaultSound}, FallbackValue={StaticResource DefaultSound}}"
+                   DockPanel.Dock="Right" MaxWidth="150" MaxHeight="75"/>
+            <Image DockPanel.Dock="Right" Source="{Binding ElementName=FlagsInfo, IsAsync=True, Path=Movie.AudioCodec, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioCodec, TargetNullValue={StaticResource DefaultSound}, FallbackValue={StaticResource DefaultSound}}" MaxWidth="150" MaxHeight="75"/>
+            <Image DockPanel.Dock="Right" Source="{Binding ElementName=FlagsInfo, IsAsync=True, Path=Movie.VideoResolution, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=VideoResolution, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}" MaxWidth="150" MaxHeight="75"/>
+            <Image DockPanel.Dock="Right" Source="{Binding ElementName=FlagsInfo, IsAsync=True, Path=Movie.VideoCodec, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=VideoCodec, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}" MaxWidth="150" MaxHeight="75"/>
         </StackPanel>
     </DockPanel>
 </UserControl>

@@ -170,7 +170,8 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         public override string ToString() {
             StringBuilder sb = new StringBuilder(100);
 
-            sb.Append(string.Format("Format: {0} ", Format ?? "*."+File.Extension));
+            string extension = File != null ? "*." + File.Extension : "";
+            sb.Append(string.Format("Format: {0} ", Format ?? extension));
 
             if (!string.IsNullOrEmpty(Encoding)) {
                 sb.Append("(" + Encoding + ")");

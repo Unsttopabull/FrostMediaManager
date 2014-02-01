@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
+using Frost.Common.Util;
 
 namespace Frost.Common.Models.DB.MovieVo.Files {
 
@@ -11,9 +12,9 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         /// <summary>Initializes a new instance of the <see cref="File"/> class.</summary>
         public File() {
-            AudioDetails = new HashSet<Audio>();
-            VideoDetails = new HashSet<Video>();
-            Subtitles = new HashSet<Subtitle>();
+            AudioDetails = new ObservableHashSet<Audio>();
+            VideoDetails = new ObservableHashSet<Video>();
+            Subtitles = new ObservableHashSet<Subtitle>();
             DateAdded = DateTime.Now;
         }
 
@@ -82,15 +83,15 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         /// <summary>Gets or sets the details about audio streams in this file</summary>
         /// <value>The details about audio streams in this file</value>
-        public virtual HashSet<Audio> AudioDetails { get; set; }
+        public virtual ObservableHashSet<Audio> AudioDetails { get; set; }
 
         /// <summary>Gets or sets the details about video streams in this file</summary>
         /// <value>The details about video streams in this file</value>
-        public virtual HashSet<Video> VideoDetails { get; set; }
+        public virtual ObservableHashSet<Video> VideoDetails { get; set; }
 
         /// <summary>Gets or sets the details about subtitles in this file</summary>
         /// <value>The details about subtitles in this file</value>
-        public virtual HashSet<Subtitle> Subtitles { get; set; }
+        public virtual ObservableHashSet<Subtitle> Subtitles { get; set; }
 
         #endregion
 

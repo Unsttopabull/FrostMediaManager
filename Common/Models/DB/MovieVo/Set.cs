@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Frost.Common.Util;
 
 namespace Frost.Common.Models.DB.MovieVo {
 
@@ -11,7 +12,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Initializes a new instance of the <see cref="Set"/> class.</summary>
         private Set() {
-            Movies = new HashSet<Movie>();
+            Movies = new ObservableHashSet<Movie>();
         }
 
         /// <summary>Initializes a new instance of the <see cref="Set"/> class with specified set name.</summary>
@@ -32,7 +33,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the movies in this set.</summary>
         /// <value>The movies in this set.</value>
-        public HashSet<Movie> Movies { get; set; }
+        public ObservableHashSet<Movie> Movies { get; set; }
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>

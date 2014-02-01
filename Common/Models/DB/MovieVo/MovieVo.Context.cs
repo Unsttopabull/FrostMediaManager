@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Frost.Common.Models.DB.MovieVo.Arts;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.Common.Models.DB.MovieVo.People;
@@ -11,8 +12,11 @@ using Frost.Common.Properties;
 
 namespace Frost.Common.Models.DB.MovieVo {
 
-    /// <summary>Represents a context used for manipulation of the database.</summary>
+    /// <summary>
+    /// Represents a context used for manipulation of the database.
+    /// </summary>
     public class MovieVoContainer : DbContext {
+
         /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
         public MovieVoContainer(bool dropCreate, string filePath) : base(GetSQLiteConnection(filePath), true) {
             if (dropCreate) {
@@ -78,6 +82,14 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <value>The information about genres of the movies in the library</value>
         public DbSet<Genre> Genres { get; set; }
 
+        /// <summary>Gets or sets the information about movie awards</summary>
+        /// <value>The information about the awards of movies in the library</value>
+        public DbSet<Award> Awards { get; set; }
+
+        /// <summary>Gets or sets the promotional videos of movies in the library.</summary>
+        /// <value>The promotional videos of movies in the library.</value>
+        public DbSet<PromotionalVideo> PromotionalVideos { get; set; }
+
         /// <summary>Gets or sets the certifications and/or restrictions in certain countries on the movies in the library.</summary>
         /// <value>The certifications and/or restrictions in certain countries on the movies in the library.</value>
         public DbSet<Certification> Certifications { get; set; }
@@ -128,7 +140,9 @@ namespace Frost.Common.Models.DB.MovieVo {
             modelBuilder.Configurations.Add(new Person.Configuration());
             modelBuilder.Configurations.Add(new Country.CountryConfiguration());
             modelBuilder.Configurations.Add(new Studio.Configuration());
-            modelBuilder.Configurations.Add(new Genre.GenreConfiguration());
+            modelBuilder.Configurations.Add(new Genre.Configuration());
+            modelBuilder.Configurations.Add(new Award.Configuration());
+            modelBuilder.Configurations.Add(new PromotionalVideo.Configuration());
             modelBuilder.Configurations.Add(new Subtitle.Configuration());
 
             base.OnModelCreating(modelBuilder);

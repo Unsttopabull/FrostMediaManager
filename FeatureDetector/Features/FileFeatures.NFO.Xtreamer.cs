@@ -35,7 +35,7 @@ namespace Frost.DetectFeatures {
             Movie.ReleaseYear = CheckReleaseYear(Movie.ReleaseYear) ? Movie.ReleaseYear : xjbMovie.Year;
 
             Movie.RatingAverage = Movie.RatingAverage ?? xjbMovie.AverageRating;
-            if(string.IsNullOrEmpty(Movie.GetMPAARating()) && !string.IsNullOrEmpty(xjbMovie.MPAA)) {
+            if(string.IsNullOrEmpty(Movie.MPAARating) && !string.IsNullOrEmpty(xjbMovie.MPAA)) {
                 Country usa = _mvc.Countries.FirstOrDefault(c => c.Name == "United States") ?? new Country("United States", "us", "usa");
 
                 Movie.Certifications.Add(new Certification(usa, xjbMovie.MPAA));
@@ -53,7 +53,7 @@ namespace Frost.DetectFeatures {
 
             Movie.RatingAverage = Math.Abs(xjbMovie.AverageRating - default(float)) > 0.001 ? xjbMovie.AverageRating : Movie.RatingAverage;
             if(!string.IsNullOrEmpty(xjbMovie.MPAA)) {
-                if (!string.IsNullOrEmpty(Movie.GetMPAARating())) {
+                if (!string.IsNullOrEmpty(Movie.MPAARating)) {
                     Movie.Certifications.RemoveWhere(c => c.Country.Name == "United States");
                 }
                 Country usa = _mvc.Countries.FirstOrDefault(c => c.Name == "United States") ?? new Country("United States", "us", "usa");
@@ -81,9 +81,17 @@ namespace Frost.DetectFeatures {
             CheckAddXjbGenres(xjbMovie, true);
             AddStudio(xjbMovie.Studio);
             AddDirector(xjbMovie.Director);
-            OverrideActors(xjbMovie.Actors);
+            AddActors(xjbMovie.Actors, true);
 
-            Movie.Runtime = xjbMovie.Runtime ?? Movie.Runtime;
+            if (xjbMovie.Runtime.HasValue) {
+                long ms = xjbMovie.Runtime.Value * 60000;
+                if (Movie.IsMultipart) {
+                    Movie.Runtime += ms;
+                }
+                else {
+                    Movie.Runtime = ms;
+                }
+            }
 
             if (xjbMovie.Plot != null) {
                 Movie.Plots.Add(new Plot(xjbMovie.Plot, xjbMovie.Outline, xjbMovie.Tagline, null));

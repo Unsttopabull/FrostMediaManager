@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.Files;
@@ -11,7 +12,8 @@ using Frost.SharpOpenSubtitles.Util;
 
 using CompressionMode = Frost.Common.CompressionMode;
 using FrameOrBitRateMode = Frost.Common.FrameOrBitRateMode;
-using ScanType = Frost.SharpMediaInfo.ScanType;
+using MediaScanType = Frost.SharpMediaInfo.ScanType;
+using ScanType = Frost.Common.ScanType;
 using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
 
 namespace Frost.DetectFeatures {
@@ -64,18 +66,37 @@ namespace Frost.DetectFeatures {
             v.BitRateMode = (FrameOrBitRateMode) mv.BitRateInfo.Mode;
             v.Format = mv.FormatInfo.Name;
             v.Codec = mv.CodecIDInfo.Hint ?? mv.CodecInfo.NameString ?? v.Codec;
+            v.CodecId = GetVideoCodecId(v.Codec, mv.CodecIDInfo.ID) ?? mv.CodecIDInfo.Hint;
             v.ColorSpace = mv.ColorSpace;
             v.ChromaSubsampling = mv.ChromaSubsampling;
             v.CompressionMode = (CompressionMode) mv.CompressionMode;
             v.Duration = mv.Duration.HasValue ? (long?) mv.Duration.Value.TotalMilliseconds : null;
             v.FPS = mv.FrameRate;
-            v.Resolution = !string.IsNullOrEmpty(mv.Standard) ? mv.Standard : GetFileVideoResolution(mv) ?? v.Resolution;
+
             v.Height = (int?) mv.Height;
             v.Width = (int?) mv.Width;
             v.Language = CheckLanguage(GetLanguage(false, mv.LanguageInfo.Full1, null, fnInfo.SubtitleLanguage, fnInfo.Language));
 
-            v.ScanType = (Common.ScanType) mv.ScanType;
+            v.ScanType = (ScanType) mv.ScanType;
             v.Aspect = mv.DisplayAspectRatio;
+
+            int resolution = 0;
+            if (!string.IsNullOrEmpty(mv.Standard)) {
+                v.Standard = mv.Standard;
+
+                if (v.Standard.Equals("NTSC", StringComparison.OrdinalIgnoreCase)) {
+                    resolution = 480;
+                    v.ScanType = ScanType.Interlaced;
+                }
+                else if (v.Standard.Equals("PAL", StringComparison.OrdinalIgnoreCase)) {
+                    resolution = 576;
+                    v.ScanType = ScanType.Interlaced;
+                }
+            }
+            else {
+                v.ScanType = GetFileVideoResolution(mv, out resolution);
+            }
+            v.Resolution = resolution == 0 ? (int?) null : resolution;
 
             if (v.Aspect.HasValue) {
                 AspectRatioInfo knownAspectRatio = AspectRatioDetector.GetKnownAspectRatio((float) v.Aspect);
@@ -85,6 +106,28 @@ namespace Frost.DetectFeatures {
             }
 
             return v;
+        }
+
+        private string GetVideoCodecId(string codec, string id) {
+            switch (codec) {
+                case "MPEG-1 Video":
+                    return "mpeg";
+                case "MPEG-2 Video":
+                    return "mpeg2";
+                case "Xvid":
+                    return codec;
+            }
+
+            if (string.IsNullOrEmpty(id) || id.All(char.IsNumber)) {
+                return null;
+            }
+
+            switch (id) {
+                case "V_MPEG4/ISO/AVC":
+                    return "h264";
+                default:
+                    return id;
+            }
         }
 
         private void AddFileNameInfo(FileNameInfo fnInfo, Video video) {
@@ -98,37 +141,61 @@ namespace Frost.DetectFeatures {
             }
 
             video.Codec = fnInfo.VideoCodec;
-            video.Resolution = fnInfo.VideoQuality;
+
+            if (!string.IsNullOrEmpty(fnInfo.VideoQuality)) {
+                int resolution;
+                if (fnInfo.VideoQuality.Equals("NTSC", StringComparison.OrdinalIgnoreCase)) {
+                    resolution = 480;
+                    video.ScanType = ScanType.Interlaced;
+                }
+                else if (fnInfo.VideoQuality.Equals("PAL", StringComparison.OrdinalIgnoreCase)) {
+                    resolution = 576;
+                    video.ScanType = ScanType.Interlaced;
+                }
+                else {
+                    string videoResolution = fnInfo.VideoQuality.TrimEnd('p', 'i');
+                    if (int.TryParse(videoResolution, out resolution)) {
+                        if (fnInfo.VideoQuality.EndsWith("p")) {
+                            video.ScanType = ScanType.Progressive;
+                        }
+                        else if (fnInfo.VideoQuality.EndsWith("i")) {
+                            video.ScanType = ScanType.Interlaced;
+                        }
+                    }
+                }
+
+                video.Resolution = resolution != 0 ? (int?) null : resolution;
+            }
 
             if (fnInfo.Language != null) {
                 video.Language = CheckLanguage(new Language(fnInfo.Language));
             }
         }
 
-        private string GetFileVideoResolution(MediaVideo mv) {
+        private ScanType GetFileVideoResolution(MediaVideo mv, out int resolution) {
             long h = mv.Height ?? 0;
             long w = mv.Width ?? 0;
 
+            resolution = 0;
             switch (mv.ScanType) {
-                case ScanType.Progressive:
+                case MediaScanType.Progressive:
                     if (h == 1080 && w == 1920) {
-                        return "1080p";
+                        resolution = 1080;
                     }
                     if (h == 720 && w == 1280) {
-                        return "720p";
+                        resolution = 720;
                     }
-                    break;
-                case ScanType.Interlaced:
-                case ScanType.MBAFF:
-                case ScanType.Mixed:
+                    return ScanType.Progressive;
+                case MediaScanType.Interlaced:
+                case MediaScanType.MBAFF:
+                case MediaScanType.Mixed:
                     if (h == 1080 && w == 1920) {
-                        return "1080i";
+                        resolution = 1080;
+                        return ScanType.Interlaced;
                     }
                     break;
-                default:
-                    return null;
             }
-            return null;
+            return ScanType.Unknown;
         }
     }
 

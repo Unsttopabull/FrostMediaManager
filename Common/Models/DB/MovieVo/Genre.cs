@@ -6,6 +6,7 @@ using System.Data.Entity.ModelConfiguration;
 using System.Globalization;
 using System.Linq;
 using Frost.Common.Models.DB.Jukebox;
+using Frost.Common.Util;
 
 namespace Frost.Common.Models.DB.MovieVo {
 
@@ -14,7 +15,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Initializes a new instance of the <see cref="Genre"/> class.</summary>
         public Genre() {
-            Movies = new HashSet<Movie>();
+            Movies = new ObservableHashSet<Movie>();
         }
 
         /// <summary>Initializes a new instance of the <see cref="Genre"/> class.</summary>
@@ -40,7 +41,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the movies of this genre.</summary>
         /// <value>The movies of this genre.</value>
-        public virtual HashSet<Movie> Movies { get; set; }
+        public virtual ObservableHashSet<Movie> Movies { get; set; }
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
         /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
@@ -85,9 +86,9 @@ namespace Frost.Common.Models.DB.MovieVo {
                     : new XjbGenre(genre.Name);
         }
 
-        internal class GenreConfiguration : EntityTypeConfiguration<Genre> {
+        internal class Configuration : EntityTypeConfiguration<Genre> {
 
-            public GenreConfiguration() {
+            public Configuration() {
                 ToTable("Genres");
 
                 //Join table for Movie <--> Genre

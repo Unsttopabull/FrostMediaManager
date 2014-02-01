@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Frost.CinemaInfoParsers.Kolosej {
+namespace Frost.MovieInfoParsers.Kolosej {
 
     [Serializable]
-    public class KolosejMovie : ICinemaMovie {
+    public class KolosejMovie : IParsedMovie<KolosejMovieInfo> {
 
         public KolosejMovie() {
             
@@ -19,11 +19,11 @@ namespace Frost.CinemaInfoParsers.Kolosej {
             MovieInfo = new KolosejMovieInfo();
         }
 
-        public Task ParseMovieInfo() {
+        public Task<KolosejMovieInfo> ParseMovieInfo() {
             if (!string.IsNullOrEmpty(Url)) {
                 return MovieInfo.ParseMoviePage(Url);
             }
-            return new Task(() => { });
+            return Task.FromResult<KolosejMovieInfo>(null);
         }
 
         public bool MovieInfoAvailable { get { return MovieInfo.IsFinished; } }

@@ -101,12 +101,8 @@ namespace Frost.Common.Models.DB.MovieVo {
                 : null;
         }
 
-        /// <summary>
-        /// Returns a string that represents the current object.
-        /// </summary>
-        /// <returns>
-        /// A string that represents the current object.
-        /// </returns>
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
         public override string ToString() {
             return string.Format("{0} ({1} / {2})", Name, ISO3166.Alpha2, ISO3166.Alpha3);
         }

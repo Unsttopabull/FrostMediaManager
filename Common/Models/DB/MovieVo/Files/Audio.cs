@@ -82,6 +82,8 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <example>\eg{ <c>MP3, AC3, FLAC</c>}</example>
         public string Codec { get; set; }
 
+        public string CodecId { get; set; }
+
         /// <summary>Gets or sets the audio bit rate.</summary>
         /// <value>The bit rate in Kbps.</value>
         public float? BitRate { get; set; }

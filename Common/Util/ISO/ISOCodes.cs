@@ -9,6 +9,10 @@ namespace Frost.Common.Util.ISO {
 
         protected static readonly Dictionary<string, T> Codes = new Dictionary<string, T>(StringComparer.OrdinalIgnoreCase);
 
+        static ISOCodes()  {
+            
+        }
+
         /// <summary>Gets all known ISO codes.</summary>
         /// <returns>An information about all known ISO codes.</returns>
         public static IEnumerable<T> GetAllKnownCodes() {

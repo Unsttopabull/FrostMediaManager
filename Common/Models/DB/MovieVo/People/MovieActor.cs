@@ -7,6 +7,9 @@ namespace Frost.Common.Models.DB.MovieVo.People {
     /// <summary>Represents a link table between a movie and a person containing the name of the person's charater.</summary>
     public class MovieActor {
 
+        public MovieActor() {
+        }
+
         /// <summary>Initializes a new instance of the <see cref="MovieActor"/> class.</summary>
         /// <param name="movie">The movie the actor is preforming in</param>
         /// <param name="person">The person that is performing in the movie</param>
@@ -64,6 +67,21 @@ namespace Frost.Common.Models.DB.MovieVo.People {
         /// </returns>
         public static explicit operator Actor(MovieActor ma) {
             return new Actor(ma);
+        }
+
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString() {
+            string ret = "";
+
+            if (Person != null) {
+                ret += Person.Name;
+            }
+
+            if (!string.IsNullOrEmpty(Character)) {
+                return ret + " as " + Character;
+            }
+            return ret;
         }
 
         internal class Configuration : EntityTypeConfiguration<MovieActor> {

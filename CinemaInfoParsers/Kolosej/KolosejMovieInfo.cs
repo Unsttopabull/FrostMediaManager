@@ -2,19 +2,20 @@
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 
-namespace Frost.CinemaInfoParsers.Kolosej {
+namespace Frost.MovieInfoParsers.Kolosej {
 
     [Serializable]
     public class KolosejMovieInfo : ParsedMovieInfo {
 
-        public Task ParseMoviePage(string url) {
+        public Task<KolosejMovieInfo> ParseMoviePage(string url) {
+            KolosejMovieInfo info = this;
             return Task.Run(() => {
                 IsFinished = false;
 
                 HtmlDocument hd = DownloadWebPage(url);
 
                 if (hd == null) {
-                    return;
+                    return null;
                 }
 
                 HtmlNode mainContent = hd.GetElementbyId("main-content-one-column");
@@ -27,7 +28,9 @@ namespace Frost.CinemaInfoParsers.Kolosej {
                 if (trailer != null) {
                     TrailerUrl = trailer.Attributes["src"].Value.Trim();
                 }
+
                 IsFinished = true;
+                return info;
             });
         }
 

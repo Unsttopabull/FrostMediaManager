@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using Frost.Common.Util;
 using File = Frost.Common.Models.DB.MovieVo.Files.File;
 
 namespace Frost.Common {
@@ -126,6 +127,21 @@ namespace Frost.Common {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static HashSet<TTo> ToHashSet<TTo, TFrom>(this IEnumerable<TFrom> enumerable) where TTo : class {
             return new HashSet<TTo>(enumerable.Select(a => a as TTo));
+        }
+
+        /// <summary>
+        /// Converts the specified <see cref="IEnumerable{TFrom}"/> to the <see cref="HashSet{TTo}"/>
+        /// by casting each element from <b>TFrom</b> to <b>TTo</b>.
+        /// </summary>
+        /// <typeparam name="TTo">The type to convert from.</typeparam>
+        /// <typeparam name="TFrom">The type to convert to.</typeparam>
+        /// <param name="enumerable">The enumerable to convert.</param>
+        /// <returns>A <see cref="HashSet{TTo}"/> with items casted from <b>TFrom</b> to <b>TTo</b>. Elements which fail the cast will be <b>null</b>.</returns>
+        /// <remarks>Will throw an exception if the specified cast does not exist.</remarks>
+        /// <exception cref="InvalidCastException">Thrown when the specified conversion is not available (eg. the conversion operators are not defined).</exception>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ObservableHashSet<TTo> ToObservableHashSet<TTo, TFrom>(this IEnumerable<TFrom> enumerable) where TTo : class {
+            return new ObservableHashSet<TTo>(enumerable.Select(a => a as TTo));
         }
 
         /// <summary>Check if strings match character by character ignoring case.</summary>

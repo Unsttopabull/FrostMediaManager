@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 
-namespace Frost.CinemaInfoParsers.PlanetTus {
+namespace Frost.MovieInfoParsers.PlanetTus {
 
-    public class PlanetTusClient : CinemaClient<TusMovie>, IDisposable {
+    public class PlanetTusClient : ParsingClient<TusMovie, TusMovieInfo>, IDisposable {
         private const string URL = "http://maribor.planet-tus.si/sl/kino?l={0}&page={1}";
         private const string MOVIE_URL = "http://maribor.planet-tus.si{0}";
         private static readonly string[] SubLists = {

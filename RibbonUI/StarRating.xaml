@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="20" d:DesignWidth="100">
+             d:DesignHeight="20" d:DesignWidth="100" >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -13,10 +13,10 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Image x:Name="Star1" x:FieldModifier="private" Grid.Column="0" Source="Images/Stars/star.png" />
-        <Image x:Name="Star2" x:FieldModifier="private" Grid.Column="1" Source="Images/Stars/star.png" />
-        <Image x:Name="Star3" x:FieldModifier="private" Grid.Column="2" Source="Images/Stars/star.png" />
-        <Image x:Name="Star4" x:FieldModifier="private" Grid.Column="3" Source="Images/Stars/star.png" />
-        <Image x:Name="Star5" x:FieldModifier="private" Grid.Column="4" Source="Images/Stars/starhalf.png" />
+        <Image x:Name="Star1" x:FieldModifier="private" Grid.Column="0" Source="Images/Stars/star.png"    /> <!--MouseEnter="Star1OnMouseEnter" MouseDown="Star1MouseDown"/> !-->
+        <Image x:Name="Star2" x:FieldModifier="private" Grid.Column="1" Source="Images/Stars/star.png"    /> <!--MouseEnter="Star2OnMouseEnter" MouseDown="Star2MouseDown"/> !-->
+        <Image x:Name="Star3" x:FieldModifier="private" Grid.Column="2" Source="Images/Stars/star.png"    /> <!--MouseEnter="Star3OnMouseEnter" MouseDown="Star3MouseDown"/> !-->
+        <Image x:Name="Star4" x:FieldModifier="private" Grid.Column="3" Source="Images/Stars/star.png"    /> <!--MouseEnter="Star4OnMouseEnter" MouseDown="Star4MouseDown"/> !-->
+        <Image x:Name="Star5" x:FieldModifier="private" Grid.Column="4" Source="Images/Stars/starhalf.png"/> <!--MouseEnter="Star5OnMouseEnter" MouseDown="Star5MouseDown"/> !-->
     </Grid>
 </UserControl>

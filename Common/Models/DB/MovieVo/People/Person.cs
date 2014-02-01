@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
+using Frost.Common.Util;
 
 namespace Frost.Common.Models.DB.MovieVo.People {
 
@@ -14,9 +15,9 @@ namespace Frost.Common.Models.DB.MovieVo.People {
 
         /// <summary>Initializes a new instance of the <see cref="Person"/> class.</summary>
         public Person() {
-            MoviesAsDirector = new HashSet<Movie>();
-            MoviesAsWriter = new HashSet<Movie>();
-            MoviesLink = new HashSet<MovieActor>();
+            MoviesAsDirector = new ObservableHashSet<Movie>();
+            MoviesAsWriter = new ObservableHashSet<Movie>();
+            MoviesLink = new ObservableHashSet<MovieActor>();
         }
 
         /// <summary>Initializes a new instance of the <see cref="Person"/> class.</summary>
@@ -64,19 +65,23 @@ namespace Frost.Common.Models.DB.MovieVo.People {
             set { _thumb = value; }
         }
 
+        /// <summary>Gets or sets the Persons imdb identifier.</summary>
+        /// <value>The imdb identifier of the person.</value>
+        public string ImdbID { get; set; }
+
         /// <summary>Gets or sets movies where this person was a director.</summary>
         /// <value>The movies where this person was a director.</value>
         [InverseProperty("Directors")]
-        public virtual HashSet<Movie> MoviesAsDirector { get; set; }
+        public virtual ObservableHashSet<Movie> MoviesAsDirector { get; set; }
 
         /// <summary>Gets or sets a link to movies where this person was an actor.</summary>
         /// <value>A link to movies where this person was an actor.</value>
-        public virtual HashSet<MovieActor> MoviesLink { get; set; }
+        public virtual ObservableHashSet<MovieActor> MoviesLink { get; set; }
 
         /// <summary>Gets or sets movies where this person was a writer.</summary>
         /// <value>The movies where this person was a writer.</value>
         [InverseProperty("Writers")]
-        public virtual HashSet<Movie> MoviesAsWriter { get; set; }
+        public virtual ObservableHashSet<Movie> MoviesAsWriter { get; set; }
 
         /// <summary>Gets or sets movies where this person was an actor.</summary>
         /// <value>The movies where this person was an actor.</value>

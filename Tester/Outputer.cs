@@ -115,7 +115,7 @@ namespace Frost.Tester {
             Debug.WriteLineIf(video.Language != null, "Language: " + video.Language);
             Debug.WriteLineIf(!string.IsNullOrEmpty(video.Source), "Source: " + video.Source);
             Debug.WriteLineIf(!string.IsNullOrEmpty(video.Type), "Type: " + video.Type);
-            Debug.WriteLineIf(!string.IsNullOrEmpty(video.Resolution), "Resoulution: " + video.Resolution);
+            Debug.WriteLineIf(video.Resolution.HasValue, "Resoulution: " + video.Resolution);
             Debug.WriteLineIf(video.FPS.HasValue, "FPS: " + video.FPS);
             Debug.WriteLineIf(video.BitRate.HasValue, "BitRate: " + video.BitRate);
             Debug.WriteLineIf(video.BitRateMode != FrameOrBitRateMode.Unknown, "BitRateMode: " + video.BitRateMode);

@@ -1,13 +1,19 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
 using HtmlAgilityPack;
 
-namespace Frost.CinemaInfoParsers {
+namespace Frost.MovieInfoParsers {
     
     [Serializable]
     public abstract class ParsedMovieInfo {
+
+        public ParsedMovieInfo() {
+            Videos = new List<ParsedVideo>();
+        }
+
         public bool IsFinished { get; protected set; }
         public string Distribution { get; protected set; }
         public string Duration { get; protected set; }
@@ -22,11 +28,13 @@ namespace Frost.CinemaInfoParsers {
         public string ImdbRating { get; protected set; }
         public string Summary { get; protected set; }
         public string TrailerUrl { get; protected set; }
+        public List<ParsedVideo> Videos { get; protected set; }
+        public ParsedAward Awards { get; protected set; }
         public string[] Genres { get; protected set; }
 
-        protected HtmlDocument DownloadWebPage(string url) {
+        protected HtmlDocument DownloadWebPage(string url, Encoding enc = null) {
             string html;
-            using (WebClient webCl = new WebClient { Encoding = Encoding.UTF8 }) {
+            using (WebClient webCl = new WebClient { Encoding = enc ?? Encoding.UTF8 }) {
                 try {
                     html = webCl.DownloadString(url);
                 }

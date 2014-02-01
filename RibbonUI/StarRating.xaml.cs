@@ -12,10 +12,8 @@ namespace RibbonUI {
         private static readonly BitmapImage StarHalf;
         private static readonly BitmapImage StarFull;
 
-        public static readonly FrameworkPropertyMetadata RatingPropertyMetadata = new FrameworkPropertyMetadata(default(double?), RatingChanged);
-
-        public static readonly DependencyProperty RatingProperty = 
-            DependencyProperty.Register("Rating", typeof(double?), typeof(StarRating), RatingPropertyMetadata);
+        private static readonly FrameworkPropertyMetadata RatingPropertyMetadata = new FrameworkPropertyMetadata(default(double?), FrameworkPropertyMetadataOptions.AffectsRender, RatingChanged);
+        public static readonly DependencyProperty RatingProperty = DependencyProperty.Register("Rating", typeof(double?), typeof(StarRating), RatingPropertyMetadata);
 
         static StarRating() {
             StarFull = new BitmapImage(new Uri(string.Format(PACK_URI_FORMAT, "Images/Stars/star.png")));
@@ -33,8 +31,12 @@ namespace RibbonUI {
         }
 
         private static void RatingChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e) {
+            double? newValue = (double?) e.NewValue;
+
             StarRating sr = (StarRating) obj;
-            sr.ChangeRating((double?) e.NewValue);
+            //sr.Rating = newValue;
+
+            sr.ChangeRating(newValue);
         }
 
         private void ChangeRating(double? value) {
@@ -45,7 +47,7 @@ namespace RibbonUI {
                 value /= 2;
             }
 
-            if (value < 0 && value < 0.5) {
+            if (value >= 0 && value < 0.5) {
                 Star1.Source = StarEmpty;
                 Star2.Source = StarEmpty;
                 Star3.Source = StarEmpty;

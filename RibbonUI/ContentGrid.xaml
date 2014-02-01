@@ -5,12 +5,18 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:ribbonUi="clr-namespace:RibbonUI"
     xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
+    xmlns:files="clr-namespace:Frost.Common.Models.DB.MovieVo.Files;assembly=Frost.Common"
     x:Class="RibbonUI.ContentGrid"
     x:Name="ContentGridControl"
     mc:Ignorable="d"
-    d:DesignHeight="700" d:DesignWidth="1396" MinWidth="{Binding MinRequiredWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}">
+    d:DesignHeight="700" d:DesignWidth="1396"
+    MinWidth="{Binding MinRequiredWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"
+    >
     
     <UserControl.Resources>
+        <Style x:Key="NoBorderCell" TargetType="{x:Type DataGridCell}">
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
         <Style x:Key="BooleanImage" TargetType="{x:Type Image}">
             <Setter Property="Source" Value="Images/error.ico" />
             <Style.Triggers>
@@ -38,7 +44,26 @@
                     <Setter Property="Width" Value="12" />
                 </DataTrigger>
             </Style.Triggers>
-        </Style>        
+        </Style>
+        <Style x:Key="ImageCheckBoxColumn" TargetType="{x:Type CheckBox}">
+            <Setter Property="IsEnabled" Value="False" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                        <Image MaxWidth="12" Style="{StaticResource BooleanImage}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ImageCheckBoxColumnEdit" TargetType="{x:Type CheckBox}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                        <Image MaxWidth="12" Style="{StaticResource BooleanImageEdit}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <Grid>
@@ -46,40 +71,37 @@
             <ColumnDefinition Width="Auto" MinWidth="325" />
             <ColumnDefinition Width="*" MinWidth="{Binding ElementName=MovieFlags, Path=MinRequiredWidth}" />
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" MaxHeight="17"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" x:Name="ListFilter" BorderThickness="3,0,0,0" KeyDown="ListFilterKeyDown"/>
+            <Button Grid.Column="1" ToolTip="Search movies by title" Click="SearchClick">
+                <Image Source="Images/search.ico" Width="16" Height="16"/>
+            </Button>
+            <Button Grid.Column="2" ToolTip="Use advanced search">
+                <Image Source="Images/filter.ico" Width="16" Height="16"/>
+            </Button>
+        </Grid>
 
-        <DataGrid Grid.Column="0" x:Name="MovieList" AutoGenerateColumns="False"
-                      AlternatingRowBackground="{StaticResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}"
-                      GridLinesVisibility="None" SelectionMode="Single" RowHeight="20"
-                      CanUserResizeColumns="False" CanUserResizeRows="False">
+        <DataGrid Grid.Column="0" Grid.Row="1" x:Name="MovieList" AutoGenerateColumns="False" CanUserAddRows="False"
+                  AlternatingRowBackground="{StaticResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}"
+                  GridLinesVisibility="None" RowHeight="20" CanUserResizeColumns="False" CanUserResizeRows="False"
+                  SnapsToDevicePixels="True" CanUserReorderColumns="False" SelectionMode="Single" CellStyle="{StaticResource NoBorderCell}">
             <DataGrid.DataContext>
                 <movieVo:Movie />
             </DataGrid.DataContext>
-            <DataGrid.Resources>
-                <Style x:Key="ImageCheckBoxColumn" TargetType="{x:Type CheckBox}">
-                    <Setter Property="IsEnabled" Value="False" />
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type CheckBox}">
-                                <Image MaxWidth="12" Style="{StaticResource BooleanImage}"/>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-                <Style x:Key="ImageCheckBoxColumnEdit" TargetType="{x:Type CheckBox}">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="{x:Type CheckBox}">
-                                <Image MaxWidth="12" Style="{StaticResource BooleanImageEdit}"/>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Title" CanUserReorder="False" IsReadOnly="True" Binding="{Binding Title}" />
+                <DataGridTextColumn Header="Title" IsReadOnly="True" CanUserReorder="False" Binding="{Binding Title}" />
                 <DataGridTextColumn Header="ReleaseYear" IsReadOnly="True" Binding="{Binding ReleaseYear, TargetNullValue={}, FallbackValue={}}" />
-
-                <DataGridCheckBoxColumn CanUserReorder="False" Header="Fanart" IsReadOnly="True" Binding="{Binding HasArt, Mode=OneWay}" ElementStyle="{StaticResource ImageCheckBoxColumn}">
+                <DataGridCheckBoxColumn Header="Fanart" IsReadOnly="True" CanUserReorder="False" Binding="{Binding HasArt, Mode=OneWay}" ElementStyle="{StaticResource ImageCheckBoxColumn}">
                     <DataGridCheckBoxColumn.HeaderTemplate>
                         <DataTemplate>
                             <ContentControl>
@@ -91,8 +113,7 @@
                         </DataTemplate>
                     </DataGridCheckBoxColumn.HeaderTemplate>
                 </DataGridCheckBoxColumn>
-
-                <DataGridCheckBoxColumn Header="NFO" IsReadOnly="True"  CanUserSort="True" Binding="{Binding HasNfo, Mode=OneWay}" ElementStyle="{StaticResource ImageCheckBoxColumn}">
+                <DataGridCheckBoxColumn Header="NFO" IsReadOnly="True" CanUserSort="True" Binding="{Binding HasNfo, Mode=OneWay}" ElementStyle="{StaticResource ImageCheckBoxColumn}">
                     <DataGridCheckBoxColumn.HeaderTemplate>
                         <DataTemplate>
                             <ContentControl>
@@ -104,8 +125,7 @@
                         </DataTemplate>
                     </DataGridCheckBoxColumn.HeaderTemplate>
                 </DataGridCheckBoxColumn>
-
-                <DataGridCheckBoxColumn Header="Trailer" IsReadOnly="True"  CanUserSort="True" Binding="{Binding HasTrailer, Mode=OneWay}" ElementStyle="{StaticResource ImageCheckBoxColumn}">
+                <DataGridCheckBoxColumn Header="Trailer" IsReadOnly="True" CanUserSort="True" Binding="{Binding HasTrailer, Mode=OneWay}" ElementStyle="{StaticResource ImageCheckBoxColumn}">
                     <DataGridCheckBoxColumn.HeaderTemplate>
                         <DataTemplate>
                             <ContentControl>
@@ -145,28 +165,73 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Background="#FFA0A0A0">
             <Grid.RowDefinitions>
                 <RowDefinition MinHeight="75" Height="75" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <ribbonUi:MovieFlagsAndInfo x:Name="MovieFlags" Movie="{Binding ElementName=MovieList, Path=CurrentItem}" />
+            <ribbonUi:MovieFlagsAndInfo x:Name="MovieFlags" Movie="{Binding ElementName=MovieList, Path=SelectedItem}" />
 
-            <TabControl Grid.Row="1">
-                <TabItem Header="Promotion Images">
-                    <TabItem.DataContext>
-                        <movieVo:Movie />
-                    </TabItem.DataContext>
-                    <Grid Background="#FFECE4E4">
-                        <Grid.Resources>
-                            <BitmapImage x:Key="DefaultFanart" UriSource="pack://application:,,,/RibbonUI;component/Images/Fanart/fanart.jpg" />
-                        </Grid.Resources>
-                        <Image x:Name="Fanart"
-                               Source="{Binding ElementName=MovieList, Path=CurrentItem.FirstFanart, FallbackValue={StaticResource DefaultFanart}, TargetNullValue={StaticResource DefaultFanart}}"
-                               Stretch="Fill" />
-                    </Grid>
+            <TabControl x:Name="TabControl" Grid.Row="1">
+                <TabControl.DataContext>
+                    <movieVo:Movie />
+                </TabControl.DataContext>
+                <TabItem Header="General Info">
+                    <ribbonUi:ArtAndPlot x:Name="ArtAndPlot" Movie="{Binding ElementName=MovieList, Path=SelectedItem}"/>
                 </TabItem>
+                <TabItem Header="Edit Movie info">
+                    <ribbonUi:EditMovie Movie="{Binding ElementName=MovieList, Path=SelectedItem}" Width="{Binding Width, ElementName=TabControl, Mode=OneWay}"/>
+                </TabItem>
+                <TabItem Header="Subtitles" x:Name="MovieSubtitles" GotFocus="MovieSubtitlesGotFocus" LostFocus="MovieSubtitlesOnLostFocus">
+                    <DataGrid x:Name="SubtitlesList" ItemsSource="{Binding ElementName=MovieList, Path=SelectedItem.Subtitles}" AutoGenerateColumns="False"
+                              AlternatingRowBackground="{StaticResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}" CellEditEnding="SubtitlesList_OnCellEditEnding"
+                              GridLinesVisibility="None" SelectionMode="Single" CanUserAddRows="False" CellStyle="{StaticResource NoBorderCell}">
+                        <DataGrid.DataContext>
+                            <files:Subtitle/>
+                        </DataGrid.DataContext>
+                        <DataGrid.Resources>
+                            <Style x:Key="CenterVertical" TargetType="DataGridCell">
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                            </Style>
+                            <BitmapImage x:Key="UnknownLang" UriSource="Images/unknown.png"/>
+                        </DataGrid.Resources>                        
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="File name" IsReadOnly="True" Binding="{Binding File.Name}" CellStyle="{StaticResource CenterVertical}">
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Format" Binding="{Binding Format}" CellStyle="{StaticResource CenterVertical}"/>
+                            <DataGridTextColumn Header="Encoding" Binding="{Binding Encoding}" CellStyle="{StaticResource CenterVertical}"/>
+                            <DataGridCheckBoxColumn CanUserReorder="False" Header="Is embeded in the video" Binding="{Binding EmbededInVideo}" ElementStyle="{StaticResource ImageCheckBoxColumn}" EditingElementStyle="{StaticResource ImageCheckBoxColumnEdit}"/>
+                            <DataGridCheckBoxColumn CanUserReorder="False" Header="Is for hearing impaired" Binding="{Binding ForHearingImpaired}" ElementStyle="{StaticResource ImageCheckBoxColumn}" EditingElementStyle="{StaticResource ImageCheckBoxColumnEdit}"/>
+                            <DataGridTemplateColumn Header="Language" CanUserReorder="False">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="{Binding Language.ISO639.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, TargetNullValue={StaticResource UnknownLang}, FallbackValue={StaticResource UnknownLang}}" MaxHeight="32" MaxWidth="32" />
+                                            <TextBlock Text="{Binding Language.Name, TargetNullValue=Unknown, FallbackValue=Unknown}" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox ItemsSource="{Binding ElementName=ContentGridControl, Path=Languages}">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Image Source="{Binding ISO639.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, TargetNullValue={StaticResource UnknownLang}, FallbackValue={StaticResource UnknownLang}}" MaxHeight="32" MaxWidth="32" />
+                                                        <TextBlock Text="{Binding Name, TargetNullValue=Unknown, FallbackValue=Unknown}" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="Promotional Videos"></TabItem>
+                <TabItem Header="Fanart"></TabItem>
             </TabControl>
         </Grid>
     </Grid>

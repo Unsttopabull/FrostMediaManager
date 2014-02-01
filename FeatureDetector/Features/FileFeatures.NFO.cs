@@ -36,7 +36,7 @@ namespace Frost.DetectFeatures {
             return year != null && year != 0 && year != 1;
         }
 
-        private void AddActors<T>(IEnumerable<T> actors) where T : XbmcXmlActor {
+        private void AddActors<T>(IEnumerable<T> actors, bool overrideValues = false) where T : XbmcXmlActor {
             foreach (T actor in actors) {
                 if (string.IsNullOrEmpty(actor.Name)) {
                     continue;
@@ -44,40 +44,52 @@ namespace Frost.DetectFeatures {
 
                 MovieActor movieActor = Movie.ActorsLink.FirstOrDefault(a => a.Person.Name == actor.Name);
                 if (movieActor != null) {
-                    //exists so just update
-                    movieActor.Character = movieActor.Character ?? (!string.IsNullOrEmpty(actor.Role) ? actor.Role : null);
-                    movieActor.Person.Thumb = movieActor.Person.Thumb ?? (!string.IsNullOrEmpty(actor.Thumb) ? actor.Thumb : null);
-                }
-                else {
-                    Person person = _mvc.People.FirstOrDefault(p => string.Compare(p.Name, actor.Name, StringComparison.Ordinal) == 0) ??
-                                    new Person(actor.Name, actor.Thumb);
-                    if (string.IsNullOrEmpty(person.Thumb) && !string.IsNullOrEmpty(actor.Thumb)) {
-                        person.Thumb = actor.Thumb;
+                    if (overrideValues) {
+                        //exists so just update
+                        if (!string.IsNullOrEmpty(actor.Role)) {
+                            movieActor.Character = actor.Role;
+                        }
+                        if (!string.IsNullOrEmpty(actor.Thumb)) {
+                            movieActor.Person.Thumb = actor.Thumb;
+                        }
                     }
+                    else {
+                        //exists so just update
+                        if (string.IsNullOrEmpty(movieActor.Character) && !string.IsNullOrEmpty(actor.Role)) {
+                            movieActor.Character = actor.Role;
+                        }
 
-                    Movie.ActorsLink.Add(new MovieActor(Movie, person, actor.Role));
-                }
-            }
-        }
-
-        private void OverrideActors<T>(IEnumerable<T> actors) where T : XbmcXmlActor {
-            foreach (T actor in actors) {
-                if (string.IsNullOrEmpty(actor.Name)) {
-                    continue;
-                }
-
-                MovieActor movieActor = Movie.ActorsLink.FirstOrDefault(al => al.Person.Name == actor.Name);
-                if (movieActor != null && movieActor.Character == null) {
-                    //exists so just update
-                    movieActor.Character = actor.Role;
+                        if (string.IsNullOrEmpty(movieActor.Person.Thumb) && !string.IsNullOrEmpty(actor.Thumb)) {
+                            movieActor.Person.Thumb = actor.Thumb;
+                        }
+                    }
                 }
                 else {
-                    //check if person with the same name already exists in DB otherwise create new one
-                    Person person = _mvc.People.FirstOrDefault(p => string.Compare(p.Name, actor.Name, StringComparison.Ordinal) == 0) ??
-                                    new Person(actor.Name, actor.Thumb);
-                    person.Thumb = actor.Thumb;
+                    string character = null;
 
-                    Movie.ActorsLink.Add(new MovieActor(Movie, person, actor.Role));
+                    //is not on the movie list yet so get the actor from DB or create new one
+                    Person person = _mvc.People.FirstOrDefault(p => p.Name == actor.Name);
+
+                    if (person != null) {
+                        if (overrideValues && !string.IsNullOrEmpty(actor.Thumb)) {
+                            person.Thumb = actor.Thumb;
+                        }
+                        else if(!overrideValues) {
+                            //if the DB person is missing a thumb but it exists in NFO add it
+                            if (string.IsNullOrEmpty(person.Thumb) && !string.IsNullOrEmpty(actor.Thumb)) {
+                                person.Thumb = actor.Thumb;
+                            }
+                        }
+
+                        if (!string.IsNullOrEmpty(actor.Role)) {
+                            character = actor.Role;
+                        }
+                    }
+                    else {
+                        //create new person
+                        person = new Person(actor.Name, actor.Thumb);
+                    }
+                    Movie.ActorsLink.Add(new MovieActor(Movie, person, character));
                 }
             }
         }
@@ -99,7 +111,7 @@ namespace Frost.DetectFeatures {
         }
 
         private void AddStudio(string studioName) {
-            if (!string.IsNullOrEmpty(studioName) && !Movie.Studios.Contains(studioName)) {
+            if (!string.IsNullOrEmpty(studioName) && Movie.Studios.All(s => s.Name != studioName)) {
                 Studio studio = _mvc.Studios.FirstOrDefault(s => s.Name == studioName) ?? new Studio(studioName);
                 Movie.Studios.Add(studio);
             }
@@ -107,7 +119,12 @@ namespace Frost.DetectFeatures {
 
         private void AddDirector(string directorName) {
             if (!string.IsNullOrEmpty(directorName)) {
-                Person director = _mvc.People.FirstOrDefault(p => p.Name == directorName) ?? new Person(directorName);
+                Person director = Movie.Directors.FirstOrDefault(p => p.Name == directorName);
+                if (director != null) {
+                    return;
+                }
+
+                director = _mvc.People.FirstOrDefault(p => p.Name == directorName) ?? new Person(directorName);
                 if (!Movie.Directors.Contains(director)) {
                     Movie.Directors.Add(director);
                 }
