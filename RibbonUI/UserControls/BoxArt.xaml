@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="RibbonUI.UserControls.BoxArt"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
+             mc:Ignorable="d"
+             x:Name="Box"
+             d:DesignHeight="379" d:DesignWidth="257">
+    <UserControl.DataContext>
+        <movieVo:Movie />
+    </UserControl.DataContext>
+    <UserControl.Resources>
+        <BitmapImage x:Key="GenericBox" UriSource="../Images/boxes/generic.png" />
+        <BitmapImage x:Key="DefaultCover" UriSource="../Images/Cover/cover.png" />
+    </UserControl.Resources>
+
+    <Grid>
+    <Image Panel.ZIndex="2"
+           Source="{Binding Type, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Box, TargetNullValue={StaticResource GenericBox}, FallbackValue={StaticResource GenericBox}}"
+           Stretch="Fill">
+        <Image.Effect>
+            <DropShadowEffect Color="White" BlurRadius="1" Opacity="0.3" ShadowDepth="1" />
+        </Image.Effect>
+    </Image>
+    <Image Stretch="Fill"
+           Margin="10,25,10,10"
+           Source="{Binding FirstCoverOrPoster.Path, FallbackValue={StaticResource DefaultCover}, TargetNullValue={StaticResource DefaultCover}}"
+           Panel.ZIndex="1">
+        <Image.CacheMode>
+            <BitmapCache />
+        </Image.CacheMode>
+    </Image>
+    </Grid>
+</UserControl>

@@ -45,7 +45,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         #endregion
 
-        #region Propreties/Columns
+        #region Properties/Columns
 
         /// <summary>Gets or sets the database audio Id.</summary>
         /// <value>The database audio Id</value>

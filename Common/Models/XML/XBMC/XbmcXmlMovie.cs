@@ -497,12 +497,15 @@ namespace Frost.Common.Models.XML.XBMC {
         public string GetTrailerUrl() {
             //if the trailer is not empty or null and starts with the YouTube plugin prefix
             //we extract the video Id and return the desktop YouTube video URL
-            if (!string.IsNullOrEmpty(Trailer) && Trailer.StartsWith(YT_TRAILER_PREFIX)) {
-                string ytId = Trailer.Replace(YT_TRAILER_PREFIX, "");
-                return "www.youtube.com/watch?v=" + ytId;
+            if (!string.IsNullOrEmpty(Trailer)) {
+                if (Trailer.StartsWith(YT_TRAILER_PREFIX)) {
+                    string ytId = Trailer.Replace(YT_TRAILER_PREFIX, "");
+                    return "www.youtube.com/watch?v=" + ytId;
+                }
+                //otherwise we just return trailer as is
+                return Trailer;
             }
-            //otherwise we just return trailer as is
-            return Trailer;
+            return null;
         }
 
         /// <summary>Gets the studio name(s). If more that 1 they are separated by " / "</summary>

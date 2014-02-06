@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
+using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.Util;
 using Frost.SharpLanguageDetect;
@@ -12,6 +17,7 @@ using Frost.SharpMediaInfo;
 using File = System.IO.File;
 using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
 using Language = Frost.Common.Models.DB.MovieVo.Language;
+using ScanType = Frost.Common.ScanType;
 
 namespace Frost.DetectFeatures {
 
@@ -68,7 +74,7 @@ namespace Frost.DetectFeatures {
             Init(fileNames);
         }
 
-        internal FileFeatures(NFOPriority nfoPriority, params FileNameInfo[] fileNameInfos) : this(nfoPriority){
+        internal FileFeatures(NFOPriority nfoPriority, params FileNameInfo[] fileNameInfos) : this(nfoPriority) {
             _files = new FileVo[fileNameInfos.Length];
 
             foreach (FileNameInfo nameInfo in fileNameInfos) {
@@ -102,7 +108,8 @@ namespace Frost.DetectFeatures {
                 MediaListFile mFile = _mf.Add(filePath, true, true);
 
                 if (mFile != null && !string.IsNullOrEmpty(mFile.General.FileInfo.FileName)) {
-                    file = new FileVo(mFile.General.FileInfo.FileName, mFile.General.FileInfo.Extension, mFile.General.FileInfo.FolderPath + "/", mFile.General.FileInfo.FileSize);
+                    file = new FileVo(mFile.General.FileInfo.FileName, mFile.General.FileInfo.Extension, mFile.General.FileInfo.FolderPath + "/",
+                        mFile.General.FileInfo.FileSize);
                 }
                 else {
                     directoryPath = ParseInfoFromPath(filePath, ref file);
@@ -131,7 +138,6 @@ namespace Frost.DetectFeatures {
                 _files[idx] = _mvc.Files.Add(file);
             }
             else if (File.Exists(filePath)) {
-
             }
             else {
             }
@@ -139,7 +145,7 @@ namespace Frost.DetectFeatures {
 
         private string ParseInfoFromPath(string filePath, ref FileVo file) {
             string directoryPath;
-            FileInfo fi; 
+            FileInfo fi;
             try {
                 fi = new FileInfo(filePath);
 
@@ -153,12 +159,12 @@ namespace Frost.DetectFeatures {
                 return directoryPath;
             }
 
-            if(file == null) {
+            if (file == null) {
                 _manualParse = true;
                 string withoutExtension = Path.GetFileNameWithoutExtension(fi.Name);
                 withoutExtension = string.IsNullOrEmpty(withoutExtension)
-                                           ? fi.Name.Substring(0, fi.Name.LastIndexOf('.'))
-                                           : withoutExtension;
+                                       ? fi.Name.Substring(0, fi.Name.LastIndexOf('.'))
+                                       : withoutExtension;
 
                 file = new FileVo(withoutExtension, fi.Extension.Substring(1), fi.DirectoryName, fi.Length);
             }
@@ -180,11 +186,96 @@ namespace Frost.DetectFeatures {
                 Movie.GetVideoRuntimeSum();
             }
 
+            GetGeneralAudioInfo();
+            GetGeneralVideoInfo();
+
             DetectMovieType();
 
+            return Save();
+        }
+
+        private void GetGeneralVideoInfo() {
+            var mostFrequentVres = Movie.Videos.Where(v => v.Resolution.HasValue)
+                                        .GroupBy(v => v.Resolution)
+                                        .OrderByDescending(g => g.Count())
+                                        .FirstOrDefault();
+
+            if (mostFrequentVres != null) {
+                Video video = mostFrequentVres.FirstOrDefault();
+
+                if (video != null) {
+                    string resolution = video.Resolution.ToString();
+                    switch (video.ScanType) {
+                        case ScanType.Interlaced:
+                            resolution = resolution + "p";
+                            break;
+                        case ScanType.Progressive:
+                            resolution = resolution + "i";
+                            break;
+                    }
+                    Movie.VideoResolution = resolution;
+                }
+            }
+
+            var mostFrequent = Movie.Videos.Where(v => v.CodecId != null)
+                                    .GroupBy(v => v.CodecId)
+                                    .OrderByDescending(g => g.Count())
+                                    .FirstOrDefault();
+
+            if (mostFrequent != null) {
+                Video video = mostFrequent.FirstOrDefault();
+
+                if (video != null) {
+                    Movie.VideoCodec = video.CodecId;
+                }
+            }
+        }
+
+        private void GetGeneralAudioInfo() {
+            int numChannels = 0;
+            foreach (Audio audio in Movie.Audios) {
+                if (audio.NumberOfChannels.HasValue) {
+                    int val = audio.NumberOfChannels.Value;
+                    if (val > numChannels) {
+                        numChannels = val;
+                    }
+                }
+            }
+
+            if (numChannels != 0) {
+                Movie.NumberOfAudioChannels = numChannels;
+            }
+
+            var mostFrequentAudioCodec = Movie.Audios.Where(v => v.CodecId != null)
+                                              .GroupBy(v => v.CodecId)
+                                              .OrderByDescending(g => g.Count())
+                                              .FirstOrDefault();
+
+            if (mostFrequentAudioCodec != null) {
+                Audio audio = mostFrequentAudioCodec.FirstOrDefault();
+
+                if (audio != null) {
+                    Movie.AudioCodec = audio.CodecId;
+                }
+            }
+        }
+
+        private bool Save() {
             try {
+                if (_mvc.Database.Connection.State == ConnectionState.Closed) {
+                    _mvc.Database.Connection.Open();
+                }
+
                 _mvc.SaveChanges();
                 return true;
+            }
+            catch (SQLiteException e) {
+                Console.Error.WriteLine(e.Message);
+                return false;
+            }
+            catch (InvalidOperationException e) {
+                Console.Error.WriteLine(e.Message);
+                return false;
             }
             catch (Exception e) {
                 Console.Error.WriteLine(e.Message);
@@ -199,12 +290,12 @@ namespace Frost.DetectFeatures {
                 Movie.Videos.All(v => v.Source.OrdinalEquals("DVD") ||
                                       v.Source.OrdinalEquals("DVDR") ||
                                       v.Source.OrdinalEquals("DVD-R"))) {
-                Movie.Type = "DVD";
+                Movie.Type = MovieType.DVD;
             }
 
             Regex reg = new Regex(@"(Bluray|BlueRay|Blu-ray|BD(5|25|9|50|r)?)$", RegexOptions.IgnoreCase);
             if (_fnInfos.Values.Any(fi => fi.VideoSource != null && reg.IsMatch(fi.VideoSource))) {
-                Movie.Type = "Bluray";
+                Movie.Type = MovieType.BluRay;
             }
         }
 
@@ -289,13 +380,18 @@ namespace Frost.DetectFeatures {
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         public void Dispose() {
             if (!IsDisposed) {
-                _mf.Close();
+                if (_mf != null) {
+                    _mf.Close();
+                }
 
                 if (_md5 != null) {
                     _md5.Dispose();
                 }
 
                 if (_mvc != null) {
+                    if (_mvc.Database.Connection.State != ConnectionState.Closed) {
+                        _mvc.Database.Connection.Close();
+                    }
                     _mvc.Dispose();
                 }
 
@@ -320,8 +416,8 @@ namespace Frost.DetectFeatures {
         public override string ToString() {
             FileNameInfo fnInfo = _fnInfos.Values.FirstOrDefault();
             return fnInfo != null
-                ? fnInfo.ToString()
-                : base.ToString();
+                       ? fnInfo.ToString()
+                       : base.ToString();
         }
     }
 

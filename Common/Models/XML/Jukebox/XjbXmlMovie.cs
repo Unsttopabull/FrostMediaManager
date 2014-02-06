@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Xml;
 using System.Xml.Schema;
@@ -122,6 +123,19 @@ namespace Frost.Common.Models.XML.Jukebox {
         /// <value>Name of the person that directed the movie</value>
         [XmlElement("director", Form = XmlSchemaForm.Unqualified)]
         public string Director { get; set; }
+
+        [XmlIgnore]
+        public string[] Directors {
+            get {
+                string[] entries = Director.SplitWithoutEmptyEntries("/");
+                for (int i = 0; i < entries.Length; i++) {
+                    entries[i] = entries[i].Trim();
+                }
+
+                return entries;
+            }
+            set { Director = string.Join("  /  ", value); }
+        }
 
         /// <summary>Gets or sets the name of the writer(s).</summary>
         /// <remarks>If more than 1 they are separated by " / "</remarks>

@@ -1,12 +1,22 @@
 ﻿<RibbonWindow x:Class="RibbonUI.MainWindow"
               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-              xmlns:local="clr-namespace:RibbonUI"
+              xmlns:userControls="clr-namespace:RibbonUI.UserControls"
               Title="MainWindow"
               x:Name="RibbonWindow"
               Icon="logo3.ico"
-              Width="1386" Height="794"
-              MinWidth="{Binding ElementName=ContentGrid, Path=MinRequiredWidth}" Loaded="RibbonWindowLoaded" Closing="RibbonWindowClosing">
+              Loaded="RibbonWindowLoaded"
+              MinWidth="{Binding ElementName=ContentGrid, Path=MinRequiredWidth}">
+              <!--Width="1386" Height="794"
+              MinWidth="{Binding ElementName=ContentGrid, Path=MinRequiredWidth}" Loaded="RibbonWindowLoaded">-->
+    <RibbonWindow.Resources>
+        <CollectionViewSource x:Key="MoviesSource"/>
+        <CollectionViewSource x:Key="GenreSource"/>
+        <CollectionViewSource x:Key="CountriesSource"/>
+        <CollectionViewSource x:Key="LanguagesSource"/>
+        <CollectionViewSource x:Key="PeopleSource"/>
+        <CollectionViewSource x:Key="StudiosSource"/>
+    </RibbonWindow.Resources>
    
     
     <!--<RibbonWindow.MinWidth>
@@ -22,7 +32,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <local:Ribbon x:Name="Ribbon" Movie="{Binding ElementName=ContentGrid, Path=SelectedMovie}"/>
-        <local:ContentGrid x:Name="ContentGrid" Grid.Row="1"/>
+        <userControls:Ribbon x:Name="Ribbon" Movie="{Binding ElementName=ContentGrid, Path=SelectedMovie}"/>
+        <userControls:ContentGrid x:Name="ContentGrid" Grid.Row="1"/>
     </Grid>
 </RibbonWindow>

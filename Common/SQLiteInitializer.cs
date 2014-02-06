@@ -2,6 +2,7 @@
 using System.Data.Entity;
 using System.Data.SQLite;
 using System.IO;
+using System.Net.Mime;
 using Frost.Common.Models.DB.MovieVo;
 
 namespace Frost.Common {
@@ -26,6 +27,7 @@ namespace Frost.Common {
             }
             catch (Exception e) {
                 Console.Error.WriteLine(e.Message);
+                Environment.Exit(0);
             }
         }
 

@@ -152,6 +152,7 @@
     <Compile Include="Models\XML\XBMC\XbmcXmlSubtitleInfo.cs" />
     <Compile Include="Models\XML\XBMC\XbmcXmlThumb.cs" />
     <Compile Include="Models\XML\XBMC\XbmcXmlVideoInfo.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

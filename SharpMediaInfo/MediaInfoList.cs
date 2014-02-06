@@ -14,15 +14,20 @@ namespace Frost.SharpMediaInfo {
         private readonly IntPtr _handle;
         private readonly MediaFileCollection _files;
         private bool _isDisposed;
+        private readonly bool _noDll;
 
         #region Constructors
         public MediaInfoList() {
             bool is64 = Environment.Is64BitProcess;
-            try{
+            try {
                 _handle = is64 ? MediaInfoList_New_x64() : MediaInfoList_New();
             }
             catch (BadImageFormatException) {
                 _handle = is64 ? MediaInfoList_New() : MediaInfoList_New_x64();
+            }
+            catch (DllNotFoundException e) {
+                _noDll = true;
+                throw e;
             }
             _files = new MediaFileCollection();
         }
@@ -253,13 +258,17 @@ namespace Frost.SharpMediaInfo {
         /// <summary>Closes all files in the list and disposes all allocated resources.</summary>
         public void Close() {
             if (!IsDisposed) {
-                RemoveAll();
-
-                if (Environment.Is64BitProcess) {
-                    MediaInfoList_Delete_x64(_handle);
+                if (_files != null) {
+                    RemoveAll();
                 }
-                else {
-                    MediaInfoList_Delete(_handle);
+
+                if (!_noDll) {
+                    if (Environment.Is64BitProcess) {
+                        MediaInfoList_Delete_x64(_handle);
+                    }
+                    else {
+                        MediaInfoList_Delete(_handle);
+                    }
                 }
                 IsDisposed = true;
 

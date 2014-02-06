@@ -80,7 +80,11 @@ namespace Frost.DetectFeatures {
 
             CheckAddXjbGenres(xjbMovie, true);
             AddStudio(xjbMovie.Studio);
-            AddDirector(xjbMovie.Director);
+
+            foreach (string director in xjbMovie.Directors) {
+                AddDirector(director);
+            }
+            
             AddActors(xjbMovie.Actors, true);
 
             if (xjbMovie.Runtime.HasValue) {

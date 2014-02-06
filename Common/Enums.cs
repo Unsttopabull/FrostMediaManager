@@ -13,6 +13,13 @@
         R8,
     }
 
+    public enum MovieType {
+        Unknown,
+        DVD,
+        BluRay,
+        HDDVD,
+    }
+
     /// <summary>The bitrate mode that was used when ecoding.</summary>
     public enum FrameOrBitRateMode : long {
 

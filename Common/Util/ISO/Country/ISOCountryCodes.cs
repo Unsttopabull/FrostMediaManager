@@ -1,4 +1,7 @@
-﻿namespace Frost.Common.Util.ISO {
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace Frost.Common.Util.ISO {
 
     /// <summary>Represents a mapping between english country names and their officialy assigned ISO 3166 country codes.</summary>
     public class ISOCountryCodes : ISOCodes<ISOCountryCode> {
@@ -280,6 +283,12 @@
         /// <returns>An instance of <see cref="ISOCode"/> if found; otherwise <c>null</c>.</returns>
         public override ISOCountryCode GetByEnglishName(string name) {
             return Codes.ContainsKey(name) ? Codes[name] : null;
+        }
+
+        /// <summary>Gets all known ISO codes.</summary>
+        /// <returns>An information about all known ISO codes.</returns>
+        public new static IEnumerable<ISOCountryCode> GetAllKnownCodes() {
+            return Codes.Values.Distinct();
         }
     }
 

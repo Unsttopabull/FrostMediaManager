@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="RibbonUI.UserControls.Edit.EditAudios"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="582">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{Binding ElementName=AudiosList, Path=ColumnHeaderHeight}" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel Margin="0,0,20,0" Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="0" ZIndex="2"
+                    Background="Transparent">
+            <Button Height="{Binding ElementName=AudiosList, Path=ColumnHeaderHeight}" Width="24"
+                    Click="RemoveOnClick"  ToolTip="Remove selected audio"
+                    Style="{StaticResource TransparentBorderlessButton}">
+                <Image Source="../../Images/remove.png" />
+            </Button>
+            <Button Height="{Binding ElementName=AudiosList, Path=ColumnHeaderHeight}" Width="24"
+                    Click="AddOnClick" ToolTip="Add new audio"
+                    Style="{StaticResource TransparentBorderlessButton}">
+                <Image Source="../../Images/add.png" />
+            </Button>
+        </StackPanel>
+        <DataGrid Grid.Row="0" x:Name="AudiosList" Grid.RowSpan="2"
+                  GridLinesVisibility="None" SelectionMode="Single"
+                  AlternatingRowBackground="#59D3D3D3"
+                  CanUserResizeColumns="False" CanUserResizeRows="False" ItemsSource="{Binding Audios}"
+                  CanUserReorderColumns="False" ClipToBounds="True" MinRowHeight="20"
+                  MinColumnWidth="50" RowHeaderWidth="0" CanUserAddRows="False">
+            <DataGrid.RowStyle>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="Gainsboro" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+            <DataGrid.CellStyle>
+                <Style BasedOn="{StaticResource NoBorderCell}" TargetType="{x:Type DataGridCell}">
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="Gainsboro" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
+        </DataGrid>
+    </Grid>
+</UserControl>

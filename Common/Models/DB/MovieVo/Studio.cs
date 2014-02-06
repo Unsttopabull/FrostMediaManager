@@ -22,13 +22,6 @@ namespace Frost.Common.Models.DB.MovieVo {
             Name = name;
         }
 
-        /// <summary>Initializes a new instance of the <see cref="Studio" /> class with specified name and an URI to the logo image.</summary>
-        /// <param name="name">The name of the studio.</param>
-        /// <param name="logo">The URI to the studio's logo image</param>
-        public Studio(string name, string logo) : this(name) {
-            Logo = logo;
-        }
-
         /// <summary>Gets or sets the Id of this studio in the database.</summary>
         /// <value>The Id of this studio in the database</value>
         [Key]
@@ -39,10 +32,6 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <value>The name of the studio.</value>
         [Required]
         public string Name { get; set; }
-
-        /// <summary>Gets or sets the URI to the studio's logo image.</summary>
-        /// <value>The URI to the studio's logo image</value>
-        public string Logo { get; set; }
 
         /// <summary>Gets or sets the movies this studio has produced.</summary>
         /// <value>The movies this studio has produced.</value>

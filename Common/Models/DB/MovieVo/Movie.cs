@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.SQLite;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Frost.Common.Annotations;
 using Frost.Common.Models.DB.Jukebox;
 using Frost.Common.Models.DB.MovieVo.Arts;
 using Frost.Common.Models.DB.MovieVo.Files;
@@ -71,7 +74,7 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <example>\eg{ ''<c>Pirates of the Caribbean: The Curse of the Black Pearl</c>'' becomes ''<c>Pirates of the Caribbean 1</c>''}</example>
         public string SortTitle { get; set; }
 
-        public string Type { get; set; }
+        public MovieType Type { get; set; }
 
         /// <summary>Gets or sets the goofs.</summary>
         /// <value>The goofs.</value>
@@ -157,6 +160,14 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the directory path to this movie.</summary>
         public string DirectoryPath { get; set; }
+
+        public int? NumberOfAudioChannels { get; set; }
+
+        public string AudioCodec { get; set; }
+
+        public string VideoResolution { get; set; }
+
+        public string VideoCodec { get; set; }
 
         #endregion
 
@@ -307,95 +318,6 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         #endregion
 
-        [NotMapped]
-        public int? NumberOfAudioChannels {
-            get {
-                int num = 0;
-                foreach (Audio audio in Audios) {
-                    if (audio.NumberOfChannels.HasValue) {
-                        int val = audio.NumberOfChannels.Value;
-                        if (val > num) {
-                            num = val;
-                        }
-                    }
-                }
-
-                if (num != 0) {
-                    return num;
-                }
-                return null;
-            }
-        }
-
-        [NotMapped]
-        public string AudioCodec {
-            get {
-                var mostFrequent = Audios.Where(v => v.CodecId != null)
-                                         .GroupBy(v => v.CodecId)
-                                         .OrderByDescending(g => g.Count())
-                                         .FirstOrDefault();
-
-                if (mostFrequent != null) {
-                    Audio video = mostFrequent.FirstOrDefault();
-
-                    if (video != null) {
-                        return video.CodecId;
-                    }
-                }
-
-                return null;
-            }
-        }
-
-        [NotMapped]
-        public string VideoResolution {
-            get {
-                var mostFrequent = Videos.Where(v => v.Resolution.HasValue)
-                                         .GroupBy(v => v.Resolution)
-                                         .OrderByDescending(g => g.Count())
-                                         .FirstOrDefault();
-
-                if (mostFrequent != null) {
-                    Video video = mostFrequent.FirstOrDefault();
-
-                    if (video != null) {
-                        string resolution = video.Resolution.ToString();
-                        switch (video.ScanType) {
-                            case ScanType.Interlaced:
-                                resolution = resolution + "p";
-                                break;
-                            case ScanType.Progressive:
-                                resolution = resolution + "i";
-                                break;
-                        }
-                        return resolution;
-                    }
-                }
-
-                return null;
-            }
-        }
-
-        [NotMapped]
-        public string VideoCodec {
-            get {
-                var mostFrequent = Videos.Where(v => v.CodecId != null)
-                                         .GroupBy(v => v.CodecId)
-                                         .OrderByDescending(g => g.Count())
-                                         .FirstOrDefault();
-
-                if (mostFrequent != null) {
-                    Video video = mostFrequent.FirstOrDefault();
-
-                    if (video != null) {
-                        return video.CodecId;
-                    }
-                }
-
-                return null;
-            }
-        }
-
         #region First X
 
         [NotMapped]
@@ -442,12 +364,6 @@ namespace Frost.Common.Models.DB.MovieVo {
         }
 
         #endregion
-
-        /// <summary>Computes the average critic rating.</summary>
-        /// <returns>The average critic rating.</returns>
-        public double ComputeAverageRating() {
-            return Ratings.Average(r => r.Value);
-        }
 
         /// <summary>Gets the US MPAA movie rating.</summary>
         /// <value>A string with the MPAA movie rating</value>

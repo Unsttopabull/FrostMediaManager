@@ -4,7 +4,7 @@ using Frost.DetectFeatures.Util;
 
 namespace Frost.DetectFeatures {
 
-    public enum MovieType {
+    public enum DetectedMovieType {
         DVD,
         BluRay,
         Multipart,
@@ -16,12 +16,12 @@ namespace Frost.DetectFeatures {
         /// <summary>Initializes a new instance of the <see cref="MovieFiles"/> class.</summary>
         /// <param name="movieType">Type of the movie.</param>
         /// <param name="fileInformation">The file name information.</param>
-        public MovieFiles(MovieType movieType, FileNameInfo[] fileInformation) {
+        public MovieFiles(DetectedMovieType movieType, FileNameInfo[] fileInformation) {
             MovieType = movieType;
             FileInformation = fileInformation;
         }
 
-        public MovieType MovieType { get; private set; }
+        public DetectedMovieType MovieType { get; private set; }
 
         public FileNameInfo[] FileInformation { get; private set; }
 

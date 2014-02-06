@@ -37,64 +37,121 @@
     <ApplicationIcon>logo3.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AvalonControlsLibrary">
+      <HintPath>..\Libraries\AvalonControlsLibrary\AvalonControlsLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework">
       <HintPath>..\Libraries\EF\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
+    <Reference Include="System.Reactive.Core">
+      <HintPath>..\packages\Rx-Core.2.2.2\lib\net45\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces">
+      <HintPath>..\packages\Rx-Interfaces.2.2.2\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq">
+      <HintPath>..\packages\Rx-Linq.2.2.2\lib\net45\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices">
+      <HintPath>..\packages\Rx-PlatformServices.2.2.3\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Controls.Ribbon" />
-    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\Libraries\ExtendedWPFToolkit\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ArtAndPlot.xaml.cs">
+    <Compile Include="Converters\EmptyStringToNullConverter.cs" />
+    <Compile Include="UserControls\ArtAndPlot.xaml.cs">
       <DependentUpon>ArtAndPlot.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ContentGrid.xaml.cs">
-      <DependentUpon>ContentGrid.xaml</DependentUpon>
+    <Compile Include="UserControls\BoxArt.xaml.cs">
+      <DependentUpon>BoxArt.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\MilisecondsToTimeSpanConverter.cs" />
     <Compile Include="Converters\NominationConverter.cs" />
     <Compile Include="Converters\PathToImageSourceConverter.cs" />
-    <Compile Include="EditMovie.xaml.cs">
+    <Compile Include="UserControls\ContentGrid.xaml.cs">
+      <DependentUpon>ContentGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Edit\EditArt.xaml.cs">
+      <DependentUpon>EditArt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Edit\EditAudios.xaml.cs">
+      <DependentUpon>EditAudios.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Edit\EditMovie.xaml.cs">
       <DependentUpon>EditMovie.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ribbon.xaml.cs">
+    <Compile Include="UserControls\Edit\EditSubtitles.xaml.cs">
+      <DependentUpon>EditSubtitles.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Edit\EditVideos.xaml.cs">
+      <DependentUpon>EditVideos.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Ribbon.xaml.cs">
       <DependentUpon>Ribbon.xaml</DependentUpon>
     </Compile>
-    <Compile Include="StarRating.xaml.cs">
+    <Compile Include="Windows\AddStudios.xaml.cs">
+      <DependentUpon>AddStudios.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AddPerson.xaml.cs">
+      <DependentUpon>AddPerson.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\InputBox.xaml.cs">
+      <DependentUpon>InputBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SelectLanguage.xaml.cs">
+      <DependentUpon>SelectLanguage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AddCountries.xaml.cs">
+      <DependentUpon>AddCountries.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\StarRating.xaml.cs">
       <DependentUpon>StarRating.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AwardStack.xaml.cs">
+    <Compile Include="UserControls\AwardStack.xaml.cs">
       <DependentUpon>AwardStack.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TestWindow.xaml.cs">
+    <Compile Include="Windows\TestWindow.xaml.cs">
       <DependentUpon>TestWindow.xaml</DependentUpon>
     </Compile>
-    <Page Include="ArtAndPlot.xaml">
+    <Page Include="UserControls\ArtAndPlot.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\BoxArt.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ContentGrid.xaml">
+    <Page Include="UserControls\ContentGrid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\Edit\EditArt.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="EditMovie.xaml">
+    <Page Include="UserControls\Edit\EditAudios.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Edit\EditMovie.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -110,29 +167,57 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MovieFlagsAndInfo.xaml">
+    <Page Include="UserControls\Edit\EditSubtitles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Ribbon.xaml">
+    <Page Include="UserControls\Edit\EditVideos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="StarRating.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="AwardStack.xaml">
+    <Page Include="UserControls\MovieFlagsAndInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TestWindow.xaml">
+    <Page Include="UserControls\Ribbon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AddStudios.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\AddPerson.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\InputBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SelectLanguage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\AddCountries.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\StarRating.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\AwardStack.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\TestWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MovieFlagsAndInfo.xaml.cs">
+    <Compile Include="UserControls\MovieFlagsAndInfo.xaml.cs">
       <DependentUpon>MovieFlagsAndInfo.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -152,6 +237,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -497,41 +583,8 @@
     <Resource Include="Images\flags\source_webdl.png" />
     <Resource Include="Images\flags\unknownaudio.png" />
     <Resource Include="Images\flags\unknownvideo.png" />
-    <Resource Include="Images\studios\20thcenturyfox.png" />
-    <Resource Include="Images\studios\artisan.png" />
-    <Resource Include="Images\studios\carolco.png" />
-    <Resource Include="Images\studios\castlerock.png" />
-    <Resource Include="Images\studios\Columbia Pictures Corporation.png" />
-    <Resource Include="Images\studios\columbia.png" />
-    <Resource Include="Images\studios\dimension.png" />
-    <Resource Include="Images\studios\disney.png" />
-    <Resource Include="Images\studios\dreamworks.png" />
-    <Resource Include="Images\studios\filmfour.png" />
-    <Resource Include="Images\studios\gaumont.png" />
-    <Resource Include="Images\studios\hollywood.png" />
-    <Resource Include="Images\studios\lionsgate.png" />
-    <Resource Include="Images\studios\lucasfilm.png" />
-    <Resource Include="Images\studios\mgm.png" />
-    <Resource Include="Images\studios\miramax.png" />
-    <Resource Include="Images\studios\newlinecinema.png" />
-    <Resource Include="Images\studios\paramount.png" />
-    <Resource Include="Images\studios\revolution.png" />
-    <Resource Include="Images\studios\screengems.png" />
-    <Resource Include="Images\studios\sonypictures.png" />
-    <Resource Include="Images\studios\studiocanal.png" />
-    <Resource Include="Images\studios\Touchstone Pictures.png" />
-    <Resource Include="Images\studios\touchstone.png" />
-    <Resource Include="Images\studios\tristar.png" />
-    <Resource Include="Images\studios\unitedartists.png" />
-    <Resource Include="Images\studios\Universal Pictures.png" />
-    <Resource Include="Images\studios\universal.png" />
-    <Resource Include="Images\studios\unknownstudio.png" />
-    <Resource Include="Images\studios\Warner Bros. Pictures.png" />
-    <Resource Include="Images\studios\warner.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Images\Types\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Images\Stars\star.png" />
   </ItemGroup>
@@ -796,6 +849,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\opensubtitles.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\remove.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\boxes\generic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\folder.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\nfo_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\edit.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

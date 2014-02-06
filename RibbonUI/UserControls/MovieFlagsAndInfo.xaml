@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="RibbonUI.UserControls.MovieFlagsAndInfo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:userControls="clr-namespace:RibbonUI.UserControls"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
+             mc:Ignorable="d" 
+             x:Name="FlagsInfo"
+             
+             d:DesignHeight="75" d:DesignWidth="950">
+    <UserControl.DataContext>
+        <movieVo:Movie/>
+    </UserControl.DataContext>
+    <DockPanel>
+        <DockPanel.Background>
+            <SolidColorBrush Color="{StaticResource {x:Static SystemColors.ControlDarkColorKey}}" />
+        </DockPanel.Background>
+
+        <Grid x:Name="MovieInfo" DockPanel.Dock="Left" Margin="10,0,10,10" VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Text="{Binding Path=Title, TargetNullValue=Unknown Title, FallbackValue=Unknown Title}"/>
+                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding Path=Edithion, StringFormat=[{0}], TargetNullValue={x:Null}}" >
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="Text" Value="{x:Null}"/>
+                                        <Condition Property="Text" Value="{x:Static sys:String.Empty}"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </MultiTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding Path=ReleaseYear, StringFormat=({0}), TargetNullValue=(?), FallbackValue=(?)}"/>
+                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding Path=OriginalTitle, StringFormat=aka {0}, TargetNullValue={}, FallbackValue={}}"/>
+            </StackPanel>
+            <TextBlock Grid.Row="1" FontSize="14" Text="{Binding Path=FirstPlot.TaglineOrSummary, TargetNullValue=No Tagline, FallbackValue=No Tagline}"/>
+            <StackPanel Grid.Row="3" Orientation="Horizontal">
+                <userControls:StarRating Rating="{Binding Path=RatingAverage}"/>
+                <TextBlock FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding Top250, StringFormat=Top 250: {0}, TargetNullValue={x:Null}}"/>
+                <TextBlock FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding Path=DurationFormatted, StringFormat={}Runtime: {0}, FallbackValue={x:Null}, TargetNullValue={x:Null}}"/>
+            </StackPanel>
+        </Grid>
+        <StackPanel x:Name="MovieFlags" DockPanel.Dock="Right" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <StackPanel.Resources>
+                <BitmapImage x:Key="DefaultLogo" UriSource="../Images/defaultscreen.png"></BitmapImage>
+                <BitmapImage x:Key="DefaultSound" UriSource="../Images/FlagsE/achan_defaultsound.png"></BitmapImage>
+            </StackPanel.Resources>
+            <Image DockPanel.Dock="Right" Source="{Binding IsAsync=True, Path=FirstStudioName, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Studio, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}}"
+                   ToolTip="{Binding IsAsync=True, Path=FirstStudioName, TargetNullValue=Unknown Studio, FallbackValue=Unknown Studio}" MaxWidth="150" MaxHeight="55">
+                <Image.CacheMode>
+                    <BitmapCache/>
+                </Image.CacheMode>
+            </Image>
+            <Image Source="{Binding IsAsync=True, Path=NumberOfAudioChannels, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioChannels, TargetNullValue={StaticResource DefaultSound}, FallbackValue={StaticResource DefaultSound}}"
+                   DockPanel.Dock="Right" MaxWidth="150" MaxHeight="55">
+                <Image.CacheMode>
+                    <BitmapCache/>
+                </Image.CacheMode>
+            </Image>                
+            <Image DockPanel.Dock="Right" Source="{Binding IsAsync=True, Path=AudioCodec, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioCodec, TargetNullValue={StaticResource DefaultSound}, FallbackValue={StaticResource DefaultSound}}" MaxWidth="150" MaxHeight="55">
+                <Image.CacheMode>
+                    <BitmapCache/>
+                </Image.CacheMode>
+            </Image>
+            <Image DockPanel.Dock="Right" Source="{Binding IsAsync=True, Path=VideoResolution, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=VideoResolution, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}" MaxWidth="150" MaxHeight="55">
+                <Image.CacheMode>
+                    <BitmapCache/>
+                </Image.CacheMode>
+            </Image>                
+            <Image DockPanel.Dock="Right" Source="{Binding IsAsync=True, Path=VideoCodec, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=VideoCodec, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}" MaxWidth="150" MaxHeight="55">
+                <Image.CacheMode>
+                    <BitmapCache/>
+                </Image.CacheMode>
+            </Image>                
+        </StackPanel>
+    </DockPanel>
+</UserControl>

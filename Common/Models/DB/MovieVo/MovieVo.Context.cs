@@ -110,6 +110,7 @@ namespace Frost.Common.Models.DB.MovieVo {
         public DbSet<Person> People { get; set; }
 
         public bool HasUnsavedChanges() {
+            ChangeTracker.DetectChanges();
             return ChangeTracker.Entries().Any(e => e.State == EntityState.Added
                                                          || e.State == EntityState.Modified
                                                          || e.State == EntityState.Deleted);

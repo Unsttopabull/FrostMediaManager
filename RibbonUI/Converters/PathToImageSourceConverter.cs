@@ -14,7 +14,8 @@ namespace RibbonUI.Converters {
         VideoCodec,
         AudioCodec,
         Box,
-        Language
+        Language,
+        Country
     }
 
     public class PathToImageSourceConverter : IValueConverter {
@@ -24,10 +25,6 @@ namespace RibbonUI.Converters {
         /// <param name="value">The value produced by the binding source.</param><param name="targetType">The type of the binding target property.</param><param name="parameter">The converter parameter to use.</param><param name="culture">The culture to use in the converter.</param>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value == null) {
-                if (parameter as string == PathType.Box.ToString()) {
-                    BitmapImage bitmapImage = new BitmapImage(new Uri(string.Format("file://{0}/{1}", Directory.GetCurrentDirectory(), "Images/Boxes/generic.png"), UriKind.Absolute));
-                    return bitmapImage;
-                }
                 return null;
             }
 
@@ -62,6 +59,9 @@ namespace RibbonUI.Converters {
                     case PathType.Language:
                         filePath = "Images/Languages/" + value + ".png";
                         break;
+                    case PathType.Country:
+                        filePath = "Images/Countries/" + value + ".png";
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -69,11 +69,6 @@ namespace RibbonUI.Converters {
                 if (File.Exists(filePath)) {
                     path = string.Format("file://{0}/{1}", Directory.GetCurrentDirectory(), filePath);
                     BitmapImage bitmapImage = new BitmapImage(new Uri(path, UriKind.Absolute));
-                    return bitmapImage;
-                }
-
-                if (type == PathType.Box) {
-                    BitmapImage bitmapImage = new BitmapImage(new Uri(string.Format("file://{0}/{1}", Directory.GetCurrentDirectory(), "Images/Boxes/generic.png"), UriKind.Absolute));
                     return bitmapImage;
                 }
             }

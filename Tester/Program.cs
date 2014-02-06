@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -44,6 +45,7 @@ namespace Frost.Tester {
             //TestXjbDbParser();
             time = TestMediaSearcher();
             //TestGremoVKino();
+            //TestDBInsert();
 
             sw.Stop();
 
@@ -55,6 +57,30 @@ namespace Frost.Tester {
             Console.WriteLine("\tFIN: " + time);
             Console.WriteLine(Filler);
             Console.Read();
+        }
+
+        private static void TestDBInsert() {
+            string dbName = "data source=movieVo.db3";
+            try {
+                if (!File.Exists(dbName)) {
+                    SQLiteConnection.CreateFile(dbName);
+                }
+                SQLiteCommand.Execute(File.ReadAllText("MovieVo.sql", Encoding.UTF8), SQLiteExecuteType.NonQuery, dbName);
+            }
+            catch (Exception e) {
+                Console.Error.WriteLine(e.Message);
+            }            
+        }
+
+        private static void OutputStudios() {
+            int count = 0;
+            using (StreamReader sr = File.OpenText("ls.txt")) {
+                using (StreamWriter sw = new StreamWriter(File.Create("studioNames.sql3"), Encoding.UTF8)) {
+                    while (!sr.EndOfStream) {
+                        sw.WriteLine("INSERT INTO Studios VALUES ({0}, \"{1}\")", ++count, sr.ReadLine());
+                    }
+                }
+            }
         }
 
         private static void TestGremoVKino() {

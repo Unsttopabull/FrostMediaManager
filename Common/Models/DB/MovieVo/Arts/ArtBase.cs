@@ -43,12 +43,32 @@ namespace Frost.Common.Models.DB.MovieVo.Arts {
         [ForeignKey("MovieId")]
         public virtual Movie Movie { get; set; }
 
-        /// <summary>
-        /// Indicates whether the current object is equal to another object of the same type.
-        /// </summary>
-        /// <returns>
-        /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-        /// </returns>
+
+        [NotMapped]
+        public string Type {
+            get {
+                Type type = GetType();
+                if (type.Namespace == "System.Data.Entity.DynamicProxies") {
+                    if (type.BaseType != null) {
+                        return type.BaseType.Name;
+                    }
+                }
+                return type.Name;
+            }
+        }
+
+        [NotMapped]
+        public string PreviewOrPath {
+            get {
+                if (!string.IsNullOrEmpty(Preview)) {
+                    return Preview;
+                }
+                return Path;
+            }
+        }
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
         /// <param name="other">An object to compare with this object.</param>
         public bool Equals(ArtBase other) {
             if (ReferenceEquals(null, other)) {
@@ -60,12 +80,8 @@ namespace Frost.Common.Models.DB.MovieVo.Arts {
             return Id == other.Id && string.Equals(Path, other.Path) && MovieId == other.MovieId && string.Equals(Preview, other.Preview);
         }
 
-        /// <summary>
-        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
-        /// </summary>
-        /// <returns>
-        /// true if the specified object  is equal to the current object; otherwise, false.
-        /// </returns>
+        /// <summary>Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.</summary>
+        /// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
         /// <param name="obj">The object to compare with the current object. </param>
         public override bool Equals(object obj) {
             if (ReferenceEquals(null, obj)) {
@@ -80,12 +96,8 @@ namespace Frost.Common.Models.DB.MovieVo.Arts {
             return Equals((ArtBase) obj);
         }
 
-        /// <summary>
-        /// Serves as a hash function for a particular type. 
-        /// </summary>
-        /// <returns>
-        /// A hash code for the current <see cref="T:System.Object"/>.
-        /// </returns>
+        /// <summary>Serves as a hash function for a particular type.</summary>
+        /// <returns>A hash code for the current <see cref="T:System.Object"/>.</returns>
         public override int GetHashCode() {
             unchecked {
                 int hashCode = Id.GetHashCode();
