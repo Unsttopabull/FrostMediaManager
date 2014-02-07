@@ -27,7 +27,7 @@
     </UserControl.DataContext>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid Margin="5,0,0,5">
+        <Grid Margin="5,-5,5,5" MaxHeight="{Binding ElementName=MovieEdit, Path=ActualHeight}">
             <Grid.Resources>
                 <Style TargetType="{x:Type Label}">
                     <Setter Property="Margin" Value="-5,0,0,0" />
@@ -35,162 +35,157 @@
             </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" MinWidth="200" />
-                <ColumnDefinition Width="5"></ColumnDefinition>
+                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Grid x:Name="LeftInfo" x:FieldModifier="private">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Label Grid.Row="0" Target="{Binding ElementName=MovieTitle}">Title:</Label>
-                <TextBox Grid.Row="1" x:Name="MovieTitle" Text="{Binding Path=Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
-                <Label Grid.Row="2" Target="{Binding ElementName=MovieOriginalTitle}">Original title:</Label>
-                <TextBox Grid.Row="3" x:Name="MovieOriginalTitle" Text="{Binding Path=OriginalTitle, Converter={StaticResource EmptyToNullConverter}, UpdateSourceTrigger=PropertyChanged}" />
-
-                <Label Grid.Row="4" Target="{Binding ElementName=MovieSortTitle}">Sort title:</Label>
-                <TextBox Grid.Row="5" x:Name="MovieSortTitle" Text="{Binding Path=SortTitle, Converter={StaticResource EmptyToNullConverter}}" />
-
-                <Label Grid.Row="6" Target="{Binding ElementName=MovieEdithion}">Edithion:</Label>
-                <TextBox Grid.Row="7" x:Name="MovieEdithion" Text="{Binding Path=Edithion, Converter={StaticResource EmptyToNullConverter}}"/>
-
-                <Grid x:Name="TypeRatingDuration" x:FieldModifier="private" Grid.Row="8">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="5"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <Grid x:Name="LeftInfo" x:FieldModifier="private" Margin="0,0,0,5" MaxHeight="{Binding ElementName=MovieEdit, Path=ActualHeight}">
                     <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Grid.Column="0">Type:</Label>
-                    <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding Source={StaticResource MovieTypes}}" SelectedItem="{Binding Type}"/>
-                    
-                    <Label Grid.Row="0" Grid.Column="2">IMBD Id:</Label>
-                    <TextBox Grid.Row="1" Grid.Column="2" Text="{Binding ImdbID, Converter={StaticResource EmptyToNullConverter}}"/>
+                    <Label Grid.Row="0" Target="{Binding ElementName=MovieTitle}">Title:</Label>
+                    <TextBox Grid.Row="1" x:Name="MovieTitle"
+                             Text="{Binding Path=Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <StackPanel Grid.Column="0" Grid.Row="3">
-                        <Label Target="{Binding ElementName=MovieReleaseYear}">Release year:</Label>
-                        <e:IntegerUpDown x:Name="MovieReleaseYear" Minimum="1900" Maximum="2100" Value="{Binding Path=ReleaseYear, UpdateSourceTrigger=PropertyChanged}" />
-                    </StackPanel>
-                    <StackPanel Grid.Column="2" Grid.Row="3">
-                        <Label Target="{Binding ElementName=MovieRating}">Rating:</Label>
-                        <userControls:StarRating Height="{Binding ElementName=MovieReleaseYear, Path=ActualHeight}"
-                                                 Rating="{Binding Path=RatingAverage, UpdateSourceTrigger=PropertyChanged}" />
-                    </StackPanel>
+                    <Label Grid.Row="2" Target="{Binding ElementName=MovieOriginalTitle}">Original title:</Label>
+                    <TextBox Grid.Row="3" x:Name="MovieOriginalTitle" Text="{Binding Path=OriginalTitle, Converter={StaticResource EmptyToNullConverter}, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <StackPanel Grid.Column="0" Grid.Row="4">
-                        <Label>Release group:</Label>
-                        <TextBox Text="{Binding ReleaseGroup, Converter={StaticResource EmptyToNullConverter}}" MinHeight="20"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="2" Grid.Row="4">
-                        <Label Target="{Binding ElementName=MoviePlayCount}">Play count:</Label>
-                        <e:IntegerUpDown x:Name="MoviePlayCount" Minimum="0" Value="{Binding Path=PlayCount}" MinWidth="26"/>
-                    </StackPanel>
+                    <Label Grid.Row="4" Target="{Binding ElementName=MovieSortTitle}">Sort title:</Label>
+                    <TextBox Grid.Row="5" x:Name="MovieSortTitle" Text="{Binding Path=SortTitle, Converter={StaticResource EmptyToNullConverter}}" />
 
-                    <StackPanel Grid.Column="0" Grid.Row="5">
-                        <Label Target="{Binding ElementName=MovieDuration}">Duration</Label>
-                        <a:TimePicker x:Name="MovieDuration"
-                                      SelectedTime="{Binding Path=Runtime, Converter={StaticResource MsToTimeSpanConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    </StackPanel>
-                    <StackPanel Grid.Column="2" Grid.Row="5">
-                        <Label Target="{Binding ElementName=MovieDuration}">Top 250</Label>
-                        <e:IntegerUpDown Minimum="0" Maximum="250" Value="{Binding Path=Top250}" MinHeight="30" VerticalContentAlignment="Center" />
-                    </StackPanel>
-                </Grid>
+                    <Label Grid.Row="6" Target="{Binding ElementName=MovieEdithion}">Edithion:</Label>
+                    <TextBox Grid.Row="7" x:Name="MovieEdithion" Text="{Binding Path=Edithion, Converter={StaticResource EmptyToNullConverter}}" />
 
-                <Grid x:Name="CountriesGenresDirectors" x:FieldModifier="private" Grid.Row="9">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    
-                    <Label Grid.Row="0" Target="{Binding ElementName=MovieDirectors}">Directors</Label>
-                    <ListBox Grid.Row="1" Grid.Column="0" x:Name="MovieDirectors" ItemsSource="{Binding Path=Directors}"
-                             MinHeight="20" />
-                    <StackPanel Grid.Row="1" Grid.Column="1">
-                        <Button Click="AddDirectorOnClick" Style="{StaticResource TransparentBorderlessButton}" ToolTip="Add a new director">
-                            <Image Source="../../Images/add.png" MaxHeight="16" />
-                        </Button>
-                        <Button Click="RemoveDirectorOnClick" Style="{StaticResource TransparentBorderlessButton}" ToolTip="Remove selected director">
-                            <Image Source="../../Images/remove.png" MaxHeight="16" />
-                        </Button>
-                        <Button DockPanel.Dock="Right" Tag="Directors" Style="{StaticResource TransparentBorderlessButton}" Click="EditPersonOnClick" Height="26" VerticalAlignment="Bottom" ToolTip="Edit selected person">
-                            <Image Source="../../Images/edit.ico" MaxHeight="16"/>
-                        </Button>                        
-                    </StackPanel>
+                    <Grid x:Name="TypeRatingDuration" x:FieldModifier="private" Grid.Row="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Grid.Column="0">Type:</Label>
+                        <ComboBox Grid.Row="1" Grid.Column="0"
+                                  ItemsSource="{Binding Source={StaticResource MovieTypes}}"
+                                  SelectedItem="{Binding Type}" />
 
-                    <Label Grid.Column="0" Grid.Row="2" Target="{Binding ElementName=MovieCountries}">Countries:</Label>
-                    <ListBox Grid.Row="3" Grid.Column="0" x:Name="MovieCountries" ItemsSource="{Binding Countries}" MinHeight="32">
-                        <ListBox.Resources>
-                            <BitmapImage x:Key="UnknownCountry" UriSource="../../Images/unknown.png" />
-                        </ListBox.Resources>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate DataType="{x:Type movieVo:Country}">
-                                <StackPanel Orientation="Horizontal">
-                                    <Image
-                                        Source="{Binding ISO3166.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Country, TargetNullValue={StaticResource UnknownCountry}, FallbackValue={StaticResource UnknownCountry}}"
-                                        MaxHeight="32" MaxWidth="32" />
-                                    <TextBlock Text="{Binding Name, TargetNullValue=Unknown, FallbackValue=Unknown}"
-                                               Margin="5,0,0,0" VerticalAlignment="Center" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                    <StackPanel Grid.Row="3" Grid.Column="1">
-                        <Button Click="AddCountryOnClick" Style="{StaticResource TransparentBorderlessButton}" ToolTip="Add new country">
-                            <Image Source="../../Images/add.png" MaxHeight="16" />
-                        </Button>
-                        <Button Click="RemoveCountryOnClick" Style="{StaticResource TransparentBorderlessButton}" ToolTip="Remove selected country">
-                            <Image Source="../../Images/remove.png" MaxHeight="16" />
-                        </Button>
-                    </StackPanel>
+                        <Label Grid.Row="0" Grid.Column="2">IMBD Id:</Label>
+                        <TextBox Grid.Row="1" Grid.Column="2"
+                                 Text="{Binding ImdbID, Converter={StaticResource EmptyToNullConverter}}" />
 
-                    <Label Grid.Column="0" Grid.Row="4" Target="{Binding ElementName=MovieGenres}">Genres</Label>
-                    <ListBox Grid.Column="0" Grid.Row="5" x:Name="MovieGenres" MinHeight="20" DataContext="{DynamicResource GenreSource}"
-                             ItemsSource="{Binding}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate DataType="movieVo:Genre">
-                                <StackPanel Orientation="Horizontal">
-                                    <CheckBox x:Name="CbMovieGenreC" Checked="GenreOnChecked"
-                                          Unchecked="GenreOnUnchecked" Loaded="CbMovieGenreCheckBoxLoaded" />
-                                    <TextBlock x:Name="MovieGenre" Margin="5,0,0,0" Text="{Binding Name}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                    <StackPanel Grid.Row="5" Grid.Column="1">
-                        <Button Click="AddGenreClick" Style="{StaticResource TransparentBorderlessButton}" ToolTip="Add a new genre">
-                            <Image Source="../../Images/add.png" MaxHeight="16" />
-                        </Button>
-                        <Button Click="RemoveGenreClick" Style="{StaticResource TransparentBorderlessButton}" ToolTip="Add a new genre">
-                            <Image Source="../../Images/remove.png" MaxHeight="16" />
-                        </Button>
-                    </StackPanel>
-                </Grid>
-            </Grid>
+                        <StackPanel Grid.Column="0" Grid.Row="3">
+                            <Label Target="{Binding ElementName=MovieReleaseYear}">Release year:</Label>
+                            <e:IntegerUpDown x:Name="MovieReleaseYear" Minimum="1900" Maximum="2100"
+                                             Value="{Binding Path=ReleaseYear, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Grid.Row="3">
+                            <Label Target="{Binding ElementName=MovieRating}">Rating:</Label>
+                            <userControls:StarRating Height="{Binding ElementName=MovieReleaseYear, Path=ActualHeight}"
+                                                     Rating="{Binding Path=RatingAverage, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="0" Grid.Row="4">
+                            <Label>Release group:</Label>
+                            <TextBox Text="{Binding ReleaseGroup, Converter={StaticResource EmptyToNullConverter}}"
+                                     MinHeight="20" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Grid.Row="4">
+                            <Label Target="{Binding ElementName=MoviePlayCount}">Play count:</Label>
+                            <e:IntegerUpDown x:Name="MoviePlayCount" Minimum="0" Value="{Binding Path=PlayCount}"
+                                             MinWidth="26" />
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="0" Grid.Row="5">
+                            <Label Target="{Binding ElementName=MovieDuration}">Duration</Label>
+                            <a:TimePicker x:Name="MovieDuration"
+                                          SelectedTime="{Binding Path=Runtime, Converter={StaticResource MsToTimeSpanConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Grid.Row="5">
+                            <Label Target="{Binding ElementName=MovieDuration}">Top 250</Label>
+                            <e:IntegerUpDown Minimum="0" Maximum="250" Value="{Binding Path=Top250}" MinHeight="30"
+                                             VerticalContentAlignment="Center" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid x:Name="CountriesGenresDirectors" x:FieldModifier="private" Grid.Row="9">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Grid.Row="0" Grid.ColumnSpan="2" Target="{Binding ElementName=MovieDirectors}">Directors</Label>
+                        <ListBox Grid.Row="1" Grid.Column="0" MinHeight="20" MaxHeight="50" Grid.ColumnSpan="2" x:Name="MovieDirectors" ItemsSource="{Binding Path=Directors}" SelectionMode="Single"/>
+                        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button DockPanel.Dock="Right" Tag="Directors" MaxHeight="16"
+                                    Style="{StaticResource TransparentBorderlessButton}" Click="EditPersonOnClick"
+                                    Height="26" VerticalAlignment="Bottom" ToolTip="Edit selected person">
+                                <Image Source="../../Images/edit.ico" />
+                            </Button>
+                            <Button Click="AddDirectorOnClick" Style="{StaticResource TransparentBorderlessButton}"
+                                    ToolTip="Add a new director" MaxHeight="16">
+                                <Image Source="../../Images/add.png"/>
+                            </Button>
+                            <Button Click="RemoveDirectorOnClick" Style="{StaticResource TransparentBorderlessButton}"
+                                    ToolTip="Remove selected director" MaxHeight="16">
+                                <Image Source="../../Images/remove.png" />
+                            </Button>
+                        </StackPanel>
+
+                        <Label Grid.Column="0" Grid.Row="3" Target="{Binding ElementName=MovieCountries}" Margin="-5,-5,0,0">Countries:</Label>
+                        <ListBox Grid.Row="4" Grid.Column="0" x:Name="MovieCountries" ItemsSource="{Binding Countries}"
+                                 MinHeight="32">
+                            <ListBox.Resources>
+                                <BitmapImage x:Key="UnknownCountry" UriSource="../../Images/unknown.png" />
+                            </ListBox.Resources>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type movieVo:Country}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image
+                                            Source="{Binding ISO3166.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Country, TargetNullValue={StaticResource UnknownCountry}, FallbackValue={StaticResource UnknownCountry}}"
+                                            MaxHeight="32" MaxWidth="32" />
+                                        <TextBlock
+                                            Text="{Binding Name, TargetNullValue=Unknown, FallbackValue=Unknown}"
+                                            Margin="5,0,0,0" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <StackPanel Grid.Row="4" Grid.Column="1">
+                            <Button Click="AddCountryOnClick" Style="{StaticResource TransparentBorderlessButton}"
+                                    ToolTip="Add new country">
+                                <Image Source="../../Images/add.png" MaxHeight="16" />
+                            </Button>
+                            <Button Click="RemoveCountryOnClick" Style="{StaticResource TransparentBorderlessButton}"
+                                    ToolTip="Remove selected country">
+                                <Image Source="../../Images/remove.png" MaxHeight="16" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid></ScrollViewer>
             <Grid  x:Name="RightInfo" x:FieldModifier="private" Grid.Column="2" Margin="10,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition MaxHeight="250"/>
@@ -258,6 +253,7 @@
                 <Grid x:Name="ActorsStudios" x:FieldModifier="private" Grid.Row="1" Grid.Column="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
+                        <ColumnDefinition Width="10"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
@@ -297,21 +293,44 @@
                             <DataGridTextColumn Binding="{Binding Character, TargetNullValue=Unknown}" Header="Role" Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <DockPanel Grid.Row="0" Grid.Column="1" LastChildFill="False" Margin="10,0,0,0">
-                        <Label DockPanel.Dock="Left">Studios:</Label>                        
-                        <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}" Click="RemoveStudioOnClick" ToolTip="Remove selected studio">
-                            <Image Source="../../Images/remove.png" MaxHeight="16"/>
-                        </Button>
-                        <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}" Click="AddStudioOnClick" Height="26" VerticalAlignment="Bottom" ToolTip="Add new studio">
-                            <Image Source="../../Images/add.png" MaxHeight="16"/>
-                        </Button>
-                    </DockPanel>
-                    <Grid Grid.Column="1" Grid.Row="1" Margin="10,0,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <ListBox x:Name="MovieStudios" ItemsSource="{Binding Studios}" MinHeight="32">
+                    <Grid Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <DockPanel Grid.Row="0" LastChildFill="False" Margin="5,0,0,0">
+                            <Label DockPanel.Dock="Left">Genres:</Label>
+                            <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}" Click="RemoveStudioOnClick" ToolTip="Remove selected studio">
+                                <Image Source="../../Images/remove.png" MaxHeight="16"/>
+                            </Button>
+                            <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}" Click="AddStudioOnClick" Height="26" VerticalAlignment="Bottom" ToolTip="Add new studio">
+                                <Image Source="../../Images/add.png" MaxHeight="16"/>
+                            </Button>
+                        </DockPanel>
+
+                        <ListBox Grid.Row="1" x:Name="MovieGenres" MinHeight="20" DataContext="{DynamicResource GenreSource}" ItemsSource="{Binding}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate DataType="movieVo:Genre">
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox x:Name="CbMovieGenreC" Checked="GenreOnChecked" Unchecked="GenreOnUnchecked" Loaded="CbMovieGenreCheckBoxLoaded" />
+                                        <TextBlock x:Name="MovieGenre" Margin="5,0,0,0" Text="{Binding Name}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>                        
+                        
+                        <DockPanel Grid.Row="2" LastChildFill="False" Margin="5,0,0,0">
+                            <Label DockPanel.Dock="Left">Studios:</Label>
+                            <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}" Click="RemoveStudioOnClick" ToolTip="Remove selected studio">
+                                <Image Source="../../Images/remove.png" MaxHeight="16"/>
+                            </Button>
+                            <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}" Click="AddStudioOnClick" Height="26" VerticalAlignment="Bottom" ToolTip="Add new studio">
+                                <Image Source="../../Images/add.png" MaxHeight="16"/>
+                            </Button>
+                        </DockPanel>
+                        <ListBox Grid.Row="3" x:Name="MovieStudios" ItemsSource="{Binding Studios}" MinHeight="32">
                             <ListBox.Resources>
                                 <BitmapImage x:Key="DefaultLogo" UriSource="../../Images/defaultscreen.png"/>
                             </ListBox.Resources>
@@ -319,14 +338,13 @@
                                 <DataTemplate DataType="{x:Type movieVo:Studio}">
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="{Binding Name, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Studio, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}"
-                                               MaxHeight="64" MaxWidth="64" />
-                                        <TextBlock Text="{Binding Name, TargetNullValue=Unknown, FallbackValue=Unknown}"
-                                                   Margin="5,0,0,0" VerticalAlignment="Center" />
+                                                   MaxHeight="64" MaxWidth="64" />
+                                        <TextBlock Text="{Binding Name, TargetNullValue=Unknown, FallbackValue=Unknown}" Margin="5,0,0,0" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
-                        </ListBox>    
-                    </Grid>                
+                        </ListBox>
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>
