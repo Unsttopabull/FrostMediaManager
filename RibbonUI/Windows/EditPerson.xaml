@@ -1,0 +1,53 @@
+﻿<Window x:Class="RibbonUI.Windows.EditPerson"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:people="clr-namespace:Frost.Common.Models.DB.MovieVo.People;assembly=Frost.Common"
+        xmlns:converters="clr-namespace:RibbonUI.Converters"
+        Title="{Binding ElementName=NameBox, Path=Text, TargetNullValue=Edit person, FallbackValue=Edit person}"
+        Height="300" Width="650" Closed="OnWindowClose">
+    <Window.Resources>
+        <BitmapImage x:Key="Person" UriSource="../Images/person.png"/>
+        <converters:EmptyStringToNullConverter x:Key="EmptyToNullConverter"/>
+    </Window.Resources>
+    <Window.DataContext>
+        <people:Person/>
+    </Window.DataContext>
+    <Grid Margin="5,5,5,5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Image Grid.Column="0" Source="{Binding Thumb, TargetNullValue={StaticResource Person}, FallbackValue={StaticResource Person}, UpdateSourceTrigger=PropertyChanged}" MaxWidth="150"/>
+        <Grid Grid.Row="0" Grid.Column="1" Margin="5,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Margin="-5,0,0,0">Name:</Label>
+            <TextBox x:Name="NameBox" x:FieldModifier="private" Grid.Row="1" Text="{Binding Name, Converter={StaticResource EmptyToNullConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Label Grid.Row="2" Margin="-5,0,0,0">Imdb ID:</Label>
+            <TextBox Grid.Row="3" Text="{Binding ImdbID, Converter={StaticResource EmptyToNullConverter}}"/>
+
+            <Label Grid.Row="4" Margin="-5,0,0,0">Thumb:</Label>
+            <TextBox x:Name="ThumbBox" x:FieldModifier="private" Grid.Row="5" Text="{Binding Thumb, Converter={StaticResource EmptyToNullConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+            <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="5" Margin="0,0,5,0" ToolTip="Open file search dialog">
+                <Button Height="16" Style="{StaticResource TransparentBorderlessButton}" Click="ThumbSearchOnClick">
+                    <Image Source="../Images/folder.ico"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button MinWidth="100" Click="Button_Click">OK</Button>
+        </StackPanel>
+    </Grid>
+</Window>

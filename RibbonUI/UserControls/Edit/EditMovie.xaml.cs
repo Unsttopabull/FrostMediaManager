@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Data;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,7 +17,7 @@ namespace RibbonUI.UserControls.Edit {
     /// <summary>Interaction logic for EditMovie.xaml</summary>
     public partial class EditMovie : UserControl {
         private Movie _movie;
-        private Window _window;
+        private MainWindow _window;
 
         public EditMovie() {
             InitializeComponent();
@@ -142,7 +144,7 @@ namespace RibbonUI.UserControls.Edit {
 
             if (MessageBox.Show(window,
                 "Please note this will remove this genre from all the movies in the collection.\n" +
-                "To remove the genre from this movie only click \"No\" and just uncheck it\nin the list.\n\n"+
+                "To remove the genre from this movie only click \"No\" and just uncheck it\nin the list.\n\n" +
                 "Do you really want to remove this genre?",
                 "Genre remove", MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
                 ListCollectionView itemsSource = (ListCollectionView) MovieGenres.ItemsSource;
@@ -301,13 +303,42 @@ namespace RibbonUI.UserControls.Edit {
         #endregion
 
         private void EditPersonOnClick(object sender, RoutedEventArgs e) {
-            if (MovieActorsList.SelectedIndex == -1) {
-                MessageBox.Show(_window, "No actor selected");
+            string tag = (string) ((Button) sender).Tag;
+
+            Person p;
+            switch (tag) {
+                case "Directors":
+                    if (MovieDirectors.SelectedIndex == -1) {
+                        MessageBox.Show(_window, "No directors selected");
+                        return;
+                    }
+                    p = (Person) MovieDirectors.SelectedItem;
+                    break;
+                case "Actors":
+                    if (MovieActorsList.SelectedIndex == -1) {
+                        MessageBox.Show(_window, "No actor selected");
+                        return;
+                    }
+                    p = ((MovieActor) MovieActorsList.SelectedItem).Person;
+                    break;
+                default:
+                    return;
+            }
+
+            new EditPerson { Owner = _window, DataContext = p }.ShowDialog();
+
+            switch (tag) {
+                case "Directors":
+                    MovieDirectors.Items.Refresh();
+                    break;
+                case "Actors":
+                    MovieActorsList.Items.Refresh();
+                    break;
             }
         }
 
         private void OnControlLoaded(object sender, RoutedEventArgs e) {
-            _window = Window.GetWindow(this);
+            _window = (MainWindow) Window.GetWindow(this);
         }
     }
 

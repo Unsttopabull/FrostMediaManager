@@ -55,7 +55,7 @@ namespace RibbonUI.UserControls {
                 EditMovie.MoviePlotCombo.SelectedIndex = 0;
             }
 
-            MinRequiredWidth = MovieList.RenderSize.Width + MovieFlags.RenderSize.Width;
+            MinRequiredWidth = MovieList.RenderSize.Width + MovieFlags.MinRequiredWidth;
         }
 
         private void MovieListOnLoaded(object sender, RoutedEventArgs e) {

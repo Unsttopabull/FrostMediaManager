@@ -8,14 +8,14 @@ namespace RibbonUI {
 
     /// <summary>Interaction logic for MainWindow.xaml</summary>
     public partial class MainWindow {
-        private readonly MovieVoContainer _container = new MovieVoContainer();
+        internal readonly MovieVoContainer Container = new MovieVoContainer();
 
         public MainWindow() {
             InitializeComponent();
         }
 
         private void RibbonWindowLoaded(object sender, RoutedEventArgs e) {
-            _container.Movies
+            Container.Movies
                       .Include("Studios")
                       .Include("Arts")
                       .Include("Genres")
@@ -26,40 +26,40 @@ namespace RibbonUI {
                       .Include("Countries")
                       .Include("Audios").Load();
 
-            _container.Genres.Load();
-            _container.Countries.Load();
-            _container.Languages.Load();
-            _container.People.Load();
-            _container.Studios.Load();
+            Container.Genres.Load();
+            Container.Countries.Load();
+            Container.Languages.Load();
+            Container.People.Load();
+            Container.Studios.Load();
             
             CollectionViewSource movieSource = (CollectionViewSource) (FindResource("MoviesSource"));
             if (movieSource != null) {
-                movieSource.Source = _container.Movies.Local;
+                movieSource.Source = Container.Movies.Local;
             }
 
             CollectionViewSource genreSurce = (CollectionViewSource) (FindResource("GenreSource"));
             if (genreSurce != null) {
-                genreSurce.Source = _container.Genres.Local;
+                genreSurce.Source = Container.Genres.Local;
             }
 
             CollectionViewSource countriesSource = (CollectionViewSource) (FindResource("CountriesSource"));
             if (countriesSource != null) {
-                countriesSource.Source = _container.Countries.Local;
+                countriesSource.Source = Container.Countries.Local;
             }
 
             CollectionViewSource languageSource = (CollectionViewSource) (FindResource("LanguagesSource"));
             if (languageSource != null) {
-                languageSource.Source = _container.Languages.Local;
+                languageSource.Source = Container.Languages.Local;
             }
 
             CollectionViewSource peopleSource = (CollectionViewSource) (FindResource("PeopleSource"));
             if (peopleSource != null) {
-                peopleSource.Source = _container.People.Local;
+                peopleSource.Source = Container.People.Local;
             }
 
             CollectionViewSource studiosSource = (CollectionViewSource) (FindResource("StudiosSource"));
             if (studiosSource != null) {
-                studiosSource.Source = _container.Studios.Local;
+                studiosSource.Source = Container.Studios.Local;
             }
         }
 
@@ -68,15 +68,15 @@ namespace RibbonUI {
         protected override void OnClosing(CancelEventArgs e) {
             base.OnClosing(e);
 
-            if (!_container.HasUnsavedChanges()) {
+            if (!Container.HasUnsavedChanges()) {
                 return;
             }
 
             if (MessageBox.Show("There are unsaved changes, save?", "Unsaved changes", MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
-                _container.SaveChanges();
+                Container.SaveChanges();
             }
 
-            _container.Dispose();
+            Container.Dispose();
         }
     }
 

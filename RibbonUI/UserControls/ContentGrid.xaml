@@ -6,6 +6,7 @@
     xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
     xmlns:userControls="clr-namespace:RibbonUI.UserControls"
     xmlns:edit="clr-namespace:RibbonUI.UserControls.Edit"
+    xmlns:converters="clr-namespace:RibbonUI.Converters"
     x:Class="RibbonUI.UserControls.ContentGrid"
     x:Name="ContentGridControl"
     mc:Ignorable="d"
@@ -13,6 +14,7 @@
     <!--MinWidth="{Binding MinRequiredWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"-->
 
     <UserControl.Resources>
+        <converters:SubtractConverter x:Key="SubtractConverter" />
         <Style x:Key="BooleanImage" TargetType="{x:Type Image}">
             <Setter Property="Source" Value="../Images/error.ico" />
             <Style.Triggers>
@@ -200,11 +202,14 @@
                 <TabItem Header="Trivia &amp; Goofs">
 
                 </TabItem>
-                <TabItem Header="Edit Movie info">
+                <TabItem x:Name="MovieEditTab" x:FieldModifier="private" Header="Edit Movie info">
                     <edit:EditMovie x:Name="EditMovie"
-                                            DataContext="{Binding ElementName=MovieList, Path=SelectedItem}"
-                                            MaxWidth="{Binding ActualWidth, ElementName=TabControl}"
-                                            MaxHeight="{Binding ElementName=TabControl, Path=ActualHeight}"/>
+                                    DataContext="{Binding ElementName=MovieList, Path=SelectedItem}"
+                                    />
+                    <!--
+                        Width="{Binding ActualWidth, ElementName=TabControl}"
+                        Height="{Binding ElementName=TabControl, Path=ActualHeight, Converter={StaticResource SubtractConverter}, ConverterParameter=22}"
+                    -->
                 </TabItem>
                 <TabItem Header="Subtitles" x:Name="MovieSubtitles" GotFocus="MovieSubtitlesGotFocus" LostFocus="MovieSubtitlesOnLostFocus">
                     <edit:EditSubtitles DataContext="{Binding ElementName=MovieList, Path=SelectedItem}"/>
