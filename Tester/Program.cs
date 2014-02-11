@@ -5,15 +5,24 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using DiscUtils;
+using DiscUtils.Iso9660;
+using DiscUtils.Ntfs;
+using DiscUtils.Optical;
 using Frost.Common.Models.DB.Jukebox;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.XML.XBMC;
+using Frost.Common.Util;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures;
 using System.Diagnostics;
+using Frost.DetectFeatures.Util;
 using Frost.MovieInfoParsers.GremoVKino;
 using Frost.PHPtoNET;
+using Frost.SharpMediaInfo;
+using LTR.IO.ImDisk;
 using File = System.IO.File;
 using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
 using CoretisMovie = Frost.Common.Models.PHP.Coretis_VO_Movie;
@@ -44,8 +53,12 @@ namespace Frost.Tester {
 
             //TestXjbDbParser();
             time = TestMediaSearcher();
+            //TestFileFeatures();
             //TestGremoVKino();
             //TestDBInsert();
+            //TestISOMount();
+            //TestDiscUtils();
+            //TestImDisk();
 
             sw.Stop();
 
@@ -57,6 +70,100 @@ namespace Frost.Tester {
             Console.WriteLine("\tFIN: " + time);
             Console.WriteLine(Filler);
             Console.Read();
+        }
+
+        private static void TestImDisk() {
+            bool imageContainsIsofs = ImDiskAPI.ImageContainsISOFS(@"E:\Torrenti\FILMI\The holiday (2006) - Počitnice\The holiday.iso", 0);
+            string findFreeDriveLetter = ImDiskAPI.FindFreeDriveLetter().ToString(CultureInfo.InvariantCulture);
+
+            IntPtr statusControl = new IntPtr();
+            ImDiskAPI.CreateDevice(0, 0, 0, 0, 0, ImDiskFlags.Auto, @"E:\Torrenti\FILMI\The holiday (2006) - Počitnice\The holiday.iso", false, "G:", statusControl);
+            uint device = (uint) ImDiskAPI.GetDeviceList()[0];
+
+            Console.WriteLine("Waiting 10s to unmount ...");
+            for (int i = 1; i < 11; i++) {
+                Console.WriteLine(i);
+                Thread.Sleep(TimeSpan.FromSeconds(1));
+            }
+
+            try {
+                ImDiskAPI.RemoveDevice(device, statusControl);
+            }
+            catch {
+                ImDiskAPI.ForceRemoveDevice(device);
+            }
+        }
+
+        private static void TestISOMount() {
+
+            IntPtr handle = IsoImageMount.Mount(@"E:\Torrenti\FILMI\The holiday (2006) - Počitnice\The holiday.iso", false);
+
+            Console.WriteLine(@"Mounted. Unmounting in 10s.");
+            for (int i = 1; i < 11; i++) {
+                Thread.Sleep(TimeSpan.FromSeconds(1));
+                Console.WriteLine(i);
+            }
+
+            Console.WriteLine(@"Unmounting...");
+            IsoImageMount.Unmount(handle);
+            IsoImageMount.CloseHandle(handle);
+
+            Console.WriteLine("Finished.");
+            Console.ReadKey();
+        }
+
+        private static void TestDiscUtils() {
+            using (FileStream fs = File.OpenRead(@"E:\Torrenti\FILMI\The holiday (2006) - Počitnice\The holiday.iso")) {
+                CDReader cdr = new CDReader(fs, false);
+                Debug.WriteLine("ISO Label: "+ cdr.VolumeLabel);
+                Debug.WriteLine("");
+
+                DiscDirectoryInfo dir = cdr.GetDirectoryInfo("");
+
+                ListFileSystem(dir);
+            }
+        }
+
+        private static void ListFileSystem(DiscDirectoryInfo dir) {
+            DiscFileInfo[] files = dir.GetFiles();
+            DiscDirectoryInfo[] dirs = dir.GetDirectories();
+
+            Debug.WriteLine("DIR: " + dir.Name);
+            Debug.Indent();
+
+            if (files.Length > 0) {
+                Debug.WriteLine("Files:");
+                Debug.Indent();
+                foreach (DiscFileInfo fileInfo in files) {
+                    string name = fileInfo.Name;
+                    Debug.WriteLine(name.Remove(name.LastIndexOf(';')));
+                }
+                Debug.Unindent();
+            }
+
+            if (dirs.Length <= 0) {
+                Debug.Unindent();
+                return;
+            }
+
+            Debug.WriteLine("Directories:");
+            Debug.Indent();
+            foreach (DiscDirectoryInfo directoryInfo in dirs) {
+                Debug.Indent();
+                ListFileSystem(directoryInfo);
+                Debug.Unindent();
+            }
+            Debug.Unindent();
+        }
+
+        private static void TestFileFeatures() {
+            FileNameInfo fnInfo = new FileNameParser(@"F:\Torrenti\FILMI\Anna.Karenina (2012)\VIDEO_TS\VTS_08_1.VOB").Parse();
+
+            using (FileFeatures ff = new FileFeatures(NFOPriority.OnlyNotDetected, fnInfo)) {
+                if (ff.Detect()) {
+                    Movie mv = ff.Movie;
+                }
+            }
         }
 
         private static void TestDBInsert() {

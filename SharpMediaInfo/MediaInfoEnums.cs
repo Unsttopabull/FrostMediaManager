@@ -99,7 +99,7 @@ namespace Frost.SharpMediaInfo {
     }
 
     /// <summary>The way of displaying/drawing video frames on the screen.</summary>
-    public enum ScanType : long {
+    public enum MediaScanType : long {
         /// <summary>An Unknown scan type.</summary>
         Unknown,
 

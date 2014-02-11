@@ -5,8 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
     xmlns:userControls="clr-namespace:RibbonUI.UserControls"
-    xmlns:edit="clr-namespace:RibbonUI.UserControls.Edit"
     xmlns:converters="clr-namespace:RibbonUI.Converters"
+    xmlns:list="clr-namespace:RibbonUI.UserControls.List"
     x:Class="RibbonUI.UserControls.ContentGrid"
     x:Name="ContentGridControl"
     mc:Ignorable="d"
@@ -14,7 +14,6 @@
     <!--MinWidth="{Binding MinRequiredWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"-->
 
     <UserControl.Resources>
-        <converters:SubtractConverter x:Key="SubtractConverter" />
         <Style x:Key="BooleanImage" TargetType="{x:Type Image}">
             <Setter Property="Source" Value="../Images/error.ico" />
             <Style.Triggers>
@@ -174,7 +173,7 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <Grid x:Name="Content" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Background="#FFA0A0A0">
+        <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Background="#FFA0A0A0">
             <Grid.Style>
                 <Style TargetType="{x:Type Grid}">
                     <Style.Triggers>
@@ -203,7 +202,7 @@
 
                 </TabItem>
                 <TabItem x:Name="MovieEditTab" x:FieldModifier="private" Header="Edit Movie info">
-                    <edit:EditMovie x:Name="EditMovie"
+                    <userControls:EditMovie x:Name="EditMovie"
                                     DataContext="{Binding ElementName=MovieList, Path=SelectedItem}"
                                     />
                     <!--
@@ -212,17 +211,19 @@
                     -->
                 </TabItem>
                 <TabItem Header="Subtitles" x:Name="MovieSubtitles" GotFocus="MovieSubtitlesGotFocus" LostFocus="MovieSubtitlesOnLostFocus">
-                    <edit:EditSubtitles DataContext="{Binding ElementName=MovieList, Path=SelectedItem}"/>
+                    <list:ListSubtitles DataContext="{Binding ElementName=MovieList, Path=SelectedItem.Subtitles}"/>
                 </TabItem>
                 <TabItem Header="Videos">
-                    <edit:EditVideos DataContext="{Binding ElementName=MovieList, Path=SelectedItem}"/>
+                    <list:ListVideos DataContext="{Binding ElementName=MovieList, Path=SelectedItem.Videos}"/>
                 </TabItem>
                 <TabItem Header="Audios">
-                    <edit:EditAudios DataContext="{Binding ElementName=MovieList, Path=SelectedItem}"/>
+                    <list:ListAudios DataContext="{Binding ElementName=MovieList, Path=SelectedItem.Audios}"/>
                 </TabItem>
-                <TabItem Header="Promotional Videos" />
+                <TabItem Header="Promotional Videos" >
+                    
+                </TabItem>
                 <TabItem Header="Art">
-                    <edit:EditArt DataContext="{Binding ElementName=MovieList, Path=SelectedItem}"/>
+                    <list:ListArt DataContext="{Binding ElementName=MovieList, Path=SelectedItem.Art}"/>
                 </TabItem>
             </TabControl>
         </Grid>

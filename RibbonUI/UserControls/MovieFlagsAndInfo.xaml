@@ -6,10 +6,7 @@
              xmlns:userControls="clr-namespace:RibbonUI.UserControls"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
-             mc:Ignorable="d" 
-             x:Name="FlagsInfo"
-             
-             d:DesignHeight="75" d:DesignWidth="950">
+             mc:Ignorable="d" x:Name="FlagsInfo" d:DesignHeight="75" d:DesignWidth="950">
     <UserControl.DataContext>
         <movieVo:Movie/>
     </UserControl.DataContext>
@@ -53,23 +50,19 @@
             </StackPanel>
         </Grid>
         <StackPanel x:Name="MovieFlags" DockPanel.Dock="Right" Orientation="Horizontal" FlowDirection="RightToLeft" SizeChanged="OnSizeChanged">
-            <StackPanel.Resources>
-                <BitmapImage x:Key="DefaultLogo" UriSource="../Images/defaultscreen.png"></BitmapImage>
-                <BitmapImage x:Key="DefaultSound" UriSource="../Images/FlagsE/achan_defaultsound.png"></BitmapImage>
-            </StackPanel.Resources>
             <Image DockPanel.Dock="Right" Source="{Binding IsAsync=True, Path=FirstStudioName, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Studio, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}}"
                    ToolTip="{Binding IsAsync=True, Path=FirstStudioName, TargetNullValue=Unknown Studio, FallbackValue=Unknown Studio}" MaxWidth="150" MaxHeight="55">
                 <Image.CacheMode>
                     <BitmapCache/>
                 </Image.CacheMode>
             </Image>
-            <Image Source="{Binding IsAsync=True, Path=NumberOfAudioChannels, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioChannels, TargetNullValue={StaticResource DefaultSound}, FallbackValue={StaticResource DefaultSound}}"
+            <Image Source="{Binding IsAsync=True, Path=NumberOfAudioChannels, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioChannels, TargetNullValue={StaticResource DefaultSoundLogo}, FallbackValue={StaticResource DefaultSoundLogo}}"
                    DockPanel.Dock="Right" MaxWidth="150" MaxHeight="55">
                 <Image.CacheMode>
                     <BitmapCache/>
                 </Image.CacheMode>
-            </Image>                
-            <Image DockPanel.Dock="Right" Source="{Binding IsAsync=True, Path=AudioCodec, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioCodec, TargetNullValue={StaticResource DefaultSound}, FallbackValue={StaticResource DefaultSound}}" MaxWidth="150" MaxHeight="55">
+            </Image>
+            <Image DockPanel.Dock="Right" Source="{Binding IsAsync=True, Path=AudioCodec, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioCodec, TargetNullValue={StaticResource DefaultSoundLogo}, FallbackValue={StaticResource DefaultSoundLogo}}" MaxWidth="150" MaxHeight="55">
                 <Image.CacheMode>
                     <BitmapCache/>
                 </Image.CacheMode>

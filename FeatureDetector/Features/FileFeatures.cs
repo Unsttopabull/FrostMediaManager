@@ -5,8 +5,6 @@ using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.Files;
@@ -45,7 +43,7 @@ namespace Frost.DetectFeatures {
                 "Adobe encore DVD", "Advanced Substation Alpha", "AQTitle",
                 "ASS", "Captions Inc", "Cheeta", "Cheetah", "CPC Captioning",
                 "CPC-600", "EBU Subtitling Format", "N19", "SAMI",
-                "Sami Captioning", "SSA", "SubRip", "SubStation Alpha"
+                "Sami Captioning", "SSA", "SubRip", "SubStation Alpha", "VobSub"
             };
 
             SubtitleExtensionsRegex = string.Format(@"\.({0})", string.Join("|", KnownSubtitleExtensions));
@@ -62,7 +60,7 @@ namespace Frost.DetectFeatures {
             _fnInfos = new Dictionary<string, FileNameInfo>();
         }
 
-        internal FileFeatures(NFOPriority nfoPriority, params string[] fileNames) : this(nfoPriority) {
+        public FileFeatures(NFOPriority nfoPriority, params string[] fileNames) : this(nfoPriority) {
             _files = new FileVo[fileNames.Length];
 
             foreach (string filenName in fileNames) {
@@ -74,7 +72,7 @@ namespace Frost.DetectFeatures {
             Init(fileNames);
         }
 
-        internal FileFeatures(NFOPriority nfoPriority, params FileNameInfo[] fileNameInfos) : this(nfoPriority) {
+        public FileFeatures(NFOPriority nfoPriority, params FileNameInfo[] fileNameInfos) : this(nfoPriority) {
             _files = new FileVo[fileNameInfos.Length];
 
             foreach (FileNameInfo nameInfo in fileNameInfos) {
@@ -145,35 +143,43 @@ namespace Frost.DetectFeatures {
 
         private string ParseInfoFromPath(string filePath, ref FileVo file) {
             string directoryPath;
-            FileInfo fi;
             try {
-                fi = new FileInfo(filePath);
+                FileInfo fi = new FileInfo(filePath);
+
+                if (file == null) {
+                    _manualParse = true;
+                    file = ParseFileInfoFromFile(fi);
+                }
 
                 _directoryInfo = fi.Directory;
                 directoryPath = _directoryInfo != null
                                     ? _directoryInfo.FullName
                                     : filePath.Substring(0, filePath.LastIndexOfAny(new[] { '\\', '/' }));
             }
-            catch (Exception e) {
+            catch (Exception) {
                 directoryPath = filePath.Substring(0, filePath.LastIndexOfAny(new[] { '\\', '/' }));
                 return directoryPath;
-            }
-
-            if (file == null) {
-                _manualParse = true;
-                string withoutExtension = Path.GetFileNameWithoutExtension(fi.Name);
-                withoutExtension = string.IsNullOrEmpty(withoutExtension)
-                                       ? fi.Name.Substring(0, fi.Name.LastIndexOf('.'))
-                                       : withoutExtension;
-
-                file = new FileVo(withoutExtension, fi.Extension.Substring(1), fi.DirectoryName, fi.Length);
             }
             return directoryPath;
         }
 
+        private static FileVo ParseFileInfoFromFile(FileInfo fi) {
+            if (fi == null) {
+                throw new ArgumentNullException("fi");
+            }
+
+            string withoutExtension = Path.GetFileNameWithoutExtension(fi.Name);
+
+            withoutExtension = string.IsNullOrEmpty(withoutExtension)
+                                   ? fi.Name.Substring(0, fi.Name.LastIndexOf('.'))
+                                   : withoutExtension;
+
+            return new FileVo(withoutExtension, fi.Extension.Substring(1), fi.DirectoryName, fi.Length);
+        }
+
         public Movie Movie { get; private set; }
 
-        internal bool Detect() {
+        public bool Detect() {
             if (_error) {
                 return false;
             }
@@ -207,10 +213,10 @@ namespace Frost.DetectFeatures {
                     string resolution = video.Resolution.ToString();
                     switch (video.ScanType) {
                         case ScanType.Interlaced:
-                            resolution = resolution + "p";
+                            resolution = resolution + "i";
                             break;
                         case ScanType.Progressive:
-                            resolution = resolution + "i";
+                            resolution = resolution + "p";
                             break;
                     }
                     Movie.VideoResolution = resolution;

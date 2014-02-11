@@ -1,11 +1,11 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace RibbonUI.UserControls.Edit {
+namespace RibbonUI.UserControls.List {
 
     /// <summary>Interaction logic for EditArt.xaml</summary>
-    public partial class EditArt : UserControl {
-        public EditArt() {
+    public partial class ListArt : UserControl {
+        public ListArt() {
             InitializeComponent();
         }
 

@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
+using System.IO;
 using Frost.Common.Util;
 
 namespace Frost.Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents an information about a file.</summary>
     public class File : IEquatable<File> {
-
         /// <summary>Initializes a new instance of the <see cref="File"/> class.</summary>
         public File() {
             AudioDetails = new ObservableHashSet<Audio>();
@@ -28,6 +28,20 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
             Name = name;
             FolderPath = pathOnDrive;
             Size = size;
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="File" /> class.</summary>
+        /// <param name="info">The file information.</param>
+        /// <exception cref="System.ArgumentNullException">Throw if <paramref name="info"/> is <c>null</c>.</exception>
+        public File(FileInfo info) {
+            if (info == null) {
+                throw new ArgumentNullException("info");
+            }
+
+            Extension = info.Extension;
+            Name = Path.GetFileNameWithoutExtension(info.Name);
+            FolderPath = info.DirectoryName + "\\";
+            Size = info.Length;
         }
 
         #region Properties/Columns
@@ -107,7 +121,7 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
                     }
                     return FolderPath + "/" + Name + "." + Extension;
                 }
-                return null;                
+                return null;
             }
         }
 
@@ -129,7 +143,8 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
             if (ReferenceEquals(this, other)) {
                 return true;
             }
-            return Id == other.Id && string.Equals(Extension, other.Extension) && string.Equals(Name, other.Name) && string.Equals(FolderPath, other.FolderPath) && Size == other.Size && DateAdded.Equals(other.DateAdded);
+            return Id == other.Id && string.Equals(Extension, other.Extension) && string.Equals(Name, other.Name) && string.Equals(FolderPath, other.FolderPath) &&
+                   Size == other.Size && DateAdded.Equals(other.DateAdded);
         }
 
         /// <summary>

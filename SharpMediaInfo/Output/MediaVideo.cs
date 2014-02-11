@@ -123,19 +123,19 @@ namespace Frost.SharpMediaInfo.Output {
         /// <summary>16/24/32 bits</summary>
         public string BitDepthString { get { return this["BitDepth/String"]; } }
 
-        public ScanType ScanType {
+        public MediaScanType ScanType {
             get {
                 switch (this["ScanType"]) {
                     case "Interlaced":
-                        return ScanType.Interlaced;
+                        return MediaScanType.Interlaced;
                     case "Progressive":
-                        return ScanType.Progressive;
+                        return MediaScanType.Progressive;
                     case "MBAFF":
-                        return ScanType.MBAFF;
+                        return MediaScanType.MBAFF;
                     case "Mixed":
-                        return ScanType.Mixed;
+                        return MediaScanType.Mixed;
                     default:
-                        return ScanType.Unknown;
+                        return MediaScanType.Unknown;
                 }
             }
         }

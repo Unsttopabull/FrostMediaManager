@@ -77,8 +77,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\BooleanToYesNoConverter.cs" />
+    <Compile Include="Converters\DebugConverter.cs" />
     <Compile Include="Converters\EmptyStringToNullConverter.cs" />
-    <Compile Include="Converters\SubtractConverter.cs" />
     <Compile Include="UserControls\ArtAndPlot.xaml.cs">
       <DependentUpon>ArtAndPlot.xaml</DependentUpon>
     </Compile>
@@ -88,23 +89,26 @@
     <Compile Include="Converters\MilisecondsToTimeSpanConverter.cs" />
     <Compile Include="Converters\NominationConverter.cs" />
     <Compile Include="Converters\PathToImageSourceConverter.cs" />
+    <Compile Include="UserControls\ChannelPicker.xaml.cs">
+      <DependentUpon>ChannelPicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ContentGrid.xaml.cs">
       <DependentUpon>ContentGrid.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Edit\EditArt.xaml.cs">
-      <DependentUpon>EditArt.xaml</DependentUpon>
+    <Compile Include="UserControls\List\ListArt.xaml.cs">
+      <DependentUpon>ListArt.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Edit\EditAudios.xaml.cs">
-      <DependentUpon>EditAudios.xaml</DependentUpon>
+    <Compile Include="UserControls\List\ListAudios.xaml.cs">
+      <DependentUpon>ListAudios.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Edit\EditMovie.xaml.cs">
+    <Compile Include="UserControls\EditMovie.xaml.cs">
       <DependentUpon>EditMovie.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Edit\EditSubtitles.xaml.cs">
-      <DependentUpon>EditSubtitles.xaml</DependentUpon>
+    <Compile Include="UserControls\List\ListSubtitles.xaml.cs">
+      <DependentUpon>ListSubtitles.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Edit\EditVideos.xaml.cs">
-      <DependentUpon>EditVideos.xaml</DependentUpon>
+    <Compile Include="UserControls\List\ListVideos.xaml.cs">
+      <DependentUpon>ListVideos.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Ribbon.xaml.cs">
       <DependentUpon>Ribbon.xaml</DependentUpon>
@@ -114,6 +118,9 @@
     </Compile>
     <Compile Include="Windows\AddPerson.xaml.cs">
       <DependentUpon>AddPerson.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EditAudio.xaml.cs">
+      <DependentUpon>EditAudio.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\EditPerson.xaml.cs">
       <DependentUpon>EditPerson.xaml</DependentUpon>
@@ -144,19 +151,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\ChannelPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\ContentGrid.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\Edit\EditArt.xaml">
+    <Page Include="UserControls\List\ListArt.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\Edit\EditAudios.xaml">
+    <Page Include="UserControls\List\ListAudios.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\Edit\EditMovie.xaml">
+    <Page Include="UserControls\EditMovie.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -172,11 +183,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="UserControls\Edit\EditSubtitles.xaml">
+    <Page Include="UserControls\List\ListSubtitles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\Edit\EditVideos.xaml">
+    <Page Include="UserControls\List\ListVideos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -195,6 +206,10 @@
     <Page Include="Windows\AddPerson.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\EditAudio.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\EditPerson.xaml">
       <SubType>Designer</SubType>
@@ -593,7 +608,9 @@
     <Resource Include="Images\flags\unknownaudio.png" />
     <Resource Include="Images\flags\unknownvideo.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\defaultsound.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Stars\star.png" />
   </ItemGroup>
@@ -873,6 +890,30 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\edit.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\unknown_large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <SplashScreen Include="SplashScreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\speaker.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\woofer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\speaker_disabled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\woofer_disabled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\clear.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\sofa.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

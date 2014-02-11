@@ -6,7 +6,7 @@ using System.Data.Entity.ModelConfiguration;
 namespace Frost.Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents information about a video stream in a file.</summary>
-    public class Video : IEquatable<Video> {
+    public class Video {
         #region Constructors
 
         /// <summary>Initializes a new instance of the <see cref="Video"/> class.</summary>
@@ -188,6 +188,9 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         #endregion
 
+        /// <summary>Gets the video resolution.</summary>
+        /// <param name="resolution">The resolution.</param>
+        /// <returns></returns>
         public int? GetVideoResolution(string resolution) {
             if (!string.IsNullOrEmpty(resolution)) {
                 int res;
@@ -207,40 +210,6 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
                 return res;
             }
             return null;
-        }
-
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(Video other) {
-            if (other == null) {
-                return false;
-            }
-
-            if (ReferenceEquals(this, other)) {
-                return true;
-            }
-
-            if (Id != 0 && other.Id != 0) {
-                return Id == other.Id;
-            }
-
-            return Source == other.Source &&
-                   Type == other.Type &&
-                   Resolution == other.Resolution &&
-                   FPS == other.FPS &&
-                   BitRate == other.BitRate &&
-                   BitRateMode == other.BitRateMode &&
-                   BitDepth == other.BitDepth &&
-                   CompressionMode == other.CompressionMode &&
-                   Duration == other.Duration &&
-                   ScanType == other.ScanType &&
-                   ColorSpace == other.ColorSpace &&
-                   Codec == other.Codec &&
-                   Aspect == other.Aspect &&
-                   Width == other.Width &&
-                   Height == other.Height &&
-                   Language == other.Language;
         }
 
         internal class Configuration : EntityTypeConfiguration<Video> {

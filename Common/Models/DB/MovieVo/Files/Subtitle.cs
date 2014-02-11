@@ -7,7 +7,7 @@ using System.Text;
 namespace Frost.Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents information about a subtitle stream in a file.</summary>
-    public class Subtitle : IEquatable<Subtitle> {
+    public class Subtitle /*: IEquatable<Subtitle>*/ {
 
         public Subtitle() {
             
@@ -110,68 +110,69 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         #endregion
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(Subtitle other) {
-            if (ReferenceEquals(null, other)) {
-                return false;
-            }
-            if (ReferenceEquals(this, other)) {
-                return true;
-            }
-            return Id == other.Id && PodnapisiId == other.PodnapisiId && OpenSubtitlesId == other.OpenSubtitlesId && string.Equals(MD5, other.MD5) && string.Equals(Format, other.Format) && string.Equals(Encoding, other.Encoding) && ForHearingImpaired.Equals(other.ForHearingImpaired) && EmbededInVideo.Equals(other.EmbededInVideo) && LanguageId == other.LanguageId && MovieId == other.MovieId && FileId == other.FileId;
-        }
+        ///// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        ///// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        ///// <param name="other">An object to compare with this object.</param>
+        //public bool Equals(Subtitle other) {
+        //    if (ReferenceEquals(null, other)) {
+        //        return false;
+        //    }
+        //    if (ReferenceEquals(this, other)) {
+        //        return true;
+        //    }
+        //    return Id == other.Id && PodnapisiId == other.PodnapisiId && OpenSubtitlesId == other.OpenSubtitlesId && string.Equals(MD5, other.MD5) && string.Equals(Format, other.Format) && string.Equals(Encoding, other.Encoding) && ForHearingImpaired.Equals(other.ForHearingImpaired) && EmbededInVideo.Equals(other.EmbededInVideo) && LanguageId == other.LanguageId && MovieId == other.MovieId && FileId == other.FileId;
+        //}
 
-        /// <summary>
-        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
-        /// </summary>
-        /// <returns>
-        /// true if the specified object  is equal to the current object; otherwise, false.
-        /// </returns>
-        /// <param name="obj">The object to compare with the current object. </param>
-        public override bool Equals(object obj) {
-            if (ReferenceEquals(null, obj)) {
-                return false;
-            }
-            if (ReferenceEquals(this, obj)) {
-                return true;
-            }
-            if (obj.GetType() != this.GetType()) {
-                return false;
-            }
-            return Equals((Subtitle) obj);
-        }
+        ///// <summary>
+        ///// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
+        ///// </summary>
+        ///// <returns>
+        ///// true if the specified object  is equal to the current object; otherwise, false.
+        ///// </returns>
+        ///// <param name="obj">The object to compare with the current object. </param>
+        //public override bool Equals(object obj) {
+        //    if (ReferenceEquals(null, obj)) {
+        //        return false;
+        //    }
+        //    if (ReferenceEquals(this, obj)) {
+        //        return true;
+        //    }
+        //    if (obj.GetType() != this.GetType()) {
+        //        return false;
+        //    }
+        //    return Equals((Subtitle) obj);
+        //}
 
-        /// <summary>
-        /// Serves as a hash function for a particular type. 
-        /// </summary>
-        /// <returns>
-        /// A hash code for the current <see cref="T:System.Object"/>.
-        /// </returns>
-        public override int GetHashCode() {
-            unchecked {
-                int hashCode = Id.GetHashCode();
-                hashCode = (hashCode * 397) ^ PodnapisiId.GetHashCode();
-                hashCode = (hashCode * 397) ^ OpenSubtitlesId.GetHashCode();
-                hashCode = (hashCode * 397) ^ (MD5 != null ? MD5.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Format != null ? Format.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Encoding != null ? Encoding.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ ForHearingImpaired.GetHashCode();
-                hashCode = (hashCode * 397) ^ EmbededInVideo.GetHashCode();
-                hashCode = (hashCode * 397) ^ LanguageId.GetHashCode();
-                hashCode = (hashCode * 397) ^ MovieId.GetHashCode();
-                hashCode = (hashCode * 397) ^ FileId.GetHashCode();
-                return hashCode;
-            }
-        }
+        ///// <summary>
+        ///// Serves as a hash function for a particular type. 
+        ///// </summary>
+        ///// <returns>
+        ///// A hash code for the current <see cref="T:System.Object"/>.
+        ///// </returns>
+        //public override int GetHashCode() {
+        //    unchecked {
+        //        int hashCode = Id.GetHashCode();
+        //        hashCode = (hashCode * 397) ^ PodnapisiId.GetHashCode();
+        //        hashCode = (hashCode * 397) ^ OpenSubtitlesId.GetHashCode();
+        //        hashCode = (hashCode * 397) ^ (MD5 != null ? MD5.GetHashCode() : 0);
+        //        hashCode = (hashCode * 397) ^ (Format != null ? Format.GetHashCode() : 0);
+        //        hashCode = (hashCode * 397) ^ (Encoding != null ? Encoding.GetHashCode() : 0);
+        //        hashCode = (hashCode * 397) ^ ForHearingImpaired.GetHashCode();
+        //        hashCode = (hashCode * 397) ^ EmbededInVideo.GetHashCode();
+        //        hashCode = (hashCode * 397) ^ LanguageId.GetHashCode();
+        //        hashCode = (hashCode * 397) ^ MovieId.GetHashCode();
+        //        hashCode = (hashCode * 397) ^ FileId.GetHashCode();
+        //        return hashCode;
+        //    }
+        //}
+
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString() {
             StringBuilder sb = new StringBuilder(100);
 
             string extension = File != null ? "*." + File.Extension : "";
-            sb.Append(string.Format("Format: {0} ", Format ?? extension));
+            sb.Append(string.Format("Format: {0} ", Format ?? (EmbededInVideo ? "Embeded" : extension)));
 
             if (!string.IsNullOrEmpty(Encoding)) {
                 sb.Append("(" + Encoding + ")");

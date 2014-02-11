@@ -11,7 +11,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary> Represents a country a movie was shot and/or produced in.</summary>
     [Table("Countries")]
-    public class Country : IEquatable<Country> {
+    public class Country {
 
         /// <summary>Initializes a new instance of the <see cref="Country"/> class.</summary>
         public Country() {
@@ -64,25 +64,6 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets or sets the movies shot in this country.</summary>
         /// <value>The country movies</value>
         public virtual HashSet<Movie> Movies { get; set; }
-
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(Country other) {
-            if (other == null) {
-                return false;
-            }
-
-            if (ReferenceEquals(this, other)) {
-                return true;
-            }
-
-            if (Id != 0 && other.Id != 0) {
-                return Id == other.Id;
-            }
-
-            return Name == other.Name;
-        }
 
         /// <summary>Converts country names to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Country"/></summary>
         /// <param name="countryNames">The counry names.</param>

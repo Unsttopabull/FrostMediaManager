@@ -12,7 +12,6 @@ using Frost.SharpOpenSubtitles.Util;
 
 using CompressionMode = Frost.Common.CompressionMode;
 using FrameOrBitRateMode = Frost.Common.FrameOrBitRateMode;
-using MediaScanType = Frost.SharpMediaInfo.ScanType;
 using ScanType = Frost.Common.ScanType;
 using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
 
@@ -78,25 +77,10 @@ namespace Frost.DetectFeatures {
             v.Language = CheckLanguage(GetLanguage(false, mv.LanguageInfo.Full1, null, fnInfo.SubtitleLanguage, fnInfo.Language));
 
             v.ScanType = (ScanType) mv.ScanType;
+
             v.Aspect = mv.DisplayAspectRatio;
 
-            int resolution = 0;
-            if (!string.IsNullOrEmpty(mv.Standard)) {
-                v.Standard = mv.Standard;
-
-                if (v.Standard.Equals("NTSC", StringComparison.OrdinalIgnoreCase)) {
-                    resolution = 480;
-                    v.ScanType = ScanType.Interlaced;
-                }
-                else if (v.Standard.Equals("PAL", StringComparison.OrdinalIgnoreCase)) {
-                    resolution = 576;
-                    v.ScanType = ScanType.Interlaced;
-                }
-            }
-            else {
-                v.ScanType = GetFileVideoResolution(mv, out resolution);
-            }
-            v.Resolution = resolution == 0 ? (int?) null : resolution;
+            GetResolution(mv, v);
 
             if (v.Aspect.HasValue) {
                 AspectRatioInfo knownAspectRatio = AspectRatioDetector.GetKnownAspectRatio((float) v.Aspect);
@@ -106,6 +90,31 @@ namespace Frost.DetectFeatures {
             }
 
             return v;
+        }
+
+        private void GetResolution(MediaVideo mv, Video v) {
+            int resolution = 0;
+            if (!string.IsNullOrEmpty(mv.Standard)) {
+                v.Standard = mv.Standard;
+
+                if (v.Standard.Equals("NTSC", StringComparison.OrdinalIgnoreCase)) {
+                    resolution = 480;
+
+                    if (v.ScanType == ScanType.Unknown) {
+                        v.ScanType = ScanType.Interlaced;
+                    }
+                }
+                else if (v.Standard.Equals("PAL", StringComparison.OrdinalIgnoreCase)) {
+                    resolution = 576;
+                    if (v.ScanType == ScanType.Unknown) {
+                        v.ScanType = ScanType.Interlaced;
+                    }
+                }
+            }
+            else {
+                v.ScanType = GetFileVideoResolution(mv, out resolution);
+            }
+            v.Resolution = resolution == 0 ? (int?) null : resolution;
         }
 
         private string GetVideoCodecId(string codec, string id) {

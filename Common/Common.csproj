@@ -160,6 +160,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SQLiteInitializer.cs" />
+    <Compile Include="Util\IsoImageMount.cs" />
     <Compile Include="Util\ISO\ISOCode.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -19,7 +19,7 @@
             <ComboBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type movieVo:Language}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="{Binding ISO639.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, TargetNullValue={StaticResource UnknownLanguage}, FallbackValue={StaticResource UnknownLanguage}}"
+                        <Image Source="{Binding ISO639.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, TargetNullValue={StaticResource UnknownCountryOrLanguage}, FallbackValue={StaticResource UnknownCountryOrLanguage}}"
                                MaxHeight="32" MaxWidth="32" />
                         <TextBlock Text="{Binding Name, TargetNullValue=Unknown, FallbackValue=Unknown}"
                                    Margin="5,0,0,0" VerticalAlignment="Center" />

@@ -7,7 +7,6 @@
         Height="300" Width="650" Closed="OnWindowClose">
     <Window.Resources>
         <BitmapImage x:Key="Person" UriSource="../Images/person.png"/>
-        <converters:EmptyStringToNullConverter x:Key="EmptyToNullConverter"/>
     </Window.Resources>
     <Window.DataContext>
         <people:Person/>
@@ -33,13 +32,13 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Margin="-5,0,0,0">Name:</Label>
-            <TextBox x:Name="NameBox" x:FieldModifier="private" Grid.Row="1" Text="{Binding Name, Converter={StaticResource EmptyToNullConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox x:Name="NameBox" x:FieldModifier="private" Grid.Row="1" Text="{Binding Name, Converter={StaticResource EmptyStringToNullConverter}, UpdateSourceTrigger=PropertyChanged}"/>
 
             <Label Grid.Row="2" Margin="-5,0,0,0">Imdb ID:</Label>
-            <TextBox Grid.Row="3" Text="{Binding ImdbID, Converter={StaticResource EmptyToNullConverter}}"/>
+            <TextBox Grid.Row="3" Text="{Binding ImdbID, Converter={StaticResource EmptyStringToNullConverter}}"/>
 
             <Label Grid.Row="4" Margin="-5,0,0,0">Thumb:</Label>
-            <TextBox x:Name="ThumbBox" x:FieldModifier="private" Grid.Row="5" Text="{Binding Thumb, Converter={StaticResource EmptyToNullConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox x:Name="ThumbBox" x:FieldModifier="private" Grid.Row="5" Text="{Binding Thumb, Converter={StaticResource EmptyStringToNullConverter}, UpdateSourceTrigger=PropertyChanged}"/>
             <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="5" Margin="0,0,5,0" ToolTip="Open file search dialog">
                 <Button Height="16" Style="{StaticResource TransparentBorderlessButton}" Click="ThumbSearchOnClick">
                     <Image Source="../Images/folder.ico"/>

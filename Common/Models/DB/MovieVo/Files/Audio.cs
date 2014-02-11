@@ -7,7 +7,7 @@ using Frost.Common.Models.XML.XBMC;
 namespace Frost.Common.Models.DB.MovieVo.Files {
 
     /// <summary>Represents information about an audio stream in a file.</summary>
-    public class Audio : IEquatable<Audio> {
+    public class Audio {
         #region Constructors
 
         /// <summary>Initializes a new instance of the <see cref="Audio"/> class.</summary>
@@ -143,82 +143,6 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         public virtual Movie Movie { get; set; }
 
         #endregion
-
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(Audio other) {
-            if (ReferenceEquals(null, other)) {
-                return false;
-            }
-            if (ReferenceEquals(this, other)) {
-                return true;
-            }
-            return Id == other.Id &&
-                   string.Equals(Source, other.Source) &&
-                   string.Equals(Type, other.Type) &&
-                   string.Equals(ChannelSetup, other.ChannelSetup) &&
-                   NumberOfChannels == other.NumberOfChannels &&
-                   string.Equals(ChannelPositions, other.ChannelPositions) &&
-                   string.Equals(Codec, other.Codec) &&
-                   BitRate.Equals(other.BitRate) &&
-                   BitRateMode == other.BitRateMode &&
-                   SamplingRate == other.SamplingRate &&
-                   BitDepth == other.BitDepth &&
-                   CompressionMode == other.CompressionMode &&
-                   Duration == other.Duration &&
-                   LanguageId == other.LanguageId &&
-                   MovieId == other.MovieId &&
-                   FileId == other.FileId;
-        }
-
-        /// <summary>
-        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
-        /// </summary>
-        /// <returns>
-        /// true if the specified object  is equal to the current object; otherwise, false.
-        /// </returns>
-        /// <param name="obj">The object to compare with the current object. </param>
-        public override bool Equals(object obj) {
-            if (ReferenceEquals(null, obj)) {
-                return false;
-            }
-            if (ReferenceEquals(this, obj)) {
-                return true;
-            }
-            if (obj.GetType() != this.GetType()) {
-                return false;
-            }
-            return Equals((Audio) obj);
-        }
-
-        /// <summary>
-        /// Serves as a hash function for a particular type. 
-        /// </summary>
-        /// <returns>
-        /// A hash code for the current <see cref="T:System.Object"/>.
-        /// </returns>
-        public override int GetHashCode() {
-            unchecked {
-                int hashCode = Id.GetHashCode();
-                hashCode = (hashCode * 397) ^ (Source != null ? Source.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Type != null ? Type.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (ChannelSetup != null ? ChannelSetup.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ NumberOfChannels.GetHashCode();
-                hashCode = (hashCode * 397) ^ (ChannelPositions != null ? ChannelPositions.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ (Codec != null ? Codec.GetHashCode() : 0);
-                hashCode = (hashCode * 397) ^ BitRate.GetHashCode();
-                hashCode = (hashCode * 397) ^ BitRateMode.GetHashCode();
-                hashCode = (hashCode * 397) ^ SamplingRate.GetHashCode();
-                hashCode = (hashCode * 397) ^ BitDepth.GetHashCode();
-                hashCode = (hashCode * 397) ^ CompressionMode.GetHashCode();
-                hashCode = (hashCode * 397) ^ Duration.GetHashCode();
-                hashCode = (hashCode * 397) ^ LanguageId.GetHashCode();
-                hashCode = (hashCode * 397) ^ MovieId.GetHashCode();
-                hashCode = (hashCode * 397) ^ FileId.GetHashCode();
-                return hashCode;
-            }
-        }
 
         /// <summary>Converts and instance of <see cref="Audio"/> to an instance of <see cref="Common.Models.XML.XBMC.XbmcXmlAudioInfo">XbmcXmlAudioInfo</see></summary>
         /// <param name="audio">The audio to convert</param>

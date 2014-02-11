@@ -4,6 +4,18 @@
              xmlns:converters="clr-namespace:RibbonUI.Converters"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <converters:EmptyStringToNullConverter x:Key="EmptyStringToNullConverter"/>
+        <BitmapImage x:Key="DefaultLogo" UriSource="Images/defaultscreen.png"/>
+        <BitmapImage x:Key="DefaultSoundLogo" UriSource="Images/defaultsound.png" />
+        <BitmapImage x:Key="UnknownCountryOrLanguage" UriSource="Images/unknown.png" />
+        <BitmapImage x:Key="UnknownLanguageLarge" UriSource="Images/unknown_large.png" />
+        <Style x:Key="CollapseOnTagNull" TargetType="{x:Type FrameworkElement}">
+            <Style.Triggers>
+                <Trigger Property="Tag" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>        
         <Style TargetType="{x:Type Button}">
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
@@ -72,7 +84,11 @@
             <Setter Property="BorderThickness" Value="0" />
         </Style>
         <converters:PathToImageSourceConverter x:Key="PathToImageSourceConverter" />
-        <Style x:Key="TransparentBorderlessButton" TargetType="{x:Type Button}">
+        <Style x:Key="TransparentBorderlessButton" TargetType="{x:Type ButtonBase}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style x:Key="TransparentBorderlessButtonCollapseOnTagNull" BasedOn="{StaticResource CollapseOnTagNull}" TargetType="{x:Type ButtonBase}">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style>
@@ -81,7 +97,6 @@
             <GradientStop Color="Gray"/>
             <GradientStop Color="#FF424040" Offset="0.5"/>
         </LinearGradientBrush>
-        <!--<Style x:Key="GradientScrollBar" TargetType="{x:Type ScrollBar}">-->
         <Style TargetType="{x:Type ScrollBar}">
             <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
             <Setter Property="Width" Value="10" />
@@ -160,5 +175,18 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="ExpanderGroup" TargetType="{x:Type GroupItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border BorderThickness="0,1,0,0" BorderBrush="SteelBlue">
+                            <Expander Header="{Binding Name}" IsExpanded="True">
+                                <ItemsPresenter />
+                            </Expander>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>        
     </Application.Resources>
 </Application>

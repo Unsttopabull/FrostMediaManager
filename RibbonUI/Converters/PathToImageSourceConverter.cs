@@ -3,6 +3,8 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
+using Frost.Common;
+using Frost.Common.Models.DB.MovieVo.Files;
 using File = System.IO.File;
 
 namespace RibbonUI.Converters {
@@ -11,6 +13,7 @@ namespace RibbonUI.Converters {
         Studio,
         AudioChannels,
         VideoResolution,
+        VideoResolutionV,
         VideoCodec,
         AudioCodec,
         Box,
@@ -46,6 +49,24 @@ namespace RibbonUI.Converters {
                         break;
                     case PathType.VideoResolution:
                         filePath = "Images/FlagsE/vres_" + value + ".png";
+                        break;
+                    case PathType.VideoResolutionV:
+                        Video v = (Video) value;
+                        if (!v.Resolution.HasValue) {
+                            return null;
+                        }
+                        int res = v.Resolution.Value;
+                        switch (v.ScanType) {
+                            case ScanType.Interlaced:
+                                filePath = "Images/FlagsE/vres_" + res + "i.png";
+                                break;
+                            case ScanType.Progressive:
+                                filePath = "Images/FlagsE/vres_" + res + "p.png";
+                                break;
+                            default:
+                                filePath = "Images/FlagsE/vres_" + res + ".png";
+                                break;
+                        }
                         break;
                     case PathType.VideoCodec:
                         filePath = "Images/FlagsE/vcodec_" + value + ".png";

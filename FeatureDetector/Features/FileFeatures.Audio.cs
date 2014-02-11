@@ -53,7 +53,7 @@ namespace Frost.DetectFeatures {
             a.Duration = ma.Duration.HasValue ? (long?) ma.Duration.Value.TotalMilliseconds : null;
             a.Language = GetLangauge(ma);
 
-            a.SamplingRate = ma.SamplingRate;
+            a.SamplingRate = ma.SamplingRate.HasValue ? ma.SamplingRate / 1024 : null;
 
             return a;
         }

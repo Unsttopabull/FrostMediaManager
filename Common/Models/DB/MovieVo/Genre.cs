@@ -11,7 +11,7 @@ using Frost.Common.Util;
 namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents a movie genre.</summary>
-    public partial class Genre : IEquatable<Genre> {
+    public partial class Genre {
 
         /// <summary>Initializes a new instance of the <see cref="Genre"/> class.</summary>
         public Genre() {
@@ -42,24 +42,6 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets or sets the movies of this genre.</summary>
         /// <value>The movies of this genre.</value>
         public virtual ObservableHashSet<Movie> Movies { get; set; }
-
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(Genre other) {
-            if (other == null) {
-                return false;
-            }
-
-            if (ReferenceEquals(this, other)) {
-                return true;
-            }
-
-            if (Id != 0 && other.Id != 0) {
-                return Id == other.Id;
-            }
-            return Name == other.Name;
-        }
 
         /// <summary>Converts genre names to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Genre"/></summary>
         /// <param name="genreNames">The genre names.</param>

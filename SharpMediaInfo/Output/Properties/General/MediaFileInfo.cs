@@ -1,10 +1,10 @@
 ﻿using System;
 
 namespace Frost.SharpMediaInfo.Output.Properties.General {
-    public class FileInfo {
+    public class MediaFileInfo {
         private readonly Media _media;
 
-        public FileInfo(Media media) {
+        public MediaFileInfo(Media media) {
             FileSizeInfo = new FileSizeInfo(media);
             _media = media;
         }

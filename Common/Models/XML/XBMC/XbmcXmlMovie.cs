@@ -466,16 +466,22 @@ namespace Frost.Common.Models.XML.XBMC {
                 //add all Thumbnails/Posters/Covers
                 foreach (XbmcXmlThumb thumb in Thumbs) {
                     ArtBase a;
-                    switch (thumb.Aspect.ToLower()) {
-                        case "poster":
-                            a = new Poster(thumb.Path, thumb.Preview);
-                            break;
-                        case "cover":
-                            a = new Cover(thumb.Path, thumb.Preview);
-                            break;
-                        default:
-                            a = new Art(thumb.Path, thumb.Preview);
-                            break;
+
+                    if (string.IsNullOrEmpty(thumb.Aspect)) {
+                        a = new Art(thumb.Path, thumb.Preview);
+                    }
+                    else {
+                        switch (thumb.Aspect.ToLower()) {
+                            case "poster":
+                                a = new Poster(thumb.Path, thumb.Preview);
+                                break;
+                            case "cover":
+                                a = new Cover(thumb.Path, thumb.Preview);
+                                break;
+                            default:
+                                a = new Art(thumb.Path, thumb.Preview);
+                                break;
+                        }
                     }
 
                     art.Add(a);
@@ -484,9 +490,7 @@ namespace Frost.Common.Models.XML.XBMC {
 
             if (Fanart != null && Fanart.Thumbs != null) {
                 //add fanart
-                foreach (XbmcXmlThumb thumb in Fanart.Thumbs) {
-                    art.Add(new Fanart(thumb.Path));
-                }
+                art.AddRange(Fanart.Thumbs.Select(thumb => new Fanart(thumb.Path, thumb.Preview)));
             }
 
             return art;

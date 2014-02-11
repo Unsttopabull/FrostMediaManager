@@ -24,7 +24,8 @@ namespace RibbonUI {
                       .Include("Plots")
                       .Include("Directors")
                       .Include("Countries")
-                      .Include("Audios").Load();
+                      .Include("Audios")
+                      .Include("Videos").Load();
 
             Container.Genres.Load();
             Container.Countries.Load();

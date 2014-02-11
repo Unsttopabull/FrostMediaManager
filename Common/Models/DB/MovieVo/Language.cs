@@ -10,7 +10,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
     /// <summary>Represents a language information.</summary>
     [Table("Languages")]
-    public class Language : IEquatable<Language> {
+    public class Language {
 
         /// <summary>Initializes a new instance of the <see cref="Language"/> class.</summary>
         public Language() {
@@ -70,34 +70,6 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets or sets the ISO639 language codes.</summary>
         /// <value>The ISO639 language codes.</value>
         public ISO639 ISO639 { get; set; }
-
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(Language other) {
-            if (other == null) {
-                return false;
-            }
-
-            if (ReferenceEquals(this, other)) {
-                return true;
-            }
-
-            if (Id != 0 && other.Id != 0) {
-                return Id == other.Id;
-            }
-
-            return string.Compare(Name, other.Name, StringComparison.OrdinalIgnoreCase) == 0;
-        }
-
-        /// <summary>Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.</summary>
-        /// <returns>true if the specified object  is equal to the current object; otherwise, false.</returns>
-        /// <param name="obj">The object to compare with the current object. </param>
-        public override bool Equals(object obj) {
-            Language lang = obj as Language;
-
-            return lang != null && Equals(lang);
-        }
 
         /// <summary>Serves as a hash function for a particular type. </summary>
         /// <returns>A hash code for the current <see cref="T:System.Object"/>.</returns>

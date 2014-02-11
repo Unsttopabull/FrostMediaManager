@@ -1,0 +1,114 @@
+﻿<UserControl x:Class="RibbonUI.UserControls.List.ListAudios"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:files="clr-namespace:Frost.Common.Models.DB.MovieVo.Files;assembly=Frost.Common"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:converters="clr-namespace:RibbonUI.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="582">
+    <UserControl.Resources>
+        <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
+    </UserControl.Resources>
+    <ListView x:Name="AudiosList" SelectionMode="Single" ItemsSource="{Binding}" ClipToBounds="True">
+        <ListView.GroupStyle>
+            <GroupStyle ContainerStyle="{StaticResource ExpanderGroup}"/>
+        </ListView.GroupStyle>
+        <ListView.Resources>
+            <Style TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            </Style>
+        </ListView.Resources>
+        <ListView.ItemTemplate>
+            <DataTemplate DataType="files:Audio">
+                <DockPanel LastChildFill="False">
+                    <StackPanel DockPanel.Dock="Left">
+                        <Image Source="{Binding CodecId, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioCodec, FallbackValue={StaticResource DefaultSoundLogo}, TargetNullValue={StaticResource DefaultSoundLogo}}"
+                               MinHeight="48">
+                            <Image.CacheMode>
+                                <BitmapCache />
+                            </Image.CacheMode>
+                        </Image>
+                        <Image Source="{Binding NumberOfChannels, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioChannels, FallbackValue={StaticResource DefaultSoundLogo}, TargetNullValue={StaticResource DefaultSoundLogo}}"
+                               MinHeight="48">
+                            <Image.CacheMode>
+                                <BitmapCache />
+                            </Image.CacheMode>
+                        </Image>
+                        <Image Source="{Binding Language.ISO639.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, FallbackValue={StaticResource UnknownLanguageLarge}, TargetNullValue={StaticResource UnknownLanguageLarge}}"
+                               MinHeight="48" MaxHeight="100" Tag="{Binding Language}" Style="{StaticResource CollapseOnTagNull}">
+                            <Image.CacheMode>
+                                <BitmapCache />
+                            </Image.CacheMode>
+                        </Image>                        
+                    </StackPanel>
+                    <StackPanel Margin="15,0,0,0" MinWidth="200">
+                        <StackPanel Orientation="Horizontal" Tag="{Binding File.NameWithExtension}" Style="{StaticResource CollapseOnTagNull}">
+                            <Label>File name:</Label>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding File.NameWithExtension}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Tag="{Binding Source}" Style="{StaticResource CollapseOnTagNull}">
+                            <Label>Source:</Label>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Source}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" x:Name="StandardPanel" Tag="{Binding ChannelSetup}" Style="{StaticResource CollapseOnTagNull}">
+                            <Label>Standard:</Label>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding ChannelSetup}" x:Name="Standard"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Tag="{Binding NumberOfChannels}" Style="{StaticResource CollapseOnTagNull}">
+                            <Label>Number of channels:</Label>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding NumberOfChannels}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Tag="{Binding ChannelPositions}" Style="{StaticResource CollapseOnTagNull}">
+                            <Label>Channel positions:</Label>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding ChannelPositions}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Tag="{Binding Codec}" Style="{StaticResource CollapseOnTagNull}">
+                            <Label>Codec:</Label>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Codec}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Tag="{Binding BitRate}" Style="{StaticResource CollapseOnTagNull}">
+                            <Label>Bit rate:</Label>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding BitRate}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label>Bit rate mode:</Label>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding BitRateMode}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Tag="{Binding SamplingRate}" Style="{StaticResource CollapseOnTagNull}">
+                            <Label>Sampling rate:</Label>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding SamplingRate}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Tag="{Binding BitDepth}" Style="{StaticResource CollapseOnTagNull}">
+                            <Label>Bit depth:</Label>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding BitDepth}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label>Compression mode:</Label>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding CompressionMode}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Tag="{Binding Duration}" Style="{StaticResource CollapseOnTagNull}">
+                            <Label>Duration:</Label>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Duration, StringFormat=hh\\:mm\\:ss, Converter={StaticResource MsToTimeSpanConverter}}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Tag="{Binding Language}" Style="{StaticResource CollapseOnTagNull}">
+                            <Label>Language:</Label>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Language}" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
+                        <Button Click="OnRemoveClicked" Style="{StaticResource TransparentBorderlessButton}">
+                            <Image Source="../../Images/remove.png" MaxHeight="32"/>
+                        </Button>
+                        <Button Click="OnEditClicked" Style="{StaticResource TransparentBorderlessButton}">
+                            <Image Source="../../Images/edit.ico" />
+                        </Button>
+                    </StackPanel>
+                </DockPanel>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</UserControl>

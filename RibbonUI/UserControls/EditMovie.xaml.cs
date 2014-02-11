@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Data;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,9 +7,10 @@ using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.People;
 using Frost.Common.Util;
+using Microsoft.Win32;
 using RibbonUI.Windows;
 
-namespace RibbonUI.UserControls.Edit {
+namespace RibbonUI.UserControls {
 
     /// <summary>Interaction logic for EditMovie.xaml</summary>
     public partial class EditMovie : UserControl {
@@ -136,13 +134,12 @@ namespace RibbonUI.UserControls.Edit {
         }
 
         private void RemoveGenreClick(object sender, RoutedEventArgs e) {
-            Window window = Window.GetWindow(this);
             if (MovieGenres.SelectedIndex == -1) {
-                MessageBox.Show(window, "No genre selected");
+                MessageBox.Show(_window, "No genre selected");
                 return;
             }
 
-            if (MessageBox.Show(window,
+            if (MessageBox.Show(_window,
                 "Please note this will remove this genre from all the movies in the collection.\n" +
                 "To remove the genre from this movie only click \"No\" and just uncheck it\nin the list.\n\n" +
                 "Do you really want to remove this genre?",
@@ -153,6 +150,28 @@ namespace RibbonUI.UserControls.Edit {
             }
         }
 
+        private void EditGenreOnClick(object sender, RoutedEventArgs e) {
+            if (MovieGenres.SelectedIndex == -1) {
+                MessageBox.Show(_window, "No genre selected");
+                return;
+            }
+
+            if (MessageBox.Show(_window,
+                "Please note this will edit this genre name in all the movies in the collection.\n" +
+                "If you want to edit this genre only for this movie ucheck it and add a new genre.\n\n" +
+                "Do you really want to edit this genre?",
+                "Genre edit", MessageBoxButton.YesNo) != MessageBoxResult.Yes) {
+                return;
+            }
+
+            Genre genre = ((Genre) MovieGenres.SelectedItem);
+            string genreName = InputBox.Show(_window, "Genre name:", "Edit genre", "Edit", genre.Name);
+
+            if (!genre.Name.Equals(genreName, StringComparison.CurrentCultureIgnoreCase)) {
+                genre.Name = genreName;
+                MovieGenres.Items.Refresh();
+            }
+        }
         #endregion
 
         #region Plot Handlers
@@ -298,6 +317,26 @@ namespace RibbonUI.UserControls.Edit {
         }
 
         private void EditStudioOnClick(object sender, RoutedEventArgs e) {
+            if (MovieGenres.SelectedIndex == -1) {
+                MessageBox.Show(_window, "No studio selected");
+                return;
+            }
+
+            if (MessageBox.Show(_window,
+                "Please note this will edit this studio name in all the movies in the collection.\n" +
+                "If you want to edit studio name only for this movie remove this studio add a new one with desired name.\n\n" +
+                "Do you really want to edit this studio?",
+                "Studio edit", MessageBoxButton.YesNo) != MessageBoxResult.Yes) {
+                return;
+            }
+
+            Studio studio = ((Studio) MovieStudios.SelectedItem);
+            string studioName = InputBox.Show(_window, "Studio name:", "Edit studio", "Edit", studio.Name);
+
+            if (!studio.Name.Equals(studioName, StringComparison.CurrentCultureIgnoreCase)) {
+                studio.Name = studioName;
+                MovieStudios.Items.Refresh();
+            }
         }
 
         #endregion
@@ -340,6 +379,16 @@ namespace RibbonUI.UserControls.Edit {
         private void OnControlLoaded(object sender, RoutedEventArgs e) {
             _window = (MainWindow) Window.GetWindow(this);
         }
+
+        private void TrailerSearchOnClick(object sender, RoutedEventArgs e) {
+            OpenFileDialog ofd = new OpenFileDialog { CheckFileExists = true, Multiselect = false };
+
+            if (ofd.ShowDialog() == true) {
+                MovieTrailer.Text = ofd.FileName;
+            }      
+        }
+
+
     }
 
 }

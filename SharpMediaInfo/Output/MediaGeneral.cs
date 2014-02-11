@@ -31,7 +31,7 @@ namespace Frost.SharpMediaInfo.Output {
             Part = new PartInfo(this);
             CoverInfo = new CoverInfo(this);
             OriginalSourceInfo = new OriginalSourceInfo(this);
-            FileInfo = new FileInfo(this);
+            FileInfo = new MediaFileInfo(this);
 
             Video = new GeneralInfo(this, StreamKind.Video);
             Audio = new GeneralInfo(this, StreamKind.Audio);
@@ -193,7 +193,7 @@ namespace Frost.SharpMediaInfo.Output {
         public string WrittenDate { get { return this["Written_Date"]; } }
         public string MasteredDate { get { return this["Mastered_Date"]; } }
 
-        public FileInfo FileInfo { get; private set; }
+        public MediaFileInfo FileInfo { get; private set; }
 
         public string RecordedLocation { get { return this["Recorded_Location"]; } }
         public string WrittenLocation { get { return this["Written_Location"]; } }

@@ -189,7 +189,7 @@ namespace Frost.SharpMediaInfo.Output {
         /// <param name="kindOfInfo">Kind of information you want about the parameter (the text, the measure, the help...)</param>
         /// <param name="kindOfSearch">Where to look for the parameter</param>
         /// <returns>a string about information you search, an empty string if there is a problem</returns>
-        public string Get(string parameter, InfoKind kindOfInfo, InfoKind kindOfSearch) {
+        public string Get(string parameter, InfoKind kindOfInfo = InfoKind.Text, InfoKind kindOfSearch = InfoKind.Name) {
             return _mediaFile.Get(_streamKind, StreamNumber, parameter, kindOfInfo, kindOfSearch);
         }
 

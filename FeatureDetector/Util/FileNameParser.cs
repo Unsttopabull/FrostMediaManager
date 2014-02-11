@@ -1128,7 +1128,7 @@ namespace Frost.DetectFeatures.Util {
         }
 
         private LanguageCheck CheckLanguage(string segment) {
-            if (segment.Length < 2 || SegmentExclusion.Contains(segment)) {
+            if (segment.Length < 2 || SegmentExclusion.Contains(segment) || segment.Equals("PAL", StringComparison.InvariantCultureIgnoreCase)) {
                 return LanguageCheck.NotALangauge;
             }
 
