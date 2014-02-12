@@ -4,17 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:files="clr-namespace:Frost.Common.Models.DB.MovieVo.Files;assembly=Frost.Common"
-             xmlns:converters="clr-namespace:RibbonUI.Converters"
+             xmlns:sys="clr-namespace:System.Text;assembly=mscorlib"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="602">
     <UserControl.Resources>
-        <converters:BooleanToYesNoConverter x:Key="BooleanToYesNoConverter"/>
-        <BitmapImage x:Key="UnknownLanguage" UriSource="../../Images/unknown_large.png" />
+        <ObjectDataProvider x:Key="Encodings" ObjectType="{x:Type sys:Encoding}" MethodName="GetEncodings"/>
     </UserControl.Resources>
     <ListView x:Name="SubtitlesList" SelectionMode="Single" ItemsSource="{Binding}" ClipToBounds="True">
         <ListView.GroupStyle>
-            <GroupStyle ContainerStyle="{StaticResource ExpanderGroup}"/>
-        </ListView.GroupStyle>        
+            <GroupStyle ContainerStyle="{StaticResource ExpanderGroup}" />
+        </ListView.GroupStyle>
         <ListView.Resources>
             <Style TargetType="ListViewItem">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -24,42 +23,42 @@
             <DataTemplate DataType="files:Subtitle">
                 <DockPanel LastChildFill="False">
                     <StackPanel DockPanel.Dock="Left">
-                        <Image Source="{Binding Language.ISO639.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, FallbackValue={StaticResource UnknownLanguageLarge}, TargetNullValue={StaticResource UnknownLanguageLarge}}"
-                               MinHeight="48" MaxHeight="100">
-                            <Image.CacheMode>
-                                <BitmapCache />
-                            </Image.CacheMode>
-                        </Image>
+                        <Button Style="{StaticResource TransparentBorderlessButton}" Click="LangEdit">
+                            <Image Source="{Binding Language.ISO639.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, FallbackValue={StaticResource UnknownLanguageLarge}, TargetNullValue={StaticResource UnknownLanguageLarge}}"
+                                   MinHeight="48" MaxHeight="100">
+                                <Image.CacheMode>
+                                    <BitmapCache />
+                                </Image.CacheMode>
+                            </Image>
+                        </Button>
+                        <TextBlock TextAlignment="Center">Click to set language</TextBlock>
                     </StackPanel>
                     <StackPanel Margin="15,0,0,0" MinWidth="200" x:Name="DetailsHolder">
-                        <StackPanel Orientation="Horizontal" Tag="{Binding Language.Name}" Style="{StaticResource CollapseOnTagNull}">
+                        <StackPanel Orientation="Horizontal">
                             <Label>Language:</Label>
                             <TextBlock VerticalAlignment="Center" Text="{Binding Language.Name}" />
-                        </StackPanel>                        
-                        <StackPanel Orientation="Horizontal" Tag="{Binding Format}" Style="{StaticResource CollapseOnTagNull}">
-                            <Label>Format:</Label>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding Format}" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Tag="{Binding Encoding}" Style="{StaticResource CollapseOnTagNull}">
-                            <Label>Encoding:</Label>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding Encoding}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
+                            <Label>Format:</Label>
+                            <ComboBox VerticalAlignment="Center" Margin="11,0,0,0" MinWidth="100" IsEditable="True" SelectedItem="{Binding Format}" Loaded="OnFormatSelectorLoaded"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label>Encoding:</Label>
+                            <ComboBox VerticalAlignment="Center" MinWidth="100" SelectedValue="{Binding Encoding}" ItemsSource="{Binding Source={StaticResource Encodings}}" SelectedValuePath="Name" DisplayMemberPath="Name"/>
+                        </StackPanel>                        
+                        <StackPanel Orientation="Horizontal">
                             <Label>Is embeded in the video:</Label>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding EmbededInVideo, Converter={StaticResource BooleanToYesNoConverter}}" />
+                            <CheckBox VerticalAlignment="Center" IsChecked="{Binding EmbededInVideo}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label>Is for hearing impaired:</Label>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding ForHearingImpaired, Converter={StaticResource BooleanToYesNoConverter}}" />
+                            <CheckBox VerticalAlignment="Center" Margin="7,0,0,0" IsChecked="{Binding ForHearingImpaired}" />
                         </StackPanel>
                     </StackPanel>
 
-                    <StackPanel DockPanel.Dock="Right">
+                    <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
                         <Button Click="OnRemoveClicked" Style="{StaticResource TransparentBorderlessButton}">
-                            <Image Source="../../Images/remove.png" />
-                        </Button>
-                        <Button Click="OnEditClicked" Style="{StaticResource TransparentBorderlessButton}">
-                            <Image Source="../../Images/edit.ico" />
+                            <Image Source="../../Images/remove.png" MaxHeight="32" />
                         </Button>
                     </StackPanel>
                 </DockPanel>

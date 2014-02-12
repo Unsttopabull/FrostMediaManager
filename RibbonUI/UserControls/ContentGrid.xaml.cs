@@ -5,23 +5,26 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Input;
+using Frost.Common.Annotations;
 using Frost.Common.Models.DB.MovieVo;
 
 namespace RibbonUI.UserControls {
 
     /// <summary>Interaction logic for ContentGrid.xaml</summary>
-    public partial class ContentGrid : UserControl {
-        private string _filter;
-
+    public partial class ContentGrid : UserControl, INotifyPropertyChanged {
         public static readonly DependencyProperty MinRequiredWidthProperty = DependencyProperty.Register(
             "MinRequiredWidth", typeof(double), typeof(ContentGrid), new FrameworkPropertyMetadata(default(double), FrameworkPropertyMetadataOptions.AffectsRender));
 
         private ICollectionView _collectionView;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public double MinRequiredWidth {
             get { return (double) GetValue(MinRequiredWidthProperty); }
             set { SetValue(MinRequiredWidthProperty, value); }
+        }
+
+        public Movie SelectedMovie {
+            get { return MovieList.SelectedItem as Movie; }
         }
 
         public ContentGrid() {
@@ -63,6 +66,18 @@ namespace RibbonUI.UserControls {
             if (view != null) {
                 _collectionView = CollectionViewSource.GetDefaultView(view);
                 _collectionView.Filter = Filter;
+            }
+        }
+
+        private void MovieListSelectedChanged(object sender, SelectedCellsChangedEventArgs e) {
+            OnPropertyChanged("SelectedMovie");
+        }
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged(string propertyName = null) {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) {
+                handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

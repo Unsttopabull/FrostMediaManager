@@ -1,14 +1,17 @@
 ﻿<UserControl
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:RibbonUI" xmlns:local1="clr-namespace:RibbonUI.UserControls" x:Name="userControl" x:Class="RibbonUI.UserControls.Ribbon" 
-             mc:Ignorable="d" 
-             d:DesignHeight="140" d:DesignWidth="500">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:RibbonUI" xmlns:local1="clr-namespace:RibbonUI.UserControls"
+    xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
+    x:Name="UserControl" x:Class="RibbonUI.UserControls.Ribbon"
+    mc:Ignorable="d"
+    d:DesignHeight="140" d:DesignWidth="500" d:DataContext="{d:DesignInstance movieVo:Movie}">
     <Ribbon x:Name="RibbonHeader" Title="Frost Media Manager" Background="#FFDFE9F5">
         <Ribbon.ContextualTabGroups>
-            <RibbonContextualTabGroup Visibility="Collapsed" Background="Red" x:Name="ContextSubtitle" Header="Download &amp; Update"/>
+            <RibbonContextualTabGroup Visibility="Collapsed" Background="Red" x:Name="ContextSubtitle"
+                                      Header="Download &amp; Update" />
         </Ribbon.ContextualTabGroups>
 
         <!-- Help Pane, located at the right-hand side -->
@@ -30,12 +33,12 @@
                 <RibbonApplicationMenu.FooterPaneContent>
                     <DockPanel LastChildFill="false">
                         <RibbonButton Command="ApplicationCommands.Close"
-							Label="Exit"
-							ToolTipTitle="Exit the application"
-							SmallImageSource="../Images/quit.png"
-							DockPanel.Dock="Right"
-							BorderBrush="#B8114EAF"
-							IsEnabled="True" />
+                                      Label="Exit"
+                                      ToolTipTitle="Exit the application"
+                                      SmallImageSource="../Images/quit.png"
+                                      DockPanel.Dock="Right"
+                                      BorderBrush="#B8114EAF"
+                                      IsEnabled="True" />
                     </DockPanel>
                 </RibbonApplicationMenu.FooterPaneContent>
                 <RibbonApplicationMenu.AuxiliaryPaneContent>
@@ -51,15 +54,18 @@
         <RibbonTab x:Name="Search" Header="Search" Margin="0,1,0,-1">
             <!-- Home  group-->
             <RibbonGroup x:Name="ClipboardGroup" Header="Home">
-                <RibbonButton LargeImageSource="../Images/search.ico" Label="Search" Click="SearchClick"/>
+                <RibbonButton LargeImageSource="../Images/search.ico" Label="Search" Click="SearchClick" />
                 <RibbonButton SmallImageSource="../Images/cut.png" Label="Cut" />
                 <RibbonButton SmallImageSource="../Images/copy.png" Label="Copy" />
                 <RibbonButton SmallImageSource="../Images/format_painter.png" Label="Format Painter" />
             </RibbonGroup>
             <RibbonGroup x:Name="Employee" Header="Employee And Payroll">
-                <RibbonButton x:Name="OpenInFolder" x:FieldModifier="private" LargeImageSource="../Images/movieFolder.ico" Label="Open movie folder"  ToolTip="{Binding Movie.DirectoryPath, ElementName=userControl}" Click="OpenInFolder_Click" />
+                <RibbonButton x:Name="OpenInFolder" x:FieldModifier="private"
+                              LargeImageSource="../Images/movieFolder.ico" Label="Open movie folder"
+                              ToolTip="{Binding DirectoryPath}"
+                              Click="OpenInFolder_Click" />
                 <RibbonButton SmallImageSource="../Images/save.png" Label="Save" />
-                <RibbonButton SmallImageSource="../Images/add.png" Label="Add"/>
+                <RibbonButton SmallImageSource="../Images/add.png" Label="Add" />
             </RibbonGroup>
         </RibbonTab>
 
@@ -79,10 +85,10 @@
         <RibbonTab x:Name="SubtitlesTab" Header="Subtitles" ContextualTabGroupHeader="Download &amp; Update">
             <RibbonGroup Header="Update &amp; Download">
                 <RibbonMenuButton Label="Download" LargeImageSource="../Images/add.png">
-                    <RibbonMenuItem ImageSource="../Images/podnapisiNet.ico" Header="Download from Podnapisi.NET"/>
-                    <RibbonMenuItem ImageSource="../Images/opensubtitles.ico" Header="Download from OpenSubtitles.org"/>
+                    <RibbonMenuItem ImageSource="../Images/podnapisiNet.ico" Header="Download from Podnapisi.NET" />
+                    <RibbonMenuItem ImageSource="../Images/opensubtitles.ico" Header="Download from OpenSubtitles.org" />
                 </RibbonMenuButton>
-                <RibbonButton Label="Detect Language" LargeImageSource="../Images/search_subs.ico"/>
+                <RibbonButton Label="Detect Language" LargeImageSource="../Images/search_subs.ico" />
             </RibbonGroup>
         </RibbonTab>
     </Ribbon>

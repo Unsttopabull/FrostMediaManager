@@ -89,7 +89,7 @@
         </Grid>
 
         <DataGrid Grid.Column="0" Grid.Row="1" x:Name="MovieList" AutoGenerateColumns="False" SelectionChanged="MovieListOnSelectionChanged"
-                  Loaded="MovieListOnLoaded"
+                  Loaded="MovieListOnLoaded" SelectedCellsChanged="MovieListSelectedChanged"
                   CanUserAddRows="False" DataContext="{DynamicResource MoviesSource}"  ItemsSource="{Binding}"
                   AlternatingRowBackground="{StaticResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}"
                   GridLinesVisibility="None" RowHeight="20" CanUserResizeColumns="False" CanUserResizeRows="False"

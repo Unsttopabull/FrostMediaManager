@@ -32,7 +32,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <userControls:Ribbon x:Name="Ribbon" Movie="{Binding ElementName=ContentGrid, Path=SelectedMovie}"/>
+        <userControls:Ribbon x:Name="Ribbon" DataContext="{Binding ElementName=ContentGrid, Path=SelectedMovie}"/>
         <userControls:ContentGrid x:Name="ContentGrid" Grid.Row="1"/>
     </Grid>
 </RibbonWindow>

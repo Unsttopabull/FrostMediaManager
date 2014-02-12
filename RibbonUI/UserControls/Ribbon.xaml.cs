@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Frost.Common.Models.DB.MovieVo;
@@ -9,21 +8,16 @@ namespace RibbonUI.UserControls {
 
     /// <summary>Interaction logic for Ribbon.xaml</summary>
     public partial class Ribbon : UserControl {
-        public static readonly DependencyProperty MovieProperty = DependencyProperty.Register("Movie", typeof(Movie), typeof(Ribbon),
-            new FrameworkPropertyMetadata(default(Movie)));
-
-        public Movie Movie {
-            get { return (Movie) GetValue(MovieProperty); }
-            set { SetValue(MovieProperty, value); }
-        }
 
         public Ribbon() {
             InitializeComponent();
         }
 
         private void OpenInFolder_Click(object sender, RoutedEventArgs e) {
-            if (Movie != null) {
-                string directory = Movie.DirectoryPath;
+            Movie movie = DataContext as Movie;
+
+            if (movie != null) {
+                string directory = movie.DirectoryPath;
                 if (!string.IsNullOrEmpty(directory)) {
                     Process.Start(directory);
                 }
