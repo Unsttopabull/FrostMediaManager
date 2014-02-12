@@ -45,10 +45,6 @@
                         </Image>                        
                     </StackPanel>
                     <StackPanel Margin="15,0,0,0" MinWidth="200">
-                        <StackPanel Orientation="Horizontal" Tag="{Binding File.NameWithExtension}" Style="{StaticResource CollapseOnTagNull}">
-                            <Label>File name:</Label>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding File.NameWithExtension}" />
-                        </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding Source}" Style="{StaticResource CollapseOnTagNull}">
                             <Label>Source:</Label>
                             <TextBlock VerticalAlignment="Center" Text="{Binding Source}" />

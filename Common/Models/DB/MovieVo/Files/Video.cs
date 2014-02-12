@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
+using System.Globalization;
 
 namespace Frost.Common.Models.DB.MovieVo.Files {
 
@@ -85,7 +86,11 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
         /// <example>\eg{ <c>720p, 1080p, 720i, 1080i, PAL, HDTV, NTSC</c>}</example>
         public int? Resolution { get; set; }
 
-        public string Standard { get; set; } 
+        /// <summary>Gets or sets the name of the resolution.</summary>
+        /// <value>The name of the resolution.</value>
+        public string ResolutionName { get; set; }
+
+        public string Standard { get; set; }
 
         /// <summary>Gets or sets the frames per second in this video.</summary>
         /// <value>The Frames per second.</value>
@@ -188,10 +193,73 @@ namespace Frost.Common.Models.DB.MovieVo.Files {
 
         #endregion
 
-        /// <summary>Gets the video resolution.</summary>
-        /// <param name="resolution">The resolution.</param>
-        /// <returns></returns>
-        public int? GetVideoResolution(string resolution) {
+        [NotMapped]
+        public string FormattedVideoResolution {
+            get {
+                if (!string.IsNullOrEmpty(ResolutionName)) {
+                    return ResolutionName;
+                }
+
+                if (!Resolution.HasValue) {
+                    return null;
+                }
+
+                string resolution = Resolution.Value.ToString(CultureInfo.InvariantCulture);
+                if (ScanType == ScanType.Interlaced) {
+                    return resolution + "i";
+                }
+
+                if (ScanType == ScanType.Progressive) {
+                    return resolution + "p";
+                }
+
+                return resolution;
+            }
+
+            set {
+                if (string.IsNullOrEmpty(value)) {
+                    return;
+                }
+
+                if (value == "Unknown") {
+                    Resolution = null;
+                    ResolutionName = null;
+                    ScanType = ScanType.Unknown;
+                    return;
+                }
+
+                ResolutionName = value;
+
+                int resolution;
+                if (value.EndsWith("i")) {
+                    if (!value.Equals("SDi", StringComparison.InvariantCultureIgnoreCase)) {
+                        int.TryParse(value.Substring(0, value.Length - 1), out resolution);
+
+                        Resolution = resolution;
+                    }
+                    ScanType = ScanType.Interlaced;
+                }
+                else if (value.EndsWith("p")) {
+                    if (!value.Equals("SDp", StringComparison.InvariantCultureIgnoreCase)) {
+                        int.TryParse(value.Substring(0, value.Length - 1), out resolution);
+
+                        Resolution = resolution;
+                    }
+                    ScanType = ScanType.Progressive;
+                }
+                else {
+                    if (!value.Equals("SD", StringComparison.InvariantCultureIgnoreCase)) {
+                        int.TryParse(value, out resolution);
+
+                        Resolution = resolution;
+                    }
+
+                    ScanType = ScanType.Unknown;
+                }
+            }
+        }
+
+        private int? GetVideoResolution(string resolution) {
             if (!string.IsNullOrEmpty(resolution)) {
                 int res;
                 string vres = resolution.TrimEnd('p', 'i');

@@ -14,7 +14,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="EditAudio" Height="443" Width="570" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        Title="Edit audio" Height="443" Width="570" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         d:DataContext="{d:DesignInstance files:Audio}">
     <Window.Resources>
         <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
@@ -43,6 +43,10 @@
             <ColumnDefinition />
             <ColumnDefinition Width="5" />
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <StackPanel DockPanel.Dock="Left" Grid.Column="0" MinWidth="115">
             <Image x:Name="CodecImg" x:FieldModifier="private" Source="{Binding CodecId, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioCodec, FallbackValue={StaticResource DefaultSoundLogo}, TargetNullValue={StaticResource DefaultSoundLogo}, UpdateSourceTrigger=PropertyChanged}"
                    MinHeight="48" MaxHeight="100" MaxWidth="115">
@@ -50,7 +54,7 @@
                     <BitmapCache />
                 </Image.CacheMode>
             </Image>
-            <Image x:Name="ChannelsImg" x:FieldModifier="private" Source="{Binding NumberOfChannels, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioChannels, FallbackValue={StaticResource DefaultSoundLogo}, TargetNullValue={StaticResource DefaultSoundLogo}, UpdateSourceTrigger=PropertyChanged}"
+            <Image x:Name="ChannelsImg" x:FieldModifier="private" Source="{Binding ElementName=ChannelPicker, Path=ChannelLayout, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioChannels, FallbackValue={StaticResource DefaultSoundLogo}, TargetNullValue={StaticResource DefaultSoundLogo}, UpdateSourceTrigger=PropertyChanged}"
                    MinHeight="48" MaxHeight="100" MaxWidth="115">
                 <Image.CacheMode>
                     <BitmapCache />
@@ -65,7 +69,7 @@
                 </Image.CacheMode>
             </Image>
         </StackPanel>
-        <StackPanel Grid.Column="2" MinWidth="200">
+        <StackPanel Grid.Row="0" Grid.Column="2" MinWidth="200">
             <Label>Source:</Label>
             <TextBox VerticalAlignment="Center" Text="{Binding Source, Converter={StaticResource EmptyStringToNullConverter}}" />
 
@@ -76,6 +80,11 @@
             <StackPanel Orientation="Horizontal">
                 <Label>Bit rate (kb/s):</Label>
                 <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="Clear value" Tag="{Binding ElementName=BitRate, Path=Value}">
+                    <in:Interaction.Triggers>
+                        <in:EventTrigger EventName="Click">
+                            <i:ChangePropertyAction TargetName="BitRate" PropertyName="Value" Value="{x:Null}"/>
+                        </in:EventTrigger>
+                    </in:Interaction.Triggers>                    
                     <Image Source="../Images/clear.ico" Width="14" Height="14"/>
                 </Button>
             </StackPanel>
@@ -87,7 +96,7 @@
                 </in:Interaction.Triggers>
             </e:DoubleUpDown>
 
-                <Label>Bit rate mode:</Label>
+            <Label>Bit rate mode:</Label>
             <ComboBox VerticalAlignment="Center" SelectedItem="{Binding BitRateMode}" SelectedIndex="0" ItemsSource="{Binding Source={StaticResource BitRateModes}}" />
 
             <StackPanel Orientation="Horizontal">
@@ -112,6 +121,11 @@
             <StackPanel Orientation="Horizontal">
                 <Label>Bit depth:</Label>
                 <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="Clear value" Tag="{Binding ElementName=BitDepth, Path=Value}">
+                    <in:Interaction.Triggers>
+                        <in:EventTrigger EventName="Click">
+                            <i:ChangePropertyAction TargetName="BitDepth" PropertyName="Value" Value="{x:Null}"/>
+                        </in:EventTrigger>
+                    </in:Interaction.Triggers>                    
                     <Image Source="../Images/clear.ico" Width="14" Height="14"/>
                 </Button>
             </StackPanel>
@@ -150,7 +164,8 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
-        <StackPanel Grid.Column="4">
+        
+        <StackPanel Grid.Row="0" Grid.Column="4">
             <StackPanel Orientation="Horizontal">
                 <Label VerticalAlignment="Center">Duration:</Label>
                 <a:TimePicker x:Name="MovieDuration" HorizontalAlignment="Left" MinTime="{x:Static sys:TimeSpan.Zero}" SelectedTime="{Binding Path=Duration, Converter={StaticResource MsToTimeSpanConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -174,9 +189,10 @@
                 <Label VerticalAlignment="Center" Margin="-5,-5,0,0">Channel layout:</Label>
                 <TextBlock Text="{Binding ElementName=ChannelPicker, Path=ChannelLayout, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,0,5"/>
             </StackPanel>
-            <userControls:ChannelPicker x:Name="ChannelPicker" BorderThickness="1" BorderBrush="DarkGray" ChannelSetup="{Binding ChannelSetup}" ChannelPositions="{Binding ChannelPositions}" NumberOfChannels="{Binding NumberOfChannels}"/>
+            <userControls:ChannelPicker x:Name="ChannelPicker" BorderThickness="1" BorderBrush="DarkGray" ChannelSetup="{Binding ChannelSetup, Mode=TwoWay}" ChannelPositions="{Binding ChannelPositions, Mode=TwoWay}" NumberOfChannels="{Binding NumberOfChannels, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="{Binding ElementName=ChannelPicker, Path=ChannelPositions, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
 
+        <Button Grid.Column="4" Grid.Row="1" Margin="0,0,5,5" Height="25" Click="CloseOnClick">Close</Button>
     </Grid>
 </Window>

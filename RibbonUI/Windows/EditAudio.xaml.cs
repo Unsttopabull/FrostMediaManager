@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using Frost.Common.Models.DB.MovieVo.Files;
 
 namespace RibbonUI.Windows {
@@ -82,6 +81,11 @@ namespace RibbonUI.Windows {
             if (codecImgSource != null) {
                 codecImgSource.UpdateTarget();
             }
+        }
+
+        private void CloseOnClick(object sender, RoutedEventArgs e) {
+            DialogResult = true;
+            Close();
         }
     }
 }

@@ -379,6 +379,7 @@ CREATE TABLE "Videos" (
 	"Source"  TEXT,
 	"Type"  TEXT,
 	"Resolution"  integer,
+	"ResolutionName"  TEXT,
 	"Standard" TEXT,
 	"FPS"  float,
 	"BitRate"  float,

@@ -117,6 +117,33 @@ namespace Frost.DetectFeatures {
             v.Resolution = resolution == 0 ? (int?) null : resolution;
         }
 
+
+        private ScanType GetFileVideoResolution(MediaVideo mv, out int resolution) {
+            long h = mv.Height ?? 0;
+            long w = mv.Width ?? 0;
+
+            resolution = 0;
+            switch (mv.ScanType) {
+                case MediaScanType.Progressive:
+                    if (h == 1080 && w == 1920) {
+                        resolution = 1080;
+                    }
+                    if (h == 720 && w == 1280) {
+                        resolution = 720;
+                    }
+                    return ScanType.Progressive;
+                case MediaScanType.Interlaced:
+                case MediaScanType.MBAFF:
+                case MediaScanType.Mixed:
+                    if (h == 1080 && w == 1920) {
+                        resolution = 1080;
+                        return ScanType.Interlaced;
+                    }
+                    break;
+            }
+            return ScanType.Unknown;
+        }
+
         private string GetVideoCodecId(string codec, string id) {
             switch (codec) {
                 case "MPEG-1 Video":
@@ -179,32 +206,6 @@ namespace Frost.DetectFeatures {
             if (fnInfo.Language != null) {
                 video.Language = CheckLanguage(new Language(fnInfo.Language));
             }
-        }
-
-        private ScanType GetFileVideoResolution(MediaVideo mv, out int resolution) {
-            long h = mv.Height ?? 0;
-            long w = mv.Width ?? 0;
-
-            resolution = 0;
-            switch (mv.ScanType) {
-                case MediaScanType.Progressive:
-                    if (h == 1080 && w == 1920) {
-                        resolution = 1080;
-                    }
-                    if (h == 720 && w == 1280) {
-                        resolution = 720;
-                    }
-                    return ScanType.Progressive;
-                case MediaScanType.Interlaced:
-                case MediaScanType.MBAFF:
-                case MediaScanType.Mixed:
-                    if (h == 1080 && w == 1920) {
-                        resolution = 1080;
-                        return ScanType.Interlaced;
-                    }
-                    break;
-            }
-            return ScanType.Unknown;
         }
     }
 

@@ -119,6 +119,9 @@
     <Compile Include="Windows\AddPerson.xaml.cs">
       <DependentUpon>AddPerson.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\EditVideo.xaml.cs">
+      <DependentUpon>EditVideo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\EditAudio.xaml.cs">
       <DependentUpon>EditAudio.xaml</DependentUpon>
     </Compile>
@@ -204,6 +207,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\AddPerson.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\EditVideo.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -11,21 +11,23 @@ namespace RibbonUI.UserControls.List {
 
     /// <summary>Interaction logic for EditAudios.xaml</summary>
     public partial class ListAudios : UserControl {
+        private ICollectionView _collectionView;
+
         public ListAudios() {
             InitializeComponent();
             TypeDescriptor.GetProperties(AudiosList)["ItemsSource"].AddValueChanged(AudiosList, SubtitlesListItemSourceChanged); 
         }
 
         private void SubtitlesListItemSourceChanged(object sender, EventArgs e) {
-            CollectionView view = (CollectionView) CollectionViewSource.GetDefaultView(AudiosList.ItemsSource);
+            _collectionView = CollectionViewSource.GetDefaultView(AudiosList.ItemsSource);
 
-            if (view == null) {
+            if (_collectionView == null) {
                 return;
             }
 
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("File");
-            if (view.GroupDescriptions != null) {
-                view.GroupDescriptions.Add(groupDescription);
+            if (_collectionView.GroupDescriptions != null) {
+                _collectionView.GroupDescriptions.Add(groupDescription);
             }            
         }
 
@@ -42,6 +44,8 @@ namespace RibbonUI.UserControls.List {
             };
 
             editAudio.ShowDialog();
+
+            _collectionView.Refresh();
         }
 
         private void OnRemoveClicked(object sender, RoutedEventArgs e) {

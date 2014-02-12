@@ -124,9 +124,9 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <StackPanel DockPanel.Dock="Right">
+                    <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
                         <Button Click="OnRemoveClicked" Style="{StaticResource TransparentBorderlessButton}">
-                            <Image Source="../../Images/remove.png" />
+                            <Image Source="../../Images/remove.png" MaxHeight="32"/>
                         </Button>
                         <Button Click="OnEditClicked" Style="{StaticResource TransparentBorderlessButton}">
                             <Image Source="../../Images/edit.ico" />
