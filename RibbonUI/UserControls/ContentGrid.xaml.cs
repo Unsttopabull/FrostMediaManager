@@ -65,6 +65,8 @@ namespace RibbonUI.UserControls {
             ICollectionView view = MovieList.ItemsSource as ICollectionView;
             if (view != null) {
                 _collectionView = CollectionViewSource.GetDefaultView(view);
+                _collectionView.SortDescriptions.Add(new SortDescription("SortTitle", ListSortDirection.Ascending));
+                _collectionView.SortDescriptions.Add(new SortDescription("Title", ListSortDirection.Ascending));
                 _collectionView.Filter = Filter;
             }
         }

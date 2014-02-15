@@ -8,6 +8,7 @@
     xmlns:userControls="clr-namespace:RibbonUI.UserControls"
     xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:t="http://wpflocalizeextension.codeplex.com"
     x:Class="RibbonUI.UserControls.ArtAndPlot"
     mc:Ignorable="d"
     d:DesignHeight="625" d:DesignWidth="1071">
@@ -54,14 +55,10 @@
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Column="1" Grid.Row="3" Panel.ZIndex="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <!--<Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>-->
-            <Image Grid.Column="0" Source="../Images/IMDbNew.png" ToolTip="{Binding ImdbID, FallbackValue=Not Available}" MouseDown="GoToIMDB" Style="{StaticResource CollapseIfTooltipNull}"/>
-            <Image Grid.Column="1" Source="../Images/trailer.ico" ToolTip="{Binding Trailer, FallbackValue=Not Available}" MouseDown="GoToTrailer" Style="{StaticResource CollapseIfTooltipNull}"/>
+            <Image Source="../Images/IMDbNew.png" ToolTip="{Binding ImdbID, FallbackValue=Not Available}" MouseDown="GoToIMDB" Style="{StaticResource CollapseIfTooltipNull}"/>
+            <Image Source="../Images/trailer.ico" ToolTip="{Binding Trailer, FallbackValue=Not Available}" MouseDown="GoToTrailer" Style="{StaticResource CollapseIfTooltipNull}"/>
         </StackPanel>
-        <Image x:Name="mpaa" Grid.Row="0" Grid.Column="1" Source="{Binding MPAARatingImage, TargetNullValue={StaticResource DefaultMpaa}, FallbackValue={StaticResource DefaultMpaa}}" Panel.ZIndex="1">
+        <Image Grid.Row="0" Grid.Column="1" Source="{Binding MPAARatingImage, TargetNullValue={StaticResource DefaultMpaa}, FallbackValue={StaticResource DefaultMpaa}}" Panel.ZIndex="1">
             <Image.Effect>
                 <DropShadowEffect/>
             </Image.Effect>
@@ -82,7 +79,7 @@
                 <ScrollViewer Grid.Row="0">
                     <ScrollViewer.Resources>
                     </ScrollViewer.Resources>
-                    <TextBlock Text="{Binding FirstPlot.Full, FallbackValue=No Plot Available, TargetNullValue=No Plot Available}"
+                    <TextBlock Text="{Binding FirstPlot.Full, FallbackValue={t:Loc No plot available}, TargetNullValue={t:Loc No plot available}}"
                                Foreground="White" Margin="10,10,0,0" TextWrapping="Wrap" FontSize="20" ScrollViewer.CanContentScroll="True" />
                 </ScrollViewer>
                 <ListView Grid.Row="1" Background="Transparent" ItemsSource="{Binding Awards}" BorderThickness="0,1,0,0" Focusable="False">
@@ -166,8 +163,8 @@
                     </DataTemplate>
                 </DataGrid.RowDetailsTemplate>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Person.Name}" Header="Actor" IsReadOnly="True"/>
-                    <DataGridTextColumn Binding="{Binding Character, TargetNullValue=Unknown}" Header="Role"/>
+                    <DataGridTextColumn Binding="{Binding Person.Name}" Header="{t:Loc Actor}" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding Character, TargetNullValue={t:Loc Unknown}}" Header="{t:Loc Character}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

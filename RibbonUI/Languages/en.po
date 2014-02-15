@@ -1,0 +1,391 @@
+# Martin Kraner <martinkraner@outlook.com>, 2014.
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2014-02-15 15:10+0200\n"
+"PO-Revision-Date: 2014-02-15 15:17+0200\n"
+"Last-Translator: Martin Kraner <martinkraner@outlook.com>\n"
+"Language-Team: Martin Kraner\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: UTF-8\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Virtaal 0.7.1\n"
+
+msgid "Actor"
+msgstr "Actor"
+
+msgid "Actors"
+msgstr "Actors"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "Add a new director"
+msgstr "Add a new director"
+
+msgid "Add new plot"
+msgstr "Add new plot"
+
+msgid "Add new studio"
+msgstr "Add new studio"
+
+msgid "Add a person"
+msgstr "Add a person"
+
+msgid "Add new actor"
+msgstr "Add new actor"
+
+msgid "Add new art"
+msgstr "Add new art"
+
+msgid "Add new countries"
+msgstr "Add new countries"
+
+msgid "Add new genre"
+msgstr "Add new genre"
+
+msgid "Art"
+msgstr "Art"
+
+msgid "Aspect"
+msgstr "Aspect"
+
+msgid "Audios"
+msgstr "Audios"
+
+msgid "Back left channel"
+msgstr "Back left channel"
+
+msgid "Back right channel"
+msgstr "Back right channel"
+
+msgid "Bit depth"
+msgstr "Bit depth"
+
+msgid "Bit depth in bits"
+msgstr "Bit depth in bits"
+
+msgid "Bit rate (kb/s)"
+msgstr "Bit rate (kb/s)"
+
+msgid "Bit rate in kbps"
+msgstr "Bit rate in kbps"
+
+msgid "Bit rate mode"
+msgstr "Bit rate mode"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Channel layout"
+msgstr "Channel layout"
+
+msgid "Channel positions"
+msgstr "Channel positions"
+
+msgid "Character"
+msgstr "Character"
+
+msgid "Chroma subsampling"
+msgstr "Chroma subsampling"
+
+msgid "Clear value"
+msgstr "Clear value"
+
+msgid "Click to set language"
+msgstr "Click to set language"
+
+msgid "Close"
+msgstr "Close"
+
+msgid "Codec"
+msgstr "Codec"
+
+msgid "Color space"
+msgstr "Color sapce"
+
+msgid "Compression mode"
+msgstr "Compression mode"
+
+msgid "Constant"
+msgstr "Constant"
+
+msgid "Countries"
+msgstr "Countries"
+
+msgid "Directors"
+msgstr "Directors"
+
+msgid "Duration"
+msgstr "Duration"
+
+msgid "DVD Region"
+msgstr "DVD Region"
+
+msgid "Edit audio"
+msgstr "Edit audio"
+
+msgid "Edit Movie info"
+msgstr "Edit Movie info"
+
+msgid "Edit person"
+msgstr "Edit person"
+
+msgid "Edit selected genre"
+msgstr "Edit selected genre"
+
+msgid "Edit selected person"
+msgstr "Edit selected person"
+
+msgid "Edit selected studio"
+msgstr "Edit selected studio"
+
+msgid "Edit video"
+msgstr "Edit video"
+
+msgid "Edithion"
+msgstr "Edithion"
+
+msgid "Encoding"
+msgstr "Encoding"
+
+msgid "Fanart"
+msgstr "Fanart"
+
+msgid "File name"
+msgstr "File name"
+
+msgid "Format"
+msgstr "Format"
+
+msgid "FPS"
+msgstr "FPS"
+
+msgid "Frame rate in frames/s"
+msgstr "Frame rate in frames/s"
+
+msgid "Front center channel"
+msgstr "Front center channel"
+
+msgid "Front left channel"
+msgstr "Front left channel"
+
+msgid "Front right channel"
+msgstr "Front right channel"
+
+msgid "General Info"
+msgstr "General info"
+
+msgid "Genres"
+msgstr "Genres"
+
+msgid "Height"
+msgstr "Height"
+
+msgid "If you have already seen this movie"
+msgstr "If you have already seen this movie"
+
+msgid "Interlaced"
+msgstr "Interlaced"
+
+msgid "Image"
+msgstr "Image"
+
+msgid "ImdbID"
+msgstr "Imdb ID"
+
+msgid "Is embeded in the video:"
+msgstr "Is embedded in the video"
+
+msgid "Is for hearing impaired:"
+msgstr "Is for hearing impaired"
+
+msgid "Language"
+msgstr "Language"
+
+msgid "LFE"
+msgstr "LFE"
+
+msgid "Lossless"
+msgstr "Lossless"
+
+msgid "Lossy"
+msgstr "Lossy"
+
+msgid "Movie has a .NFO metadata file"
+msgstr "Movie has a .NFO metadata file"
+
+msgid "Movie has available fanart images"
+msgstr "Movie has available fanart images"
+
+msgid "Movie has available subtitles"
+msgstr "Movie has available subtitles"
+
+msgid "Movie has available trailer"
+msgstr "Movie has available trailer"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "No plot available"
+msgstr "Opis ni navoljo"
+
+msgid "No tagline"
+msgstr "No tagline"
+
+msgid "Number of channels"
+msgstr "Number of channels"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Open file search dialog"
+msgstr "Open file search dialog"
+
+msgid "Original title"
+msgstr "Original title"
+
+msgid "Path"
+msgstr "Path"
+
+msgid "Play count"
+msgstr "Play count"
+
+msgid "Plot"
+msgstr "Plot"
+
+msgid "Plot full"
+msgstr "Plot full"
+
+msgid "Plot summary"
+msgstr "Plot summary"
+
+msgid "Preview"
+msgstr "Preview"
+
+msgid "Promotional videos"
+msgstr "Promotional videos"
+
+msgid "Progressive"
+msgstr "Progresivno"
+
+msgid "Rating"
+msgstr "Rating"
+
+msgid "Release group"
+msgstr "Release group"
+
+msgid "Release year"
+msgstr "Release year"
+
+msgid "Remove current plot"
+msgstr "Remove current plot"
+
+msgid "Remove selected actor"
+msgstr "Remove selected actor"
+
+msgid "Remove selected art"
+msgstr "Remove selected art"
+
+msgid "Remove selected country"
+msgstr "Remove selected country"
+
+msgid "Remove selected director"
+msgstr "Remove selected director"
+
+msgid "Remove selected genre"
+msgstr "Remove selected genre"
+
+msgid "Remove selected studio"
+msgstr "Remove selected studio"
+
+msgid "Resolution"
+msgstr "Resolution"
+
+msgid "Sampling rate (kHz)"
+msgstr "Sampling rate (kHz)"
+
+msgid "Sampling rate in kHz"
+msgstr "Sampling rate in kHz"
+
+msgid "Scan type"
+msgstr "Scan type"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "Select language"
+msgstr "Select language"
+
+msgid "Select studios"
+msgstr "Select studios"
+
+msgid "Set"
+msgstr "Set"
+
+msgid "Set language"
+msgstr "Set language"
+
+msgid "Side left channel"
+msgstr "Side left channel"
+
+msgid "Side right channel"
+msgstr "Side right channel"
+
+msgid "Sort title"
+msgstr "Sort title"
+
+msgid "Source"
+msgstr "Source"
+
+msgid "Standard"
+msgstr "Standard"
+
+msgid "Studios"
+msgstr "Studios"
+
+msgid "Subtitles"
+msgstr "Subtitles"
+
+msgid "Tagline"
+msgstr "Tagline"
+
+msgid "Thumb"
+msgstr "Thumb"
+
+msgid "Title"
+msgstr "Title"
+
+msgid "TmdbID"
+msgstr "Tmdb ID"
+
+msgid "Top 250"
+msgstr "Top 250"
+
+msgid "Trailer"
+msgstr "Trailer"
+
+msgid "Trivia and goofs"
+msgstr "Trivia and goofs"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Unknown"
+msgstr "Unknown"
+
+msgid "Unknown title"
+msgstr "Unknown title"
+
+msgid "Use advanced search"
+msgstr "Use advanced search"
+
+msgid "Variable"
+msgstr "Variable"
+
+msgid "Videos"
+msgstr "Videos"
+
+msgid "Wdith"
+msgstr ""

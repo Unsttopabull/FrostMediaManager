@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:userControls="clr-namespace:RibbonUI.UserControls"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:t="http://wpflocalizeextension.codeplex.com"
              xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
              mc:Ignorable="d" x:Name="FlagsInfo" d:DesignHeight="75" d:DesignWidth="950">
     <UserControl.DataContext>
@@ -23,7 +24,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Horizontal" SizeChanged="OnSizeChanged">
-                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Text="{Binding Path=Title, TargetNullValue=Unknown Title, FallbackValue=Unknown Title}"/>
+                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Text="{Binding Path=Title, TargetNullValue={t:Loc Unknown title}, FallbackValue={t:Loc Unknown title}}"/>
                 <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding Path=Edithion, StringFormat=[{0}], TargetNullValue={x:Null}}" >
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
@@ -42,7 +43,7 @@
                 <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding Path=ReleaseYear, StringFormat=({0}), TargetNullValue=(?), FallbackValue=(?)}"/>
                 <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding Path=OriginalTitle, StringFormat=aka {0}, TargetNullValue={}, FallbackValue={}}"/>
             </StackPanel>
-            <TextBlock Grid.Row="1" FontSize="14" Text="{Binding Path=FirstPlot.TaglineOrSummary, TargetNullValue=No Tagline, FallbackValue=No Tagline}"/>
+            <TextBlock Grid.Row="1" FontSize="14" Text="{Binding Path=FirstPlot.TaglineOrSummary, TargetNullValue={t:Loc No tagline}, FallbackValue={t:Loc No tagline}}"/>
             <StackPanel Grid.Row="3" Orientation="Horizontal">
                 <userControls:StarRating Rating="{Binding Path=RatingAverage}"/>
                 <TextBlock FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding Top250, StringFormat=Top 250: {0}, TargetNullValue={x:Null}}"/>

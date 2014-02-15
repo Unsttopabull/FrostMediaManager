@@ -10,13 +10,12 @@
         xmlns:files="clr-namespace:Frost.Common.Models.DB.MovieVo.Files;assembly=Frost.Common"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:e="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
-        xmlns:userControls="clr-namespace:RibbonUI.UserControls"
+        xmlns:t="http://wpflocalizeextension.codeplex.com"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:threading="clr-namespace:System.Threading;assembly=mscorlib"
-        xmlns:globalization="clr-namespace:System.Globalization;assembly=mscorlib"
+        xmlns:glob="clr-namespace:System.Globalization;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Edit video" Height="443" Width="570" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        Title="{t:Loc Edit video}" Height="443" Width="570" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         d:DataContext="{d:DesignInstance files:Video}">
     <Window.Resources>
         <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
@@ -57,8 +56,7 @@
                     <BitmapCache />
                 </Image.CacheMode>
             </Image>
-            <Image x:Name="ResolutionImg" x:FieldModifier="private"
-                   Source="{Binding FormattedVideoResolution, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=VideoResolution, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}, UpdateSourceTrigger=PropertyChanged}"
+            <Image Source="{Binding FormattedVideoResolution, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=VideoResolution, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}, UpdateSourceTrigger=PropertyChanged}"
                    MinHeight="48" MaxHeight="100" MaxWidth="115">
                 <Image.CacheMode>
                     <BitmapCache />
@@ -74,27 +72,27 @@
             </Image>
         </StackPanel>
         <StackPanel Grid.Row="0" Grid.Column="2" MinWidth="200">
-            <Label>Source:</Label>
+            <Label Content="{t:Loc Source}"/>
             <TextBox VerticalAlignment="Center"
                      Text="{Binding Source, Converter={StaticResource EmptyStringToNullConverter}}" />
 
-            <Label>Codec:</Label>
+            <Label Content="{t:Loc Codec}"/>
             <ComboBox x:Name="CodecSelect" x:FieldModifier="private" IsEditable="False" VerticalAlignment="Center"
                       Loaded="CodecSelectOnLoaded"
                       SelectionChanged="CodecSelectOnSelectionChanged" DisplayMemberPath="Name" SelectedIndex="0" />
 
-            <Label>Standard:</Label>
+            <Label Content="{t:Loc Standard}"/>
             <ComboBox x:Name="StandardSelect" x:FieldModifier="private" VerticalAlignment="Center" IsEditable="True"
                       Loaded="StandardSelectOnLoaded" SelectedIndex="0" SelectedItem="{Binding Standard}"/>
 
-            <Label>Resolution:</Label>
+            <Label Content="{t:Loc Resolution}"/>
             <ComboBox x:Name="ResolutionSelect" x:FieldModifier="private"
                       SelectedItem="{Binding FormattedVideoResolution}" VerticalAlignment="Center"
                       Loaded="ResolutionSelectOnLoaded"/>
 
             <StackPanel Orientation="Horizontal">
-                <Label>FPS:</Label>
-                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="Clear value"
+                <Label Content="{t:Loc FPS}"/>
+                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{t:Loc Clear value}"
                         Tag="{Binding ElementName=Fps, Path=Value}">
                     <in:Interaction.Triggers>
                         <in:EventTrigger EventName="Click">
@@ -104,7 +102,7 @@
                     <Image Source="../Images/clear.ico" Width="14" Height="14" />
                 </Button>
             </StackPanel>
-            <e:DoubleUpDown Minimum="0" Watermark="Frame rate in frames/s" VerticalAlignment="Center" CultureInfo="{x:Static globalization:CultureInfo.CurrentCulture}"
+            <e:DoubleUpDown Minimum="0" Watermark="{t:Loc Frame rate in frames/s}" VerticalAlignment="Center" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}"
                             Value="{Binding FPS}" x:Name="Fps" x:FieldModifier="private" FormatString="F2">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=Fps, Path=Value}" Value="0">
@@ -114,8 +112,8 @@
             </e:DoubleUpDown>
 
             <StackPanel Orientation="Horizontal">
-                <Label>Bit rate (kb/s):</Label>
-                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="Clear value"
+                <Label Content="{t:Loc Bit rate (kb/s)}"/>
+                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{t:Loc Clear value}"
                         Tag="{Binding ElementName=BitRate, Path=Value}">
                     <in:Interaction.Triggers>
                         <in:EventTrigger EventName="Click">
@@ -125,8 +123,8 @@
                     <Image Source="../Images/clear.ico" Width="14" Height="14" />
                 </Button>
             </StackPanel>
-            <e:DoubleUpDown Minimum="0" Watermark="Bit rate in kbps" VerticalAlignment="Center" MinHeight="22" FormatString="F3"
-                            Value="{Binding BitRate}" x:Name="BitRate" x:FieldModifier="private" CultureInfo="{x:Static globalization:CultureInfo.CurrentCulture}">
+            <e:DoubleUpDown Minimum="0" Watermark="{t:Loc Bit rate in kbps}" VerticalAlignment="Center" MinHeight="22" FormatString="F3"
+                            Value="{Binding BitRate}" x:Name="BitRate" x:FieldModifier="private" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=BitRate, Path=Value}" Value="0">
                         <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}" />
@@ -134,15 +132,15 @@
                 </in:Interaction.Triggers>
             </e:DoubleUpDown>
 
-            <Label>Compression mode:</Label>
+            <Label Content="{t:Loc Compression mode}"/>
             <ComboBox VerticalAlignment="Center" SelectedItem="{Binding CompressionMode}"
                       ItemsSource="{Binding Source={StaticResource CompressionModes}}" SelectedIndex="0" />
 
         </StackPanel>
         <StackPanel Grid.Row="0" Grid.Column="4">
             <StackPanel Orientation="Horizontal">
-                <Label VerticalAlignment="Center">Duration:</Label>
-                <Button Style="{StaticResource TransparentBorderlessButton}" ToolTip="Clear value">
+                <Label VerticalAlignment="Center" Content="{t:Loc Duration}"/>
+                <Button Style="{StaticResource TransparentBorderlessButton}" ToolTip="{t:Loc Clear value}">
                     <in:Interaction.Triggers>
                         <in:EventTrigger EventName="Click">
                             <i:ChangePropertyAction TargetName="VideoDuration" PropertyName="SelectedTime"
@@ -164,13 +162,13 @@
             </a:TimePicker>
 
 
-            <Label Margin="-5,0,0,0">Color space:</Label>
+            <Label Margin="-5,0,0,0" Content="{t:Loc Color space}"/>
             <ComboBox VerticalAlignment="Center" SelectedItem="{Binding ColorSpace}" IsEditable="True"
                       Loaded="OnColorSpaceSelectLoaded"/>
 
             <StackPanel Orientation="Horizontal">
-                <Label>Aspect:</Label>
-                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="Clear value"
+                <Label Content="{t:Loc Aspect}"/>
+                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{t:Loc Clear value}"
                         Tag="{Binding ElementName=Aspect, Path=Value}">
                     <in:Interaction.Triggers>
                         <in:EventTrigger EventName="Click">
@@ -181,7 +179,7 @@
                 </Button>
             </StackPanel>
             <e:DoubleUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding Aspect}" MinHeight="22" FormatString="F3"
-                            x:Name="Aspect" x:FieldModifier="private" CultureInfo="{x:Static globalization:CultureInfo.CurrentCulture}">
+                            x:Name="Aspect" x:FieldModifier="private" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=Aspect, Path=Value}" Value="0">
                         <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}" />
@@ -190,8 +188,8 @@
             </e:DoubleUpDown>
 
             <StackPanel Orientation="Horizontal">
-                <Label>Width:</Label>
-                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="Clear value"
+                <Label Content="{t:Loc Width}"/>
+                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{t:Loc Clear value}"
                         Tag="{Binding ElementName=Width, Path=Value}">
                     <in:Interaction.Triggers>
                         <in:EventTrigger EventName="Click">
@@ -202,7 +200,7 @@
                 </Button>
             </StackPanel>
             <e:IntegerUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding Width}" MinHeight="22"
-                             x:Name="Width" x:FieldModifier="private" CultureInfo="{x:Static globalization:CultureInfo.CurrentCulture}">
+                             x:Name="Width" x:FieldModifier="private" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=Width, Path=Value}" Value="0">
                         <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}" />
@@ -211,8 +209,8 @@
             </e:IntegerUpDown>
 
             <StackPanel Orientation="Horizontal">
-                <Label>Height:</Label>
-                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="Clear value"
+                <Label Content="{t:Loc Height}"/>
+                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{t:Loc Clear value}"
                         Tag="{Binding ElementName=Height, Path=Value}">
                     <in:Interaction.Triggers>
                         <in:EventTrigger EventName="Click">
@@ -223,7 +221,7 @@
                 </Button>
             </StackPanel>
             <e:IntegerUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding Height}" x:Name="Height"
-                             x:FieldModifier="private" CultureInfo="{x:Static globalization:CultureInfo.CurrentCulture}">
+                             x:FieldModifier="private" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=Height, Path=Value}" Value="0">
                         <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}" />
@@ -231,13 +229,13 @@
                 </in:Interaction.Triggers>
             </e:IntegerUpDown>
 
-            <Label>Bit rate mode:</Label>
+            <Label Content="{t:Loc Bit rate mode}"/>
             <ComboBox VerticalAlignment="Center" SelectedItem="{Binding BitRateMode}" SelectedIndex="0"
                       ItemsSource="{Binding Source={StaticResource BitRateModes}}" />
 
             <StackPanel Orientation="Horizontal">
-                <Label>Language:</Label>
-                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="Clear value" Tag="{Binding ElementName=SelectedLanguage, Path=SelectedItem}">
+                <Label Content="{t:Loc Language}"/>
+                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{t:Loc Clear value}" Tag="{Binding ElementName=SelectedLanguage, Path=SelectedItem}">
                     <in:Interaction.Triggers>
                         <in:EventTrigger EventName="Click">
                             <i:ChangePropertyAction TargetName="SelectedLanguage" PropertyName="SelectedIndex" Value="-1"/>
@@ -261,6 +259,6 @@
 
         </StackPanel>
 
-        <Button Grid.Column="4" Grid.Row="1" Margin="0,0,5,5" Height="25" Click="CloseOnClick">Close</Button>
+        <Button Grid.Column="4" Grid.Row="1" Margin="0,0,5,5" Height="25" Click="CloseOnClick" Content="{t:Loc Close}"/>
     </Grid>
 </Window>

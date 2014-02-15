@@ -18,14 +18,6 @@
         <CollectionViewSource x:Key="StudiosSource"/>
     </RibbonWindow.Resources>
    
-    
-    <!--<RibbonWindow.MinWidth>
-        <MultiBinding Converter="{StaticResource SumConverter}">
-            <Binding ElementName="ContentGrid" Path="(local:ContentGrid.MovieFlags).MinRequiredWidth"/>
-            <Binding ElementName="ContentGrid" Path="TabViewMinWidth"/>
-        </MultiBinding>
-    </RibbonWindow.MinWidth>-->
-    
     <Grid x:Name="LayoutRoot">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

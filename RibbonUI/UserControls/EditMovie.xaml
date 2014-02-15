@@ -12,6 +12,7 @@
              xmlns:common="clr-namespace:Frost.Common;assembly=Frost.Common"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:t="http://wpflocalizeextension.codeplex.com"
              mc:Ignorable="d" Loaded="OnControlLoaded"
              d:DesignHeight="725" d:DesignWidth="1071"
              DataContextChanged="EditMovieOnDataContextChanged">
@@ -60,16 +61,16 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Target="{Binding ElementName=MovieTitle}">Title:</Label>
+                    <Label Grid.Row="0" Target="{Binding ElementName=MovieTitle}" Content="{t:Loc Title}"/>
                     <TextBox Grid.Row="1" x:Name="MovieTitle" Text="{Binding Path=Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <Label Grid.Row="2" Target="{Binding ElementName=MovieOriginalTitle}">Original title:</Label>
+                    <Label Grid.Row="2" Target="{Binding ElementName=MovieOriginalTitle}" Content="{t:Loc Original title}"/>
                     <TextBox Grid.Row="3" x:Name="MovieOriginalTitle" Text="{Binding Path=OriginalTitle, Converter={StaticResource EmptyStringToNullConverter}, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <Label Grid.Row="4" Target="{Binding ElementName=MovieSortTitle}">Sort title:</Label>
+                    <Label Grid.Row="4" Target="{Binding ElementName=MovieSortTitle}" Content="{t:Loc Sort title}"/>
                     <TextBox Grid.Row="5" x:Name="MovieSortTitle" Text="{Binding Path=SortTitle, Converter={StaticResource EmptyStringToNullConverter}}" />
 
-                    <Label Grid.Row="6" Target="{Binding ElementName=MovieEdithion}">Edithion:</Label>
+                    <Label Grid.Row="6" Target="{Binding ElementName=MovieEdithion}" Content="{t:Loc Edithion}"/>
                     <TextBox Grid.Row="7" x:Name="MovieEdithion" Text="{Binding Path=Edithion, Converter={StaticResource EmptyStringToNullConverter}}" />
 
                     <Grid x:Name="TypeRatingDuration" x:FieldModifier="private" Grid.Row="8">
@@ -87,12 +88,12 @@
                             <RowDefinition />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                        <Label Grid.Row="0" Grid.Column="0">Type:</Label>
+                        <Label Grid.Row="0" Grid.Column="0" Content="{t:Loc Type}"/>
                         <ComboBox Grid.Row="1" Grid.Column="0" x:Name="MovieTypeComboBox"
                                   ItemsSource="{Binding Source={StaticResource MovieTypes}}"
                                   SelectedItem="{Binding Type}" />
 
-                        <Label Grid.Column="2" Grid.Row="0">DVD Region</Label>
+                        <Label Grid.Column="2" Grid.Row="0" Content="{t:Loc DVD Region}"/>
                         <ComboBox Grid.Row="1" Grid.Column="2" IsEnabled="False"
                                   ItemsSource="{Binding Source={StaticResource DvDRegions}}"
                                   SelectedItem="{Binding DvdRegion}">
@@ -109,48 +110,48 @@
                             </in:Interaction.Triggers>
                         </ComboBox>
 
-                        <Label Grid.Row="2" Grid.Column="2">IMBD Id:</Label>
+                        <Label Grid.Row="2" Grid.Column="2" Content="{t:Loc ImdbID}"/>
                         <TextBox Grid.Row="3" Grid.Column="2"
                                  Text="{Binding ImdbID, Converter={StaticResource EmptyStringToNullConverter}}" />
 
-                        <Label Grid.Row="2" Grid.Column="0">TMDB Id:</Label>
+                        <Label Grid.Row="2" Grid.Column="0" Content="{t:Loc TmdbID}"/>
                         <TextBox Grid.Row="3" Grid.Column="0"
                                  Text="{Binding TmdbID, Converter={StaticResource EmptyStringToNullConverter}}" />
 
                         <StackPanel Grid.Column="0" Grid.Row="4">
-                            <Label Target="{Binding ElementName=MovieReleaseYear}">Release year:</Label>
+                            <Label Target="{Binding ElementName=MovieReleaseYear}" Content="{t:Loc Release year}"/>
                             <e:IntegerUpDown x:Name="MovieReleaseYear" Minimum="1900" Maximum="2100"
                                              Value="{Binding Path=ReleaseYear, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel Grid.Column="2" Grid.Row="4">
-                            <Label Target="{Binding ElementName=MovieRating}">Rating:</Label>
+                            <Label Target="{Binding ElementName=MovieRating}" Content="{t:Loc Rating}"/>
                             <userControls:StarRating Height="{Binding ElementName=MovieReleaseYear, Path=ActualHeight}"
                                                      Rating="{Binding Path=RatingAverage, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="5">
-                            <Label>Release group:</Label>
+                            <Label Content="{t:Loc Release group}"/>
                             <TextBox Text="{Binding ReleaseGroup, Converter={StaticResource EmptyStringToNullConverter}}"
                                      MinHeight="20" />
                         </StackPanel>
                         <StackPanel Grid.Column="2" Grid.Row="5">
-                            <Label Target="{Binding ElementName=MoviePlayCount}">Play count:</Label>
+                            <Label Target="{Binding ElementName=MoviePlayCount}" Content="{t:Loc Play count}"/>
                             <e:IntegerUpDown x:Name="MoviePlayCount" Minimum="0" Value="{Binding Path=PlayCount}"
                                              MinWidth="26" />
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="6">
-                            <Label Target="{Binding ElementName=MovieDuration}">Duration</Label>
+                            <Label Target="{Binding ElementName=MovieDuration}" Content="{t:Loc Duration}"/>
                             <a:TimePicker x:Name="MovieDuration"
                                           SelectedTime="{Binding Path=Runtime, Converter={StaticResource MsToTimeSpanConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel Grid.Column="2" Grid.Row="6">
-                            <Label Target="{Binding ElementName=MovieDuration}">Top 250</Label>
+                            <Label Target="{Binding ElementName=MovieDuration}" Content="{t:Loc Top 250}"/>
                             <e:IntegerUpDown Minimum="0" Maximum="250" Value="{Binding Path=Top250}" MinHeight="30"
                                              VerticalContentAlignment="Center" />
                         </StackPanel>
                     </Grid>
-                    <Label Grid.Row="9">Trailer:</Label>
+                    <Label Grid.Row="9" Content="{t:Loc Trailer}"/>
                     <Grid x:Name="TrailerGrid" x:FieldModifier="private" Grid.Row="10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -158,7 +159,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBox x:Name="MovieTrailer" Grid.Column="0" Text="{Binding Trailer, Converter={StaticResource EmptyStringToNullConverter}}"/>
                         <Button Grid.Column="1" Height="{Binding ElementName=MovieTitle, Path=ActualHeight}" Click="TrailerSearchOnClick"
-                                ToolTip="Open file search dialog" Margin="2,0,0,0" Style="{StaticResource TransparentBorderlessButton}">
+                                ToolTip="{t:Loc Open file search dialog}" Margin="2,0,0,0" Style="{StaticResource TransparentBorderlessButton}">
                             <Image Source="../Images/folder.ico" />
                         </Button>
                     </Grid>
@@ -178,30 +179,27 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <Label Grid.Row="0" Grid.ColumnSpan="2" Target="{Binding ElementName=MovieDirectors}">Directors</Label>
+                        <Label Grid.Row="0" Grid.ColumnSpan="2" Target="{Binding ElementName=MovieDirectors}" Content="{t:Loc Directors}"/>
                         <ListBox Grid.Row="1" Grid.Column="0" MinHeight="20" MaxHeight="50" Grid.ColumnSpan="2"
                                  x:Name="MovieDirectors" ItemsSource="{Binding Path=Directors}" SelectionMode="Single" />
                         <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal"
                                     HorizontalAlignment="Center">
                             <Button DockPanel.Dock="Right" Tag="Directors"
                                     Style="{StaticResource TransparentBorderlessButton}" Click="EditPersonOnClick"
-                                    Height="26" VerticalAlignment="Bottom" ToolTip="Edit selected person">
+                                    Height="26" VerticalAlignment="Bottom" ToolTip="{t:Loc Edit selected person}">
                                 <Image Source="../Images/edit.ico" MaxHeight="16"/>
                             </Button>
                             <Button Click="AddDirectorOnClick" Style="{StaticResource TransparentBorderlessButton}"
-                                    ToolTip="Add a new director" >
+                                    ToolTip="{t:Loc Add a new director}" >
                                 <Image Source="../Images/add.png" MaxHeight="16"/>
                             </Button>
                             <Button Click="RemoveDirectorOnClick" Style="{StaticResource TransparentBorderlessButton}"
-                                    ToolTip="Remove selected director">
+                                    ToolTip="{t:Loc Remove selected director}">
                                 <Image Source="../Images/remove.png" MaxHeight="16"/>
                             </Button>
                         </StackPanel>
 
-                        <Label Grid.Column="0" Grid.Row="3" Target="{Binding ElementName=MovieCountries}"
-                               Margin="-5,-5,0,0">
-                            Countries:
-                        </Label>
+                        <Label Grid.Column="0" Grid.Row="3" Target="{Binding ElementName=MovieCountries}" Margin="-5,-5,0,0"  Content="{t:Loc Countries}"/>
                         <ListBox Grid.Row="4" Grid.Column="0" x:Name="MovieCountries" ItemsSource="{Binding Countries}"
                                  MinHeight="32">
                             <ListBox.ItemTemplate>
@@ -216,10 +214,10 @@
                             </ListBox.ItemTemplate>
                         </ListBox>
                         <StackPanel Grid.Row="4" Grid.Column="1">
-                            <Button Click="AddCountryOnClick" Style="{StaticResource TransparentBorderlessButton}" ToolTip="Add new country">
+                            <Button Click="AddCountryOnClick" Style="{StaticResource TransparentBorderlessButton}" ToolTip="{t:Loc Add new countries}">
                                 <Image Source="../Images/add.png" MaxHeight="16" />
                             </Button>
-                            <Button Click="RemoveCountryOnClick" Style="{StaticResource TransparentBorderlessButton}" ToolTip="Remove selected country">
+                            <Button Click="RemoveCountryOnClick" Style="{StaticResource TransparentBorderlessButton}" ToolTip="{t:Loc Remove selected country}">
                                 <Image Source="../Images/remove.png" MaxHeight="16" />
                             </Button>
                         </StackPanel>
@@ -243,7 +241,7 @@
                         <ColumnDefinition Width="10" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Row="0" Grid.Column="2">Tagline:</Label>
+                    <Label Grid.Row="0" Grid.Column="2" Content="{t:Loc Tagline}"/>
                     <TextBox x:Name="MoviePlotTagline" Height="{Binding ElementName=MoviePlotCombo, Path=ActualHeight}"
                              Grid.Column="2" Grid.Row="1"
                              Text="{Binding ElementName=MoviePlotCombo, Path=SelectedItem.Tagline}"
@@ -260,14 +258,14 @@
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <DockPanel Grid.Column="0" Grid.Row="0" LastChildFill="False">
-                            <Label DockPanel.Dock="Left">Plot:</Label>
+                            <Label DockPanel.Dock="Left" Content="{t:Loc Plot}"/>
                             <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
-                                    Click="RemovePotOnClick" ToolTip="Remove current plot">
+                                    Click="RemovePotOnClick" ToolTip="{t:Loc Remove current plot}">
                                 <Image Source="../Images/remove.png" MaxHeight="16" />
                             </Button>
                             <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
                                     Click="AddPlotOnClick" Height="26" VerticalAlignment="Bottom"
-                                    ToolTip="Add a new plot">
+                                    ToolTip="{t:Loc Add new plot}">
                                 <Image Source="../Images/add.png" MaxHeight="16" />
                             </Button>
                         </DockPanel>
@@ -289,16 +287,16 @@
                         </ComboBox>
                         <Button Grid.Row="1" Grid.Column="1" Margin="5,0,0,0"
                                 IsEnabled="{Binding ElementName=MoviePlotCombo, Path=IsEnabled}"
-                                ToolTip="Set the current plot language" Content="Set Language"
+                                ToolTip="{t:Loc SettPlotLanguage}" Content="{t:Loc Set language}"
                                 Click="SetPlotLanguageClick" />
                     </Grid>
 
-                    <Label Grid.Column="0" Grid.Row="2">Plot summary:</Label>
+                    <Label Grid.Column="0" Grid.Row="2" Content="{t:Loc Plot summary}"/>
                     <TextBox Grid.Column="0" Grid.Row="3" x:Name="MoviePlotSummary"
                              Text="{Binding ElementName=MoviePlotCombo, Path=SelectedItem.Summary, UpdateSourceTrigger=PropertyChanged}"
                              IsEnabled="{Binding ElementName=MoviePlotCombo, Path=HasItems}" TextWrapping="Wrap"
                              MinHeight="150" />
-                    <Label Grid.Row="2" Grid.Column="2">Plot full:</Label>
+                    <Label Grid.Row="2" Grid.Column="2" Content="{t:Loc Plot full}"/>
                     <TextBox Grid.Row="3" Grid.Column="2" x:Name="MoviePlotFull"
                              Text="{Binding ElementName=MoviePlotCombo, Path=SelectedItem.Full}"
                              IsEnabled="{Binding ElementName=MoviePlotCombo, Path=HasItems}" TextWrapping="Wrap"
@@ -315,18 +313,18 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <DockPanel Grid.Row="0" Grid.Column="0" LastChildFill="False">
-                        <Label DockPanel.Dock="Left">Actors:</Label>
+                        <Label DockPanel.Dock="Left" Content="{t:Loc Actors}"/>
                         <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
-                                Click="RemoveActorOnClick" ToolTip="Remove selected actor">
+                                Click="RemoveActorOnClick"  ToolTip="{t:Loc Remove selected actor}">
                             <Image Source="../Images/remove.png" MaxHeight="16" />
                         </Button>
                         <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
-                                Click="AddActorOnClick" Height="26" VerticalAlignment="Bottom" ToolTip="Add new actor">
+                                Click="AddActorOnClick" Height="26" VerticalAlignment="Bottom" ToolTip="{t:Loc Add new actor}">
                             <Image Source="../Images/add.png" MaxHeight="16" />
                         </Button>
                         <Button DockPanel.Dock="Right" Tag="Actors"
                                 Style="{StaticResource TransparentBorderlessButton}" Click="EditPersonOnClick"
-                                Height="26" VerticalAlignment="Bottom" ToolTip="Edit selected person">
+                                Height="26" VerticalAlignment="Bottom"  ToolTip="{t:Loc Edit selected person}">
                             <Image Source="../Images/edit.ico" MaxHeight="16" />
                         </Button>
                     </DockPanel>
@@ -341,7 +339,7 @@
                             <BitmapImage x:Key="Person" UriSource="../Images/person.png" />
                         </DataGrid.Resources>
                         <DataGrid.Columns>
-                            <DataGridTemplateColumn Header="Image" IsReadOnly="True">
+                            <DataGridTemplateColumn Header="{t:Loc Image}" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Image Source="{Binding Person.Thumb, TargetNullValue={StaticResource Person}, FallbackValue={StaticResource Person}}"
@@ -349,8 +347,8 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn Binding="{Binding Person.Name}" Header="Actor" IsReadOnly="True" />
-                            <DataGridTextColumn Binding="{Binding Character, TargetNullValue=Unknown}" Header="Role" Width="*" />
+                            <DataGridTextColumn Binding="{Binding Person.Name}" Header="{t:Loc Actor}" IsReadOnly="True" />
+                            <DataGridTextColumn Binding="{Binding Character, TargetNullValue=Unknown}" Header="{t:Loc Character}" Width="*" />
                         </DataGrid.Columns>
                     </DataGrid>
                     <Grid Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
@@ -361,18 +359,18 @@
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <DockPanel Grid.Row="0" LastChildFill="False">
-                            <Label DockPanel.Dock="Left">Genres:</Label>                            
+                            <Label DockPanel.Dock="Left" Content="{t:Loc Genres}"/>
                             <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
-                                    Click="RemoveGenreClick" ToolTip="Remove selected studio">
+                                    Click="RemoveGenreClick"  ToolTip="{t:Loc Remove selected genre}">
                                 <Image Source="../Images/remove.png" MaxHeight="16" />
                             </Button>
                             <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
                                     Click="AddGenreClick" Height="26" VerticalAlignment="Bottom"
-                                    ToolTip="Add new studio">
+                                     ToolTip="{t:Loc Add new genre}">
                                 <Image Source="../Images/add.png" MaxHeight="16" />
                             </Button>
                             <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
-                                    Click="EditGenreOnClick" ToolTip="Edit selected studio">
+                                    Click="EditGenreOnClick"  ToolTip="{t:Loc Edit selected genre}">
                                 <Image Source="../Images/edit.ico" MaxHeight="16" />
                             </Button>
                         </DockPanel>
@@ -390,18 +388,18 @@
                         </ListBox>
 
                         <DockPanel Grid.Row="2" LastChildFill="False">
-                            <Label DockPanel.Dock="Left">Studios:</Label>
+                            <Label DockPanel.Dock="Left" Content="{t:Loc Studios}"/>
                             <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
-                                    Click="RemoveStudioOnClick" ToolTip="Remove selected studio">
+                                    Click="RemoveStudioOnClick" ToolTip="{t:Loc Remove selected studio}">
                                 <Image Source="../Images/remove.png" MaxHeight="16" />
                             </Button>
                             <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
                                     Click="AddStudioOnClick" Height="26" VerticalAlignment="Bottom"
-                                    ToolTip="Add new studio">
+                                    ToolTip="{t:Loc Add new studio}">
                                 <Image Source="../Images/add.png" MaxHeight="16" />
                             </Button>
                             <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
-                                    Click="EditStudioOnClick" ToolTip="Edit selected studio">
+                                    Click="EditStudioOnClick" ToolTip="{t:Loc Edit selected studio}">
                                 <Image Source="../Images/edit.ico" MaxHeight="16" />
                             </Button>                            
                         </DockPanel>

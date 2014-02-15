@@ -1,0 +1,11 @@
+﻿<#@ assembly name="System.Configuration" #>
+
+<#
+this.ClassName = "Gettext";
+this.ResourceName = "";
+this.NamespaceName = "GettextTranslationExtension";
+this.DefaultResourceDir = "Languages"; 
+this.DefaultFileFormat = "{{culture}}.po";
+#>
+
+<#@ include file="Strings.tt" #>

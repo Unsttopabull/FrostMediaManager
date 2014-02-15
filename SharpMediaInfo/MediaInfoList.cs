@@ -13,7 +13,6 @@ namespace Frost.SharpMediaInfo {
 
         private readonly IntPtr _handle;
         private readonly MediaFileCollection _files;
-        private bool _isDisposed;
         private readonly bool _noDll;
 
         #region Constructors
@@ -245,10 +244,7 @@ namespace Frost.SharpMediaInfo {
 
         #region IDisposable
 
-        public bool IsDisposed {
-            get { return _isDisposed; }
-            private set { _isDisposed = value; }
-        }
+        public bool IsDisposed { get; private set; }
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         void IDisposable.Dispose() {

@@ -52,13 +52,14 @@ namespace Frost.Tester {
             //TestPHPDeserialize2();
 
             //TestXjbDbParser();
-            time = TestMediaSearcher();
+            //time = TestMediaSearcher();
             //TestFileFeatures();
             //TestGremoVKino();
             //TestDBInsert();
             //TestISOMount();
             //TestDiscUtils();
             //TestImDisk();
+            OutputPo();
 
             sw.Stop();
 
@@ -70,6 +71,140 @@ namespace Frost.Tester {
             Console.WriteLine("\tFIN: " + time);
             Console.WriteLine(Filler);
             Console.Read();
+        }
+
+        private static void OutputPo() {
+            List<string> keys = new List<string> {
+                "Preview",
+                "Type",
+                "Path",
+                "Source",
+                "Standard",
+                "Number of channels",
+                "Channel positions",
+                "Codec",
+                "Bit rate (kb/s)",
+                "Bit rate mode",
+                "Sampling rate (kHz)",
+                "Compression mode",
+                "Duration",
+                "Language",
+                "Click to set language",
+                "Format",
+                "Encoding",
+                "Is embeded in the video:",
+                "Is for hearing impaired:",
+                "File name",
+                "FPS",
+                "Bit depth",
+                "Scan type",
+                "Color space",
+                "Chroma subsampling",
+                "Aspect",
+                "Wdith",
+                "Height",
+                "Actor",
+                "Unknown",
+                "Unknown title",
+                "Front center channel",
+                "Front left channel",
+                "Front right channel",
+                "Side left channel",
+                "Side right channel",
+                "Back left channel",
+                "Back right channel",
+                "LFE",
+                "Use advanced search",
+                "Title",
+                "Release year",
+                "Fanart",
+                "Movie has available fanart images",
+                "Movie has a .NFO metadata file",
+                "Movie has available trailer",
+                "Movie has available subtitles",
+                "If you have already seen this movie",
+                "General Info",
+                "Trivia and goofs",
+                "Edit Movie info",
+                "Subtitles",
+                "Videos",
+                "Audios",
+                "Promotional videos",
+                "Art",
+                "Remove selected art",
+                "Add new art",
+                "Original title",
+                "Sort title",
+                "Edithion",
+                "DVD Region",
+                "Rating",
+                "Release group",
+                "Play count",
+                "Top 250",
+                "Trailer",
+                "Open file search dialog",
+                "Directors",
+                "Add a new director",
+                "Remove selected director",
+                "Countries",
+                "Add new countries",
+                "Remove selected country",
+                "Tagline",
+                "Remove current plot",
+                "Add a new plot",
+                "Set language",
+                "Plot summary",
+                "Plot full",
+                "Actors",
+                "Remove selected actor",
+                "Add new actor",
+                "Edit selected person",
+                "Image",
+                "Character",
+                "Genres",
+                "Remove selected genre",
+                "Add new genre",
+                "Edit selected genre",
+                "Studios",
+                "Remove selected studio",
+                "Edit selected studio",
+                "Select studios",
+                "No tagline",
+                "Add",
+                "Cancel",
+                "Search",
+                "Name",
+                "Thumb",
+                "Add a new studio",
+                "Edit audio",
+                "Clear value",
+                "Sampling rate in kHz",
+                "Bit depth in bits",
+                "Channel layout",
+                "Add a person",
+                "Edit person",
+                "Name",
+                "ImdbID",
+                "OK",
+                "Edit video",
+                "Resolution",
+                "Frame rate in frames/s",
+                "Bit rate in kbps",
+                "Select language",
+                "Set",
+                "TmdbID",
+            };
+
+            keys.Sort();
+            keys = keys.Distinct().ToList();
+
+            using (StreamWriter sw = new StreamWriter("FrostMediaManager.pot")) {
+                foreach (string key in keys) {
+                    sw.WriteLine("msgid \"{0}\"", key);
+                    sw.WriteLine("msgstr \"\"");
+                    sw.WriteLine();
+                }
+            }
         }
 
         private static void TestImDisk() {

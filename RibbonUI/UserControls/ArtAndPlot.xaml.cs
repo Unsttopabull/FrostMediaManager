@@ -5,6 +5,8 @@ using Frost.Common;
 
 namespace RibbonUI.UserControls {
 
+    using Translation;
+
     /// <summary>Interaction logic for ArtAndPlot.xaml</summary>
     public partial class ArtAndPlot : UserControl {
         private const string IMDB_PERSON_URI = "http://www.imdb.com/name/nm{0}";
@@ -42,7 +44,7 @@ namespace RibbonUI.UserControls {
             if (e.EditAction == DataGridEditAction.Commit) {
                 TextBox textBox = ((TextBox) e.EditingElement);
                 string text = textBox.Text;
-                if (string.IsNullOrEmpty(text) || (!string.IsNullOrEmpty(text) && text.OrdinalEquals("Unknown"))) {
+                if (string.IsNullOrEmpty(text) || (!string.IsNullOrEmpty(text) && text.OrdinalEquals(Gettext.T("Unknown")))) {
                     textBox.Text = null;
                 }
             }

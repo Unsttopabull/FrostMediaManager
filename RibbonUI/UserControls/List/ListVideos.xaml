@@ -4,11 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:files="clr-namespace:Frost.Common.Models.DB.MovieVo.Files;assembly=Frost.Common"
+             xmlns:t="http://wpflocalizeextension.codeplex.com"
              xmlns:converters="clr-namespace:RibbonUI.Converters"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="580">
     <UserControl.Resources>
         <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
+        <converters:TranslateEnumConverter x:Key="TranslateEnumConverter"/>
     </UserControl.Resources>
     <ListView x:Name="VideosList" SelectionMode="Single" ItemsSource="{Binding}" ClipToBounds="True">
         <ListView.GroupStyle>
@@ -40,62 +42,62 @@
                     <StackPanel Margin="15,0,0,0" MinWidth="200">
                         <StackPanel Orientation="Horizontal" Tag="{Binding File.NameWithExtension}"
                                     Style="{StaticResource CollapseOnTagNull}">
-                            <Label>File name:</Label>
+                            <Label Content="{t:Loc File name}"/>
                             <TextBlock VerticalAlignment="Center" Text="{Binding File.NameWithExtension}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding Source}"
                                     Style="{StaticResource CollapseOnTagNull}">
-                            <Label>Source:</Label>
+                            <Label Content="{t:Loc Source}"/>
                             <TextBlock VerticalAlignment="Center" Text="{Binding Source}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" x:Name="StandardPanel" Tag="{Binding Standard}" Style="{StaticResource CollapseOnTagNull}">
-                            <Label>Standard:</Label>
+                            <Label Content="{t:Loc Standard}"/>
                             <TextBlock VerticalAlignment="Center" Text="{Binding Standard}" x:Name="Standard" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding FPS}" Style="{StaticResource CollapseOnTagNull}">
-                            <Label>FPS:</Label>
+                            <Label Content="{t:Loc FPS}"/>
                             <TextBlock VerticalAlignment="Center" Text="{Binding FPS}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding BitRate}" Style="{StaticResource CollapseOnTagNull}">
-                            <Label>Bit rate:</Label>
+                            <Label Content="{t:Loc Bit rate (kb/s)}"/>
                             <TextBlock VerticalAlignment="Center" Text="{Binding BitRate, StringFormat={}{0} Kbps}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Label>Bit rate mode:</Label>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding BitRateMode}" />
+                            <Label Content="{t:Loc Bit rate mode}"/>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding BitRateMode, Converter={StaticResource TranslateEnumConverter}}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding BitDepth}"
                                     Style="{StaticResource CollapseOnTagNull}">
-                            <Label>Bit depth:</Label>
+                            <Label Content="{t:Loc Bit depth}"/>
                             <TextBlock VerticalAlignment="Center" Text="{Binding BitDepth}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Label>Compression mode:</Label>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding CompressionMode}" />
+                            <Label Content="{t:Loc Compression mode}"/>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding CompressionMode, Converter={StaticResource TranslateEnumConverter}}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Label>Scan type:</Label>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding ScanType}" />
+                            <Label Content="{t:Loc Scan type}"/>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding ScanType, Converter={StaticResource TranslateEnumConverter}}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding ColorSpace}"
                                     Style="{StaticResource CollapseOnTagNull}">
-                            <Label>Color space:</Label>
+                            <Label Content="{t:Loc Color space}"/>
                             <TextBlock VerticalAlignment="Center" Text="{Binding ColorSpace}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding ChromaSubsampling}" Style="{StaticResource CollapseOnTagNull}">
-                            <Label>Chroma subsampling:</Label>
+                            <Label Content="{t:Loc Chroma subsampling}"/>
                             <TextBlock VerticalAlignment="Center" Text="{Binding ChromaSubsampling}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding Format}" Style="{StaticResource CollapseOnTagNull}">
-                            <Label>Format:</Label>
+                            <Label Content="{t:Loc Format}"/>
                             <TextBlock VerticalAlignment="Center" Text="{Binding Format}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding Codec}" Style="{StaticResource CollapseOnTagNull}">
-                            <Label>Codec:</Label>
+                            <Label Content="{t:Loc Codec}"/>
                             <TextBlock VerticalAlignment="Center" Text="{Binding Codec}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding Aspect}" Style="{StaticResource CollapseOnTagNull}">
-                            <Label>Aspect:</Label>
+                            <Label Content="{t:Loc Aspect}"/>
                             <TextBlock VerticalAlignment="Center">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}{0:F3} ({1})">
@@ -106,20 +108,20 @@
                             </TextBlock>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding Width}" Style="{StaticResource CollapseOnTagNull}">
-                            <Label>Width:</Label>
+                            <Label Content="{t:Loc Width}"/>
                             <TextBlock VerticalAlignment="Center" Text="{Binding Width}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding Height}" Style="{StaticResource CollapseOnTagNull}">
-                            <Label>Height:</Label>
+                            <Label Content="{t:Loc Height}"/>
                             <TextBlock VerticalAlignment="Center" Text="{Binding Height}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding Duration}"
                                     Style="{StaticResource CollapseOnTagNull}">
-                            <Label>Duration:</Label>
+                            <Label Content="{t:Loc Duration}"/>
                             <TextBlock VerticalAlignment="Center" Text="{Binding Duration, StringFormat=hh\\:mm\\:ss, Converter={StaticResource MsToTimeSpanConverter}}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding Language}" Style="{StaticResource CollapseOnTagNull}">
-                            <Label>Language:</Label>
+                            <Label Content="{t:Loc Language}"/>
                             <TextBlock VerticalAlignment="Center" Text="{Binding Language}" />
                         </StackPanel>
                     </StackPanel>

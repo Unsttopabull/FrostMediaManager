@@ -13,11 +13,13 @@
         xmlns:userControls="clr-namespace:RibbonUI.UserControls"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:t="http://wpflocalizeextension.codeplex.com"
         mc:Ignorable="d"
-        Title="Edit audio" Height="443" Width="570" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        Title="{t:Loc Edit audio}" Height="443" Width="570" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         d:DataContext="{d:DesignInstance files:Audio}">
     <Window.Resources>
         <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
+        <converters:TranslateEnumConverter x:Key="TranslateEnumConverter" />
         <ObjectDataProvider x:Key="BitRateModes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="common:FrameOrBitRateMode" />
@@ -70,16 +72,16 @@
             </Image>
         </StackPanel>
         <StackPanel Grid.Row="0" Grid.Column="2" MinWidth="200">
-            <Label>Source:</Label>
+            <Label Content="{t:Loc Source}"/>
             <TextBox VerticalAlignment="Center" Text="{Binding Source, Converter={StaticResource EmptyStringToNullConverter}}" />
 
-            <Label>Codec:</Label>
+            <Label Content="{t:Loc Codec}"/>
             <ComboBox x:Name="CodecSelect" x:FieldModifier="private" IsEditable="False" VerticalAlignment="Center" Loaded="CodecSelectOnLoaded"
                       SelectionChanged="CodecSelectOnSelectionChanged" DisplayMemberPath="Name" SelectedIndex="0"/>
 
             <StackPanel Orientation="Horizontal">
-                <Label>Bit rate (kb/s):</Label>
-                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="Clear value" Tag="{Binding ElementName=BitRate, Path=Value}">
+                <Label Content="{t:Loc Bit rate (kb/s)}"/>
+                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{t:Loc Clear value}" Tag="{Binding ElementName=BitRate, Path=Value}">
                     <in:Interaction.Triggers>
                         <in:EventTrigger EventName="Click">
                             <i:ChangePropertyAction TargetName="BitRate" PropertyName="Value" Value="{x:Null}"/>
@@ -88,7 +90,7 @@
                     <Image Source="../Images/clear.ico" Width="14" Height="14"/>
                 </Button>
             </StackPanel>
-            <e:DoubleUpDown Minimum="0" Watermark="Bit rate in kbps" VerticalAlignment="Center" Value="{Binding BitRate}" x:Name="BitRate" x:FieldModifier="private">
+            <e:DoubleUpDown Minimum="0" Watermark="{t:Loc Bit rate in kbps}" VerticalAlignment="Center" Value="{Binding BitRate}" x:Name="BitRate" x:FieldModifier="private">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=BitRate, Path=Value}" Value="0">
                         <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}"/>
@@ -96,12 +98,12 @@
                 </in:Interaction.Triggers>
             </e:DoubleUpDown>
 
-            <Label>Bit rate mode:</Label>
+            <Label Content="{t:Loc Bit rate mode}"/>
             <ComboBox VerticalAlignment="Center" SelectedItem="{Binding BitRateMode}" SelectedIndex="0" ItemsSource="{Binding Source={StaticResource BitRateModes}}" />
 
             <StackPanel Orientation="Horizontal">
-                <Label>Sampling rate (kHz):</Label>
-                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="Clear value" Tag="{Binding ElementName=SamplingRate, Path=Value}">
+                <Label Content="{t:Loc Sampling rate (kHz)}"/>
+                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{t:Loc Clear value}" Tag="{Binding ElementName=SamplingRate, Path=Value}">
                     <in:Interaction.Triggers>
                         <in:EventTrigger EventName="Click">
                             <i:ChangePropertyAction TargetName="SamplingRate" PropertyName="Value" Value="{x:Null}"/>
@@ -110,7 +112,7 @@
                     <Image Source="../Images/clear.ico" Width="14" Height="14"/>
                 </Button>
             </StackPanel>
-            <e:IntegerUpDown Minimum="0" Watermark="Sampling rate in kHz" VerticalAlignment="Center" Value="{Binding SamplingRate}" x:Name="SamplingRate" x:FieldModifier="private">
+            <e:IntegerUpDown Minimum="0" Watermark="{t:Loc Sampling rate in kHz}" VerticalAlignment="Center" Value="{Binding SamplingRate}" x:Name="SamplingRate" x:FieldModifier="private">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=SamplingRate, Path=Value}" Value="0">
                         <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}"/>
@@ -119,8 +121,8 @@
             </e:IntegerUpDown>
 
             <StackPanel Orientation="Horizontal">
-                <Label>Bit depth:</Label>
-                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="Clear value" Tag="{Binding ElementName=BitDepth, Path=Value}">
+                <Label Content="{t:Loc Bit depth}"/>
+                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{t:Loc Clear value}" Tag="{Binding ElementName=BitDepth, Path=Value}">
                     <in:Interaction.Triggers>
                         <in:EventTrigger EventName="Click">
                             <i:ChangePropertyAction TargetName="BitDepth" PropertyName="Value" Value="{x:Null}"/>
@@ -129,7 +131,7 @@
                     <Image Source="../Images/clear.ico" Width="14" Height="14"/>
                 </Button>
             </StackPanel>
-            <e:IntegerUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding BitDepth}" Watermark="Bit depth in bits" x:Name="BitDepth" x:FieldModifier="private">
+            <e:IntegerUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding BitDepth}" Watermark="{t:Loc Bit depth in bits}" x:Name="BitDepth" x:FieldModifier="private">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=BitDepth, Path=Value}" Value="0">
                         <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}"/>
@@ -137,12 +139,12 @@
                 </in:Interaction.Triggers>                
             </e:IntegerUpDown>
 
-            <Label>Compression mode:</Label>
+            <Label Content="{t:Loc Compression mode}"/>
             <ComboBox VerticalAlignment="Center" SelectedItem="{Binding CompressionMode}" ItemsSource="{Binding Source={StaticResource CompressionModes}}" SelectedIndex="0" />
             
             <StackPanel Orientation="Horizontal">
-                <Label>Language:</Label>
-                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="Clear value" Tag="{Binding ElementName=SelectedLanguage, Path=SelectedItem}">
+                <Label Content="{t:LocText Language}"/>
+                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{t:Loc Clear value}" Tag="{Binding ElementName=SelectedLanguage, Path=SelectedItem}">
                     <in:Interaction.Triggers>
                         <in:EventTrigger EventName="Click">
                             <i:ChangePropertyAction TargetName="SelectedLanguage" PropertyName="SelectedIndex" Value="-1"/>
@@ -167,7 +169,7 @@
         
         <StackPanel Grid.Row="0" Grid.Column="4">
             <StackPanel Orientation="Horizontal">
-                <Label VerticalAlignment="Center">Duration:</Label>
+                <Label VerticalAlignment="Center" Content="{t:Loc Duration}"/>
                 <a:TimePicker x:Name="MovieDuration" HorizontalAlignment="Left" MinTime="{x:Static sys:TimeSpan.Zero}" SelectedTime="{Binding Path=Duration, Converter={StaticResource MsToTimeSpanConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <in:Interaction.Triggers>
                         <i:DataTrigger Binding="{Binding ElementName=MovieDuration, Path=SelectedTime}" Value="{x:Static sys:TimeSpan.Zero}">
@@ -186,13 +188,13 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <Label VerticalAlignment="Center" Margin="-5,-5,0,0">Channel layout:</Label>
+                <Label VerticalAlignment="Center" Margin="-5,-5,0,0" Content="{t:Loc Channel layout}"/>
                 <TextBlock Text="{Binding ElementName=ChannelPicker, Path=ChannelLayout, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,0,5"/>
             </StackPanel>
             <userControls:ChannelPicker x:Name="ChannelPicker" BorderThickness="1" BorderBrush="DarkGray" ChannelSetup="{Binding ChannelSetup, Mode=TwoWay}" ChannelPositions="{Binding ChannelPositions, Mode=TwoWay}" NumberOfChannels="{Binding NumberOfChannels, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="{Binding ElementName=ChannelPicker, Path=ChannelPositions, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
 
-        <Button Grid.Column="4" Grid.Row="1" Margin="0,0,5,5" Height="25" Click="CloseOnClick">Close</Button>
+        <Button Grid.Column="4" Grid.Row="1" Margin="0,0,5,5" Height="25" Click="CloseOnClick" Content="{t:Loc Close}"/>
     </Grid>
 </Window>
