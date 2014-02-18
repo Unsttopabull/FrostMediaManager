@@ -284,22 +284,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\1353183085_save.png" />
     <Resource Include="Images\add.png" />
     <Resource Include="Images\copy.png" />
     <Resource Include="Images\cut.png" />
     <Resource Include="Images\format_painter.png" />
-    <Resource Include="Images\go-next.png" />
-    <Resource Include="Images\go-previous.png" />
     <Resource Include="Images\help.png" />
     <Resource Include="Images\home.png" />
     <Resource Include="Images\options.png" />
     <Resource Include="Images\paste.png" />
-    <Resource Include="Images\personal.png" />
     <Resource Include="Images\quit.png" />
-    <Resource Include="Images\redo.png" />
     <Resource Include="Images\save.png" />
-    <Resource Include="Images\undo.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\export.png" />
@@ -311,314 +305,8 @@
     <Resource Include="Images\xtreamer.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Fanart\fanart_test.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\certificates\bbfc_12.png" />
-    <Resource Include="Images\certificates\bbfc_12a.png" />
-    <Resource Include="Images\certificates\bbfc_15.png" />
-    <Resource Include="Images\certificates\bbfc_18.png" />
-    <Resource Include="Images\certificates\bbfc_pg.png" />
-    <Resource Include="Images\certificates\bbfc_u.png" />
-    <Resource Include="Images\certificates\bbfc_x.png" />
-    <Resource Include="Images\certificates\fsk_0.png" />
-    <Resource Include="Images\certificates\fsk_12.png" />
-    <Resource Include="Images\certificates\fsk_16.png" />
-    <Resource Include="Images\certificates\fsk_18.png" />
-    <Resource Include="Images\certificates\fsk_6.png" />
-    <Resource Include="Images\certificates\mpaa_g.png" />
-    <Resource Include="Images\certificates\mpaa_nc17.png" />
-    <Resource Include="Images\certificates\mpaa_nr.png" />
-    <Resource Include="Images\certificates\mpaa_pg.png" />
-    <Resource Include="Images\certificates\mpaa_pg13.png" />
-    <Resource Include="Images\certificates\mpaa_r.png" />
-    <Resource Include="Images\certificates\oflc_g.png" />
-    <Resource Include="Images\certificates\oflc_m.png" />
-    <Resource Include="Images\certificates\oflc_ma.png" />
-    <Resource Include="Images\certificates\oflc_pg.png" />
-    <Resource Include="Images\certificates\oflc_r.png" />
-    <Resource Include="Images\certificates\tv_14.png" />
-    <Resource Include="Images\certificates\tv_g.png" />
-    <Resource Include="Images\certificates\tv_ma.png" />
-    <Resource Include="Images\certificates\tv_pg.png" />
-    <Resource Include="Images\certificates\tv_y.png" />
-    <Resource Include="Images\certificates\tv_y7.png" />
-    <Resource Include="Images\certificates\tv_y7fv.png" />
     <Resource Include="Images\default\cover.png" />
     <Resource Include="Images\default\fanart.jpg" />
-    <Resource Include="Images\default\folder.jpg" />
-    <Resource Include="Images\default\popup.png" />
-    <Resource Include="Images\flags\ar_120.png" />
-    <Resource Include="Images\flags\ar_121.png" />
-    <Resource Include="Images\flags\ar_122.png" />
-    <Resource Include="Images\flags\ar_123.png" />
-    <Resource Include="Images\flags\ar_124.png" />
-    <Resource Include="Images\flags\ar_125.png" />
-    <Resource Include="Images\flags\ar_126.png" />
-    <Resource Include="Images\flags\ar_127.png" />
-    <Resource Include="Images\flags\ar_128.png" />
-    <Resource Include="Images\flags\ar_129.png" />
-    <Resource Include="Images\flags\ar_130.png" />
-    <Resource Include="Images\flags\ar_131.png" />
-    <Resource Include="Images\flags\ar_132.png" />
-    <Resource Include="Images\flags\ar_133.png" />
-    <Resource Include="Images\flags\ar_134.png" />
-    <Resource Include="Images\flags\ar_135.png" />
-    <Resource Include="Images\flags\ar_136.png" />
-    <Resource Include="Images\flags\ar_137.png" />
-    <Resource Include="Images\flags\ar_138.png" />
-    <Resource Include="Images\flags\ar_139.png" />
-    <Resource Include="Images\flags\ar_140.png" />
-    <Resource Include="Images\flags\ar_141.png" />
-    <Resource Include="Images\flags\ar_142.png" />
-    <Resource Include="Images\flags\ar_143.png" />
-    <Resource Include="Images\flags\ar_144.png" />
-    <Resource Include="Images\flags\ar_145.png" />
-    <Resource Include="Images\flags\ar_146.png" />
-    <Resource Include="Images\flags\ar_147.png" />
-    <Resource Include="Images\flags\ar_148.png" />
-    <Resource Include="Images\flags\ar_149.png" />
-    <Resource Include="Images\flags\ar_150.png" />
-    <Resource Include="Images\flags\ar_151.png" />
-    <Resource Include="Images\flags\ar_152.png" />
-    <Resource Include="Images\flags\ar_153.png" />
-    <Resource Include="Images\flags\ar_154.png" />
-    <Resource Include="Images\flags\ar_155.png" />
-    <Resource Include="Images\flags\ar_156.png" />
-    <Resource Include="Images\flags\ar_157.png" />
-    <Resource Include="Images\flags\ar_158.png" />
-    <Resource Include="Images\flags\ar_159.png" />
-    <Resource Include="Images\flags\ar_160.png" />
-    <Resource Include="Images\flags\ar_161.png" />
-    <Resource Include="Images\flags\ar_162.png" />
-    <Resource Include="Images\flags\ar_163.png" />
-    <Resource Include="Images\flags\ar_164.png" />
-    <Resource Include="Images\flags\ar_165.png" />
-    <Resource Include="Images\flags\ar_166.png" />
-    <Resource Include="Images\flags\ar_167.png" />
-    <Resource Include="Images\flags\ar_168.png" />
-    <Resource Include="Images\flags\ar_169.png" />
-    <Resource Include="Images\flags\ar_170.png" />
-    <Resource Include="Images\flags\ar_171.png" />
-    <Resource Include="Images\flags\ar_172.png" />
-    <Resource Include="Images\flags\ar_173.png" />
-    <Resource Include="Images\flags\ar_174.png" />
-    <Resource Include="Images\flags\ar_175.png" />
-    <Resource Include="Images\flags\ar_176.png" />
-    <Resource Include="Images\flags\ar_177.png" />
-    <Resource Include="Images\flags\ar_178.png" />
-    <Resource Include="Images\flags\ar_179.png" />
-    <Resource Include="Images\flags\ar_180.png" />
-    <Resource Include="Images\flags\ar_181.png" />
-    <Resource Include="Images\flags\ar_182.png" />
-    <Resource Include="Images\flags\ar_183.png" />
-    <Resource Include="Images\flags\ar_184.png" />
-    <Resource Include="Images\flags\ar_185.png" />
-    <Resource Include="Images\flags\ar_186.png" />
-    <Resource Include="Images\flags\ar_187.png" />
-    <Resource Include="Images\flags\ar_188.png" />
-    <Resource Include="Images\flags\ar_189.png" />
-    <Resource Include="Images\flags\ar_190.png" />
-    <Resource Include="Images\flags\ar_191.png" />
-    <Resource Include="Images\flags\ar_192.png" />
-    <Resource Include="Images\flags\ar_193.png" />
-    <Resource Include="Images\flags\ar_194.png" />
-    <Resource Include="Images\flags\ar_195.png" />
-    <Resource Include="Images\flags\ar_196.png" />
-    <Resource Include="Images\flags\ar_197.png" />
-    <Resource Include="Images\flags\ar_198.png" />
-    <Resource Include="Images\flags\ar_199.png" />
-    <Resource Include="Images\flags\ar_200.png" />
-    <Resource Include="Images\flags\ar_201.png" />
-    <Resource Include="Images\flags\ar_202.png" />
-    <Resource Include="Images\flags\ar_203.png" />
-    <Resource Include="Images\flags\ar_204.png" />
-    <Resource Include="Images\flags\ar_205.png" />
-    <Resource Include="Images\flags\ar_206.png" />
-    <Resource Include="Images\flags\ar_207.png" />
-    <Resource Include="Images\flags\ar_208.png" />
-    <Resource Include="Images\flags\ar_209.png" />
-    <Resource Include="Images\flags\ar_210.png" />
-    <Resource Include="Images\flags\ar_211.png" />
-    <Resource Include="Images\flags\ar_212.png" />
-    <Resource Include="Images\flags\ar_213.png" />
-    <Resource Include="Images\flags\ar_214.png" />
-    <Resource Include="Images\flags\ar_215.png" />
-    <Resource Include="Images\flags\ar_216.png" />
-    <Resource Include="Images\flags\ar_217.png" />
-    <Resource Include="Images\flags\ar_218.png" />
-    <Resource Include="Images\flags\ar_219.png" />
-    <Resource Include="Images\flags\ar_220.png" />
-    <Resource Include="Images\flags\ar_221.png" />
-    <Resource Include="Images\flags\ar_222.png" />
-    <Resource Include="Images\flags\ar_223.png" />
-    <Resource Include="Images\flags\ar_224.png" />
-    <Resource Include="Images\flags\ar_225.png" />
-    <Resource Include="Images\flags\ar_226.png" />
-    <Resource Include="Images\flags\ar_227.png" />
-    <Resource Include="Images\flags\ar_228.png" />
-    <Resource Include="Images\flags\ar_229.png" />
-    <Resource Include="Images\flags\ar_230.png" />
-    <Resource Include="Images\flags\ar_231.png" />
-    <Resource Include="Images\flags\ar_232.png" />
-    <Resource Include="Images\flags\ar_233.png" />
-    <Resource Include="Images\flags\ar_234.png" />
-    <Resource Include="Images\flags\ar_235.png" />
-    <Resource Include="Images\flags\ar_236.png" />
-    <Resource Include="Images\flags\ar_237.png" />
-    <Resource Include="Images\flags\ar_238.png" />
-    <Resource Include="Images\flags\ar_239.png" />
-    <Resource Include="Images\flags\ar_240.png" />
-    <Resource Include="Images\flags\ar_241.png" />
-    <Resource Include="Images\flags\ar_242.png" />
-    <Resource Include="Images\flags\ar_243.png" />
-    <Resource Include="Images\flags\ar_244.png" />
-    <Resource Include="Images\flags\ar_245.png" />
-    <Resource Include="Images\flags\ar_246.png" />
-    <Resource Include="Images\flags\ar_247.png" />
-    <Resource Include="Images\flags\ar_248.png" />
-    <Resource Include="Images\flags\ar_249.png" />
-    <Resource Include="Images\flags\ar_250.png" />
-    <Resource Include="Images\flags\ar_251.png" />
-    <Resource Include="Images\flags\ar_252.png" />
-    <Resource Include="Images\flags\ar_253.png" />
-    <Resource Include="Images\flags\ar_254.png" />
-    <Resource Include="Images\flags\ar_255.png" />
-    <Resource Include="Images\flags\ar_256.png" />
-    <Resource Include="Images\flags\ar_257.png" />
-    <Resource Include="Images\flags\ar_258.png" />
-    <Resource Include="Images\flags\ar_259.png" />
-    <Resource Include="Images\flags\ar_260.png" />
-    <Resource Include="Images\flags\ar_261.png" />
-    <Resource Include="Images\flags\ar_262.png" />
-    <Resource Include="Images\flags\ar_263.png" />
-    <Resource Include="Images\flags\ar_264.png" />
-    <Resource Include="Images\flags\ar_265.png" />
-    <Resource Include="Images\flags\ar_266.png" />
-    <Resource Include="Images\flags\ar_267.png" />
-    <Resource Include="Images\flags\ar_268.png" />
-    <Resource Include="Images\flags\ar_269.png" />
-    <Resource Include="Images\flags\ar_270.png" />
-    <Resource Include="Images\flags\ar_271.png" />
-    <Resource Include="Images\flags\ar_272.png" />
-    <Resource Include="Images\flags\ar_273.png" />
-    <Resource Include="Images\flags\ar_274.png" />
-    <Resource Include="Images\flags\ar_275.png" />
-    <Resource Include="Images\flags\ar_276.png" />
-    <Resource Include="Images\flags\ar_277.png" />
-    <Resource Include="Images\flags\ar_278.png" />
-    <Resource Include="Images\flags\ar_279.png" />
-    <Resource Include="Images\flags\ar_280.png" />
-    <Resource Include="Images\flags\ar_281.png" />
-    <Resource Include="Images\flags\ar_282.png" />
-    <Resource Include="Images\flags\ar_283.png" />
-    <Resource Include="Images\flags\ar_284.png" />
-    <Resource Include="Images\flags\ar_285.png" />
-    <Resource Include="Images\flags\ar_286.png" />
-    <Resource Include="Images\flags\ar_287.png" />
-    <Resource Include="Images\flags\ar_288.png" />
-    <Resource Include="Images\flags\ar_289.png" />
-    <Resource Include="Images\flags\ar_290.png" />
-    <Resource Include="Images\flags\audch_20.png" />
-    <Resource Include="Images\flags\audch_21.png" />
-    <Resource Include="Images\flags\audch_51.png" />
-    <Resource Include="Images\flags\audch_60.png" />
-    <Resource Include="Images\flags\audch_61.png" />
-    <Resource Include="Images\flags\audch_71.png" />
-    <Resource Include="Images\flags\audcod_aac.png" />
-    <Resource Include="Images\flags\audcod_ac3.png" />
-    <Resource Include="Images\flags\audcod_dca.png" />
-    <Resource Include="Images\flags\audcod_dolby.png" />
-    <Resource Include="Images\flags\audcod_dts.png" />
-    <Resource Include="Images\flags\audcod_dtshd.png" />
-    <Resource Include="Images\flags\audcod_faac.png" />
-    <Resource Include="Images\flags\audcod_faad.png" />
-    <Resource Include="Images\flags\audcod_flac.png" />
-    <Resource Include="Images\flags\audcod_hwac3.png" />
-    <Resource Include="Images\flags\audcod_mp3.png" />
-    <Resource Include="Images\flags\audcod_ogg.png" />
-    <Resource Include="Images\flags\audcod_pcm.png" />
-    <Resource Include="Images\flags\audcod_q.png" />
-    <Resource Include="Images\flags\audcod_truehd.png" />
-    <Resource Include="Images\flags\audcod_wmapro.png" />
-    <Resource Include="Images\flags\codec_avc1.png" />
-    <Resource Include="Images\flags\codec_divx.png" />
-    <Resource Include="Images\flags\codec_dx50.png" />
-    <Resource Include="Images\flags\codec_h264.png" />
-    <Resource Include="Images\flags\codec_mpeg.png" />
-    <Resource Include="Images\flags\codec_ms.png" />
-    <Resource Include="Images\flags\codec_wvc1.png" />
-    <Resource Include="Images\flags\codec_xvid.png" />
-    <Resource Include="Images\flags\container_asf.png" />
-    <Resource Include="Images\flags\container_avi.png" />
-    <Resource Include="Images\flags\container_bin.png" />
-    <Resource Include="Images\flags\container_dat.png" />
-    <Resource Include="Images\flags\container_divx.png" />
-    <Resource Include="Images\flags\container_dvd.png" />
-    <Resource Include="Images\flags\container_ifo.png" />
-    <Resource Include="Images\flags\container_img.png" />
-    <Resource Include="Images\flags\container_iso.png" />
-    <Resource Include="Images\flags\container_m1v.png" />
-    <Resource Include="Images\flags\container_m2p.png" />
-    <Resource Include="Images\flags\container_m2t.png" />
-    <Resource Include="Images\flags\container_m2ts.png" />
-    <Resource Include="Images\flags\container_m2v.png" />
-    <Resource Include="Images\flags\container_m4v.png" />
-    <Resource Include="Images\flags\container_mdf.png" />
-    <Resource Include="Images\flags\container_mkv.png" />
-    <Resource Include="Images\flags\container_mov.png" />
-    <Resource Include="Images\flags\container_mp4.png" />
-    <Resource Include="Images\flags\container_mpg.png" />
-    <Resource Include="Images\flags\container_mts.png" />
-    <Resource Include="Images\flags\container_nrg.png" />
-    <Resource Include="Images\flags\container_qt.png" />
-    <Resource Include="Images\flags\container_rar.png" />
-    <Resource Include="Images\flags\container_rm.png" />
-    <Resource Include="Images\flags\container_rmp4.png" />
-    <Resource Include="Images\flags\container_tp.png" />
-    <Resource Include="Images\flags\container_trp.png" />
-    <Resource Include="Images\flags\container_ts.png" />
-    <Resource Include="Images\flags\container_unknown.png" />
-    <Resource Include="Images\flags\container_vob.png" />
-    <Resource Include="Images\flags\container_wmv.png" />
-    <Resource Include="Images\flags\fps_23976.png" />
-    <Resource Include="Images\flags\fps_24.png" />
-    <Resource Include="Images\flags\fps_25.png" />
-    <Resource Include="Images\flags\fps_2997.png" />
-    <Resource Include="Images\flags\fps_30.png" />
-    <Resource Include="Images\flags\fps_50.png" />
-    <Resource Include="Images\flags\fps_59.png" />
-    <Resource Include="Images\flags\fps_5994.png" />
-    <Resource Include="Images\flags\fps_60.png" />
-    <Resource Include="Images\flags\output_1080i.png" />
-    <Resource Include="Images\flags\output_1080p.png" />
-    <Resource Include="Images\flags\output_480i.png" />
-    <Resource Include="Images\flags\output_480p.png" />
-    <Resource Include="Images\flags\output_576i.png" />
-    <Resource Include="Images\flags\output_720p.png" />
-    <Resource Include="Images\flags\output_ntsc.png" />
-    <Resource Include="Images\flags\output_pal.png" />
-    <Resource Include="Images\flags\output_sdtv.png" />
-    <Resource Include="Images\flags\rating_0.png" />
-    <Resource Include="Images\flags\rating_1.png" />
-    <Resource Include="Images\flags\rating_2.png" />
-    <Resource Include="Images\flags\rating_3.png" />
-    <Resource Include="Images\flags\rating_4.png" />
-    <Resource Include="Images\flags\rating_5.png" />
-    <Resource Include="Images\flags\source_bluray.png" />
-    <Resource Include="Images\flags\source_cam.png" />
-    <Resource Include="Images\flags\source_dtheater.png" />
-    <Resource Include="Images\flags\source_dvd.png" />
-    <Resource Include="Images\flags\source_dvdscr.png" />
-    <Resource Include="Images\flags\source_hddvd.png" />
-    <Resource Include="Images\flags\source_hdtv.png" />
-    <Resource Include="Images\flags\source_mpeg4.png" />
-    <Resource Include="Images\flags\source_r5.png" />
-    <Resource Include="Images\flags\source_sdtv.png" />
-    <Resource Include="Images\flags\source_telecine.png" />
-    <Resource Include="Images\flags\source_webdl.png" />
-    <Resource Include="Images\flags\unknownaudio.png" />
-    <Resource Include="Images\flags\unknownvideo.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\defaultsound.png" />
@@ -628,149 +316,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Stars\starhalf.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\FlagsE\achan_1.png" />
-    <Resource Include="Images\FlagsE\achan_2.png" />
-    <Resource Include="Images\FlagsE\achan_6.png" />
-    <Resource Include="Images\FlagsE\achan_8.png" />
-    <Resource Include="Images\FlagsE\achan_defaultsound.png" />
-    <Resource Include="Images\FlagsE\acodec_aac.png" />
-    <Resource Include="Images\FlagsE\acodec_ac3.png" />
-    <Resource Include="Images\FlagsE\acodec_aif.png" />
-    <Resource Include="Images\FlagsE\acodec_aifc.png" />
-    <Resource Include="Images\FlagsE\acodec_aiff.png" />
-    <Resource Include="Images\FlagsE\acodec_ape.png" />
-    <Resource Include="Images\FlagsE\acodec_a_vorbis.png" />
-    <Resource Include="Images\FlagsE\acodec_dca.png" />
-    <Resource Include="Images\FlagsE\acodec_dd.png" />
-    <Resource Include="Images\FlagsE\acodec_defaultsound.png" />
-    <Resource Include="Images\FlagsE\acodec_dolbydigital.png" />
-    <Resource Include="Images\FlagsE\acodec_dts.png" />
-    <Resource Include="Images\FlagsE\acodec_dtshr.png" />
-    <Resource Include="Images\FlagsE\acodec_dtsma.png" />
-    <Resource Include="Images\FlagsE\acodec_flac.png" />
-    <Resource Include="Images\FlagsE\acodec_mp1.png" />
-    <Resource Include="Images\FlagsE\acodec_mp2.png" />
-    <Resource Include="Images\FlagsE\acodec_mp3.png" />
-    <Resource Include="Images\FlagsE\acodec_ogg.png" />
-    <Resource Include="Images\FlagsE\acodec_truehd.png" />
-    <Resource Include="Images\FlagsE\acodec_vorbis.png" />
-    <Resource Include="Images\FlagsE\acodec_wma.png" />
-    <Resource Include="Images\FlagsE\acodec_wmahd.png" />
-    <Resource Include="Images\FlagsE\acodec_wmapro.png" />
-    <Resource Include="Images\FlagsE\a_aac.png" />
-    <Resource Include="Images\FlagsE\vcodec_3iv2.png" />
-    <Resource Include="Images\FlagsE\vcodec_3ivd.png" />
-    <Resource Include="Images\FlagsE\vcodec_3ivx.png" />
-    <Resource Include="Images\FlagsE\vcodec_8bps.png" />
-    <Resource Include="Images\FlagsE\vcodec_advj.png" />
-    <Resource Include="Images\FlagsE\vcodec_avc.png" />
-    <Resource Include="Images\FlagsE\vcodec_avc1.png" />
-    <Resource Include="Images\FlagsE\vcodec_avrn.png" />
-    <Resource Include="Images\FlagsE\vcodec_dca.png" />
-    <Resource Include="Images\FlagsE\vcodec_defaultscreen.png" />
-    <Resource Include="Images\FlagsE\vcodec_div1.png" />
-    <Resource Include="Images\FlagsE\vcodec_div2.png" />
-    <Resource Include="Images\FlagsE\vcodec_div3.png" />
-    <Resource Include="Images\FlagsE\vcodec_div4.png" />
-    <Resource Include="Images\FlagsE\vcodec_div5.png" />
-    <Resource Include="Images\FlagsE\vcodec_div6.png" />
-    <Resource Include="Images\FlagsE\vcodec_divx.png" />
-    <Resource Include="Images\FlagsE\vcodec_dm4v.png" />
-    <Resource Include="Images\FlagsE\vcodec_dx50.png" />
-    <Resource Include="Images\FlagsE\vcodec_em2v.png" />
-    <Resource Include="Images\FlagsE\vcodec_flv.png" />
-    <Resource Include="Images\FlagsE\vcodec_geox.png" />
-    <Resource Include="Images\FlagsE\vcodec_h264.png" />
-    <Resource Include="Images\FlagsE\vcodec_lmp2.png" />
-    <Resource Include="Images\FlagsE\vcodec_m4s2.png" />
-    <Resource Include="Images\FlagsE\vcodec_mmes.png" />
-    <Resource Include="Images\FlagsE\vcodec_mp4.png" />
-    <Resource Include="Images\FlagsE\vcodec_mpeg-2.png" />
-    <Resource Include="Images\FlagsE\vcodec_mpeg-4.png" />
-    <Resource Include="Images\FlagsE\vcodec_mpeg.png" />
-    <Resource Include="Images\FlagsE\vcodec_mpeg2.png" />
-    <Resource Include="Images\FlagsE\vcodec_mpeg4.png" />
-    <Resource Include="Images\FlagsE\vcodec_nds.png" />
-    <Resource Include="Images\FlagsE\vcodec_ndx.png" />
-    <Resource Include="Images\FlagsE\vcodec_pim1.png" />
-    <Resource Include="Images\FlagsE\vcodec_pvmm.png" />
-    <Resource Include="Images\FlagsE\vcodec_qt.png" />
-    <Resource Include="Images\FlagsE\vcodec_rle.png" />
-    <Resource Include="Images\FlagsE\vcodec_rpza.png" />
-    <Resource Include="Images\FlagsE\vcodec_smc.png" />
-    <Resource Include="Images\FlagsE\vcodec_sv10.png" />
-    <Resource Include="Images\FlagsE\vcodec_svq.png" />
-    <Resource Include="Images\FlagsE\vcodec_vc1.png" />
-    <Resource Include="Images\FlagsE\vcodec_wmv.png" />
-    <Resource Include="Images\FlagsE\vcodec_wmva.png" />
-    <Resource Include="Images\FlagsE\vcodec_wvc1.png" />
-    <Resource Include="Images\FlagsE\vcodec_xvid.png" />
-    <Resource Include="Images\FlagsE\vcodec_xvix.png" />
-    <Resource Include="Images\FlagsE\vcodec_zygo.png" />
-    <Resource Include="Images\FlagsE\vres_1080.png" />
-    <Resource Include="Images\FlagsE\vres_1080i.png" />
-    <Resource Include="Images\FlagsE\vres_1080p.png" />
-    <Resource Include="Images\FlagsE\vres_480.png" />
-    <Resource Include="Images\FlagsE\vres_480i.png" />
-    <Resource Include="Images\FlagsE\vres_480p.png" />
-    <Resource Include="Images\FlagsE\vres_540.png" />
-    <Resource Include="Images\FlagsE\vres_540i.png" />
-    <Resource Include="Images\FlagsE\vres_540p.png" />
-    <Resource Include="Images\FlagsE\vres_576.png" />
-    <Resource Include="Images\FlagsE\vres_576i.png" />
-    <Resource Include="Images\FlagsE\vres_576p.png" />
-    <Resource Include="Images\FlagsE\vres_720.png" />
-    <Resource Include="Images\FlagsE\vres_720i.png" />
-    <Resource Include="Images\FlagsE\vres_720p.png" />
-    <Resource Include="Images\FlagsE\vres_768.png" />
-    <Resource Include="Images\FlagsE\vres_768i.png" />
-    <Resource Include="Images\FlagsE\vres_768p.png" />
-    <Resource Include="Images\FlagsE\vres_defaultscreen.png" />
-    <Resource Include="Images\FlagsE\vres_sd.png" />
-    <Resource Include="Images\FlagsE\vres_sdi.png" />
-    <Resource Include="Images\FlagsE\vres_sdp.png" />
-    <Resource Include="Images\FlagsE\vsource_bluray.png" />
-    <Resource Include="Images\FlagsE\vsource_defaultscreen.png" />
-    <Resource Include="Images\FlagsE\vsource_dvd.png" />
-    <Resource Include="Images\FlagsE\vsource_hddvd.png" />
-    <Resource Include="Images\FlagsE\vsource_hdtv.png" />
-    <Resource Include="Images\FlagsE\vsource_sdtv.png" />
-    <Resource Include="Images\RatingsE\au\australia_g.png" />
-    <Resource Include="Images\RatingsE\au\australia_m.png" />
-    <Resource Include="Images\RatingsE\au\australia_ma.png" />
-    <Resource Include="Images\RatingsE\au\australia_pg.png" />
-    <Resource Include="Images\RatingsE\au\australia_r.png" />
-    <Resource Include="Images\RatingsE\au\mpaa_pg13.png" />
-    <Resource Include="Images\RatingsE\de\de_0.png" />
-    <Resource Include="Images\RatingsE\de\de_12.png" />
-    <Resource Include="Images\RatingsE\de\de_16.png" />
-    <Resource Include="Images\RatingsE\de\de_18.png" />
-    <Resource Include="Images\RatingsE\de\de_6.png" />
-    <Resource Include="Images\RatingsE\Ratings.xml" />
-    <Resource Include="Images\RatingsE\uk\uk_12.png" />
-    <Resource Include="Images\RatingsE\uk\uk_12A.png" />
-    <Resource Include="Images\RatingsE\uk\uk_15.png" />
-    <Resource Include="Images\RatingsE\uk\uk_18.png" />
-    <Resource Include="Images\RatingsE\uk\uk_pg.png" />
-    <Resource Include="Images\RatingsE\uk\uk_u.png" />
-    <Resource Include="Images\RatingsE\uk\uk_uc.png" />
-    <Resource Include="Images\RatingsE\usa\mpaag.png" />
-    <Resource Include="Images\RatingsE\usa\mpaanc17.png" />
-    <Resource Include="Images\RatingsE\usa\mpaapg.png" />
-    <Resource Include="Images\RatingsE\usa\mpaapg13.png" />
-    <Resource Include="Images\RatingsE\usa\mpaar.png" />
-    <Resource Include="Images\RatingsE\usa\tv14.png" />
-    <Resource Include="Images\RatingsE\usa\tvg.png" />
-    <Resource Include="Images\RatingsE\usa\tvma.png" />
-    <Resource Include="Images\RatingsE\usa\tvpg.png" />
-    <Resource Include="Images\RatingsE\usa\tvy.png" />
-    <Resource Include="Images\RatingsE\usa\tvy7.png" />
-    <Resource Include="Images\RatingsE\usa\tvy7fv.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\invalid.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\valid.png" />
@@ -810,16 +355,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\missing.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\Headers\trailer2.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\missing2.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Fanart\fanart.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\defaultscreen.png" />
@@ -840,25 +379,13 @@
     <Resource Include="Images\missingEdit.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Cover\cover.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\IMDb_logo.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\person.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\person2.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\IMDbNew.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\person3.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\RatingsE\usa\mpaaur.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\trailer.ico" />
@@ -898,9 +425,6 @@
     <Resource Include="Images\folder.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\nfo_icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\edit.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -927,7 +451,9 @@
   <ItemGroup>
     <Resource Include="Images\sofa.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\default\mpaaur.png" />
+  </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>

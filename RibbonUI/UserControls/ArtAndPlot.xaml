@@ -17,8 +17,8 @@
     </UserControl.DataContext>
     <Grid>
         <Grid.Resources>
-            <BitmapImage x:Key="DefaultFanart"  UriSource="../Images/Fanart/fanart.jpg" />
-            <BitmapImage x:Key="DefaultMpaa"    UriSource="../Images/RatingsE/usa/mpaaur.png"/>
+            <BitmapImage x:Key="DefaultFanart"  UriSource="../Images/default/fanart.jpg" />
+            <BitmapImage x:Key="DefaultMpaa"    UriSource="../Images/default/mpaaur.png"/>
             <BitmapImage x:Key="OscarWon"       UriSource="../Images/awards/oscar-icon.png"/>
             <BitmapImage x:Key="OscarNominated" UriSource="../Images/awards/oscar-icon-nomination.png"/>
             <BitmapImage x:Key="GoldenGlobeWon" UriSource="../Images/awards/golden-globes.png"/>
