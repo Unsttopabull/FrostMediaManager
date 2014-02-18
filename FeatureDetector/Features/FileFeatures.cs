@@ -32,14 +32,14 @@ namespace Frost.DetectFeatures {
 
         static FileFeatures() {
             //known subtitle extensions already sorted
-            KnownSubtitleExtensions = new[] {
+            KnownSubtitleExtensions = new List<string> {
                 "890", "aqt", "asc", "ass", "dat", "dks", "js", "jss", "lrc", "mpl", "ovr", "pan",
                 "pjs", "psb", "rt", "rtf", "s2k", "sami", "sbt", "scr", "smi", "son", "srt", "ssa",
                 "sst", "ssts", "stl", "sub", "tts", "txt", "vkt", "vsf", "xas", "zeg"
             };
 
             //known subtitle format names already sorted
-            KnownSubtitleFormats = new[] {
+            KnownSubtitleFormats = new List<string> {
                 "Adobe encore DVD", "Advanced Substation Alpha", "AQTitle",
                 "ASS", "Captions Inc", "Cheeta", "Cheetah", "CPC Captioning",
                 "CPC-600", "EBU Subtitling Format", "N19", "SAMI",

@@ -52,14 +52,14 @@ namespace Frost.DetectFeatures {
             _filePaths = filePaths;
         }
 
-        public void AddExtension(string ext) {
+        public static void AddExtension(string ext) {
             if (!VideoExtensions.Contains(ext)) {
                 VideoExtensions.Add(ext);
                 _mediaFileRegex = new Regex(string.Format(REGEX_FORMAT, string.Join("|", VideoExtensions)), RegexOptions.IgnoreCase);
             }
         }
 
-        public bool RemoveExtension(string ext) {
+        public static bool RemoveExtension(string ext) {
             bool wasRemoved = VideoExtensions.Remove(ext);
             if (wasRemoved) {
                 _mediaFileRegex = new Regex(string.Format(REGEX_FORMAT, string.Join("|", VideoExtensions)), RegexOptions.IgnoreCase);

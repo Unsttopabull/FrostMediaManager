@@ -46,12 +46,11 @@ namespace Frost.DetectFeatures.Util {
         private static readonly HashSet<string> SegmentExclusion;
         private static readonly HashSet<string> ReleaseGroups;
         private static readonly Dictionary<string, string> CustomLangMappings;
-        private static readonly Dictionary<string, SegmentType> KnownSegments;
+        private static readonly Dictionary<string, SegmentType> KnownSegementsDict;
         private static readonly HashSet<char> RegexReservedChars;
         private static readonly Regex ReleaseGroup = new Regex(@"-([^\. _\[\]-]{3,20})");
         private static readonly Regex PartIdentifier = new Regex(@"[\. -](part ?(\d+)|cd ?(\d+)|disk ?(\d+))[\. -]?", RegexOptions.IgnoreCase);
         private static readonly Regex UrlRegex = new Regex(@"((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)");
-        private static TextInfo _textInfo;
 
         private readonly string _fileName;
         private readonly Regex _titleAndReleaseYear;
@@ -93,7 +92,7 @@ namespace Frost.DetectFeatures.Util {
                 "sin"
             };
 
-            KnownSegments = new Dictionary<string, SegmentType>(StringComparer.OrdinalIgnoreCase) {
+            KnownSegementsDict = new Dictionary<string, SegmentType>(StringComparer.OrdinalIgnoreCase) {
                 { "DOKU", SegmentType.Genre },
                 { "MANGA", SegmentType.Genre },
                 { "XXX", SegmentType.Genre },
@@ -736,8 +735,6 @@ namespace Frost.DetectFeatures.Util {
         }
 
         public FileNameParser(string filePath, bool useDirectoryName, params char[] delimiters) {
-            _textInfo = CultureInfo.CurrentCulture.TextInfo;
-
             _delimiters = new List<char>(delimiters);
             _titleAndReleaseYear = GetTitleAndReleaseYearRegexWithDelimiters();
 
@@ -774,9 +771,66 @@ namespace Frost.DetectFeatures.Util {
             set { _delimiters = value.ToList(); }
         }
 
-        public void AddKnownSegment(string value, SegmentType type) {
-            KnownSegments.Add(value, type);
+        #region Static Members
+
+        public static Dictionary<string, SegmentType> KnownSegments {
+            get { return KnownSegementsDict; }
         }
+
+        public static Dictionary<string, string> CustomLanguageMappings {
+            get { return CustomLangMappings; }
+        }
+
+        public static HashSet<string> ExcludedSegments {
+            get { return SegmentExclusion; }
+        }
+
+        public static bool AddKnownSegment(string value, SegmentType type) {
+            if (KnownSegments.ContainsKey(value)) {
+                return false;
+            }
+
+            KnownSegments.Add(value, type);
+            return true;
+        }
+
+        public static bool RemoveSegment(string key) {
+            if (!KnownSegments.ContainsKey(key)) {
+                return false;
+            }
+
+            KnownSegments.Remove(key);
+            return true;
+        }
+
+        public static bool ExcludeSegment(string segment) {
+            return ExcludedSegments.Add(segment);
+        }
+
+        public static bool RemoveSegmentFromExclusion(string segment) {
+            return ExcludedSegments.Remove(segment);
+        }
+
+        public static bool AddCustomLanguageMapping(string segment, string iso639Alpha2B) {
+            if (!CustomLanguageMappings.ContainsKey(segment)) {
+                return false;
+            }
+
+            CustomLanguageMappings.Add(segment, iso639Alpha2B);
+            return true;
+        }
+
+        public static bool RemoveCustomLanguageMapping(string mapping) {
+            if (!CustomLanguageMappings.ContainsKey(mapping)) {
+                return false;
+            }
+
+            CustomLanguageMappings.Remove(mapping);
+            return true;
+        }
+
+        #endregion
+
 
         private Regex GetTitleAndReleaseYearRegexWithDelimiters() {
             StringBuilder sb = new StringBuilder(_delimiters.Count + 10);
@@ -1114,7 +1168,7 @@ namespace Frost.DetectFeatures.Util {
                     isoCode = ISOLanguageCodes.GetByEnglishName(segment);
                     break;
                 case LanguageCheck.Custom:
-                    isoCode = ISOLanguageCodes.GetByISOCode(CustomLangMappings[segment]);
+                    isoCode = ISOLanguageCodes.GetByISOCode(CustomLanguageMappings[segment]);
                     break;
             }
 
@@ -1128,11 +1182,11 @@ namespace Frost.DetectFeatures.Util {
         }
 
         private LanguageCheck CheckLanguage(string segment) {
-            if (segment.Length < 2 || SegmentExclusion.Contains(segment) || segment.Equals("PAL", StringComparison.InvariantCultureIgnoreCase)) {
+            if (segment.Length < 2 || ExcludedSegments.Contains(segment) || segment.Equals("PAL", StringComparison.InvariantCultureIgnoreCase)) {
                 return LanguageCheck.NotALangauge;
             }
 
-            if (CustomLangMappings.ContainsKey(segment)) {
+            if (CustomLanguageMappings.ContainsKey(segment)) {
                 return LanguageCheck.Custom;
             }
 
@@ -1166,7 +1220,7 @@ namespace Frost.DetectFeatures.Util {
             if (match.Success) {
                 string releaseGroup = match.Groups[1].Value;
 
-                if (releaseGroup.Length > 2 && !SegmentExclusion.Contains(releaseGroup)) {
+                if (releaseGroup.Length > 2 && !ExcludedSegments.Contains(releaseGroup)) {
                     _fileNameInfo.ReleaseGroup = releaseGroup;
                     _fileNameInfo.UndetectedSegments.Remove(releaseGroup);
 

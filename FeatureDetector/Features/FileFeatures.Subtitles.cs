@@ -20,9 +20,9 @@ using Language = Frost.Common.Models.DB.MovieVo.Language;
 namespace Frost.DetectFeatures {
 
     public partial class FileFeatures : IDisposable {
-        private static readonly string[] KnownSubtitleExtensions;
-        private static readonly string SubtitleExtensionsRegex;
-        private static readonly string[] KnownSubtitleFormats;
+        private static readonly List<string> KnownSubtitleExtensions;
+        private static readonly List<string> KnownSubtitleFormats;
+        private static string SubtitleExtensionsRegex;
         private readonly MD5 _md5 = MD5.Create();
 
         private void GetSubtitles(FileVo file) {
@@ -59,7 +59,7 @@ namespace Frost.DetectFeatures {
                 string mediaFormat = text.FormatInfo.Name;
 
                 //if MediaInfo detected a format and it is a known subtitle format
-                if (mediaFormat != null && Array.BinarySearch(KnownSubtitleFormats, mediaFormat) >= 0) {
+                if (mediaFormat != null && KnownSubtitleFormats.BinarySearch(mediaFormat) >= 0) {
                     sub = new Subtitle(file, lang, mediaFormat);
                 }
                 else {
@@ -98,7 +98,7 @@ namespace Frost.DetectFeatures {
                     string mediaFormat = text.FormatInfo.Name;
 
                     //if MediaInfo detected a format and it is a known subtitle format
-                    if (mediaFormat != null && Array.BinarySearch(KnownSubtitleFormats, mediaFormat) >= 0) {
+                    if (mediaFormat != null && KnownSubtitleFormats.BinarySearch(mediaFormat) >= 0) {
                         sub = new Subtitle(file, lang, mediaFormat);
                     }
                     else {
@@ -193,6 +193,50 @@ namespace Frost.DetectFeatures {
             return ud.IsSupportedEncoding
                        ? ud.DetectedEncoding
                        : null;
+        }
+
+        public static bool AddSubtitleExtension(string extension) {
+            if (KnownSubtitleExtensions.BinarySearch(extension) >= 0) {
+                return false;
+            }
+
+            KnownSubtitleExtensions.Add(extension);
+            KnownSubtitleExtensions.Sort();
+
+            SubtitleExtensionsRegex = string.Format(@"\.({0})", string.Join("|", KnownSubtitleExtensions));
+            return true;
+        }
+
+        public static bool RemoveSubtitleExtension(string extension) {
+            int index = KnownSubtitleExtensions.BinarySearch(extension);
+            if (index < 0) {
+                return false;
+            }
+
+            KnownSubtitleExtensions.RemoveAt(index);
+
+            SubtitleExtensionsRegex = string.Format(@"\.({0})", string.Join("|", KnownSubtitleExtensions));
+            return true;
+        }
+
+        public static bool AddSubtitleFormat(string format) {
+            if (KnownSubtitleFormats.BinarySearch(format) >= 0) {
+                return false;
+            }
+
+            KnownSubtitleFormats.Add(format);
+            KnownSubtitleFormats.Sort();
+            return true;
+        }
+
+        public static bool RemoveSubtitleFormat(string format) {
+            int index = KnownSubtitleFormats.BinarySearch(format);
+            if (index < 0) {
+                return false;
+            }
+
+            KnownSubtitleFormats.RemoveAt(index);
+            return true;
         }
     }
 
