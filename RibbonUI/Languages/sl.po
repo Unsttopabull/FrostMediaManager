@@ -230,6 +230,12 @@ msgstr "Film ima na voljo napovednik"
 msgid "Name"
 msgstr "Ime"
 
+msgid "No actor selected"
+msgstr "Niste izbrali igralca"
+
+msgid "No directors selected"
+msgstr "Niste izbrali režiserja"
+
 msgid "No plot available"
 msgstr "Opis ni navoljo"
 
@@ -325,6 +331,9 @@ msgstr "Izberite studije"
 
 msgid "Set"
 msgstr "Nastavi"
+
+msgid "Set plot language"
+msgsrt "Nastavi jezik opisa"
 
 msgid "Set language"
 msgstr "Nastavi jezik"

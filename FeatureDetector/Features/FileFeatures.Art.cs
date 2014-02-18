@@ -79,7 +79,7 @@ namespace Frost.DetectFeatures {
 
             ArtBase art = GetArtType(artFile.FullName, type, File.Exists(pathFull) ? pathFull : null);
             if (art != null) {
-                Movie.Arts.Add(art);
+                Movie.Art.Add(art);
             }
         }
 

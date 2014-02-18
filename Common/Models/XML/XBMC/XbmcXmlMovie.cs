@@ -635,7 +635,7 @@ namespace Frost.Common.Models.XML.XBMC {
                 Trailer = mx.GetTrailerUrl(),
                 Watched = mx.Watched,
                 ReleaseYear = mx.Year,
-                Arts = new ObservableHashSet<ArtBase>(mx.GetArt()),
+                Art = new ObservableHashSet<ArtBase>(mx.GetArt()),
                 Directors = mx.GetDirectors(),
                 Writers = mx.GetWriters(),
                 Genres = new ObservableHashSet<Genre>(Genre.GetFromNames(mx.Genres)),

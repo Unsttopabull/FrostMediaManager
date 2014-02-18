@@ -173,16 +173,18 @@ namespace Frost.SharpMediaInfo {
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         void IDisposable.Dispose() {
-            Close();
+            Dispose(false);
         }
 
-        /// <summary>Closes this instance and disposes all allocated resources.</summary>
-        internal virtual void Close() {
-            throw new NotImplementedException("Should be overriden in a inherited class.");
-        }
+        ///// <summary>Closes this instance and disposes all allocated resources.</summary>
+        //internal virtual void Close() {
+        //    throw new NotImplementedException("Should be overriden in a inherited class.");
+        //}
+
+        protected abstract void Dispose(bool destructor);
 
         ~MediaFileBase() {
-            Close();
+            Dispose(true);
         }
 
         #endregion

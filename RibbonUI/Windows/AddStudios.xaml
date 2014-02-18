@@ -2,8 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
-        xmlns:lex="http://wpflocalizeextension.codeplex.com"
-        Title="{lex:Loc Select studios}" Height="520" Width="500" WindowStartupLocation="CenterOwner">
+        xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
+        Title="{l:T Select studios}" Height="520" Width="500" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <BitmapImage x:Key="DefaultStudio" UriSource="..\Images\defaultscreen.png" />
     </Window.Resources>
@@ -23,7 +23,7 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Margin="-5,0,0,0" Content="{lex:Loc Search}"/>
+            <Label Grid.Row="0" Margin="-5,0,0,0" Content="{l:T Search, Postfix=:}"/>
             <TextBox x:Name="SearchBox" Grid.Row="1"/>
         </Grid>
         <ListBox x:Name="StudiosList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding}"
@@ -52,11 +52,11 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Margin="-5,0,0,0" Content="{lex:Loc Add a new studio}"/>
+            <Label Grid.Row="0" Grid.Column="0" Margin="-5,0,0,0" Content="{l:T Add a new studio, Postfix=:}"/>
             <Label x:Name="Error" Grid.Row="0" Grid.Column="1" Margin="-5,0,0,0" FlowDirection="RightToLeft" Foreground="Red" Visibility="Collapsed">!The studio already exists</Label>
             <TextBox x:Name="NewStudioName" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TextChanged="NewStudioNameOnTextChanged" />
         </Grid>
-        <Button Grid.Row="3" Grid.Column="0" Margin="5,5,5,5" Click="AddOnClick" Content="{lex:Loc Add}">
+        <Button Grid.Row="3" Grid.Column="0" Margin="5,5,5,5" Click="AddOnClick" Content="{l:T Add}">
             <Button.Style>
                 <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                     <Style.Triggers>
@@ -67,6 +67,6 @@
                 </Style>
             </Button.Style>
         </Button>
-        <Button Grid.Row="3" Grid.Column="1" Margin="5,5,5,5" Click="CancelOnClick" Content="{lex:Loc Cancel}"/>
+        <Button Grid.Row="3" Grid.Column="1" Margin="5,5,5,5" Click="CancelOnClick" Content="{l:T Cancel}"/>
     </Grid>
 </Window>

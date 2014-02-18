@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Frost.SharpMediaInfo.Collections;
 
 namespace Frost.SharpMediaInfo {
@@ -102,15 +101,6 @@ namespace Frost.SharpMediaInfo {
                 return file;
             }
             return null;
-        }
-
-        /// <summary>Add the file to the list and collects information about it (technical information and tags). The Inform() call can be optionaly cached to reduce further calls to the DLL.</summary>
-        /// <param name="fileName">Full name of the file to open.</param>
-        /// <param name="cacheInform">If set to <c>true</c> caches the Inform() call.</param>
-        /// <param name="allInfoCache">if set to <c>true</c> ShowAllInfo ("Complete_Get") is set to <c>true</c> before the Inform() call and reset afterwards.</param>
-        /// <returns>Returns <c>true</c> if sucessfull, otherwise <c>false</c></returns>
-        public Task<MediaListFile> AddAsync(string fileName, bool cacheInform, bool allInfoCache) {
-            return Task.Run(() => Add(fileName, cacheInform, allInfoCache));
         }
         
         #endregion
@@ -248,11 +238,15 @@ namespace Frost.SharpMediaInfo {
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         void IDisposable.Dispose() {
-            Close();
+            Dispose(false);
         }
 
         /// <summary>Closes all files in the list and disposes all allocated resources.</summary>
         public void Close() {
+            Dispose(false);
+        }
+
+        private void Dispose(bool destructor) {
             if (!IsDisposed) {
                 if (_files != null) {
                     RemoveAll();
@@ -268,12 +262,14 @@ namespace Frost.SharpMediaInfo {
                 }
                 IsDisposed = true;
 
-                GC.SuppressFinalize(this);
+                if (destructor) {
+                    GC.SuppressFinalize(this);
+                }
             }
         }
 
         ~MediaInfoList() {
-            Close();
+            Dispose(true);
         }
 
         #endregion

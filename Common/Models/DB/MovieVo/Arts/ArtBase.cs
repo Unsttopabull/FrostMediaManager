@@ -80,7 +80,7 @@ namespace Frost.Common.Models.DB.MovieVo.Arts {
                 Map<Fanart>(m => m.Requires("Type").HasValue((long) ArtType.Fanart));
 
                 HasRequired(a => a.Movie)
-                    .WithMany(m => m.Arts)
+                    .WithMany(m => m.Art)
                     .HasForeignKey(a => a.MovieId)
                     .WillCascadeOnDelete();
             }

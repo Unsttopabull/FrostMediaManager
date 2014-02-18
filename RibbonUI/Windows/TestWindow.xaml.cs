@@ -8,7 +8,6 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Interop;
 using Frost.Common.Models.DB.MovieVo;
-using Frost.DetectFeatures;
 
 namespace RibbonUI.Windows {
     /// <summary>

@@ -7,6 +7,7 @@ using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.People;
 using Frost.Common.Util;
+using Frost.GettextMarkupExtension;
 using Microsoft.Win32;
 using RibbonUI.Windows;
 
@@ -222,7 +223,7 @@ namespace RibbonUI.UserControls {
             if (e.EditAction == DataGridEditAction.Commit) {
                 TextBox textBox = ((TextBox) e.EditingElement);
                 string text = textBox.Text;
-                if (string.IsNullOrEmpty(text) || (!string.IsNullOrEmpty(text) && text.OrdinalEquals("Unknown"))) {
+                if (string.IsNullOrEmpty(text) || (!string.IsNullOrEmpty(text) && text.OrdinalEquals(TranslationManager.Instance.Translate("Unknown")))) {
                     textBox.Text = null;
                 }
             }
@@ -348,14 +349,14 @@ namespace RibbonUI.UserControls {
             switch (tag) {
                 case "Directors":
                     if (MovieDirectors.SelectedIndex == -1) {
-                        MessageBox.Show(_window, "No directors selected");
+                        MessageBox.Show(_window, TranslationManager.T("No directors selected"));
                         return;
                     }
                     p = (Person) MovieDirectors.SelectedItem;
                     break;
                 case "Actors":
                     if (MovieActorsList.SelectedIndex == -1) {
-                        MessageBox.Show(_window, "No actor selected");
+                        MessageBox.Show(_window, TranslationManager.T("No actor selected"));
                         return;
                     }
                     p = ((MovieActor) MovieActorsList.SelectedItem).Person;

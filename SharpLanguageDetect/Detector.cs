@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Frost.SharpLanguageDetect.JDK;
@@ -53,6 +54,7 @@ namespace Frost.SharpLanguageDetect {
     * @author Nakatani Shuyo
     * @see DetectorFactory
     */
+
     public class Detector {
         private const double ALPHA_DEFAULT = 0.5;
         private const double ALPHA_WIDTH = 0.05;
@@ -86,6 +88,7 @@ namespace Frost.SharpLanguageDetect {
         * Detector instance can be constructed via {@link DetectorFactory#create()}.
         * @param factory {@link DetectorFactory} instance (only DetectorFactory inside)
         */
+
         public Detector(DetectorFactory factory) {
             Alpha = ALPHA_DEFAULT;
 
@@ -112,6 +115,7 @@ namespace Frost.SharpLanguageDetect {
          * The default value is 10000(10KB).
          * @param max_text_length the max_text_length to set
          */
+
         public int MaxTextLength {
             get { return _maxTextLength; }
             set { _maxTextLength = value; }
@@ -122,6 +126,7 @@ namespace Frost.SharpLanguageDetect {
          * @param priorMap the priorMap to set
          * @throws LangDetectException 
          */
+
         public void SetPriorityMap(Dictionary<string, double> priorMap) {
             _priorMap = new double[_langList.Count];
             double sump = 0;
@@ -155,6 +160,7 @@ namespace Frost.SharpLanguageDetect {
          * @param reader the input reader (BufferedReader as usual)
          * @throws IOException Can't read the reader.
          */
+
         public void Append(StreamReader reader) {
             char[] buf = new char[_maxTextLength / 2];
             while (_text.Length < _maxTextLength && !reader.EndOfStream) {
@@ -170,6 +176,7 @@ namespace Frost.SharpLanguageDetect {
          * 
          * @param text the target text to append
          */
+
         public void Append(string text) {
             text = URLRegex.Replace(text, " ");
             text = MailRegex.Replace(text, " ");
@@ -187,6 +194,7 @@ namespace Frost.SharpLanguageDetect {
          * Cleaning text to detect
          * (eliminate URL, e-mail address and Latin sentence if it is not written in Latin alphabet)
          */
+
         private void CleaningText() {
             int latinCount = 0, nonLatinCount = 0;
             for (int i = 0; i < _text.Length; ++i) {
@@ -217,11 +225,12 @@ namespace Frost.SharpLanguageDetect {
          * @throws LangDetectException 
          *  code = ErrorCode.CantDetectError : Can't detect because of no valid features in text
          */
+
         public string Detect() {
             List<Language> probabilities = GetProbabilities();
             return (probabilities.Count > 0)
-                ? probabilities[0].LangCode
-                : UNKNOWN_LANG;
+                       ? probabilities[0].LangCode
+                       : UNKNOWN_LANG;
         }
 
         /**
@@ -230,6 +239,7 @@ namespace Frost.SharpLanguageDetect {
          * @throws LangDetectException 
          *  code = ErrorCode.CantDetectError : Can't detect because of no valid features in text
          */
+
         public List<Language> GetProbabilities() {
             if (_langprob == null) {
                 DetectBlock();
@@ -243,6 +253,7 @@ namespace Frost.SharpLanguageDetect {
          * @throws LangDetectException 
          * 
          */
+
         private void DetectBlock() {
             CleaningText();
             List<string> ngrams = ExtractNGrams();
@@ -253,8 +264,8 @@ namespace Frost.SharpLanguageDetect {
             _langprob = new double[_langList.Count];
 
             GaussianRandom rand = _seed.HasValue
-                ? new GaussianRandom((int) _seed.Value)
-                : new GaussianRandom();
+                                      ? new GaussianRandom((int) _seed.Value)
+                                      : new GaussianRandom();
 
             //Random rand = new Random();
             //if (_seed.HasValue) {
@@ -275,7 +286,7 @@ namespace Frost.SharpLanguageDetect {
                             break;
                         }
                         if (Verbose) {
-                            Console.WriteLine(@"> [{0}]", string.Join(", ", SortProbability(prob)));
+                            Console.WriteLine(@"> [{0}]", string.Join(", ", SortProbability(prob).Select(l => l.ToString()).ToArray()));
                         }
                     }
                 }
@@ -285,7 +296,7 @@ namespace Frost.SharpLanguageDetect {
                 }
 
                 if (Verbose) {
-                    Console.WriteLine(@"==> [{0}]", string.Join(", ", SortProbability(prob)));
+                    Console.WriteLine(@"==> [{0}]", string.Join(", ", SortProbability(prob).Select(l => l.ToString()).ToArray()));
                 }
             }
         }
@@ -295,6 +306,7 @@ namespace Frost.SharpLanguageDetect {
          * If there is the specified prior map, use it as initial map.
          * @return initialized map of language probabilities
          */
+
         private double[] InitProbability() {
             double[] prob = new double[_langList.Count];
             if (_priorMap != null) {
@@ -314,6 +326,7 @@ namespace Frost.SharpLanguageDetect {
          * Extract n-grams from target text
          * @return n-grams list
          */
+
         private List<string> ExtractNGrams() {
             List<string> list = new List<string>();
             NGram ngram = new NGram();
@@ -336,6 +349,7 @@ namespace Frost.SharpLanguageDetect {
          * @param prob probabiliy array
          * @param alpha the smoothing parameter
          */
+
         private bool UpdateLangProb(double[] prob, string word, double alpha) {
             if (word == null || !_wordLangProbMap.ContainsKey(word)) {
                 return false;
@@ -368,6 +382,7 @@ namespace Frost.SharpLanguageDetect {
          * normalize probabilities and check convergence by the maximun probability
          * @return maximum of probabilities
          */
+
         private static double NormalizeProb(double[] prob) {
             double maxp = 0, sump = 0;
 
@@ -389,6 +404,7 @@ namespace Frost.SharpLanguageDetect {
          * @param probabilities Dictionary
          * @return lanugage candidates order by probabilities descendently
          */
+
         private List<Language> SortProbability(double[] prob) {
             List<Language> langs = new List<Language>();
             for (int j = 0; j < prob.Length; ++j) {
@@ -412,6 +428,7 @@ namespace Frost.SharpLanguageDetect {
          * @param word
          * @return
          */
+
         private static string UnicodeEncode(string word) {
             StringBuilder buf = new StringBuilder();
             foreach (char ch in word) {

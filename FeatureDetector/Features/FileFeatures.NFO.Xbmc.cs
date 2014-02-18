@@ -103,7 +103,7 @@ namespace Frost.DetectFeatures {
             Movie.Aired = FilterDate(xbmcMovie.Aired);
             Movie.Trailer = xbmcMovie.GetTrailerUrl();
 
-            Movie.Arts.UnionWith(xbmcMovie.GetArt());
+            Movie.Art.UnionWith(xbmcMovie.GetArt());
             Movie.Certifications.UnionWith(xbmcMovie.GetCertifications());
 
             foreach (Country country in xbmcMovie.GetCountries()) {

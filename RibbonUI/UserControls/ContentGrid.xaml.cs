@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
@@ -7,6 +10,8 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using Frost.Common.Annotations;
 using Frost.Common.Models.DB.MovieVo;
+using Frost.GettextMarkupExtension;
+using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace RibbonUI.UserControls {
 
@@ -80,6 +85,30 @@ namespace RibbonUI.UserControls {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) {
                 handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        private void LangSelectionChanged(object sender, SelectionChangedEventArgs e) {
+            ComboBox comboBox = (ComboBox) sender;
+            if (comboBox.SelectedIndex != -1) {
+                CultureInfo ci = (CultureInfo) comboBox.SelectedItem;
+
+                TranslationManager.CurrentCulture = ci;
+            }
+
+        }
+
+        private void LangSelectLoaded(object sender, RoutedEventArgs e) {
+            ComboBox comboBox = (ComboBox) sender;
+            List<CultureInfo> itemsSource = (List<CultureInfo>) comboBox.ItemsSource;
+            
+            CultureInfo uiCultureTranslation = TranslationManager.Instance.Languages.FirstOrDefault(t =>
+                t.Equals(Thread.CurrentThread.CurrentUICulture) || //check specific culture
+                t.Equals(Thread.CurrentThread.CurrentUICulture.Parent //check neutral culture
+            ));
+
+            if (uiCultureTranslation != null) {
+                comboBox.SelectedItem = uiCultureTranslation;
             }
         }
     }

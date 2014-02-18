@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Frost.SharpOpenSubtitles.Util {
     public static class MovieHasher {
@@ -28,23 +27,7 @@ namespace Frost.SharpOpenSubtitles.Util {
             return ToHexString(ComputeMovieHash(input));
         }
 
-        public static Task<byte[]> GetMovieHashAsync(this Stream input) {
-            return Task.Run(() => ComputeMovieHash(input));
-        }
-
-        public static Task<string> GetMovieHashAsHexStringAsync(this Stream input) {
-            return Task.Run(() => ToHexString(ComputeMovieHash(input)));
-        }
-
         #endregion
-
-        public static Task<byte[]> ComputeMovieHashAsync(string fileName) {
-            return Task.Run(() => ComputeMovieHash(fileName));
-        }
-
-        public static Task<string> ComputeMovieHashAsHexStringAsync(string fileName) {
-            return Task.Run(() => ToHexString(ComputeMovieHash(fileName)));
-        }
 
         public static string ComputeMovieHashAsHexString(string fileName) {
             return ToHexString(ComputeMovieHash(fileName));
@@ -56,10 +39,6 @@ namespace Frost.SharpOpenSubtitles.Util {
                 result = ComputeMovieHash(input);
             }
             return result;
-        }
-
-        public static Task<byte[]> ComputeMovieHashAsync(Stream input) {
-            return Task.Run(() => ComputeMovieHash(input));
         }
 
         public static byte[] ComputeMovieHash(Stream input) {

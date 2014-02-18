@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 
 namespace Frost.SharpMediaInfo {
 
@@ -127,15 +128,21 @@ namespace Frost.SharpMediaInfo {
         #region IDisposable
 
         /// <summary>Closes this instance and disposes all allocated resources.</summary>
-        public new void Close() {
+        public void Close() {
+            Dispose(false);
+        }
+
+        protected override void Dispose(bool destructor) {
             if (!_isDisposed) {
                 if (IsOpen) {
                     CloseHandle(Handle);
                     IsOpen = false;
-                }                
+                }
                 DeleteHandle(Handle);
 
-                GC.SuppressFinalize(this);
+                if (destructor) {
+                    GC.SuppressFinalize(this);
+                }
                 _isDisposed = true;
             }
         }

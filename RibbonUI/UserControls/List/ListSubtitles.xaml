@@ -4,8 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:files="clr-namespace:Frost.Common.Models.DB.MovieVo.Files;assembly=Frost.Common"
+             xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"             
              xmlns:sys="clr-namespace:System.Text;assembly=mscorlib"
-             xmlns:t="http://wpflocalizeextension.codeplex.com"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="602">
     <UserControl.Resources>
@@ -32,27 +32,27 @@
                                 </Image.CacheMode>
                             </Image>
                         </Button>
-                        <TextBlock TextAlignment="Center" Text="{t:Loc Click to set language}"/>
+                        <TextBlock TextAlignment="Center" Text="{l:T Click to set language}"/>
                     </StackPanel>
                     <StackPanel Margin="15,0,0,0" MinWidth="200" x:Name="DetailsHolder">
                         <StackPanel Orientation="Horizontal">
-                            <Label Content="{t:Loc Language}"/>
+                            <Label Content="{l:T Language, Postfix=:}"/>
                             <TextBlock VerticalAlignment="Center" Text="{Binding Language.Name}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Label Content="{t:Loc Format}"/>
+                            <Label Content="{l:T Format, Postfix=:}"/>
                             <ComboBox VerticalAlignment="Center" Margin="11,0,0,0" MinWidth="100" IsEditable="True" SelectedItem="{Binding Format}" Loaded="OnFormatSelectorLoaded"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Label Content="{t:Loc Encoding}"/>
+                            <Label Content="{l:T Encoding, Postfix=:}"/>
                             <ComboBox VerticalAlignment="Center" MinWidth="100" SelectedValue="{Binding Encoding}" ItemsSource="{Binding Source={StaticResource Encodings}}" SelectedValuePath="Name" DisplayMemberPath="DisplayName"/>
                         </StackPanel>                        
                         <StackPanel Orientation="Horizontal">
-                            <Label Content="{t:Loc Is embeded in the video:}"/>
+                            <Label Content="{l:T Is embeded in the video:, Postfix=:}"/>
                             <CheckBox VerticalAlignment="Center" IsChecked="{Binding EmbededInVideo}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
-                            <Label Content="{t:Loc Is for hearing impaired:}"/>
+                            <Label Content="{l:T Is for hearing impaired:, Postfix=:}"/>
                             <CheckBox VerticalAlignment="Center" Margin="7,0,0,0" IsChecked="{Binding ForHearingImpaired}" />
                         </StackPanel>
                     </StackPanel>

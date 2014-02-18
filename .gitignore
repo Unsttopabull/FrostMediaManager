@@ -171,3 +171,4 @@ Other
 !Libraries/**/x64
 !Libraries/**/*.pdb
 !Libraries
+/packages

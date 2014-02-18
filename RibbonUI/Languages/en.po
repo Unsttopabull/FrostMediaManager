@@ -324,6 +324,9 @@ msgstr "Select studios"
 msgid "Set"
 msgstr "Set"
 
+msgid "Set plot language"
+msgsrt "Set plot language"
+
 msgid "Set language"
 msgstr "Set language"
 

@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Frost.Common.Models.DB.MovieVo.Files;
+using Frost.GettextMarkupExtension;
 
 namespace RibbonUI.Windows {
 
@@ -30,7 +31,7 @@ namespace RibbonUI.Windows {
         private void CodecSelectOnLoaded(object sender, RoutedEventArgs e) {
             List<Codec> lst = new List<Codec>();
 
-            lst.Add(new Codec("Unknown", "unk"));
+            lst.Add(new Codec(TranslationManager.T("Unknown"), "unk"));
             lst.Add(new Codec("Windows Media Audio", "wma"));
             lst.Add(new Codec("Windows Media Audio HD", "wmahd"));
             lst.Add(new Codec("Windows Media Audio Pro", "wmapro"));
@@ -68,7 +69,7 @@ namespace RibbonUI.Windows {
                 return;
             }
 
-            if (c.Name == "Unknown") {
+            if (c.Name == TranslationManager.T("Unknown")) {
                 audio.Codec = null;
                 audio.CodecId = null;
                 return;

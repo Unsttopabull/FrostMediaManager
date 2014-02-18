@@ -32,7 +32,7 @@ namespace Frost.Common.Models.DB.MovieVo {
             Audios = new ObservableHashSet<Audio>();
             Ratings = new ObservableHashSet<Rating>();
             Plots = new ObservableHashSet<Plot>();
-            Arts = new ObservableHashSet<ArtBase>();
+            Art = new ObservableHashSet<ArtBase>();
             Certifications = new ObservableHashSet<Certification>();
             Genres = new ObservableHashSet<Genre>();
             Awards = new ObservableHashSet<Award>();
@@ -215,7 +215,7 @@ namespace Frost.Common.Models.DB.MovieVo {
 
         /// <summary>Gets or sets the movie promotional images.</summary>
         /// <value>The movie promotional images</value>
-        public virtual ObservableHashSet<ArtBase> Arts { get; set; }
+        public virtual ObservableHashSet<ArtBase> Art { get; set; }
 
         /// <summary>Gets or sets the information about this movie's certification ratings/restrictions in certain countries.</summary>
         /// <value>The information about this movie's certification ratings/restrictions in certain countries.</value>
@@ -303,7 +303,7 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <value>Is <c>true</c> if the movie has available fanart; otherwise, <c>false</c>.</value>
         [NotMapped]
         public bool HasArt {
-            get { return Arts.Count != 0; }
+            get { return Art.Count != 0; }
         }
 
         [NotMapped]
@@ -338,8 +338,8 @@ namespace Frost.Common.Models.DB.MovieVo {
         [NotMapped]
         public Fanart FirstFanart {
             get {
-                return Arts.OfType<Fanart>().Any()
-                           ? Arts.OfType<Fanart>().FirstOrDefault()
+                return Art.OfType<Fanart>().Any()
+                           ? Art.OfType<Fanart>().FirstOrDefault()
                            : null;
             }
         }
@@ -347,12 +347,12 @@ namespace Frost.Common.Models.DB.MovieVo {
         [NotMapped]
         public ArtBase FirstCoverOrPoster {
             get {
-                if (Arts.OfType<Cover>().Any()) {
-                    return Arts.OfType<Cover>().FirstOrDefault();
+                if (Art.OfType<Cover>().Any()) {
+                    return Art.OfType<Cover>().FirstOrDefault();
                 }
 
-                if (Arts.OfType<Poster>().Any()) {
-                    return Arts.OfType<Poster>().FirstOrDefault();
+                if (Art.OfType<Poster>().Any()) {
+                    return Art.OfType<Poster>().FirstOrDefault();
                 }
                 return null;
             }
@@ -455,7 +455,7 @@ namespace Frost.Common.Models.DB.MovieVo {
         /// <summary>Gets the cover image path name.</summary>
         /// <returns>The path to the fist cover image</returns>
         public string GetCoverPath() {
-            Cover cover = Arts.OfType<Cover>().FirstOrDefault();
+            Cover cover = Art.OfType<Cover>().FirstOrDefault();
             return (cover != null)
                        ? cover.Path
                        : null;

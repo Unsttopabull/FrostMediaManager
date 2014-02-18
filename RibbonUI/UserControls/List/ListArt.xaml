@@ -3,27 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:t="http://wpflocalizeextension.codeplex.com"
+             xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
              xmlns:arts="clr-namespace:Frost.Common.Models.DB.MovieVo.Arts;assembly=Frost.Common"
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="622">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="{Binding ElementName=ArtsList, Path=ColumnHeaderHeight}" />
+            <RowDefinition Height="{Binding ElementName=ArtList, Path=ColumnHeaderHeight}" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <StackPanel Margin="0,0,20,0" Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="0" ZIndex="2"
                     Background="Transparent">
-            <Button Height="{Binding ElementName=ArtsList, Path=ColumnHeaderHeight}" Width="24"
-                    Click="RemoveOnClick"
-                    Style="{StaticResource TransparentBorderlessButton}" ToolTip="{t:Loc Remove selected art}">
+            <Button Height="{Binding ElementName=ArtList, Path=ColumnHeaderHeight}" Width="24"
+                    Click="RemoveOnClick" Style="{StaticResource TransparentBorderlessButton}" ToolTip="{l:T Remove selected art}">
                 <Image Source="../../Images/remove.png" />
             </Button>
-            <Button Height="{Binding ElementName=ArtsList, Path=ColumnHeaderHeight}" Width="24" Click="AddOnClick"
-                    Style="{StaticResource TransparentBorderlessButton}" ToolTip="{t:Loc Add new art}">
+            <Button Height="{Binding ElementName=ArtList, Path=ColumnHeaderHeight}" Width="24" Click="AddOnClick"
+                    Style="{StaticResource TransparentBorderlessButton}" ToolTip="{l:T Add new art}">
                 <Image Source="../../Images/add.png" />
             </Button>
         </StackPanel>
-        <DataGrid Grid.Row="0" x:Name="ArtsList" Grid.RowSpan="2" AutoGenerateColumns="False"
+        <DataGrid Grid.Row="0" x:Name="ArtList" Grid.RowSpan="2" AutoGenerateColumns="False"
                   GridLinesVisibility="None" SelectionMode="Single"
                   AlternatingRowBackground="#59D3D3D3"
                   CanUserResizeColumns="False" CanUserResizeRows="False" ItemsSource="{Binding}"
@@ -49,16 +48,16 @@
                 </Style>
             </DataGrid.CellStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="{t:Loc Preview}" IsReadOnly="True">
+                <DataGridTemplateColumn Header="{l:T Preview}" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate DataType="arts:ArtBase">
                             <Image Source="{Binding PreviewOrPath}" Stretch="Uniform" MaxHeight="300" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding Type}" Header="{t:Loc Type}" IsReadOnly="True" />
-                <DataGridTextColumn Binding="{Binding Preview}" Header="{t:Loc Preview}" />
-                <DataGridTextColumn Binding="{Binding Path}" Header="{t:Loc Path}"/>
+                <DataGridTextColumn Binding="{Binding Type}" Header="{l:T Type}" IsReadOnly="True" />
+                <DataGridTextColumn Binding="{Binding Preview}" Header="{l:T Preview}" />
+                <DataGridTextColumn Binding="{Binding Path}" Header="{l:T Path}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

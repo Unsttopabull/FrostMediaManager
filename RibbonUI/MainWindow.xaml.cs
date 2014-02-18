@@ -17,7 +17,7 @@ namespace RibbonUI {
         private void RibbonWindowLoaded(object sender, RoutedEventArgs e) {
             Container.Movies
                       .Include("Studios")
-                      .Include("Arts")
+                      .Include("Art")
                       .Include("Genres")
                       .Include("Awards")
                       .Include("ActorsLink")

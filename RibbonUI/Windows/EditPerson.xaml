@@ -2,8 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:people="clr-namespace:Frost.Common.Models.DB.MovieVo.People;assembly=Frost.Common"
-        xmlns:t="http://wpflocalizeextension.codeplex.com"
-        Title="{Binding ElementName=NameBox, Path=Text, TargetNullValue={t:Loc Edit person}, FallbackValue={t:Loc Edit person}}"
+        xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
+        Title="{Binding ElementName=NameBox, Path=Text, TargetNullValue={l:T Edit person}, FallbackValue={l:T Edit person}}"
         Height="300" Width="650" Closed="OnWindowClose">
     <Window.Resources>
         <BitmapImage x:Key="Person" UriSource="../Images/person.png"/>
@@ -31,13 +31,13 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Margin="-5,0,0,0" Content="{t:Loc Name}"/>
+            <Label Grid.Row="0" Margin="-5,0,0,0" Content="{l:T Name, Postfix=:}"/>
             <TextBox x:Name="NameBox" x:FieldModifier="private" Grid.Row="1" Text="{Binding Name, Converter={StaticResource EmptyStringToNullConverter}, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <Label Grid.Row="2" Margin="-5,0,0,0" Content="{t:Loc ImdbID}"/>
+            <Label Grid.Row="2" Margin="-5,0,0,0" Content="{l:T ImdbID, Postfix=:}"/>
             <TextBox Grid.Row="3" Text="{Binding ImdbID, Converter={StaticResource EmptyStringToNullConverter}}"/>
 
-            <Label Grid.Row="4" Margin="-5,0,0,0" Content="{t:Loc Thumb}"/>
+            <Label Grid.Row="4" Margin="-5,0,0,0" Content="{l:T Thumb, Postfix=:}"/>
             <TextBox x:Name="ThumbBox" x:FieldModifier="private" Grid.Row="5" Text="{Binding Thumb, Converter={StaticResource EmptyStringToNullConverter}, UpdateSourceTrigger=PropertyChanged}"/>
             <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="5" Margin="0,0,5,0" ToolTip="Open file search dialog">
                 <Button Height="16" Style="{StaticResource TransparentBorderlessButton}" Click="ThumbSearchOnClick">
@@ -46,7 +46,7 @@
             </StackPanel>
         </Grid>
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button MinWidth="100" Click="Button_Click" Content="{t:Loc OK}"/>
+            <Button MinWidth="100" Click="Button_Click" Content="{l:T OK, Postfix=:}"/>
         </StackPanel>
     </Grid>
 </Window>

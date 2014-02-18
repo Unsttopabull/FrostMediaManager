@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Windows;
 
-namespace GettextTranslationExtension {
+namespace Frost.GettextMarkupExtension {
 
     internal class LanguageChangedEventManager : WeakEventManager {
         private static readonly Type ManagerType = typeof(LanguageChangedEventManager);

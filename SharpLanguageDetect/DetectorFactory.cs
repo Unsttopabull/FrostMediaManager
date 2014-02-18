@@ -121,7 +121,7 @@ namespace Frost.SharpLanguageDetect {
          *                              or profile's format is wrong (error code = {@link ErrorCode#FormatError})
          */
         public static void LoadProfilesFromFolder(DirectoryInfo profileDirectory) {
-            FileInfo[] listFiles = profileDirectory.EnumerateFiles().ToArray();
+            FileInfo[] listFiles = profileDirectory.GetFiles();
             if (listFiles == null) {
                 throw new LangDetectException(ErrorCode.NeedLoadProfileError, "Not found profile: " + profileDirectory);
             }

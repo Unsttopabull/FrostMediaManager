@@ -126,16 +126,16 @@ namespace Frost.Common.Models.PHP {
 
         private void AddArt(Movie mov) {
             if (!string.IsNullOrEmpty(pathCover)) {
-                mov.Arts.Add(new Cover(pathCover));
+                mov.Art.Add(new Cover(pathCover));
             }
 
             if (pathScreenArr != null) {
                 //if the array is not null we add all art as Fanart
-                mov.Arts.UnionWith(pathScreenArr.Select(screen => new Fanart(screen)));
+                mov.Art.UnionWith(pathScreenArr.Select(screen => new Fanart(screen)));
             }
 
             if (pathFanartArr != null) {
-                mov.Arts.UnionWith(pathFanartArr.Select(fanart => new Fanart(fanart)));
+                mov.Art.UnionWith(pathFanartArr.Select(fanart => new Fanart(fanart)));
             }
         }
 

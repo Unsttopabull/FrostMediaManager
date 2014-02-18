@@ -4,8 +4,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using Frost.Common.Models.DB.MovieVo.Files;
+using Frost.GettextMarkupExtension;
 
 namespace RibbonUI.Windows {
 
@@ -29,7 +29,7 @@ namespace RibbonUI.Windows {
 
         private void CodecSelectOnLoaded(object sender, RoutedEventArgs e) {
             List<Codec> lst = new List<Codec> {
-                new Codec("Unknown", "unk"),
+                new Codec(TranslationManager.T("Unknown"), "unk"),
                 new Codec("Windows Media Video", "wmv"),
                 new Codec("Windows Media Video HD", "wmva"),
                 new Codec("Nero Digital Standard", "nds"),
@@ -87,7 +87,7 @@ namespace RibbonUI.Windows {
                 return;
             }
 
-            if (c.Name == "Unknown") {
+            if (c.Name == TranslationManager.T("Unknown")) {
                 video.Codec = null;
                 video.CodecId = null;
             }
@@ -109,7 +109,7 @@ namespace RibbonUI.Windows {
 
         private void ResolutionSelectOnLoaded(object sender, RoutedEventArgs e) {
             List<string> resolutions = new List<string> {
-                "Unknown",
+                TranslationManager.T("Unknown"),
                 "SDp",
                 "SDi",
                 "SD",

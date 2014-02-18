@@ -8,7 +8,7 @@
     xmlns:userControls="clr-namespace:RibbonUI.UserControls"
     xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:t="http://wpflocalizeextension.codeplex.com"
+    xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
     x:Class="RibbonUI.UserControls.ArtAndPlot"
     mc:Ignorable="d"
     d:DesignHeight="625" d:DesignWidth="1071">
@@ -55,8 +55,8 @@
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Column="1" Grid.Row="3" Panel.ZIndex="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Image Source="../Images/IMDbNew.png" ToolTip="{Binding ImdbID, FallbackValue=Not Available}" MouseDown="GoToIMDB" Style="{StaticResource CollapseIfTooltipNull}"/>
-            <Image Source="../Images/trailer.ico" ToolTip="{Binding Trailer, FallbackValue=Not Available}" MouseDown="GoToTrailer" Style="{StaticResource CollapseIfTooltipNull}"/>
+            <Image Source="../Images/IMDbNew.png" Tag="{Binding ImdbID}" ToolTip="{Binding ImdbID, FallbackValue=Not Available}" MouseDown="GoToIMDB" Style="{StaticResource CollapseIfTooltipNull}"/>
+            <Image Source="../Images/trailer.ico" Tag="{Binding Trailer}" ToolTip="{Binding Trailer, FallbackValue=Not Available}" MouseDown="GoToTrailer" Style="{StaticResource CollapseIfTooltipNull}"/>
         </StackPanel>
         <Image Grid.Row="0" Grid.Column="1" Source="{Binding MPAARatingImage, TargetNullValue={StaticResource DefaultMpaa}, FallbackValue={StaticResource DefaultMpaa}}" Panel.ZIndex="1">
             <Image.Effect>
@@ -79,7 +79,7 @@
                 <ScrollViewer Grid.Row="0">
                     <ScrollViewer.Resources>
                     </ScrollViewer.Resources>
-                    <TextBlock Text="{Binding FirstPlot.Full, FallbackValue={t:Loc No plot available}, TargetNullValue={t:Loc No plot available}}"
+                    <TextBlock Text="{Binding FirstPlot.Full, FallbackValue={l:T No plot available}, TargetNullValue={l:T No plot available}}"
                                Foreground="White" Margin="10,10,0,0" TextWrapping="Wrap" FontSize="20" ScrollViewer.CanContentScroll="True" />
                 </ScrollViewer>
                 <ListView Grid.Row="1" Background="Transparent" ItemsSource="{Binding Awards}" BorderThickness="0,1,0,0" Focusable="False">
@@ -110,8 +110,8 @@
             <DataGrid x:Name="ActorsList" AutoGenerateColumns="False" GridLinesVisibility="None" SelectionMode="Single"
                       CanUserResizeColumns="False" CanUserResizeRows="False" ItemsSource="{Binding ActorsLink}"
                       BorderBrush="Transparent" CanUserReorderColumns="False" ClipToBounds="True" MinRowHeight="20" MinColumnWidth="50"
-                      CellEditEnding="ActorsListOnCellEditEnding" Margin="0" RowHeaderWidth="0" BorderThickness="1,1,1,0" CanUserAddRows="False"
-                      Background="Transparent" EnableRowVirtualization="False" OpacityMask="{Binding ElementName=border, Mode=OneWay}">
+                      Margin="0" RowHeaderWidth="0" BorderThickness="1,1,1,0" CanUserAddRows="False"
+                      Background="Transparent" EnableRowVirtualization="False">
                 <DataGrid.Resources>
                     <LinearGradientBrush x:Key="ColumnHeaders" EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="Black" Offset="0.594"/>
@@ -157,14 +157,14 @@
                                 <ColumnDefinition Width="{Binding Columns[0].ActualWidth, ElementName=ActorsList}"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Image Grid.Column="1" Source="../Images/IMDbNew.png" Margin="10,0,0,0" MouseDown="ActorImdbMouseDown" ToolTip="{Binding Person.ImdbID, FallbackValue=Not Available, TargetNullValue=Not Available}"/>
+                            <Image Grid.Column="1" Source="../Images/IMDbNew.png" Margin="10,0,0,0" MouseDown="ActorImdbMouseDown" Tag="{Binding Person.ImdbID}" ToolTip="{Binding Person.ImdbID, FallbackValue=Not Available, TargetNullValue=Not Available}"/>
                             <Image Grid.Column="0" MaxWidth="{Binding Columns[0].ActualWidth, ElementName=ActorsList}" Source="{Binding Person.Thumb, IsAsync=True, TargetNullValue={StaticResource Person}, FallbackValue={StaticResource Person}}" Stretch="Uniform"/>
                         </Grid>
                     </DataTemplate>
                 </DataGrid.RowDetailsTemplate>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Person.Name}" Header="{t:Loc Actor}" IsReadOnly="True"/>
-                    <DataGridTextColumn Binding="{Binding Character, TargetNullValue={t:Loc Unknown}}" Header="{t:Loc Character}"/>
+                    <DataGridTextColumn Binding="{Binding Person.Name}" Header="{l:T Actor}" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding Character, TargetNullValue={l:T Unknown}}" Header="{l:T Character}" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>

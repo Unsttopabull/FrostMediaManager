@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
     xmlns:userControls="clr-namespace:RibbonUI.UserControls"
-    xmlns:t="http://wpflocalizeextension.codeplex.com"
+    xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
     xmlns:list="clr-namespace:RibbonUI.UserControls.List"
     x:Class="RibbonUI.UserControls.ContentGrid"
     x:Name="ContentGridControl"
@@ -14,6 +14,7 @@
     <!--MinWidth="{Binding MinRequiredWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"-->
 
     <UserControl.Resources>
+        <ObjectDataProvider x:Key="Cultures" ObjectInstance="{x:Static l:TranslationManager.Instance}" MethodName="get_Languages"/>
         <Style x:Key="BooleanImage" TargetType="{x:Type Image}">
             <Setter Property="Source" Value="../Images/error.ico" />
             <Style.Triggers>
@@ -83,7 +84,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBox Grid.Column="0" x:Name="ListFilter" BorderThickness="3,0,0,0"/>
-            <Button Grid.Column="2" ToolTip="{t:Loc Use advanced search}" Style="{StaticResource TransparentBorderlessButton}">
+            <Button Grid.Column="2" ToolTip="{l:T Use advanced search}" Style="{StaticResource TransparentBorderlessButton}">
                 <Image Source="../Images/filter.ico" Width="16" Height="16" />
             </Button>
         </Grid>
@@ -96,17 +97,17 @@
                   SnapsToDevicePixels="True" CanUserReorderColumns="False" SelectionMode="Single"
                   CellStyle="{StaticResource NoBorderCell}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="{t:Loc Title}" IsReadOnly="True" CanUserReorder="False" Binding="{Binding Title}" />
-                <DataGridTextColumn Header="{t:Loc Release year}" IsReadOnly="True"
+                <DataGridTextColumn Header="{l:T Title}" IsReadOnly="True" CanUserReorder="False" Binding="{Binding Title}" />
+                <DataGridTextColumn Header="{l:T Release year}" IsReadOnly="True"
                                     Binding="{Binding ReleaseYear, TargetNullValue={}, FallbackValue={}}" />
-                <DataGridCheckBoxColumn Header="{t:Loc Fanart}" IsReadOnly="True" CanUserReorder="False"
+                <DataGridCheckBoxColumn Header="{l:T Fanart}" IsReadOnly="True" CanUserReorder="False"
                                         Binding="{Binding HasArt, Mode=OneWay}"
                                         ElementStyle="{StaticResource ImageCheckBoxColumn}">
                     <DataGridCheckBoxColumn.HeaderTemplate>
                         <DataTemplate>
                             <ContentControl>
                                 <ToolTipService.ToolTip>
-                                    <ToolTip x:Name="HeaderTooltip" Content="{t:Loc Movie has available fanart images}" />
+                                    <ToolTip x:Name="HeaderTooltip" Content="{l:T Movie has available fanart images, Postfix=:}" />
                                 </ToolTipService.ToolTip>
                                 <Image x:Name="HeaderImage" Source="../Images/Headers/fanart.ico" Height="24" />
                             </ContentControl>
@@ -120,7 +121,7 @@
                         <DataTemplate>
                             <ContentControl>
                                 <ToolTipService.ToolTip>
-                                    <ToolTip x:Name="HeaderTooltip" Content="{t:Loc Movie has a .NFO metadata file}" />
+                                    <ToolTip x:Name="HeaderTooltip" Content="{l:T Movie has a .NFO metadata file, Postfix=:}" />
                                 </ToolTipService.ToolTip>
                                 <Image x:Name="HeaderImage" Source="../Images/Headers/nfo.ico" Height="24" />
                             </ContentControl>
@@ -134,7 +135,7 @@
                         <DataTemplate>
                             <ContentControl>
                                 <ToolTipService.ToolTip>
-                                    <ToolTip x:Name="HeaderTooltip" Content="{t:Loc Movie has available trailer}" />
+                                    <ToolTip x:Name="HeaderTooltip" Content="{l:T Movie has available trailer, Postfix=:}" />
                                 </ToolTipService.ToolTip>
                                 <Image x:Name="HeaderImage" Source="../Images/Headers/trailer2.ico" Height="24" />
                             </ContentControl>
@@ -148,7 +149,7 @@
                         <DataTemplate>
                             <ContentControl>
                                 <ToolTipService.ToolTip>
-                                    <ToolTip x:Name="HeaderTooltip" Content="{t:Loc Movie has available subtitles}" />
+                                    <ToolTip x:Name="HeaderTooltip" Content="{l:T Movie has available subtitles, Postfix=:}" />
                                 </ToolTipService.ToolTip>
                                 <Image x:Name="HeaderImage" Source="../Images/Headers/subtitles.ico" Height="20" />
                             </ContentControl>
@@ -163,7 +164,7 @@
                         <DataTemplate>
                             <ContentControl>
                                 <ToolTipService.ToolTip>
-                                    <ToolTip x:Name="HeaderTooltip" Content="{t:Loc If you have already seen this movie}" />
+                                    <ToolTip x:Name="HeaderTooltip" Content="{l:T If you have already seen this movie, Postfix=:}" />
                                 </ToolTipService.ToolTip>
                                 <Image x:Name="HeaderImage" Source="../Images/Headers/watched.ico" Height="24" />
                             </ContentControl>
@@ -193,32 +194,36 @@
                 <TabControl.DataContext>
                     <movieVo:Movie />
                 </TabControl.DataContext>
-                <TabItem Header="{t:Loc General Info}">
+                <TabItem Header="{l:T General Info}">
                     <userControls:ArtAndPlot x:Name="ArtAndPlot"
                                              DataContext="{Binding ElementName=MovieList, Path=SelectedItem}"
                                              Background="Transparent" />
                 </TabItem>
-                <TabItem Header="{t:Loc Trivia and goofs}">
-
+                <TabItem Header="{l:T Trivia and goofs}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <ComboBox ItemsSource="{Binding Source={StaticResource Cultures}}" DisplayMemberPath="DisplayName" SelectionChanged="LangSelectionChanged" Loaded="LangSelectLoaded"/>
+                    </Grid>
                 </TabItem>
-                <TabItem x:Name="MovieEditTab" x:FieldModifier="private" Header="{t:Loc Edit Movie info}">
-                    <userControls:EditMovie x:Name="EditMovie"
-                                    DataContext="{Binding ElementName=MovieList, Path=SelectedItem}"
-                                    />
+                <TabItem x:Name="MovieEditTab" x:FieldModifier="private" Header="{l:T Edit Movie info}">
+                    <userControls:EditMovie x:Name="EditMovie" DataContext="{Binding ElementName=MovieList, Path=SelectedItem}" />
                 </TabItem>
-                <TabItem Header="{t:Loc Subtitles}" x:Name="MovieSubtitles" GotFocus="MovieSubtitlesGotFocus" LostFocus="MovieSubtitlesOnLostFocus">
+                <TabItem Header="{l:T Subtitles}" x:Name="MovieSubtitles" GotFocus="MovieSubtitlesGotFocus" LostFocus="MovieSubtitlesOnLostFocus">
                     <list:ListSubtitles DataContext="{Binding ElementName=MovieList, Path=SelectedItem.Subtitles}"/>
                 </TabItem>
-                <TabItem Header="{t:Loc Videos}">
+                <TabItem Header="{l:T Videos}">
                     <list:ListVideos DataContext="{Binding ElementName=MovieList, Path=SelectedItem.Videos}"/>
                 </TabItem>
-                <TabItem Header="{t:Loc Audios}">
+                <TabItem Header="{l:T Audios}">
                     <list:ListAudios DataContext="{Binding ElementName=MovieList, Path=SelectedItem.Audios}"/>
                 </TabItem>
-                <TabItem Header="{t:Loc Promotional videos}" >
+                <TabItem Header="{l:T Promotional videos}" >
                     
                 </TabItem>
-                <TabItem Header="{t:Loc Art}">
+                <TabItem Header="{l:T Art}">
                     <list:ListArt DataContext="{Binding ElementName=MovieList, Path=SelectedItem.Art}"/>
                 </TabItem>
             </TabControl>

@@ -2,9 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
-        xmlns:lex="http://wpflocalizeextension.codeplex.com"
-        lex:LocalizeDictionary.DesignCulture="en-GB"
-        Title="{lex:Loc SelectCountry}" Height="212" Width="350" WindowStartupLocation="CenterOwner">
+        xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
+        Title="{l:T SelectCountry}" Height="212" Width="350" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <BitmapImage x:Key="UnknownCountry" UriSource="..\Images\unknown.png" />
     </Window.Resources>
@@ -30,7 +29,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Button Grid.Row="1" Grid.Column="0" Margin="5,5,5,5" Click="AddOnClick" Content="{lex:Loc Add}"/>
-        <Button Grid.Row="1" Grid.Column="1" Margin="5,5,5,5" Click="CancelOnClick" Content="{lex:Loc Cancel}"/>
+        <Button Grid.Row="1" Grid.Column="0" Margin="5,5,5,5" Click="AddOnClick" Content="{l:T Add}"/>
+        <Button Grid.Row="1" Grid.Column="1" Margin="5,5,5,5" Click="CancelOnClick" Content="{l:T Cancel}"/>
     </Grid>
 </Window>
