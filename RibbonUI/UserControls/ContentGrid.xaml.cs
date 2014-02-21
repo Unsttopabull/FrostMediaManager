@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shell;
 using Frost.Common.Annotations;
 using Frost.Common.Models.DB.MovieVo;
+using Frost.GettextMarkupExtension;
 using RibbonUI.Commands;
 
 namespace RibbonUI.UserControls {
@@ -98,7 +99,7 @@ namespace RibbonUI.UserControls {
             using (Bitmap bm = new Bitmap("Images/overlay.png")) {
                 using (Graphics g = Graphics.FromImage(bm)) {
                     g.DrawString(MovieList.Items.Count.ToString(CultureInfo.InvariantCulture), new Font("Arial", 16, System.Drawing.FontStyle.Bold),
-                        new SolidBrush(System.Drawing.Color.Red), 0, 7);
+                        new SolidBrush(Color.Red), 0, 7);
                 }
 
                 overlay.BeginInit();
@@ -115,13 +116,13 @@ namespace RibbonUI.UserControls {
                 ThumbButtonInfos = new ThumbButtonInfoCollection {
                     new ThumbButtonInfo {
                         ImageSource = new BitmapImage(new Uri("pack://application:,,,/RibbonUI;component/Images/go-next.png")),
-                        Description = "Go to next movie",
-                        Command = new RelayCommand(o => MovieList.SelectedIndex++, o => true),
+                        Description = TranslationManager.T("Go to next movie"),
+                        Command = new RelayCommand(() => MovieList.SelectedIndex++, o => true),
                     },
                     new ThumbButtonInfo {
                         ImageSource = new BitmapImage(new Uri("pack://application:,,,/RibbonUI;component/Images/go-previous.png")),
-                        Description = "Go to previous movie",
-                        Command = new RelayCommand(o => MovieList.SelectedIndex--, o => true),
+                        Description = TranslationManager.T("Go to previous movie"),
+                        Command = new RelayCommand(() => MovieList.SelectedIndex--, o => true),
                     }
                 }
             };

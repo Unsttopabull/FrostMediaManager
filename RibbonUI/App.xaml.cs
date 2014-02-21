@@ -40,15 +40,14 @@ namespace RibbonUI {
 
             if (Settings.Default.AudioCodecIdBindings == null) {
                 Settings.Default.AudioCodecIdBindings = new StringDictionary();
-                foreach (KeyValuePair<string, string> pair in FileFeatures.AudioCodecIdBindings) {
+                foreach (KeyValuePair<string, string> pair in FileFeatures.AudioCodecIdMappings) {
                     Settings.Default.AudioCodecIdBindings.Add(pair.Key, pair.Value);
                 }
             }
             else {
-                //FileFeatures.AudioCodecIdBindings = new ObservableDictionary<string, string>(Settings.Default.AudioCodecIdBindings.Count);
-                FileFeatures.AudioCodecIdBindings = new CodecIdMappingCollection();
+                FileFeatures.AudioCodecIdMappings = new CodecIdMappingCollection();
                 foreach (DictionaryEntry entry in Settings.Default.AudioCodecIdBindings) {
-                    FileFeatures.AudioCodecIdBindings.Add((string) entry.Key, (string) entry.Value);
+                    FileFeatures.AudioCodecIdMappings.Add((string) entry.Key, (string) entry.Value);
                 }
             }
 
@@ -59,12 +58,15 @@ namespace RibbonUI {
                 }
             }
             else {
-                //FileFeatures.VideoCodecIdMappings = new ObservableDictionary<string, string>(Settings.Default.AudioCodecIdBindings.Count);
-                FileFeatures.AudioCodecIdBindings = new CodecIdMappingCollection();
+                FileFeatures.AudioCodecIdMappings = new CodecIdMappingCollection();
                 foreach (DictionaryEntry entry in Settings.Default.VideoCodecIdBindings) {
                     FileFeatures.VideoCodecIdMappings.Add((string) entry.Key, (string) entry.Value);
                 }                
             }
+        }
+
+        internal static void SaveSettings() {
+            
         }
 
         private void UnhandledExeption(object sender, DispatcherUnhandledExceptionEventArgs e) {

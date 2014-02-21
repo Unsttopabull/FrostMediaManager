@@ -31,7 +31,7 @@ namespace Frost.DetectFeatures {
         private bool _error;
 
         static FileFeatures() {
-            AudioCodecIdBindings = new CodecIdMappingCollection {
+            AudioCodecIdMappings = new CodecIdMappingCollection {
                 new CodecIdBinding("A_AAC", "AAC"),
                 new CodecIdBinding("DD", "dolbydigital"),
                 new CodecIdBinding("ogg", "vorbis"),

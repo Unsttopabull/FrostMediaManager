@@ -9,8 +9,8 @@
         xmlns:vm="clr-namespace:RibbonUI.Windows.ViewModels"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
         xmlns:util="clr-namespace:RibbonUI.Util"
-        mc:Ignorable="d"
-        Title="AddCodecMapping" Height="615" Width="485" d:DataContext="{d:DesignInstance vm:AddCodecMappingViewModel}">
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:AddCodecMappingViewModel}"
+        Title="{l:T Add codec mapping}" Height="615" Width="485" Closed="AddCodecMappingOnClosed">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
@@ -31,12 +31,12 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Margin="-5,0,0,0" Content="{l:T Search, Postfix=:}"/>
-            <TextBox x:Name="SearchBox" Grid.Row="1"/>
+            <TextBox x:Name="SearchBox" Grid.Row="1" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
-        <ListBox x:Name="CodecsList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding KnownCodecs}" Margin="5,5,5,0" SelectionMode="Single" Loaded="CodecsList_OnLoaded" SelectedItem="{Binding SelectedCodec}">
+        <ListBox x:Name="CodecsList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding KnownCodecs}" Margin="5,5,5,0" SelectionMode="Single">
             <in:Interaction.Triggers>
                 <in:EventTrigger EventName="SelectionChanged">
-                    <i:ChangePropertyAction TargetName="NewCodecName" PropertyName="Text" Value="{x:Null}"/>
+                    <i:ChangePropertyAction TargetName="CodecMappingName" PropertyName="Text" Value="{Binding ElementName=CodecsList, Path=SelectedItem.CodecId}"/>
                 </in:EventTrigger>
             </in:Interaction.Triggers>
             <ListBox.ItemTemplate>
@@ -54,31 +54,33 @@
         </ListBox>
         <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Margin="5,0,5,5">
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="6*"/>
             </Grid.ColumnDefinitions>
-            <Image Source="{Binding ElementName=NewCodecImage, Path=Text, FallbackValue={StaticResource DefaultLogo}}" Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Margin="0,0,5,0" />
-            
-            <Label Grid.Row="0" Grid.Column="1" Margin="-5,0,0,0" Content="{l:T New codec id, Postfix=:}"/>
-            <Label x:Name="Error" Grid.Row="0" Grid.Column="2" Margin="-5,0,0,0" FlowDirection="RightToLeft" Foreground="Red" Visibility="{Binding IsError, Converter={StaticResource BooleanToVisibilityConverter}}">!The studio already exists</Label>
-            <TextBox x:Name="NewCodecName" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding NewCodecId, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" TextAlignment="Center" VerticalAlignment="Center" Text="{l:T Click to set logo}" Visibility="{Binding IsNew, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Image x:Name="Logo" Source="{Binding SelectedCodec.ImagePath, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}" MaxHeight="50" Grid.Column="0" Grid.Row="1" Grid.RowSpan="3" Margin="0,0,5,0">
+                <in:Interaction.Triggers>
+                    <in:EventTrigger EventName="MouseUp">
+                        <in:InvokeCommandAction Command="{Binding SeachNewLogoCommand}" CommandParameter="{Binding ElementName=CodecMappingName, Path=Text}"/>
+                    </in:EventTrigger>
+                </in:Interaction.Triggers>
+            </Image>
 
-            <Label Grid.Row="2" Grid.Column="1" Margin="-5,0,0,0" Content="{l:T New codec logo, Postfix=:}"/>
-            <TextBox x:Name="LogoBox" x:FieldModifier="private" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="2" Text="{Binding NewCodecIdLogo, UpdateSourceTrigger=PropertyChanged}"/>
-            <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,0,5,0" ToolTip="Open file search dialog">
-                <Button Height="16" Style="{StaticResource TransparentBorderlessButton}" Click="LogoSearchOnClick">
-                    <Image Source="../Images/folder.ico"/>
-                </Button>
-            </StackPanel>
+            <Label Grid.Row="0" Grid.Column="1" Margin="-5,0,0,0" Content="{l:T New codec id, Postfix=:}"/>
+            <Label Grid.Row="0" Grid.Column="2" Foreground="Red" HorizontalContentAlignment="Right" Content="{l:T The studio already exists, Postfix=!}" Visibility="{Binding IsError, Converter={StaticResource BooleanToVisibilityConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox x:Name="NewCodecName" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="1" VerticalContentAlignment="Center" Text="{Binding SelectedCodec.CodecId, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Label Grid.Row="2" Grid.Column="1" Margin="-5,0,0,0" Content="{l:T New codec mapping, Postfix=:}"/>
+            <TextBox x:Name="CodecMappingName" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" VerticalContentAlignment="Center" Text="{Binding SelectedCodec.Mapping, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
-        <Button Grid.Row="3" Grid.Column="0" Margin="5,5,5,5" Click="AddOnClick" Content="{l:T Add}" Command="{Binding AddCommand}" CommandParameter="{Binding ElementName=CodecMapping}"/>
-        <Button Grid.Row="3" Grid.Column="1" Margin="5,5,5,5" Click="CancelOnClick" Content="{l:T Cancel}"/>
+        <Button Grid.Row="3" Grid.Column="0" Margin="5,5,5,5" Content="{l:T Add}" Command="{Binding AddCommand}" CommandParameter="{Binding ElementName=CodecMapping}"/>
+        <Button Grid.Row="3" Grid.Column="1" Margin="5,5,5,5" Content="{l:T Cancel}" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=CodecMapping}"/>
     </Grid>
 </Window>

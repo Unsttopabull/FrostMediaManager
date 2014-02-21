@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:detectFeatures="clr-namespace:Frost.DetectFeatures;assembly=Frost.FeatureDetector"
              xmlns:validations="clr-namespace:RibbonUI.Validations"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" Loaded="FeatureDetectorSettingsLoaded"
+             Unloaded="FeatureDetectorSettingsUnloaded"
              d:DesignHeight="641" d:DesignWidth="522">
     <Grid Margin="5,0,5,0">
         <Grid.Resources>
@@ -62,12 +63,11 @@
                     <Image Source="../../Images/add.png" MaxHeight="16" />
                 </Button>
             </DockPanel>
-            <DataGrid x:Name="AudioCodecBindings" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"  MinHeight="100" ItemsSource="{x:Static detectFeatures:FileFeatures.AudioCodecIdBindings}" CanUserResizeRows="False"
-                      AutoGenerateColumns="False" CellStyle="{StaticResource NoBorderCell}" GridLinesVisibility="None" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed"
-                      RowValidationErrorTemplate="{DynamicResource RowValidationErrorIconTemplate}">
+            <DataGrid x:Name="AudioCodecBindings" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"  MinHeight="100" ItemsSource="{x:Static detectFeatures:FileFeatures.AudioCodecIdMappings}" CanUserResizeRows="False"
+                      AutoGenerateColumns="False" CellStyle="{StaticResource NoBorderCell}" GridLinesVisibility="None" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="0">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Codec Id" Binding="{Binding CodecId, ValidatesOnExceptions=True}" MinWidth="150"/>
-                    <DataGridTextColumn Header="Mapped codec" Binding="{Binding Mapping, ValidatesOnExceptions=True}" Width="*" />
+                    <DataGridTextColumn Header="Codec Id" Binding="{Binding CodecId}" MinWidth="150"/>
+                    <DataGridTextColumn Header="Mapped codec" Binding="{Binding Mapping}" IsReadOnly="True" Width="*" />
                 </DataGrid.Columns>
             </DataGrid>
 
@@ -81,11 +81,10 @@
                 </Button>
             </DockPanel>            
             <DataGrid x:Name="VideoCodecBindings" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" MinHeight="100" ItemsSource="{x:Static detectFeatures:FileFeatures.VideoCodecIdMappings}" CanUserResizeRows="False"
-                      AutoGenerateColumns="False" CellStyle="{StaticResource NoBorderCell}" GridLinesVisibility="None" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed"
-                      RowValidationErrorTemplate="{DynamicResource RowValidationErrorIconTemplate}">
+                      AutoGenerateColumns="False" CellStyle="{StaticResource NoBorderCell}" GridLinesVisibility="None" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="0">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Codec Id" Binding="{Binding CodecId, ValidatesOnExceptions=True}" MinWidth="150"/>
-                    <DataGridTextColumn Header="Mapped codec" Binding="{Binding Mapping, ValidatesOnExceptions=True}" Width="*" />
+                    <DataGridTextColumn Header="Codec Id" Binding="{Binding CodecId}" MinWidth="150"/>
+                    <DataGridTextColumn Header="Mapped codec" Binding="{Binding Mapping}" IsReadOnly="True" Width="*" />
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

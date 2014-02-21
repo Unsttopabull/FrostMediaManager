@@ -1,9 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Frost.DetectFeatures.Util {
 
     public class CodecIdMappingCollection : KeyedCollection<string, CodecIdBinding>, IEnumerable<KeyValuePair<string, string>> {
+
+        public CodecIdMappingCollection() : base(StringComparer.InvariantCultureIgnoreCase){
+        }
 
         public void Add(string codecId, string mapping) {
             Add(new CodecIdBinding(codecId, mapping));
@@ -17,7 +21,7 @@ namespace Frost.DetectFeatures.Util {
         }
 
         public bool ContainsKey(string key) {
-            return Contains(key);
+            return key != null && Contains(key);
         }
 
         public new string this[string codecId] {

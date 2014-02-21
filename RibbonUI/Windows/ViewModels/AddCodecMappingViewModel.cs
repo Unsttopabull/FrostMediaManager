@@ -1,72 +1,83 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using Frost.Common.Annotations;
+using Frost.DetectFeatures;
+using Frost.GettextMarkupExtension;
+using Microsoft.Win32;
 using RibbonUI.Commands;
 using RibbonUI.Util;
 
 namespace RibbonUI.Windows.ViewModels {
-    public class AddCodecMappingViewModel : DependencyObject, INotifyPropertyChanged {
-        private string _newCodecId;
-        private string _newCodecIdLogo;
-        private bool _isError;
+
+    public class AddCodecMappingViewModel : DependencyObject, INotifyPropertyChanged, IDisposable {
+        private readonly bool _isVideo;
         public event PropertyChangedEventHandler PropertyChanged;
+        private bool _isError;
+        private string _searchText;
+        private ICollectionView _collectionView;
+        private KnownCodec _selectedCodec;
+        private readonly IDisposable _searchTextObservable;
 
         public AddCodecMappingViewModel() {
-            AddCommand = new RelayCommand<AddCodecMapping>(acm => acm.Close(), OnCanExecute);
-        }
+            AddCommand = new RelayCommand<AddCodecMapping>(acm => {
+                acm.DialogResult = true;
+                acm.Close();
+            }, acm => SelectedCodec != null && !IsError && !string.IsNullOrEmpty(SelectedCodec.CodecId) && !string.IsNullOrEmpty(SelectedCodec.Mapping) && !string.IsNullOrEmpty(SelectedCodec.ImagePath));
 
-        private bool OnCanExecute(AddCodecMapping acm) {
-            return SelectedCodec != null && !IsError && !string.IsNullOrEmpty(SelectedCodec.CodecId) && !string.IsNullOrEmpty(SelectedCodec.ImagePath);
+            CancelCommand = new RelayCommand<Window>(w => {
+                w.DialogResult = false;
+                w.Close();
+            });
+
+            SeachNewLogoCommand = new RelayCommand<string>(mapping => {
+                OpenFileDialog ofd = new OpenFileDialog {
+                    CheckFileExists = true,
+                    Multiselect = false,
+                    Filter = TranslationManager.T("Image Files") + " (*.bmp, *.jpg, *.jpeg, *.png, *.gif, *.tiff)|*.bmp;*.jpg;*.jpeg;*.png;*.gif;*.tiff"
+                };
+
+                if (ofd.ShowDialog() == true) {
+                    SelectedCodec.ImagePath = "file://" + ofd.FileName;
+                }
+            }, mapping => !CheckCodecExists(mapping));
+
+            _searchTextObservable = Observable.FromEventPattern<PropertyChangedEventArgs>(this, "PropertyChanged")
+                                              .Where(ep => ep.EventArgs.PropertyName == "SearchText")
+                                              .Throttle(TimeSpan.FromSeconds(0.5))
+                                              .ObserveOn(SynchronizationContext.Current)
+                                              .Subscribe(obj => _collectionView.Refresh());
+
+            SelectedCodec = new KnownCodec(null, null);
         }
 
         public AddCodecMappingViewModel(bool isVideo) : this() {
+            _isVideo = isVideo;
             GetKnownCodecs(isVideo);
         }
 
-        private void GetKnownCodecs(bool isVideo) {
-            if (!Directory.Exists("Images/FlagsE")) {
-                KnownCodecs.Clear();
-                return;
+        public string SearchText {
+            get { return _searchText; }
+            set {
+                if (value == _searchText) {
+                    return;
+                }
+                _searchText = value;
+                OnPropertyChanged();
             }
-
-            DirectoryInfo di = new DirectoryInfo("Images/FlagsE");
-            KnownCodecs = isVideo
-                ? new ObservableCollection<KnownCodec>(di.EnumerateFiles("vcodec_*.png").Select(fi => new KnownCodec(fi.FullName, true)))
-                : new ObservableCollection<KnownCodec>(di.EnumerateFiles("acodec_*.png").Select(fi => new KnownCodec(fi.FullName, false)));
-
-            OnPropertyChanged("KnownCodecs");
         }
 
         public ObservableCollection<KnownCodec> KnownCodecs { get; set; }
-
-        public string NewCodecId {
-            get { return _newCodecId; }
-            set {
-                if (Equals(value, _newCodecId)) {
-                    return;
-                }
-
-                _newCodecId = value;
-
-                if (string.IsNullOrEmpty(value)) {
-                    return;
-                }
-
-                SelectedCodec = !string.IsNullOrEmpty(NewCodecIdLogo)
-                    ? new KnownCodec(value, NewCodecIdLogo)
-                    : new KnownCodec(value, null);
-
-                OnPropertyChanged("SelectedCodec");
-            }
-        }
 
         public bool IsError {
             get { return _isError; }
@@ -79,36 +90,85 @@ namespace RibbonUI.Windows.ViewModels {
             }
         }
 
-        public string NewCodecIdLogo {
-            get { return _newCodecIdLogo; }
-            set {
-                if (Equals(value, _newCodecIdLogo)) {
-                    return;
+        public bool IsNew {
+            get {
+                if (CheckCodecExists(SelectedCodec.Mapping)) {
+                    SelectedCodec.ImagePath = KnownCodecs.Where(kc => kc.CodecId.Equals(SelectedCodec.Mapping, StringComparison.CurrentCultureIgnoreCase))
+                                                         .Select(kc => kc.ImagePath)
+                                                         .FirstOrDefault();
+                    return false;
                 }
-
-                _newCodecIdLogo = value;
-
-                if (!string.IsNullOrEmpty(NewCodecId)) {
-                    SelectedCodec.ImagePath = value;
-                    OnPropertyChanged("SelectedCodec");
-                }
+                SelectedCodec.ImagePath = null;
+                return true;
             }
         }
 
-        public KnownCodec SelectedCodec { get; set; }
+        public KnownCodec SelectedCodec {
+            get { return _selectedCodec; }
+            set {
+                if (Equals(value, _selectedCodec)) {
+                    return;
+                }
+
+                if (_selectedCodec != null) {
+                    _selectedCodec.PropertyChanged -= SelectedCodecChanged;
+                }
+
+                _selectedCodec = value;
+                _selectedCodec.PropertyChanged += SelectedCodecChanged;
+
+                OnPropertyChanged("IsNew");
+                OnPropertyChanged();
+            }
+        }
+
+        private void SelectedCodecChanged(object sender, PropertyChangedEventArgs args) {
+            switch (args.PropertyName) {
+                case "CodecId":
+                    if (CheckCodecExists(_selectedCodec.CodecId)) {
+                        IsError = true;
+                        return;
+                    }
+                    IsError = false;
+                    break;
+                case "Mapping":
+                    OnPropertyChanged("IsNew");
+                    break;
+            }
+        }
 
         public ICommand AddCommand { get; private set; }
 
-        public void CheckCodecExists(EventPattern<TextChangedEventArgs> args) {
-            TextBox tb = (TextBox) args.EventArgs.Source;
+        public ICommand CancelCommand { get; private set; }
 
-            string newCodec = tb.Text;
-            if (KnownCodecs.Any(kc => kc.CodecId.Equals(newCodec, StringComparison.CurrentCultureIgnoreCase))) {
-                IsError = true;
+        public ICommand SeachNewLogoCommand { get; private set; }
+
+        private void GetKnownCodecs(bool isVideo) {
+            if (!Directory.Exists("Images/FlagsE")) {
+                KnownCodecs.Clear();
+                return;
             }
-            else if(IsError) {
-                IsError = false;
+
+            DirectoryInfo di = new DirectoryInfo("Images/FlagsE");
+            KnownCodecs = isVideo
+                              ? new ObservableCollection<KnownCodec>(di.EnumerateFiles("vcodec_*.png").Select(fi => new KnownCodec(fi.FullName, true)))
+                              : new ObservableCollection<KnownCodec>(di.EnumerateFiles("acodec_*.png").Select(fi => new KnownCodec(fi.FullName, false)));
+
+            _collectionView = CollectionViewSource.GetDefaultView(KnownCodecs);
+            _collectionView.Filter = Filter;
+
+            OnPropertyChanged("KnownCodecs");
+        }
+
+        private bool Filter(object obj) {
+            return ((KnownCodec) obj).CodecId.IndexOf(SearchText ?? "", StringComparison.CurrentCultureIgnoreCase) >= 0;
+        }
+
+        private bool CheckCodecExists(string value) {
+            if (_isVideo) {
+                return FileFeatures.VideoCodecIdMappings.ContainsKey(value) || KnownCodecs.Any(kc => kc.CodecId == value);
             }
+            return FileFeatures.AudioCodecIdMappings.ContainsKey(value) || KnownCodecs.Any(kc => kc.CodecId == value);
         }
 
         [NotifyPropertyChangedInvocator]
@@ -119,16 +179,29 @@ namespace RibbonUI.Windows.ViewModels {
             }
         }
 
-        public void CheckCodecExists2(object sender, TextChangedEventArgs e) {
-            TextBox tb = (TextBox) e.Source;
 
-            string newCodec = tb.Text;
-            if (KnownCodecs.Any(kc => kc.CodecId.Equals(newCodec, StringComparison.CurrentCultureIgnoreCase))) {
-                IsError = true;
+        public void Dispose() {
+            Dispose(false);
+        }
+
+        /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
+        private void Dispose(bool destructor) {
+            if (_searchTextObservable != null) {
+                _searchTextObservable.Dispose();
             }
-            else if(IsError) {
-                IsError = false;
+
+            if (_selectedCodec != null) {
+                _selectedCodec.PropertyChanged -= SelectedCodecChanged;
+            }
+
+            if (!destructor) {
+                GC.SuppressFinalize(this);
             }
         }
+
+        ~AddCodecMappingViewModel() {
+            Dispose(true);
+        }
     }
+
 }

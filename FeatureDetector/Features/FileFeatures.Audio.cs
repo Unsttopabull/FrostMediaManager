@@ -17,7 +17,7 @@ using FrameOrBitRateMode = Frost.Common.FrameOrBitRateMode;
 namespace Frost.DetectFeatures {
 
     public partial class FileFeatures : IDisposable {
-        public static CodecIdMappingCollection AudioCodecIdBindings;
+        public static CodecIdMappingCollection AudioCodecIdMappings;
 
         private void GetISOAudioInfo() {
         }
@@ -66,13 +66,13 @@ namespace Frost.DetectFeatures {
 
         private string GetAudioCodecId(string codec, string id) {
             if (string.IsNullOrEmpty(id) || id.All(char.IsNumber)) {
-                return AudioCodecIdBindings.ContainsKey(codec)
-                    ? AudioCodecIdBindings[codec]
+                return AudioCodecIdMappings.ContainsKey(codec)
+                    ? AudioCodecIdMappings[codec]
                     : codec;
             }
 
-            return AudioCodecIdBindings.ContainsKey(id)
-                ? AudioCodecIdBindings[id]
+            return AudioCodecIdMappings.ContainsKey(id)
+                ? AudioCodecIdMappings[id]
                 : id;
         }
 

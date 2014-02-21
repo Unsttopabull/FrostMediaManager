@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:properties="clr-namespace:RibbonUI.Properties"
         xmlns:settings="clr-namespace:RibbonUI.UserControls.Settings"
+        xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
         Loaded="WindowLoaded"
         Title="Settings" Height="575" Width="630" Background="#BCD6F5"
         DataContext="{x:Static properties:Settings.Default}">
@@ -106,7 +107,7 @@
                 <ListBox.Items>
                     <TextBlock>UI and search folders</TextBlock>
                     <TextBlock>Feature detector</TextBlock>
-                    <TextBlock>Add-ins</TextBlock>
+                    <TextBlock>File name parser</TextBlock>
                     <TextBlock>ActiveX Settings</TextBlock>
                     <TextBlock>Macro Settings</TextBlock>
                     <TextBlock>Message Bar</TextBlock>
@@ -154,7 +155,7 @@
                         </Style.Triggers>
                     </Style>
                 </TabItem.Style>
-                <Label>Label 3</Label>
+                <settings:FileNameParserSettings DataContext="{Binding}"/>
             </TabItem>
         </TabControl>
         <GridSplitter HorizontalAlignment="Right" Margin="0,5,0,5"
@@ -163,8 +164,8 @@
                       Width="2" Background="#FFBCBCBC" />
 
         <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,5,5" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button MinWidth="100" Margin="0,0,10,0" Click="CloseClick">Canel</Button>
-            <Button MinWidth="100" Click="SaveClick">Save</Button>
+            <Button MinWidth="100" Margin="0,0,10,0" Click="CloseClick" Content="{l:T Cancel}"/>
+            <Button MinWidth="100" Click="SaveClick" Content="{l:T Save}"/>
         </StackPanel>
     </Grid>
 </Window>
