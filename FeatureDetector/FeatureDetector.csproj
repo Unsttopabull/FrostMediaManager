@@ -59,6 +59,8 @@
   <ItemGroup>
     <Compile Include="FeatureDetector.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Util\CodecIdBinding.cs" />
+    <Compile Include="Util\CodecIdMappingCollection.cs" />
     <Compile Include="Features\FileFeatures.Art.cs" />
     <Compile Include="Features\FileFeatures.Audio.cs" />
     <Compile Include="Features\FileFeatures.cs" />
@@ -73,10 +75,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Util\AspectRatio\AspectRatioInfo.cs" />
-    <Compile Include="Util\FileNameInfo.cs">
+    <Compile Include="FileName\FileNameInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Util\FileNameParser.cs" />
+    <Compile Include="FileName\FileNameParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\GenericKeyedCollection.cs" />
     <Compile Include="Util\SubtitleLanguage.cs">

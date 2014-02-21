@@ -34,5 +34,72 @@ namespace RibbonUI.Properties {
                 this["FirstRun"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection SearchFolders {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["SearchFolders"]));
+            }
+            set {
+                this["SearchFolders"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("(Default)")]
+        public global::System.Globalization.CultureInfo UICulture {
+            get {
+                return ((global::System.Globalization.CultureInfo)(this["UICulture"]));
+            }
+            set {
+                this["UICulture"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection KnownSubtitleFormats {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["KnownSubtitleFormats"]));
+            }
+            set {
+                this["KnownSubtitleFormats"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection KnownSubtitleExtensions {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["KnownSubtitleExtensions"]));
+            }
+            set {
+                this["KnownSubtitleExtensions"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringDictionary AudioCodecIdBindings {
+            get {
+                return ((global::System.Collections.Specialized.StringDictionary)(this["AudioCodecIdBindings"]));
+            }
+            set {
+                this["AudioCodecIdBindings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringDictionary VideoCodecIdBindings {
+            get {
+                return ((global::System.Collections.Specialized.StringDictionary)(this["VideoCodecIdBindings"]));
+            }
+            set {
+                this["VideoCodecIdBindings"] = value;
+            }
+        }
     }
 }

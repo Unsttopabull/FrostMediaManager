@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using Frost.Common;
 using Frost.Common.Util.ISO;
 
-namespace Frost.DetectFeatures.Util {
+namespace Frost.DetectFeatures.FileName {
 
     public enum SegmentType {
         Unknown,

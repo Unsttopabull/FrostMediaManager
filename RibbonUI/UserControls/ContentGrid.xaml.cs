@@ -1,17 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
-using System.Linq;
+using System.IO;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media.Imaging;
+using System.Windows.Shell;
 using Frost.Common.Annotations;
 using Frost.Common.Models.DB.MovieVo;
-using Frost.GettextMarkupExtension;
-using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
+using RibbonUI.Commands;
 
 namespace RibbonUI.UserControls {
 
@@ -74,6 +76,7 @@ namespace RibbonUI.UserControls {
                 _collectionView.SortDescriptions.Add(new SortDescription("Title", ListSortDirection.Ascending));
                 _collectionView.Filter = Filter;
             }
+            ChangeTaskBarItems();
         }
 
         private void MovieListSelectedChanged(object sender, SelectedCellsChangedEventArgs e) {
@@ -88,28 +91,41 @@ namespace RibbonUI.UserControls {
             }
         }
 
-        private void LangSelectionChanged(object sender, SelectionChangedEventArgs e) {
-            ComboBox comboBox = (ComboBox) sender;
-            if (comboBox.SelectedIndex != -1) {
-                CultureInfo ci = (CultureInfo) comboBox.SelectedItem;
+        private void ChangeTaskBarItems() {
+            Window window = Window.GetWindow(this);
 
-                TranslationManager.CurrentCulture = ci;
+            BitmapImage overlay = new BitmapImage();
+            using (Bitmap bm = new Bitmap("Images/overlay.png")) {
+                using (Graphics g = Graphics.FromImage(bm)) {
+                    g.DrawString(MovieList.Items.Count.ToString(CultureInfo.InvariantCulture), new Font("Arial", 16, System.Drawing.FontStyle.Bold),
+                        new SolidBrush(System.Drawing.Color.Red), 0, 7);
+                }
+
+                overlay.BeginInit();
+                MemoryStream ms = new MemoryStream();
+                bm.Save(ms, ImageFormat.Png);
+
+                ms.Seek(0, SeekOrigin.Begin);
+                overlay.StreamSource = ms;
+                overlay.EndInit();
             }
 
-        }
-
-        private void LangSelectLoaded(object sender, RoutedEventArgs e) {
-            ComboBox comboBox = (ComboBox) sender;
-            List<CultureInfo> itemsSource = (List<CultureInfo>) comboBox.ItemsSource;
-            
-            CultureInfo uiCultureTranslation = TranslationManager.Instance.Languages.FirstOrDefault(t =>
-                t.Equals(Thread.CurrentThread.CurrentUICulture) || //check specific culture
-                t.Equals(Thread.CurrentThread.CurrentUICulture.Parent //check neutral culture
-            ));
-
-            if (uiCultureTranslation != null) {
-                comboBox.SelectedItem = uiCultureTranslation;
-            }
+            TaskbarItemInfo taskbarItemInfo = new TaskbarItemInfo {
+                Overlay = overlay,
+                ThumbButtonInfos = new ThumbButtonInfoCollection {
+                    new ThumbButtonInfo {
+                        ImageSource = new BitmapImage(new Uri("pack://application:,,,/RibbonUI;component/Images/go-next.png")),
+                        Description = "Go to next movie",
+                        Command = new RelayCommand(o => MovieList.SelectedIndex++, o => true),
+                    },
+                    new ThumbButtonInfo {
+                        ImageSource = new BitmapImage(new Uri("pack://application:,,,/RibbonUI;component/Images/go-previous.png")),
+                        Description = "Go to previous movie",
+                        Command = new RelayCommand(o => MovieList.SelectedIndex--, o => true),
+                    }
+                }
+            };
+            window.TaskbarItemInfo = taskbarItemInfo;
         }
     }
 

@@ -1,7 +1,6 @@
 ﻿using System;
-using Frost.DetectFeatures.Util.AspectRatio;
 
-namespace Frost.DetectFeatures.Util {
+namespace Frost.DetectFeatures.Util.AspectRatio {
 
     //list of aspect ratios adapted from https://code.google.com/p/moviejukebox/source/browse/trunk/moviejukebox/yamj/src/main/java/com/moviejukebox/tools/AspectRatioTools.java
 

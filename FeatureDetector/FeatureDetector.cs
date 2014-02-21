@@ -7,6 +7,7 @@ using System.Security;
 using System.Text.RegularExpressions;
 using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
+using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
 using Frost.SharpMediaInfo;
 
@@ -28,6 +29,7 @@ namespace Frost.DetectFeatures {
         private int _count;
         private readonly string[] _filePaths;
         private static Regex _mediaFileRegex;
+        private static List<string> _videoExtensions;
         private const string REGEX_FORMAT = @"(?!sample).*\.({0})$";
 
         static FeatureDetector() {
@@ -46,25 +48,16 @@ namespace Frost.DetectFeatures {
             _mediaFileRegex = new Regex(string.Format(REGEX_FORMAT, string.Join("|", VideoExtensions)), RegexOptions.IgnoreCase);
         }
 
-        public static List<string> VideoExtensions { get; private set; }
+        public static List<string> VideoExtensions {
+            get { return _videoExtensions; }
+            set {
+                _videoExtensions = value;
+                _mediaFileRegex = new Regex(string.Format(REGEX_FORMAT, string.Join("|", VideoExtensions)), RegexOptions.IgnoreCase);
+            }
+        }
 
         public FeatureDetector(params string[] filePaths) {
             _filePaths = filePaths;
-        }
-
-        public static void AddExtension(string ext) {
-            if (!VideoExtensions.Contains(ext)) {
-                VideoExtensions.Add(ext);
-                _mediaFileRegex = new Regex(string.Format(REGEX_FORMAT, string.Join("|", VideoExtensions)), RegexOptions.IgnoreCase);
-            }
-        }
-
-        public static bool RemoveExtension(string ext) {
-            bool wasRemoved = VideoExtensions.Remove(ext);
-            if (wasRemoved) {
-                _mediaFileRegex = new Regex(string.Format(REGEX_FORMAT, string.Join("|", VideoExtensions)), RegexOptions.IgnoreCase);
-            }
-            return wasRemoved;
         }
 
         public void Search() {

@@ -525,9 +525,7 @@ namespace SecondLanguage {
             get { return Translate(id, args); }
         }
 
-        /// <summary>
-        /// A default <see cref="Translator"/>.
-        /// </summary>
+        /// <summary>A default <see cref="Translator"/>.</summary>
         public static Translator Default { get { return Singleton; } }
 
         public static CultureInfo SelectedCulture {

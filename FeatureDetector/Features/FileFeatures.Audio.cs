@@ -1,8 +1,12 @@
 ﻿using System;
-using System.CodeDom;
+using System.Collections.Generic;
 using System.Linq;
+using DrWPF.Windows.Data;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.Files;
+using Frost.Common.Util;
+using Frost.Common.Util.System.Collections.ObjectModel;
+using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
 using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
@@ -13,6 +17,8 @@ using FrameOrBitRateMode = Frost.Common.FrameOrBitRateMode;
 namespace Frost.DetectFeatures {
 
     public partial class FileFeatures : IDisposable {
+        public static CodecIdMappingCollection AudioCodecIdBindings;
+
         private void GetISOAudioInfo() {
         }
 
@@ -60,57 +66,14 @@ namespace Frost.DetectFeatures {
 
         private string GetAudioCodecId(string codec, string id) {
             if (string.IsNullOrEmpty(id) || id.All(char.IsNumber)) {
-
-                switch (codec) {
-                    case "A_AAC":
-                    case "AAC LC":
-                    case "AAC LC-SBR":
-                        return "AAC";
-                    case "A_MPEG/L3":
-                        return "MP3";
-                    case "A_DTS":
-                        return "DTS";
-                    case "A_AC3":
-                        return "AC3";
-                    case "MPA1L3":
-                    case "MPA2L3":
-                        return "MP3";
-                    case "MPA1L2":
-                        return "MP2";
-                    case "MPA1L1":
-                        return "MP1";
-                    case "MPEG-2A":
-                        return "mpeg2";
-                    case "MPEG-1A":
-                        return "mpeg";
-                    case "161":
-                        return "wma";
-                    default:
-                        return codec;
-                }
+                return AudioCodecIdBindings.ContainsKey(codec)
+                    ? AudioCodecIdBindings[codec]
+                    : codec;
             }
 
-            switch (id) {
-                case "A_AAC":
-                case "AAC LC":
-                case "AAC LC-SBR":
-                    return "AAC";
-                case "A_MPEG/L3":
-                    return "MP3";
-                case "A_DTS":
-                    return "DTS";
-                case "A_AC3":
-                    return "AC3";
-                case "MPA1L3":
-                case "MPA2L3":
-                    return "MP3";
-                case "MPA1L2":
-                    return "MP2";
-                case "MPA1L1":
-                    return "MP1";
-                default:
-                    return id;
-            }
+            return AudioCodecIdBindings.ContainsKey(id)
+                ? AudioCodecIdBindings[id]
+                : id;
         }
 
         private void AddFileNameInfo(FileNameInfo fnInfo, Audio audio) {

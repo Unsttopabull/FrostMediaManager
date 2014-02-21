@@ -9,20 +9,22 @@ namespace Frost.GettextMarkupExtension {
 
     public class SecondLanguageTranslationProvider : IGettextProvider {
         private IEnumerable<CultureInfo> _availableLanguages;
-        private readonly Translator _translator = Translator.Default;
+        private readonly Translator _translator;
 
         public string DirectoryPath { get; set; }
 
         public string ResourceName { get; set; }
 
         public SecondLanguageTranslationProvider(string directoryPath, string resourceName = null) {
+            _translator = Translator.Default;
+
             DirectoryPath = directoryPath;
             if (resourceName != null) {
                 ResourceName = resourceName;
             }
 
-            Translator.SelectedCulture = Thread.CurrentThread.CurrentUICulture;
             RefreshAvailableCulutres();
+            SelectedCulture = Thread.CurrentThread.CurrentUICulture;
         }
 
         public void RefreshAvailableCulutres() {
@@ -138,6 +140,7 @@ namespace Frost.GettextMarkupExtension {
             set {
                 Translator.SelectedCulture = value;
             }
+            get { return Translator.SelectedCulture; }
         }
 
     }

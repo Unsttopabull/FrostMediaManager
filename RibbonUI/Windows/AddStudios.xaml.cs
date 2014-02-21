@@ -53,11 +53,12 @@ namespace RibbonUI.Windows {
         }
 
         private void StudiosList_Loaded(object sender, RoutedEventArgs e) {
-            ICollectionView view = StudiosList.ItemsSource as ICollectionView;
-            if (view != null) {
-                _collectionView = CollectionViewSource.GetDefaultView(view);
-                _collectionView.Filter = Filter;
+            if (StudiosList.ItemsSource == null) {
+                return;
             }
+
+            _collectionView = CollectionViewSource.GetDefaultView(StudiosList.ItemsSource);
+            _collectionView.Filter = Filter;
         }
 
         private bool Filter(object obj) {

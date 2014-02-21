@@ -46,7 +46,7 @@
             </StackPanel>
         </Grid>
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button MinWidth="100" Click="Button_Click" Content="{l:T OK, Postfix=:}"/>
+            <Button MinWidth="100" Click="Button_Click" Content="{l:T OK}"/>
         </StackPanel>
     </Grid>
 </Window>

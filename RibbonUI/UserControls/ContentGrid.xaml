@@ -14,7 +14,6 @@
     <!--MinWidth="{Binding MinRequiredWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"-->
 
     <UserControl.Resources>
-        <ObjectDataProvider x:Key="Cultures" ObjectInstance="{x:Static l:TranslationManager.Instance}" MethodName="get_Languages"/>
         <Style x:Key="BooleanImage" TargetType="{x:Type Image}">
             <Setter Property="Source" Value="../Images/error.ico" />
             <Style.Triggers>
@@ -95,7 +94,7 @@
                   AlternatingRowBackground="{StaticResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}"
                   GridLinesVisibility="None" RowHeight="20" CanUserResizeColumns="False" CanUserResizeRows="False"
                   SnapsToDevicePixels="True" CanUserReorderColumns="False" SelectionMode="Single"
-                  CellStyle="{StaticResource NoBorderCell}">
+                  CellStyle="{StaticResource NoBorderCell}" d:DataContext="{d:DesignInstance movieVo:Movie}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="{l:T Title}" IsReadOnly="True" CanUserReorder="False" Binding="{Binding Title}" />
                 <DataGridTextColumn Header="{l:T Release year}" IsReadOnly="True"
@@ -200,13 +199,6 @@
                                              Background="Transparent" />
                 </TabItem>
                 <TabItem Header="{l:T Trivia and goofs}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <ComboBox ItemsSource="{Binding Source={StaticResource Cultures}}" DisplayMemberPath="DisplayName" SelectionChanged="LangSelectionChanged" Loaded="LangSelectLoaded"/>
-                    </Grid>
                 </TabItem>
                 <TabItem x:Name="MovieEditTab" x:FieldModifier="private" Header="{l:T Edit Movie info}">
                     <userControls:EditMovie x:Name="EditMovie" DataContext="{Binding ElementName=MovieList, Path=SelectedItem}" />

@@ -1,13 +1,18 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using DrWPF.Windows.Data;
 using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.Files;
+using Frost.Common.Util;
+using Frost.Common.Util.System.Collections.ObjectModel;
+using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
 using Frost.DetectFeatures.Util.AspectRatio;
 using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
+using Frost.SharpMediaInfo.Output.Properties.Codecs;
 using Frost.SharpOpenSubtitles.Util;
 
 using CompressionMode = Frost.Common.CompressionMode;
@@ -18,6 +23,7 @@ using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
 namespace Frost.DetectFeatures {
 
     public partial class FileFeatures : IDisposable {
+        public static CodecIdMappingCollection VideoCodecIdMappings;
 
         private void GetISOVideoInfo() {
         }
@@ -145,25 +151,17 @@ namespace Frost.DetectFeatures {
         }
 
         private string GetVideoCodecId(string codec, string id) {
-            switch (codec) {
-                case "MPEG-1 Video":
-                    return "mpeg";
-                case "MPEG-2 Video":
-                    return "mpeg2";
-                case "Xvid":
-                    return codec;
+            if (VideoCodecIdMappings.ContainsKey(codec)) {
+                return VideoCodecIdMappings[codec];
             }
 
             if (string.IsNullOrEmpty(id) || id.All(char.IsNumber)) {
                 return null;
             }
 
-            switch (id) {
-                case "V_MPEG4/ISO/AVC":
-                    return "h264";
-                default:
-                    return id;
-            }
+            return VideoCodecIdMappings.ContainsKey(id)
+                ? VideoCodecIdMappings[id]
+                : id;
         }
 
         private void AddFileNameInfo(FileNameInfo fnInfo, Video video) {

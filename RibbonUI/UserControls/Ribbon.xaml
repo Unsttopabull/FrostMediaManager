@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:RibbonUI" xmlns:local1="clr-namespace:RibbonUI.UserControls"
     xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
     x:Name="UserControl" x:Class="RibbonUI.UserControls.Ribbon"
     mc:Ignorable="d"
@@ -44,7 +43,7 @@
                 <RibbonApplicationMenu.AuxiliaryPaneContent>
                     <RibbonGallery />
                 </RibbonApplicationMenu.AuxiliaryPaneContent>
-                <RibbonApplicationMenuItem Header="Options" ImageSource="../Images/options.png" />
+                <RibbonApplicationMenuItem Header="Options" ImageSource="../Images/options.png" Click="MenuItemOptionsOnClick"/>
             </RibbonApplicationMenu>
         </Ribbon.ApplicationMenu>
 

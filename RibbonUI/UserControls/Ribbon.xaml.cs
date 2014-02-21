@@ -37,6 +37,11 @@ namespace RibbonUI.UserControls {
 
             //((MainWindow)((Grid)Parent).Parent).ContentGrid.;
         }
+
+        private void MenuItemOptionsOnClick(object sender, RoutedEventArgs e) {
+            SettingsWindow sw = new SettingsWindow { Owner = Window.GetWindow(this) };
+            sw.ShowDialog();
+        }
     }
 
 }

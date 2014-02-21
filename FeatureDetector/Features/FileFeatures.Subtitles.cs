@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.Common.Util.ISO;
+using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
 using Frost.SharpCharsetDetector;
 using Frost.SharpLanguageDetect;
@@ -20,17 +21,18 @@ using Language = Frost.Common.Models.DB.MovieVo.Language;
 namespace Frost.DetectFeatures {
 
     public partial class FileFeatures : IDisposable {
-        private static readonly List<string> KnownSubtitleExtensions;
-        private static readonly List<string> KnownSubtitleFormats;
-        private static string SubtitleExtensionsRegex;
+        private static string _subtitleExtensionsRegex;
         private readonly MD5 _md5 = MD5.Create();
+
+        public static List<string> KnownSubtitleExtensions { get; set; }
+        public static List<string> KnownSubtitleFormats { get; set; }
 
         private void GetSubtitles(FileVo file) {
             GetSubtitlesInFile(file);
 
 
             //regex from matching files with the same name but with a known subtitle extension
-            string regex = string.Format(@"{0}{1}", Regex.Escape(Path.GetFileNameWithoutExtension(file.NameWithExtension) ?? ""), SubtitleExtensionsRegex);
+            string regex = string.Format(@"{0}{1}", Regex.Escape(Path.GetFileNameWithoutExtension(file.NameWithExtension) ?? ""), _subtitleExtensionsRegex);
             IEnumerable<MediaListFile> mediaFiles = _directoryInfo.EnumerateFilesRegex(regex)
                                                                   .Select(fi => _mf.GetOrOpen(fi.FullName))
                                                                   .Where(mediaFile => mediaFile != null);
@@ -203,7 +205,7 @@ namespace Frost.DetectFeatures {
             KnownSubtitleExtensions.Add(extension);
             KnownSubtitleExtensions.Sort();
 
-            SubtitleExtensionsRegex = string.Format(@"\.({0})", string.Join("|", KnownSubtitleExtensions));
+            _subtitleExtensionsRegex = string.Format(@"\.({0})", string.Join("|", KnownSubtitleExtensions));
             return true;
         }
 
@@ -215,7 +217,7 @@ namespace Frost.DetectFeatures {
 
             KnownSubtitleExtensions.RemoveAt(index);
 
-            SubtitleExtensionsRegex = string.Format(@"\.({0})", string.Join("|", KnownSubtitleExtensions));
+            _subtitleExtensionsRegex = string.Format(@"\.({0})", string.Join("|", KnownSubtitleExtensions));
             return true;
         }
 

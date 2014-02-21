@@ -195,6 +195,6 @@
             <TextBlock Text="{Binding ElementName=ChannelPicker, Path=ChannelPositions, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
 
-        <Button Grid.Column="4" Grid.Row="1" Margin="0,0,5,5" Height="25" Click="CloseOnClick" Content="{l:T Close, Postfix=:}"/>
+        <Button Grid.Column="4" Grid.Row="1" Margin="0,0,0,5" Height="25" Click="CloseOnClick" Content="{l:T Close}"/>
     </Grid>
 </Window>

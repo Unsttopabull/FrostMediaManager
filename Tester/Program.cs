@@ -18,6 +18,7 @@ using Frost.Common.Util;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures;
 using System.Diagnostics;
+using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
 using Frost.MovieInfoParsers.GremoVKino;
 using Frost.PHPtoNET;

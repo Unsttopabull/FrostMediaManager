@@ -4,7 +4,7 @@ using System.Globalization;
 using Frost.Common;
 using Frost.Common.Util.ISO;
 
-namespace Frost.DetectFeatures.Util {
+namespace Frost.DetectFeatures.FileName {
 
 
 

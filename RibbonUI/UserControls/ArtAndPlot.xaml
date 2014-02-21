@@ -9,6 +9,7 @@
     xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
+    xmlns:controls="clr-namespace:RibbonUI.Controls"
     x:Class="RibbonUI.UserControls.ArtAndPlot"
     mc:Ignorable="d"
     d:DesignHeight="625" d:DesignWidth="1071">
@@ -103,10 +104,10 @@
                 </ListView>
             </Grid>
         </Border>
-        <Border x:Name="border" Grid.Row="2" Grid.Column="3" CornerRadius="20" BorderThickness="10,5,0,5">
-            <Border.Background>
+        <controls:ClippingBorder x:Name="border" Grid.Row="2" Grid.Column="3" CornerRadius="20" BorderThickness="10,5,0,5">
+            <controls:ClippingBorder.Background>
                 <SolidColorBrush Color="Black" Opacity="0.8" />
-            </Border.Background>
+            </controls:ClippingBorder.Background>
             <DataGrid x:Name="ActorsList" AutoGenerateColumns="False" GridLinesVisibility="None" SelectionMode="Single"
                       CanUserResizeColumns="False" CanUserResizeRows="False" ItemsSource="{Binding ActorsLink}"
                       BorderBrush="Transparent" CanUserReorderColumns="False" ClipToBounds="True" MinRowHeight="20" MinColumnWidth="50"
@@ -167,7 +168,7 @@
                     <DataGridTextColumn Binding="{Binding Character, TargetNullValue={l:T Unknown}}" Header="{l:T Character}" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
-        </Border>
+        </controls:ClippingBorder>
         <StackPanel Grid.Column="2" Grid.Row="3" Orientation="Horizontal">
             <userControls:AwardStack Won="{Binding NumberOfOscarsWon}"
                               Nominated="{Binding NumberOfOscarNominations}"
