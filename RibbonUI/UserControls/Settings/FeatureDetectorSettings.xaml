@@ -1,92 +1,94 @@
 ﻿<UserControl x:Class="RibbonUI.UserControls.Settings.FeatureDetectorSettings"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:detectFeatures="clr-namespace:Frost.DetectFeatures;assembly=Frost.FeatureDetector"
-             xmlns:validations="clr-namespace:RibbonUI.Validations"
              mc:Ignorable="d" Loaded="FeatureDetectorSettingsLoaded"
              Unloaded="FeatureDetectorSettingsUnloaded"
              d:DesignHeight="641" d:DesignWidth="522">
     <Grid Margin="5,0,5,0">
         <Grid.Resources>
             <Style TargetType="{x:Type Label}">
-                <Setter Property="Margin" Value="-5,0,0,0"/>
+                <Setter Property="Margin" Value="-5,0,0,0" />
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="1" Margin="0,5,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <DockPanel Grid.Row="0" Grid.Column="0" LastChildFill="False">
-                <Label>File extensions to search for:</Label>
-                <Button DockPanel.Dock="Right" Click="RemoveFileExtensionClicked" Style="{StaticResource TransparentBorderlessButton}">
-                    <Image Source="../../Images/remove.png" MaxHeight="16" />
-                </Button>
-                <Button DockPanel.Dock="Right" Click="AddFileExtensionClicked" Style="{StaticResource TransparentBorderlessButton}">
-                    <Image Source="../../Images/add.png" MaxHeight="16" />
-                </Button>
-            </DockPanel>
-            <ListBox x:Name="VideoExtensionList" Grid.Row="1" Grid.Column="0" MinHeight="100" ItemsSource="{x:Static detectFeatures:FeatureDetector.VideoExtensions}"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.Row="0" Grid.Column="0" LastChildFill="False">
+            <Label>File extensions to search for:</Label>
+            <Button DockPanel.Dock="Right" Click="RemoveFileExtensionClicked"
+                    Style="{StaticResource TransparentBorderlessButton}">
+                <Image Source="../../Images/remove.png" MaxHeight="16" />
+            </Button>
+            <Button DockPanel.Dock="Right" Click="AddFileExtensionClicked"
+                    Style="{StaticResource TransparentBorderlessButton}">
+                <Image Source="../../Images/add.png" MaxHeight="16" />
+            </Button>
+        </DockPanel>
+        <ListBox x:Name="VideoExtensionList" Grid.Row="1" Grid.Column="0" MinHeight="100"
+                 ItemsSource="{x:Static detectFeatures:FeatureDetector.VideoExtensions}" />
 
-            <DockPanel Grid.Row="0" Grid.Column="2" LastChildFill="False">
-                <Label>Subtitle extensions to search for:</Label>
-                <Button DockPanel.Dock="Right" Click="RemoveSubtitleFileExtensionClicked" Style="{StaticResource TransparentBorderlessButton}">
-                    <Image Source="../../Images/remove.png" MaxHeight="16" />
-                </Button>
-                <Button DockPanel.Dock="Right" Click="AddSubtitleFileExtensionClicked" Style="{StaticResource TransparentBorderlessButton}">
-                    <Image Source="../../Images/add.png" MaxHeight="16" />
-                </Button>
-            </DockPanel>
-            <ListBox x:Name="SubtitleExtensionList" Grid.Row="1" Grid.Column="2" MinHeight="100" ItemsSource="{x:Static detectFeatures:FileFeatures.KnownSubtitleExtensions}"/>
+        <DockPanel Grid.Row="0" Grid.Column="2" LastChildFill="False">
+            <Label>Subtitle extensions to search for:</Label>
+            <Button DockPanel.Dock="Right" Click="RemoveSubtitleFileExtensionClicked" Style="{StaticResource TransparentBorderlessButton}">
+                <Image Source="../../Images/remove.png" MaxHeight="16" />
+            </Button>
+            <Button DockPanel.Dock="Right" Click="AddSubtitleFileExtensionClicked" Style="{StaticResource TransparentBorderlessButton}">
+                <Image Source="../../Images/add.png" MaxHeight="16" />
+            </Button>
+        </DockPanel>
+        <ListBox x:Name="SubtitleExtensionList" Grid.Row="1" Grid.Column="2" MinHeight="100"
+                 ItemsSource="{x:Static detectFeatures:FileFeatures.KnownSubtitleExtensions}" />
 
-            <DockPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" LastChildFill="False">
-                <Label DockPanel.Dock="Left">Custom audio codec mappings:</Label>
-                <Button DockPanel.Dock="Right" Click="RemoveAudioCodecMappingClicked" Style="{StaticResource TransparentBorderlessButton}">
-                    <Image Source="../../Images/remove.png" MaxHeight="16" />
-                </Button>
-                <Button DockPanel.Dock="Right" Click="AddAudioCodecMappingClicked" Style="{StaticResource TransparentBorderlessButton}">
-                    <Image Source="../../Images/add.png" MaxHeight="16" />
-                </Button>
-            </DockPanel>
-            <DataGrid x:Name="AudioCodecBindings" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3"  MinHeight="100" ItemsSource="{x:Static detectFeatures:FileFeatures.AudioCodecIdMappings}" CanUserResizeRows="False"
-                      AutoGenerateColumns="False" CellStyle="{StaticResource NoBorderCell}" GridLinesVisibility="None" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="0">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Codec Id" Binding="{Binding CodecId}" MinWidth="150"/>
-                    <DataGridTextColumn Header="Mapped codec" Binding="{Binding Mapping}" IsReadOnly="True" Width="*" />
-                </DataGrid.Columns>
-            </DataGrid>
+        <DockPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" LastChildFill="False">
+            <Label DockPanel.Dock="Left">Custom audio codec mappings:</Label>
+            <Button DockPanel.Dock="Right" Click="RemoveAudioCodecMappingClicked" Style="{StaticResource TransparentBorderlessButton}">
+                <Image Source="../../Images/remove.png" MaxHeight="16" />
+            </Button>
+            <Button DockPanel.Dock="Right" Click="AddAudioCodecMappingClicked" Style="{StaticResource TransparentBorderlessButton}">
+                <Image Source="../../Images/add.png" MaxHeight="16" />
+            </Button>
+        </DockPanel>
+        <DataGrid x:Name="AudioCodecBindings" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" MinHeight="100"
+                  ItemsSource="{x:Static detectFeatures:FileFeatures.AudioCodecIdMappings}" CanUserResizeRows="False"
+                  AutoGenerateColumns="False" CellStyle="{StaticResource NoBorderCell}" GridLinesVisibility="None"
+                  SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Codec Id" Binding="{Binding CodecId}" MinWidth="150" />
+                <DataGridTextColumn Header="Mapped codec" Binding="{Binding Mapping}" IsReadOnly="True" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
 
-            <DockPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"  LastChildFill="False">
-                <Label>Custom video codec mappings:</Label>
-                <Button DockPanel.Dock="Right" Click="RemoveVideoCodecMappingClicked" Style="{StaticResource TransparentBorderlessButton}">
-                    <Image Source="../../Images/remove.png" MaxHeight="16" />
-                </Button>
-                <Button DockPanel.Dock="Right" Click="AddVideoCodecMappingClicked" Style="{StaticResource TransparentBorderlessButton}">
-                    <Image Source="../../Images/add.png" MaxHeight="16" />
-                </Button>
-            </DockPanel>            
-            <DataGrid x:Name="VideoCodecBindings" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" MinHeight="100" ItemsSource="{x:Static detectFeatures:FileFeatures.VideoCodecIdMappings}" CanUserResizeRows="False"
-                      AutoGenerateColumns="False" CellStyle="{StaticResource NoBorderCell}" GridLinesVisibility="None" SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="0">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Codec Id" Binding="{Binding CodecId}" MinWidth="150"/>
-                    <DataGridTextColumn Header="Mapped codec" Binding="{Binding Mapping}" IsReadOnly="True" Width="*" />
-                </DataGrid.Columns>
-            </DataGrid>
-        </Grid>
+        <DockPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" LastChildFill="False">
+            <Label>Custom video codec mappings:</Label>
+            <Button DockPanel.Dock="Right" Click="RemoveVideoCodecMappingClicked" Style="{StaticResource TransparentBorderlessButton}">
+                <Image Source="../../Images/remove.png" MaxHeight="16" />
+            </Button>
+            <Button DockPanel.Dock="Right" Click="AddVideoCodecMappingClicked"
+                    Style="{StaticResource TransparentBorderlessButton}">
+                <Image Source="../../Images/add.png" MaxHeight="16" />
+            </Button>
+        </DockPanel>
+        <DataGrid x:Name="VideoCodecBindings" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" MinHeight="100"
+                  ItemsSource="{x:Static detectFeatures:FileFeatures.VideoCodecIdMappings}" CanUserResizeRows="False"
+                  AutoGenerateColumns="False" CellStyle="{StaticResource NoBorderCell}" GridLinesVisibility="None"
+                  SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Codec Id" Binding="{Binding CodecId}" MinWidth="150" />
+                <DataGridTextColumn Header="Mapped codec" Binding="{Binding Mapping}" IsReadOnly="True" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

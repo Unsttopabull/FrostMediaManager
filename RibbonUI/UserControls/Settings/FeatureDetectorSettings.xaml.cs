@@ -26,9 +26,17 @@ namespace RibbonUI.UserControls.Settings {
                 return;
             }
             FeatureDetector.VideoExtensions.Remove((string) VideoExtensionList.SelectedItem);
+            VideoExtensionList.Items.Refresh();
         }
 
         private void AddFileExtensionClicked(object sender, RoutedEventArgs e) {
+            string extension = InputBox.Show(_window, TranslationManager.T("Enter new extension:"), TranslationManager.T("Add new extension"), TranslationManager.T("Add"));
+            if (string.IsNullOrEmpty(extension)) {
+                return;
+            }
+
+            FeatureDetector.VideoExtensions.Add(extension);
+            VideoExtensionList.Items.Refresh();
         }
 
         #endregion
@@ -43,25 +51,29 @@ namespace RibbonUI.UserControls.Settings {
             }
 
             FileFeatures.VideoCodecIdMappings.Remove((CodecIdBinding) VideoCodecBindings.SelectedItem);
+            VideoCodecBindings.Items.Refresh();
         }
 
         private void AddVideoCodecMappingClicked(object sender, RoutedEventArgs e) {
             AddCodecMapping acm = new AddCodecMapping(true) { Owner = _window };
-            if (acm.ShowDialog() == true) {
-                KnownCodec addedCodec = acm.AddedCodec;
-
-                FileFeatures.VideoCodecIdMappings.Add(addedCodec.CodecId, addedCodec.Mapping);
-                if (!acm.IsNew) {
-                    return;
-                }
-
-                try {
-                    File.Copy(addedCodec.ImagePath, Directory.GetCurrentDirectory() + "Images/FlagsE/vcodec_" + addedCodec.Mapping);
-                }
-                catch(Exception) {
-                        
-                }
+            if (acm.ShowDialog() != true) {
+                return;
             }
+
+            KnownCodec addedCodec = acm.AddedCodec;
+
+            FileFeatures.VideoCodecIdMappings.Add(addedCodec.CodecId, addedCodec.Mapping);
+            if (!acm.IsNew) {
+                return;
+            }
+
+            try {
+                File.Copy(addedCodec.ImagePath, Directory.GetCurrentDirectory() + "Images/FlagsE/vcodec_" + addedCodec.Mapping);
+            }
+            catch(Exception) {
+                        
+            }
+            VideoCodecBindings.Items.Refresh();
         }
 
         #endregion
@@ -77,25 +89,29 @@ namespace RibbonUI.UserControls.Settings {
             }
             
             FileFeatures.AudioCodecIdMappings.Remove((CodecIdBinding) AudioCodecBindings.SelectedItem);
+            AudioCodecBindings.Items.Refresh();
         }
 
         private void AddAudioCodecMappingClicked(object sender, RoutedEventArgs e) {
             AddCodecMapping acm = new AddCodecMapping(false) { Owner = Window.GetWindow(this) };
-            if (acm.ShowDialog() == true) {
-                KnownCodec addedCodec = acm.AddedCodec;
-
-                FileFeatures.VideoCodecIdMappings.Add(addedCodec.CodecId, addedCodec.Mapping);
-                if (!acm.IsNew) {
-                    return;
-                }
-
-                try {
-                    File.Copy(addedCodec.ImagePath, Directory.GetCurrentDirectory() + "Images/FlagsE/acodec_" + addedCodec.Mapping);
-                }
-                catch(Exception) {
-                        
-                }
+            if (acm.ShowDialog() != true) {
+                return;
             }
+
+            KnownCodec addedCodec = acm.AddedCodec;
+
+            FileFeatures.VideoCodecIdMappings.Add(addedCodec.CodecId, addedCodec.Mapping);
+            if (!acm.IsNew) {
+                return;
+            }
+
+            try {
+                File.Copy(addedCodec.ImagePath, Directory.GetCurrentDirectory() + "Images/FlagsE/acodec_" + addedCodec.Mapping);
+            }
+            catch(Exception) {
+                        
+            }
+            AudioCodecBindings.Items.Refresh();
         }
 
         #endregion
@@ -105,7 +121,13 @@ namespace RibbonUI.UserControls.Settings {
         #region Subtitles
 
         private void AddSubtitleFileExtensionClicked(object sender, RoutedEventArgs e) {
-            
+            string extension = InputBox.Show(_window, TranslationManager.T("Enter new extension:"), TranslationManager.T("Add new extension"), TranslationManager.T("Add"));
+            if (string.IsNullOrEmpty(extension)) {
+                return;
+            }
+
+            FileFeatures.KnownSubtitleExtensions.Add(extension);
+            SubtitleExtensionList.Items.Refresh();
         }
 
         private void RemoveSubtitleFileExtensionClicked(object sender, RoutedEventArgs e) {
@@ -115,6 +137,7 @@ namespace RibbonUI.UserControls.Settings {
             }
 
             FileFeatures.KnownSubtitleExtensions.Remove((string) SubtitleExtensionList.SelectedItem);
+            SubtitleExtensionList.Items.Refresh();
         }
 
         #endregion

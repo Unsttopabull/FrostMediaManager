@@ -1,16 +1,19 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace Frost.DetectFeatures.Util {
 
-    public class CodecIdMappingCollection : KeyedCollection<string, CodecIdBinding>, IEnumerable<KeyValuePair<string, string>> {
+    public class CodecIdMappingCollection : ObservableKeyedCollection<string, CodecIdBinding>, IEnumerable<KeyValuePair<string, string>> {
 
         public CodecIdMappingCollection() : base(StringComparer.InvariantCultureIgnoreCase){
         }
 
-        public void Add(string codecId, string mapping) {
-            Add(new CodecIdBinding(codecId, mapping));
+        public CodecIdMappingCollection(StringDictionary stringDictionary) : this() {
+            foreach (DictionaryEntry entry in stringDictionary) {
+                Add((string) entry.Key, (string) entry.Value);
+            }
         }
 
         /// <summary>When implemented in a derived class, extracts the key from the specified element.</summary>
@@ -18,6 +21,10 @@ namespace Frost.DetectFeatures.Util {
         /// <param name="item">The element from which to extract the key.</param>
         protected override string GetKeyForItem(CodecIdBinding item) {
             return item.CodecId;
+        }
+
+        public void Add(string codecId, string mapping) {
+            Add(new CodecIdBinding(codecId, mapping));
         }
 
         public bool ContainsKey(string key) {

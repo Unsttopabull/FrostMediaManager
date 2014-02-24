@@ -1,18 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using DrWPF.Windows.Data;
 using Frost.Common;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.Common.Models.DB.MovieVo.Files;
-using Frost.Common.Util;
-using Frost.Common.Util.System.Collections.ObjectModel;
 using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
 using Frost.DetectFeatures.Util.AspectRatio;
 using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
-using Frost.SharpMediaInfo.Output.Properties.Codecs;
 using Frost.SharpOpenSubtitles.Util;
 
 using CompressionMode = Frost.Common.CompressionMode;

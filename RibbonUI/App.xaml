@@ -3,20 +3,29 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:converters="clr-namespace:RibbonUI.Converters"
              xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+             xmlns:controls="clr-namespace:RibbonUI.Controls"
              StartupUri="Windows/SettingsWindow.xaml">
-    <!--StartupUri="MainWindow.xaml">-->
+             <!--StartupUri="MainWindow.xaml">-->
     <Application.Resources>
         <converters:EmptyStringToNullConverter x:Key="EmptyStringToNullConverter" />
+        <converters:PathToImageSourceConverter x:Key="PathToImageSourceConverter" />
         <BitmapImage x:Key="DefaultLogo" UriSource="Images/defaultscreen.png" />
         <BitmapImage x:Key="DefaultSoundLogo" UriSource="Images/defaultsound.png" />
         <BitmapImage x:Key="UnknownCountryOrLanguage" UriSource="Images/unknown.png" />
         <BitmapImage x:Key="UnknownLanguageLarge" UriSource="Images/unknown_large.png" />
-        <Style x:Key="CollapseOnTagNull" TargetType="{x:Type FrameworkElement}">
-            <Style.Triggers>
-                <Trigger Property="Tag" Value="{x:Null}">
-                    <Setter Property="Visibility" Value="Collapsed" />
-                </Trigger>
-            </Style.Triggers>
+        <BitmapImage x:Key="Add" UriSource="Images/add.png" />
+        <BitmapImage x:Key="AddDisabled" UriSource="Images/add_disabled.png" />
+        <BitmapImage x:Key="Remove" UriSource="Images/remove.png" />
+        <BitmapImage x:Key="RemoveDisabled" UriSource="Images/remove_disabled.png" />
+        
+        <Style TargetType="{x:Type controls:ImageButton}" x:Key="AddButton">
+            <Setter Property="EnabledSource" Value="{StaticResource Add}"/>
+            <Setter Property="DisabledSource" Value="{StaticResource AddDisabled}"/>
+        </Style>
+
+        <Style TargetType="{x:Type controls:ImageButton}" x:Key="RemoveButton">
+            <Setter Property="EnabledSource" Value="{StaticResource Remove}"/>
+            <Setter Property="DisabledSource" Value="{StaticResource RemoveDisabled}"/>
         </Style>
 
         <!-- BUTTON BASE STYLE AERO NORMAL !-->
@@ -24,7 +33,9 @@
             <Setter Property="Control.Template">
                 <Setter.Value>
                     <ControlTemplate>
-                        <Rectangle Margin="2" StrokeThickness="1" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeDashArray="1 2" SnapsToDevicePixels="true" />
+                        <Rectangle Margin="2" StrokeThickness="1"
+                                   Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
+                                   StrokeDashArray="1 2" SnapsToDevicePixels="true" />
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -80,14 +91,9 @@
             </Setter>
         </Style>
         <!-- BUTTON BASE STYLE AERO NORMAL !-->
-        <Style x:Key="NoBorderCell" TargetType="{x:Type DataGridCell}">
-            <Setter Property="BorderThickness" Value="0" />
-        </Style>
-        <converters:PathToImageSourceConverter x:Key="PathToImageSourceConverter" />
-        <Style x:Key="TransparentBorderlessButton" TargetType="{x:Type ButtonBase}">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="0" />
-        </Style>
+
+
+
         <Style x:Key="TransparentBorderlessButtonCollapseOnTagNull" BasedOn="{StaticResource CollapseOnTagNull}"
                TargetType="{x:Type ButtonBase}">
             <Setter Property="Background" Value="Transparent" />
@@ -182,6 +188,105 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="TransparentBorderlessButton" TargetType="{x:Type ButtonBase}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ButtonBase}">
+                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          RecognizesAccessKey="True"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CollapseOnTagNull" TargetType="{x:Type FrameworkElement}">
+            <Style.Triggers>
+                <Trigger Property="Tag" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="MenuListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
+            <Style.Resources>
+                <SolidColorBrush x:Key="MouseOverBorderBrush">#FFC29B29</SolidColorBrush>
+                <SolidColorBrush x:Key="SlectedBorderBrush">#FFFFB700</SolidColorBrush>
+
+                <LinearGradientBrush x:Key="SlectedBackgroundBrush" EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#FFE3C085" Offset="0" />
+                    <GradientStop Color="#FFF4CC89" Offset="0.19" />
+                    <GradientStop Color="#FFF5C777" Offset="0.36" />
+                    <GradientStop Color="#FFF5BB56" Offset="0.36" />
+                    <GradientStop Color="#FFF4CE9A" Offset="0.79" />
+                    <GradientStop Color="#FFF3E28D" Offset="1" />
+                </LinearGradientBrush>
+
+                <LinearGradientBrush x:Key="MouseOverBackgroundBrush" EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="#FFFEFBF4" Offset="0" />
+                    <GradientStop Color="#FFFDE7CE" Offset="0.19" />
+                    <GradientStop Color="#FFFDDEB8" Offset="0.39" />
+                    <GradientStop Color="#FFFFCE6B" Offset="0.39" />
+                    <GradientStop Color="#FFFFDE9A" Offset="0.79" />
+                    <GradientStop Color="#FFFFEBAA" Offset="1" />
+                </LinearGradientBrush>
+            </Style.Resources>
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Margin" Value="0,0,0,1" />
+            <Setter Property="Padding" Value="5,2,5,2" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Border BorderThickness="{TemplateBinding BorderThickness}" Margin="1,0,1,0"
+                                Padding="10,5,10,5" BorderBrush="{TemplateBinding BorderBrush}"
+                                Background="{TemplateBinding Background}" CornerRadius="3"
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter Margin="5,0,0,0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" Value="{StaticResource MouseOverBackgroundBrush}" />
+                                <Setter Property="BorderBrush" Value="{StaticResource MouseOverBorderBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter Property="Background" Value="{StaticResource SlectedBackgroundBrush}" />
+                                <Setter Property="BorderBrush" Value="{StaticResource SlectedBorderBrush}" />
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="true" />
+                                    <Condition Property="Selector.IsSelectionActive" Value="false" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="{StaticResource SlectedBackgroundBrush}" />
+                                <Setter Property="BorderBrush" Value="#FFCFCFCF" />
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="true" />
+                                    <Condition Property="IsMouseOver" Value="true" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background" Value="{StaticResource SlectedBackgroundBrush}" />
+                                <Setter Property="BorderBrush" Value="{StaticResource SlectedBorderBrush}" />
+                            </MultiTrigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="NoBorderCell" TargetType="{x:Type DataGridCell}">
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
         <Style x:Key="ExpanderGroup" TargetType="{x:Type GroupItem}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -195,10 +300,5 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <ControlTemplate x:Key="RowValidationErrorIconTemplate">
-            <Image Margin="0,-2,0,-2"
-                   ToolTip="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGridRow}}, Path=(Validation.Errors)[0].ErrorContent}"
-                   Source="Images/error.ico" MaxWidth="16" />
-        </ControlTemplate>
     </Application.Resources>
 </Application>

@@ -1,11 +1,211 @@
 ﻿<UserControl x:Class="RibbonUI.UserControls.Settings.FileNameParserSettings"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:fileName="clr-namespace:Frost.DetectFeatures.FileName;assembly=Frost.FeatureDetector"
+             xmlns:iso="clr-namespace:Frost.Common.Util.ISO;assembly=Frost.Common"
+             xmlns:viewModels="clr-namespace:RibbonUI.UserControls.Settings.ViewModels"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:converters="clr-namespace:RibbonUI.Converters"
+             xmlns:util="clr-namespace:Frost.DetectFeatures.Util;assembly=Frost.FeatureDetector"
+             xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
+             xmlns:controls="clr-namespace:RibbonUI.Controls"
+             xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
+             mc:Ignorable="d" x:Name="FileNameParserSettingsControl"
+             d:DesignHeight="635" d:DesignWidth="620">
+    <UserControl.Resources>
+        <ObjectDataProvider x:Key="SegmentTypes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="fileName:SegmentType" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
+        <converters:ISO639Alpha3ToISOLanguageCodeConverter x:Key="Alpha3ToIsoLanguageCodeConverter"/>
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Validation.ErrorTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="0"/>
+                            </Grid.ColumnDefinitions>
+                            <AdornedElementPlaceholder Name="customAdorner" Grid.Column="0" VerticalAlignment="Center">
+                                <Border BorderBrush="red" BorderThickness="1" />
+                            </AdornedElementPlaceholder>
+                            <Image Grid.Column="1" Source="../../Images/error.ico" Margin="-22,0,0,0" MaxHeight="22" MaxWidth="22" ToolTip="{Binding ElementName=customAdorner, Path=AdornedElement.(Validation.Errors)[0].ErrorContent, TargetNullValue={x:Null}, FallbackValue={x:Null}}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>        
+    </UserControl.Resources>
+    <UserControl.DataContext>
+        <viewModels:FileNameParserSettingsViewModel/>
+    </UserControl.DataContext>
+    <Grid Margin="5,0,5,0">
+        <Grid.Resources>
+            <Style TargetType="{x:Type Label}">
+                <Setter Property="Margin" Value="-5,0,0,0" />
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="5" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.5*" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="1.5*" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <DockPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5" LastChildFill="False">
+            <Label Content="{l:T Known segments, Postfix=:}"/>
+            <controls:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected known segment}" Command="{Binding RemoveKnownSegmentCommand}" CommandParameter="{Binding SelectedItem, ElementName=KnownSegments}"/>
+        </DockPanel>
+        <DataGrid x:Name="KnownSegments" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" MinHeight="100"
+                  ItemsSource="{x:Static fileName:FileNameParser.KnownSegments}" CanUserResizeRows="False"
+                  AutoGenerateColumns="False" CellStyle="{StaticResource NoBorderCell}" GridLinesVisibility="None"
+                  SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="0" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{l:T Segment}" Binding="{Binding Segment}" MinWidth="200"/>
+                <DataGridTemplateColumn Header="{l:T Segment type}" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="{x:Type util:SegmentMapping}">
+                            <ComboBox SelectedItem="{Binding SegmentType, Converter={StaticResource EnumDescriptionConverter}}"
+                                      ItemsSource="{Binding Source={StaticResource SegmentTypes}, Converter={StaticResource EnumDescriptionConverter}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        
+        <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="5" Margin="0,0,0,10">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MaxWidth="200"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Content="{l:T Segment, Postfix=:}"/>
+            <DockPanel Grid.Row="0" Grid.Column="2">
+                <controls:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}" ToolTip="{l:T Add a new known segment}" Command="{Binding AddNewKnownSegmentCommand}"/>
+                <Label DockPanel.Dock="Left" Content="{l:T Segment type, Postfix=:}"/>
+            </DockPanel>
+            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Segment, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" MinHeight="22"/>
+            <ComboBox Grid.Row="1" Grid.Column="2" SelectedItem="{Binding SegmentType, Converter={StaticResource EnumDescriptionConverter}}" ItemsSource="{Binding Source={StaticResource SegmentTypes}, Converter={StaticResource EnumDescriptionConverter}}"/>
+        </Grid>
+
+        <DockPanel Grid.Row="3" Grid.Column="0" LastChildFill="False">
+            <Label Content="{l:T Excluded segments, Postfix=:}"/>
+            <controls:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove segment from exclusion}" Command="{Binding RemoveExcludedSegmentCommand}" CommandParameter="{Binding SelectedItem, ElementName=ExcludedSegmentsList}"/>
+        </DockPanel>
+        <ListBox x:Name="ExcludedSegmentsList" Grid.Row="4" Grid.Column="0" MinHeight="100" ItemsSource="{x:Static fileName:FileNameParser.ExcludedSegments}" />
+
+        <DockPanel Grid.Row="3" Grid.Column="2" LastChildFill="False">
+            <Label Content="{l:T Release groups, Postfix=:}"/>
+            <controls:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected release group}" Command="{Binding RemoveReleaseGroupCommand}" CommandParameter="{Binding SelectedItem, ElementName=ReleaseGroups}"/>
+        </DockPanel>
+        <ListBox x:Name="ReleaseGroups" Grid.Row="4" Grid.Column="2" MinHeight="100" ItemsSource="{x:Static fileName:FileNameParser.ReleaseGroups}" />
+
+        <DockPanel Grid.Row="3" Grid.Column="4" LastChildFill="False">
+            <Label Content="{l:T Custom language mappings, Postfix=:}"/>
+            <controls:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected language mapping}" Command="{Binding RemoveLanguageMappingCommand}" CommandParameter="{Binding ElementName=CustomLanguageMappingsList, Path=SelectedItem}"/>
+        </DockPanel>
+        <DataGrid x:Name="CustomLanguageMappingsList" Grid.Row="4" Grid.Column="4" MinHeight="100"
+                  ItemsSource="{x:Static fileName:FileNameParser.CustomLanguageMappings}" CanUserResizeRows="False"
+                  AutoGenerateColumns="False" CellStyle="{StaticResource NoBorderCell}" GridLinesVisibility="None"
+                  SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="0" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{l:T Mapping}" Binding="{Binding Mapping}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="5,0,0,0"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="{l:T Language}" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate DataType="{x:Type util:LanguageMapping}">
+                            <ComboBox x:Name="SelectedLanguage" SelectedItem="{Binding ISO639Alpha3, Converter={StaticResource Alpha3ToIsoLanguageCodeConverter}, TargetNullValue={x:Null}, FallbackValue={x:Null}}" ItemsSource="{Binding DataContext.Languages, ElementName=FileNameParserSettingsControl}" MaxHeight="30">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type iso:ISOLanguageCode}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="{Binding Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, TargetNullValue={StaticResource UnknownCountryOrLanguage}, FallbackValue={StaticResource UnknownCountryOrLanguage}}" MaxHeight="32" MaxWidth="32" />
+                                            <TextBlock Text="{Binding EnglishName, TargetNullValue={l:T Unknown}, FallbackValue={l:T Unknown}}" Margin="5,0,0,0" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <DockPanel Grid.Column="0" Grid.Row="5" LastChildFill="False">
+            <Label Content="{l:T Exclude a segment}"/>
+            <controls:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}" ToolTip="{l:T Add a new segment to exclude}" Command="{Binding AddNewExcludedSegmentCommand}"/>
+        </DockPanel>
+        <TextBox Grid.Row="6" Grid.Column="0" Text="{Binding ExcludedSegment, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" Height="{Binding ElementName=LanguageMappingSelect, Path=ActualHeight}"/>
+
+        <DockPanel Grid.Column="2" Grid.Row="5" LastChildFill="False">
+            <Label Content="{l:T Add a release group, Postfix=:}"/>
+            <controls:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}" ToolTip="{l:T Add a new release group}" Command="{Binding AddNewReleaseGroupCommand}"/>
+        </DockPanel>
+        <TextBox Grid.Row="6" Grid.Column="2" MaxLength="20" x:Name="NewReleaseGroup" ToolTip="{Binding ReleaseGroupError}" Text="{Binding ReleaseGroup, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Height="{Binding ElementName=LanguageMappingSelect, Path=ActualHeight}">
+            <!--<in:Interaction.Triggers>
+                <i:DataTrigger Binding="{Binding ToolTip, ElementName=NewReleaseGroup}" Value="{x:Null}" Comparison="NotEqual">
+                    <i:ChangePropertyAction PropertyName="Foreground" Value="Red"/>
+                </i:DataTrigger>
+                <i:DataTrigger Binding="{Binding ToolTip, ElementName=NewReleaseGroup}" Value="{x:Null}" Comparison="Equal">
+                    <i:ChangePropertyAction PropertyName="Foreground" Value="Black"/>
+                </i:DataTrigger>                
+            </in:Interaction.Triggers>-->
+        </TextBox>
+
+        <Grid Grid.Row="5" Grid.Column="4" Grid.RowSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Content="{l:T Mapping, Postfix=:}"/>
+            <DockPanel Grid.Row="0" Grid.Column="2" LastChildFill="False">
+                <Label Content="{l:T Language, Postfix=:}"/>
+                <controls:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}" ToolTip="{l:T Add a new language mapping}" Command="{Binding AddNewLanguageMappingCommand}"/>
+            </DockPanel>
+
+            <TextBox Grid.Row="1" Grid.Column="0" DockPanel.Dock="Left" Height="{Binding ElementName=LanguageMappingSelect, Path=ActualHeight}" Text="{Binding Mapping, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+            <ComboBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Languages}" SelectedItem="{Binding Language}" MaxHeight="25" x:Name="LanguageMappingSelect">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type iso:ISOLanguageCode}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{Binding Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, TargetNullValue={StaticResource UnknownCountryOrLanguage}, FallbackValue={StaticResource UnknownCountryOrLanguage}}" MaxHeight="32" MaxWidth="32" />
+                            <TextBlock Text="{Binding EnglishName, TargetNullValue={l:T Unknown}, FallbackValue={l:T Unknown}}" Margin="5,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Grid>
     </Grid>
 </UserControl>

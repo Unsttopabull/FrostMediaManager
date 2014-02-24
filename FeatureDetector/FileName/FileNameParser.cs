@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -8,29 +9,39 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Frost.Common;
+using Frost.Common.Util;
 using Frost.Common.Util.ISO;
+using Frost.DetectFeatures.Util;
 
 namespace Frost.DetectFeatures.FileName {
 
     public enum SegmentType {
-        Unknown,
+        [Description("DVD Region")]
         DVDRegion,
+        [Description("Content type")]
         ContentType,
+        [Description("Genre")]
         Genre,
+        [Description("Edithion")]
         Edithion,
-        SubtitleLanguage,
-        Language,
 
+        [Description("Video source")]
         VideoSource,
+        [Description("Video quality")]
         VideoQuality,
+        [Description("Video codec")]
         VideoCodec,
 
+        [Description("Audio source")]
         AudioSource,
+        [Description("Audio source")]
         AudioCodec,
+        [Description("Audio quality")]
         AudioQuality,
 
+        [Description("Special")]
         Special,
-        ReleaseGroup,
+        [Description("Part identifier")]
         PartIdentifier,
     }
 
@@ -43,10 +54,6 @@ namespace Frost.DetectFeatures.FileName {
 
     public class FileNameParser {
         private static readonly ISOLanguageCodes ISOLanguageCodes = ISOLanguageCodes.Instance;
-        private static readonly HashSet<string> SegmentExclusion;
-        private static readonly HashSet<string> ReleaseGroups;
-        private static readonly Dictionary<string, string> CustomLangMappings;
-        private static readonly Dictionary<string, SegmentType> KnownSegementsDict;
         private static readonly HashSet<char> RegexReservedChars;
         private static readonly Regex ReleaseGroup = new Regex(@"-([^\. _\[\]-]{3,20})");
         private static readonly Regex PartIdentifier = new Regex(@"[\. -](part ?(\d+)|cd ?(\d+)|disk ?(\d+))[\. -]?", RegexOptions.IgnoreCase);
@@ -66,7 +73,7 @@ namespace Frost.DetectFeatures.FileName {
             RegexReservedChars = new HashSet<char> { '.', '^', '$', '*', '+', '?', '(', ')', '[', ']', '\\', '|', '}', '{', '-' };
             EnclosingDelimiters = new[] { '[', ']', '(', ')', '{', '}' };
 
-            CustomLangMappings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
+            CustomLanguageMappings = new LanguageMappingCollection {
                 { "JAP", "jpn" },
                 { "srbski", "srp" },
                 { "SER", "srp" },
@@ -75,7 +82,7 @@ namespace Frost.DetectFeatures.FileName {
                 { "CRO", "hrv" }
             };
 
-            SegmentExclusion = new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
+            ExcludedSegments = new ObservableHashSet<string>(StringComparer.OrdinalIgnoreCase) {
                 "the",
                 "an",
                 "to",
@@ -92,7 +99,7 @@ namespace Frost.DetectFeatures.FileName {
                 "sin"
             };
 
-            KnownSegementsDict = new Dictionary<string, SegmentType>(StringComparer.OrdinalIgnoreCase) {
+            KnownSegments = new SegmentCollection {
                 { "DOKU", SegmentType.Genre },
                 { "MANGA", SegmentType.Genre },
                 { "XXX", SegmentType.Genre },
@@ -272,7 +279,7 @@ namespace Frost.DetectFeatures.FileName {
 
             #region Release Groups
 
-            ReleaseGroups = new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
+            ReleaseGroups = new ObservableHashSet<string>(StringComparer.OrdinalIgnoreCase) {
                 "666",
                 "aaf",
                 "ac",
@@ -766,24 +773,20 @@ namespace Frost.DetectFeatures.FileName {
             return fileName;
         }
 
-        public ICollection<char> Delimiters {
+        public List<char> Delimiters {
             get { return _delimiters; }
-            set { _delimiters = value.ToList(); }
+            set { _delimiters = value; }
         }
 
         #region Static Members
 
-        public static Dictionary<string, SegmentType> KnownSegments {
-            get { return KnownSegementsDict; }
-        }
+        public static SegmentCollection KnownSegments { get; set; }
 
-        public static Dictionary<string, string> CustomLanguageMappings {
-            get { return CustomLangMappings; }
-        }
+        public static LanguageMappingCollection CustomLanguageMappings { get; set; }
 
-        public static HashSet<string> ExcludedSegments {
-            get { return SegmentExclusion; }
-        }
+        public static ObservableHashSet<string> ExcludedSegments { get; set; }
+
+        public static ObservableHashSet<string> ReleaseGroups { get; set; }
 
         public static bool AddKnownSegment(string value, SegmentType type) {
             if (KnownSegments.ContainsKey(value)) {

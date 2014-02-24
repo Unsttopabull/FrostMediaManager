@@ -89,8 +89,12 @@ namespace Frost.GettextMarkupExtension {
             Dispose(false);
         }
 
+        public void Dispose() {
+            Dispose(false);
+        }
+
         /// <summary>Closes all files in the list and disposes all allocated resources.</summary>
-        public void Dispose(bool finalizer) {
+        private void Dispose(bool finalizer) {
             if (IsDisposed) {
                 return;
             }

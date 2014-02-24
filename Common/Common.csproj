@@ -180,8 +180,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Util\KeyedCollectionGeneric.cs" />
-    <Compile Include="Util\ObservableDictionary.cs" />
-    <Compile Include="Util\ObservableDictionaryDrWpf.cs" />
     <Compile Include="Util\ObservableHashSet.cs" />
     <Compile Include="XmlIndentedTextWriter.cs" />
   </ItemGroup>

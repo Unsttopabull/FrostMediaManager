@@ -14,7 +14,7 @@ using System.Windows.Shell;
 using Frost.Common.Annotations;
 using Frost.Common.Models.DB.MovieVo;
 using Frost.GettextMarkupExtension;
-using RibbonUI.Commands;
+using Microsoft.Expression.Interactivity.Core;
 
 namespace RibbonUI.UserControls {
 
@@ -117,12 +117,12 @@ namespace RibbonUI.UserControls {
                     new ThumbButtonInfo {
                         ImageSource = new BitmapImage(new Uri("pack://application:,,,/RibbonUI;component/Images/go-next.png")),
                         Description = TranslationManager.T("Go to next movie"),
-                        Command = new RelayCommand(() => MovieList.SelectedIndex++, o => true),
+                        Command = new ActionCommand(() => MovieList.SelectedIndex++),
                     },
                     new ThumbButtonInfo {
                         ImageSource = new BitmapImage(new Uri("pack://application:,,,/RibbonUI;component/Images/go-previous.png")),
                         Description = TranslationManager.T("Go to previous movie"),
-                        Command = new RelayCommand(() => MovieList.SelectedIndex--, o => true),
+                        Command = new ActionCommand(() => MovieList.SelectedIndex--),
                     }
                 }
             };

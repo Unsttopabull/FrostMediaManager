@@ -210,19 +210,19 @@
             <StackPanel Orientation="Horizontal">
                 <Label Content="{l:T Height, Postfix=:}"/>
                 <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{l:T Clear value}"
-                        Tag="{Binding ElementName=Height, Path=Value}">
+                        Tag="{Binding ElementName=VideoHeight, Path=Value}">
                     <in:Interaction.Triggers>
                         <in:EventTrigger EventName="Click">
-                            <i:ChangePropertyAction TargetName="Height" PropertyName="Value" Value="{x:Null}" />
+                            <i:ChangePropertyAction TargetName="VideoHeight" PropertyName="Value" Value="{x:Null}" />
                         </in:EventTrigger>
                     </in:Interaction.Triggers>
                     <Image Source="../Images/clear.ico" Width="14" Height="14" />
                 </Button>
             </StackPanel>
-            <e:IntegerUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding Height}" x:Name="Height"
+            <e:IntegerUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding Height}" x:Name="VideoHeight"
                              x:FieldModifier="private" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}">
                 <in:Interaction.Triggers>
-                    <i:DataTrigger Binding="{Binding ElementName=Height, Path=Value}" Value="0">
+                    <i:DataTrigger Binding="{Binding ElementName=VideoHeight, Path=Value}" Value="0">
                         <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}" />
                     </i:DataTrigger>
                 </in:Interaction.Triggers>

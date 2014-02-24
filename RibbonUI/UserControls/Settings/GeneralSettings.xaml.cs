@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Forms;
 using Frost.GettextMarkupExtension;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using ComboBox = System.Windows.Controls.ComboBox;
 using MessageBox = System.Windows.MessageBox;
 using UserControl = System.Windows.Controls.UserControl;
 
@@ -47,7 +48,7 @@ namespace RibbonUI.UserControls.Settings {
             }
             else {
                 using (FolderBrowserDialog fbd = new FolderBrowserDialog()) {
-                    if (fbd.ShowDialog() != System.Windows.Forms.DialogResult.OK) {
+                    if (fbd.ShowDialog() != DialogResult.OK) {
                         return;
                     }
                     folderPath = fbd.SelectedPath;
@@ -63,7 +64,7 @@ namespace RibbonUI.UserControls.Settings {
         }
 
         private void LangSelectionChanged(object sender, SelectionChangedEventArgs e) {
-            System.Windows.Controls.ComboBox comboBox = (System.Windows.Controls.ComboBox) sender;
+            ComboBox comboBox = (ComboBox) sender;
             if (comboBox.SelectedIndex == -1) {
                 return;
             }
@@ -72,10 +73,14 @@ namespace RibbonUI.UserControls.Settings {
         }
 
         private void LangSelectOnLoaded(object sender, RoutedEventArgs e) {
-            System.Windows.Controls.ComboBox cb = (System.Windows.Controls.ComboBox) sender;
-            List<CultureInfo> itemsSource = (List<CultureInfo>) cb.ItemsSource;
-            int idx = itemsSource.IndexOf(Thread.CurrentThread.CurrentUICulture);
+            ComboBox cb = (ComboBox) sender;
 
+            List<CultureInfo> itemsSource = cb.ItemsSource as List<CultureInfo>;
+            if (itemsSource == null) {
+                return;
+            }
+
+            int idx = itemsSource.IndexOf(Thread.CurrentThread.CurrentUICulture);
             if (idx == -1) {
                 idx = itemsSource.IndexOf(Thread.CurrentThread.CurrentUICulture.Parent);
             }

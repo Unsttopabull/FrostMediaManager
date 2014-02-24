@@ -101,5 +101,49 @@ namespace RibbonUI.Properties {
                 this["VideoCodecIdBindings"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringDictionary KnownSegments {
+            get {
+                return ((global::System.Collections.Specialized.StringDictionary)(this["KnownSegments"]));
+            }
+            set {
+                this["KnownSegments"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringDictionary CustomLanguageMappings {
+            get {
+                return ((global::System.Collections.Specialized.StringDictionary)(this["CustomLanguageMappings"]));
+            }
+            set {
+                this["CustomLanguageMappings"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection ExcludedSegments {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ExcludedSegments"]));
+            }
+            set {
+                this["ExcludedSegments"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection ReleaseGroups {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ReleaseGroups"]));
+            }
+            set {
+                this["ReleaseGroups"] = value;
+            }
+        }
     }
 }

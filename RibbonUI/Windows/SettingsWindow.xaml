@@ -5,7 +5,7 @@
         xmlns:settings="clr-namespace:RibbonUI.UserControls.Settings"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
         Loaded="WindowLoaded"
-        Title="Settings" Height="575" Width="630" Background="#BCD6F5"
+        Title="Settings" Height="635" Width="800" Background="#BCD6F5"
         DataContext="{x:Static properties:Settings.Default}">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -19,99 +19,16 @@
         </Grid.RowDefinitions>
 
         <Border Grid.Column="0" Grid.Row="0" Margin="5,5,0,5" CornerRadius="5,0,0,5" Background="White">
-            <ListBox Margin="0,5,0,5" BorderThickness="0" Background="Transparent" x:Name="SettingsMenu"> <!--SelectedIndex="0">-->
+            <ListBox Margin="0,5,0,5" BorderThickness="0" Background="Transparent" x:Name="SettingsMenu" ItemContainerStyle="{StaticResource MenuListBoxItemStyle}" > <!--SelectedIndex="0">-->
                 <ListBox.Resources>
-                    <SolidColorBrush x:Key="MouseOverBorderBrush">#FFC29B29</SolidColorBrush>
-                    <SolidColorBrush x:Key="SlectedBorderBrush">#FFFFB700</SolidColorBrush>
-
-                    <LinearGradientBrush x:Key="SlectedBackgroundBrush" EndPoint="0,1" StartPoint="0,0">
-                        <GradientStop Color="#FFE3C085" Offset="0" />
-                        <GradientStop Color="#FFF4CC89" Offset="0.19" />
-                        <GradientStop Color="#FFF5C777" Offset="0.36" />
-                        <GradientStop Color="#FFF5BB56" Offset="0.36" />
-                        <GradientStop Color="#FFF4CE9A" Offset="0.79" />
-                        <GradientStop Color="#FFF3E28D" Offset="1" />
-                    </LinearGradientBrush>
-
-                    <LinearGradientBrush x:Key="MouseOverBackgroundBrush" EndPoint="0,1" StartPoint="0,0">
-                        <GradientStop Color="#FFFEFBF4" Offset="0" />
-                        <GradientStop Color="#FFFDE7CE" Offset="0.19" />
-                        <GradientStop Color="#FFFDDEB8" Offset="0.39" />
-                        <GradientStop Color="#FFFFCE6B" Offset="0.39" />
-                        <GradientStop Color="#FFFFDE9A" Offset="0.79" />
-                        <GradientStop Color="#FFFFEBAA" Offset="1" />
-                    </LinearGradientBrush>
                     <Style TargetType="{x:Type TextBlock}">
                         <Setter Property="Background" Value="Transparent" />
                     </Style>
                 </ListBox.Resources>
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListBoxItem}">
-                        <Setter Property="Background" Value="Transparent" />
-                        <Setter Property="BorderBrush" Value="Transparent" />
-                        <Setter Property="BorderThickness" Value="1" />
-                        <Setter Property="Margin" Value="0,0,0,1" />
-                        <Setter Property="Padding" Value="5,2,5,2" />
-                        <Setter Property="VerticalContentAlignment" Value="Center" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <Border BorderThickness="{TemplateBinding BorderThickness}" Margin="1,0,1,0"
-                                            Padding="10,5,10,5" BorderBrush="{TemplateBinding BorderBrush}"
-                                            Background="{TemplateBinding Background}" CornerRadius="3"
-                                            SnapsToDevicePixels="true">
-                                        <ContentPresenter Margin="5,0,0,0"
-                                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="true">
-                                            <Setter Property="Background"
-                                                    Value="{StaticResource MouseOverBackgroundBrush}" />
-                                            <Setter Property="BorderBrush"
-                                                    Value="{StaticResource MouseOverBorderBrush}" />
-                                        </Trigger>
-                                        <Trigger Property="IsSelected" Value="true">
-                                            <Setter Property="Background"
-                                                    Value="{StaticResource SlectedBackgroundBrush}" />
-                                            <Setter Property="BorderBrush" Value="{StaticResource SlectedBorderBrush}" />
-                                        </Trigger>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="IsSelected" Value="true" />
-                                                <Condition Property="Selector.IsSelectionActive" Value="false" />
-                                            </MultiTrigger.Conditions>
-                                            <Setter Property="Background"
-                                                    Value="{StaticResource SlectedBackgroundBrush}" />
-                                            <Setter Property="BorderBrush" Value="#FFCFCFCF" />
-                                        </MultiTrigger>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="IsSelected" Value="true" />
-                                                <Condition Property="IsMouseOver" Value="true" />
-                                            </MultiTrigger.Conditions>
-                                            <Setter Property="Background"
-                                                    Value="{StaticResource SlectedBackgroundBrush}" />
-                                            <Setter Property="BorderBrush" Value="{StaticResource SlectedBorderBrush}" />
-                                        </MultiTrigger>
-                                        <Trigger Property="IsEnabled" Value="false">
-                                            <Setter Property="Foreground"
-                                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ListBox.ItemContainerStyle>
                 <ListBox.Items>
-                    <TextBlock>UI and search folders</TextBlock>
-                    <TextBlock>Feature detector</TextBlock>
-                    <TextBlock>File name parser</TextBlock>
-                    <TextBlock>ActiveX Settings</TextBlock>
-                    <TextBlock>Macro Settings</TextBlock>
-                    <TextBlock>Message Bar</TextBlock>
-                    <TextBlock>Privacy Options</TextBlock>
+                    <TextBlock Text="{l:T UI and search folders}"/>
+                    <TextBlock Text="{l:T Feature detector}"/>
+                    <TextBlock Text="{l:T File name parser}"/>
                 </ListBox.Items>
             </ListBox>
         </Border>
@@ -143,7 +60,7 @@
                         </Style.Triggers>
                     </Style>
                 </TabItem.Style>
-                <settings:FeatureDetectorSettings DataContext="{Binding}"/>
+                <settings:FeatureDetectorSettings/>
             </TabItem>
             <TabItem Header="3">
                 <TabItem.Style>
@@ -155,7 +72,7 @@
                         </Style.Triggers>
                     </Style>
                 </TabItem.Style>
-                <settings:FileNameParserSettings DataContext="{Binding}"/>
+                <settings:FileNameParserSettings/>
             </TabItem>
         </TabControl>
         <GridSplitter HorizontalAlignment="Right" Margin="0,5,0,5"
