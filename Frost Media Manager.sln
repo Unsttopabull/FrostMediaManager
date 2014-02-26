@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecondLanguage", "SecondLan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoParser", "PoParser\PoParser.csproj", "{56BB56BD-8E29-44FD-9E68-DE452B78B253}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamlControls", "XamlControls\XamlControls.csproj", "{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -365,6 +367,24 @@ Global
 		{56BB56BD-8E29-44FD-9E68-DE452B78B253}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{56BB56BD-8E29-44FD-9E68-DE452B78B253}.Release|Win32.ActiveCfg = Release|Any CPU
 		{56BB56BD-8E29-44FD-9E68-DE452B78B253}.Release|x86.ActiveCfg = Release|Any CPU
+		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}.Release No Installer|Any CPU.ActiveCfg = Release|Any CPU
+		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}.Release No Installer|Any CPU.Build.0 = Release|Any CPU
+		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}.Release No Installer|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}.Release No Installer|Mixed Platforms.Build.0 = Release|Any CPU
+		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}.Release No Installer|Win32.ActiveCfg = Release|Any CPU
+		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}.Release No Installer|x86.ActiveCfg = Release|Any CPU
+		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}.Release|Win32.ActiveCfg = Release|Any CPU
+		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

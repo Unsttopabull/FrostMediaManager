@@ -84,9 +84,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Commands\RelayCommand.cs" />
-    <Compile Include="Controls\ClippingBorder.cs" />
-    <Compile Include="Controls\ImageButton.cs" />
     <Compile Include="Converters\BooleanToYesNoConverter.cs" />
     <Compile Include="Converters\DebugConverter.cs" />
     <Compile Include="Converters\EmptyStringToNullConverter.cs" />
@@ -97,15 +94,9 @@
     <Compile Include="UserControls\ArtAndPlot.xaml.cs">
       <DependentUpon>ArtAndPlot.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\BoxArt.xaml.cs">
-      <DependentUpon>BoxArt.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Converters\MilisecondsToTimeSpanConverter.cs" />
     <Compile Include="Converters\NominationConverter.cs" />
     <Compile Include="Converters\PathToImageSourceConverter.cs" />
-    <Compile Include="UserControls\ChannelPicker.xaml.cs">
-      <DependentUpon>ChannelPicker.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\ContentGrid.xaml.cs">
       <DependentUpon>ContentGrid.xaml</DependentUpon>
     </Compile>
@@ -167,12 +158,6 @@
     <Compile Include="Windows\AddCountries.xaml.cs">
       <DependentUpon>AddCountries.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\StarRating.xaml.cs">
-      <DependentUpon>StarRating.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\AwardStack.xaml.cs">
-      <DependentUpon>AwardStack.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -180,21 +165,9 @@
       <DependentUpon>TestWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\ViewModels\AddCodecMappingViewModel.cs" />
-    <Page Include="Themes\Generic.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\ArtAndPlot.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UserControls\BoxArt.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\ChannelPicker.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\ContentGrid.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -285,14 +258,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Windows\AddCountries.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UserControls\StarRating.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="UserControls\AwardStack.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -416,6 +381,10 @@
       <Project>{a3ce8f2a-9950-409c-aa35-74cd1d1d6d87}</Project>
       <Name>GettextMarkupExtension</Name>
     </ProjectReference>
+    <ProjectReference Include="..\XamlControls\XamlControls.csproj">
+      <Project>{39d8b812-d2b3-476e-ba81-10beea1d5eee}</Project>
+      <Name>XamlControls</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Headers\trailer2.ico" />
@@ -482,9 +451,6 @@
     <Resource Include="Images\remove.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\boxes\generic.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\folder.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -529,6 +495,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\add_disabled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\default\generic.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

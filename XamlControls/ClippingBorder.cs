@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace RibbonUI.Controls {
+namespace Frost.XamlControls {
 
     /// <Remarks>As a side effect ClippingBorder will surpress any databinding or animation of its childs UIElement.Clip property until the child is removed from ClippingBorder</Remarks>
     public class ClippingBorder : Border {

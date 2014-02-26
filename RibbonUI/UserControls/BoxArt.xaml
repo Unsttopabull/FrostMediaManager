@@ -16,20 +16,20 @@
     </UserControl.Resources>
 
     <Grid>
-    <Image Panel.ZIndex="2"
-           Source="{Binding Type, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Box, TargetNullValue={StaticResource GenericBox}, FallbackValue={StaticResource GenericBox}}"
-           Stretch="Fill">
-        <Image.Effect>
-            <DropShadowEffect Color="White" BlurRadius="1" Opacity="0.3" ShadowDepth="1" />
-        </Image.Effect>
-    </Image>
-    <Image Stretch="Fill"
-           Margin="10,25,10,10"
-           Source="{Binding FirstCoverOrPoster.Path, FallbackValue={StaticResource DefaultCover}, TargetNullValue={StaticResource DefaultCover}}"
-           Panel.ZIndex="1">
-        <Image.CacheMode>
-            <BitmapCache />
-        </Image.CacheMode>
-    </Image>
+        <Image Panel.ZIndex="2"
+               Source="{Binding Type, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Box, TargetNullValue={StaticResource GenericBox}, FallbackValue={StaticResource GenericBox}}"
+               Stretch="Fill">
+            <Image.Effect>
+                <DropShadowEffect Color="White" BlurRadius="1" Opacity="0.3" ShadowDepth="1" />
+            </Image.Effect>
+        </Image>
+        <Image Stretch="Fill"
+               Margin="10,25,10,10"
+               Source="{Binding FirstCoverOrPoster.Path, FallbackValue={StaticResource DefaultCover}, TargetNullValue={StaticResource DefaultCover}}"
+               Panel.ZIndex="1">
+            <Image.CacheMode>
+                <BitmapCache />
+            </Image.CacheMode>
+        </Image>
     </Grid>
 </UserControl>

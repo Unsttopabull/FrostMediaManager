@@ -10,9 +10,9 @@
              xmlns:converters="clr-namespace:RibbonUI.Converters"
              xmlns:util="clr-namespace:Frost.DetectFeatures.Util;assembly=Frost.FeatureDetector"
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
-             xmlns:controls="clr-namespace:RibbonUI.Controls"
              xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
              mc:Ignorable="d" x:Name="FileNameParserSettingsControl"
              d:DesignHeight="635" d:DesignWidth="620">
     <UserControl.Resources>
@@ -72,7 +72,7 @@
 
         <DockPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5" LastChildFill="False">
             <Label Content="{l:T Known segments, Postfix=:}"/>
-            <controls:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected known segment}" Command="{Binding RemoveKnownSegmentCommand}" CommandParameter="{Binding SelectedItem, ElementName=KnownSegments}"/>
+            <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected known segment}" Command="{Binding RemoveKnownSegmentCommand}" CommandParameter="{Binding SelectedItem, ElementName=KnownSegments}"/>
         </DockPanel>
         <DataGrid x:Name="KnownSegments" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" MinHeight="100"
                   ItemsSource="{x:Static fileName:FileNameParser.KnownSegments}" CanUserResizeRows="False"
@@ -103,7 +103,7 @@
             </Grid.ColumnDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Content="{l:T Segment, Postfix=:}"/>
             <DockPanel Grid.Row="0" Grid.Column="2">
-                <controls:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}" ToolTip="{l:T Add a new known segment}" Command="{Binding AddNewKnownSegmentCommand}"/>
+                <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}" ToolTip="{l:T Add a new known segment}" Command="{Binding AddNewKnownSegmentCommand}"/>
                 <Label DockPanel.Dock="Left" Content="{l:T Segment type, Postfix=:}"/>
             </DockPanel>
             <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Segment, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, ValidatesOnExceptions=True}" MinHeight="22"/>
@@ -112,19 +112,19 @@
 
         <DockPanel Grid.Row="3" Grid.Column="0" LastChildFill="False">
             <Label Content="{l:T Excluded segments, Postfix=:}"/>
-            <controls:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove segment from exclusion}" Command="{Binding RemoveExcludedSegmentCommand}" CommandParameter="{Binding SelectedItem, ElementName=ExcludedSegmentsList}"/>
+            <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove segment from exclusion}" Command="{Binding RemoveExcludedSegmentCommand}" CommandParameter="{Binding SelectedItem, ElementName=ExcludedSegmentsList}"/>
         </DockPanel>
         <ListBox x:Name="ExcludedSegmentsList" Grid.Row="4" Grid.Column="0" MinHeight="100" ItemsSource="{x:Static fileName:FileNameParser.ExcludedSegments}" />
 
         <DockPanel Grid.Row="3" Grid.Column="2" LastChildFill="False">
             <Label Content="{l:T Release groups, Postfix=:}"/>
-            <controls:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected release group}" Command="{Binding RemoveReleaseGroupCommand}" CommandParameter="{Binding SelectedItem, ElementName=ReleaseGroups}"/>
+            <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected release group}" Command="{Binding RemoveReleaseGroupCommand}" CommandParameter="{Binding SelectedItem, ElementName=ReleaseGroups}"/>
         </DockPanel>
         <ListBox x:Name="ReleaseGroups" Grid.Row="4" Grid.Column="2" MinHeight="100" ItemsSource="{x:Static fileName:FileNameParser.ReleaseGroups}" />
 
         <DockPanel Grid.Row="3" Grid.Column="4" LastChildFill="False">
             <Label Content="{l:T Custom language mappings, Postfix=:}"/>
-            <controls:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected language mapping}" Command="{Binding RemoveLanguageMappingCommand}" CommandParameter="{Binding ElementName=CustomLanguageMappingsList, Path=SelectedItem}"/>
+            <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected language mapping}" Command="{Binding RemoveLanguageMappingCommand}" CommandParameter="{Binding ElementName=CustomLanguageMappingsList, Path=SelectedItem}"/>
         </DockPanel>
         <DataGrid x:Name="CustomLanguageMappingsList" Grid.Row="4" Grid.Column="4" MinHeight="100"
                   ItemsSource="{x:Static fileName:FileNameParser.CustomLanguageMappings}" CanUserResizeRows="False"
@@ -160,13 +160,13 @@
 
         <DockPanel Grid.Column="0" Grid.Row="5" LastChildFill="False">
             <Label Content="{l:T Exclude a segment}"/>
-            <controls:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}" ToolTip="{l:T Add a new segment to exclude}" Command="{Binding AddNewExcludedSegmentCommand}"/>
+            <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}" ToolTip="{l:T Add a new segment to exclude}" Command="{Binding AddNewExcludedSegmentCommand}"/>
         </DockPanel>
         <TextBox Grid.Row="6" Grid.Column="0" Text="{Binding ExcludedSegment, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" Height="{Binding ElementName=LanguageMappingSelect, Path=ActualHeight}"/>
 
         <DockPanel Grid.Column="2" Grid.Row="5" LastChildFill="False">
             <Label Content="{l:T Add a release group, Postfix=:}"/>
-            <controls:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}" ToolTip="{l:T Add a new release group}" Command="{Binding AddNewReleaseGroupCommand}"/>
+            <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}" ToolTip="{l:T Add a new release group}" Command="{Binding AddNewReleaseGroupCommand}"/>
         </DockPanel>
         <TextBox Grid.Row="6" Grid.Column="2" MaxLength="20" x:Name="NewReleaseGroup" ToolTip="{Binding ReleaseGroupError}" Text="{Binding ReleaseGroup, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" Height="{Binding ElementName=LanguageMappingSelect, Path=ActualHeight}">
             <!--<in:Interaction.Triggers>
@@ -192,7 +192,7 @@
             <Label Grid.Row="0" Grid.Column="0" Content="{l:T Mapping, Postfix=:}"/>
             <DockPanel Grid.Row="0" Grid.Column="2" LastChildFill="False">
                 <Label Content="{l:T Language, Postfix=:}"/>
-                <controls:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}" ToolTip="{l:T Add a new language mapping}" Command="{Binding AddNewLanguageMappingCommand}"/>
+                <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}" ToolTip="{l:T Add a new language mapping}" Command="{Binding AddNewLanguageMappingCommand}"/>
             </DockPanel>
 
             <TextBox Grid.Row="1" Grid.Column="0" DockPanel.Dock="Left" Height="{Binding ElementName=LanguageMappingSelect, Path=ActualHeight}" Text="{Binding Mapping, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>

@@ -3,7 +3,10 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
 
+[assembly:XmlnsDefinition("http://www.frostmediamanager.com/xaml/translation", "Frost.GettextMarkupExtension")]
+[assembly:XmlnsPrefix("http://www.frostmediamanager.com/xaml/translation", "l")]
 namespace Frost.GettextMarkupExtension {
+
     public class TExtension : MarkupExtension {
 
         public TExtension() {

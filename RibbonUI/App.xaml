@@ -3,9 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:converters="clr-namespace:RibbonUI.Converters"
              xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
-             xmlns:controls="clr-namespace:RibbonUI.Controls"
-             StartupUri="Windows/SettingsWindow.xaml">
-             <!--StartupUri="MainWindow.xaml">-->
+             xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
+             xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             StartupUri="MainWindow.xaml">             
+             <!--StartupUri="Windows/SettingsWindow.xaml">-->
     <Application.Resources>
         <converters:EmptyStringToNullConverter x:Key="EmptyStringToNullConverter" />
         <converters:PathToImageSourceConverter x:Key="PathToImageSourceConverter" />
@@ -15,18 +16,8 @@
         <BitmapImage x:Key="UnknownLanguageLarge" UriSource="Images/unknown_large.png" />
         <BitmapImage x:Key="Add" UriSource="Images/add.png" />
         <BitmapImage x:Key="AddDisabled" UriSource="Images/add_disabled.png" />
-        <BitmapImage x:Key="Remove" UriSource="Images/remove.png" />
+        <av:BitmapImage x:Key="Remove" UriSource="Images/remove.png" />
         <BitmapImage x:Key="RemoveDisabled" UriSource="Images/remove_disabled.png" />
-        
-        <Style TargetType="{x:Type controls:ImageButton}" x:Key="AddButton">
-            <Setter Property="EnabledSource" Value="{StaticResource Add}"/>
-            <Setter Property="DisabledSource" Value="{StaticResource AddDisabled}"/>
-        </Style>
-
-        <Style TargetType="{x:Type controls:ImageButton}" x:Key="RemoveButton">
-            <Setter Property="EnabledSource" Value="{StaticResource Remove}"/>
-            <Setter Property="DisabledSource" Value="{StaticResource RemoveDisabled}"/>
-        </Style>
 
         <!-- BUTTON BASE STYLE AERO NORMAL !-->
         <Style x:Key="ButtonFocusVisual">
@@ -92,7 +83,23 @@
         </Style>
         <!-- BUTTON BASE STYLE AERO NORMAL !-->
 
+        <Style TargetType="{x:Type fmm:ImageButton}" x:Key="AddButton">
+            <Setter Property="EnabledSource" Value="{StaticResource Add}"/>
+            <Setter Property="DisabledSource" Value="{StaticResource AddDisabled}"/>
+        </Style>
 
+        <Style TargetType="{x:Type fmm:ImageButton}" x:Key="RemoveButton">
+            <Setter Property="EnabledSource" Value="{StaticResource Remove}"/>
+            <Setter Property="DisabledSource" Value="{StaticResource RemoveDisabled}"/>
+        </Style>
+
+        <Style x:Key="CollapseOnTagNull" TargetType="{x:Type FrameworkElement}">
+            <Style.Triggers>
+                <Trigger Property="Tag" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
         <Style x:Key="TransparentBorderlessButtonCollapseOnTagNull" BasedOn="{StaticResource CollapseOnTagNull}"
                TargetType="{x:Type ButtonBase}">
@@ -204,15 +211,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <Style x:Key="CollapseOnTagNull" TargetType="{x:Type FrameworkElement}">
-            <Style.Triggers>
-                <Trigger Property="Tag" Value="{x:Null}">
-                    <Setter Property="Visibility" Value="Collapsed" />
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
+        
         <Style x:Key="MenuListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
             <Style.Resources>
                 <SolidColorBrush x:Key="MouseOverBorderBrush">#FFC29B29</SolidColorBrush>

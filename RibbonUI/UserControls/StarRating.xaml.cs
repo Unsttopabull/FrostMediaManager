@@ -8,14 +8,14 @@ namespace RibbonUI.UserControls {
 
     /// <summary>Interaction logic for StarRating.xaml</summary>
     public partial class StarRating : UserControl {
+        private static readonly FrameworkPropertyMetadata RatingPropertyMetadata = new FrameworkPropertyMetadata(default(double?), FrameworkPropertyMetadataOptions.AffectsRender, RatingChanged);
+        public static readonly DependencyProperty RatingProperty = DependencyProperty.Register("Rating", typeof(double?), typeof(StarRating), RatingPropertyMetadata);
+
         private const string PACK_URI_FORMAT = "pack://application:,,,/RibbonUI;component/{0}";
         private static readonly BitmapImage StarEmpty;
         private static readonly BitmapImage StarHalf;
         private static readonly BitmapImage StarFull;
         private double _mouseOverRating;
-
-        private static readonly FrameworkPropertyMetadata RatingPropertyMetadata = new FrameworkPropertyMetadata(default(double?), FrameworkPropertyMetadataOptions.AffectsRender, RatingChanged);
-        public static readonly DependencyProperty RatingProperty = DependencyProperty.Register("Rating", typeof(double?), typeof(StarRating), RatingPropertyMetadata);
 
         static StarRating() {
             StarFull = new BitmapImage(new Uri(string.Format(PACK_URI_FORMAT, "Images/Stars/star.png")));

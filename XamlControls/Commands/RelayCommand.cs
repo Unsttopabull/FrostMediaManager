@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Windows.Input;
 
-namespace RibbonUI.Commands {
+namespace Frost.XamlControls.Commands {
 
     public class RelayCommand<T> : ICommand {
         private readonly Action<T> _execute;
@@ -37,5 +37,15 @@ namespace RibbonUI.Commands {
         }
 
         #endregion // ICommand Members
+    }
+
+    public class RelayCommand : RelayCommand<object> {
+
+        public RelayCommand(Action execute) : base(o => execute()){
+        }
+
+        public RelayCommand(Action execute, Predicate<object> canExecute) : base(o => execute(), canExecute) {
+            
+        }
     }
 }

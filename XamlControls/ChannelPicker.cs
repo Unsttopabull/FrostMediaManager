@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using Frost.Common;
-using Frost.Common.Annotations;
-using Frost.Common.Models.DB.MovieVo;
+using System.Windows.Media;
+using Frost.XamlControls.Commands;
 
-namespace RibbonUI.UserControls {
+namespace Frost.XamlControls {
 
     public enum Channel {
         Unknown,
@@ -27,8 +21,7 @@ namespace RibbonUI.UserControls {
         LFE
     }
 
-    /// <summary>Interaction logic for ChannelPicker.xaml</summary>
-    public partial class ChannelPicker : UserControl {
+    public class ChannelPicker : Control {
         public static readonly DependencyProperty ChannelSetupProperty = DependencyProperty.Register("ChannelSetup", typeof(string), typeof(ChannelPicker), new PropertyMetadata(default(string)));
         public static readonly DependencyProperty ChannelLayoutProperty = DependencyProperty.Register("ChannelLayout", typeof(string), typeof(ChannelPicker), new FrameworkPropertyMetadata(default(string), FrameworkPropertyMetadataOptions.AffectsRender));
         public static readonly DependencyProperty ChannelPositionsProperty = DependencyProperty.Register("ChannelPositions", typeof(string), typeof(ChannelPicker), new PropertyMetadata(default(string), OnChannelPositionsChanged));
@@ -38,13 +31,53 @@ namespace RibbonUI.UserControls {
         private readonly HashSet<Channel> _side;
         private readonly HashSet<Channel> _back;
         private bool _first = true;
+        private bool _templateApplied;
+
+        private ToggleImageButton _frontCenter;
+        private ToggleImageButton _frontRight;
+        private ToggleImageButton _frontLeft;
+
+        private ToggleImageButton _sideRight;
+        private ToggleImageButton _sideLeft;
+
+        private ToggleImageButton _backRight;
+        private ToggleImageButton _backLeft;
+        private ToggleImageButton _lfe;
+
+        static ChannelPicker() {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(ChannelPicker), new FrameworkPropertyMetadata(typeof(ChannelPicker)));
+        }
 
         public ChannelPicker() {
-            InitializeComponent();
-
             _front = new HashSet<Channel>();
             _side = new HashSet<Channel>();
             _back = new HashSet<Channel>();
+
+            ChannelClickedCommand = new RelayCommand<ToggleImageButton>(OnToggleButtonClicked);
+        }
+
+        /// <summary>When overridden in a derived class, is invoked whenever application code or internal processes call <see cref="M:System.Windows.FrameworkElement.ApplyTemplate"/>.</summary>
+        public override void OnApplyTemplate() {
+            base.OnApplyTemplate();
+
+            _frontCenter = (ToggleImageButton) Template.FindName("FrontCenter", this);
+            _frontRight = (ToggleImageButton) Template.FindName("FrontRight", this);
+            _frontLeft = (ToggleImageButton) Template.FindName("FrontLeft", this);
+
+            _sideRight = (ToggleImageButton) Template.FindName("SideRight", this);
+            _sideLeft = (ToggleImageButton) Template.FindName("SideLeft", this);
+
+            _backRight = (ToggleImageButton) Template.FindName("BackRight", this);
+            _backLeft = (ToggleImageButton) Template.FindName("BackLeft", this);
+
+            _lfe = (ToggleImageButton) Template.FindName("Woofer", this);
+
+            _templateApplied = true;
+
+            if (string.IsNullOrEmpty(ChannelPositions)) {
+                SetFromNumberOfChannels(NumberOfChannels);
+            }
+            SetFromChannelPositionsString(ChannelPositions);  
         }
 
         public string ChannelSetup {
@@ -70,15 +103,21 @@ namespace RibbonUI.UserControls {
         public ICommand ChannelClickedCommand { get; private set; }
 
         private static void OnChannelPositionsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            ((ChannelPicker) d).SetFromChannelPositionsString((string) e.NewValue);
+            ChannelPicker channelPicker = (ChannelPicker) d;
+            if (channelPicker._templateApplied) {
+                channelPicker.SetFromChannelPositionsString((string) e.NewValue);
+            }
         }
 
         private static void OnNumberOfChannelChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            ((ChannelPicker) d).SetFromNumberOfChannels((int?) e.NewValue);
+            ChannelPicker channelPicker = (ChannelPicker) d;
+            if (channelPicker._templateApplied) {
+                channelPicker.SetFromNumberOfChannels((int?) e.NewValue);
+            }
         }
 
         private void SetFromNumberOfChannels(int? numberOfChannels) {
-            if (!numberOfChannels.HasValue || !string.IsNullOrEmpty(ChannelPositions)) {
+            if (!numberOfChannels.HasValue || !string.IsNullOrEmpty(ChannelPositions) || !IsInitialized) {
                 return;
             }
 
@@ -88,87 +127,94 @@ namespace RibbonUI.UserControls {
                 case 2:
                     _front.Add(Channel.FrontLeft);
                     _front.Add(Channel.FrontRight);
-                    FrontRight.IsChecked = true;
-                    FrontLeft.IsChecked = true;
+                    _frontRight.IsChecked = true;
+                    _frontLeft.IsChecked = true;
                     break;
                 case 6:
                     _front.Add(Channel.FrontLeft);
                     _front.Add(Channel.FrontRight);
                     _front.Add(Channel.FrontCenter);
-                    FrontCenter.IsChecked = true;
-                    FrontRight.IsChecked = true;
-                    FrontLeft.IsChecked = true;
+                    _frontCenter.IsChecked = true;
+                    _frontRight.IsChecked = true;
+                    _frontLeft.IsChecked = true;
 
                     _side.Add(Channel.SideLeft);
                     _side.Add(Channel.SideRight);
-                    SideRight.IsChecked = true;
-                    SideLeft.IsChecked = true;
+                    _sideRight.IsChecked = true;
+                    _sideLeft.IsChecked = true;
 
-                    Woofer.IsChecked = true;
+                    _lfe.IsChecked = true;
                     break;
                 case 8:
                     _front.Add(Channel.FrontLeft);
                     _front.Add(Channel.FrontRight);
                     _front.Add(Channel.FrontCenter);
-                    FrontCenter.IsChecked = true;
-                    FrontRight.IsChecked = true;
-                    FrontLeft.IsChecked = true;
+                    _frontCenter.IsChecked = true;
+                    _frontRight.IsChecked = true;
+                    _frontLeft.IsChecked = true;
 
                     _side.Add(Channel.SideLeft);
                     _side.Add(Channel.SideRight);
-                    SideRight.IsChecked = true;
-                    SideLeft.IsChecked = true;
+                    _sideRight.IsChecked = true;
+                    _sideLeft.IsChecked = true;
 
                     _back.Add(Channel.BackLeft);
                     _back.Add(Channel.BackRight);
-                    BackRight.IsChecked = true;
-                    BackLeft.IsChecked = true;
+                    _backRight.IsChecked = true;
+                    _backLeft.IsChecked = true;
 
-                    Woofer.IsChecked = true;
+                    _lfe.IsChecked = true;
                     break;
             }
 
             GetChannelPositions();
             GetChannelSetup();
 
-            ChannelLayout = Woofer.IsChecked == true
-                ? (numberOfChannels - 1) + ".1" 
-                : numberOfChannels + ".0";
+            ChannelLayout = _lfe.IsChecked == true
+                                ? (numberOfChannels - 1) + ".1"
+                                : numberOfChannels + ".0";
         }
 
         private void SetFromChannelPositionsString(string channelPositions) {
-            if (string.IsNullOrEmpty(channelPositions) && !_first) {
+            if (string.IsNullOrEmpty(channelPositions) || !_first || !IsInitialized ) {
                 return;
             }
 
             _first = true;
 
-            foreach (ToggleButton toggle in LogicalTreeHelper.GetChildren(this).OfType<ToggleButton>()) {
-                toggle.IsChecked = false;
-            }
+            _lfe.IsChecked = false;
+            _frontCenter.IsChecked = false;
+            _frontRight.IsChecked = false;
+            _frontLeft.IsChecked = false;
+
+            _sideRight.IsChecked = false;
+            _sideLeft.IsChecked = false;
+
+            _backRight.IsChecked = false;
+            _backLeft.IsChecked = false;
 
             int numChannels = 0;
-            string[] speakerPositions = channelPositions.SplitWithoutEmptyEntries(", ");
+            string[] speakerPositions = channelPositions.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string position in speakerPositions) {
                 int front = position.IndexOf("Front:", StringComparison.InvariantCultureIgnoreCase);
                 if (front != -1) {
-                    string[] speakers = position.Remove(front, 6).SplitWithoutEmptyEntries(" ");
+                    string[] speakers = position.Remove(front, 6).Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                     foreach (string speaker in speakers) {
                         switch (speaker) {
                             case "C":
                                 numChannels++;
                                 _front.Add(Channel.FrontCenter);
-                                FrontCenter.IsChecked = true;
+                                _frontCenter.IsChecked = true;
                                 break;
                             case "L":
                                 numChannels++;
                                 _front.Add(Channel.FrontLeft);
-                                FrontLeft.IsChecked = true;
+                                _frontLeft.IsChecked = true;
                                 break;
                             case "R":
                                 numChannels++;
                                 _front.Add(Channel.FrontRight);
-                                FrontRight.IsChecked = true;
+                                _frontRight.IsChecked = true;
                                 break;
                         }
                     }
@@ -178,19 +224,19 @@ namespace RibbonUI.UserControls {
 
                 int side = position.IndexOf("Side:", StringComparison.InvariantCultureIgnoreCase);
                 if (side != -1) {
-                    string[] speakers = position.Remove(side, 5).SplitWithoutEmptyEntries(" ");
+                    string[] speakers = position.Remove(side, 5).Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
                     foreach (string speaker in speakers) {
                         switch (speaker) {
                             case "L":
                                 numChannels++;
                                 _side.Add(Channel.SideLeft);
-                                SideLeft.IsChecked = true;
+                                _sideLeft.IsChecked = true;
                                 break;
                             case "R":
                                 numChannels++;
                                 _side.Add(Channel.SideRight);
-                                SideRight.IsChecked = true;
+                                _sideRight.IsChecked = true;
                                 break;
                         }
                     }
@@ -199,19 +245,19 @@ namespace RibbonUI.UserControls {
 
                 int back = position.IndexOf("Back:", StringComparison.InvariantCultureIgnoreCase);
                 if (back != -1) {
-                    string[] speakers = position.Remove(back, 5).SplitWithoutEmptyEntries(" ");
+                    string[] speakers = position.Remove(back, 5).Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
                     foreach (string speaker in speakers) {
                         switch (speaker) {
                             case "L":
                                 numChannels++;
                                 _back.Add(Channel.BackLeft);
-                                BackLeft.IsChecked = true;
+                                _backLeft.IsChecked = true;
                                 break;
                             case "R":
                                 numChannels++;
                                 _back.Add(Channel.BackRight);
-                                SideRight.IsChecked = true;
+                                _backRight.IsChecked = true;
                                 break;
                         }
                     }
@@ -219,21 +265,27 @@ namespace RibbonUI.UserControls {
                 }
 
                 if (position.Equals("LFE", StringComparison.InvariantCultureIgnoreCase)) {
-                    Woofer.IsChecked = true;
+                    _lfe.IsChecked = true;
                     numChannels++;
                 }
             }
 
             NumberOfChannels = numChannels;
             GetChannelSetup();
-            ChannelLayout = Woofer.IsChecked == true
+            ChannelLayout = _lfe.IsChecked == true
                                 ? (NumberOfChannels - 1) + ".1"
                                 : NumberOfChannels + ".0";
         }
 
-        private void OnToggleButtonClicked(object sender, RoutedEventArgs e) {
-            ToggleButton source = (ToggleButton) sender;
+        private void OnToggleButtonClicked(ToggleImageButton source) {
+            if (source == null) {
+                throw new ArgumentNullException("source");
+            }
+
             Channel channels = (Channel) source.Tag;
+            if (channels == Channel.Unknown) {
+                return;
+            }
 
             if (source.IsChecked == true) {
                 AddRemove(false, channels);
@@ -247,9 +299,9 @@ namespace RibbonUI.UserControls {
             GetChannelPositions();
             GetChannelSetup();
 
-            ChannelLayout = Woofer.IsChecked == true
-                ? (NumberOfChannels == 0 ? NumberOfChannels + ".1" : (NumberOfChannels - 1) + ".1")
-                : NumberOfChannels + ".0";
+            ChannelLayout = _lfe.IsChecked == true
+                                ? (NumberOfChannels == 0 ? NumberOfChannels + ".1" : (NumberOfChannels - 1) + ".1")
+                                : NumberOfChannels + ".0";
         }
 
         private void GetChannelSetup() {
@@ -318,7 +370,7 @@ namespace RibbonUI.UserControls {
                 }
             }
 
-            if (Woofer.IsChecked == true) {
+            if (_lfe.IsChecked == true) {
                 sb.Append(", LFE");
             }
             ChannelPositions = sb.ToString();

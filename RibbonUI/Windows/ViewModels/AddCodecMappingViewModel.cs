@@ -12,8 +12,8 @@ using System.Windows.Input;
 using Frost.Common.Annotations;
 using Frost.DetectFeatures;
 using Frost.GettextMarkupExtension;
+using Frost.XamlControls.Commands;
 using Microsoft.Win32;
-using RibbonUI.Commands;
 using RibbonUI.Util;
 
 namespace RibbonUI.Windows.ViewModels {

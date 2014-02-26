@@ -6,13 +6,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:e="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
              xmlns:converters="clr-namespace:RibbonUI.Converters"
-             xmlns:userControls="clr-namespace:RibbonUI.UserControls"
              xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:common="clr-namespace:Frost.Common;assembly=Frost.Common"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
+             xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
              mc:Ignorable="d" Loaded="OnControlLoaded"
              d:DesignHeight="725" d:DesignWidth="1071"
              DataContextChanged="EditMovieOnDataContextChanged">
@@ -125,7 +125,7 @@
                         </StackPanel>
                         <StackPanel Grid.Column="2" Grid.Row="4">
                             <Label Target="{Binding ElementName=MovieRating}" Content="{l:T Rating}"/>
-                            <userControls:StarRating Height="{Binding ElementName=MovieReleaseYear, Path=ActualHeight}" x:Name="MovieRating"
+                            <fmm:StarRating Height="{Binding ElementName=MovieReleaseYear, Path=ActualHeight}" x:Name="MovieRating"
                                                      Rating="{Binding Path=RatingAverage, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
 

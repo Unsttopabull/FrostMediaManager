@@ -10,10 +10,10 @@
         xmlns:files="clr-namespace:Frost.Common.Models.DB.MovieVo.Files;assembly=Frost.Common"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:e="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
-        xmlns:userControls="clr-namespace:RibbonUI.UserControls"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
+        xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
         mc:Ignorable="d"
         Title="{l:T Edit audio}" Height="443" Width="570" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         d:DataContext="{d:DesignInstance files:Audio}">
@@ -191,7 +191,7 @@
                 <Label VerticalAlignment="Center" Margin="-5,-5,0,0" Content="{l:T Channel layout, Postfix=:}"/>
                 <TextBlock Text="{Binding ElementName=ChannelPicker, Path=ChannelLayout, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,0,5"/>
             </StackPanel>
-            <userControls:ChannelPicker x:Name="ChannelPicker" BorderThickness="1" BorderBrush="DarkGray" ChannelSetup="{Binding ChannelSetup, Mode=TwoWay}" ChannelPositions="{Binding ChannelPositions, Mode=TwoWay}" NumberOfChannels="{Binding NumberOfChannels, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <fmm:ChannelPicker x:Name="ChannelPicker" BorderThickness="1" BorderBrush="DarkGray" ChannelSetup="{Binding ChannelSetup, Mode=TwoWay}" ChannelPositions="{Binding ChannelPositions, Mode=TwoWay}" NumberOfChannels="{Binding NumberOfChannels, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="{Binding ElementName=ChannelPicker, Path=ChannelPositions, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
 

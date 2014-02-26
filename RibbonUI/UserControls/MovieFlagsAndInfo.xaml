@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:userControls="clr-namespace:RibbonUI.UserControls"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
              xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
+             xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
              mc:Ignorable="d" x:Name="FlagsInfo" d:DesignHeight="75" d:DesignWidth="950">
     <UserControl.DataContext>
         <movieVo:Movie/>
@@ -45,7 +45,7 @@
             </StackPanel>
             <TextBlock Grid.Row="1" FontSize="14" Text="{Binding Path=FirstPlot.TaglineOrSummary, TargetNullValue={l:T No tagline}, FallbackValue={l:T No tagline}}"/>
             <StackPanel Grid.Row="3" Orientation="Horizontal">
-                <userControls:StarRating Rating="{Binding Path=RatingAverage}"/>
+                <fmm:StarRating Rating="{Binding Path=RatingAverage}"/>
                 <TextBlock FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding Top250, StringFormat=Top 250: {0}, TargetNullValue={x:Null}}"/>
                 <TextBlock FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding Path=DurationFormatted, StringFormat={}Runtime: {0}, FallbackValue={x:Null}, TargetNullValue={x:Null}}"/>
             </StackPanel>
