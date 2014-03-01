@@ -23,12 +23,12 @@
         <converters:TranslateEnumConverter x:Key="TranslateEnumConverter" />
         <ObjectDataProvider x:Key="BitRateModes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="dbModels:FrameOrBitRateMode" />
+                <x:Type TypeName="common:FrameOrBitRateMode" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
         <ObjectDataProvider x:Key="CompressionModes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="dbModels:CompressionMode" />
+                <x:Type TypeName="common:CompressionMode" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Window.Resources>

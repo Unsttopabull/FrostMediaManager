@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -11,7 +10,7 @@ using System.Threading.Tasks;
 using Frost.Common;
 using Frost.Common.Annotations;
 using Frost.DetectFeatures.FileName;
-using Frost.Models.Frost.DB;
+using Frost.DetectFeatures.Models;
 
 namespace Frost.DetectFeatures {
 
@@ -72,9 +71,9 @@ namespace Frost.DetectFeatures {
             _filePaths = filePaths;
         }
 
-        public IEnumerable<Movie> Search() {
+        public IEnumerable<MovieInfo> Search() {
             Count = 0;
-            Task<IEnumerable<Movie>>[] arr = new Task<IEnumerable<Movie>>[_filePaths.Length];
+            Task<IEnumerable<MovieInfo>>[] arr = new Task<IEnumerable<MovieInfo>>[_filePaths.Length];
 
             for (int i = 0; i < _filePaths.Length; i++) {
                 string filePath = _filePaths[i];
@@ -85,8 +84,8 @@ namespace Frost.DetectFeatures {
 
             Task.WaitAll(arr);
 
-            List<Movie> files = new List<Movie>();
-            foreach (Task<IEnumerable<Movie>> task in arr) {
+            List<MovieInfo> files = new List<MovieInfo>();
+            foreach (Task<IEnumerable<MovieInfo>> task in arr) {
                 if (task.IsCompleted) {
                     files.AddRange(task.Result);
                 }
@@ -95,11 +94,11 @@ namespace Frost.DetectFeatures {
             return files;
         }
 
-        private async Task<IEnumerable<Movie>> SearchDir(DirectoryInfo directory, bool recursive = true, bool fullDirName = false) {
+        private async Task<IEnumerable<MovieInfo>> SearchDir(DirectoryInfo directory, bool recursive = true, bool fullDirName = false) {
             //Debug.WriteLine(fullDirName ? directory.FullName : directory.Name, "DIRECTORY");
             //Debug.Indent();
 
-            List<Movie> mf = new List<Movie>();
+            List<MovieInfo> mf = new List<MovieInfo>();
 
             FileInfo[] mediaFiles;
             try {
@@ -155,7 +154,7 @@ namespace Frost.DetectFeatures {
             return mf;
         }
 
-        private Movie DetectDvdMovie(FileInfo[] mediaFiles) {
+        private MovieInfo DetectDvdMovie(FileInfo[] mediaFiles) {
             FileNameInfo[] fnInfos = new FileNameInfo[mediaFiles.Length];
             for (int i = 0; i < mediaFiles.Length; i++) {
                 fnInfos[i] = new FileNameParser(mediaFiles[i].FullName, true).Parse();
@@ -171,7 +170,7 @@ namespace Frost.DetectFeatures {
             //Debug.Unindent();
         }
 
-        private Movie[] DetectMultipartMovie(FileInfo[] mediaFiles) {
+        private MovieInfo[] DetectMultipartMovie(FileInfo[] mediaFiles) {
             FileNameParser fnp = new FileNameParser(mediaFiles[0].FullName);
             FileNameInfo info = fnp.Parse();
 
@@ -188,7 +187,7 @@ namespace Frost.DetectFeatures {
                 return new[] { Detect(fniArr) };
             }
 
-            Movie[] movies = new Movie[mediaFiles.Length];
+            MovieInfo[] movies = new MovieInfo[mediaFiles.Length];
 
             movies[0] = Detect(info);
             Count++;
@@ -205,7 +204,7 @@ namespace Frost.DetectFeatures {
 
         /// <param name="fnInfos">The file name information of the files to check for features.</param>
         /// <param name="nfoPriority">How to handle information in a NFO file if found.</param>
-        public Movie Detect(FileNameInfo[] fnInfos, NFOPriority nfoPriority = NFOPriority.OnlyNotDetected) {
+        public MovieInfo Detect(FileNameInfo[] fnInfos, NFOPriority nfoPriority = NFOPriority.OnlyNotDetected) {
             if (fnInfos == null || (fnInfos != null && fnInfos.Any(fnInfo => fnInfo == null))) {
                 throw new ArgumentNullException("fnInfos");
             }
@@ -219,7 +218,7 @@ namespace Frost.DetectFeatures {
 
         /// <param name="fnInfo">The file name information of the file to check for features.</param>
         /// <param name="nfoPriority">How to handle information in a NFO file if found.</param>
-        public Movie Detect(FileNameInfo fnInfo, NFOPriority nfoPriority = NFOPriority.OnlyNotDetected) {
+        public MovieInfo Detect(FileNameInfo fnInfo, NFOPriority nfoPriority = NFOPriority.OnlyNotDetected) {
             if (fnInfo == null) {
                 throw new ArgumentNullException("fnInfo");
             }

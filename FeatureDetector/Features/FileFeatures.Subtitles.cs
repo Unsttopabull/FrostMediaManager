@@ -7,30 +7,34 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.FileName;
+using Frost.DetectFeatures.Models;
 using Frost.DetectFeatures.Util;
-using Frost.Models.Frost.DB.Files;
 using Frost.SharpCharsetDetector;
 using Frost.SharpLanguageDetect;
 using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
 using Frost.SharpMediaInfo.Output.Properties.General;
-using File = System.IO.File;
-using FileVo = Frost.Models.Frost.DB.Files.File;
-using Language = Frost.Models.Frost.DB.Language;
 
 namespace Frost.DetectFeatures {
 
     public partial class FileFeatures : IDisposable {
         private static string _subtitleExtensionsRegex;
+        private static List<string> _knownSubtitleExtensions;
         private readonly MD5 _md5 = MD5.Create();
 
         /// <summary>Subtitle extension to search for when searching for subtitles.</summary>
-        public static List<string> KnownSubtitleExtensions { get; set; }
+        public static List<string> KnownSubtitleExtensions {
+            get { return _knownSubtitleExtensions; }
+            set {
+                _knownSubtitleExtensions = value;
+                _subtitleExtensionsRegex = string.Format(@"\.({0})", string.Join("|", KnownSubtitleExtensions));
+            }
+        }
 
         /// <summary>Known subtitle formats to be detected</summary>
         public static List<string> KnownSubtitleFormats { get; set; }
 
-        private void GetSubtitles(FileVo file) {
+        private void GetSubtitles(FileDetectionInfo file) {
             GetSubtitlesInFile(file);
 
 
@@ -45,7 +49,7 @@ namespace Frost.DetectFeatures {
             }
         }
 
-        private void GetSubtitlesInFile(FileVo file) {
+        private void GetSubtitlesInFile(FileDetectionInfo file) {
             ISOLanguageCode subLang = null;
             ISOLanguageCode audiolang = null;
 
@@ -58,18 +62,19 @@ namespace Frost.DetectFeatures {
 
             MediaListFile mFile = _mf.GetOrOpen(file.FullPath);
             foreach (MediaText text in mFile.Text) {
-                Subtitle sub;
-                Language lang = CheckLanguage(GetLanguage(true, text.Language, null, subLang, audiolang));
+                SubtitleDetectionInfo sub;
+                ISOLanguageCode lang = GetLanguage(true, text.Language, null, subLang, audiolang);
 
                 string mediaFormat = text.FormatInfo.Name;
 
                 //if MediaInfo detected a format and it is a known subtitle format
                 if (mediaFormat != null && KnownSubtitleFormats.BinarySearch(mediaFormat) >= 0) {
-                    sub = new Subtitle(file, lang, mediaFormat);
+
+                    sub = new SubtitleDetectionInfo(lang, mediaFormat);
                 }
                 else {
                     //TODO:check format if its a subtitle
-                    sub = new Subtitle(file, lang);
+                    sub = new SubtitleDetectionInfo(lang);
 
                     switch (mediaFormat) {
                         case "UTF-8":
@@ -82,33 +87,32 @@ namespace Frost.DetectFeatures {
                 }
                 sub.EmbededInVideo = true;
 
-                Movie.Subtitles.Add(sub);
+                file.Subtitles.Add(sub);
             }
         }
 
         private void GetSideSubtitles(MediaListFile mediaFile, FileNameInfo fnInfo) {
             SubtitleLanguage subLang = GetLanguageAndEncoding(mediaFile.General.FileInfo.FullPath);
 
-            FileVo file = GetFile(mediaFile, fnInfo.FilePath);
+            FileDetectionInfo file = GetFile(mediaFile, fnInfo.FilePath);
             if (file == null) {
                 return;
             }
 
             if (mediaFile.Text.Count > 0) {
                 foreach (MediaText text in mediaFile.Text) {
-                    Subtitle sub;
-                    Language languageToCheck = GetLanguage(true, text.Language, subLang.Language, fnInfo.SubtitleLanguage, fnInfo.Language);
-                    Language lang = CheckLanguage(languageToCheck);
+                    SubtitleDetectionInfo sub;
+                    ISOLanguageCode lang = GetLanguage(true, text.Language, subLang.Language, fnInfo.SubtitleLanguage, fnInfo.Language);
 
                     string mediaFormat = text.FormatInfo.Name;
 
                     //if MediaInfo detected a format and it is a known subtitle format
                     if (mediaFormat != null && KnownSubtitleFormats.BinarySearch(mediaFormat) >= 0) {
-                        sub = new Subtitle(file, lang, mediaFormat);
+                        sub = new SubtitleDetectionInfo(lang, mediaFormat);
                     }
                     else {
                         //TODO:check format if its a subtitle
-                        sub = new Subtitle(file, lang);
+                        sub = new SubtitleDetectionInfo(lang);
                     }
 
                     if (subLang.Encoding != null) {
@@ -116,14 +120,13 @@ namespace Frost.DetectFeatures {
                     }
                     sub.MD5 = subLang.MD5;
 
-                    Movie.Subtitles.Add(sub);
+                    file.Subtitles.Add(sub);
                 }
             }
             else {
-                Language languageToCheck = GetLanguage(true, null, subLang.Language, fnInfo.SubtitleLanguage, fnInfo.Language);
-                Language lang = CheckLanguage(languageToCheck);
+                ISOLanguageCode lang = GetLanguage(true, null, subLang.Language, fnInfo.SubtitleLanguage, fnInfo.Language);
 
-                Subtitle sub = new Subtitle(file, lang);
+                SubtitleDetectionInfo sub = new SubtitleDetectionInfo(lang);
 
                 if (subLang.Encoding != null) {
                     sub.Encoding = subLang.Encoding.WebName;
@@ -134,19 +137,19 @@ namespace Frost.DetectFeatures {
                 }
                 sub.MD5 = subLang.MD5;
 
-                Movie.Subtitles.Add(sub);
+                file.Subtitles.Add(sub);
             }
         }
 
-        private FileVo GetFile(MediaListFile mediaFile, string filePath) {
+        private FileDetectionInfo GetFile(MediaListFile mediaFile, string filePath) {
             MediaFileInfo mFileInfo = mediaFile.General.FileInfo;
             if (mFileInfo.FileName != null && mFileInfo.Extension != null && mFileInfo.FolderPath != null) {
-                return new FileVo(mFileInfo.FileName, mFileInfo.Extension, mFileInfo.FolderPath + "/", mFileInfo.FileSize);
+                return new FileDetectionInfo(mFileInfo.FileName, mFileInfo.Extension, mFileInfo.FolderPath + "/", mFileInfo.FileSize);
             }
 
             try {
                 FileInfo info = new FileInfo(filePath);
-                return new FileVo(info);
+                return new FileDetectionInfo(info);
             }
             catch {
                 return null;

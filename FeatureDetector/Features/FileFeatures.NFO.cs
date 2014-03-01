@@ -4,10 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Frost.Common.Models;
-using Frost.Common.Util.ISO;
-using Frost.Models.Frost.DB;
-using Frost.Models.Frost.DB.ISO;
-using Frost.Models.Frost.DB.People;
+using Frost.DetectFeatures.Models;
 
 namespace Frost.DetectFeatures {
 
@@ -42,7 +39,7 @@ namespace Frost.DetectFeatures {
                     continue;
                 }
 
-                MovieActor movieActor = Movie.ActorsLink.FirstOrDefault(a => a.Person.Name == actor.Name);
+                ActorInfo movieActor = Movie.Actors.FirstOrDefault(a => a.Name == actor.Name);
                 if (movieActor != null) {
                     if (overrideValues) {
                         //exists so just update
@@ -50,7 +47,7 @@ namespace Frost.DetectFeatures {
                             movieActor.Character = actor.Role;
                         }
                         if (!string.IsNullOrEmpty(actor.Thumb)) {
-                            movieActor.Person.Thumb = actor.Thumb;
+                            movieActor.Thumb = actor.Thumb;
                         }
                     }
                     else {
@@ -59,116 +56,42 @@ namespace Frost.DetectFeatures {
                             movieActor.Character = actor.Role;
                         }
 
-                        if (string.IsNullOrEmpty(movieActor.Person.Thumb) && !string.IsNullOrEmpty(actor.Thumb)) {
-                            movieActor.Person.Thumb = actor.Thumb;
+                        if (string.IsNullOrEmpty(movieActor.Thumb) && !string.IsNullOrEmpty(actor.Thumb)) {
+                            movieActor.Thumb = actor.Thumb;
                         }
                     }
                 }
                 else {
                     //create new person
-                    Movie.ActorsLink.Add(new MovieActor(Movie, new Person(actor.Name, actor.Thumb), null));
+                    Movie.Actors.Add(new ActorInfo(actor.Name, actor.Thumb));
                 }
             }
         }
 
         private void AddSet(string setName) {
             if (!string.IsNullOrEmpty(setName)) {
-                Movie.Set = new Set(setName);
-            }
-        }
-
-        private void AddGenre(Genre genre) {
-            if (!string.IsNullOrEmpty(genre.Name) && !Movie.Genres.Contains(genre)) {
-                Movie.Genres.Add(genre);
+                Movie.Set = setName;
             }
         }
 
         private void AddStudio(string studioName) {
-            if (!string.IsNullOrEmpty(studioName) && Movie.Studios.All(s => s.Name != studioName)) {
-                Movie.Studios.Add(new Studio(studioName));
+            if (!string.IsNullOrEmpty(studioName) && Movie.Studios.All(s => s != studioName)) {
+                Movie.Studios.Add(studioName);
             }
         }
 
         private void AddDirector(string directorName) {
             if (!string.IsNullOrEmpty(directorName)) {
-                Person director = Movie.Directors.FirstOrDefault(p => p.Name == directorName);
+                PersonInfo director = Movie.Directors.FirstOrDefault(p => p.Name == directorName);
                 if (director != null) {
                     return;
                 }
 
-                director = new Person(directorName);
+                director = new PersonInfo(directorName);
                 if (!Movie.Directors.Contains(director)) {
                     Movie.Directors.Add(director);
                 }
             }
-        }
-
-        private void AddCertification(Certification certification) {
-            certification.Country = CheckCountry(certification.Country);
-
-            Movie.Certifications.Add(certification);
-        }
-
-        private Country CheckCountry(Country countryToCheck) {
-            if (countryToCheck == null) {
-                return null;
-            }
-
-            string name = countryToCheck.Name;
-
-            //possible ISO 3166 code
-            if (name.Length == 2 || name.Length == 3) {
-                Country country = Country.FromISO3166(name);
-                if (country != null) {
-                    return  country;
-                }
-            }
-            else {
-                //the country is not in the DB yet
-                //check if ISO codes are already present
-                ISO3166 iso3166 = countryToCheck.ISO3166;
-                if (string.IsNullOrEmpty(iso3166.Alpha3) && string.IsNullOrEmpty(iso3166.Alpha2)) {
-                    //if not try to obtain them
-                    ISOCountryCode code = ISOCountryCodes.Instance.GetByEnglishName(name);
-                    if (code != null) {
-                        return new Country(code);
-                    }
-                }
-            }
-            return countryToCheck;
-        }
-
-        private Language CheckLanguage(Language languageToCheck) {
-            if (languageToCheck == null) {
-                return null;
-            }
-
-            string name = languageToCheck.Name;
-
-            //possible ISO 3166 code
-            if (name.Length == 2 || name.Length == 3) {
-                Language language = CheckIfNameIsIsoCode(name);
-                if (language != null) {
-                    return language;
-                }
-            }
-            else {
-                //the country is not in the DB yet
-                //check if ISO codes are already present
-                ISO639 iso639 = languageToCheck.ISO639;
-                if (string.IsNullOrEmpty(iso639.Alpha3) && string.IsNullOrEmpty(iso639.Alpha2)) {
-                    //if not try to obtain them
-                    ISOLanguageCode code = ISOLanguageCodes.Instance.GetByEnglishName(name);
-                    if (code != null) {
-                        return new Language(code);
-                    }
-                }
-            }
-            return languageToCheck;
-        }
-
-        private Language CheckIfNameIsIsoCode(string name) {
-            return Language.FromISO639(name);
         }
     }
 

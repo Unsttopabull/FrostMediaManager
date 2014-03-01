@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -245,38 +244,6 @@ namespace Frost.Model.Xbmc.DB {
         /// <summary>Gets or sets the studios that produced this movie.</summary>
         /// <value>The studios that produced this movie.</value>
         public virtual HashSet<XbmcStudio> Studios { get; set; }
-
-        #endregion
-
-        #region Conversion Functions
-
-        ///// <summary>Converts this instance to and instance of <see cref="Common.Models.DB.MovieVo.Movie">Movie</see>.</summary>
-        ///// <returns>An instance of <see cref="Common.Models.DB.MovieVo.Movie">Movie</see> converted from this instance.</returns>
-        //public Movie ToMovie(XbmcMovie movie) {
-        //    return (Movie) movie;
-        //}
-
-        ///// <summary>Converts this instance to and instance of <see cref="Common.Models.XML.XBMC.XbmcXmlMovie">XbmcXmlMovie</see>.</summary>
-        ///// <returns>An instance of <see cref="Common.Models.XML.XBMC.XbmcXmlMovie">XbmcXmlMovie</see> converted from this instance.</returns>
-        //public XbmcXmlMovie ToXmlMovie(XbmcMovie movie) {
-        //    return (XbmcXmlMovie) movie;
-        //}
-
-        #endregion
-
-        #region Conversion Operators
-
-        ///// <summary>Converts an instanc of <see cref="XbmcMovie"/> to an instance of <see cref="Common.Models.DB.MovieVo.Movie">Movie</see>.</summary>
-        ///// <returns>An instance of <see cref="Common.Models.DB.MovieVo.Movie">Movie</see> converted from an instance of <see cref="XbmcMovie"/>.</returns>
-        //public static explicit operator Movie(XbmcMovie movie) {
-        //    throw new NotImplementedException();
-        //}
-
-        ///// <summary>Converts an instance of <see cref="XbmcMovie"/> to an instance of <see cref="Common.Models.XML.XBMC.XbmcXmlMovie">XbmcXmlMovie</see>.</summary>
-        ///// <returns>An instance of <see cref="Common.Models.XML.XBMC.XbmcXmlMovie">XbmcXmlMovie</see> converted from an instance of <see cref="XbmcMovie"/>.</returns>
-        //public static explicit operator XbmcXmlMovie(XbmcMovie movie) {
-        //    throw new NotImplementedException();
-        //}
 
         #endregion
 

@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Frost.Common;
-using Frost.Models.Frost;
-using Frost.Models.Frost.DB.Arts;
-using Frost.Models.Frost.DB.People;
-using FileVo = Frost.Models.Frost.DB.Files.File;
-using File = System.IO.File;
+using Frost.DetectFeatures.Models;
 
 namespace Frost.DetectFeatures {
 
@@ -49,16 +45,16 @@ namespace Frost.DetectFeatures {
                 string actorName = Path.GetFileNameWithoutExtension(file.Name).Replace('_', ' ');
 
                 //Check if person has already been added to the movie's actor list
-                MovieActor actor = Movie.ActorsLink.FirstOrDefault(al => al.Person.Name == actorName);
+                ActorInfo actor = Movie.Actors.FirstOrDefault(al => al.Name == actorName);
                 if (actor != null) {
                     //if the actor is missing a thumbnails add it
-                    if (string.IsNullOrEmpty(actor.Person.Thumb)) {
-                        actor.Person.Thumb = file.FullName;
+                    if (string.IsNullOrEmpty(actor.Thumb)) {
+                        actor.Thumb = file.FullName;
                     }
                 }
                 else {
                     //add new person to the DB and add it to the movie's list of actors
-                    Movie.ActorsLink.Add(new MovieActor(Movie, new Person(actorName, file.FullName), null));
+                    Movie.Actors.Add(new ActorInfo(actorName, file.FullName));
                 }
             }
         }
@@ -66,36 +62,21 @@ namespace Frost.DetectFeatures {
         private void AddXjbArt(FileInfo artFile, ArtType type) {
             string pathFull = artFile.Name + "_full" + artFile.Extension;
 
-            ArtBase art = GetArtType(artFile.FullName, type, File.Exists(pathFull) ? pathFull : null);
+            ArtInfo art = GetArtType(artFile.FullName, type, File.Exists(pathFull) ? pathFull : null);
             if (art != null) {
                 Movie.Art.Add(art);
             }
         }
 
-        private static ArtBase GetArtType(string path, ArtType type, string pathFull) {
-            ArtBase art = null;
-
+        private static ArtInfo GetArtType(string path, ArtType type, string pathFull) {
             string preview = null;
+
             if (!string.IsNullOrEmpty(pathFull)) {
                 preview = path;
                 path = pathFull;
             }
 
-            switch (type) {
-                case ArtType.Unknown:
-                    art = new Art(path, preview);
-                    break;
-                case ArtType.Cover:
-                    art = new Cover(path, preview);
-                    break;
-                case ArtType.Poster:
-                    art = new Poster(path, preview);
-                    break;
-                case ArtType.Fanart:
-                    art = new Fanart(path, preview);
-                    break;
-            }
-            return art;
+            return new ArtInfo(type, path, preview);
         }
     }
 }

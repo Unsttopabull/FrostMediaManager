@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Globalization;
+using Frost.Common;
 using Frost.Model.Xbmc.NFO;
 
 namespace Frost.Models.Frost.DB.Files {

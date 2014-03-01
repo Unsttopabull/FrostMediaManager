@@ -1,23 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Frost.Common;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.FileName;
+using Frost.DetectFeatures.Models;
 using Frost.DetectFeatures.Util;
-using Frost.Models.Frost;
-using Frost.Models.Frost.DB;
-using Frost.Models.Frost.DB.Files;
 using Frost.SharpLanguageDetect;
 using Frost.SharpMediaInfo;
 using File = System.IO.File;
-using FileVo = Frost.Models.Frost.DB.Files.File;
-using Language = Frost.Models.Frost.DB.Language;
-using ScanType = Frost.Models.Frost.ScanType;
 
 namespace Frost.DetectFeatures {
 
@@ -28,7 +20,7 @@ namespace Frost.DetectFeatures {
         private readonly MediaInfoList _mf;
         private readonly NFOPriority _nfoPriority;
         //private readonly MovieVoContainer _mvc;
-        private readonly FileVo[] _files;
+        private readonly FileDetectionInfo[] _files;
         private bool _error;
 
         static FileFeatures() {
@@ -168,8 +160,13 @@ namespace Frost.DetectFeatures {
             _subtitleExtensionsRegex = string.Format(@"\.({0})", string.Join("|", KnownSubtitleExtensions));
 
             //DetectorFactory.LoadStaticProfiles();
-            if (Directory.Exists("LanguageProfiles")) {
-                DetectorFactory.LoadProfilesFromFolder("LanguageProfiles");
+            if (Directory.GetFiles("LanguageProfiles").Length > 0) {
+                try {
+                    DetectorFactory.LoadProfilesFromFolder("LanguageProfiles");
+                }
+                catch (LangDetectException) {
+                    DetectorFactory.LoadStaticProfiles();
+                }
             }
             else {
                 DetectorFactory.LoadStaticProfiles();
@@ -185,7 +182,7 @@ namespace Frost.DetectFeatures {
         }
 
         public FileFeatures(NFOPriority nfoPriority, params string[] fileNames) : this(nfoPriority) {
-            _files = new FileVo[fileNames.Length];
+            _files = new FileDetectionInfo[fileNames.Length];
 
             foreach (string filenName in fileNames) {
                 FileNameParser fnp = new FileNameParser(filenName);
@@ -197,7 +194,7 @@ namespace Frost.DetectFeatures {
         }
 
         public FileFeatures(NFOPriority nfoPriority, params FileNameInfo[] fileNameInfos) : this(nfoPriority) {
-            _files = new FileVo[fileNameInfos.Length];
+            _files = new FileDetectionInfo[fileNameInfos.Length];
 
             foreach (FileNameInfo nameInfo in fileNameInfos) {
                 _fnInfos.Add(nameInfo.FileOrFolderName, nameInfo);
@@ -214,9 +211,7 @@ namespace Frost.DetectFeatures {
             }
 
             //Movie = _mvc.Movies.Add(new Movie());
-            Movie = new Movie();
-
-            Movie.DirectoryPath = _directoryInfo.FullName;
+            Movie = new MovieInfo { DirectoryPath = _directoryInfo.FullName };
         }
 
         private void InitFile(int idx, string filePath) {
@@ -226,12 +221,12 @@ namespace Frost.DetectFeatures {
             }
 
             string directoryPath = null;
-            FileVo file = null;
+            FileDetectionInfo file = null;
             if (!filePath.EndsWith(".iso")) {
                 MediaListFile mFile = _mf.Add(filePath, true, true);
 
                 if (mFile != null && !string.IsNullOrEmpty(mFile.General.FileInfo.FileName)) {
-                    file = new FileVo(mFile.General.FileInfo.FileName, mFile.General.FileInfo.Extension, mFile.General.FileInfo.FolderPath + "/",
+                    file = new FileDetectionInfo(mFile.General.FileInfo.FileName, mFile.General.FileInfo.Extension, mFile.General.FileInfo.FolderPath + "/",
                         mFile.General.FileInfo.FileSize);
                 }
                 else {
@@ -267,7 +262,7 @@ namespace Frost.DetectFeatures {
             }
         }
 
-        private string ParseInfoFromPath(string filePath, ref FileVo file) {
+        private string ParseInfoFromPath(string filePath, ref FileDetectionInfo file) {
             string directoryPath;
             try {
                 FileInfo fi = new FileInfo(filePath);
@@ -288,7 +283,7 @@ namespace Frost.DetectFeatures {
             return directoryPath;
         }
 
-        private static FileVo ParseFileInfoFromFile(FileInfo fi) {
+        private static FileDetectionInfo ParseFileInfoFromFile(FileInfo fi) {
             if (fi == null) {
                 throw new ArgumentNullException("fi");
             }
@@ -299,139 +294,116 @@ namespace Frost.DetectFeatures {
                                    ? fi.Name.Substring(0, fi.Name.LastIndexOf('.'))
                                    : withoutExtension;
 
-            return new FileVo(withoutExtension, fi.Extension.Substring(1), fi.DirectoryName, fi.Length);
+            return new FileDetectionInfo(withoutExtension, fi.Extension.Substring(1), fi.DirectoryName, fi.Length);
         }
 
-        public Movie Movie { get; private set; }
+        public MovieInfo Movie { get; private set; }
 
         public bool Detect() {
             if (_error) {
                 return false;
             }
 
-            foreach (FileVo file in _files) {
+            foreach (FileDetectionInfo file in _files) {
                 DetectFile(file);
             }
 
-            if (!Movie.Runtime.HasValue) {
-                Movie.GetVideoRuntimeSum();
-            }
+            //if (!Movie.Runtime.HasValue) {
+            //    Movie.GetVideoRuntimeSum();
+            //}
 
-            GetGeneralAudioInfo();
-            GetGeneralVideoInfo();
+            //GetGeneralAudioInfo();
+            //GetGeneralVideoInfo();
 
-            DetectMovieType();
+            //DetectMovieType();
 
             //return Save();
             return true;
         }
 
-        private void GetGeneralVideoInfo() {
-            var mostFrequentVres = Movie.Videos.Where(v => v.Resolution.HasValue)
-                                        .GroupBy(v => v.Resolution)
-                                        .OrderByDescending(g => g.Count())
-                                        .FirstOrDefault();
+        //private void GetGeneralVideoInfo() {
+        //    var mostFrequentVres = Movie.Videos.Where(v => v.Resolution.HasValue)
+        //                                .GroupBy(v => v.Resolution)
+        //                                .OrderByDescending(g => g.Count())
+        //                                .FirstOrDefault();
 
-            if (mostFrequentVres != null) {
-                Video video = mostFrequentVres.FirstOrDefault();
+        //    if (mostFrequentVres != null) {
+        //        Video video = mostFrequentVres.FirstOrDefault();
 
-                if (video != null) {
-                    string resolution = video.Resolution.ToString();
-                    switch (video.ScanType) {
-                        case ScanType.Interlaced:
-                            resolution = resolution + "i";
-                            break;
-                        case ScanType.Progressive:
-                            resolution = resolution + "p";
-                            break;
-                    }
-                    Movie.VideoResolution = resolution;
-                }
-            }
-
-            var mostFrequent = Movie.Videos.Where(v => v.CodecId != null)
-                                    .GroupBy(v => v.CodecId)
-                                    .OrderByDescending(g => g.Count())
-                                    .FirstOrDefault();
-
-            if (mostFrequent != null) {
-                Video video = mostFrequent.FirstOrDefault();
-
-                if (video != null) {
-                    Movie.VideoCodec = video.CodecId;
-                }
-            }
-        }
-
-        private void GetGeneralAudioInfo() {
-            int numChannels = 0;
-            foreach (Audio audio in Movie.Audios) {
-                if (audio.NumberOfChannels.HasValue) {
-                    int val = audio.NumberOfChannels.Value;
-                    if (val > numChannels) {
-                        numChannels = val;
-                    }
-                }
-            }
-
-            if (numChannels != 0) {
-                Movie.NumberOfAudioChannels = numChannels;
-            }
-
-            var mostFrequentAudioCodec = Movie.Audios.Where(v => v.CodecId != null)
-                                              .GroupBy(v => v.CodecId)
-                                              .OrderByDescending(g => g.Count())
-                                              .FirstOrDefault();
-
-            if (mostFrequentAudioCodec != null) {
-                Audio audio = mostFrequentAudioCodec.FirstOrDefault();
-
-                if (audio != null) {
-                    Movie.AudioCodec = audio.CodecId;
-                }
-            }
-        }
-
-        //private bool Save() {
-        //    try {
-        //        //if (_mvc.Database.Connection.State == ConnectionState.Closed) {
-        //        //    _mvc.Database.Connection.Open();
-        //        //}
-
-        //        //_mvc.SaveChanges();
-        //        return true;
+        //        if (video != null) {
+        //            string resolution = video.Resolution.ToString();
+        //            switch (video.ScanType) {
+        //                case ScanType.Interlaced:
+        //                    resolution = resolution + "i";
+        //                    break;
+        //                case ScanType.Progressive:
+        //                    resolution = resolution + "p";
+        //                    break;
+        //            }
+        //            Movie.VideoResolution = resolution;
+        //        }
         //    }
-        //    catch (SQLiteException e) {
-        //        Console.Error.WriteLine(e.Message);
-        //        return false;
-        //    }
-        //    catch (InvalidOperationException e) {
-        //        Console.Error.WriteLine(e.Message);
-        //        return false;
-        //    }
-        //    catch (Exception e) {
-        //        Console.Error.WriteLine(e.Message);
-        //        return false;
+
+        //    var mostFrequent = Movie.Videos.Where(v => v.CodecId != null)
+        //                            .GroupBy(v => v.CodecId)
+        //                            .OrderByDescending(g => g.Count())
+        //                            .FirstOrDefault();
+
+        //    if (mostFrequent != null) {
+        //        Video video = mostFrequent.FirstOrDefault();
+
+        //        if (video != null) {
+        //            Movie.VideoCodec = video.CodecId;
+        //        }
         //    }
         //}
 
-        private void DetectMovieType() {
-            if (Movie.Videos.All(v => v.File.Extension.OrdinalEquals("vob") ||
-                                      v.File.Extension.OrdinalEquals("ifo") ||
-                                      v.File.Extension.OrdinalEquals("bup")) ||
-                Movie.Videos.All(v => v.Source.OrdinalEquals("DVD") ||
-                                      v.Source.OrdinalEquals("DVDR") ||
-                                      v.Source.OrdinalEquals("DVD-R"))) {
-                Movie.Type = MovieType.DVD;
-            }
+        //private void GetGeneralAudioInfo() {
+        //    int numChannels = 0;
+        //    foreach (Audio audio in Movie.Audios) {
+        //        if (audio.NumberOfChannels.HasValue) {
+        //            int val = audio.NumberOfChannels.Value;
+        //            if (val > numChannels) {
+        //                numChannels = val;
+        //            }
+        //        }
+        //    }
 
-            Regex reg = new Regex(@"(Bluray|BlueRay|Blu-ray|BD(5|25|9|50|r)?)$", RegexOptions.IgnoreCase);
-            if (_fnInfos.Values.Any(fi => fi.VideoSource != null && reg.IsMatch(fi.VideoSource))) {
-                Movie.Type = MovieType.BluRay;
-            }
-        }
+        //    if (numChannels != 0) {
+        //        Movie.NumberOfAudioChannels = numChannels;
+        //    }
 
-        private void DetectFile(FileVo file) {
+        //    var mostFrequentAudioCodec = Movie.Audios.Where(v => v.CodecId != null)
+        //                                      .GroupBy(v => v.CodecId)
+        //                                      .OrderByDescending(g => g.Count())
+        //                                      .FirstOrDefault();
+
+        //    if (mostFrequentAudioCodec != null) {
+        //        Audio audio = mostFrequentAudioCodec.FirstOrDefault();
+
+        //        if (audio != null) {
+        //            Movie.AudioCodec = audio.CodecId;
+        //        }
+        //    }
+        //}
+
+        //private void DetectMovieType() {
+        //    if (Movie.Videos.All(v => v.File.Extension.OrdinalEquals("vob") ||
+        //                              v.File.Extension.OrdinalEquals("ifo") ||
+        //                              v.File.Extension.OrdinalEquals("bup")) ||
+        //        Movie.Videos.All(v => v.Source.OrdinalEquals("DVD") ||
+        //                              v.Source.OrdinalEquals("DVDR") ||
+        //                              v.Source.OrdinalEquals("DVD-R"))) {
+        //        Movie.Type = MovieType.DVD;
+        //    }
+
+        //    Regex reg = new Regex(@"(Bluray|BlueRay|Blu-ray|BD(5|25|9|50|r)?)$", RegexOptions.IgnoreCase);
+        //    if (_fnInfos.Values.Any(fi => fi.VideoSource != null && reg.IsMatch(fi.VideoSource))) {
+        //        Movie.Type = MovieType.BluRay;
+        //    }
+        //}
+
+        private void DetectFile(FileDetectionInfo file) {
             GetFileNameInfo();
 
             GetSubtitles(file);
@@ -461,7 +433,7 @@ namespace Frost.DetectFeatures {
                 }
 
                 if (!string.IsNullOrEmpty(fnInfo.Genre) && !Movie.Genres.Contains(fnInfo.Genre)) {
-                    AddGenre(fnInfo.Genre);
+                    Movie.Genres.Add(fnInfo.Genre);
                 }
 
                 if (string.IsNullOrEmpty(Movie.Edithion)) {
@@ -473,30 +445,29 @@ namespace Frost.DetectFeatures {
                 }
 
                 foreach (string special in fnInfo.Specials) {
-                    Special spec = Movie.Specials.FirstOrDefault(s => s.Value == special);
-                    if (spec != null) {
+                    if (Movie.Specials.Contains(special)) {
                         continue;
                     }
-                    Movie.Specials.Add(new Special(special));
+                    Movie.Specials.Add(special);
                 }
             }
         }
 
-        private Language GetLanguage(bool subtitles, string mediaInfoLang, ISOLanguageCode detectedLangCode, ISOLanguageCode subLangCode, ISOLanguageCode langCode) {
+        private ISOLanguageCode GetLanguage(bool subtitles, string mediaInfoLang, ISOLanguageCode detectedLangCode, ISOLanguageCode subLangCode, ISOLanguageCode langCode) {
             if (mediaInfoLang != null) {
-                return Language.FromISO639(mediaInfoLang);
+                return ISOLanguageCodes.Instance.GetByISOCode(mediaInfoLang);
             }
 
             if (detectedLangCode != null) {
-                return new Language(detectedLangCode);
+                return detectedLangCode;
             }
 
             if (subtitles && subLangCode != null) {
-                return new Language(subLangCode);
+                return subLangCode;
             }
 
             if (langCode != null) {
-                return new Language(langCode);
+                return langCode;
             }
             return null;
         }
@@ -508,35 +479,32 @@ namespace Frost.DetectFeatures {
         public bool IsDisposed { get; private set; }
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
-        public void Dispose() {
-            if (!IsDisposed) {
-                if (_mf != null) {
-                    _mf.Close();
-                }
-
-                if (_md5 != null) {
-                    _md5.Dispose();
-                }
-
-                //if (_mvc != null) {
-                //    if (_mvc.Database.Connection.State != ConnectionState.Closed) {
-                //        _mvc.Database.Connection.Close();
-                //    }
-                //    _mvc.Dispose();
-                //}
-
-                GC.SuppressFinalize(this);
-                IsDisposed = true;
+        private void Dispose(bool finalizer) {
+            if (IsDisposed) {
+                return;
             }
+
+            if (_mf != null) {
+                _mf.Close();
+            }
+
+            if (_md5 != null) {
+                _md5.Dispose();
+            }
+
+            if (!finalizer) {
+                GC.SuppressFinalize(this);
+            }
+            IsDisposed = true;
         }
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
-        void IDisposable.Dispose() {
-            Dispose();
+        public void Dispose() {
+            Dispose(false);
         }
 
         ~FileFeatures() {
-            Dispose();
+            Dispose(true);
         }
 
         #endregion

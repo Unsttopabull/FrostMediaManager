@@ -3,11 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using Frost.Common;
 using Frost.Common.Util.ISO;
-using Frost.Models.Frost;
 
 namespace Frost.DetectFeatures.FileName {
-
-
 
     public class FileNameInfo {
         private string _title;

@@ -13,6 +13,7 @@
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
              xmlns:dbModels="clr-namespace:Frost.Models.Frost;assembly=Frost.Models.Frost"
              xmlns:db="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
+             xmlns:common="clr-namespace:Frost.Common;assembly=Frost.Common"
              mc:Ignorable="d" Loaded="OnControlLoaded"
              d:DesignHeight="725" d:DesignWidth="1071" d:DataContext="{d:DesignInstance db:Movie}"
              DataContextChanged="EditMovieOnDataContextChanged">
@@ -20,12 +21,12 @@
         <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
         <ObjectDataProvider x:Key="MovieTypes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="dbModels:MovieType" />
+                <x:Type TypeName="common:MovieType" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
         <ObjectDataProvider x:Key="DvDRegions" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="dbModels:DVDRegion" />
+                <x:Type TypeName="common:DVDRegion" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </UserControl.Resources>

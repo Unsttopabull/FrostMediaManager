@@ -3,23 +3,19 @@ using System.IO;
 using System.Linq;
 using Frost.Common;
 using Frost.DetectFeatures.FileName;
+using Frost.DetectFeatures.Models;
 using Frost.DetectFeatures.Util;
 using Frost.DetectFeatures.Util.AspectRatio;
-using Frost.Models.Frost;
-using Frost.Models.Frost.DB;
-using Frost.Models.Frost.DB.Files;
 using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
 using Frost.SharpOpenSubtitles.Util;
-
-using CompressionMode = Frost.Models.Frost.CompressionMode;
-using FrameOrBitRateMode = Frost.Models.Frost.FrameOrBitRateMode;
-using ScanType = Frost.Models.Frost.ScanType;
-using FileVo = Frost.Models.Frost.DB.Files.File;
+using CompressionMode = Frost.Common.CompressionMode;
+using FrameOrBitRateMode = Frost.Common.FrameOrBitRateMode;
 
 namespace Frost.DetectFeatures {
 
     public partial class FileFeatures : IDisposable {
+
         /// <summary>The video codec identifier mappings</summary>
         /// <example>dx50 => mpeg-4</example>
         public static CodecIdMappingCollection VideoCodecIdMappings;
@@ -27,7 +23,7 @@ namespace Frost.DetectFeatures {
         private void GetISOVideoInfo() {
         }
 
-        private void GetVideoInfo(FileVo file) {
+        private void GetVideoInfo(FileDetectionInfo file) {
             if (file.Extension == "iso") {
                 GetISOVideoInfo();
                 return;
@@ -45,11 +41,10 @@ namespace Frost.DetectFeatures {
                 }
 
                 foreach (MediaVideo mediaVideo in mediaFile.Video) {
-                    Video video = GetFileVideoStreamInfo(fnInfo, mediaVideo);
-                    video.File = file;
+                    VideoDetectionInfo video = GetFileVideoStreamInfo(fnInfo, mediaVideo);
                     video.MovieHash = movieHash;
 
-                    Movie.Videos.Add(video);
+                    file.Videos.Add(video);
                 }
             }
             else {
@@ -57,8 +52,8 @@ namespace Frost.DetectFeatures {
             }
         }
 
-        private Video GetFileVideoStreamInfo(FileNameInfo fnInfo, MediaVideo mv) {
-            Video v = new Video();
+        private VideoDetectionInfo GetFileVideoStreamInfo(FileNameInfo fnInfo, MediaVideo mv) {
+            VideoDetectionInfo v = new VideoDetectionInfo();
 
             AddFileNameInfo(fnInfo, v);
 
@@ -79,7 +74,7 @@ namespace Frost.DetectFeatures {
 
             v.Height = (int?) mv.Height;
             v.Width = (int?) mv.Width;
-            v.Language = CheckLanguage(GetLanguage(false, mv.LanguageInfo.Full1, null, fnInfo.SubtitleLanguage, fnInfo.Language));
+            v.Language = GetLanguage(false, mv.LanguageInfo.Full1, null, fnInfo.SubtitleLanguage, fnInfo.Language);
 
             v.ScanType = (ScanType) mv.ScanType;
 
@@ -97,7 +92,7 @@ namespace Frost.DetectFeatures {
             return v;
         }
 
-        private void GetResolution(MediaVideo mv, Video v) {
+        private void GetResolution(MediaVideo mv, VideoDetectionInfo v) {
             int resolution = 0;
             if (!string.IsNullOrEmpty(mv.Standard)) {
                 v.Standard = mv.Standard;
@@ -163,7 +158,7 @@ namespace Frost.DetectFeatures {
                 : id;
         }
 
-        private void AddFileNameInfo(FileNameInfo fnInfo, Video video) {
+        private void AddFileNameInfo(FileNameInfo fnInfo, VideoDetectionInfo video) {
             if (fnInfo.VideoSource != null) {
                 video.Source = fnInfo.VideoSource;
             }
@@ -201,7 +196,7 @@ namespace Frost.DetectFeatures {
             }
 
             if (fnInfo.Language != null) {
-                video.Language = CheckLanguage(new Language(fnInfo.Language));
+                video.Language = fnInfo.Language;
             }
         }
     }

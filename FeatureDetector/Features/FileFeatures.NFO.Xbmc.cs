@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Frost.Common;
+using Frost.Common.Util.ISO;
+using Frost.DetectFeatures.Models;
 using Frost.Model.Xbmc.NFO;
-using Frost.Models.Frost;
-using Frost.Models.Frost.DB;
 
 namespace Frost.DetectFeatures {
 
     public partial class FileFeatures : IDisposable {
+        private static readonly ISOCountryCode Usa = ISOCountryCodes.Instance.GetByISOCode("USA");
 
         private void GetXbmcNfoInfo(string fileName, FileInfo[] xbmcNfo) {
             FileInfo sameName = xbmcNfo.FirstOrDefault(fi => fi.Name.Equals(fileName + ".nfo"));
@@ -59,8 +62,11 @@ namespace Frost.DetectFeatures {
             Movie.ReleaseDate = xbmcMovie.ReleaseDate != default(DateTime) ? xbmcMovie.ReleaseDate : Movie.ReleaseDate;
             Movie.LastPlayed = xbmcMovie.LastPlayed != default(DateTime) ? FilterDate(xbmcMovie.LastPlayed) : Movie.LastPlayed;
 
-            if(string.IsNullOrEmpty(Movie.MPAARating) && !string.IsNullOrEmpty(xbmcMovie.MPAA)) {
-                Movie.Certifications.Add(new Certification(new Country("United States", "us", "usa"), xbmcMovie.MPAA));
+            if(!string.IsNullOrEmpty(xbmcMovie.MPAA)) {
+                CertificationInfo mpaa = Movie.Certifications.FirstOrDefault(c => c.Country == Usa);
+                if (mpaa != null) {
+                    mpaa.Rating = xbmcMovie.MPAA;
+                }
             }
 
             AddActors(xbmcMovie.Actors, true);
@@ -79,17 +85,50 @@ namespace Frost.DetectFeatures {
             Movie.ReleaseDate = Movie.ReleaseDate != default(DateTime) ? Movie.ReleaseDate : xbmcMovie.ReleaseDate;
             Movie.LastPlayed = Movie.LastPlayed != default(DateTime) ? Movie.LastPlayed : FilterDate(xbmcMovie.LastPlayed);
 
-            if(!string.IsNullOrEmpty(xbmcMovie.MPAA)) {
-                if (!string.IsNullOrEmpty(Movie.MPAARating)) {
-                    Movie.Certifications.RemoveWhere(c => c.Country.Name == "United States");
-                }
-
-                Movie.Certifications.Add(new Certification(new Country("United States", "us", "usa"), xbmcMovie.MPAA));
+            if(!string.IsNullOrEmpty(xbmcMovie.MPAA) && string.IsNullOrEmpty(xbmcMovie.MPAA)) {
+                
             }
 
             AddActors(xbmcMovie.Actors);
 
             AddNfoMovieCommon(xbmcMovie);
+        }
+
+        public static IEnumerable<ArtInfo> GetArt(XbmcXmlMovie xm) {
+            List<ArtInfo> art = new List<ArtInfo>();
+
+            if (xm.Thumbs != null) {
+                //add all Thumbnails/Posters/Covers
+                foreach (XbmcXmlThumb thumb in xm.Thumbs) {
+                    ArtInfo a;
+
+                    if (string.IsNullOrEmpty(thumb.Aspect)) {
+                        a = new ArtInfo(ArtType.Unknown, thumb.Path, thumb.Preview);
+                    }
+                    else {
+                        switch (thumb.Aspect.ToLower()) {
+                            case "poster":
+                                a = new ArtInfo(ArtType.Poster,thumb.Path, thumb.Preview);
+                                break;
+                            case "cover":
+                                a = new ArtInfo(ArtType.Cover, thumb.Path, thumb.Preview);
+                                break;
+                            default:
+                                a = new ArtInfo(ArtType.Unknown, thumb.Path, thumb.Preview);
+                                break;
+                        }
+                    }
+
+                    art.Add(a);
+                }
+            }
+
+            if (xm.Fanart != null && xm.Fanart.Thumbs != null) {
+                //add fanart
+                art.AddRange(xm.Fanart.Thumbs.Select(thumb => new ArtInfo(ArtType.Fanart, thumb.Path, thumb.Preview)));
+            }
+
+            return art;
         }
 
         private void AddNfoMovieCommon(XbmcXmlMovie xbmcMovie) {
@@ -103,23 +142,27 @@ namespace Frost.DetectFeatures {
             Movie.Aired = FilterDate(xbmcMovie.Aired);
             Movie.Trailer = xbmcMovie.GetTrailerUrl();
 
-            Movie.Art.UnionWith(xbmcMovie.GetArt());
-            Movie.Certifications.UnionWith(xbmcMovie.GetCertifications());
+            Movie.Art.AddRange(GetArt(xbmcMovie));
 
-            foreach (Country country in Country.GetFromNames(xbmcMovie.Countries)) {
-                Country item = CheckCountry(country);
-                Movie.Countries.Add(item);
+            foreach (XbmcXmlCertification certification in xbmcMovie.Certifications) {
+                ISOCountryCode country = ISOCountryCodes.Instance.GetByEnglishName(certification.Country);
+                
+                Movie.Certifications.Add(new CertificationInfo(country, certification.Rating));
+            }
+
+            foreach (string country in xbmcMovie.Countries) {
+                ISOCountryCode isoCountry = ISOCountryCodes.Instance.GetByEnglishName(country);
+                if (isoCountry == null) {
+                    continue;
+                }
+
+                Movie.Countries.Add(isoCountry);
             }
 
             Movie.RatingAverage = Math.Abs(xbmcMovie.Rating - default(float)) > 0.001 ? xbmcMovie.Rating : Movie.RatingAverage;
 
-            foreach (Genre genre in Genre.GetFromNames(xbmcMovie.Genres)) {
-                AddGenre(genre);
-            }
-
-            foreach (string studio in xbmcMovie.Studios) {
-                AddStudio(studio);
-            }
+            Movie.Genres.AddRange(xbmcMovie.Genres);
+            Movie.Studios.AddRange(xbmcMovie.Studios);
 
             foreach (string director in xbmcMovie.Directors) {
                 AddDirector(director);
@@ -138,7 +181,7 @@ namespace Frost.DetectFeatures {
             }
 
             if (xbmcMovie.Plot != null) {
-                Movie.Plots.Add(new Plot(xbmcMovie.Plot, xbmcMovie.Outline, xbmcMovie.Tagline, null));
+                Movie.Plots.Add(new PlotInfo(xbmcMovie.Plot, xbmcMovie.Outline, xbmcMovie.Tagline, null));
             }
         }
     }

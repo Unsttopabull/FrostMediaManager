@@ -1,9 +1,8 @@
-using System;
 
 namespace Frost.Models.Frost.DB.Arts {
 
     /// <summary>Represents a movie cover image.</summary>
-    public class Cover : ArtBase, IEquatable<Cover> {
+    public class Cover : ArtBase {
 
         public Cover() {
         }
@@ -17,13 +16,6 @@ namespace Frost.Models.Frost.DB.Arts {
         /// <summary>Initializes a new instance of the <see cref="Cover"/> class.</summary>
         /// <param name="path">The path to this art (can be local or network or an URI).</param>
         public Cover(string path) : base(path, null) {
-        }
-
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(Cover other) {
-            return base.Equals(other);
         }
 
     }

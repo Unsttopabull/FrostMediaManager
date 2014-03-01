@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
-using Frost.Models.Frost.DB;
+using Frost.DetectFeatures.Models;
+using Frost.Models.Xtreamer;
 using Frost.Models.Xtreamer.DB;
 using Frost.Models.Xtreamer.NFO;
 
 namespace Frost.DetectFeatures {
 
     public partial class FileFeatures : IDisposable {
-
         private void GetXtreamerNfoInfo(string xtNfo) {
             XjbXmlMovie xjbMovie = null;
             try {
@@ -35,8 +35,8 @@ namespace Frost.DetectFeatures {
             Movie.ReleaseYear = CheckReleaseYear(Movie.ReleaseYear) ? Movie.ReleaseYear : xjbMovie.Year;
 
             Movie.RatingAverage = Movie.RatingAverage ?? xjbMovie.AverageRating;
-            if(string.IsNullOrEmpty(Movie.MPAARating) && !string.IsNullOrEmpty(xjbMovie.MPAA)) {
-                Movie.Certifications.Add(new Certification(new Country("United States", "us", "usa"), xjbMovie.MPAA));
+            if (string.IsNullOrEmpty(Movie.MPAARating) && !string.IsNullOrEmpty(xjbMovie.MPAA)) {
+                Movie.Certifications.Add(new CertificationInfo(Usa, xjbMovie.MPAA));
             }
 
             GetNfoMovieInfoCommon(xjbMovie);
@@ -50,12 +50,11 @@ namespace Frost.DetectFeatures {
             Movie.ReleaseYear = CheckReleaseYear(xjbMovie.Year) ? xjbMovie.Year : Movie.ReleaseYear;
 
             Movie.RatingAverage = Math.Abs(xjbMovie.AverageRating - default(float)) > 0.001 ? xjbMovie.AverageRating : Movie.RatingAverage;
-            if(!string.IsNullOrEmpty(xjbMovie.MPAA)) {
-                if (!string.IsNullOrEmpty(Movie.MPAARating)) {
-                    Movie.Certifications.RemoveWhere(c => c.Country.Name == "United States");
+            if (!string.IsNullOrEmpty(xjbMovie.MPAA)) {
+                CertificationInfo mpaa = Movie.Certifications.FirstOrDefault(c => c.Country == Usa);
+                if (mpaa != null) {
+                    mpaa.Rating = xjbMovie.MPAA;
                 }
-
-                Movie.Certifications.Add(new Certification(new Country("United States", "us", "usa"), xjbMovie.MPAA));
             }
 
             GetNfoMovieInfoCommon(xjbMovie);
@@ -70,9 +69,11 @@ namespace Frost.DetectFeatures {
                 }
             }
 
-            if (!string.IsNullOrEmpty(xjbMovie.Certifications)) {
-                foreach (Certification certification in Certification.ParseCertificationsString(xjbMovie.Certifications)) {
-                    AddCertification(certification);
+            if (!string.IsNullOrEmpty(xjbMovie.CertificationsString)) {
+                foreach (XjbCertification certification in xjbMovie.Certifications) {
+                    if (Movie.Certifications.All(c => c.Country != certification.Country)) {
+                        Movie.Certifications.Add(new CertificationInfo(certification.Country, certification.Rating));
+                    }
                 }
             }
 
@@ -82,7 +83,7 @@ namespace Frost.DetectFeatures {
             foreach (string director in xjbMovie.Directors) {
                 AddDirector(director);
             }
-            
+
             AddActors(xjbMovie.Actors, true);
 
             if (xjbMovie.Runtime.HasValue) {
@@ -96,7 +97,7 @@ namespace Frost.DetectFeatures {
             }
 
             if (xjbMovie.Plot != null) {
-                Movie.Plots.Add(new Plot(xjbMovie.Plot, xjbMovie.Outline, xjbMovie.Tagline, null));
+                Movie.Plots.Add(new PlotInfo(xjbMovie.Plot, xjbMovie.Outline, xjbMovie.Tagline, null));
             }
         }
 
@@ -107,10 +108,10 @@ namespace Frost.DetectFeatures {
             }
 
             return !string.IsNullOrEmpty(otherwise)
-                ? otherwise
-                : null;
+                       ? otherwise
+                       : null;
         }
-    
+
         private void CheckAddXjbGenres(XjbXmlMovie xjbMovie, bool otherwise = false) {
             if (otherwise) {
                 Movie.Genres.Clear();
@@ -125,8 +126,10 @@ namespace Frost.DetectFeatures {
                     continue;
                 }
 
-                Genre genre = Genre.FromGenreAbbreviation(genreAbbrev);
-                AddGenre(genre);
+                string xjbGenre = XjbGenre.GenreNameFromAbbreviation(genreAbbrev);
+                if (!Movie.Genres.Contains(xjbGenre)) {
+                    Movie.Genres.Add(xjbGenre);
+                }
             }
         }
     }

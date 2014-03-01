@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Linq;
+using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.FileName;
+using Frost.DetectFeatures.Models;
 using Frost.DetectFeatures.Util;
-using Frost.Models.Frost.DB;
-using Frost.Models.Frost.DB.Files;
 using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
-using CompressionMode = Frost.Models.Frost.CompressionMode;
-using FileVo = Frost.Models.Frost.DB.Files.File;
-using FrameOrBitRateMode = Frost.Models.Frost.FrameOrBitRateMode;
+using CompressionMode = Frost.Common.CompressionMode;
+using FrameOrBitRateMode = Frost.Common.FrameOrBitRateMode;
 
 namespace Frost.DetectFeatures {
 
@@ -20,7 +19,7 @@ namespace Frost.DetectFeatures {
         private void GetISOAudioInfo() {
         }
 
-        private void GetAudioInfo(FileVo file) {
+        private void GetAudioInfo(FileDetectionInfo file) {
             if (file.Extension == "iso") {
                 GetISOAudioInfo();
                 return;
@@ -29,10 +28,9 @@ namespace Frost.DetectFeatures {
             MediaListFile mediaFile = _mf.GetOrOpen(file.FullPath);
             if (mediaFile != null) {
                 foreach (MediaAudio mediaVideo in mediaFile.Audio) {
-                    Audio audio = GetFileAudioStreamInfo(_fnInfos[file.NameWithExtension], mediaVideo);
-                    audio.File = file;
+                    AudioDetectionInfo audio = GetFileAudioStreamInfo(_fnInfos[file.NameWithExtension], mediaVideo);
 
-                    Movie.Audios.Add(audio);
+                    file.Audios.Add(audio);
                 }
             }
             else {
@@ -40,8 +38,8 @@ namespace Frost.DetectFeatures {
             }
         }
 
-        private Audio GetFileAudioStreamInfo(FileNameInfo fnInfo, MediaAudio ma) {
-            Audio a = new Audio();
+        private AudioDetectionInfo GetFileAudioStreamInfo(FileNameInfo fnInfo, MediaAudio ma) {
+            AudioDetectionInfo a = new AudioDetectionInfo();
 
             AddFileNameInfo(fnInfo, a);
 
@@ -74,7 +72,7 @@ namespace Frost.DetectFeatures {
                 : id;
         }
 
-        private void AddFileNameInfo(FileNameInfo fnInfo, Audio audio) {
+        private void AddFileNameInfo(FileNameInfo fnInfo, AudioDetectionInfo audio) {
             if (fnInfo.AudioSource != null) {
                 audio.Source = fnInfo.AudioSource;
             }
@@ -83,15 +81,13 @@ namespace Frost.DetectFeatures {
             audio.Type = fnInfo.AudioQuality;
 
             if (fnInfo.Language != null) {
-                audio.Language = CheckLanguage(new Language(fnInfo.Language));
+                audio.Language = fnInfo.Language;
             }
         }
 
-        private Language GetLangauge(MediaAudio ma) {
+        private ISOLanguageCode GetLangauge(MediaAudio ma) {
             if (ma.Language != null && ma.Language != "Undefined") {
-                Language languageToCheck = new Language(ma.LanguageInfo.Full1.Trim(), ma.LanguageInfo.ISO639_Alpha2, ma.LanguageInfo.ISO639_Alpha3);
-                Language lang = CheckLanguage(languageToCheck);
-                return lang;
+                return ISOLanguageCodes.Instance.GetByISOCode(ma.LanguageInfo.ISO639_Alpha3);
             }
             return null;
         }

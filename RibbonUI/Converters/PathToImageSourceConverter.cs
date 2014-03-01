@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
+using Frost.Common;
 using Frost.Models.Frost;
 using Frost.Models.Frost.DB.Files;
 using File = System.IO.File;

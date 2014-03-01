@@ -39,7 +39,7 @@ namespace Frost.Models.Frost.DB.Files {
 
             Extension = info.Extension;
             Name = Path.GetFileNameWithoutExtension(info.Name);
-            FolderPath = info.DirectoryName + "\\";
+            FolderPath = info.DirectoryName + Path.DirectorySeparatorChar;
             Size = info.Length;
         }
 

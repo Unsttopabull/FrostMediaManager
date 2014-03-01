@@ -56,6 +56,16 @@
   <ItemGroup>
     <Compile Include="FeatureDetector.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Models\ActorInfo.cs" />
+    <Compile Include="Models\ArtInfo.cs" />
+    <Compile Include="Models\AudioDetectionInfo.cs" />
+    <Compile Include="Models\CertificationInfo.cs" />
+    <Compile Include="Models\FileDetectionInfo.cs" />
+    <Compile Include="Models\MovieInfo.cs" />
+    <Compile Include="Models\PersonInfo.cs" />
+    <Compile Include="Models\PlotInfo.cs" />
+    <Compile Include="Models\SubtitleDetectionInfo.cs" />
+    <Compile Include="Models\VideoDetectionInfo.cs" />
     <Compile Include="Util\LanguageMappingCollection.cs" />
     <Compile Include="Util\LanguageMapping.cs" />
     <Compile Include="Util\SegmentCollection.cs" />
@@ -91,10 +101,6 @@
       <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DBModels\Models.Frost.csproj">
-      <Project>{b404da8f-fbf4-4ccc-be01-22c488863ec2}</Project>
-      <Name>Models.Frost</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Models.Xbmc\Models.Xbmc.csproj">
       <Project>{2E311A90-347B-47E1-8AA7-87A276C88F4E}</Project>
       <Name>Models.Xbmc</Name>
@@ -120,6 +126,7 @@
       <Name>SharpCharsetDetector</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

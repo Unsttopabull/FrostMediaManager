@@ -72,6 +72,15 @@ namespace Frost.Common {
 
         /// <summary>Splits the string on specified delimiters and removes empty entires.</summary>
         /// <param name="str">The string to split.</param>
+        /// <param name="delimiter">The delimiter to split on.</param>
+        /// <returns>Array of strings that resulted in the split without empty entries.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string[] SplitWithoutEmptyEntries(this string str, string delimiter) {
+            return str.Split(new[] { delimiter }, StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        /// <summary>Splits the string on specified delimiters and removes empty entires.</summary>
+        /// <param name="str">The string to split.</param>
         /// <param name="delimiters">The delimiters to split on.</param>
         /// <returns>Array of strings that resulted in the split without empty entries.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

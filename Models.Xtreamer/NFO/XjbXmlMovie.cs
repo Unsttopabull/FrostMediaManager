@@ -77,9 +77,15 @@ namespace Frost.Models.Xtreamer.NFO {
         /// <value>Other country ratings</value>
         /// <remarks>If more than 1 they are split by " / " with country and rating split by ":" without space</remarks>
         /// <example>\eg{ ''<c>us:R / au:M</c>''}</example>
-        //[EditorBrowsable(EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         [XmlElement("certification", Form = XmlSchemaForm.Unqualified)]
-        public string Certifications { get; set; }
+        public string CertificationsString { get; set; }
+
+        [XmlIgnore]
+        public XjbCertification[] Certifications {
+            get { return XjbCertification.ParseCertificationsString(CertificationsString); }
+            set { CertificationsString = string.Join<XjbCertification>(SEPARATOR, value);}
+        }
 
         /// <summary>Gets or sets the movie genres.</summary>
         /// <value>The movie genres separated by " / "</value>

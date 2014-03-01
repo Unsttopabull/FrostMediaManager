@@ -24,7 +24,7 @@ namespace Frost.Common.Models {
             return certStr.SplitWithoutEmptyEntries(CERTIFICATIONS_SEPARATOR)
                 //For each certification
                 .Select(cert => {
-                    //Split on ":" to separate country and the the rating
+                    //Split on ":" to separate country and the the rating into a key-value pair
                     string[] kvp = cert.SplitWithoutEmptyEntries(COUNTRY_RATING_SEPARATOR);
 
                     //add new certification with

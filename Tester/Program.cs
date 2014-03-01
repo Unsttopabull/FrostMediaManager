@@ -6,6 +6,7 @@ using System.Data.SQLite;
 using System.Linq;
 using Frost.DetectFeatures;
 using System.Diagnostics;
+using Frost.DetectFeatures.Models;
 using Frost.Models.Frost.DB;
 using FileVo = Frost.Models.Frost.DB.Files.File;
 using CoretisMovie = Frost.Models.Xtreamer.PHP.Coretis_VO_Movie;
@@ -62,7 +63,7 @@ namespace Frost.Tester {
             FeatureDetector ms = new FeatureDetector(@"E:\Torrenti\FILMI", @"F:\Torrenti\FILMI");
             ms.PropertyChanged += WriteCount;
 
-            IEnumerable<Movie> movies = ms.Search();
+            IEnumerable<MovieInfo> movies = ms.Search();
             ms.PropertyChanged -= WriteCount;
 
             sw.Stop();
@@ -78,9 +79,9 @@ namespace Frost.Tester {
                 mvc.Sets.Load();
                 mvc.People.Load();
 
-                foreach (Movie movie in movies) {
-                    mvc.Save(movie);
-                    mvc.ChangeTracker.DetectChanges();
+                foreach (MovieInfo movie in movies) {
+                    //mvc.Save(movie);
+                    //mvc.ChangeTracker.DetectChanges();
                 }
 
                 mvc.SaveChanges();
