@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Frost.Common;
-using Frost.Common.Models.DB.Jukebox;
-using Frost.Common.Models.DB.MovieVo;
+using Frost.Models.Frost.DB;
+using Frost.Models.Xtreamer.DB;
 using Frost.PHPtoNET;
 
-using CoretisMovie = Frost.Common.Models.PHP.Coretis_VO_Movie;
+using CoretisMovie = Frost.Models.Xtreamer.PHP.Coretis_VO_Movie;
 
 namespace Frost.ProcessDatabase {
     public class XjbDbParser : MediaManager<CoretisMovie> {

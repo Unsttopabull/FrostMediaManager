@@ -168,6 +168,7 @@ namespace SecondLanguage {
         ///     If this is <c>null</c>, the assembly resolver base directory (which is
         ///     normally your program directory) is used.
         /// </param>
+        /// <param name="culture"></param>
         /// <returns><c>true</c> if the file loaded successfully.</returns>
         public bool TryRegisterTranslation(string filename, out Translation translation, string rootDirectory = null, CultureInfo culture = null) {
             try {
@@ -209,6 +210,7 @@ namespace SecondLanguage {
         ///     If this is <c>null</c>, the search will begin from the assembly resolver base directory,
         ///     which normally is your program directory. This is typically what you want.
         /// </param>
+        /// <param name="culture"></param>
         /// <returns>Newly-registered translations.</returns>
         public Translation[] RegisterTranslationsBySearchPattern(string searchPattern, string rootDirectory = null, CultureInfo culture = null) {
             Throw.If.Null(searchPattern, "searchPattern");

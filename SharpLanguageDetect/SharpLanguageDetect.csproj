@@ -135,168 +135,168 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="LanguageProfiles\af">
+    <Content Include="LanguageProfiles\af">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\ar">
+    </Content>
+    <Content Include="LanguageProfiles\ar">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\bg">
+    </Content>
+    <Content Include="LanguageProfiles\bg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\bn">
+    </Content>
+    <Content Include="LanguageProfiles\bn">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\cs">
+    </Content>
+    <Content Include="LanguageProfiles\cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\da">
+    </Content>
+    <Content Include="LanguageProfiles\da">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\de">
+    </Content>
+    <Content Include="LanguageProfiles\de">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\el">
+    </Content>
+    <Content Include="LanguageProfiles\el">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\en">
+    </Content>
+    <Content Include="LanguageProfiles\en">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\es">
+    </Content>
+    <Content Include="LanguageProfiles\es">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\et">
+    </Content>
+    <Content Include="LanguageProfiles\et">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\fa">
+    </Content>
+    <Content Include="LanguageProfiles\fa">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\fi">
+    </Content>
+    <Content Include="LanguageProfiles\fi">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\fr">
+    </Content>
+    <Content Include="LanguageProfiles\fr">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\gu">
+    </Content>
+    <Content Include="LanguageProfiles\gu">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\he">
+    </Content>
+    <Content Include="LanguageProfiles\he">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\hi">
+    </Content>
+    <Content Include="LanguageProfiles\hi">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\hr">
+    </Content>
+    <Content Include="LanguageProfiles\hr">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\hu">
+    </Content>
+    <Content Include="LanguageProfiles\hu">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\id">
+    </Content>
+    <Content Include="LanguageProfiles\id">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\it">
+    </Content>
+    <Content Include="LanguageProfiles\it">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\ja">
+    </Content>
+    <Content Include="LanguageProfiles\ja">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\kn">
+    </Content>
+    <Content Include="LanguageProfiles\kn">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\ko">
+    </Content>
+    <Content Include="LanguageProfiles\ko">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\lt">
+    </Content>
+    <Content Include="LanguageProfiles\lt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\lv">
+    </Content>
+    <Content Include="LanguageProfiles\lv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\mk">
+    </Content>
+    <Content Include="LanguageProfiles\mk">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\ml">
+    </Content>
+    <Content Include="LanguageProfiles\ml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\mr">
+    </Content>
+    <Content Include="LanguageProfiles\mr">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\ne">
+    </Content>
+    <Content Include="LanguageProfiles\ne">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\nl">
+    </Content>
+    <Content Include="LanguageProfiles\nl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\no">
+    </Content>
+    <Content Include="LanguageProfiles\no">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\pa">
+    </Content>
+    <Content Include="LanguageProfiles\pa">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\pl">
+    </Content>
+    <Content Include="LanguageProfiles\pl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\pt">
+    </Content>
+    <Content Include="LanguageProfiles\pt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\ro">
+    </Content>
+    <Content Include="LanguageProfiles\ro">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\ru">
+    </Content>
+    <Content Include="LanguageProfiles\ru">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\sk">
+    </Content>
+    <Content Include="LanguageProfiles\sk">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\sl">
+    </Content>
+    <Content Include="LanguageProfiles\sl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\so">
+    </Content>
+    <Content Include="LanguageProfiles\so">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\sq">
+    </Content>
+    <Content Include="LanguageProfiles\sq">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\sr">
+    </Content>
+    <Content Include="LanguageProfiles\sr">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\sv">
+    </Content>
+    <Content Include="LanguageProfiles\sv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\sw">
+    </Content>
+    <Content Include="LanguageProfiles\sw">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\ta">
+    </Content>
+    <Content Include="LanguageProfiles\ta">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\te">
+    </Content>
+    <Content Include="LanguageProfiles\te">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\th">
+    </Content>
+    <Content Include="LanguageProfiles\th">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\tl">
+    </Content>
+    <Content Include="LanguageProfiles\tl">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\tr">
+    </Content>
+    <Content Include="LanguageProfiles\tr">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\uk">
+    </Content>
+    <Content Include="LanguageProfiles\uk">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\ur">
+    </Content>
+    <Content Include="LanguageProfiles\ur">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\vi">
+    </Content>
+    <Content Include="LanguageProfiles\vi">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\zh-cn">
+    </Content>
+    <Content Include="LanguageProfiles\zh-cn">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="LanguageProfiles\zh-tw">
+    </Content>
+    <Content Include="LanguageProfiles\zh-tw">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

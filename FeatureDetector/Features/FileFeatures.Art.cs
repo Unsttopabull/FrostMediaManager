@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Frost.Common;
-using Frost.Common.Models.DB.MovieVo.Arts;
-using Frost.Common.Models.DB.MovieVo.People;
-using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
+using Frost.Models.Frost;
+using Frost.Models.Frost.DB.Arts;
+using Frost.Models.Frost.DB.People;
+using FileVo = Frost.Models.Frost.DB.Files.File;
 using File = System.IO.File;
 
 namespace Frost.DetectFeatures {
@@ -56,20 +57,8 @@ namespace Frost.DetectFeatures {
                     }
                 }
                 else {
-                    //check if a person with the same name already exists in the DB
-                    Person person = _mvc.People.FirstOrDefault(p => p.Name == actorName);
-                    if (person != null) {
-                        //if it does check for missing thumbnail
-                        if (string.IsNullOrEmpty(person.Thumb)) {
-                            person.Thumb = file.FullName;
-                        }
-                        //add the person to the movie as actor
-                        Movie.ActorsLink.Add(new MovieActor(Movie, person, null));
-                    }
-                    else {
-                        //add new person to the DB and add it to the movie's list of actors
-                        Movie.ActorsLink.Add(new MovieActor(Movie, new Person(actorName, file.FullName), null));
-                    }
+                    //add new person to the DB and add it to the movie's list of actors
+                    Movie.ActorsLink.Add(new MovieActor(Movie, new Person(actorName, file.FullName), null));
                 }
             }
         }

@@ -12,6 +12,7 @@ using Frost.Common;
 using Frost.Common.Util;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.Util;
+using Frost.Models.Frost;
 
 namespace Frost.DetectFeatures.FileName {
 

@@ -253,7 +253,7 @@ namespace CookComputing.XmlRpc
         {
           throw;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
           throw new XmlRpcInvalidEnumValue(mappingStack.MappingType
             + " contains invalid or out of range " + xmlRpcType + " value mapped to enum "
@@ -318,7 +318,7 @@ namespace CookComputing.XmlRpc
         {
           throw;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
           throw new XmlRpcInvalidEnumValue(mappingStack.MappingType
             + " contains invalid or out of range " + xmlRpcType + " value mapped to enum "

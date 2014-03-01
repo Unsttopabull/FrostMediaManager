@@ -4,10 +4,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Frost.Common;
-using Frost.Common.Models.DB.MovieVo;
-using Frost.Common.Models.DB.MovieVo.People;
 using Frost.Common.Util;
 using Frost.GettextMarkupExtension;
+using Frost.Models.Frost.DB;
+using Frost.Models.Frost.DB.People;
 using Microsoft.Win32;
 using RibbonUI.Windows;
 

@@ -6,17 +6,18 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Frost.Common;
-using Frost.Common.Models.DB.MovieVo;
-using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
+using Frost.Models.Frost;
+using Frost.Models.Frost.DB;
+using Frost.Models.Frost.DB.Files;
 using Frost.SharpLanguageDetect;
 using Frost.SharpMediaInfo;
 using File = System.IO.File;
-using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
-using Language = Frost.Common.Models.DB.MovieVo.Language;
-using ScanType = Frost.Common.ScanType;
+using FileVo = Frost.Models.Frost.DB.Files.File;
+using Language = Frost.Models.Frost.DB.Language;
+using ScanType = Frost.Models.Frost.ScanType;
 
 namespace Frost.DetectFeatures {
 
@@ -26,72 +27,81 @@ namespace Frost.DetectFeatures {
         private readonly Dictionary<string, FileNameInfo> _fnInfos;
         private readonly MediaInfoList _mf;
         private readonly NFOPriority _nfoPriority;
-        private readonly MovieVoContainer _mvc;
+        //private readonly MovieVoContainer _mvc;
         private readonly FileVo[] _files;
         private bool _error;
 
         static FileFeatures() {
+            #region Audio CodecId Mappings
+
             AudioCodecIdMappings = new CodecIdMappingCollection {
-                new CodecIdBinding("A_AAC", "AAC"),
-                new CodecIdBinding("DD", "dolbydigital"),
-                new CodecIdBinding("ogg", "vorbis"),
-                new CodecIdBinding("a_vorbis", "vorbis"),
-                new CodecIdBinding("dtsma", "dtshd"),
-                new CodecIdBinding("dtshr", "dtshd"),
-                new CodecIdBinding("AAC LC", "AAC"),
-                new CodecIdBinding("AAC LC-SBR", "AAC"),
-                new CodecIdBinding("A_MPEG/L3", "MP3"),
-                new CodecIdBinding("A_DTS", "DTS"),
-                new CodecIdBinding("dca", "DTS"),
-                new CodecIdBinding("A_AC3", "AC3"),
-                new CodecIdBinding("MPA1L3", "MP3"),
-                new CodecIdBinding("MPA2L3", "MP3"),
-                new CodecIdBinding("MPA1L2", "MP2"),
-                new CodecIdBinding("MPA1L1", "MP1"),
-                new CodecIdBinding("MPEG-2A", "mpeg2"),
-                new CodecIdBinding("MPEG-1A", "mpeg"),
-                new CodecIdBinding("161", "wma")
+                { "A_AAC", "AAC" },
+                { "DD", "dolbydigital" },
+                { "ogg", "vorbis" },
+                { "a_vorbis", "vorbis" },
+                { "dtsma", "dtshd" },
+                { "dtshr", "dtshd" },
+                { "AAC LC", "AAC" },
+                { "AAC LC-SBR", "AAC" },
+                { "A_MPEG/L3", "MP3" },
+                { "A_DTS", "DTS" },
+                { "dca", "DTS" },
+                { "A_AC3", "AC3" },
+                { "MPA1L3", "MP3" },
+                { "MPA2L3", "MP3" },
+                { "MPA1L2", "MP2" },
+                { "MPA1L1", "MP1" },
+                { "MPEG-2A", "mpeg2" },
+                { "MPEG-1A", "mpeg" },
+                { "161", "wma" }
             };
+
+            #endregion
+
+            #region Video CodecID mappings
 
             VideoCodecIdMappings = new CodecIdMappingCollection {
-                new CodecIdBinding("MPEG-1 Video", "mpeg"),
-                new CodecIdBinding("MPEG-2 Video", "mpeg2"),
-                new CodecIdBinding("Xvid", "Xvid"),
-                new CodecIdBinding("V_MPEG4/ISO/AVC", "h264"),
-                new CodecIdBinding("pvmm", "mpeg4"),
-                new CodecIdBinding("ndx", "mpeg4"),
-                new CodecIdBinding("nds", "mpeg4"),
-                new CodecIdBinding("mpeg-4", "mpeg4"),
-                new CodecIdBinding("m4s2", "mpeg4"),
-                new CodecIdBinding("geox", "mpeg4"),
-                new CodecIdBinding("dx50", "mpeg4"),
-                new CodecIdBinding("dm4v", "mpeg4"),
-                new CodecIdBinding("xvix", "xvid"),
-                new CodecIdBinding("pim1", "mpeg"),
-                new CodecIdBinding("mpeg-2", "mpeg2"),
-                new CodecIdBinding("mmes", "mpeg2"),
-                new CodecIdBinding("lmp2", "mpeg2"),
-                new CodecIdBinding("em2v", "mpeg2"),
-                new CodecIdBinding("div6", "divx"),
-                new CodecIdBinding("div5", "divx"),
-                new CodecIdBinding("div4", "divx"),
-                new CodecIdBinding("div3", "divx"),
-                new CodecIdBinding("div2", "divx"),
-                new CodecIdBinding("div1", "divx"),
-                new CodecIdBinding("3ivd", "3ivx"),
-                new CodecIdBinding("3iv2", "3ivx"),
-                new CodecIdBinding("zygo", "qt"),
-                new CodecIdBinding("svq", "qt"),
-                new CodecIdBinding("sv10", "qt"),
-                new CodecIdBinding("smc", "qt"),
-                new CodecIdBinding("rpza", "qt"),
-                new CodecIdBinding("rle", "qt"),
-                new CodecIdBinding("avrn", "qt"),
-                new CodecIdBinding("advj", "qt"),
-                new CodecIdBinding("8bps", "qt"),
+                { "MPEG-1 Video", "mpeg" },
+                { "MPEG-2 Video", "mpeg2" },
+                { "Xvid", "Xvid" },
+                { "V_MPEG4/ISO/AVC", "h264" },
+                { "pvmm", "mpeg4" },
+                { "ndx", "mpeg4" },
+                { "nds", "mpeg4" },
+                { "mpeg-4", "mpeg4" },
+                { "m4s2", "mpeg4" },
+                { "geox", "mpeg4" },
+                { "dx50", "mpeg4" },
+                { "dm4v", "mpeg4" },
+                { "xvix", "xvid" },
+                { "pim1", "mpeg" },
+                { "mpeg-2", "mpeg2" },
+                { "mmes", "mpeg2" },
+                { "lmp2", "mpeg2" },
+                { "em2v", "mpeg2" },
+                { "div6", "divx" },
+                { "div5", "divx" },
+                { "div4", "divx" },
+                { "div3", "divx" },
+                { "div2", "divx" },
+                { "div1", "divx" },
+                { "3ivd", "3ivx" },
+                { "3iv2", "3ivx" },
+                { "zygo", "qt" },
+                { "svq", "qt" },
+                { "sv10", "qt" },
+                { "smc", "qt" },
+                { "rpza", "qt" },
+                { "rle", "qt" },
+                { "avrn", "qt" },
+                { "advj", "qt" },
+                { "8bps", "qt" }
             };
 
-            //known subtitle extensions already sorted
+            #endregion
+
+            #region Known subtitle extensions already sorted
+
             KnownSubtitleExtensions = new List<string> {
                 "890",
                 "aqt",
@@ -129,7 +139,10 @@ namespace Frost.DetectFeatures {
                 "zeg"
             };
 
-            //known subtitle format names already sorted
+            #endregion
+
+            #region Known subtitle format names already sorted
+
             KnownSubtitleFormats = new List<string> {
                 "Adobe encore DVD",
                 "Advanced Substation Alpha",
@@ -150,6 +163,8 @@ namespace Frost.DetectFeatures {
                 "VobSub"
             };
 
+            #endregion
+
             _subtitleExtensionsRegex = string.Format(@"\.({0})", string.Join("|", KnownSubtitleExtensions));
 
             //DetectorFactory.LoadStaticProfiles();
@@ -162,7 +177,7 @@ namespace Frost.DetectFeatures {
         }
 
         private FileFeatures(NFOPriority nfoPriority) {
-            _mvc = new MovieVoContainer(false);
+            //_mvc = new MovieVoContainer(false);
             _nfoPriority = nfoPriority;
             _mf = new MediaInfoList();
 
@@ -198,7 +213,9 @@ namespace Frost.DetectFeatures {
                 InitFile(i, filePaths[i]);
             }
 
-            Movie = _mvc.Movies.Add(new Movie());
+            //Movie = _mvc.Movies.Add(new Movie());
+            Movie = new Movie();
+
             Movie.DirectoryPath = _directoryInfo.FullName;
         }
 
@@ -241,7 +258,8 @@ namespace Frost.DetectFeatures {
             }
 
             if (file != null && file.ToString() != ".") {
-                _files[idx] = _mvc.Files.Add(file);
+                //_files[idx] = _mvc.Files.Add(file);
+                _files[idx] = file;
             }
             else if (File.Exists(filePath)) {
             }
@@ -304,7 +322,8 @@ namespace Frost.DetectFeatures {
 
             DetectMovieType();
 
-            return Save();
+            //return Save();
+            return true;
         }
 
         private void GetGeneralVideoInfo() {
@@ -373,28 +392,28 @@ namespace Frost.DetectFeatures {
             }
         }
 
-        private bool Save() {
-            try {
-                if (_mvc.Database.Connection.State == ConnectionState.Closed) {
-                    _mvc.Database.Connection.Open();
-                }
+        //private bool Save() {
+        //    try {
+        //        //if (_mvc.Database.Connection.State == ConnectionState.Closed) {
+        //        //    _mvc.Database.Connection.Open();
+        //        //}
 
-                _mvc.SaveChanges();
-                return true;
-            }
-            catch (SQLiteException e) {
-                Console.Error.WriteLine(e.Message);
-                return false;
-            }
-            catch (InvalidOperationException e) {
-                Console.Error.WriteLine(e.Message);
-                return false;
-            }
-            catch (Exception e) {
-                Console.Error.WriteLine(e.Message);
-                return false;
-            }
-        }
+        //        //_mvc.SaveChanges();
+        //        return true;
+        //    }
+        //    catch (SQLiteException e) {
+        //        Console.Error.WriteLine(e.Message);
+        //        return false;
+        //    }
+        //    catch (InvalidOperationException e) {
+        //        Console.Error.WriteLine(e.Message);
+        //        return false;
+        //    }
+        //    catch (Exception e) {
+        //        Console.Error.WriteLine(e.Message);
+        //        return false;
+        //    }
+        //}
 
         private void DetectMovieType() {
             if (Movie.Videos.All(v => v.File.Extension.OrdinalEquals("vob") ||
@@ -458,9 +477,7 @@ namespace Frost.DetectFeatures {
                     if (spec != null) {
                         continue;
                     }
-
-                    Special dbSpecial = _mvc.Specials.FirstOrDefault(s => s.Value == special);
-                    Movie.Specials.Add(dbSpecial ?? new Special(special));
+                    Movie.Specials.Add(new Special(special));
                 }
             }
         }
@@ -501,12 +518,12 @@ namespace Frost.DetectFeatures {
                     _md5.Dispose();
                 }
 
-                if (_mvc != null) {
-                    if (_mvc.Database.Connection.State != ConnectionState.Closed) {
-                        _mvc.Database.Connection.Close();
-                    }
-                    _mvc.Dispose();
-                }
+                //if (_mvc != null) {
+                //    if (_mvc.Database.Connection.State != ConnectionState.Closed) {
+                //        _mvc.Database.Connection.Close();
+                //    }
+                //    _mvc.Dispose();
+                //}
 
                 GC.SuppressFinalize(this);
                 IsDisposed = true;

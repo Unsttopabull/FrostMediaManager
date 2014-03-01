@@ -4,8 +4,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.GettextMarkupExtension;
+using Frost.Models.Frost.DB.Files;
 
 namespace RibbonUI.Windows {
 

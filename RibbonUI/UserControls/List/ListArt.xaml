@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
-             xmlns:arts="clr-namespace:Frost.Common.Models.DB.MovieVo.Arts;assembly=Frost.Common"
+             xmlns:arts="clr-namespace:Frost.Models.Frost.DB.Arts;assembly=Frost.Models.Frost"
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="622">
     <Grid>
         <Grid.RowDefinitions>

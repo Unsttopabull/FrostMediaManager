@@ -5,13 +5,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:converters="clr-namespace:RibbonUI.Converters"
-    xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:l="http://www.frostmediamanager.com/xaml/translation"
     xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
+    xmlns:db="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
     x:Class="RibbonUI.UserControls.ArtAndPlot"
     mc:Ignorable="d"
-    d:DesignHeight="625" d:DesignWidth="1071" d:DataContext="{d:DesignInstance movieVo:Movie}">
+    d:DesignHeight="625" d:DesignWidth="1071" d:DataContext="{d:DesignInstance db:Movie}">
     <Grid>
         <Grid.Resources>
             <BitmapImage x:Key="Box" UriSource="../Images/default/generic.png"/>

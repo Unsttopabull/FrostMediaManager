@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Frost.Common.Models.DB.MovieVo;
-using Frost.Common.Models.XML.XBMC;
+using Frost.Model.Xbmc.NFO;
+using Frost.Models.Frost;
+using Frost.Models.Frost.DB;
 
 namespace Frost.DetectFeatures {
 
@@ -59,8 +60,7 @@ namespace Frost.DetectFeatures {
             Movie.LastPlayed = xbmcMovie.LastPlayed != default(DateTime) ? FilterDate(xbmcMovie.LastPlayed) : Movie.LastPlayed;
 
             if(string.IsNullOrEmpty(Movie.MPAARating) && !string.IsNullOrEmpty(xbmcMovie.MPAA)) {
-                Country usa = _mvc.Countries.FirstOrDefault(c => c.Name == "United States") ?? new Country("United States", "us", "usa");
-                Movie.Certifications.Add(new Certification(usa, xbmcMovie.MPAA));
+                Movie.Certifications.Add(new Certification(new Country("United States", "us", "usa"), xbmcMovie.MPAA));
             }
 
             AddActors(xbmcMovie.Actors, true);
@@ -83,8 +83,8 @@ namespace Frost.DetectFeatures {
                 if (!string.IsNullOrEmpty(Movie.MPAARating)) {
                     Movie.Certifications.RemoveWhere(c => c.Country.Name == "United States");
                 }
-                Country usa = _mvc.Countries.FirstOrDefault(c => c.Name == "United States") ?? new Country("United States", "us", "usa");
-                Movie.Certifications.Add(new Certification(usa, xbmcMovie.MPAA));
+
+                Movie.Certifications.Add(new Certification(new Country("United States", "us", "usa"), xbmcMovie.MPAA));
             }
 
             AddActors(xbmcMovie.Actors);
@@ -106,14 +106,14 @@ namespace Frost.DetectFeatures {
             Movie.Art.UnionWith(xbmcMovie.GetArt());
             Movie.Certifications.UnionWith(xbmcMovie.GetCertifications());
 
-            foreach (Country country in xbmcMovie.GetCountries()) {
+            foreach (Country country in Country.GetFromNames(xbmcMovie.Countries)) {
                 Country item = CheckCountry(country);
                 Movie.Countries.Add(item);
             }
 
             Movie.RatingAverage = Math.Abs(xbmcMovie.Rating - default(float)) > 0.001 ? xbmcMovie.Rating : Movie.RatingAverage;
 
-            foreach (Genre genre in xbmcMovie.GetGenres()) {
+            foreach (Genre genre in Genre.GetFromNames(xbmcMovie.Genres)) {
                 AddGenre(genre);
             }
 

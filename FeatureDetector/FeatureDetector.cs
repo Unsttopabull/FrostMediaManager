@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Frost.Common;
-using Frost.Common.Models.DB.MovieVo;
+using Frost.Common.Annotations;
 using Frost.DetectFeatures.FileName;
-using Frost.DetectFeatures.Util;
-using Frost.SharpMediaInfo;
+using Frost.Models.Frost.DB;
 
 namespace Frost.DetectFeatures {
 
@@ -24,7 +26,8 @@ namespace Frost.DetectFeatures {
     }
 
     /// <summary>A class used for detecting file information and features.</summary>
-    public class FeatureDetector {
+    public class FeatureDetector : INotifyPropertyChanged {
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private int _count;
         private readonly string[] _filePaths;
@@ -56,22 +59,47 @@ namespace Frost.DetectFeatures {
             }
         }
 
+        public int Count {
+            get { return _count; }
+            set {
+                if (value == _count) return;
+                _count = value;
+                OnPropertyChanged();
+            }
+        }
+
         public FeatureDetector(params string[] filePaths) {
             _filePaths = filePaths;
         }
 
-        public void Search() {
-            _count = 0;
-            foreach (string filePath in _filePaths) {
+        public IEnumerable<Movie> Search() {
+            Count = 0;
+            Task<IEnumerable<Movie>>[] arr = new Task<IEnumerable<Movie>>[_filePaths.Length];
+
+            for (int i = 0; i < _filePaths.Length; i++) {
+                string filePath = _filePaths[i];
                 if (Directory.Exists(filePath)) {
-                    SearchDir(new DirectoryInfo(filePath), true, true);
+                    arr[i] = SearchDir(new DirectoryInfo(filePath), true, true);                    
                 }
             }
+
+            Task.WaitAll(arr);
+
+            List<Movie> files = new List<Movie>();
+            foreach (Task<IEnumerable<Movie>> task in arr) {
+                if (task.IsCompleted) {
+                    files.AddRange(task.Result);
+                }
+            }
+
+            return files;
         }
 
-        private void SearchDir(DirectoryInfo directory, bool recursive = true, bool fullDirName = false) {
-            Debug.WriteLine(fullDirName ? directory.FullName : directory.Name, "DIRECTORY");
-            Debug.Indent();
+        private async Task<IEnumerable<Movie>> SearchDir(DirectoryInfo directory, bool recursive = true, bool fullDirName = false) {
+            //Debug.WriteLine(fullDirName ? directory.FullName : directory.Name, "DIRECTORY");
+            //Debug.Indent();
+
+            List<Movie> mf = new List<Movie>();
 
             FileInfo[] mediaFiles;
             try {
@@ -79,68 +107,71 @@ namespace Frost.DetectFeatures {
             }
             catch (DirectoryNotFoundException e) {
                 OutputDirError(e);
-                return;
+                return null;
             }
             catch (SecurityException e) {
                 OutputDirError(e);
-                return;                
+                return null;
             }
 
-            foreach (FileInfo fileInfo in mediaFiles) {
-                Debug.WriteLine(fileInfo.Name, "FILE");
-            }
+            //foreach (FileInfo fileInfo in mediaFiles) {
+            //    Debug.WriteLine(fileInfo.Name, "FILE");
+            //}
 
             if (mediaFiles.Length > 0) {
                 //if files are in DVD format (ifo, vob, bup)
                 if (mediaFiles.Any(f => f.Extension.OrdinalEquals(".vob") || f.Extension.OrdinalEquals(".ifo") || f.Extension.OrdinalEquals(".bup"))) {
-                    DetectDvdMovie(mediaFiles);
+                    mf.Add(await Task.Run(() => DetectDvdMovie(mediaFiles)));
                 }
                 else {
-                    DetectMultipartMovie(mediaFiles);
+                    mf.AddRange(await Task.Run(() => DetectMultipartMovie(mediaFiles)));
                 }
             }
 
             if (recursive) {
-                int ident = Debug.IndentLevel;
+                //int ident = Debug.IndentLevel;
                 try {
                     foreach (DirectoryInfo directoryInfo in directory.EnumerateDirectories()) {
-                        SearchDir(directoryInfo);
+                        mf.AddRange(await SearchDir(directoryInfo));
                     }
                 }
                 catch (DirectoryNotFoundException e) {
                     OutputDirError(e);
-                    Debug.IndentLevel = ident;
-                    return;
+                    //Debug.IndentLevel = ident;
+                    return null;
                 }
                 catch (SecurityException e) {
                     OutputDirError(e);
-                    Debug.IndentLevel = ident;
-                    return;                
+                    //Debug.IndentLevel = ident;
+                    return null;
                 }
             }
-            Debug.Unindent();
+            //Debug.Unindent();
 
-            if (fullDirName) {
-                Debug.WriteLine("");
-            }
+            //if (fullDirName) {
+            //    Debug.WriteLine("");
+            //}
+
+            return mf;
         }
 
-        private void DetectDvdMovie(FileInfo[] mediaFiles) {
+        private Movie DetectDvdMovie(FileInfo[] mediaFiles) {
             FileNameInfo[] fnInfos = new FileNameInfo[mediaFiles.Length];
             for (int i = 0; i < mediaFiles.Length; i++) {
                 fnInfos[i] = new FileNameParser(mediaFiles[i].FullName, true).Parse();
             }
 
-            Detect(fnInfos);
+            Count++;
+            return Detect(fnInfos);
         }
 
         private static void OutputDirError(Exception e) {
             Console.Error.WriteLine("Directory not found or inaccessible.");
-            Debug.WriteLine(string.Format("Directory '{0}' not found or inaccessible.", "PATH"), "ERROR");
-            Debug.Unindent();
+            //Debug.WriteLine(string.Format("Directory '{0}' not found or inaccessible.", "PATH"), "ERROR");
+            //Debug.Unindent();
         }
 
-        private void DetectMultipartMovie(FileInfo[] mediaFiles) {
+        private Movie[] DetectMultipartMovie(FileInfo[] mediaFiles) {
             FileNameParser fnp = new FileNameParser(mediaFiles[0].FullName);
             FileNameInfo info = fnp.Parse();
 
@@ -153,44 +184,24 @@ namespace Frost.DetectFeatures {
                     fniArr[i] = fnp.Parse();
                 }
 
-                Detect(fniArr);
+                Count++;
+                return new[] { Detect(fniArr) };
             }
-            else {
-                Detect(info);
 
-                for (int i = 1; i < mediaFiles.Length; i++) {
-                    Detect(mediaFiles[i].FullName);
-                }
+            Movie[] movies = new Movie[mediaFiles.Length];
+
+            movies[0] = Detect(info);
+            Count++;
+
+            for (int i = 1; i < mediaFiles.Length; i++) {
+                fnp = new FileNameParser(mediaFiles[i].FullName);
+                movies[i] = Detect(fnp.Parse());
+                Count++;
             }
+            return movies;
         }
 
-        /// <param name="filePath">The filepath of the file to check for features.</param>
-        /// <param name="nfoPriority">How to handle information in a NFO file if found.</param>
-        public Movie Detect(string filePath, NFOPriority nfoPriority = NFOPriority.OnlyNotDetected) {
-            if (string.IsNullOrEmpty(filePath)) {
-                throw new ArgumentNullException("filePath");
-            }
-
-            Debug.WriteLine(++_count +": "+filePath, "MOVIE");
-
-            using (FileFeatures file = new FileFeatures(nfoPriority, filePath)) {
-                return file.Detect() ? file.Movie : null;
-            }
-        }
-
-        /// <param name="filePaths">The filepaths of the files to check for features.</param>
-        /// <param name="nfoPriority">How to handle information in a NFO file if found.</param>
-        public Movie Detect(string[] filePaths, NFOPriority nfoPriority = NFOPriority.OnlyNotDetected) {
-            if (filePaths == null || (filePaths != null && filePaths.Any(fnInfo => fnInfo == null))) {
-                throw new ArgumentNullException("filePaths");
-            }
-
-            Debug.WriteLine(++_count +": "+filePaths[0], "MOVIE");
-
-            using (FileFeatures file = new FileFeatures(nfoPriority, filePaths)) {
-                return file.Detect() ? file.Movie : null;
-            }
-        }
+        #region Detect
 
         /// <param name="fnInfos">The file name information of the files to check for features.</param>
         /// <param name="nfoPriority">How to handle information in a NFO file if found.</param>
@@ -199,7 +210,7 @@ namespace Frost.DetectFeatures {
                 throw new ArgumentNullException("fnInfos");
             }
 
-            Debug.WriteLine(++_count +": "+fnInfos[0].Title, "MOVIE");
+            //Debug.WriteLine(Count + ": " + fnInfos[0].Title, "MOVIE");
 
             using (FileFeatures file = new FileFeatures(nfoPriority, fnInfos)) {
                 return file.Detect() ? file.Movie : null;
@@ -213,10 +224,47 @@ namespace Frost.DetectFeatures {
                 throw new ArgumentNullException("fnInfo");
             }
 
-            Debug.WriteLine(++_count +": "+fnInfo.Title, "MOVIE");
+            //Debug.WriteLine(Count + ": " + fnInfo.Title, "MOVIE");
 
             using (FileFeatures file = new FileFeatures(nfoPriority, fnInfo)) {
                 return file.Detect() ? file.Movie : null;
+            }
+        }
+
+        ///// <param name="filePath">The filepath of the file to check for features.</param>
+        ///// <param name="nfoPriority">How to handle information in a NFO file if found.</param>
+        //public Movie Detect(string filePath, NFOPriority nfoPriority = NFOPriority.OnlyNotDetected) {
+        //    if (string.IsNullOrEmpty(filePath)) {
+        //        throw new ArgumentNullException("filePath");
+        //    }
+
+        //    Debug.WriteLine(++_count + ": " + filePath, "MOVIE");
+
+        //    using (FileFeatures file = new FileFeatures(nfoPriority, filePath)) {
+        //        return file.Detect() ? file.Movie : null;
+        //    }
+        //}
+
+        ///// <param name="filePaths">The filepaths of the files to check for features.</param>
+        ///// <param name="nfoPriority">How to handle information in a NFO file if found.</param>
+        //public Movie Detect(string[] filePaths, NFOPriority nfoPriority = NFOPriority.OnlyNotDetected) {
+        //    if (filePaths == null || (filePaths != null && filePaths.Any(fnInfo => fnInfo == null))) {
+        //        throw new ArgumentNullException("filePaths");
+        //    }
+
+        //    Debug.WriteLine(++_count + ": " + filePaths[0], "MOVIE");
+
+        //    using (FileFeatures file = new FileFeatures(nfoPriority, filePaths)) {
+        //        return file.Detect() ? file.Movie : null;
+        //    }
+        //}
+        #endregion
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) {
+                handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

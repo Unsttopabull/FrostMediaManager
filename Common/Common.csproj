@@ -42,19 +42,14 @@
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\EF\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="HibernatingRhinos.Profiler.Appender">
-      <HintPath>..\..\..\..\..\..\Libraries\Martin\Downloads\EntityFramework.Profiler-v2.0-Build-2224\HibernatingRhinos.Profiler.Appender.dll</HintPath>
+      <HintPath>..\Libraries\EF6\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.Entity" />
-    <Reference Include="System.Data.SQLite, Version=1.0.90.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
+    <Reference Include="System.Data.SQLite, Version=1.0.91.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\SQLite\NET4.5\System.Data.SQLite.dll</HintPath>
+      <HintPath>..\Libraries\SQLite\EF6\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -62,103 +57,9 @@
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Models\CertificationBase.cs" />
-    <Compile Include="Models\DB\Jukebox\XjbGenreInit.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Models\DB\Jukebox\XjbMovie.cs" />
-    <Compile Include="Models\DB\MovieVo\Arts\Art.cs" />
-    <Compile Include="Models\DB\MovieVo\Award.cs" />
-    <Compile Include="Models\DB\MovieVo\GenreInit.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Models\DB\MovieVo\ISO\ISO3166.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Models\DB\MovieVo\ISO\ISO639.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Models\DB\MovieVo\Language.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Models\DB\MovieVo\People\Actor.cs" />
-    <Compile Include="Models\DB\MovieVo\People\MovieActor.cs" />
-    <Compile Include="Models\DB\MovieVo\Arts\Cover.cs" />
-    <Compile Include="Models\DB\MovieVo\Arts\Fanart.cs" />
-    <Compile Include="Models\DB\MovieVo\Arts\Poster.cs" />
-    <Compile Include="Models\DB\MovieVo\PromotionalVideo.cs" />
-    <Compile Include="Models\DB\MovieVo\Set.cs" />
-    <Compile Include="Models\DB\MovieVo\Special.cs" />
-    <Compile Include="Models\DB\XBMC\Actor\XbmcActor.cs" />
-    <Compile Include="Models\DB\XBMC\Actor\XbmcMovieActor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Models\DB\XBMC\Actor\XbmcPerson.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Models\PHP\Coretis_VO_Genre.cs" />
-    <Compile Include="Models\PHP\Coretis_VO_Movie.cs" />
-    <Compile Include="Models\PHP\Coretis_VO_Person.cs" />
-    <Compile Include="Models\PHP\Coretis_VO_Picture.cs" />
-    <Compile Include="Models\DB\Jukebox\XjbDrive.cs" />
-    <Compile Include="Models\DB\Jukebox\XjbGenre.cs" />
-    <Compile Include="Models\DB\Jukebox\XjbEntities.Context.cs" />
-    <Compile Include="Models\DB\Jukebox\XjbMoviePerson.cs" />
-    <Compile Include="Models\DB\Jukebox\XjbOption.cs" />
-    <Compile Include="Models\DB\Jukebox\XjbPerson.cs" />
-    <Compile Include="Models\XML\Jukebox\XjbXmlMovie.cs" />
-    <Compile Include="Models\XML\Jukebox\XjbXmlActor.cs" />
-    <Compile Include="Models\DB\MovieVo\Arts\ArtBase.cs" />
-    <Compile Include="Models\DB\MovieVo\Files\Audio.cs" />
-    <Compile Include="Models\DB\MovieVo\Certification.cs" />
-    <Compile Include="Models\DB\MovieVo\Country.cs" />
-    <Compile Include="Models\DB\MovieVo\Files\File.cs" />
-    <Compile Include="Models\DB\MovieVo\Genre.cs" />
-    <Compile Include="Models\DB\MovieVo\Movie.cs" />
-    <Compile Include="Models\DB\MovieVo\MovieVo.Context.cs" />
-    <Compile Include="Models\DB\MovieVo\People\Person.cs" />
-    <Compile Include="Models\DB\MovieVo\Plot.cs" />
-    <Compile Include="Models\DB\MovieVo\Rating.cs" />
-    <Compile Include="Models\DB\MovieVo\Studio.cs" />
-    <Compile Include="Models\DB\MovieVo\Files\Subtitle.cs" />
-    <Compile Include="Models\DB\MovieVo\Files\Video.cs" />
-    <Compile Include="Models\DB\XBMC\StreamDetails\XbmcAudioDetails.cs" />
-    <Compile Include="Models\DB\XBMC\StreamDetails\XbmcSubtitleDetails.cs" />
-    <Compile Include="Models\DB\XBMC\StreamDetails\XbmcVideoDetails.cs" />
-    <Compile Include="Models\DB\XBMC\XbmcArt.cs" />
-    <Compile Include="Models\DB\XBMC\XbmcBookmark.cs" />
-    <Compile Include="Models\DB\XBMC\XbmcCountry.cs" />
-    <Compile Include="Models\DB\XBMC\XbmcFile.cs" />
-    <Compile Include="Models\DB\XBMC\XbmcGenre.cs" />
-    <Compile Include="Models\DB\XBMC\XbmcMovie.cs" />
-    <Compile Include="Models\DB\XBMC\XbmcPath.cs" />
-    <Compile Include="Models\DB\XBMC\XbmcSet.cs" />
-    <Compile Include="Models\DB\XBMC\XbmcSettings.cs" />
-    <Compile Include="Models\DB\XBMC\XbmcStackTimes.cs" />
-    <Compile Include="Models\DB\XBMC\StreamDetails\XbmcDbStreamDetails.cs" />
-    <Compile Include="Models\DB\XBMC\XbmcStudio.cs" />
-    <Compile Include="Models\DB\XBMC\Tag\XbmcTag.cs" />
-    <Compile Include="Models\DB\XBMC\Tag\XbmcTagLink.cs" />
-    <Compile Include="Models\DB\XBMC\XbmcVersion.cs" />
-    <Compile Include="Models\DB\XBMC\XBMC.Context.cs" />
-    <Compile Include="Models\XML\XBMC\XbmcStreamDetails.cs" />
-    <Compile Include="Models\XML\XBMC\XbmcXmlActor.cs" />
-    <Compile Include="Models\XML\XBMC\XbmcXmlAudioInfo.cs" />
-    <Compile Include="Models\XML\XBMC\XbmcXmlCertification.cs" />
-    <Compile Include="Models\XML\XBMC\XbmcXmlFanart.cs" />
-    <Compile Include="Models\XML\XBMC\XbmcXmlFileInfo.cs" />
-    <Compile Include="Models\XML\XBMC\XbmcXmlMovie.cs" />
-    <Compile Include="Models\XML\XBMC\XbmcXmlMovieDbId.cs" />
-    <Compile Include="Models\XML\XBMC\XbmcXmlResumeInfo.cs" />
-    <Compile Include="Models\XML\XBMC\XbmcXmlSubtitleInfo.cs" />
-    <Compile Include="Models\XML\XBMC\XbmcXmlThumb.cs" />
-    <Compile Include="Models\XML\XBMC\XbmcXmlVideoInfo.cs" />
+    <Compile Include="Models\XmlActor.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="SQLiteInitializer.cs" />
     <Compile Include="Util\IsoImageMount.cs" />
     <Compile Include="Util\ISO\ISOCode.cs">
@@ -183,52 +84,7 @@
     <Compile Include="Util\ObservableHashSet.cs" />
     <Compile Include="XmlIndentedTextWriter.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-    <Compile Include="Models\DB\MovieVo\Movie.Configuration.cs" />
-    <None Include="Models\XML\XBMC\XSD\xbmcXmlMovie.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Models\XML\XBMC\XSD\xbmcXmlMovie_xsd11.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Models\XML\XBMC\XSD\yamjXmlMovie.xsd">
-      <SubType>Designer</SubType>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\Libraries\SQLite\NET4.5\x64\SQLite.Interop.dll">
-      <Link>x64\SQLite.Interop.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Libraries\SQLite\NET4.5\x64\SQLite.Interop.pdb">
-      <Link>x64\SQLite.Interop.pdb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Libraries\SQLite\NET4.5\x86\SQLite.Interop.dll">
-      <Link>x86\SQLite.Interop.dll</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Libraries\SQLite\NET4.5\x86\SQLite.Interop.pdb">
-      <Link>x86\SQLite.Interop.pdb</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Models\DB\Jukebox\fixMovieYear.sql" />
-    <Content Include="Models\DB\MovieVo\MovieVo.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Models\DB\XBMC\extendSettings.sql" />
-    <Content Include="Models\DB\XBMC\extendStreamDetails.sql" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

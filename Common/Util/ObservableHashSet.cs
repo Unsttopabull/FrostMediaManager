@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Xml.Schema;
 
 namespace Frost.Common.Util {
 
@@ -218,8 +219,12 @@ namespace Frost.Common.Util {
         /// <summary>Gets or sets the element at the specified index.</summary>
         /// <returns>The element at the specified index.</returns>
         /// <param name="index">The zero-based index of the element to get or set.</param><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.</exception><exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1"/> is read-only.</exception>
-        private T this[int index] {
+        public T this[int index] {
             get {
+                if (index > Count) {
+                    throw new IndexOutOfRangeException();
+                }
+
                 int idx = -1;
                 foreach (T item in this) {
                     idx++;
@@ -230,17 +235,12 @@ namespace Frost.Common.Util {
                 return default(T);
             }
             set {
-                int i = -1;
-                T tObj;
-                Enumerator enumerator = GetEnumerator();
-                while (enumerator.MoveNext()) {
-                    i++;
-                    if (i == index) {
-                        tObj = enumerator.Current;
-                        break;
-                    }
+                if (index > Count) {
+                    throw new IndexOutOfRangeException();
                 }
-                tObj = value;
+
+                base.Remove(this[index]);
+                base.Add(value);
             }
         }
 

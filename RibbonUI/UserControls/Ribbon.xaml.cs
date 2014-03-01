@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using Frost.Common.Models.DB.MovieVo;
+using Frost.Models.Frost.DB;
 using RibbonUI.Windows;
 
 namespace RibbonUI.UserControls {

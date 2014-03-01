@@ -2,7 +2,7 @@
 using System.Data.Entity;
 using System.Windows;
 using System.Windows.Data;
-using Frost.Common.Models.DB.MovieVo;
+using Frost.Models.Frost.DB;
 
 namespace RibbonUI {
 
@@ -16,16 +16,16 @@ namespace RibbonUI {
 
         private void RibbonWindowLoaded(object sender, RoutedEventArgs e) {
             Container.Movies
-                      .Include("Studios")
-                      .Include("Art")
-                      .Include("Genres")
-                      .Include("Awards")
-                      .Include("ActorsLink")
-                      .Include("Plots")
-                      .Include("Directors")
-                      .Include("Countries")
-                      .Include("Audios")
-                      .Include("Videos").Load();
+                     .Include("Studios")
+                     .Include("Art")
+                     .Include("Genres")
+                     .Include("Awards")
+                     .Include("ActorsLink")
+                     .Include("Plots")
+                     .Include("Directors")
+                     .Include("Countries")
+                     .Include("Audios")
+                     .Include("Videos").Load();
 
             Container.Genres.Load();
             Container.Countries.Load();

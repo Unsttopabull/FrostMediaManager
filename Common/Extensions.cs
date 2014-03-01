@@ -7,7 +7,6 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using Frost.Common.Util;
-using File = Frost.Common.Models.DB.MovieVo.Files.File;
 
 namespace Frost.Common {
 
@@ -96,22 +95,6 @@ namespace Frost.Common {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static string[] SplitWithoutEmptyEntries(this string str, params char[] delimiters) {
             return str.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-        }
-
-        /// <summary>Adds the file info as an instance <see cref="Models.DB.MovieVo.Files.File">File</see> to the collection if the file with specified filename it exists.</summary>
-        /// <param name="files">The files collection to add to.</param>
-        /// <param name="filename">The filename to check.</param>
-        /// <returns>Returns <b>true</b> if the fille exist and there was no error retrieving its info; otherwise <b>false</b>.</returns>
-        public static bool AddFile(this ICollection<File> files, string filename) {
-            try {
-                FileInfo fi = new FileInfo(filename);
-
-                files.Add(new File(fi.Name, fi.Extension, fi.FullName, fi.Length));
-            }
-            catch (Exception) {
-                return false;
-            }
-            return true;
         }
 
         /// <summary>

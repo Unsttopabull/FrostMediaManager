@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Frost.Common;
-using Frost.Common.Models.DB.MovieVo;
-using Frost.Common.Models.DB.MovieVo.Files;
+using Frost.Models.Frost;
+using Frost.Models.Frost.DB;
+using Frost.Models.Frost.DB.Files;
 
 namespace Frost.Tester {
 

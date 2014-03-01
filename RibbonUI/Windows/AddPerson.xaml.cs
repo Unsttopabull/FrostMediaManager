@@ -6,7 +6,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Frost.Common.Models.DB.MovieVo.People;
+using Frost.Models.Frost.DB.People;
 using Microsoft.Win32;
 
 namespace RibbonUI.Windows {

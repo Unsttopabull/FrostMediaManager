@@ -35,7 +35,7 @@ namespace Frost.DetectFeatures.Util {
             return key != null && Contains(key);
         }
 
-        public SegmentType this[string segment] {
+        public new SegmentType this[string segment] {
             get { return base[segment].SegmentType; }
         }
 

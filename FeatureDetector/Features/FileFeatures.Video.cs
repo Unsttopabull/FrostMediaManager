@@ -2,23 +2,26 @@
 using System.IO;
 using System.Linq;
 using Frost.Common;
-using Frost.Common.Models.DB.MovieVo;
-using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
 using Frost.DetectFeatures.Util.AspectRatio;
+using Frost.Models.Frost;
+using Frost.Models.Frost.DB;
+using Frost.Models.Frost.DB.Files;
 using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
 using Frost.SharpOpenSubtitles.Util;
 
-using CompressionMode = Frost.Common.CompressionMode;
-using FrameOrBitRateMode = Frost.Common.FrameOrBitRateMode;
-using ScanType = Frost.Common.ScanType;
-using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
+using CompressionMode = Frost.Models.Frost.CompressionMode;
+using FrameOrBitRateMode = Frost.Models.Frost.FrameOrBitRateMode;
+using ScanType = Frost.Models.Frost.ScanType;
+using FileVo = Frost.Models.Frost.DB.Files.File;
 
 namespace Frost.DetectFeatures {
 
     public partial class FileFeatures : IDisposable {
+        /// <summary>The video codec identifier mappings</summary>
+        /// <example>dx50 => mpeg-4</example>
         public static CodecIdMappingCollection VideoCodecIdMappings;
 
         private void GetISOVideoInfo() {

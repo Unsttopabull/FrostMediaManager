@@ -11,7 +11,8 @@
     <AssemblyName>Frost.FeatureDetector</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -43,10 +44,6 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\EF\EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -93,6 +90,18 @@
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DBModels\Models.Frost.csproj">
+      <Project>{b404da8f-fbf4-4ccc-be01-22c488863ec2}</Project>
+      <Name>Models.Frost</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Models.Xbmc\Models.Xbmc.csproj">
+      <Project>{2E311A90-347B-47E1-8AA7-87A276C88F4E}</Project>
+      <Name>Models.Xbmc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Models.Xtreamer\Models.Xtreamer.csproj">
+      <Project>{8491DCCF-354E-4FF6-89D4-88A0BB9CB8AF}</Project>
+      <Name>Models.Xtreamer</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpLanguageDetect\SharpLanguageDetect.csproj">
       <Project>{977BDAC0-B1E4-4198-A0AD-6B93E30EF480}</Project>

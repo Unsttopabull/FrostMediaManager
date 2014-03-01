@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Frost.Common.Models.DB.MovieVo.Files;
+using Frost.Models.Frost.DB.Files;
 using RibbonUI.Windows;
 
 namespace RibbonUI.UserControls.List {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Frost.Common;
-using Frost.Common.Models.DB.MovieVo;
+using Frost.Models.Frost.DB;
 
 namespace Frost.ProcessDatabase {
     public abstract class MediaManager<T> where T : class {

@@ -5,18 +5,18 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
+using Frost.Models.Frost.DB.Files;
 using Frost.SharpCharsetDetector;
 using Frost.SharpLanguageDetect;
 using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
 using Frost.SharpMediaInfo.Output.Properties.General;
 using File = System.IO.File;
-using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
-using Language = Frost.Common.Models.DB.MovieVo.Language;
+using FileVo = Frost.Models.Frost.DB.Files.File;
+using Language = Frost.Models.Frost.DB.Language;
 
 namespace Frost.DetectFeatures {
 
@@ -24,7 +24,10 @@ namespace Frost.DetectFeatures {
         private static string _subtitleExtensionsRegex;
         private readonly MD5 _md5 = MD5.Create();
 
+        /// <summary>Subtitle extension to search for when searching for subtitles.</summary>
         public static List<string> KnownSubtitleExtensions { get; set; }
+
+        /// <summary>Known subtitle formats to be detected</summary>
         public static List<string> KnownSubtitleFormats { get; set; }
 
         private void GetSubtitles(FileVo file) {
@@ -195,50 +198,6 @@ namespace Frost.DetectFeatures {
             return ud.IsSupportedEncoding
                        ? ud.DetectedEncoding
                        : null;
-        }
-
-        public static bool AddSubtitleExtension(string extension) {
-            if (KnownSubtitleExtensions.BinarySearch(extension) >= 0) {
-                return false;
-            }
-
-            KnownSubtitleExtensions.Add(extension);
-            KnownSubtitleExtensions.Sort();
-
-            _subtitleExtensionsRegex = string.Format(@"\.({0})", string.Join("|", KnownSubtitleExtensions));
-            return true;
-        }
-
-        public static bool RemoveSubtitleExtension(string extension) {
-            int index = KnownSubtitleExtensions.BinarySearch(extension);
-            if (index < 0) {
-                return false;
-            }
-
-            KnownSubtitleExtensions.RemoveAt(index);
-
-            _subtitleExtensionsRegex = string.Format(@"\.({0})", string.Join("|", KnownSubtitleExtensions));
-            return true;
-        }
-
-        public static bool AddSubtitleFormat(string format) {
-            if (KnownSubtitleFormats.BinarySearch(format) >= 0) {
-                return false;
-            }
-
-            KnownSubtitleFormats.Add(format);
-            KnownSubtitleFormats.Sort();
-            return true;
-        }
-
-        public static bool RemoveSubtitleFormat(string format) {
-            int index = KnownSubtitleFormats.BinarySearch(format);
-            if (index < 0) {
-                return false;
-            }
-
-            KnownSubtitleFormats.RemoveAt(index);
-            return true;
         }
     }
 

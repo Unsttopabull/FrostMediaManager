@@ -6,32 +6,29 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:e="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
              xmlns:converters="clr-namespace:RibbonUI.Converters"
-             xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:common="clr-namespace:Frost.Common;assembly=Frost.Common"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
+             xmlns:dbModels="clr-namespace:Frost.Models.Frost;assembly=Frost.Models.Frost"
+             xmlns:db="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
              mc:Ignorable="d" Loaded="OnControlLoaded"
-             d:DesignHeight="725" d:DesignWidth="1071"
+             d:DesignHeight="725" d:DesignWidth="1071" d:DataContext="{d:DesignInstance db:Movie}"
              DataContextChanged="EditMovieOnDataContextChanged">
     <UserControl.Resources>
         <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
         <ObjectDataProvider x:Key="MovieTypes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="common:MovieType" />
+                <x:Type TypeName="dbModels:MovieType" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
         <ObjectDataProvider x:Key="DvDRegions" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="common:DVDRegion" />
+                <x:Type TypeName="dbModels:DVDRegion" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </UserControl.Resources>
-    <UserControl.DataContext>
-        <movieVo:Movie />
-    </UserControl.DataContext>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="5,-5,5,5" MaxHeight="{Binding ElementName=MovieEdit, Path=ActualHeight}">
@@ -203,7 +200,7 @@
                         <ListBox Grid.Row="4" Grid.Column="0" x:Name="MovieCountries" ItemsSource="{Binding Countries}"
                                  MinHeight="32">
                             <ListBox.ItemTemplate>
-                                <DataTemplate DataType="{x:Type movieVo:Country}">
+                                <DataTemplate DataType="{x:Type db:Country}">
                                     <StackPanel Orientation="Horizontal">
                                         <Image
                                             Source="{Binding ISO3166.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Country, TargetNullValue={StaticResource UnknownCountryOrLanguage}, FallbackValue={StaticResource UnknownCountryOrLanguage}}"
@@ -377,7 +374,7 @@
 
                         <ListBox Grid.Row="1" x:Name="MovieGenres" MinHeight="20" DataContext="{DynamicResource GenreSource}" ItemsSource="{Binding}">
                             <ListBox.ItemTemplate>
-                                <DataTemplate DataType="movieVo:Genre">
+                                <DataTemplate DataType="db:Genre">
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox x:Name="CbMovieGenreC" Checked="GenreOnChecked"
                                                   Unchecked="GenreOnUnchecked" Loaded="CbMovieGenreCheckBoxLoaded" />
@@ -405,7 +402,7 @@
                         </DockPanel>
                         <ListBox Grid.Row="3" x:Name="MovieStudios" ItemsSource="{Binding Studios}" MinHeight="32">
                             <ListBox.ItemTemplate>
-                                <DataTemplate DataType="{x:Type movieVo:Studio}">
+                                <DataTemplate DataType="{x:Type db:Studio}">
                                     <StackPanel Orientation="Horizontal">
                                         <Image
                                             Source="{Binding Name, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Studio, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}"

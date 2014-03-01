@@ -3,10 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
     xmlns:userControls="clr-namespace:RibbonUI.UserControls"
     xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
     xmlns:list="clr-namespace:RibbonUI.UserControls.List"
+    xmlns:db="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
     x:Class="RibbonUI.UserControls.ContentGrid"
     x:Name="ContentGridControl"
     mc:Ignorable="d"
@@ -94,7 +94,7 @@
                   AlternatingRowBackground="{StaticResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}"
                   GridLinesVisibility="None" RowHeight="20" CanUserResizeColumns="False" CanUserResizeRows="False"
                   SnapsToDevicePixels="True" CanUserReorderColumns="False" SelectionMode="Single"
-                  CellStyle="{StaticResource NoBorderCell}" d:DataContext="{d:DesignInstance movieVo:Movie}">
+                  CellStyle="{StaticResource NoBorderCell}" d:DataContext="{d:DesignInstance db:Movie}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="{l:T Title}" IsReadOnly="True" CanUserReorder="False" Binding="{Binding Title}" />
                 <DataGridTextColumn Header="{l:T Release year}" IsReadOnly="True"
@@ -189,10 +189,7 @@
             </Grid.RowDefinitions>
 
             <userControls:MovieFlagsAndInfo x:Name="MovieFlags" DataContext="{Binding ElementName=MovieList, Path=SelectedItem}" />
-            <TabControl Grid.Row="1">
-                <TabControl.DataContext>
-                    <movieVo:Movie />
-                </TabControl.DataContext>
+            <TabControl Grid.Row="1" d:DataContext="{d:DesignInstance db:Movie}">
                 <TabItem Header="{l:T General Info}">
                     <userControls:ArtAndPlot x:Name="ArtAndPlot"
                                              DataContext="{Binding ElementName=MovieList, Path=SelectedItem}"

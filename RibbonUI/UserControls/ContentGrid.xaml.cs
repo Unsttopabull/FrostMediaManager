@@ -12,8 +12,8 @@ using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using System.Windows.Shell;
 using Frost.Common.Annotations;
-using Frost.Common.Models.DB.MovieVo;
 using Frost.GettextMarkupExtension;
+using Frost.Models.Frost.DB;
 using Microsoft.Expression.Interactivity.Core;
 
 namespace RibbonUI.UserControls {

@@ -22,6 +22,14 @@ namespace Frost.DetectFeatures {
             FileInformation = fileInformation;
         }
 
+        /// <summary>Initializes a new instance of the <see cref="MovieFiles"/> class.</summary>
+        /// <param name="movieType">Type of the movie.</param>
+        /// <param name="fileInformation">The file name information.</param>
+        public MovieFiles(DetectedMovieType movieType, FileNameInfo fileInformation) {
+            MovieType = movieType;
+            FileInformation = new[] { fileInformation };
+        }
+
         public DetectedMovieType MovieType { get; private set; }
 
         public FileNameInfo[] FileInformation { get; private set; }

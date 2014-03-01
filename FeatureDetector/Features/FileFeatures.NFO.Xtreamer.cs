@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Frost.Common.Models.DB.Jukebox;
-using Frost.Common.Models.DB.MovieVo;
-using Frost.Common.Models.XML.Jukebox;
+using Frost.Models.Frost.DB;
+using Frost.Models.Xtreamer.DB;
+using Frost.Models.Xtreamer.NFO;
 
 namespace Frost.DetectFeatures {
 
@@ -36,9 +36,7 @@ namespace Frost.DetectFeatures {
 
             Movie.RatingAverage = Movie.RatingAverage ?? xjbMovie.AverageRating;
             if(string.IsNullOrEmpty(Movie.MPAARating) && !string.IsNullOrEmpty(xjbMovie.MPAA)) {
-                Country usa = _mvc.Countries.FirstOrDefault(c => c.Name == "United States") ?? new Country("United States", "us", "usa");
-
-                Movie.Certifications.Add(new Certification(usa, xjbMovie.MPAA));
+                Movie.Certifications.Add(new Certification(new Country("United States", "us", "usa"), xjbMovie.MPAA));
             }
 
             GetNfoMovieInfoCommon(xjbMovie);
@@ -56,8 +54,8 @@ namespace Frost.DetectFeatures {
                 if (!string.IsNullOrEmpty(Movie.MPAARating)) {
                     Movie.Certifications.RemoveWhere(c => c.Country.Name == "United States");
                 }
-                Country usa = _mvc.Countries.FirstOrDefault(c => c.Name == "United States") ?? new Country("United States", "us", "usa");
-                Movie.Certifications.Add(new Certification(usa, xjbMovie.MPAA));
+
+                Movie.Certifications.Add(new Certification(new Country("United States", "us", "usa"), xjbMovie.MPAA));
             }
 
             GetNfoMovieInfoCommon(xjbMovie);
@@ -72,8 +70,8 @@ namespace Frost.DetectFeatures {
                 }
             }
 
-            if (xjbMovie.Certifications != null) {
-                foreach (Certification certification in xjbMovie.Certifications) {
+            if (!string.IsNullOrEmpty(xjbMovie.Certifications)) {
+                foreach (Certification certification in Certification.ParseCertificationsString(xjbMovie.Certifications)) {
                     AddCertification(certification);
                 }
             }
@@ -127,7 +125,7 @@ namespace Frost.DetectFeatures {
                     continue;
                 }
 
-                Genre genre = XjbGenre.FromGenreAbbreviation(genreAbbrev);
+                Genre genre = Genre.FromGenreAbbreviation(genreAbbrev);
                 AddGenre(genre);
             }
         }

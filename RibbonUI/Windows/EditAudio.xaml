@@ -3,17 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:common="clr-namespace:Frost.Common;assembly=Frost.Common"
-        xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
         xmlns:converters="clr-namespace:RibbonUI.Converters"
         xmlns:a="http://schemas.AvalonControls/AvalonControlsLibrary/Controls"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:files="clr-namespace:Frost.Common.Models.DB.MovieVo.Files;assembly=Frost.Common"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:e="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
         xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
+        xmlns:files="clr-namespace:Frost.Models.Frost.DB.Files;assembly=Frost.Models.Frost"
+        xmlns:dbModels="clr-namespace:Frost.Models.Frost;assembly=Frost.Models.Frost"
+        xmlns:movieVo="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
         mc:Ignorable="d"
         Title="{l:T Edit audio}" Height="443" Width="570" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         d:DataContext="{d:DesignInstance files:Audio}">
@@ -22,12 +23,12 @@
         <converters:TranslateEnumConverter x:Key="TranslateEnumConverter" />
         <ObjectDataProvider x:Key="BitRateModes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="common:FrameOrBitRateMode" />
+                <x:Type TypeName="dbModels:FrameOrBitRateMode" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
         <ObjectDataProvider x:Key="CompressionModes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="common:CompressionMode" />
+                <x:Type TypeName="dbModels:CompressionMode" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Window.Resources>

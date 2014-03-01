@@ -173,7 +173,7 @@ namespace Frost.SharpLanguageDetect.Util {
             catch (XmlException) {
                 throw new LangDetectException(ErrorCode.TrainDataFormatError, string.Format("Training database file '{0}' is an invalid XML.", file.Name));
             }
-            catch (Exception e) {
+            catch (Exception) {
                 throw new LangDetectException(ErrorCode.CantOpenTrainData, string.Format("Can't open training database file '{0}'", file.Name));
             }
             return profile;
@@ -207,7 +207,7 @@ namespace Frost.SharpLanguageDetect.Util {
                 }
                 Console.WriteLine(lang + ":" + count);
             }
-            catch (IOException e) {
+            catch (IOException) {
                 throw new LangDetectException(ErrorCode.CantOpenTrainData, "Can't open training database file '" + file.Name + "'");
             }
             finally {

@@ -1,8 +1,8 @@
 ﻿<Window x:Class="RibbonUI.Windows.AddStudios"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
+        xmlns:movieVo="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
         Title="{l:T Select studios}" Height="520" Width="500" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <BitmapImage x:Key="DefaultStudio" UriSource="..\Images\defaultscreen.png" />

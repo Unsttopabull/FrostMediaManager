@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Interop;
-using Frost.Common.Models.DB.MovieVo;
 
 namespace RibbonUI.Windows {
     /// <summary>
@@ -37,7 +36,7 @@ namespace RibbonUI.Windows {
             var hwnd = new WindowInteropHelper(this).Handle;
             SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_SYSMENU);
 
-            Task.Run(() => {
+            Task.Factory.StartNew(() => {
                 //using (MovieVoContainer mvc = new MovieVoContainer(true, "movieVo.db3")) {
                 //    int count = mvc.Movies.Count();
                 //}
@@ -49,7 +48,7 @@ namespace RibbonUI.Windows {
                 //catch (Exception ex) {
                 //    MessageBox.Show(ex.Message);
                 //}
-            }).ContinueWith(tsk => Dispatcher.Invoke(Close));
+            }).ContinueWith(tsk => Dispatcher.Invoke(new Action(Close)));
         }
     }
 
@@ -66,7 +65,7 @@ namespace RibbonUI.Windows {
         /// </summary>
         /// <param name="message">A message to write. </param>
         public override void Write(string message) {
-            _tb.Dispatcher.Invoke(() => _tb.AppendText(message));
+            _tb.Dispatcher.Invoke(new Action(() => _tb.AppendText(message)));
         }
 
         /// <summary>
@@ -79,7 +78,7 @@ namespace RibbonUI.Windows {
                 ident = new string(' ', IndentLevel * IndentSize);
             }
 
-            _tb.Dispatcher.Invoke(() => _tb.AppendText(ident + message + Environment.NewLine));
+            _tb.Dispatcher.Invoke(new Action(() => _tb.AppendText(ident + message + Environment.NewLine)));
         }
     }
 }

@@ -109,7 +109,8 @@ namespace Frost.SharpLanguageDetect {
          *                              or profile's format is wrong (error code = {@link ErrorCode#FormatError})
          */
         public static void LoadProfilesFromFolder(string profileDirectory) {
-            LoadProfilesFromFolder(new DirectoryInfo(profileDirectory));
+            DirectoryInfo dirInfo = new DirectoryInfo(profileDirectory);
+            LoadProfilesFromFolder(dirInfo);
         }
 
         /**

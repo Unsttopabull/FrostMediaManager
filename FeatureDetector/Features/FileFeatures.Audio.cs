@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Linq;
-using Frost.Common.Models.DB.MovieVo;
-using Frost.Common.Models.DB.MovieVo.Files;
 using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
+using Frost.Models.Frost.DB;
+using Frost.Models.Frost.DB.Files;
 using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;
-using CompressionMode = Frost.Common.CompressionMode;
-using FileVo = Frost.Common.Models.DB.MovieVo.Files.File;
-using FrameOrBitRateMode = Frost.Common.FrameOrBitRateMode;
+using CompressionMode = Frost.Models.Frost.CompressionMode;
+using FileVo = Frost.Models.Frost.DB.Files.File;
+using FrameOrBitRateMode = Frost.Models.Frost.FrameOrBitRateMode;
 
 namespace Frost.DetectFeatures {
 
     public partial class FileFeatures : IDisposable {
+        /// <summary>The audio codec identifier mappings</summary>
+        /// <example>MPA2L3 => MP3, 116 => WMA</example>
         public static CodecIdMappingCollection AudioCodecIdMappings;
 
         private void GetISOAudioInfo() {

@@ -3,10 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
+    xmlns:db="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
     x:Name="UserControl" x:Class="RibbonUI.UserControls.Ribbon"
-    mc:Ignorable="d"
-    d:DesignHeight="140" d:DesignWidth="500" d:DataContext="{d:DesignInstance movieVo:Movie}">
+    mc:Ignorable="d" d:DataContext="{d:DesignInstance db:Movie}"
+    d:DesignHeight="140" d:DesignWidth="500">
     <Ribbon x:Name="RibbonHeader" Title="Frost Media Manager" Background="#FFDFE9F5">
         <Ribbon.ContextualTabGroups>
             <RibbonContextualTabGroup Visibility="Collapsed" Background="Red" x:Name="ContextSubtitle"

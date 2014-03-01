@@ -5,12 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
-             xmlns:movieVo="clr-namespace:Frost.Common.Models.DB.MovieVo;assembly=Frost.Common"
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
-             mc:Ignorable="d" x:Name="FlagsInfo" d:DesignHeight="75" d:DesignWidth="950">
-    <UserControl.DataContext>
-        <movieVo:Movie/>
-    </UserControl.DataContext>
+             xmlns:db="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
+             mc:Ignorable="d" x:Name="FlagsInfo"
+             d:DesignHeight="75" d:DesignWidth="950" d:DataContext="{d:DesignInstance db:Movie}">
     <DockPanel>
         <DockPanel.Background>
             <SolidColorBrush Color="{StaticResource {x:Static SystemColors.ControlDarkColorKey}}" />
