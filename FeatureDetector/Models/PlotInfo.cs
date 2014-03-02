@@ -3,6 +3,7 @@ using Frost.Common.Util.ISO;
 namespace Frost.DetectFeatures.Models {
 
     public class PlotInfo {
+
         public PlotInfo(string full, string summary, string tagline, ISOLanguageCode language) {
             Full = full;
             Summary = summary;

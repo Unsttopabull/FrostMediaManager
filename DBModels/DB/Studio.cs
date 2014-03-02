@@ -8,7 +8,7 @@ using Frost.Common.Util;
 namespace Frost.Models.Frost.DB {
 
     /// <summary>Represents a studio that prodcuced a movie.</summary>
-    public class Studio {
+    public class Studio : IHasName {
 
         /// <summary>Initializes a new instance of the <see cref="Studio"/> class.</summary>
         public Studio() {

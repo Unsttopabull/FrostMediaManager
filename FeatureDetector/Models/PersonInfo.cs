@@ -4,6 +4,11 @@ namespace Frost.DetectFeatures.Models {
         private string _thumb;
 
         /// <summary>Initializes a new instance of the <see cref="PersonInfo"/> class.</summary>
+        public PersonInfo() {
+            
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="PersonInfo"/> class.</summary>
         /// <param name="name">The full name of the actor.</param>
         public PersonInfo(string name) {
             Name = name;

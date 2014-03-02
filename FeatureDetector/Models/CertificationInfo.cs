@@ -3,6 +3,7 @@
 namespace Frost.DetectFeatures.Models {
 
     public class CertificationInfo {
+
         public CertificationInfo(ISOCountryCode country, string certification) {
             Country = country;
             Rating = certification;

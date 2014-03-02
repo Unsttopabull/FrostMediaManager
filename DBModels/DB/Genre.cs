@@ -11,7 +11,7 @@ using Frost.Models.Xtreamer.DB;
 namespace Frost.Models.Frost.DB {
 
     /// <summary>Represents a movie genre.</summary>
-    public partial class Genre {
+    public partial class Genre : IHasName {
 
         /// <summary>Initializes a new instance of the <see cref="Genre"/> class.</summary>
         public Genre() {

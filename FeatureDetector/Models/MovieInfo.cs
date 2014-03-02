@@ -15,6 +15,11 @@ namespace Frost.DetectFeatures.Models {
             Directors = new List<PersonInfo>();
             Writers = new List<PersonInfo>();
             Countries = new List<ISOCountryCode>();
+            Art = new List<ArtInfo>();
+            Actors = new List<ActorInfo>();
+            Certifications = new List<CertificationInfo>();
+            Studios = new List<string>();
+            Plots = new List<PlotInfo>();
         }
 
         /// <summary>Gets or sets the title of the movie in the local language.</summary>
@@ -170,6 +175,12 @@ namespace Frost.DetectFeatures.Models {
         public List<ArtInfo> Art { get; set; }
 
         public List<ISOCountryCode> Countries { get; set; }
+
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString() {
+            return Title;
+        }
     }
 
 }

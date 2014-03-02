@@ -1,7 +1,9 @@
-﻿namespace Frost.Common.Util.ISO {
+﻿
+namespace Frost.Common.Util.ISO {
 
     /// <summary>A base class for information about ISO codes.</summary>
     public class ISOCode {
+
         /// <summary>Initializes a new instance of the <see cref="ISOCode" /> class.</summary>
         /// <param name="englishName">The ISO english language name.</param>
         /// <param name="alpha2">The ISO Two letter code.</param>
@@ -23,7 +25,6 @@
         /// <summary>Gets the ISO english language name.</summary>
         /// <value>The ISO english language name.</value>
         public string EnglishName { get; private set; }
-
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>

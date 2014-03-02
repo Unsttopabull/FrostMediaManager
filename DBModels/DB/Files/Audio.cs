@@ -8,7 +8,14 @@ namespace Frost.Models.Frost.DB.Files {
 
     /// <summary>Represents information about an audio stream in a file.</summary>
     public class Audio : IHasLanguage {
+
         #region Constructors
+
+        /// <summary>Initializes a new instance of the <see cref="Audio"/> class.</summary>
+        /// <param name="file">The file.</param>
+        public Audio(File file) {
+            File = file;
+        }
 
         /// <summary>Initializes a new instance of the <see cref="Audio"/> class.</summary>
         /// <param name="source">The source of the audio (LD, MIC, LINE MIC, ...)</param>
@@ -38,9 +45,6 @@ namespace Frost.Models.Frost.DB.Files {
         /// <param name="channels">The audio channels setting. (2, 6, 5.1, ...)</param>
         /// <param name="language">The language of this audio.</param>
         public Audio(string codec, string channels, string language) : this(null, null, codec, channels, language) {
-        }
-
-        public Audio() {
         }
 
         #endregion

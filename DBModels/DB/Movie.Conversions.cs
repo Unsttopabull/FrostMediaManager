@@ -63,8 +63,7 @@ namespace Frost.Models.Frost.DB
         private static void AddActors(Coretis_VO_Movie m, Movie mov) {
             foreach (Coretis_VO_Person cPerson in m.personArr) {
                 if (cPerson.job.OrdinalEquals("actor")) {
-                    Actor actor = new Actor(cPerson.name, null, cPerson.character);
-                    mov.ActorsLink.Add(new MovieActor(mov, actor));
+                    mov.ActorsLink.Add(new MovieActor(mov, new Person(cPerson.name, null), cPerson.character));
                     continue;
                 }
 

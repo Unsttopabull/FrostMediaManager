@@ -27,12 +27,6 @@ namespace Frost.Models.Frost.DB.People {
         public MovieActor(Movie movie, string personName, string character) : this(movie, new Person(personName), character) {
         }
 
-        /// <summary>Initializes a new instance of the <see cref="MovieActor"/> class.</summary>
-        /// <param name="actor">The actor in the following movie</param>
-        /// <param name="movie">The movie the actor is preforming in</param>
-        public MovieActor(Movie movie, Actor actor) : this(movie, actor, actor.Character) {
-        }
-
         /// <summary>Gets or sets the database Id of this link entry.</summary>
         /// <value>The database Id of this link entry</value>
         [Key]
@@ -58,16 +52,6 @@ namespace Frost.Models.Frost.DB.People {
         /// <summary>Gets or sets the person that is portraying that character in the linked movie</summary>
         /// <value>The person that is portraying that character in the linked movie</value>
         public virtual Person Person { get; set; }
-
-        /// <summary>Converts an instance of <see cref="MovieActor"/> into <see cref="Actor"/></summary>
-        /// <param name="ma">The MovieActor to convert.</param>
-        /// <returns>
-        /// A mew instance of <see cref="Actor"/> converted from <see cref="MovieActor"/> with its
-        /// Person information and the character they are portraying in the linked movie
-        /// </returns>
-        public static explicit operator Actor(MovieActor ma) {
-            return new Actor(ma);
-        }
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>

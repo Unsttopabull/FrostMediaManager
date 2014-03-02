@@ -9,10 +9,6 @@ namespace Frost.Models.Frost.DB.Files {
     /// <summary>Represents information about a subtitle stream in a file.</summary>
     public class Subtitle : IHasLanguage {
 
-        public Subtitle() {
-            
-        }
-
         public Subtitle(File file = null) {
             File = file;
         }
@@ -114,7 +110,7 @@ namespace Frost.Models.Frost.DB.Files {
         /// <param name="subtitle">The instance of <see cref="XbmcXmlAudioInfo"/> to convert</param>
         /// <returns>An instance of <see cref="Subtitle">Subtitle</see> converted from <see cref="XbmcXmlSubtitleInfo"/></returns>
         public static explicit operator Subtitle(XbmcXmlSubtitleInfo subtitle) {
-            return new Subtitle(null, subtitle.LongLanguage ?? subtitle.Language);
+            return new Subtitle(null, subtitle.LongLanguage ?? subtitle.Language, null);
         }
 
         /// <summary>Returns a string that represents the current object.</summary>

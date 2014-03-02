@@ -205,13 +205,12 @@ namespace Frost.DetectFeatures {
 
         private void Init(string[] filePaths) {
             int length = filePaths.Length;
-
             for (int i = 0; i < length && !_error; i++) {
                 InitFile(i, filePaths[i]);
             }
 
-            //Movie = _mvc.Movies.Add(new Movie());
             Movie = new MovieInfo { DirectoryPath = _directoryInfo.FullName };
+            Movie.FileInfos.AddRange(_files);
         }
 
         private void InitFile(int idx, string filePath) {
@@ -226,8 +225,7 @@ namespace Frost.DetectFeatures {
                 MediaListFile mFile = _mf.Add(filePath, true, true);
 
                 if (mFile != null && !string.IsNullOrEmpty(mFile.General.FileInfo.FileName)) {
-                    file = new FileDetectionInfo(mFile.General.FileInfo.FileName, mFile.General.FileInfo.Extension, mFile.General.FileInfo.FolderPath + "/",
-                        mFile.General.FileInfo.FileSize);
+                    file = new FileDetectionInfo(mFile.General.FileInfo.FileName, mFile.General.FileInfo.Extension, mFile.General.FileInfo.FolderPath + Path.DirectorySeparatorChar, mFile.General.FileInfo.FileSize);
                 }
                 else {
                     directoryPath = ParseInfoFromPath(filePath, ref file);

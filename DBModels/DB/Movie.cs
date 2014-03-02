@@ -1,5 +1,3 @@
-//using Frost.Common.Models.XML.Jukebox;
-//using Frost.Common.Models.XML.XBMC;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,7 +11,6 @@ using Frost.Models.Frost.DB.Arts;
 using Frost.Models.Frost.DB.Files;
 using Frost.Models.Frost.DB.People;
 using Frost.Models.Xtreamer.DB;
-using Frost.Models.Xtreamer.PHP;
 
 namespace Frost.Models.Frost.DB {
 

@@ -58,6 +58,7 @@
     <Compile Include="DB\Genre.cs" />
     <Compile Include="DB\GenreInit.cs" />
     <Compile Include="DB\IHasLanguage.cs" />
+    <Compile Include="DB\IHasName.cs" />
     <Compile Include="DB\ISO\ISO3166.cs" />
     <Compile Include="DB\ISO\ISO639.cs" />
     <Compile Include="DB\Language.cs" />
@@ -66,7 +67,6 @@
     </Compile>
     <Compile Include="DB\Movie.cs" />
     <Compile Include="DB\MovieVo.Context.cs" />
-    <Compile Include="DB\People\Actor.cs" />
     <Compile Include="DB\People\MovieActor.cs" />
     <Compile Include="DB\People\Person.cs" />
     <Compile Include="DB\Plot.cs" />

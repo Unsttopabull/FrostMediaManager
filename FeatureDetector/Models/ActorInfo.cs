@@ -1,3 +1,4 @@
+
 namespace Frost.DetectFeatures.Models {
 
     public class ActorInfo : PersonInfo {

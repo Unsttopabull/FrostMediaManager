@@ -17,17 +17,23 @@ namespace Frost.Models.Frost.DB.Files {
         }
 
         /// <summary>Initializes a new instance of the <see cref="Video"/> class.</summary>
+        /// <param name="file">The file.</param>
+        public Video(File file) {
+            File = file;
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="Video"/> class.</summary>
         /// <param name="codec">The codec this video is encoded in.</param>
         /// <param name="width">The width of the video.</param>
         /// <param name="height">The height of the video.</param>
-        public Video(string codec, int width, int height) : this() {
+        public Video(string codec, int? width, int? height) : this() {
             Codec = codec;
 
-            if (height > 0) {
+            if (height.HasValue && height.Value > 0) {
                 Height = height;
             }
 
-            if (width > 0) {
+            if (width.HasValue && width.Value> 0) {
                 Width = width;
             }
         }

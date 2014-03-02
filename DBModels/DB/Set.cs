@@ -6,10 +6,10 @@ namespace Frost.Models.Frost.DB {
 
     /// <summary>Represents a movie set or collection.</summary>
     [Table("Sets")]
-    public class Set {
+    public class Set : IHasName {
 
         /// <summary>Initializes a new instance of the <see cref="Set"/> class.</summary>
-        private Set() {
+        public Set() {
             Movies = new ObservableHashSet<Movie>();
         }
 

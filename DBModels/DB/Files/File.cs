@@ -9,6 +9,7 @@ namespace Frost.Models.Frost.DB.Files {
 
     /// <summary>Represents an information about a file.</summary>
     public class File : IEquatable<File> {
+
         /// <summary>Initializes a new instance of the <see cref="File"/> class.</summary>
         public File() {
             AudioDetails = new ObservableHashSet<Audio>();
@@ -84,10 +85,6 @@ namespace Frost.Models.Frost.DB.Files {
 
         #endregion
 
-        ///// <summary>Gets or sets the movie foreign key.</summary>
-        ///// <value>The movie foreign key.</value>
-        //public long MovieId { get; set; }
-
         #region Relation Tables
 
         ///// <summary>Gets or sets the movie this file is from.</summary>
@@ -114,13 +111,7 @@ namespace Frost.Models.Frost.DB.Files {
         /// <value>A full path filename to the fille or <b>null</b> if any of <b>FolderPath</b> or <b>FileName</b> are null</value>
         public string FullPath {
             get {
-                if (FolderPath != null && Name != null) {
-                    if (FolderPath.EndsWith("/") || FolderPath.EndsWith("\\")) {
-                        return FolderPath + Name + "." + Extension;
-                    }
-                    return FolderPath + "/" + Name + "." + Extension;
-                }
-                return null;
+                return Path.Combine(FolderPath, Name) + "." + Extension;
             }
         }
 

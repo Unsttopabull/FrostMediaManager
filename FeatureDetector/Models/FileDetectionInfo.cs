@@ -18,7 +18,7 @@ namespace Frost.DetectFeatures.Models {
             Size = fileSize;
         }
 
-        public FileDetectionInfo(FileInfo info) {
+        public FileDetectionInfo(FileInfo info) : this() {
             Extension = info.Extension;
             Name = Path.GetFileNameWithoutExtension(info.Name);
             FolderPath = info.DirectoryName + Path.DirectorySeparatorChar;

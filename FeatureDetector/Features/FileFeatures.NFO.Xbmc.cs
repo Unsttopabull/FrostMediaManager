@@ -144,19 +144,23 @@ namespace Frost.DetectFeatures {
 
             Movie.Art.AddRange(GetArt(xbmcMovie));
 
-            foreach (XbmcXmlCertification certification in xbmcMovie.Certifications) {
-                ISOCountryCode country = ISOCountryCodes.Instance.GetByEnglishName(certification.Country);
-                
-                Movie.Certifications.Add(new CertificationInfo(country, certification.Rating));
+            if (xbmcMovie.Certifications != null) {
+                foreach (XbmcXmlCertification certification in xbmcMovie.Certifications) {
+                    ISOCountryCode country = ISOCountryCodes.Instance.GetByEnglishName(certification.Country);
+
+                    Movie.Certifications.Add(new CertificationInfo(country, certification.Rating));
+                }
             }
 
-            foreach (string country in xbmcMovie.Countries) {
-                ISOCountryCode isoCountry = ISOCountryCodes.Instance.GetByEnglishName(country);
-                if (isoCountry == null) {
-                    continue;
-                }
+            if (xbmcMovie.Countries != null) {
+                foreach (string country in xbmcMovie.Countries) {
+                    ISOCountryCode isoCountry = ISOCountryCodes.Instance.GetByEnglishName(country);
+                    if (isoCountry == null) {
+                        continue;
+                    }
 
-                Movie.Countries.Add(isoCountry);
+                    Movie.Countries.Add(isoCountry);
+                }
             }
 
             Movie.RatingAverage = Math.Abs(xbmcMovie.Rating - default(float)) > 0.001 ? xbmcMovie.Rating : Movie.RatingAverage;

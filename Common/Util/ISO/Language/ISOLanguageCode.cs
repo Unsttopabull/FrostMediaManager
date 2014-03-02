@@ -1,4 +1,5 @@
-﻿namespace Frost.Common.Util.ISO {
+﻿
+namespace Frost.Common.Util.ISO {
 
     /// <summary>Represents an information about ISO 639 language codes and its english name.</summary>
     public class ISOLanguageCode : ISOCode {

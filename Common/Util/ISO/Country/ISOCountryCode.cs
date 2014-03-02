@@ -1,3 +1,4 @@
+
 namespace Frost.Common.Util.ISO {
 
     /// <summary>Represents an information about ISO 3166-1 country codes and english name of a country.</summary>
