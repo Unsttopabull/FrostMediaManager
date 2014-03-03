@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -16,14 +17,23 @@ namespace Frost.Tester {
         //}
 
         public static T LocalOrDatabase<T>(this DbContext context, Expression<Func<T, Boolean>> expression) where T : class {
-            IEnumerable<T> localResults = context.Set<T>().Local.Where(expression.Compile());
-
-            T item = localResults.FirstOrDefault();
+            T item = context.Set<T>().Local.Where(expression.Compile()).FirstOrDefault();
             if (item != null) {
+                Debug.WriteLine("Found in EF Cache");
+                Debug.Unindent();
+
                 return item;
             }
 
-            return context.Set<T>().FirstOrDefault(expression);
+            item = context.Set<T>().FirstOrDefault(expression);
+
+            if (item != null) {
+                Debug.WriteLine("Found in DB");
+                Debug.Unindent();
+
+                return item;
+            }
+            return null;
         }
     }
 

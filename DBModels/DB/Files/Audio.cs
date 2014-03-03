@@ -12,6 +12,10 @@ namespace Frost.Models.Frost.DB.Files {
         #region Constructors
 
         /// <summary>Initializes a new instance of the <see cref="Audio"/> class.</summary>
+        public Audio() {
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="Audio"/> class.</summary>
         /// <param name="file">The file.</param>
         public Audio(File file) {
             File = file;

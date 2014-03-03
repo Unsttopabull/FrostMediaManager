@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +29,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
@@ -104,10 +106,28 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
+       Other similar extension points exist, see Microsoft.Common.targets. 
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
+   <Delete
+     Files="$(TargetDir)$(TargetName).XmlSerializers.dll"
+     ContinueOnError="true" />
+   <SGen
+     BuildAssemblyName="$(TargetFileName)"
+     BuildAssemblyPath="$(OutputPath)"
+     References="@(ReferencePath)"
+     ShouldGenerateSerializer="true"
+     UseProxyTypes="false"
+     KeyContainer="$(KeyContainerName)"
+     KeyFile="$(KeyOriginatorFile)"
+     DelaySign="$(DelaySign)"
+     ToolPath="$(TargetFrameworkSDKToolsDirectory)"
+     Platform="$(Platform)">
+      <Output
+       TaskParameter="SerializationAssembly"
+       ItemName="SerializationAssembly" />
+   </SGen>  
   </Target>
   -->
 </Project>

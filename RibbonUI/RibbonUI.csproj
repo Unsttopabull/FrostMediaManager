@@ -138,8 +138,13 @@
       <DependentUpon>GeneralSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Settings\ViewModels\FileNameParserSettingsViewModel.cs" />
+    <Compile Include="UserControls\ViewModels\ArtAndPlotViewModel.cs" />
     <Compile Include="Util\Extensions.cs" />
+    <Compile Include="Util\IMovieSaver.cs" />
     <Compile Include="Util\KnownCodec.cs" />
+    <Compile Include="Util\MovieSaver.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Validations\EmptyOrNullValidationRule.cs" />
     <Compile Include="Windows\AddCodecMapping.xaml.cs">
       <DependentUpon>AddCodecMapping.xaml</DependentUpon>

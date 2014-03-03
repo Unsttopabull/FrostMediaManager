@@ -9,9 +9,15 @@
     xmlns:l="http://www.frostmediamanager.com/xaml/translation"
     xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
     xmlns:db="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
+    xmlns:viewModels="clr-namespace:RibbonUI.UserControls.ViewModels"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     x:Class="RibbonUI.UserControls.ArtAndPlot"
     mc:Ignorable="d"
-    d:DesignHeight="625" d:DesignWidth="1071" d:DataContext="{d:DesignInstance db:Movie}">
+    d:DesignHeight="625" d:DesignWidth="1071">
+    <!-- d:DataContext="{d:DesignInstance db:Movie}" -->
+    <UserControl.DataContext>
+        <viewModels:ArtAndPlotViewModel/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.Resources>
             <BitmapImage x:Key="Box" UriSource="../Images/default/generic.png"/>
@@ -53,18 +59,30 @@
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Column="1" Grid.Row="3" Panel.ZIndex="1" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Image Source="../Images/IMDbNew.png" Tag="{Binding ImdbID}" ToolTip="{Binding ImdbID, FallbackValue=Not Available}" MouseDown="GoToIMDB" Style="{StaticResource CollapseIfTooltipNull}"/>
-            <Image Source="../Images/trailer.ico" Tag="{Binding Trailer}" ToolTip="{Binding Trailer, FallbackValue=Not Available}" MouseDown="GoToTrailer" Style="{StaticResource CollapseIfTooltipNull}"/>
+            <Image Name="MovieImdb" Source="../Images/IMDbNew.png" Tag="{Binding SelectedMovie.ImdbID}" ToolTip="{Binding SelectedMovie.ImdbID, FallbackValue=Not Available}" Style="{StaticResource CollapseIfTooltipNull}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDown">
+                        <i:InvokeCommandAction Command="{Binding GoToImdbCommand}" CommandParameter="{Binding ElementName=MovieImdb, Path=Tag}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Image>
+            <Image Name="MovieTrailer" Source="../Images/trailer.ico" Tag="{Binding SelectedMovie.Trailer}" ToolTip="{Binding SelectedMovie.Trailer, FallbackValue=Not Available}" Style="{StaticResource CollapseIfTooltipNull}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDown">
+                        <i:InvokeCommandAction Command="{Binding GoToTrailerCommand}" CommandParameter="{Binding ElementName=MovieTrailer, Path=Tag}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>                
+            </Image>
         </StackPanel>
-        <Image Grid.Row="0" Grid.Column="1" Source="{Binding MPAARatingImage, TargetNullValue={StaticResource DefaultMpaa}, FallbackValue={StaticResource DefaultMpaa}}" Panel.ZIndex="1">
+        <Image Grid.Row="0" Grid.Column="1" Source="{Binding SelectedMovie.MPAARatingImage, TargetNullValue={StaticResource DefaultMpaa}, FallbackValue={StaticResource DefaultMpaa}}" Panel.ZIndex="1">
             <Image.Effect>
                 <DropShadowEffect/>
             </Image.Effect>
         </Image>
         <Image Grid.ColumnSpan="5" Grid.Column="0" Grid.Row="0" Grid.RowSpan="4"
-               Source="{Binding FirstFanart.Path, IsAsync=True}"
+               Source="{Binding SelectedMovie.FirstFanart.Path, IsAsync=True}"
                Stretch="Fill"/>
-        <fmm:BoxArt Grid.Column="1" Grid.Row="2" CoverImage="{Binding FirstCoverOrPoster.Path}" BoxImage="{StaticResource Box}"/>
+        <fmm:BoxArt Grid.Column="1" Grid.Row="2" CoverImage="{Binding SelectedMovie.FirstCoverOrPoster.Path}" BoxImage="{StaticResource Box}"/>
         <Border Grid.Row="2" Grid.Column="2" CornerRadius="20" BorderThickness="5,5,0,5">
             <Border.Background>
                 <SolidColorBrush Color="Black" Opacity="0.8" />
@@ -77,10 +95,10 @@
                 <ScrollViewer Grid.Row="0">
                     <ScrollViewer.Resources>
                     </ScrollViewer.Resources>
-                    <TextBlock Text="{Binding FirstPlot.Full, FallbackValue={l:T No plot available}, TargetNullValue={l:T No plot available}}"
+                    <TextBlock Text="{Binding SelectedMovie.FirstPlot.Full, FallbackValue={l:T No plot available}, TargetNullValue={l:T No plot available}}"
                                Foreground="White" Margin="10,10,0,0" TextWrapping="Wrap" FontSize="20" ScrollViewer.CanContentScroll="True" />
                 </ScrollViewer>
-                <ListView Grid.Row="1" Background="Transparent" ItemsSource="{Binding Awards}" BorderThickness="0,1,0,0" Focusable="False">
+                <ListView Grid.Row="1" Background="Transparent" ItemsSource="{Binding SelectedMovie.Awards}" BorderThickness="0,1,0,0" Focusable="False">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Foreground="White">
@@ -106,7 +124,7 @@
                 <SolidColorBrush Color="Black" Opacity="0.8" />
             </fmm:ClippingBorder.Background>
             <DataGrid x:Name="ActorsList" AutoGenerateColumns="False" GridLinesVisibility="None" SelectionMode="Single"
-                      CanUserResizeColumns="False" CanUserResizeRows="False" ItemsSource="{Binding ActorsLink}"
+                      CanUserResizeColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedMovie.ActorsLink}"
                       BorderBrush="Transparent" CanUserReorderColumns="False" ClipToBounds="True" MinRowHeight="20" MinColumnWidth="50"
                       Margin="0" RowHeaderWidth="0" BorderThickness="1,1,1,0" CanUserAddRows="False"
                       Background="Transparent" EnableRowVirtualization="False">
@@ -155,8 +173,18 @@
                                 <ColumnDefinition Width="{Binding Columns[0].ActualWidth, ElementName=ActorsList}"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Image Grid.Column="1" Source="../Images/IMDbNew.png" Margin="10,0,0,0" MouseDown="ActorImdbMouseDown" Tag="{Binding Person.ImdbID}" ToolTip="{Binding Person.ImdbID, FallbackValue=Not Available, TargetNullValue=Not Available}"/>
-                            <Image Grid.Column="0" MaxWidth="{Binding Columns[0].ActualWidth, ElementName=ActorsList}" Source="{Binding Person.Thumb, IsAsync=True, TargetNullValue={StaticResource Person}, FallbackValue={StaticResource Person}}" Stretch="Uniform"/>
+                            <Image Name="ActorImdb" Grid.Column="1" Source="../Images/IMDbNew.png" Margin="10,0,0,0" Tag="{Binding ElementName=ActorsList, Path=SelectedItem.Person.ImdbId}" ToolTip="{Binding ElementName=ActorsList, Path=SelectedItem.Person.ImdbId, FallbackValue=Not Available, TargetNullValue=Not Available}">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDown">
+                                        <i:InvokeCommandAction Command="{Binding ActorImdbClickedCommand}" CommandParameter="{Binding ElementName=ActorImdb, Path=Tag}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Image>
+                            <Image Grid.Column="0" MaxWidth="{Binding Columns[0].ActualWidth, ElementName=ActorsList}" Source="{Binding ElementName=ActorsList, Path=SelectedItem.Person.Thumb, IsAsync=True, TargetNullValue={StaticResource Person}, FallbackValue={StaticResource Person}}" Stretch="Uniform">
+                                <Image.CacheMode>
+                                    <BitmapCache/>
+                                </Image.CacheMode>
+                            </Image>
                         </Grid>
                     </DataTemplate>
                 </DataGrid.RowDetailsTemplate>
@@ -166,19 +194,19 @@
                 </DataGrid.Columns>
             </DataGrid>
         </fmm:ClippingBorder>
-        <!--<StackPanel Grid.Column="2" Grid.Row="3" Orientation="Horizontal">
-            <controls:AwardStack Won="{Binding NumberOfOscarsWon}"
-                              Nominated="{Binding NumberOfOscarNominations}"
+        <StackPanel Grid.Column="2" Grid.Row="3" Orientation="Horizontal">
+            <fmm:AwardStack Won="{Binding SelectedMovie.NumberOfOscarsWon}"
+                              Nominated="{Binding SelectedMovie.NumberOfOscarNominations}"
                               WonImage="{StaticResource OscarWon}"
                               NominatedImage="{StaticResource OscarNominated}"/>
-            <controls:AwardStack Won="{Binding NumberOfGoldenGlobesWon}"
-                              Nominated="{Binding NumberOfGoldenGlobeNominations}"
+            <fmm:AwardStack Won="{Binding SelectedMovie.NumberOfGoldenGlobesWon}"
+                              Nominated="{Binding SelectedMovie.NumberOfGoldenGlobeNominations}"
                               WonImage="{StaticResource GoldenGlobeWon}"
                               NominatedImage="{StaticResource GoldenGlobeNominated}"/>
-            <controls:AwardStack Won="{Binding NumberOfCannesAwards}"
-                              Nominated="{Binding NumberOfCannesNominations}"
+            <fmm:AwardStack Won="{Binding SelectedMovie.NumberOfCannesAwards}"
+                              Nominated="{Binding SelectedMovie.NumberOfCannesNominations}"
                               WonImage="{StaticResource CannesWon}"
                               NominatedImage="{StaticResource CannesNominated}"/>
-        </StackPanel>-->
+        </StackPanel>
     </Grid>
 </UserControl>

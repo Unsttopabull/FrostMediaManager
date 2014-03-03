@@ -192,7 +192,7 @@
             <TabControl Grid.Row="1" d:DataContext="{d:DesignInstance db:Movie}">
                 <TabItem Header="{l:T General Info}">
                     <userControls:ArtAndPlot x:Name="ArtAndPlot"
-                                             DataContext="{Binding ElementName=MovieList, Path=SelectedItem}"
+                                             SelectedMovie="{Binding ElementName=MovieList, Path=SelectedItem}"
                                              Background="Transparent" />
                 </TabItem>
                 <TabItem Header="{l:T Trivia and goofs}">

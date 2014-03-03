@@ -79,7 +79,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
-    <Compile Include="MovieSaver.cs" />
+    <Compile Include="IMovieSaver.cs" />
+    <Compile Include="MovieSaver4.cs" />
     <Compile Include="Outputer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

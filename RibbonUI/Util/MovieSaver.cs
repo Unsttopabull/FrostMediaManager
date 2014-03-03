@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Diagnostics;
-using System.IO;
+using System.Linq;
 using Frost.Common;
 using Frost.Common.Util;
 using Frost.Common.Util.ISO;
@@ -11,11 +10,10 @@ using Frost.Models.Frost.DB;
 using Frost.Models.Frost.DB.Arts;
 using Frost.Models.Frost.DB.Files;
 using Frost.Models.Frost.DB.People;
-using File = Frost.Models.Frost.DB.Files.File;
 
-namespace Frost.Tester {
+namespace RibbonUI.Util {
 
-    public class MovieSaver : IDisposable {
+    public class MovieSaver : IMovieSaver {
         private readonly Dictionary<ISOCountryCode, Country> _countries;
         private readonly Dictionary<ISOLanguageCode, Language> _languages;
         private readonly Dictionary<string, Set> _sets;
@@ -40,7 +38,7 @@ namespace Frost.Tester {
             _people = new Dictionary<string, Person>(StringComparer.InvariantCultureIgnoreCase);
 
             //_mvc = new MovieVoContainer(true, "movieVo.db3");
-            _mvc = new MovieVoContainer();
+            _mvc = new MovieVoContainer(true);
 
         }
 
@@ -152,7 +150,7 @@ namespace Frost.Tester {
                 return p;
             }
 
-            p = _mvc.LocalOrDatabase<Person>(person => person.Name == info.Name);
+            p = _mvc.People.FirstOrDefault(person => person.Name == info.Name);
             if (p != null) {
                 _people.Add(p.Name, p);
 
@@ -186,7 +184,7 @@ namespace Frost.Tester {
                 return lang;
             }
 
-            lang = _mvc.LocalOrDatabase<Language>(l => l.ISO639.Alpha3 == langCode.Alpha3);
+            lang = _mvc.Languages.FirstOrDefault(l => l.ISO639.Alpha3 == langCode.Alpha3);
             if (lang != null) {
                 _languages.Add(langCode, lang);
 
@@ -216,7 +214,7 @@ namespace Frost.Tester {
                 return lang;
             }
 
-            lang = _mvc.LocalOrDatabase<Country>(l => l.ISO3166.Alpha3 == countryCode.Alpha3);
+            lang = _mvc.Countries.FirstOrDefault(l => l.ISO3166.Alpha3 == countryCode.Alpha3);
             if (lang != null) {
                 Debug.WriteLine("Found in DB");
                 Debug.Unindent();
@@ -250,7 +248,7 @@ namespace Frost.Tester {
                 return hasName;
             }
 
-            hasName = _mvc.LocalOrDatabase<T>(s => s.Name == name);
+            hasName = _mvc.Set<T>().FirstOrDefault<T>(s => s.Name == name);
             if (hasName != null) {
                 Debug.WriteLine("Found in DB");
                 Debug.Unindent();
@@ -280,7 +278,7 @@ namespace Frost.Tester {
                 return spec;
             }
 
-            spec = _mvc.LocalOrDatabase<Special>(s => s.Value == special);
+            spec = _mvc.Specials.FirstOrDefault(s => s.Value == special);
             if (spec != null) {
                 Debug.WriteLine("Found in DB");
                 Debug.Unindent();
@@ -370,6 +368,34 @@ namespace Frost.Tester {
 
             if (_mvc != null) {
                 _mvc.Dispose();
+            }
+
+            if (_countries != null) {
+                _countries.Clear();
+            }
+
+            if (_languages != null) {
+                _languages.Clear();
+            }
+
+            if (_sets != null) {
+                _sets.Clear();
+            }
+
+            if (_genres != null) {
+                _genres.Clear();
+            }
+
+            if (_specials != null) {
+                _specials.Clear();
+            }
+
+            if (_studios != null) {
+                _studios.Clear();
+            }
+
+            if (_people != null) {
+                _people.Clear();
             }
 
             if (!finializer) {

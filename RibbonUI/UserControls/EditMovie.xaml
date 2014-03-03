@@ -140,13 +140,11 @@
 
                         <StackPanel Grid.Column="0" Grid.Row="6">
                             <Label Target="{Binding ElementName=MovieDuration}" Content="{l:T Duration, Postfix=:}"/>
-                            <a:TimePicker x:Name="MovieDuration"
-                                          SelectedTime="{Binding Path=Runtime, Converter={StaticResource MsToTimeSpanConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <a:TimePicker x:Name="MovieDuration" SelectedTime="{Binding Path=Runtime, Converter={StaticResource MsToTimeSpanConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel Grid.Column="2" Grid.Row="6">
                             <Label Target="{Binding ElementName=MovieDuration}" Content="{l:T Top 250, Postfix=:}"/>
-                            <e:IntegerUpDown Minimum="0" Maximum="250" Value="{Binding Path=Top250, TargetNullValue={x:Null}, UpdateSourceTrigger=PropertyChanged}" MinHeight="30"
-                                             VerticalContentAlignment="Center" />
+                            <e:IntegerUpDown Minimum="0" Maximum="250" Value="{Binding Path=Top250, TargetNullValue={x:Null}, UpdateSourceTrigger=PropertyChanged}" MinHeight="30" VerticalContentAlignment="Center" />
                         </StackPanel>
                     </Grid>
                     <Label Grid.Row="9" Content="{l:T Trailer, Postfix=:}"/>

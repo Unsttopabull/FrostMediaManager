@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Linq;
@@ -13,23 +15,17 @@ using Frost.Models.Frost.Properties;
 
 namespace Frost.Models.Frost.DB {
 
-    /// <summary>
-    /// Represents a context used for manipulation of the database.
-    /// </summary>
+    /// <summary>Represents a context used for manipulation of the database.</summary>
     public class MovieVoContainer : DbContext {
 
         /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
         public MovieVoContainer(bool dropCreate, string filePath) : base(GetSQLiteConnection(filePath), true) {
-            if (dropCreate) {
-                Database.SetInitializer(new SQLiteInitializer<MovieVoContainer>(Resources.MovieVoSQL));
-            }
+            Database.SetInitializer(new SQLiteInitializer<MovieVoContainer>(Resources.MovieVoSQL, dropCreate));
         }
 
         /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
         public MovieVoContainer(string connectionString, bool dropCreate = true) : base(connectionString) {
-            if (dropCreate) {
-                Database.SetInitializer(new SQLiteInitializer<MovieVoContainer>(Resources.MovieVoSQL));
-            }
+            Database.SetInitializer(new SQLiteInitializer<MovieVoContainer>(Resources.MovieVoSQL, dropCreate));
         }
 
         /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
@@ -110,247 +106,20 @@ namespace Frost.Models.Frost.DB {
         /// <value>The information about people that participated in the movies in the library</value>
         public DbSet<Person> People { get; set; }
 
-        ///// <summary>Saves the movie in the database making sure we're not creating duplicates of the already existing entites.</summary>
-        ///// <param name="movie">The movie to save.</param>
-        ///// <exception cref="ArgumentNullException">Throws if the <paramref name="movie"/> is <c>null</c>.</exception>
-        //public void Save(MovieInfo movie) {
-        //    if (movie == null) {
-        //        throw new ArgumentNullException("movie");
-        //    }
-
-        //    //Movie mv = Movies.Create();
-        //    //CopyProperties(movie, mv);
-
-        //    //mv.Set = CheckSet(movie.Set);
-        //    //AddSubtitles(movie, mv.Subtitles);
-
-        //    //Console.WriteLine(movie.Title);
-
-        //    movie.Set = CheckSet(movie.Set);
-        //    CheckCountries(movie);
-        //    CheckStudios(movie);
-        //    CheckPeople(movie);
-        //    //CheckSpecials(movie);
-        //    CheckGenres(movie);
-        //    CheckAwards(movie);
-        //    CheckLanguages(movie);
-
-        //    Movies.Add(movie);
-        //}
-
-        //private void AddSubtitles(Movie movie, ObservableHashSet<Subtitle> subtitles) {
-        //    foreach (Subtitle subtitle in movie.Subtitles) {
-        //        if (subtitle.Language == null) {
-        //            subtitles.Add(subtitle);
-        //            continue;
-        //        }
-
-        //        Language lang = Languages.Local.FirstOrDefault(l => l.Name.Equals(subtitle.Language.Name, StringComparison.InvariantCultureIgnoreCase));
-        //        if (lang != null) {
-        //            subtitle.Language = lang;
-        //        }
-        //        else {
-        //            Languages.Local.Add(subtitle.Language);
-        //        }
-        //    }
-        //}
-
-        //private void CopyProperties(Movie mv, Movie copy) {
-        //    copy.Title = mv.Title;
-        //    copy.OriginalTitle = mv.OriginalTitle;
-        //    copy.SortTitle = mv.SortTitle;
-        //    copy.Type = mv.Type;
-        //    copy.Goofs = mv.Goofs;
-        //    copy.Trivia = mv.Trivia;
-        //    copy.ReleaseYear = mv.ReleaseYear;
-        //    copy.ReleaseDate = mv.ReleaseDate;
-        //    copy.Edithion = mv.Edithion;
-        //    copy.DvdRegion = mv.DvdRegion;
-        //    copy.LastPlayed = mv.LastPlayed;
-        //    copy.Premiered = mv.Premiered;
-        //    copy.Aired = mv.Aired;
-        //    copy.Trailer = mv.Trailer;
-        //    copy.Top250 = mv.Top250;
-        //    copy.Runtime = mv.Runtime;
-        //    copy.Watched = mv.Watched;
-        //    copy.PlayCount = mv.PlayCount;
-        //    copy.RatingAverage = mv.RatingAverage;
-        //    copy.ImdbID = mv.ImdbID;
-        //    copy.TmdbID = mv.TmdbID;
-        //    copy.ReleaseGroup = mv.ReleaseGroup;
-        //    copy.IsMultipart = mv.IsMultipart;
-        //    copy.PartTypes = mv.PartTypes;
-        //    copy.DirectoryPath = mv.DirectoryPath;
-        //    copy.NumberOfAudioChannels = mv.NumberOfAudioChannels;
-        //    copy.AudioCodec = mv.AudioCodec;
-        //    copy.VideoResolution = mv.VideoResolution;
-        //    copy.VideoCodec = mv.VideoCodec;
-        //}
-
-        //#region Check methods
-
-        //private void CheckLanguages(Movie movie) {
-        //    for (int i = 0; i < movie.Videos.Count; i++) {
-        //        CheckLanguage(movie.Videos.ElementAt(i));
-        //    }
-
-        //    for (int i = 0; i < movie.Audios.Count; i++) {
-        //        CheckLanguage(movie.Audios.ElementAt(i));
-        //    }
-
-        //    for (int i = 0; i < movie.Subtitles.Count; i++) {
-        //        CheckLanguage(movie.Subtitles.ElementAt(i));
-        //    }
-        //}
-
-        //private void CheckLanguage(IHasLanguage hasLanguage) {
-        //    if (hasLanguage.Language == null) {
-        //        return;
-        //    }
-
-        //    Language dbLanguage = Languages.Local.FirstOrDefault(l => l.Name == hasLanguage.Language.Name ||
-        //                                                              l.ISO639.Alpha3 == hasLanguage.Language.ISO639.Alpha3);
-        //    if (dbLanguage == null) {
-        //        Languages.Local.Add(hasLanguage.Language);
-        //        return;
-        //    }
-
-        //    hasLanguage.Language = dbLanguage;
-        //}
-
-        //private void CheckAwards(Movie movie) {
-        //    for (int i = 0; i < movie.Awards.Count; i++) {
-        //        Award award = movie.Awards.ElementAt(i);
-        //        Award dbAward = Awards.Local.FirstOrDefault(aw => aw.Organization == award.Organization &&
-        //                                                          aw.IsNomination == award.IsNomination &&
-        //                                                          aw.AwardType == award.AwardType);
-        //        if (dbAward == null) {
-        //            continue;
-        //        }
-
-        //        movie.Awards.Remove(award);
-        //        movie.Awards.Add(dbAward);
-        //    }
-        //}
-
-        //private void CheckSpecials(Movie movie) {
-        //    for (int i = 0; i < movie.Specials.Count; i++) {
-        //        Special special = movie.Specials.ElementAt(i);
-
-        //        if (Specials.Local.FirstOrDefault(s => s.Value == special.Value) == null) {
-        //            Specials.Local.Add(special);
-        //        }
-        //    }
-        //}
-
-        //private void CheckPeople(Movie movie) {
-        //    for (int i = 0; i < movie.ActorsLink.Count; i++) {
-        //        MovieActor movieActor = movie.ActorsLink.ElementAt(i);
-
-        //        Person dbPerson = People.Local.FirstOrDefault(p => p.Name == movieActor.Person.Name || p.ImdbID == movieActor.Person.ImdbID);
-        //        if (dbPerson == null) {
-        //            People.Local.Add(movieActor.Person);
-        //            continue;
-        //        }
-
-        //        movieActor.Person = dbPerson;
-        //    }
-
-        //    for (int i = 0; i < movie.Writers.Count; i++) {
-        //        Person writer = movie.Writers.ElementAt(i);
-
-        //        Person dbPerson = People.Local.FirstOrDefault(p => p.Name == writer.Name || p.ImdbID == writer.ImdbID);
-        //        if (dbPerson == null) {
-        //            People.Local.Add(writer);
-        //            continue;
-        //        }
-
-        //        movie.Writers.Remove(writer);
-        //        movie.Writers.Add(dbPerson);
-        //    }
-
-        //    for (int i = 0; i < movie.Directors.Count; i++) {
-        //        Person director = movie.Directors.ElementAt(i);
-
-        //        Person dbPerson = People.Local.FirstOrDefault(p => p.Name == director.Name || p.ImdbID == director.ImdbID);
-        //        if (dbPerson == null) {
-        //            People.Local.Add(director);
-        //            continue;
-        //        }
-
-        //        movie.Directors.Remove(director);
-        //        movie.Directors.Add(dbPerson);
-        //    }
-        //}
-
-        //private void CheckGenres(Movie movie) {
-        //    for (int i = 0; i < movie.Genres.Count; i++) {
-        //        //Genre genre = movie.Genres.ElementAt(i);
-        //        Genre genre = movie.Genres[i];
-
-        //        Genre dbGenre = Genres.Local.FirstOrDefault(s => s.Name == genre.Name);
-        //        if (dbGenre == null) {
-        //            Genres.Local.Add(genre);
-        //            continue;
-        //        }
-
-        //        //movie.Genres.Remove(genre);
-        //        //movie.Genres.Add(dbGenre);
-        //        movie.Genres[i] = dbGenre;
-        //    }
-        //}
-
-        //private void CheckStudios(Movie movie) {
-
-        //    for (int i = 0; i < movie.Studios.Count; i++) {
-        //        //Studio studio = movie.Studios.ElementAt(i);
-        //        Studio studio = movie.Studios[i];
-
-        //        Studio dbStudio = Studios.Local.FirstOrDefault(s => s.Name == studio.Name);
-        //        if (dbStudio == null) {
-        //            Studios.Local.Add(studio);
-        //            continue;
-        //        }
-
-        //        //movie.Studios.Remove(studio);
-        //        //movie.Studios.Add(dbStudio);
-        //        movie.Studios[i] = dbStudio;
-        //    }
-        //}
-
-        //private Set CheckSet(Set set) {
-        //    if (set == null) {
-        //        return null;
-        //    }
-
-        //    Set dbSet = Sets.Local.FirstOrDefault(s => s.Name.Equals(set.Name, StringComparison.InvariantCultureIgnoreCase));
-        //    return dbSet ?? set;
-        //}
-
-        //private void CheckCountries(Movie movie) {
-        //    for (int i = 0; i < movie.Countries.Count; i++) {
-        //        //Country country = movie.Countries.ElementAt(i);
-        //        Country country = movie.Countries[i];
-
-        //        Country dbCountry = Countries.Local.FirstOrDefault(c => c.Name.Equals(country.Name, StringComparison.OrdinalIgnoreCase));
-        //        if (dbCountry == null) {
-        //            Countries.Local.Add(country);
-        //            continue;
-        //        }
-
-        //        movie.Countries[i] = dbCountry;
-        //        //movie.Countries.Remove(country);
-        //        //movie.Countries.Add(dbCountry);
-        //    }
-        //}
-
-        //#endregion
-
         /// <summary>Checks if the context has unsaved changed (added, modified or deleted entites)</summary>
         /// <returns>Returns <c>true</c> if unsaved changes exist; otherwise <c>false</c>.</returns>
         public bool HasUnsavedChanges() {
             ChangeTracker.DetectChanges();
             return ChangeTracker.Entries().Any(e => e.State == EntityState.Added
+                                                         || e.State == EntityState.Modified
+                                                         || e.State == EntityState.Deleted);
+        }
+
+        /// <summary>Checks if the context has unsaved changed (added, modified or deleted entites)</summary>
+        /// <returns>Returns <c>true</c> if unsaved changes exist; otherwise <c>false</c>.</returns>
+        public IEnumerable<DbEntityEntry> GetUnsavedEntites() {
+            ChangeTracker.DetectChanges();
+            return ChangeTracker.Entries().Where(e => e.State == EntityState.Added
                                                          || e.State == EntityState.Modified
                                                          || e.State == EntityState.Deleted);
         }

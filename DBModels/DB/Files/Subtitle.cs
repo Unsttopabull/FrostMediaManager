@@ -9,6 +9,12 @@ namespace Frost.Models.Frost.DB.Files {
     /// <summary>Represents information about a subtitle stream in a file.</summary>
     public class Subtitle : IHasLanguage {
 
+        /// <summary>Initializes a new instance of the <see cref="Subtitle" /> class.</summary>
+        public Subtitle() {
+            
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="Subtitle" /> class.</summary>
         public Subtitle(File file = null) {
             File = file;
         }

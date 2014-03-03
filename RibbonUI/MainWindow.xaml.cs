@@ -1,5 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using Frost.Models.Frost.DB;
@@ -8,24 +13,30 @@ namespace RibbonUI {
 
     /// <summary>Interaction logic for MainWindow.xaml</summary>
     public partial class MainWindow {
-        internal readonly MovieVoContainer Container = new MovieVoContainer();
+        internal readonly MovieVoContainer Container;
+        private readonly TextWriterTraceListener _logger;
 
         public MainWindow() {
             InitializeComponent();
+
+            _logger = new TextWriterTraceListener(File.Create("dbLog.txt"));
+
+            Container = new MovieVoContainer();
+            Container.Database.Log = s => _logger.WriteLine(s);
         }
 
         private void RibbonWindowLoaded(object sender, RoutedEventArgs e) {
-            Container.Movies
-                     .Include("Studios")
-                     .Include("Art")
-                     .Include("Genres")
-                     .Include("Awards")
-                     .Include("ActorsLink")
-                     .Include("Plots")
-                     .Include("Directors")
-                     .Include("Countries")
-                     .Include("Audios")
-                     .Include("Videos").Load();
+            Container.Movies.Load();
+                     //.Include("Studios")
+                     //.Include("Art")
+                     //.Include("Genres")
+                     //.Include("Awards")
+                     //.Include("ActorsLink")
+                     //.Include("Plots")
+                     //.Include("Directors")
+                     //.Include("Countries")
+                     //.Include("Audios")
+                     //.Include("Videos").Load();
 
             Container.Genres.Load();
             Container.Countries.Load();
@@ -62,12 +73,23 @@ namespace RibbonUI {
             if (studiosSource != null) {
                 studiosSource.Source = Container.Studios.Local;
             }
+
+            _logger.WriteLine("End startup load");
         }
 
         /// <summary>Raises the <see cref="E:System.Windows.Window.Closing"/> event.</summary>
         /// <param name="e">A <see cref="T:System.ComponentModel.CancelEventArgs"/> that contains the event data.</param>
         protected override void OnClosing(CancelEventArgs e) {
             base.OnClosing(e);
+
+
+            IEnumerable<DbEntityEntry> unsaved = Container.GetUnsavedEntites();
+            DbEntityEntry first = unsaved.FirstOrDefault();
+
+            foreach (string propertyName in first.CurrentValues.PropertyNames) {
+                object currentValue = first.CurrentValues[propertyName];
+                object originalValue = first.OriginalValues[propertyName];
+            }
 
             if (!Container.HasUnsavedChanges()) {
                 return;
@@ -78,6 +100,7 @@ namespace RibbonUI {
             }
 
             Container.Dispose();
+            _logger.Close();
         }
     }
 

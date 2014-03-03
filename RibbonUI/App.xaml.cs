@@ -157,7 +157,7 @@ namespace RibbonUI {
         #endregion
 
         private void UnhandledExeption(object sender, DispatcherUnhandledExceptionEventArgs e) {
-            MessageBox.Show(e.Exception.Message);
+           MessageBox.Show(e.Exception.Message);
             e.Handled = true;
         }
     }
