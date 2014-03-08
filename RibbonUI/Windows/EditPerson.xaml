@@ -5,9 +5,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"         
         xmlns:l="http://www.frostmediamanager.com/xaml/translation"
         xmlns:people="clr-namespace:Frost.Models.Frost.DB.People;assembly=Frost.Models.Frost"
-        mc:Ignorable="d" d:DataContext="{d:DesignInstance people:Person}"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:vm="clr-namespace:RibbonUI.ViewModels.Windows"
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance people:Person}" WindowStartupLocation="CenterOwner"
         Title="{Binding ElementName=NameBox, Path=Text, TargetNullValue={l:T Edit person}, FallbackValue={l:T Edit person}}"
-        Height="300" Width="650" Closed="OnWindowClose">
+        Height="300" Width="650" Loaded="EditPersonOnLoaded" Name="EditPersonWindow">
+    <Window.DataContext>
+        <vm:EditPersonViewModel/>
+    </Window.DataContext>
+    <!--<i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction Command="{Binding OnClosedCommand}" CommandParameter="{Binding ElementName=EditPersonWindow}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>-->
     <Window.Resources>
         <BitmapImage x:Key="Person" UriSource="../Images/person.png"/>
     </Window.Resources>
@@ -20,7 +30,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Image Grid.Column="0" Source="{Binding Thumb, TargetNullValue={StaticResource Person}, FallbackValue={StaticResource Person}, UpdateSourceTrigger=PropertyChanged}" MaxWidth="150"/>
+        <Image Grid.Column="0" Source="{Binding SelectedPerson.Thumb, TargetNullValue={StaticResource Person}, FallbackValue={StaticResource Person}, UpdateSourceTrigger=PropertyChanged}" MaxWidth="150"/>
         <Grid Grid.Row="0" Grid.Column="1" Margin="5,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -32,21 +42,21 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Margin="-5,0,0,0" Content="{l:T Name, Postfix=:}"/>
-            <TextBox x:Name="NameBox" x:FieldModifier="private" Grid.Row="1" Text="{Binding Name, Converter={StaticResource EmptyStringToNullConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox x:Name="NameBox" x:FieldModifier="private" Grid.Row="1" Text="{Binding SelectedPerson.Name, Converter={StaticResource EmptyStringToNullConverter}, UpdateSourceTrigger=PropertyChanged}"/>
 
             <Label Grid.Row="2" Margin="-5,0,0,0" Content="{l:T ImdbID, Postfix=:}"/>
-            <TextBox Grid.Row="3" Text="{Binding ImdbID, Converter={StaticResource EmptyStringToNullConverter}}"/>
+            <TextBox Grid.Row="3" Text="{Binding SelectedPerson.ImdbID, Converter={StaticResource EmptyStringToNullConverter}}"/>
 
             <Label Grid.Row="4" Margin="-5,0,0,0" Content="{l:T Thumb, Postfix=:}"/>
-            <TextBox x:Name="ThumbBox" x:FieldModifier="private" Grid.Row="5" Text="{Binding Thumb, Converter={StaticResource EmptyStringToNullConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Row="5" Text="{Binding ThumbnailPath, Converter={StaticResource EmptyStringToNullConverter}, UpdateSourceTrigger=PropertyChanged}"/>
             <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="5" Margin="0,0,5,0" ToolTip="Open file search dialog">
-                <Button Height="16" Style="{StaticResource TransparentBorderlessButton}" Click="ThumbSearchOnClick">
+                <Button Height="16" Style="{StaticResource TransparentBorderlessButton}" Command="{Binding ThumbnailSearchCommand}">
                     <Image Source="../Images/folder.ico"/>
                 </Button>
             </StackPanel>
         </Grid>
         <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button MinWidth="100" Click="Button_Click" Content="{l:T OK}"/>
+            <Button MinWidth="100" Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=EditPersonWindow}" Content="{l:T OK}"/>
         </StackPanel>
     </Grid>
 </Window>

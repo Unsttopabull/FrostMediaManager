@@ -1,5 +1,16 @@
 ﻿namespace Frost.Common {
 
+    public enum PromotionalVideoType {
+        Unknown,
+        Trailer,
+        Interview,
+        Featurete,
+        BehindTheScenes,
+        TvSpot,
+        Review,
+        Clip
+    }
+
     /// <summary>The type of the media stream or file.</summary>
     public enum MediaType {
 

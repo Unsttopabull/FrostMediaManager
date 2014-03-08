@@ -3,10 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
         xmlns:movieVo="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
+        xmlns:vm="clr-namespace:RibbonUI.ViewModels.Windows" Name="Countries"
         Title="{l:T SelectCountry}" Height="212" Width="350" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <BitmapImage x:Key="UnknownCountry" UriSource="..\Images\unknown.png" />
     </Window.Resources>
+    <Window.DataContext>
+        <vm:AddCountriesViewModel/>
+    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -29,7 +33,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Button Grid.Row="1" Grid.Column="0" Margin="5,5,5,5" Click="AddOnClick" Content="{l:T Add}"/>
-        <Button Grid.Row="1" Grid.Column="1" Margin="5,5,5,5" Click="CancelOnClick" Content="{l:T Cancel}"/>
+        <Button Grid.Row="1" Grid.Column="0" Margin="5,5,5,5" Command="{Binding AddCommand}" Content="{l:T Add}" CommandParameter="{Binding ElementName=Countries}"/>
+        <Button Grid.Row="1" Grid.Column="1" Margin="5,5,5,5" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=Countries}" Content="{l:T Cancel}"/>
     </Grid>
 </Window>

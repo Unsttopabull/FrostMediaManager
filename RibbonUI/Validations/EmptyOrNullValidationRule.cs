@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Frost.DetectFeatures;
 using Frost.DetectFeatures.Util;
 
 namespace RibbonUI.Validations {

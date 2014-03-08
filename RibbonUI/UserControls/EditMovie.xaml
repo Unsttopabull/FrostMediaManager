@@ -11,12 +11,16 @@
              xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
-             xmlns:dbModels="clr-namespace:Frost.Models.Frost;assembly=Frost.Models.Frost"
              xmlns:db="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
              xmlns:common="clr-namespace:Frost.Common;assembly=Frost.Common"
+             xmlns:people="clr-namespace:Frost.Models.Frost.DB.People;assembly=Frost.Models.Frost"
+             xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
+             xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls"
              mc:Ignorable="d" Loaded="OnControlLoaded"
-             d:DesignHeight="725" d:DesignWidth="1071" d:DataContext="{d:DesignInstance db:Movie}"
-             DataContextChanged="EditMovieOnDataContextChanged">
+             d:DesignHeight="725" d:DesignWidth="1071">
+    <UserControl.DataContext>
+        <vm:EditMovieViewModel/>
+    </UserControl.DataContext>
     <UserControl.Resources>
         <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
         <ObjectDataProvider x:Key="MovieTypes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
@@ -60,16 +64,16 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Target="{Binding ElementName=MovieTitle}" Content="{l:T Title, Postfix=:}"/>
-                    <TextBox Grid.Row="1" x:Name="MovieTitle" Text="{Binding Path=Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Grid.Row="1" x:Name="MovieTitle" Text="{Binding SelectedMovie.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Label Grid.Row="2" Target="{Binding ElementName=MovieOriginalTitle}" Content="{l:T Original title, Postfix=:}"/>
-                    <TextBox Grid.Row="3" x:Name="MovieOriginalTitle" Text="{Binding Path=OriginalTitle, Converter={StaticResource EmptyStringToNullConverter}, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Grid.Row="3" x:Name="MovieOriginalTitle" Text="{Binding SelectedMovie.OriginalTitle, Converter={StaticResource EmptyStringToNullConverter}, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Label Grid.Row="4" Target="{Binding ElementName=MovieSortTitle}" Content="{l:T Sort title, Postfix=:}"/>
-                    <TextBox Grid.Row="5" x:Name="MovieSortTitle" Text="{Binding Path=SortTitle, Converter={StaticResource EmptyStringToNullConverter}}" />
+                    <TextBox Grid.Row="5" x:Name="MovieSortTitle" Text="{Binding SelectedMovie.SortTitle, Converter={StaticResource EmptyStringToNullConverter}}" />
 
                     <Label Grid.Row="6" Target="{Binding ElementName=MovieEdithion}" Content="{l:T Edithion, Postfix=:}"/>
-                    <TextBox Grid.Row="7" x:Name="MovieEdithion" Text="{Binding Path=Edithion, Converter={StaticResource EmptyStringToNullConverter}}" />
+                    <TextBox Grid.Row="7" x:Name="MovieEdithion" Text="{Binding SelectedMovie.Edithion, Converter={StaticResource EmptyStringToNullConverter}}" />
 
                     <Grid x:Name="TypeRatingDuration" x:FieldModifier="private" Grid.Row="8">
                         <Grid.ColumnDefinitions>
@@ -89,12 +93,12 @@
                         <Label Grid.Row="0" Grid.Column="0" Content="{l:T Type, Postfix=:}"/>
                         <ComboBox Grid.Row="1" Grid.Column="0" x:Name="MovieTypeComboBox"
                                   ItemsSource="{Binding Source={StaticResource MovieTypes}}"
-                                  SelectedItem="{Binding Type}" />
+                                  SelectedItem="{Binding SelectedMovie.Type}" />
 
                         <Label Grid.Column="2" Grid.Row="0" Content="{l:T DVD Region, Postfix=:}"/>
                         <ComboBox Grid.Row="1" Grid.Column="2" IsEnabled="False"
                                   ItemsSource="{Binding Source={StaticResource DvDRegions}}"
-                                  SelectedItem="{Binding DvdRegion}">
+                                  SelectedItem="{Binding SelectedMovie.DvdRegion}">
                             <in:Interaction.Triggers>
                                 <i:DataTrigger Binding="{Binding ElementName=MovieTypeComboBox, Path=SelectedItem}"
                                                Value="DVD">
@@ -110,41 +114,41 @@
 
                         <Label Grid.Row="2" Grid.Column="2" Content="{l:T ImdbID}"/>
                         <TextBox Grid.Row="3" Grid.Column="2"
-                                 Text="{Binding ImdbID, Converter={StaticResource EmptyStringToNullConverter}}" />
+                                 Text="{Binding SelectedMovie.ImdbID, Converter={StaticResource EmptyStringToNullConverter}}" />
 
                         <Label Grid.Row="2" Grid.Column="0" Content="{l:T TmdbID}"/>
                         <TextBox Grid.Row="3" Grid.Column="0"
-                                 Text="{Binding TmdbID, Converter={StaticResource EmptyStringToNullConverter}}" />
+                                 Text="{Binding SelectedMovie.TmdbID, Converter={StaticResource EmptyStringToNullConverter}}" />
 
                         <StackPanel Grid.Column="0" Grid.Row="4">
                             <Label Target="{Binding ElementName=MovieReleaseYear}" Content="{l:T Release year, Postfix=:}"/>
                             <e:IntegerUpDown x:Name="MovieReleaseYear" Minimum="1900" Maximum="2100"
-                                             Value="{Binding Path=ReleaseYear, TargetNullValue={x:Null}, UpdateSourceTrigger=PropertyChanged}" />
+                                             Value="{Binding SelectedMovie.ReleaseYear, TargetNullValue={x:Null}, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel Grid.Column="2" Grid.Row="4">
                             <Label Target="{Binding ElementName=MovieRating}" Content="{l:T Rating}"/>
                             <fmm:StarRating Height="{Binding ElementName=MovieReleaseYear, Path=ActualHeight}" x:Name="MovieRating"
-                                                     Rating="{Binding Path=RatingAverage, UpdateSourceTrigger=PropertyChanged}" />
+                                                     Rating="{Binding SelectedMovie.RatingAverage, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="5">
                             <Label Content="{l:T Release group, Postfix=:}"/>
-                            <TextBox Text="{Binding ReleaseGroup, Converter={StaticResource EmptyStringToNullConverter}}"
+                            <TextBox Text="{Binding SelectedMovie.ReleaseGroup, Converter={StaticResource EmptyStringToNullConverter}}"
                                      MinHeight="20" />
                         </StackPanel>
                         <StackPanel Grid.Column="2" Grid.Row="5">
                             <Label Target="{Binding ElementName=MoviePlayCount}" Content="{l:T Play count, Postfix=:}"/>
-                            <e:IntegerUpDown x:Name="MoviePlayCount" Minimum="0" Value="{Binding Path=PlayCount, TargetNullValue={x:Null}}"
+                            <e:IntegerUpDown x:Name="MoviePlayCount" Minimum="0" Value="{Binding SelectedMovie.PlayCount, TargetNullValue={x:Null}}"
                                              MinWidth="26" />
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="6">
                             <Label Target="{Binding ElementName=MovieDuration}" Content="{l:T Duration, Postfix=:}"/>
-                            <a:TimePicker x:Name="MovieDuration" SelectedTime="{Binding Path=Runtime, Converter={StaticResource MsToTimeSpanConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <a:TimePicker x:Name="MovieDuration" SelectedTime="{Binding SelectedMovie.Runtime, Converter={StaticResource MsToTimeSpanConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel Grid.Column="2" Grid.Row="6">
                             <Label Target="{Binding ElementName=MovieDuration}" Content="{l:T Top 250, Postfix=:}"/>
-                            <e:IntegerUpDown Minimum="0" Maximum="250" Value="{Binding Path=Top250, TargetNullValue={x:Null}, UpdateSourceTrigger=PropertyChanged}" MinHeight="30" VerticalContentAlignment="Center" />
+                            <e:IntegerUpDown Minimum="0" Maximum="250" Value="{Binding SelectedMovie.Top250, TargetNullValue={x:Null}, UpdateSourceTrigger=PropertyChanged}" MinHeight="30" VerticalContentAlignment="Center" />
                         </StackPanel>
                     </Grid>
                     <Label Grid.Row="9" Content="{l:T Trailer, Postfix=:}"/>
@@ -153,8 +157,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox x:Name="MovieTrailer" Grid.Column="0" Text="{Binding Trailer, Converter={StaticResource EmptyStringToNullConverter}}"/>
-                        <Button Grid.Column="1" Height="{Binding ElementName=MovieTitle, Path=ActualHeight}" Click="TrailerSearchOnClick"
+                        <TextBox x:Name="MovieTrailer" Grid.Column="0" Text="{Binding SelectedMovie.Trailer, Converter={StaticResource EmptyStringToNullConverter}}"/>
+                        <Button Grid.Column="1" Height="{Binding ElementName=MovieTitle, Path=ActualHeight}" Command="{Binding TrailerSearchCommand}"
                                 ToolTip="{l:T Open file search dialog}" Margin="2,0,0,0" Style="{StaticResource TransparentBorderlessButton}">
                             <Image Source="../Images/folder.ico" />
                         </Button>
@@ -177,26 +181,19 @@
 
                         <Label Grid.Row="0" Grid.ColumnSpan="2" Target="{Binding ElementName=MovieDirectors}" Content="{l:T Directors, Postfix=:}"/>
                         <ListBox Grid.Row="1" Grid.Column="0" MinHeight="20" MaxHeight="50" Grid.ColumnSpan="2"
-                                 x:Name="MovieDirectors" ItemsSource="{Binding Path=Directors}" SelectionMode="Single" />
+                                 x:Name="MovieDirectors" ItemsSource="{Binding SelectedMovie.Directors}" SelectionMode="Single" />
                         <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal"
                                     HorizontalAlignment="Center">
-                            <Button DockPanel.Dock="Right" Tag="Directors"
-                                    Style="{StaticResource TransparentBorderlessButton}" Click="EditPersonOnClick"
-                                    Height="26" VerticalAlignment="Bottom" ToolTip="{l:T Edit selected person}">
-                                <Image Source="../Images/edit.ico" MaxHeight="16"/>
-                            </Button>
-                            <Button Click="AddDirectorOnClick" Style="{StaticResource TransparentBorderlessButton}"
-                                    ToolTip="{l:T Add a new director}" >
-                                <Image Source="../Images/add.png" MaxHeight="16"/>
-                            </Button>
-                            <Button Click="RemoveDirectorOnClick" Style="{StaticResource TransparentBorderlessButton}"
-                                    ToolTip="{l:T Remove selected director}">
-                                <Image Source="../Images/remove.png" MaxHeight="16"/>
-                            </Button>
+                            <fmm:ImageButton DockPanel.Dock="Right" Tag="Directors" ToolTip="{l:T Edit selected person}" Height="26" VerticalAlignment="Bottom"
+                                             Command="{Binding EditDirectorCommand}" Style="{StaticResource EditButton}"
+                                             CommandParameter="{Binding ElementName=MovieDirectors, Path=SelectedItem}"/>
+                            <fmm:ImageButton Command="{Binding AddDirectorCommand}" Style="{StaticResource AddButton}" ToolTip="{l:T Add a new director}" />
+                            <fmm:ImageButton Command="{Binding RemoveDirectorCommand}" CommandParameter="{Binding ElementName=MovieDirectors, Path=SelectedItem}"
+                                             ToolTip="{l:T Remove selected director}" Style="{StaticResource RemoveButton}"/>
                         </StackPanel>
 
                         <Label Grid.Column="0" Grid.Row="3" Target="{Binding ElementName=MovieCountries}" Margin="-5,-5,0,0"  Content="{l:T Countries, Postfix=:}"/>
-                        <ListBox Grid.Row="4" Grid.Column="0" x:Name="MovieCountries" ItemsSource="{Binding Countries}"
+                        <ListBox Grid.Row="4" Grid.Column="0" x:Name="MovieCountries" ItemsSource="{Binding SelectedMovie.Countries}"
                                  MinHeight="32">
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type db:Country}">
@@ -210,12 +207,8 @@
                             </ListBox.ItemTemplate>
                         </ListBox>
                         <StackPanel Grid.Row="4" Grid.Column="1">
-                            <Button Click="AddCountryOnClick" Style="{StaticResource TransparentBorderlessButton}" ToolTip="{l:T Add new countries}">
-                                <Image Source="../Images/add.png" MaxHeight="16" />
-                            </Button>
-                            <Button Click="RemoveCountryOnClick" Style="{StaticResource TransparentBorderlessButton}" ToolTip="{l:T Remove selected country}">
-                                <Image Source="../Images/remove.png" MaxHeight="16" />
-                            </Button>
+                            <fmm:ImageButton Command="{Binding AddCountryCommand}" Style="{StaticResource AddButton}" ToolTip="{l:T Add new countries}"/>
+                            <fmm:ImageButton Command="{Binding RemoveCountryCommand}" CommandParameter="{Binding ElementName=MovieCountries, Path=SelectedItem}" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected country}"/>
                         </StackPanel>
                     </Grid>
                 </Grid>
@@ -255,19 +248,21 @@
                         </Grid.ColumnDefinitions>
                         <DockPanel Grid.Column="0" Grid.Row="0" LastChildFill="False">
                             <Label DockPanel.Dock="Left" Content="{l:T Plot, Postfix=:}"/>
-                            <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
-                                    Click="RemovePotOnClick" ToolTip="{l:T Remove current plot}">
-                                <Image Source="../Images/remove.png" MaxHeight="16" />
-                            </Button>
-                            <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
-                                    Click="AddPlotOnClick" Height="26" VerticalAlignment="Bottom"
-                                    ToolTip="{l:T Add new plot}">
-                                <Image Source="../Images/add.png" MaxHeight="16" />
-                            </Button>
+                            <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}"
+                                    ToolTip="{l:T Remove current plot}"
+                                    Command="{Binding RemovePlotCommand}" CommandParameter="{Binding ElementName=MoviePlotCombo, Path=SelectedItem}"/>
+                            <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}"
+                                    Command="{Binding AddPlotCommand}" Height="26" VerticalAlignment="Bottom"
+                                    ToolTip="{l:T Add new plot}"/>
                         </DockPanel>
 
-                        <ComboBox Grid.Column="0" Grid.Row="1" x:Name="MoviePlotCombo" ItemsSource="{Binding Plots}"
+                        <ComboBox Grid.Column="0" Grid.Row="1" x:Name="MoviePlotCombo" ItemsSource="{Binding MoviePlots}"
                                   SelectedIndex="0" IsSynchronizedWithCurrentItem="True">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type o:MoviePlot}">
+                                    <TextBlock Text="{Binding Language, TargetNullValue={l:T Unknown language}, FallbackValue={l:T Unknown language}, UpdateSourceTrigger=PropertyChanged}"/>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
                             <ComboBox.Style>
                                 <Style TargetType="{x:Type ComboBox}">
                                     <Style.Triggers>
@@ -284,7 +279,9 @@
                         <Button Grid.Row="1" Grid.Column="1" Margin="5,0,0,0"
                                 IsEnabled="{Binding ElementName=MoviePlotCombo, Path=IsEnabled}"
                                 ToolTip="{l:T Set plot language}" Content="{l:T Set language}"
-                                Click="SetPlotLanguageClick" />
+                                Command="{Binding SetPlotLanguageCommand}"
+                                CommandParameter="{Binding ElementName=MoviePlotCombo, Path=SelectedItem}">
+                        </Button>
                     </Grid>
 
                     <Label Grid.Column="0" Grid.Row="2" Content="{l:T Plot summary, Postfix=:}"/>
@@ -310,40 +307,33 @@
                     </Grid.RowDefinitions>
                     <DockPanel Grid.Row="0" Grid.Column="0" LastChildFill="False">
                         <Label DockPanel.Dock="Left" Content="{l:T Actors, Postfix=:}"/>
-                        <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
-                                Click="RemoveActorOnClick"  ToolTip="{l:T Remove selected actor}">
-                            <Image Source="../Images/remove.png" MaxHeight="16" />
-                        </Button>
-                        <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
-                                Click="AddActorOnClick" Height="26" VerticalAlignment="Bottom" ToolTip="{l:T Add new actor}">
-                            <Image Source="../Images/add.png" MaxHeight="16" />
-                        </Button>
-                        <Button DockPanel.Dock="Right" Tag="Actors"
-                                Style="{StaticResource TransparentBorderlessButton}" Click="EditPersonOnClick"
-                                Height="26" VerticalAlignment="Bottom"  ToolTip="{l:T Edit selected person}">
-                            <Image Source="../Images/edit.ico" MaxHeight="16" />
-                        </Button>
+                        <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected actor}"
+                                         Command="{Binding RemoveActorCommand}" CommandParameter="{Binding ElementName=MovieActorsList, Path=SelectedItem}"/>
+                        <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}"
+                                         Command="{Binding AddActorCommand}" Height="26" VerticalAlignment="Bottom" ToolTip="{l:T Add new actor}"/>
+                        <fmm:ImageButton DockPanel.Dock="Right" Tag="Actors"
+                                Style="{StaticResource EditButton}" Command="{Binding EditActorCommand}" CommandParameter="{Binding ElementName=MovieActorsList, Path=SelectedItem}"
+                                Height="26" VerticalAlignment="Bottom"  ToolTip="{l:T Edit selected person}"/>
                     </DockPanel>
                     <DataGrid Grid.Column="0" Grid.Row="1" AutoGenerateColumns="False" GridLinesVisibility="None"
-                              SelectionMode="Single"
-                              CanUserResizeColumns="False" CanUserResizeRows="False" ItemsSource="{Binding ActorsLink}"
-                              CanUserReorderColumns="False" ClipToBounds="True" MinRowHeight="20"
-                              MinColumnWidth="50" RowHeaderWidth="0" CanUserAddRows="False" x:Name="MovieActorsList"
-                              CellEditEnding="ActorsListOnCellEditEnding" Background="Transparent" CellStyle="{StaticResource NoBorderCell}"
-                              EnableRowVirtualization="False">
+                              SelectionMode="Single" x:Name="MovieActorsList" CellStyle="{StaticResource NoBorderCell}"
+                              CanUserResizeColumns="False" CanUserResizeRows="False" ItemsSource="{Binding Actors}"
+                              CanUserReorderColumns="False" ClipToBounds="True" MinRowHeight="20" EnableRowVirtualization="False"
+                              MinColumnWidth="50" RowHeaderWidth="0" CanUserAddRows="False" 
+                              CellEditEnding="ActorsListOnCellEditEnding" Background="Transparent">
                         <DataGrid.Resources>
                             <BitmapImage x:Key="Person" UriSource="../Images/person.png" />
                         </DataGrid.Resources>
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="{l:T Image}" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Image Source="{Binding Person.Thumb, TargetNullValue={StaticResource Person}, FallbackValue={StaticResource Person}}"
+                                    <DataTemplate DataType="people:Actor">
+                                        <Image Source="{Binding Thumb, TargetNullValue={StaticResource Person}, FallbackValue={StaticResource Person}}"
                                                Stretch="Uniform" MaxWidth="100" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn Binding="{Binding Person.Name}" Header="{l:T Actor}" IsReadOnly="True" />
+                            <DataGridTextColumn Binding="{Binding Name}" Header="{l:T Actor}" IsReadOnly="True" />
                             <DataGridTextColumn Binding="{Binding Character, TargetNullValue=Unknown}" Header="{l:T Character}" Width="*" />
                         </DataGrid.Columns>
                     </DataGrid>
@@ -356,27 +346,28 @@
                         </Grid.RowDefinitions>
                         <DockPanel Grid.Row="0" LastChildFill="False">
                             <Label DockPanel.Dock="Left" Content="{l:T Genres, Postfix=:}"/>
-                            <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
-                                    Click="RemoveGenreClick"  ToolTip="{l:T Remove selected genre}">
-                                <Image Source="../Images/remove.png" MaxHeight="16" />
-                            </Button>
-                            <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
-                                    Click="AddGenreClick" Height="26" VerticalAlignment="Bottom"
-                                     ToolTip="{l:T Add new genre}">
-                                <Image Source="../Images/add.png" MaxHeight="16" />
-                            </Button>
-                            <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
-                                    Click="EditGenreOnClick"  ToolTip="{l:T Edit selected genre}">
-                                <Image Source="../Images/edit.ico" MaxHeight="16" />
-                            </Button>
+                            <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected genre}"
+                                             Command="{Binding RemoveGenreCommand}" CommandParameter="{Binding SelectedItem, ElementName=MovieGenres}"/>
+                            <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}" ToolTip="{l:T Add new genre}" Height="26" VerticalAlignment="Bottom"
+                                             Command="{Binding AddGenreCommand}" CommandParameter="{Binding ElementName=MovieGenres, Path=ItemsSource}"/>
+                            <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource EditButton}" ToolTip="{l:T Edit selected genre}"
+                                             Command="{Binding EditGenreCommand}" CommandParameter="{Binding SelectedItem, ElementName=MovieGenres}"/>
                         </DockPanel>
 
                         <ListBox Grid.Row="1" x:Name="MovieGenres" MinHeight="20" DataContext="{DynamicResource GenreSource}" ItemsSource="{Binding}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="db:Genre">
                                     <StackPanel Orientation="Horizontal">
-                                        <CheckBox x:Name="CbMovieGenreC" Checked="GenreOnChecked"
-                                                  Unchecked="GenreOnUnchecked" Loaded="CbMovieGenreCheckBoxLoaded" />
+                                        <CheckBox x:Name="CbMovieGenreC" Loaded="CbMovieGenreCheckBoxLoaded">
+                                            <in:Interaction.Triggers>
+                                                <in:EventTrigger EventName="Checked">
+                                                    <in:InvokeCommandAction Command="{Binding ElementName=MovieEdit, Path=DataContext.AddMovieGenreCommand}" CommandParameter="{Binding DataContext, ElementName=CbMovieGenreC}"/>
+                                                </in:EventTrigger>
+                                                <in:EventTrigger EventName="Unchecked">
+                                                    <in:InvokeCommandAction Command="{Binding ElementName=MovieEdit, Path=DataContext.RemoveMovieGenreCommand}" CommandParameter="{Binding DataContext, ElementName=CbMovieGenreC}"/>
+                                                </in:EventTrigger>
+                                            </in:Interaction.Triggers>
+                                            </CheckBox>
                                         <TextBlock x:Name="MovieGenre" Margin="5,0,0,0" Text="{Binding Name}" />
                                     </StackPanel>
                                 </DataTemplate>
@@ -385,21 +376,15 @@
 
                         <DockPanel Grid.Row="2" LastChildFill="False">
                             <Label DockPanel.Dock="Left" Content="{l:T Studios, Postfix=:}"/>
-                            <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
-                                    Click="RemoveStudioOnClick" ToolTip="{l:T Remove selected studio}">
-                                <Image Source="../Images/remove.png" MaxHeight="16" />
-                            </Button>
-                            <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
-                                    Click="AddStudioOnClick" Height="26" VerticalAlignment="Bottom"
-                                    ToolTip="{l:T Add new studio}">
-                                <Image Source="../Images/add.png" MaxHeight="16" />
-                            </Button>
-                            <Button DockPanel.Dock="Right" Style="{StaticResource TransparentBorderlessButton}"
-                                    Click="EditStudioOnClick" ToolTip="{l:T Edit selected studio}">
-                                <Image Source="../Images/edit.ico" MaxHeight="16" />
-                            </Button>                            
+                            <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected studio}"
+                                             Command="{Binding RemoveStudioCommand}" CommandParameter="{Binding ElementName=MovieStudios, Path=SelectedItem}"/>
+                            <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}" Height="26" VerticalAlignment="Bottom"
+                                             Command="{Binding AddStudioCommand}" CommandParameter="{Binding ElementName=MovieStudios, Path=SelectedItem}"
+                                             ToolTip="{l:T Add new studio}"/>
+                            <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource EditButton}" ToolTip="{l:T Edit selected studio}"
+                                             Command="{Binding EditStudioCommand}" CommandParameter="{Binding ElementName=MovieStudios, Path=SelectedItem}"/>                            
                         </DockPanel>
-                        <ListBox Grid.Row="3" x:Name="MovieStudios" ItemsSource="{Binding Studios}" MinHeight="32">
+                        <ListBox Grid.Row="3" x:Name="MovieStudios" ItemsSource="{Binding SelectedMovie.Studios}" MinHeight="32">
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type db:Studio}">
                                     <StackPanel Orientation="Horizontal">

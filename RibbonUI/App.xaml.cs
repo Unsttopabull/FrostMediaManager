@@ -1,15 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Windows;
-using System.Windows.Threading;
+using Frost.Common;
 using Frost.Common.Util;
 using Frost.DetectFeatures;
 using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
 using Frost.GettextMarkupExtension;
+using Frost.Models.Frost;
 using RibbonUI.Properties;
 
 namespace RibbonUI {
@@ -18,8 +18,10 @@ namespace RibbonUI {
     public partial class App : Application {
         public App() {
             TranslationManager.CurrentTranslationProvider = new SecondLanguageTranslationProvider("Languages");
+            ModelCreator.RegisterSystem(new FrostModelRegistrator());
+            ModelCreator.ChangeSystem("Frost");
 
-            DispatcherUnhandledException += UnhandledExeption;
+            //DispatcherUnhandledException += UnhandledExeption;
 
             LoadSettings();
         }
@@ -156,10 +158,10 @@ namespace RibbonUI {
 
         #endregion
 
-        private void UnhandledExeption(object sender, DispatcherUnhandledExceptionEventArgs e) {
-           MessageBox.Show(e.Exception.Message);
-            e.Handled = true;
-        }
+        //private void UnhandledExeption(object sender, DispatcherUnhandledExceptionEventArgs e) {
+        //   MessageBox.Show(e.Exception.Message);
+        //    e.Handled = true;
+        //}
     }
 
 }

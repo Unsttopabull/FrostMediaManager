@@ -11,6 +11,11 @@ namespace Frost.XamlControls {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ImageButton), new FrameworkPropertyMetadata(typeof(ImageButton)));
         }
 
+        private object Content {
+            get { return base.Content; }
+            set { base.Content = value; }
+        }
+
         public ImageSource EnabledSource {
             get { return (ImageSource) GetValue(EnabledSourceProperty); }
             set { SetValue(EnabledSourceProperty, value); }

@@ -31,7 +31,6 @@ namespace Headblender.XmlRpc
 	using System.Reflection;
 
 	using System.Globalization;
-	using System.Text;
 	using System.IO;
 	using System.CodeDom;
 	using System.CodeDom.Compiler;

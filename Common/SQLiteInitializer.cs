@@ -43,7 +43,6 @@ namespace Frost.Common {
             }
             catch (Exception e) {
                 Console.Error.WriteLine(e.Message);
-                Environment.Exit(0);
             }
         }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Frost.Common;
-using Frost.Common.Util;
+using Frost.Common.Models;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.Models;
 using Frost.Models.Frost.DB;
@@ -67,16 +67,16 @@ namespace RibbonUI.Util {
             Movie mv = FromMovieInfo(movie);
 
             mv.Set = GetHasName(movie.Set, _sets);
-            mv.Plots = new ObservableHashSet<Plot>(movie.Plots.ConvertAll(p => new Plot(p.Full, p.Summary, p.Tagline, p.Language != null ? p.Language.EnglishName : null)));
-            mv.Art = new ObservableHashSet<ArtBase>(movie.Art.ConvertAll(GetArt));
-            mv.Certifications = new ObservableHashSet<Certification>(movie.Certifications.ConvertAll(GetCertification));
-            mv.Specials = new ObservableHashSet<Special>(movie.Specials.ConvertAll(GetSpecial));
-            mv.Genres = new ObservableHashSet<Genre>(movie.Genres.ConvertAll(g => GetHasName(g, _genres)));
-            mv.Studios = new ObservableHashSet<Studio>(movie.Studios.ConvertAll(s => GetHasName(s, _studios)));
-            mv.Countries = new ObservableHashSet<Country>(movie.Countries.ConvertAll(GetCountry));
-            mv.Writers = new ObservableHashSet<Person>(movie.Writers.ConvertAll(GetPerson));
-            mv.Directors = new ObservableHashSet<Person>(movie.Directors.ConvertAll(GetPerson));
-            mv.ActorsLink = new ObservableHashSet<MovieActor>(movie.Actors.ConvertAll(actorInfo => new MovieActor(mv, GetPerson(actorInfo), actorInfo.Character)));
+            mv.Plots = new HashSet<Plot>(movie.Plots.ConvertAll(p => new Plot(p.Full, p.Summary, p.Tagline, p.Language != null ? p.Language.EnglishName : null)));
+            mv.Art = new HashSet<Art>(movie.Art.ConvertAll(art => new Art(art.Type, art.Path, art.Preview)));
+            mv.Certifications = new HashSet<Certification>(movie.Certifications.ConvertAll(GetCertification));
+            mv.Specials = new HashSet<Special>(movie.Specials.ConvertAll(GetSpecial));
+            mv.Genres = new HashSet<Genre>(movie.Genres.ConvertAll(g => GetHasName(g, _genres)));
+            mv.Studios = new HashSet<Studio>(movie.Studios.ConvertAll(s => GetHasName(s, _studios)));
+            mv.Countries = new HashSet<Country>(movie.Countries.ConvertAll(GetCountry));
+            mv.Writers = new HashSet<Person>(movie.Writers.ConvertAll(GetPerson));
+            mv.Directors = new HashSet<Person>(movie.Directors.ConvertAll(GetPerson));
+            mv.Actors = new HashSet<Actor>(movie.Actors.ConvertAll(actorInfo => new Actor(GetPerson(actorInfo), actorInfo.Character)));
 
             foreach (FileDetectionInfo fileInfo in movie.FileInfos) {
                 AddFileInfo(fileInfo, mv);
@@ -90,7 +90,7 @@ namespace RibbonUI.Util {
             File file = new File(fileInfo.Name, fileInfo.Extension, fileInfo.FolderPath, fileInfo.Size);
             Debug.Unindent();
 
-            mv.Videos = new ObservableHashSet<Video>(fileInfo.Videos.ConvertAll(v => new Video(file) {
+            mv.Videos = new HashSet<Video>(fileInfo.Videos.ConvertAll(v => new Video(file) {
                 MovieHash = v.MovieHash,
                 Source = v.Source,
                 Type = v.Type,
@@ -115,7 +115,7 @@ namespace RibbonUI.Util {
                 Height = v.Height
             }));
 
-            mv.Audios = new ObservableHashSet<Audio>(fileInfo.Audios.ConvertAll(a => new Audio(file) {
+            mv.Audios = new HashSet<Audio>(fileInfo.Audios.ConvertAll(a => new Audio(file) {
                 Source = a.Source,
                 Type = a.Type,
                 ChannelSetup = a.ChannelSetup,
@@ -131,7 +131,7 @@ namespace RibbonUI.Util {
                 Duration = a.Duration
             }));
 
-            mv.Subtitles = new ObservableHashSet<Subtitle>(fileInfo.Subtitles.ConvertAll(sd => new Subtitle(file) {
+            mv.Subtitles = new HashSet<Subtitle>(fileInfo.Subtitles.ConvertAll(sd => new Subtitle(file) {
                 Language = GetLanguage(sd.Language),
                 Format = sd.Format,
                 EmbededInVideo = sd.EmbededInVideo,
@@ -301,19 +301,6 @@ namespace RibbonUI.Util {
                 Rating = certification.Rating,
                 Country = GetCountry(certification.Country)
             };
-        }
-
-        private ArtBase GetArt(ArtInfo art) {
-            switch (art.Type) {
-                case ArtType.Cover:
-                    return new Cover(art.Path, art.Preview);
-                case ArtType.Poster:
-                    return new Poster(art.Path, art.Preview);
-                case ArtType.Fanart:
-                    return new Fanart(art.Path, art.Preview);
-                default:
-                    return new Art(art.Path, art.Preview);
-            }
         }
 
         private Movie FromMovieInfo(MovieInfo movie) {

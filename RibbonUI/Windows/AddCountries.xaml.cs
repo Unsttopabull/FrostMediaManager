@@ -8,14 +8,5 @@ namespace RibbonUI.Windows {
             InitializeComponent();
         }
 
-        private void AddOnClick(object sender, RoutedEventArgs e) {
-            DialogResult = true;
-            Close();
-        }
-
-        private void CancelOnClick(object sender, RoutedEventArgs e) {
-            DialogResult = false;
-            Close();
-        }
     }
 }

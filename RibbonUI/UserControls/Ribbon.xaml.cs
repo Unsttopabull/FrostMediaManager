@@ -29,11 +29,11 @@ namespace RibbonUI.UserControls {
             //    int count = mvc.Movies.Count();
             //}
 
-            TestWindow tw = new TestWindow();
-            Debug.Listeners.Add(tw.Listener);
+            //TestWindow tw = new TestWindow();
+            //Debug.Listeners.Add(tw.Listener);
 
-            tw.Owner = Window.GetWindow(this);
-            tw.ShowDialog();
+            //tw.Owner = Window.GetWindow(this);
+            //tw.ShowDialog();
 
             //((MainWindow)((Grid)Parent).Parent).ContentGrid.;
         }

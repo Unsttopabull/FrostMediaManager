@@ -25,7 +25,6 @@ DEALINGS IN THE SOFTWARE.
 
 using System;
 using System.ComponentModel;
-using System.Collections;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;

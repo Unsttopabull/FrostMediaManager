@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\EventToCommand.cs" />
+    <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="StarRating.cs" />
     <Compile Include="ToggleImageButton.cs" />

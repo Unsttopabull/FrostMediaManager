@@ -80,7 +80,7 @@
   <ItemGroup>
     <Compile Include="Extensions.cs" />
     <Compile Include="IMovieSaver.cs" />
-    <Compile Include="MovieSaver4.cs" />
+    <Compile Include="MovieSaver.cs" />
     <Compile Include="Outputer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -96,7 +96,7 @@
       <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DBModels\Models.Frost.csproj">
+    <ProjectReference Include="..\Models.Frost\Models.Frost.csproj">
       <Project>{b404da8f-fbf4-4ccc-be01-22c488863ec2}</Project>
       <Name>Models.Frost</Name>
     </ProjectReference>

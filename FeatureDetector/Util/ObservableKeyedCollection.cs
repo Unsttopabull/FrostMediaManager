@@ -26,6 +26,8 @@ namespace Frost.DetectFeatures.Util {
         public ObservableKeyedCollection(IEqualityComparer<TKey> comparer, int dictionaryCreationThreshold) : base(comparer, dictionaryCreationThreshold) {
         }
 
+        #region Keyed Collection
+
         /// <summary>Removes all elements from the <see cref="T:System.Collections.ObjectModel.KeyedCollection`2"/>.</summary>
         protected override void ClearItems() {
             base.ClearItems();
@@ -69,6 +71,8 @@ namespace Frost.DetectFeatures.Util {
             throw new NotImplementedException("Must me overriden in the derived class");
         }
 
+        #endregion
+
         public new TValue this[int index] {
             get { return base[index]; }
             set { SetItem(index, value); }
@@ -79,6 +83,15 @@ namespace Frost.DetectFeatures.Util {
                 Add(item);
             }
             OnPropertyChanged("Count");
+        }
+
+        public bool TryGetValue(TKey key, out TValue value) {
+            if (Dictionary != null) {
+                return Dictionary.TryGetValue(key, out value);
+            }
+
+            value = default(TValue);
+            return false;
         }
 
         public void OnCollectionChanged(NotifyCollectionChangedEventArgs args) {

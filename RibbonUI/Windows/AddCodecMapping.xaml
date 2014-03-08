@@ -6,10 +6,10 @@
         xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"        
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:vm="clr-namespace:RibbonUI.Windows.ViewModels"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
         xmlns:util="clr-namespace:RibbonUI.Util"
-        mc:Ignorable="d" d:DataContext="{d:DesignInstance vm:AddCodecMappingViewModel}"
+        xmlns:windows="clr-namespace:RibbonUI.ViewModels.Windows"
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance windows:AddCodecMappingViewModel}"
         Title="{l:T Add codec mapping}" Height="615" Width="485" Closed="AddCodecMappingOnClosed">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>

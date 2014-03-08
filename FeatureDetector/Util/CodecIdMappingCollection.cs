@@ -35,6 +35,16 @@ namespace Frost.DetectFeatures.Util {
             get { return base[codecId].Mapping; }
         }
 
+        public bool TryGetValue(string key, out string binding) {
+            CodecIdBinding bindingCodec;
+            if (TryGetValue(key, out bindingCodec)) {
+                binding = bindingCodec.Mapping;
+                return true;
+            }
+            binding = null;
+            return false;
+        }
+
         /// <summary>Returns an enumerator that iterates through the collection.</summary>
         /// <returns>A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.</returns>
         public new IEnumerator<KeyValuePair<string, string>> GetEnumerator() {

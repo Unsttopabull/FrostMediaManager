@@ -12,12 +12,13 @@
         xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
         xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
-        xmlns:files="clr-namespace:Frost.Models.Frost.DB.Files;assembly=Frost.Models.Frost"
-        xmlns:dbModels="clr-namespace:Frost.Models.Frost;assembly=Frost.Models.Frost"
         xmlns:movieVo="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
-        mc:Ignorable="d"
-        Title="{l:T Edit audio}" Height="443" Width="570" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
-        d:DataContext="{d:DesignInstance files:Audio}">
+        xmlns:vm="clr-namespace:RibbonUI.ViewModels.Windows" Name="EditAudioWindow"
+        mc:Ignorable="d" Height="500" Width="570" ResizeMode="NoResize"
+        Title="{l:T Edit audio}"  WindowStartupLocation="CenterOwner">
+    <Window.DataContext>
+        <vm:EditAudioViewModel/>
+    </Window.DataContext>
     <Window.Resources>
         <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
         <converters:TranslateEnumConverter x:Key="TranslateEnumConverter" />
@@ -64,8 +65,8 @@
                 </Image.CacheMode>
             </Image>
             <Image
-                Source="{Binding Language.ISO639.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, FallbackValue={StaticResource UnknownLanguageLarge}, TargetNullValue={StaticResource UnknownLanguageLarge}}"
-                MinHeight="48" MaxHeight="100" MaxWidth="115" Tag="{Binding Language}"
+                Source="{Binding SelectedAudio.Language.ISO639.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, FallbackValue={StaticResource UnknownLanguageLarge}, TargetNullValue={StaticResource UnknownLanguageLarge}}"
+                MinHeight="48" MaxHeight="100" MaxWidth="115" Tag="{Binding SelectedAudio.Language}"
                 Style="{StaticResource CollapseOnTagNull}">
                 <Image.CacheMode>
                     <BitmapCache />
@@ -74,11 +75,20 @@
         </StackPanel>
         <StackPanel Grid.Row="0" Grid.Column="2" MinWidth="200">
             <Label Content="{l:T Source, Postfix=:}"/>
-            <TextBox VerticalAlignment="Center" Text="{Binding Source, Converter={StaticResource EmptyStringToNullConverter}}" />
+            <TextBox VerticalAlignment="Center" Text="{Binding SelectedAudio.Source, Converter={StaticResource EmptyStringToNullConverter}}" />
 
             <Label Content="{l:T Codec, Postfix=:}"/>
-            <ComboBox x:Name="CodecSelect" x:FieldModifier="private" IsEditable="False" VerticalAlignment="Center" Loaded="CodecSelectOnLoaded"
-                      SelectionChanged="CodecSelectOnSelectionChanged" DisplayMemberPath="Name" SelectedIndex="0"/>
+            <ComboBox x:Name="CodecSelect" x:FieldModifier="private" IsEditable="False"
+                      DisplayMemberPath="Name" SelectedIndex="0" VerticalAlignment="Center">
+                <in:Interaction.Triggers>
+                    <in:EventTrigger EventName="SelectionChanged">
+                        <in:InvokeCommandAction Command="{Binding CodecSelectSelectionChangedCommand}" CommandParameter="{Binding ElementName=CodecSelect, Path=SelectedItem}"/>
+                    </in:EventTrigger>
+                    <in:EventTrigger EventName="Loaded">
+                        <in:InvokeCommandAction Command="{Binding CodecSelectOnLoadCommand}" CommandParameter="{Binding ElementName=CodecSelect}"/>
+                    </in:EventTrigger>
+                </in:Interaction.Triggers>
+            </ComboBox>
 
             <StackPanel Orientation="Horizontal">
                 <Label Content="{l:T Bit rate (kb/s), Postfix=:}"/>
@@ -91,7 +101,7 @@
                     <Image Source="../Images/clear.ico" Width="14" Height="14"/>
                 </Button>
             </StackPanel>
-            <e:DoubleUpDown Minimum="0" Watermark="{l:T Bit rate in kbps}" VerticalAlignment="Center" Value="{Binding BitRate}" x:Name="BitRate" x:FieldModifier="private">
+            <e:DoubleUpDown Minimum="0" Watermark="{l:T Bit rate in kbps}" VerticalAlignment="Center" Value="{Binding SelectedAudio.BitRate}" x:Name="BitRate" x:FieldModifier="private">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=BitRate, Path=Value}" Value="0">
                         <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}"/>
@@ -100,7 +110,7 @@
             </e:DoubleUpDown>
 
             <Label Content="{l:T Bit rate mode, Postfix=:}"/>
-            <ComboBox VerticalAlignment="Center" SelectedItem="{Binding BitRateMode}" SelectedIndex="0" ItemsSource="{Binding Source={StaticResource BitRateModes}}" />
+            <ComboBox VerticalAlignment="Center" SelectedItem="{Binding SelectedAudio.BitRateMode}" SelectedIndex="0" ItemsSource="{Binding Source={StaticResource BitRateModes}}" />
 
             <StackPanel Orientation="Horizontal">
                 <Label Content="{l:T Sampling rate (kHz), Postfix=:}"/>
@@ -113,7 +123,7 @@
                     <Image Source="../Images/clear.ico" Width="14" Height="14"/>
                 </Button>
             </StackPanel>
-            <e:IntegerUpDown Minimum="0" Watermark="{l:T Sampling rate in kHz}" VerticalAlignment="Center" Value="{Binding SamplingRate}" x:Name="SamplingRate" x:FieldModifier="private">
+            <e:IntegerUpDown Minimum="0" Watermark="{l:T Sampling rate in kHz}" VerticalAlignment="Center" Value="{Binding SelectedAudio.SamplingRate}" x:Name="SamplingRate" x:FieldModifier="private">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=SamplingRate, Path=Value}" Value="0">
                         <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}"/>
@@ -132,7 +142,7 @@
                     <Image Source="../Images/clear.ico" Width="14" Height="14"/>
                 </Button>
             </StackPanel>
-            <e:IntegerUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding BitDepth}" Watermark="{l:T Bit depth in bits}" x:Name="BitDepth" x:FieldModifier="private">
+            <e:IntegerUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding SelectedAudio.BitDepth}" Watermark="{l:T Bit depth in bits}" x:Name="BitDepth" x:FieldModifier="private">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=BitDepth, Path=Value}" Value="0">
                         <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}"/>
@@ -141,7 +151,7 @@
             </e:IntegerUpDown>
 
             <Label Content="{l:T Compression mode, Postfix=:}"/>
-            <ComboBox VerticalAlignment="Center" SelectedItem="{Binding CompressionMode}" ItemsSource="{Binding Source={StaticResource CompressionModes}}" SelectedIndex="0" />
+            <ComboBox VerticalAlignment="Center" SelectedItem="{Binding SelectedAudio.CompressionMode}" ItemsSource="{Binding Source={StaticResource CompressionModes}}" SelectedIndex="0" />
             
             <StackPanel Orientation="Horizontal">
                 <Label Content="{l:T Language}"/>
@@ -154,14 +164,19 @@
                     <Image Source="../Images/clear.ico" Width="14" Height="14"/>
                 </Button>
             </StackPanel>
-            <ComboBox x:Name="SelectedLanguage" SelectedItem="{Binding Language}">
+
+            <ComboBox x:Name="SelectedLanguage">
+                <in:Interaction.Triggers>
+                    <in:EventTrigger EventName="SelectionChanged">
+                        <in:InvokeCommandAction Command="{Binding SelectedLanguageChanged}" CommandParameter="{Binding ElementName=SelectedLanguage, Path=SelectedItem}"/>
+                    </in:EventTrigger>
+                </in:Interaction.Triggers>
                 <ComboBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type movieVo:Language}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{Binding ISO639.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, TargetNullValue={StaticResource UnknownCountryOrLanguage}, FallbackValue={StaticResource UnknownCountryOrLanguage}}"
                                    MaxHeight="32" MaxWidth="32" />
-                            <TextBlock Text="{Binding Name, TargetNullValue=Unknown, FallbackValue=Unknown}"
-                                       Margin="5,0,0,0" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding Name, TargetNullValue=Unknown, FallbackValue=Unknown}" Margin="5,0,0,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
@@ -171,7 +186,7 @@
         <StackPanel Grid.Row="0" Grid.Column="4">
             <StackPanel Orientation="Horizontal">
                 <Label VerticalAlignment="Center" Content="{l:T Duration, Postfix=:}"/>
-                <a:TimePicker x:Name="MovieDuration" HorizontalAlignment="Left" MinTime="{x:Static sys:TimeSpan.Zero}" SelectedTime="{Binding Path=Duration, Converter={StaticResource MsToTimeSpanConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <a:TimePicker x:Name="MovieDuration" HorizontalAlignment="Left" MinTime="{x:Static sys:TimeSpan.Zero}" SelectedTime="{Binding SelectedAudio.Duration, Converter={StaticResource MsToTimeSpanConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                     <in:Interaction.Triggers>
                         <i:DataTrigger Binding="{Binding ElementName=MovieDuration, Path=SelectedTime}" Value="{x:Static sys:TimeSpan.Zero}">
                             <i:ChangePropertyAction PropertyName="SelectedTime" Value="{x:Null}"/>
@@ -192,10 +207,13 @@
                 <Label VerticalAlignment="Center" Margin="-5,-5,0,0" Content="{l:T Channel layout, Postfix=:}"/>
                 <TextBlock Text="{Binding ElementName=ChannelPicker, Path=ChannelLayout, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,0,5"/>
             </StackPanel>
-            <fmm:ChannelPicker x:Name="ChannelPicker" BorderThickness="1" BorderBrush="DarkGray" ChannelSetup="{Binding ChannelSetup, Mode=TwoWay}" ChannelPositions="{Binding ChannelPositions, Mode=TwoWay}" NumberOfChannels="{Binding NumberOfChannels, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <fmm:ChannelPicker x:Name="ChannelPicker" BorderThickness="1" ChannelSetup="{Binding SelectedAudio.ChannelSetup, Mode=TwoWay}"
+                               ChannelPositions="{Binding SelectedAudio.ChannelPositions, Mode=TwoWay}" BorderBrush="DarkGray"
+                               NumberOfChannels="{Binding SelectedAudio.NumberOfChannels, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                               />
             <TextBlock Text="{Binding ElementName=ChannelPicker, Path=ChannelPositions, UpdateSourceTrigger=PropertyChanged}"/>
         </StackPanel>
 
-        <Button Grid.Column="4" Grid.Row="1" Margin="0,0,0,5" Height="25" Click="CloseOnClick" Content="{l:T Close}"/>
+        <Button Grid.Column="4" Grid.Row="1" Margin="0,0,0,5" Height="25" Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=EditAudioWindow}" Content="{l:T Close}"/>
     </Grid>
 </Window>

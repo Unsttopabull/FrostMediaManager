@@ -137,15 +137,49 @@
     <Compile Include="UserControls\Settings\GeneralSettings.xaml.cs">
       <DependentUpon>GeneralSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Settings\ViewModels\FileNameParserSettingsViewModel.cs" />
-    <Compile Include="UserControls\ViewModels\ArtAndPlotViewModel.cs" />
+    <Compile Include="Util\ObservableHashSet2.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\ObservableWrappers\ObservableActor.cs" />
+    <Compile Include="Util\ObservableWrappers\MovieAudio.cs" />
+    <Compile Include="Util\ObservableWrappers\MovieVideo.cs" />
+    <Compile Include="ViewModels\UserControls\ArtAndPlotViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModels\UserControls\ContentGridViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModels\UserControls\List\ListVideosViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\Settings\FeatureDetectorSettingsViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModels\UserControls\Settings\FileNameParserSettingsViewModel.cs" />
+    <Compile Include="ViewModels\UserControls\Settings\GeneralSettingsViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModels\UserControls\EditMovieViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModels\UserControls\MovieFlagsAndInfoViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Util\Extensions.cs" />
     <Compile Include="Util\IMovieSaver.cs" />
     <Compile Include="Util\KnownCodec.cs" />
     <Compile Include="Util\MovieSaver.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Util\ObservableWrappers\MoviePlot.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Validations\EmptyOrNullValidationRule.cs" />
+    <Compile Include="ViewModels\Windows\AddCountriesViewModel.cs" />
+    <Compile Include="ViewModels\Windows\AddPersonViewModel.cs" />
+    <Compile Include="ViewModels\Windows\EditAudioViewModel.cs" />
+    <Compile Include="ViewModels\Windows\EditPersonViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModels\Windows\SelectLanguageViewModel.cs" />
     <Compile Include="Windows\AddCodecMapping.xaml.cs">
       <DependentUpon>AddCodecMapping.xaml</DependentUpon>
     </Compile>
@@ -176,10 +210,7 @@
     <Compile Include="Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\TestWindow.xaml.cs">
-      <DependentUpon>TestWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\ViewModels\AddCodecMappingViewModel.cs" />
+    <Compile Include="ViewModels\Windows\AddCodecMappingViewModel.cs" />
     <Page Include="UserControls\ArtAndPlot.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -277,10 +308,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\SettingsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\TestWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -388,7 +415,7 @@
       <Project>{73F12859-D8B1-49C1-A835-0810CE7BD006}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DBModels\Models.Frost.csproj">
+    <ProjectReference Include="..\Models.Frost\Models.Frost.csproj">
       <Project>{b404da8f-fbf4-4ccc-be01-22c488863ec2}</Project>
       <Name>Models.Frost</Name>
     </ProjectReference>
@@ -518,6 +545,10 @@
   <ItemGroup>
     <Resource Include="Images\default\generic.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\edit_disabled.ico" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -30,8 +30,6 @@ using System.Reflection;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Messaging;
 
-using CookComputing.XmlRpc;
-
 namespace CookComputing.XmlRpc
 {
   public class XmlRpcClientFormatterSink : IClientChannelSink, IMessageSink

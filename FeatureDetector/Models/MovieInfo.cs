@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Frost.Common;
 using Frost.Common.Util.ISO;
 
@@ -175,6 +176,16 @@ namespace Frost.DetectFeatures.Models {
         public List<ArtInfo> Art { get; set; }
 
         public List<ISOCountryCode> Countries { get; set; }
+
+        /// <summary>Gets the runtime sum of all the video parts in this movie in miliseconds.</summary>
+        /// <returns>Full runtime sum of video parts in this movie in miliseconds.</returns>
+        public void CalculateVideoRuntimeSum() {
+            long l = FileInfos.SelectMany(f => f.Videos).Where(v => v.Duration.HasValue).Sum(v => v.Duration.Value);
+
+            if (!Runtime.HasValue && l > 0) {
+                Runtime = l;
+            }
+        }
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>

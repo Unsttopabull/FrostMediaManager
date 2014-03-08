@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace Frost.XamlControls.Commands {
 
-    public class RelayCommand<T> : ICommand {
+    public class RelayCommand<T> : ICommand<T> {
         private readonly Action<T> _execute;
         private readonly Predicate<T> _canExecute;
 

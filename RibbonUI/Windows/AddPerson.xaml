@@ -3,7 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
         xmlns:people="clr-namespace:Frost.Models.Frost.DB.People;assembly=Frost.Models.Frost"
-        Title="{l:T Add a person}" Height="552" Width="590" WindowStartupLocation="CenterOwner">
+        xmlns:vm="clr-namespace:RibbonUI.ViewModels.Windows"
+        Closed="AddPersonOnClosed" Loaded="AddPersonOnLoaded"
+        Title="{l:T Add a person}" Height="552" Width="590"
+        WindowStartupLocation="CenterOwner" Name="AddPersonWindow">
+    <Window.DataContext>
+        <vm:AddPersonViewModel />            
+    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -21,9 +27,9 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,-5" Content="{l:T Search}"/>
-            <TextBox Grid.Column="0" Grid.Row="1" Margin="5,5,5,0" x:Name="SearchBox"/>
+            <TextBox Grid.Column="0" Grid.Row="1" Margin="5,5,5,0" x:Name="SearchBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
-        <ListBox x:Name="PeopleList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding}" Margin="5,5,5,0" Loaded="PeopleListOnLoaded">
+        <ListBox x:Name="PeopleList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding People.View, UpdateSourceTrigger=PropertyChanged}" Margin="5,5,5,0" SelectedItem="{Binding SelectedPerson}" SelectionChanged="PeopleList_OnSelectionChanged">
             <ListBox.Resources>
                 <BitmapImage x:Key="DefaultPerson" UriSource="../Images/person.png"/>
             </ListBox.Resources>
@@ -50,20 +56,20 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Label Margin="-5,0,0,0" Grid.Row="0" Grid.Column="0" Content="{l:T Name, Postfix=:}"/>
-                <TextBox Grid.Column="0" Grid.Row="1" x:Name="PersonName" Text="{Binding ElementName=PeopleList, Path=SelectedItem.Name, Mode=OneWay, Converter={StaticResource EmptyStringToNullConverter}}"/>
+                <TextBox Grid.Column="0" Grid.Row="1" x:Name="PersonName" Text="{Binding PersonName, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EmptyStringToNullConverter}}"/>
 
                 <Label Margin="-5,0,0,0" Grid.Row="0" Grid.Column="2" Content="{l:T Thumb, Postfix=:}"/>
-                <TextBox Grid.Row="1" Grid.Column="2" x:Name="PersonThumb" Text="{Binding ElementName=PeopleList, Path=SelectedItem.Thumb, Mode=OneWay, Converter={StaticResource EmptyStringToNullConverter}}"/>
+                <TextBox Grid.Row="1" Grid.Column="2" x:Name="PersonThumb" Text="{Binding PersonThumb, Converter={StaticResource EmptyStringToNullConverter}}"/>
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="1" Grid.Column="2" Margin="0,0,5,0" ToolTip="{l:T Open file search dialog}">
-                    <Button Height="16" Style="{StaticResource TransparentBorderlessButton}" Click="ThumbSearchOnClick">
+                    <Button Height="16" Style="{StaticResource TransparentBorderlessButton}" Command="{Binding ThumbSearchCommand}">
                         <Image Source="../Images/folder.ico"/>
                     </Button>
                 </StackPanel>
             </Grid>
             <Label Margin="-5,0,0,0" x:Name="CharacterLabel" x:FieldModifier="private" Target="{Binding ElementName=ActorCharacter, Converter={StaticResource EmptyStringToNullConverter}}" Content="{l:T Character}"/>
-            <TextBox x:Name="ActorCharacter" Margin="0,0,0,5"/>
+            <TextBox x:Name="ActorCharacter" Margin="0,0,0,5" Text="{Binding PersonCharacter}"/>
         </StackPanel>
-        <Button Grid.Row="3" Grid.Column="0" Margin="5,5,5,5" Click="AddOnClick" Content="{l:T Add}"/>
-        <Button Grid.Row="3" Grid.Column="1" Margin="5,5,5,5" Click="CancelOnClick" Content="{l:T Cancel}"/>
+        <Button Grid.Row="3" Grid.Column="0" Margin="5,5,5,5" Command="{Binding AddCommand}" CommandParameter="{Binding ElementName=AddPersonWindow}" Content="{l:T Add}"/>
+        <Button Grid.Row="3" Grid.Column="1" Margin="5,5,5,5" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=AddPersonWindow}" Content="{l:T Cancel}"/>
     </Grid>
 </Window>

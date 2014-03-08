@@ -4,7 +4,6 @@
              xmlns:converters="clr-namespace:RibbonUI.Converters"
              xmlns:themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
-             xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              StartupUri="MainWindow.xaml">             
              <!--StartupUri="Windows/SettingsWindow.xaml">-->
     <Application.Resources>
@@ -16,8 +15,10 @@
         <BitmapImage x:Key="UnknownLanguageLarge" UriSource="Images/unknown_large.png" />
         <BitmapImage x:Key="Add" UriSource="Images/add.png" />
         <BitmapImage x:Key="AddDisabled" UriSource="Images/add_disabled.png" />
-        <av:BitmapImage x:Key="Remove" UriSource="Images/remove.png" />
+        <BitmapImage x:Key="Remove" UriSource="Images/remove.png" />
         <BitmapImage x:Key="RemoveDisabled" UriSource="Images/remove_disabled.png" />
+        <BitmapImage x:Key="Edit" UriSource="Images/edit.ico" />
+        <BitmapImage x:Key="EditDisabled" UriSource="Images/edit_disabled.ico" />
 
         <!-- BUTTON BASE STYLE AERO NORMAL !-->
         <Style x:Key="ButtonFocusVisual">
@@ -82,6 +83,11 @@
             </Setter>
         </Style>
         <!-- BUTTON BASE STYLE AERO NORMAL !-->
+
+        <Style TargetType="{x:Type fmm:ImageButton}" x:Key="EditButton">
+            <Setter Property="EnabledSource" Value="{StaticResource Edit}"/>
+            <Setter Property="DisabledSource" Value="{StaticResource EditDisabled}"/>
+        </Style>
 
         <Style TargetType="{x:Type fmm:ImageButton}" x:Key="AddButton">
             <Setter Property="EnabledSource" Value="{StaticResource Add}"/>

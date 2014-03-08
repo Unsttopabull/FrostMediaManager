@@ -50,7 +50,7 @@
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="{l:T Preview}" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate DataType="arts:ArtBase">
+                        <DataTemplate DataType="arts:Art">
                             <Image Source="{Binding PreviewOrPath}" Stretch="Uniform" MaxHeight="300" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

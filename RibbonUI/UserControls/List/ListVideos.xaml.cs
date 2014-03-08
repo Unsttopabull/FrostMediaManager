@@ -1,51 +1,30 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using Frost.Models.Frost.DB.Files;
-using RibbonUI.Windows;
+using RibbonUI.Util;
+using RibbonUI.ViewModels.UserControls.List;
 
 namespace RibbonUI.UserControls.List {
 
     /// <summary>Interaction logic for EditVideos.xaml</summary>
     public partial class ListVideos : UserControl {
-        private ICollectionView _collectionView;
+        public static readonly DependencyProperty VideosProperty = DependencyProperty.Register("Videos", typeof(ObservableHashSet2<Video>), typeof(ListVideos), new PropertyMetadata(default(ObservableHashSet2<Video>), OnVideoListChanged));
 
         public ListVideos() {
             InitializeComponent();
-            
-            TypeDescriptor.GetProperties(VideosList)["ItemsSource"].AddValueChanged(VideosList, VideosListItemSourceChanged); 
         }
 
-        private void VideosListItemSourceChanged(object sender, EventArgs e) {
-            _collectionView = CollectionViewSource.GetDefaultView(VideosList.ItemsSource);
-
-            PropertyGroupDescription groupDescription = new PropertyGroupDescription("File");
-            if (_collectionView.GroupDescriptions != null) {
-                _collectionView.GroupDescriptions.Add(groupDescription);
-            }            
+        private static void OnVideoListChanged(DependencyObject d, DependencyPropertyChangedEventArgs args) {
+            ((ListVideosViewModel) (((ListVideos) d).DataContext)).Videos = (ObservableHashSet2<Video>) args.NewValue;
         }
 
-        private void OnEditClicked(object sender, RoutedEventArgs e) {
-            Video selectedVideo = (Video) ((Button) sender).DataContext;
-
-            Window window = Window.GetWindow(this);
-            EditVideo editVideo = new EditVideo {
-                Owner = window,
-                DataContext = selectedVideo,
-                SelectedLanguage = {
-                    ItemsSource = ((CollectionViewSource)window.Resources["LanguagesSource"]).View
-                }
-            };
-
-            editVideo.ShowDialog();
-
-            _collectionView.Refresh();
+        public ObservableHashSet2<Video> Videos {
+            get { return (ObservableHashSet2<Video>) GetValue(VideosProperty); }
+            set { SetValue(VideosProperty, value); }
         }
 
-        private void OnRemoveClicked(object sender, RoutedEventArgs e) {
-            
+        private void OnWindowLoaded(object sender, RoutedEventArgs e) {
+            ((ListVideosViewModel) DataContext).ParentWindow = Window.GetWindow(this);
         }
     }
 

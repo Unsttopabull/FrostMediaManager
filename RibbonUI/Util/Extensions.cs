@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using Frost.Common;
 
 namespace RibbonUI.Util {
 

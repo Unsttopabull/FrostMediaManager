@@ -5,14 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:fileName="clr-namespace:Frost.DetectFeatures.FileName;assembly=Frost.FeatureDetector"
              xmlns:iso="clr-namespace:Frost.Common.Util.ISO;assembly=Frost.Common"
-             xmlns:viewModels="clr-namespace:RibbonUI.UserControls.Settings.ViewModels"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:converters="clr-namespace:RibbonUI.Converters"
              xmlns:util="clr-namespace:Frost.DetectFeatures.Util;assembly=Frost.FeatureDetector"
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
-             xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
+             xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls.Settings"
              mc:Ignorable="d" x:Name="FileNameParserSettingsControl"
              d:DesignHeight="635" d:DesignWidth="620">
     <UserControl.Resources>
@@ -44,7 +42,7 @@
         </Style>        
     </UserControl.Resources>
     <UserControl.DataContext>
-        <viewModels:FileNameParserSettingsViewModel/>
+        <vm:FileNameParserSettingsViewModel/>
     </UserControl.DataContext>
     <Grid Margin="5,0,5,0">
         <Grid.Resources>

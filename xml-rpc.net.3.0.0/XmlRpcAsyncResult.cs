@@ -28,8 +28,6 @@ namespace CookComputing.XmlRpc
   using System;
   using System.IO;
   using System.Net;
-  using System.Reflection;
-  using System.Text;
   using System.Threading;
 
   public class XmlRpcAsyncResult : IAsyncResult

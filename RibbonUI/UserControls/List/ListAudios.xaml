@@ -66,7 +66,7 @@
                             <TextBlock VerticalAlignment="Center" Text="{Binding Codec}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding BitRate}" Style="{StaticResource CollapseOnTagNull}">
-                            <Label Content="{l:T Bit rate, Postfix=:}"/>
+                            <Label Content="{l:T Bit rate (kb/s), Postfix=:}"/>
                             <TextBlock VerticalAlignment="Center" Text="{Binding BitRate}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
@@ -74,7 +74,7 @@
                             <TextBlock VerticalAlignment="Center" Text="{Binding BitRateMode, Converter={StaticResource TranslateEnumConverter}}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding SamplingRate}" Style="{StaticResource CollapseOnTagNull}">
-                            <Label Content="{l:T Sampling rate, Postfix=:}"/>
+                            <Label Content="{l:T Sampling rate (kHz), Postfix=:}"/>
                             <TextBlock VerticalAlignment="Center" Text="{Binding SamplingRate}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding BitDepth}" Style="{StaticResource CollapseOnTagNull}">

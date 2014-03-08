@@ -24,8 +24,6 @@ DEALINGS IN THE SOFTWARE.
 */
 
 using System;
-using System.IO;
-using System.Diagnostics;
 
 namespace CookComputing.XmlRpc
 {

@@ -28,17 +28,11 @@ DEALINGS IN THE SOFTWARE.
 namespace CookComputing.XmlRpc
 {
   using System;
-  using System.Collections;
-  using System.Globalization;
   using System.IO;
   using System.Reflection;
-  using System.Text;
-  using System.Text.RegularExpressions;
-  using System.Threading;
   using System.Xml;
-  using System.Collections.Generic;
 
-  public class XmlRpcRequestSerializer : XmlRpcSerializer
+    public class XmlRpcRequestSerializer : XmlRpcSerializer
   {
     public XmlRpcRequestSerializer() { }
     public XmlRpcRequestSerializer(XmlRpcFormatSettings settings) : base(settings) { }

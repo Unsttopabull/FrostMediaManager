@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using Frost.Models.Frost.DB;
@@ -22,7 +19,12 @@ namespace RibbonUI {
             _logger = new TextWriterTraceListener(File.Create("dbLog.txt"));
 
             Container = new MovieVoContainer();
-            Container.Database.Log = s => _logger.WriteLine(s);
+            Container.Database.Log = s => {
+                lock (_logger) {
+                    _logger.WriteLine(s);
+                }
+            };
+
         }
 
         private void RibbonWindowLoaded(object sender, RoutedEventArgs e) {
@@ -83,13 +85,20 @@ namespace RibbonUI {
             base.OnClosing(e);
 
 
-            IEnumerable<DbEntityEntry> unsaved = Container.GetUnsavedEntites();
-            DbEntityEntry first = unsaved.FirstOrDefault();
+            //IEnumerable<DbEntityEntry> unsaved = Container.GetUnsavedEntites();
+            //DbEntityEntry first = unsaved.FirstOrDefault();
 
-            foreach (string propertyName in first.CurrentValues.PropertyNames) {
-                object currentValue = first.CurrentValues[propertyName];
-                object originalValue = first.OriginalValues[propertyName];
-            }
+            //if (first != null) {
+            //    Dictionary<string, ChangedEntry> changed = 
+            //        first.CurrentValues.PropertyNames
+            //                           .Where(prop => first.CurrentValues[prop] != first.OriginalValues[prop])
+            //                           .Select(prop => new ChangedEntry {
+            //                               Property = prop,
+            //                               Current = first.CurrentValues[prop],
+            //                               Original = first.OriginalValues[prop]
+            //                           })
+            //                           .ToDictionary(ce => ce.Property, ce => ce);
+            //}
 
             if (!Container.HasUnsavedChanges()) {
                 return;
@@ -101,6 +110,18 @@ namespace RibbonUI {
 
             Container.Dispose();
             _logger.Close();
+        }
+    }
+
+    class ChangedEntry {
+        public string Property { get; set; }
+        public object Original { get; set; }
+        public object Current { get; set; }
+
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString() {
+            return Original + " => " + Current;
         }
     }
 

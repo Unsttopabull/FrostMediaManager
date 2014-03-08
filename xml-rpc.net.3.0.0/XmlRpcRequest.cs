@@ -26,7 +26,6 @@ DEALINGS IN THE SOFTWARE.
 namespace CookComputing.XmlRpc
 {
   using System;
-  using System.IO;
   using System.Reflection;
 
   public class XmlRpcRequest

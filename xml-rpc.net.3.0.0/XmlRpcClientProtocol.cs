@@ -25,8 +25,6 @@ DEALINGS IN THE SOFTWARE.
 
 using System;
 using System.ComponentModel;
-using System.Collections;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Reflection;

@@ -6,18 +6,26 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using Frost.Models.Frost.DB;
 using Frost.Models.Frost.DB.Files;
+using RibbonUI.Util;
 using RibbonUI.Windows;
 
 namespace RibbonUI.UserControls.List {
 
     /// <summary>Interaction logic for EditSubtitles.xaml</summary>
     public partial class ListSubtitles : UserControl {
+        public static readonly DependencyProperty SubtitlesProperty = DependencyProperty.Register("Subtitles", typeof(ObservableHashSet2<Subtitle>), typeof(ListSubtitles), new PropertyMetadata(default(ObservableHashSet2<Subtitle>)));
         private ICollectionView _collectionView;
+        
 
         public ListSubtitles() {
             InitializeComponent();
 
             TypeDescriptor.GetProperties(SubtitlesList)["ItemsSource"].AddValueChanged(SubtitlesList, SubtitlesListItemSourceChanged); 
+        }
+
+        public ObservableHashSet2<Subtitle> Subtitles {
+            get { return (ObservableHashSet2<Subtitle>) GetValue(SubtitlesProperty); }
+            set { SetValue(SubtitlesProperty, value); }
         }
 
         private void SubtitlesListItemSourceChanged(object sender, EventArgs e) {

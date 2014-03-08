@@ -40,7 +40,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecondLanguage", "SecondLan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamlControls", "XamlControls\XamlControls.csproj", "{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models.Frost", "DBModels\Models.Frost.csproj", "{B404DA8F-FBF4-4CCC-BE01-22C488863EC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models.Frost", "Models.Frost\Models.Frost.csproj", "{B404DA8F-FBF4-4CCC-BE01-22C488863EC2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models.Xtreamer", "Models.Xtreamer\Models.Xtreamer.csproj", "{8491DCCF-354E-4FF6-89D4-88A0BB9CB8AF}"
 EndProject

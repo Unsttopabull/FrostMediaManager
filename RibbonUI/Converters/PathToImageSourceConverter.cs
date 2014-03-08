@@ -4,7 +4,7 @@ using System.IO;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using Frost.Common;
-using Frost.Models.Frost;
+using Frost.DetectFeatures;
 using Frost.Models.Frost.DB.Files;
 using File = System.IO.File;
 
@@ -41,6 +41,7 @@ namespace RibbonUI.Converters {
 
             if (!string.IsNullOrEmpty(path)) {
                 string filePath;
+                string mapping;
                 switch (type) {
                     case PathType.Studio:
                         filePath = "Images/StudiosE/" + value + ".png";
@@ -70,9 +71,17 @@ namespace RibbonUI.Converters {
                         }
                         break;
                     case PathType.VideoCodec:
+                        if (FileFeatures.VideoCodecIdMappings.TryGetValue(path, out mapping)) {
+                            value = mapping;
+                        }
+
                         filePath = "Images/FlagsE/vcodec_" + value + ".png";
                         break;
                     case PathType.AudioCodec:
+                        if (FileFeatures.AudioCodecIdMappings.TryGetValue(path, out mapping)) {
+                            value = mapping;
+                        }
+
                         filePath = "Images/FlagsE/acodec_" + value + ".png";
                         break;
                     case PathType.Box:

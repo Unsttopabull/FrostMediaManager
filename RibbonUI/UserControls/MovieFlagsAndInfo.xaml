@@ -6,9 +6,13 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
-             xmlns:db="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls"
              mc:Ignorable="d" x:Name="FlagsInfo"
-             d:DesignHeight="75" d:DesignWidth="950" d:DataContext="{d:DesignInstance db:Movie}">
+             d:DesignHeight="75" d:DesignWidth="950">
+    <UserControl.DataContext>
+        <vm:MovieFlagsAndInfoViewModel/>
+    </UserControl.DataContext>
     <DockPanel>
         <DockPanel.Background>
             <SolidColorBrush Color="{StaticResource {x:Static SystemColors.ControlDarkColorKey}}" />
@@ -21,9 +25,14 @@
                 <RowDefinition Height="5"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0" Orientation="Horizontal" SizeChanged="OnSizeChanged">
-                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Text="{Binding Path=Title, TargetNullValue={l:T Unknown title}, FallbackValue={l:T Unknown title}}"/>
-                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding Path=Edithion, StringFormat=[{0}], TargetNullValue={x:Null}}" >
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SizeChanged">
+                        <i:InvokeCommandAction Command="{Binding OnSizeChangedCommand}" CommandParameter="{Binding ElementName=FlagsInfo}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Text="{Binding SelectedMovie.Title, TargetNullValue={l:T Unknown title}, FallbackValue={l:T Unknown title}}"/>
+                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding SelectedMovie.Edithion, StringFormat=[{0}], TargetNullValue={x:Null}}" >
                     <TextBlock.Style>
                         <Style TargetType="{x:Type TextBlock}">
                             <Style.Triggers>
@@ -38,40 +47,45 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding Path=ReleaseYear, StringFormat=({0}), TargetNullValue=(?), FallbackValue=(?)}"/>
-                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding Path=OriginalTitle, StringFormat=aka {0}, TargetNullValue={}, FallbackValue={}}"/>
+                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding SelectedMovie.ReleaseYear, StringFormat=({0}), TargetNullValue=(?), FallbackValue=(?)}"/>
+                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding SelectedMovie.OriginalTitle, StringFormat=aka {0}, TargetNullValue={}, FallbackValue={}}"/>
             </StackPanel>
-            <TextBlock Grid.Row="1" FontSize="14" Text="{Binding Path=FirstPlot.TaglineOrSummary, TargetNullValue={l:T No tagline}, FallbackValue={l:T No tagline}}"/>
+            <TextBlock Grid.Row="1" FontSize="14" Text="{Binding SelectedMovie.FirstPlot.TaglineOrSummary, TargetNullValue={l:T No tagline}, FallbackValue={l:T No tagline}}"/>
             <StackPanel Grid.Row="3" Orientation="Horizontal">
-                <fmm:StarRating Rating="{Binding Path=RatingAverage}"/>
-                <TextBlock FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding Top250, StringFormat=Top 250: {0}, TargetNullValue={x:Null}}"/>
-                <TextBlock FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding Path=DurationFormatted, StringFormat={}Runtime: {0}, FallbackValue={x:Null}, TargetNullValue={x:Null}}"/>
+                <fmm:StarRating Rating="{Binding SelectedMovie.RatingAverage}"/>
+                <TextBlock FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding SelectedMovie.Top250, StringFormat=Top 250: {0}, TargetNullValue={x:Null}}"/>
+                <TextBlock FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding DurationFormatted, StringFormat={}Runtime: {0}, FallbackValue={x:Null}, TargetNullValue={x:Null}}"/>
             </StackPanel>
         </Grid>
-        <StackPanel x:Name="MovieFlags" DockPanel.Dock="Right" Orientation="Horizontal" FlowDirection="RightToLeft" SizeChanged="OnSizeChanged">
-            <Image DockPanel.Dock="Right" Source="{Binding IsAsync=True, Path=FirstStudioName, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Studio, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}}"
-                   ToolTip="{Binding IsAsync=True, Path=FirstStudioName, TargetNullValue=Unknown Studio, FallbackValue=Unknown Studio}" MaxWidth="150" MaxHeight="55">
+        <StackPanel x:Name="MovieFlags" DockPanel.Dock="Right" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SizeChanged">
+                    <i:InvokeCommandAction Command="{Binding OnSizeChangedCommand}" CommandParameter="{Binding ElementName=FlagsInfo}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <Image DockPanel.Dock="Right" Source="{Binding FirstStudioName, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Studio, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}}"
+                   ToolTip="{Binding FirstStudioName, IsAsync=True, TargetNullValue=Unknown Studio, FallbackValue=Unknown Studio}" MaxWidth="150" MaxHeight="55">
                 <Image.CacheMode>
                     <BitmapCache/>
                 </Image.CacheMode>
             </Image>
-            <Image Source="{Binding IsAsync=True, Path=NumberOfAudioChannels, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioChannels, TargetNullValue={StaticResource DefaultSoundLogo}, FallbackValue={StaticResource DefaultSoundLogo}}"
+            <Image Source="{Binding SelectedMovie.NumberOfAudioChannels, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioChannels, TargetNullValue={StaticResource DefaultSoundLogo}, FallbackValue={StaticResource DefaultSoundLogo}}"
                    DockPanel.Dock="Right" MaxWidth="150" MaxHeight="55">
                 <Image.CacheMode>
                     <BitmapCache/>
                 </Image.CacheMode>
             </Image>
-            <Image DockPanel.Dock="Right" Source="{Binding IsAsync=True, Path=AudioCodec, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioCodec, TargetNullValue={StaticResource DefaultSoundLogo}, FallbackValue={StaticResource DefaultSoundLogo}}" MaxWidth="150" MaxHeight="55">
+            <Image DockPanel.Dock="Right" Source="{Binding SelectedMovie.AudioCodec, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioCodec, TargetNullValue={StaticResource DefaultSoundLogo}, FallbackValue={StaticResource DefaultSoundLogo}}" MaxWidth="150" MaxHeight="55">
                 <Image.CacheMode>
                     <BitmapCache/>
                 </Image.CacheMode>
             </Image>
-            <Image DockPanel.Dock="Right" Source="{Binding IsAsync=True, Path=VideoResolution, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=VideoResolution, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}" MaxWidth="150" MaxHeight="55">
+            <Image DockPanel.Dock="Right" Source="{Binding SelectedMovie.VideoResolution, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=VideoResolution, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}" MaxWidth="150" MaxHeight="55">
                 <Image.CacheMode>
                     <BitmapCache/>
                 </Image.CacheMode>
-            </Image>                
-            <Image DockPanel.Dock="Right" Source="{Binding IsAsync=True, Path=VideoCodec, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=VideoCodec, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}" MaxWidth="150" MaxHeight="55">
+            </Image>
+            <Image DockPanel.Dock="Right" Source="{Binding SelectedMovie.VideoCodec, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=VideoCodec, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}" MaxWidth="150" MaxHeight="55">
                 <Image.CacheMode>
                     <BitmapCache/>
                 </Image.CacheMode>

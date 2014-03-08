@@ -1,21 +1,27 @@
 ﻿using System;
-using System.Collections;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Frost.Models.Frost.DB.Files;
+using RibbonUI.Util;
 using RibbonUI.Windows;
 
 namespace RibbonUI.UserControls.List {
 
     /// <summary>Interaction logic for EditAudios.xaml</summary>
     public partial class ListAudios : UserControl {
+        public static readonly DependencyProperty AudiosProperty = DependencyProperty.Register("Audios", typeof(ObservableHashSet2<Audio>), typeof(ListAudios), new PropertyMetadata(default(ObservableHashSet2<Audio>)));
         private ICollectionView _collectionView;
 
         public ListAudios() {
             InitializeComponent();
             TypeDescriptor.GetProperties(AudiosList)["ItemsSource"].AddValueChanged(AudiosList, SubtitlesListItemSourceChanged); 
+        }
+
+        public ObservableHashSet2<Audio> Audios {
+            get { return (ObservableHashSet2<Audio>) GetValue(AudiosProperty); }
+            set { SetValue(AudiosProperty, value); }
         }
 
         private void SubtitlesListItemSourceChanged(object sender, EventArgs e) {
@@ -37,9 +43,9 @@ namespace RibbonUI.UserControls.List {
             Window window = Window.GetWindow(this);
             EditAudio editAudio = new EditAudio {
                 Owner = window,
-                DataContext = selectedAudio,
+                SelectedAudio = selectedAudio,
                 SelectedLanguage = {
-                    ItemsSource = ((CollectionViewSource)window.Resources["LanguagesSource"]).View
+                    ItemsSource = ((CollectionViewSource) window.Resources["LanguagesSource"]).View
                 }
             };
 

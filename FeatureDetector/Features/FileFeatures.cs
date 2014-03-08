@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Frost.Common;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Models;
@@ -160,15 +161,16 @@ namespace Frost.DetectFeatures {
             _subtitleExtensionsRegex = string.Format(@"\.({0})", string.Join("|", KnownSubtitleExtensions));
 
             //DetectorFactory.LoadStaticProfiles();
-            if (Directory.GetFiles("LanguageProfiles").Length > 0) {
-                try {
+
+            try {
+                if (Directory.GetFiles("LanguageProfiles").Length > 0) {
                     DetectorFactory.LoadProfilesFromFolder("LanguageProfiles");
                 }
-                catch (LangDetectException) {
+                else {
                     DetectorFactory.LoadStaticProfiles();
                 }
             }
-            else {
+            catch {
                 DetectorFactory.LoadStaticProfiles();
             }
         }
@@ -306,100 +308,104 @@ namespace Frost.DetectFeatures {
                 DetectFile(file);
             }
 
-            //if (!Movie.Runtime.HasValue) {
-            //    Movie.GetVideoRuntimeSum();
-            //}
+            if (!Movie.Runtime.HasValue) {
+                Movie.CalculateVideoRuntimeSum();
+            }
 
-            //GetGeneralAudioInfo();
-            //GetGeneralVideoInfo();
+            GetGeneralAudioInfo();
+            GetGeneralVideoInfo();
 
-            //DetectMovieType();
+            DetectMovieType();
 
             //return Save();
             return true;
         }
 
-        //private void GetGeneralVideoInfo() {
-        //    var mostFrequentVres = Movie.Videos.Where(v => v.Resolution.HasValue)
-        //                                .GroupBy(v => v.Resolution)
-        //                                .OrderByDescending(g => g.Count())
-        //                                .FirstOrDefault();
+        private void GetGeneralVideoInfo() {
+            var mostFrequentVres = Movie.FileInfos.SelectMany(f => f.Videos)
+                                                  .Where(v => v.Resolution.HasValue)
+                                                  .GroupBy(v => v.Resolution)
+                                                  .OrderByDescending(g => g.Count())
+                                                  .FirstOrDefault();
 
-        //    if (mostFrequentVres != null) {
-        //        Video video = mostFrequentVres.FirstOrDefault();
+            if (mostFrequentVres != null) {
+                VideoDetectionInfo video = mostFrequentVres.FirstOrDefault();
 
-        //        if (video != null) {
-        //            string resolution = video.Resolution.ToString();
-        //            switch (video.ScanType) {
-        //                case ScanType.Interlaced:
-        //                    resolution = resolution + "i";
-        //                    break;
-        //                case ScanType.Progressive:
-        //                    resolution = resolution + "p";
-        //                    break;
-        //            }
-        //            Movie.VideoResolution = resolution;
-        //        }
-        //    }
+                if (video != null) {
+                    string resolution = video.Resolution.ToString();
+                    switch (video.ScanType) {
+                        case ScanType.Interlaced:
+                            resolution = resolution + "i";
+                            break;
+                        case ScanType.Progressive:
+                            resolution = resolution + "p";
+                            break;
+                    }
+                    Movie.VideoResolution = resolution;
+                }
+            }
 
-        //    var mostFrequent = Movie.Videos.Where(v => v.CodecId != null)
-        //                            .GroupBy(v => v.CodecId)
-        //                            .OrderByDescending(g => g.Count())
-        //                            .FirstOrDefault();
+            var mostFrequent = Movie.FileInfos.SelectMany(f => f.Videos)
+                                              .Where(v => v.CodecId != null)
+                                              .GroupBy(v => v.CodecId)
+                                              .OrderByDescending(g => g.Count())
+                                              .FirstOrDefault();
 
-        //    if (mostFrequent != null) {
-        //        Video video = mostFrequent.FirstOrDefault();
+            if (mostFrequent != null) {
+                VideoDetectionInfo video = mostFrequent.FirstOrDefault();
 
-        //        if (video != null) {
-        //            Movie.VideoCodec = video.CodecId;
-        //        }
-        //    }
-        //}
+                if (video != null) {
+                    Movie.VideoCodec = video.CodecId;
+                }
+            }
+        }
 
-        //private void GetGeneralAudioInfo() {
-        //    int numChannels = 0;
-        //    foreach (Audio audio in Movie.Audios) {
-        //        if (audio.NumberOfChannels.HasValue) {
-        //            int val = audio.NumberOfChannels.Value;
-        //            if (val > numChannels) {
-        //                numChannels = val;
-        //            }
-        //        }
-        //    }
+        private void GetGeneralAudioInfo() {
+            int numChannels = 0;
+            foreach (AudioDetectionInfo audio in Movie.FileInfos.SelectMany(f => f.Audios)) {
+                if (audio.NumberOfChannels.HasValue) {
+                    int val = audio.NumberOfChannels.Value;
+                    if (val > numChannels) {
+                        numChannels = val;
+                    }
+                }
+            }
 
-        //    if (numChannels != 0) {
-        //        Movie.NumberOfAudioChannels = numChannels;
-        //    }
+            if (numChannels != 0) {
+                Movie.NumberOfAudioChannels = numChannels;
+            }
 
-        //    var mostFrequentAudioCodec = Movie.Audios.Where(v => v.CodecId != null)
-        //                                      .GroupBy(v => v.CodecId)
-        //                                      .OrderByDescending(g => g.Count())
-        //                                      .FirstOrDefault();
+            var mostFrequentAudioCodec = Movie.FileInfos.SelectMany(f => f.Audios)
+                                                        .Where(v => v.CodecId != null)
+                                                        .GroupBy(v => v.CodecId)
+                                                        .OrderByDescending(g => g.Count())
+                                                        .FirstOrDefault();
 
-        //    if (mostFrequentAudioCodec != null) {
-        //        Audio audio = mostFrequentAudioCodec.FirstOrDefault();
+            if (mostFrequentAudioCodec != null) {
+                AudioDetectionInfo audio = mostFrequentAudioCodec.FirstOrDefault();
 
-        //        if (audio != null) {
-        //            Movie.AudioCodec = audio.CodecId;
-        //        }
-        //    }
-        //}
+                if (audio != null) {
+                    Movie.AudioCodec = audio.CodecId;
+                }
+            }
+        }
 
-        //private void DetectMovieType() {
-        //    if (Movie.Videos.All(v => v.File.Extension.OrdinalEquals("vob") ||
-        //                              v.File.Extension.OrdinalEquals("ifo") ||
-        //                              v.File.Extension.OrdinalEquals("bup")) ||
-        //        Movie.Videos.All(v => v.Source.OrdinalEquals("DVD") ||
-        //                              v.Source.OrdinalEquals("DVDR") ||
-        //                              v.Source.OrdinalEquals("DVD-R"))) {
-        //        Movie.Type = MovieType.DVD;
-        //    }
+        private void DetectMovieType() {
+            if (Movie.FileInfos.All(f => f.Extension.OrdinalEquals("vob") ||
+                                         f.Extension.OrdinalEquals("ifo") ||
+                                         f.Extension.OrdinalEquals("bup")) ||
+                Movie.FileInfos.SelectMany(f => f.Videos)
+                               .All(v => v.Source.OrdinalEquals("DVD") ||
+                                         v.Source.OrdinalEquals("DVDR") ||
+                                         v.Source.OrdinalEquals("DVD-R"))) {
+                Movie.Type = MovieType.DVD;
+            }
 
-        //    Regex reg = new Regex(@"(Bluray|BlueRay|Blu-ray|BD(5|25|9|50|r)?)$", RegexOptions.IgnoreCase);
-        //    if (_fnInfos.Values.Any(fi => fi.VideoSource != null && reg.IsMatch(fi.VideoSource))) {
-        //        Movie.Type = MovieType.BluRay;
-        //    }
-        //}
+            Regex reg = new Regex(@"(Bluray|BlueRay|Blu-ray|BD(5|25|9|50|r)?)$", RegexOptions.IgnoreCase);
+            if (_fnInfos.Values.Any(fi => fi.VideoSource != null && reg.IsMatch(fi.VideoSource))) {
+                Movie.Type = MovieType.BluRay;
+            }
+        }
 
         private void DetectFile(FileDetectionInfo file) {
             GetFileNameInfo();

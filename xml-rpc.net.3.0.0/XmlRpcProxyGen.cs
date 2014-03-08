@@ -26,7 +26,6 @@ DEALINGS IN THE SOFTWARE.
 namespace CookComputing.XmlRpc
 {
   using System;
-  using System.Collections;
   using System.Collections.Generic;
   using System.Reflection;
   using System.Reflection.Emit;

@@ -4,8 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
-             mc:Ignorable="d" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:settings="clr-namespace:RibbonUI.ViewModels.UserControls.Settings"
+             mc:Ignorable="d" Loaded="GeneralSettingsOnLoaded"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.DataContext>
+        <settings:GeneralSettingsViewModel/>
+    </UserControl.DataContext>
     <UserControl.Resources>
         <ObjectDataProvider x:Key="Cultures" ObjectInstance="{x:Static l:TranslationManager.Instance}" MethodName="get_Languages" />
     </UserControl.Resources>
@@ -20,8 +25,17 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0">
-            <Label>Set user interface langauge:</Label>
-            <ComboBox ItemsSource="{Binding Source={StaticResource Cultures}}" DisplayMemberPath="DisplayName" SelectionChanged="LangSelectionChanged" Loaded="LangSelectOnLoaded" />
+            <Label Content="{l:T Set user interface langauge, Postfix=:}"/>
+            <ComboBox Name="Languages" ItemsSource="{Binding Source={StaticResource Cultures}}" DisplayMemberPath="DisplayName">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding LangSelectionChangedCommand}" CommandParameter="{Binding ElementName=Languages, Path=SelectedItem}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Loaded">
+                        <i:InvokeCommandAction Command="{Binding LangSelectLoadedCommand}" CommandParameter="{Binding ElementName=Languages}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
         </StackPanel>
 
         <Grid Grid.Row="1" Margin="0,5,0,0">
@@ -32,10 +46,10 @@
             <Label Grid.Row="0" Grid.Column="0">Folder to search for movies:</Label>
             <ListBox x:Name="MovieFolders" Grid.Row="1" Grid.Column="0" MinHeight="100" ItemsSource="{Binding SearchFolders}" />
             <StackPanel Grid.Row="0" VerticalAlignment="Center" Orientation="Horizontal" FlowDirection="RightToLeft">
-                <Button Click="RemoveMovieFolderClicked" Style="{StaticResource TransparentBorderlessButton}">
+                <Button Style="{StaticResource TransparentBorderlessButton}" Command="{Binding RemoveMovieFolderCommand}" CommandParameter="{Binding ElementName=MovieFolders, Path=SelectedItem}">
                     <Image Source="../../Images/remove.png" MaxHeight="16" />
                 </Button>
-                <Button Click="AddMovieFolderClicked" Style="{StaticResource TransparentBorderlessButton}">
+                <Button Style="{StaticResource TransparentBorderlessButton}" Command="{Binding AddMovieFolderCommand}">
                     <Image Source="../../Images/add.png" MaxHeight="16" />
                 </Button>
             </StackPanel>

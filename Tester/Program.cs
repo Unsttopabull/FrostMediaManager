@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using Frost.Common.Models;
 using Frost.DetectFeatures;
 using System.Diagnostics;
 using Frost.DetectFeatures.Models;
+using Frost.Models.Frost.DB;
 using Frost.Models.Frost.DB.Files;
-using Newtonsoft.Json;
 using FileVo = Frost.Models.Frost.DB.Files.File;
 using CoretisMovie = Frost.Models.Xtreamer.PHP.Coretis_VO_Movie;
 
@@ -37,6 +38,7 @@ namespace Frost.Tester {
 
             //TestXjbDbParser();
             TestMediaSearcher();
+            TestIntefaces();
 
             //TestFileFeatures();
             //TestGremoVKino();
@@ -54,6 +56,13 @@ namespace Frost.Tester {
             Console.Read();
         }
 
+        private static void TestIntefaces() {
+            HashSet<Plot> p = new HashSet<Plot>();
+
+            HashSet<IPlot> p2 = new HashSet<IPlot>(p);
+            p2.Add(new Plot());
+        }
+
         private static TimeSpan TestMediaSearcher() {
             //using (MovieVoContainer mvc = new MovieVoContainer(true, "movieVo.db3")) {
             //    int count = mvc.Movies.Count();
@@ -61,34 +70,19 @@ namespace Frost.Tester {
 
             Stopwatch sw = Stopwatch.StartNew();
 
-            IEnumerable<MovieInfo> movies;
-            //if (System.IO.File.Exists("movies.json")) {
-            //    JsonSerializer ser = new JsonSerializer();
+            FeatureDetector ms = new FeatureDetector(@"E:\Torrenti\FILMI", @"F:\Torrenti\FILMI");
+            ms.PropertyChanged += WriteCount;
 
-            //    using (JsonTextReader jtr = new JsonTextReader(System.IO.File.OpenText("movies.json"))) {
-            //        MovieInfo[] movies2 = ser.Deserialize<MovieInfo[]>(jtr);
-            //    }
-            //}
-            //else {
-                FeatureDetector ms = new FeatureDetector(@"E:\Torrenti\FILMI", @"F:\Torrenti\FILMI");
-                ms.PropertyChanged += WriteCount;
+            IEnumerable<MovieInfo> movies = ms.Search();
+            ms.PropertyChanged -= WriteCount;
 
-                movies = ms.Search();
-                ms.PropertyChanged -= WriteCount;
-
-                sw.Stop();
-
-            //    JsonSerializer jser = new JsonSerializer();
-            //    using (JsonTextWriter jsw = new JsonTextWriter(System.IO.File.CreateText("movies.json"))) {
-            //        jser.Serialize(jsw, movies);
-            //    }
-            //}
+            sw.Stop();
 
             Console.WriteLine("Detection took: " + sw.Elapsed);
 
-            //using (IMovieSaver sv = new MovieSaver(movies)) {
-            //    sv.Save();
-            //}
+            using (IMovieSaver sv = new MovieSaver(movies)) {
+                sv.Save();
+            }
 
             return sw.Elapsed;
         }

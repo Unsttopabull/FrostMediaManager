@@ -199,7 +199,7 @@
                             </Image.Effect>
                         </Image>
 
-                        <Image Source="{Binding CoverImage, RelativeSource={RelativeSource TemplatedParent}, FallbackValue={StaticResource DefaultCover}, TargetNullValue={StaticResource DefaultCover}}"
+                        <Image Name="CoverImage" Source="{Binding CoverImage, RelativeSource={RelativeSource TemplatedParent}, FallbackValue={StaticResource DefaultCover}, TargetNullValue={StaticResource DefaultCover}}"
                                Margin="10,25,10,10" Panel.ZIndex="1" Stretch="Fill" >
                             <Image.CacheMode>
                                 <BitmapCache />

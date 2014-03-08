@@ -6,13 +6,16 @@
     xmlns:userControls="clr-namespace:RibbonUI.UserControls"
     xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
     xmlns:list="clr-namespace:RibbonUI.UserControls.List"
-    xmlns:db="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
+    xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     x:Class="RibbonUI.UserControls.ContentGrid"
     x:Name="ContentGridControl"
-    mc:Ignorable="d"
+    mc:Ignorable="d" Loaded="OnWindowLoaded"
     d:DesignHeight="700" d:DesignWidth="1396">
     <!--MinWidth="{Binding MinRequiredWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"-->
-
+    <UserControl.DataContext>
+        <vm:ContentGridViewModel/>
+    </UserControl.DataContext>
     <UserControl.Resources>
         <Style x:Key="BooleanImage" TargetType="{x:Type Image}">
             <Setter Property="Source" Value="../Images/error.ico" />
@@ -82,19 +85,18 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" x:Name="ListFilter" BorderThickness="3,0,0,0"/>
+            <TextBox Grid.Column="0" BorderThickness="3,0,0,0" Text="{Binding MovieSearchFilter, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Grid.Column="2" ToolTip="{l:T Use advanced search}" Style="{StaticResource TransparentBorderlessButton}">
                 <Image Source="../Images/filter.ico" Width="16" Height="16" />
             </Button>
         </Grid>
 
         <DataGrid Grid.Column="0" Grid.Row="1" x:Name="MovieList" AutoGenerateColumns="False" SelectionChanged="MovieListOnSelectionChanged"
-                  Loaded="MovieListOnLoaded" SelectedCellsChanged="MovieListSelectedChanged"
-                  CanUserAddRows="False" DataContext="{DynamicResource MoviesSource}"  ItemsSource="{Binding}"
+                  SelectedCellsChanged="MovieListSelectedChanged" CellStyle="{StaticResource NoBorderCell}" SelectedItem="{Binding SelectedMovie}"
+                  CanUserAddRows="False" ItemsSource="{Binding MovieList}" CanUserResizeRows="False"
                   AlternatingRowBackground="{StaticResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}"
-                  GridLinesVisibility="None" RowHeight="20" CanUserResizeColumns="False" CanUserResizeRows="False"
-                  SnapsToDevicePixels="True" CanUserReorderColumns="False" SelectionMode="Single"
-                  CellStyle="{StaticResource NoBorderCell}" d:DataContext="{d:DesignInstance db:Movie}">
+                  GridLinesVisibility="None" RowHeight="20" CanUserResizeColumns="False" SelectionMode="Single"
+                  SnapsToDevicePixels="True" CanUserReorderColumns="False" SelectedIndex="0">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="{l:T Title}" IsReadOnly="True" CanUserReorder="False" Binding="{Binding Title}" />
                 <DataGridTextColumn Header="{l:T Release year}" IsReadOnly="True"
@@ -188,32 +190,40 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <userControls:MovieFlagsAndInfo x:Name="MovieFlags" DataContext="{Binding ElementName=MovieList, Path=SelectedItem}" />
-            <TabControl Grid.Row="1" d:DataContext="{d:DesignInstance db:Movie}">
+            <userControls:MovieFlagsAndInfo x:Name="MovieFlags" SelectedMovie="{Binding ElementName=MovieList, Path=SelectedItem}" />
+            <TabControl Grid.Row="1">
                 <TabItem Header="{l:T General Info}">
                     <userControls:ArtAndPlot x:Name="ArtAndPlot"
-                                             SelectedMovie="{Binding ElementName=MovieList, Path=SelectedItem}"
+                                             SelectedMovie="{Binding SelectedMovie, UpdateSourceTrigger=PropertyChanged}"
                                              Background="Transparent" />
                 </TabItem>
                 <TabItem Header="{l:T Trivia and goofs}">
                 </TabItem>
                 <TabItem x:Name="MovieEditTab" x:FieldModifier="private" Header="{l:T Edit Movie info}">
-                    <userControls:EditMovie x:Name="EditMovie" DataContext="{Binding ElementName=MovieList, Path=SelectedItem}" />
+                    <userControls:EditMovie x:Name="EditMovie" SelectedMovie="{Binding ElementName=MovieList, Path=SelectedItem}" />
                 </TabItem>
-                <TabItem Header="{l:T Subtitles}" x:Name="MovieSubtitles" GotFocus="MovieSubtitlesGotFocus" LostFocus="MovieSubtitlesOnLostFocus">
-                    <list:ListSubtitles DataContext="{Binding ElementName=MovieList, Path=SelectedItem.Subtitles}"/>
+                <TabItem Header="{l:T Subtitles}" x:Name="MovieSubtitles">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="GotFocus">
+                            <i:InvokeCommandAction Command="{Binding SubtitlesOnFocusCommand}"/>
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="LostFocus">
+                            <i:InvokeCommandAction Command="{Binding SubtitlesLostFocusCommand}"/>
+                        </i:EventTrigger>                        
+                    </i:Interaction.Triggers>
+                    <list:ListSubtitles Subtitles="{Binding MovieSubtitles}"/>
                 </TabItem>
                 <TabItem Header="{l:T Videos}">
-                    <list:ListVideos DataContext="{Binding ElementName=MovieList, Path=SelectedItem.Videos}"/>
+                    <list:ListVideos Videos="{Binding MovieVideos}"/>
                 </TabItem>
                 <TabItem Header="{l:T Audios}">
-                    <list:ListAudios DataContext="{Binding ElementName=MovieList, Path=SelectedItem.Audios}"/>
+                    <list:ListAudios Audios="{Binding MovieAudios}"/>
                 </TabItem>
                 <TabItem Header="{l:T Promotional videos}" >
                     
                 </TabItem>
                 <TabItem Header="{l:T Art}">
-                    <list:ListArt DataContext="{Binding ElementName=MovieList, Path=SelectedItem.Art}"/>
+                    <list:ListArt Art="{Binding MovieArt}"/>
                 </TabItem>
             </TabControl>
         </Grid>

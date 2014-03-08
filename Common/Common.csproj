@@ -12,6 +12,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -26,6 +27,40 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <DocumentationFile>bin\Debug\Frost.Common.XML</DocumentationFile>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
+    <CodeContractsEnableRuntimeChecking>False</CodeContractsEnableRuntimeChecking>
+    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
+    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
+    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
+    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
+    <CodeContractsRunCodeAnalysis>False</CodeContractsRunCodeAnalysis>
+    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
+    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
+    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
+    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
+    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
+    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
+    <CodeContractsInferRequires>True</CodeContractsInferRequires>
+    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
+    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
+    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
+    <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
+    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
+    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
+    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
+    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
+    <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
+    <CodeContractsCustomRewriterAssembly />
+    <CodeContractsCustomRewriterClass />
+    <CodeContractsLibPaths />
+    <CodeContractsExtraRewriteOptions />
+    <CodeContractsExtraAnalysisOptions />
+    <CodeContractsSQLServerOption />
+    <CodeContractsBaseLineFile />
+    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
+    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
+    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
+    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -56,7 +91,77 @@
   <ItemGroup>
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="IModelRegistrator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ModelCreator.cs" />
     <Compile Include="Models\CertificationBase.cs" />
+    <Compile Include="Models\IActor.cs" />
+    <Compile Include="Models\IArt.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\IAudio.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\IAward.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ICertification.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ICountry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\IFile.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\IGenre.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\IHasLanguage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\IHasName.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ILanguage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\IMovie.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\IMovieEntity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\IMovieSet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\IPerson.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\IPlot.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\IPromotionalVideo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\IRating.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ISO\ISO3166.cs" />
+    <Compile Include="Models\ISO\ISO639.cs" />
+    <Compile Include="Models\ISpecial.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\IStudio.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\ISubtitle.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\IVideo.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Models\XmlActor.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

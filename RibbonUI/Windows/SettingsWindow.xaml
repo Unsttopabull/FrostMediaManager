@@ -48,7 +48,7 @@
                         </Style.Triggers>
                     </Style>
                 </TabItem.Style>
-                <settings:GeneralSettings DataContext="{Binding}"/>
+                <settings:GeneralSettings />
             </TabItem>
             <TabItem Header="2">
                 <TabItem.Style>
