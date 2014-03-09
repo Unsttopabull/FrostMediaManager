@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using Frost.Common;
 using Frost.Common.Models;
 using Frost.Model.Xbmc.DB;
-using Frost.Models.Frost.DB.Arts;
 using Frost.Models.Frost.DB.Files;
 using Frost.Models.Frost.DB.People;
 using Frost.Models.Xtreamer.DB;
@@ -17,7 +15,6 @@ namespace Frost.Models.Frost.DB {
 
     /// <summary>Represents an information about a movie in the library.</summary>
     public partial class Movie : IMovie {
-
         /// <summary>Separator between multiple genres, certifications, person names ...</summary>
         private const string SEPARATOR = " / ";
 
@@ -49,22 +46,22 @@ namespace Frost.Models.Frost.DB {
         /// <param name="movie">The value.</param>
         /// <exception cref="System.NotImplementedException"></exception>
         public Movie(IMovie movie) {
-            Contract.Requires<ArgumentNullException>(movie.Subtitles != null, "Movie Subtitle collection must be initialized");
-            Contract.Requires<ArgumentNullException>(movie.Countries != null, "Movie Country collection must be initialized");
-            Contract.Requires<ArgumentNullException>(movie.Studios != null, "Movie Studio collection must be initialized");
-            Contract.Requires<ArgumentNullException>(movie.Videos != null, "Movie Video collection must be initialized");
-            Contract.Requires<ArgumentNullException>(movie.Audios != null, "Movie Audio collection must be initialized");
-            Contract.Requires<ArgumentNullException>(movie.Ratings != null, "Movie Rating collection must be initialized");
-            Contract.Requires<ArgumentNullException>(movie.Plots != null, "Movie Plot collection must be initialized");
-            Contract.Requires<ArgumentNullException>(movie.Art != null, "Movie Art collection must be initialized");
-            Contract.Requires<ArgumentNullException>(movie.Certifications != null, "Movie Certification collection must be initialized");
-            Contract.Requires<ArgumentNullException>(movie.Writers != null, "Movie Writer collection must be initialized");
-            Contract.Requires<ArgumentNullException>(movie.Directors != null, "Movie Director collection must be initialized");
-            Contract.Requires<ArgumentNullException>(movie.Actors != null, "Movie Actor collection must be initialized");
-            Contract.Requires<ArgumentNullException>(movie.Specials != null, "Movie Special collection must be initialized");
-            Contract.Requires<ArgumentNullException>(movie.Genres != null, "Movie Genre collection must be initialized");
-            Contract.Requires<ArgumentNullException>(movie.Awards != null, "Movie Award collection must be initialized");
-            Contract.Requires<ArgumentNullException>(movie.PromotionalVideos != null, "Movie Promotional video collection must be initialized");
+            //Contract.Requires<ArgumentNullException>(movie.Subtitles != null, "Movie Subtitle collection must be initialized");
+            //Contract.Requires<ArgumentNullException>(movie.Countries != null, "Movie Country collection must be initialized");
+            //Contract.Requires<ArgumentNullException>(movie.Studios != null, "Movie Studio collection must be initialized");
+            //Contract.Requires<ArgumentNullException>(movie.Videos != null, "Movie Video collection must be initialized");
+            //Contract.Requires<ArgumentNullException>(movie.Audios != null, "Movie Audio collection must be initialized");
+            //Contract.Requires<ArgumentNullException>(movie.Ratings != null, "Movie Rating collection must be initialized");
+            //Contract.Requires<ArgumentNullException>(movie.Plots != null, "Movie Plot collection must be initialized");
+            //Contract.Requires<ArgumentNullException>(movie.Art != null, "Movie Art collection must be initialized");
+            //Contract.Requires<ArgumentNullException>(movie.Certifications != null, "Movie Certification collection must be initialized");
+            //Contract.Requires<ArgumentNullException>(movie.Writers != null, "Movie Writer collection must be initialized");
+            //Contract.Requires<ArgumentNullException>(movie.Directors != null, "Movie Director collection must be initialized");
+            //Contract.Requires<ArgumentNullException>(movie.Actors != null, "Movie Actor collection must be initialized");
+            //Contract.Requires<ArgumentNullException>(movie.Specials != null, "Movie Special collection must be initialized");
+            //Contract.Requires<ArgumentNullException>(movie.Genres != null, "Movie Genre collection must be initialized");
+            //Contract.Requires<ArgumentNullException>(movie.Awards != null, "Movie Award collection must be initialized");
+            //Contract.Requires<ArgumentNullException>(movie.PromotionalVideos != null, "Movie Promotional video collection must be initialized");
 
             Title = movie.Title;
             OriginalTitle = movie.Title;
@@ -295,7 +292,7 @@ namespace Frost.Models.Frost.DB {
         /// <summary>Gets or sets the movie promotional images.</summary>
         /// <value>The movie promotional images</value>
         public virtual ICollection<Art> Art { get; set; }
-
+        
         /// <summary>Gets or sets the information about this movie's certification ratings/restrictions in certain countries.</summary>
         /// <value>The information about this movie's certification ratings/restrictions in certain countries.</value>
         public virtual ICollection<Certification> Certifications { get; set; }
@@ -311,7 +308,7 @@ namespace Frost.Models.Frost.DB {
         /// <summary>Gets or sets the Person to Movie link with payload as in character name the person is protraying.</summary>
         /// <value>The Person to Movie link with payload as in character name the person is protraying.</value>
         public virtual ICollection<Actor> Actors { get; set; }
-
+        
         /// <summary>Gets or sets the special information about this movie release.</summary>
         /// <value>The special information about this movie release</value>
         public virtual ICollection<Special> Specials { get; set; }
@@ -319,7 +316,7 @@ namespace Frost.Models.Frost.DB {
         /// <summary>Gets or sets the movie genres.</summary>
         /// <value>The movie genres.</value>
         public virtual ICollection<Genre> Genres { get; set; }
-
+        
         public virtual ICollection<Award> Awards { get; set; }
 
         public virtual ICollection<PromotionalVideo> PromotionalVideos { get; set; }
@@ -341,96 +338,332 @@ namespace Frost.Models.Frost.DB {
 
         /// <summary>Gets or sets the movie subtitles.</summary>
         /// <value>The movie subtitles.</value>
-        ICollection<ISubtitle> IMovie.Subtitles {
-            get {
-                return new HashSet<ISubtitle>(Subtitles);
+        IEnumerable<ISubtitle> IMovie.Subtitles {
+            get { return Subtitles; }
+        }
+
+        public void Remove(ISubtitle subtitle) {
+            Subtitle sub = Subtitles.FirstOrDefault(s => s.Equals(subtitle));
+            if (sub != null) {
+                Subtitles.Remove(sub);
             }
+        }
+
+        public ISubtitle Add(ISubtitle subtitle) {
+            Subtitle item = new Subtitle(subtitle);
+            Subtitles.Add(item);
+
+            return item;
         }
 
         /// <summary>Gets or sets the countries that this movie was shot or/and produced in.</summary>
         /// <summary>The countries that this movie was shot or/and produced in.</summary>
-        ICollection<ICountry> IMovie.Countries {
-            get { return new HashSet<ICountry>(Countries); }
+        IEnumerable<ICountry> IMovie.Countries {
+            get { return Countries; }
+        }
+
+        public void Remove(ICountry country) {
+            Country cntry = Countries.FirstOrDefault(c => c.Equals(country));
+            if (cntry != null) {
+                Countries.Remove(cntry);
+            }
+        }
+
+        public ICountry Add(ICountry country) {
+            if (country == null) {
+                return null;
+            }
+
+            Country item = new Country(country);
+            Countries.Add(item);
+
+            return item;
         }
 
         /// <summary>Gets or sets the studio(s) that produced the movie.</summary>
         /// <value>The studio(s) that produced the movie.</value>
-        ICollection<IStudio> IMovie.Studios {
-            get { return new HashSet<IStudio>(Studios); }
+        IEnumerable<IStudio> IMovie.Studios {
+            get { return Studios; }
+        }
+
+        public void Remove(IStudio studio) {
+            Studio stud = Studios.FirstOrDefault(c => c == studio);
+            if (studio != null) {
+                Studios.Remove(stud);
+            }
+        }
+
+        public IStudio Add(IStudio studio) {
+            Studio item = new Studio(studio);
+            Studios.Add(item);
+
+            return item;
         }
 
         /// <summary>Gets or sets the information about video streams of this movie.</summary>
         /// <value>The information about video streams of this movie</value>
-        ICollection<IVideo> IMovie.Videos {
-            get { return new HashSet<IVideo>(Videos);}
+        IEnumerable<IVideo> IMovie.Videos {
+            get { return Videos; }
+        }
+
+
+        public void Remove(IVideo video) {
+            Video vid = Videos.FirstOrDefault(v => v == video);
+            if (vid != null) {
+                Videos.Remove(vid);
+            }
+        }
+
+        public IVideo Add(IVideo video) {
+            Video v = new Video(video);
+            Videos.Add(v);
+
+            return v;
         }
 
         /// <summary>Gets or sets the information about audio streams of this movie.</summary>
         /// <value>The information about audio streams of this movie</value>
-        ICollection<IAudio> IMovie.Audios {
-            get { return new HashSet<IAudio>(Audios);}
+        IEnumerable<IAudio> IMovie.Audios {
+            get { return Audios; }
+        }
+
+        public void Remove(IAudio audio) {
+            Audio aud = Audios.FirstOrDefault(v => v == audio);
+            if (aud != null) {
+                Audios.Remove(aud);
+            }
+        }
+
+        public IAudio Add(IAudio audio) {
+            Audio a = new Audio(audio);
+
+            Audios.Add(a);
+            return a;
         }
 
         /// <summary>Gets or sets the information about this movie's critics and their ratings</summary>
         /// <value>The information about this movie's critics and their ratings</value>
-        ICollection<IRating> IMovie.Ratings {
-            get { return new HashSet<IRating>(Ratings);}
+        IEnumerable<IRating> IMovie.Ratings {
+            get { return Ratings; }
+        }
+
+        public void Remove(IRating rating) {
+            Rating aud = Ratings.FirstOrDefault(v => v == rating);
+            if (aud != null) {
+                Ratings.Remove(aud);
+            }
+        }
+
+        public IRating Add(IRating rating) {
+            Rating r = new Rating(rating);
+            Ratings.Add(r);
+
+            return r;
         }
 
         /// <summary>Gets or sets this movie's story and plot with summary and a tagline.</summary>
         /// <value>This movie's story and plot with summary and a tagline</value>
-        ICollection<IPlot> IMovie.Plots {
-            get { return new HashSet<IPlot>(Plots);}
+        IEnumerable<IPlot> IMovie.Plots {
+            get { return Plots; }
+        }
+
+
+        public void Remove(IPlot plot) {
+            Plot aud = Plots.FirstOrDefault(v => v == plot);
+            if (aud != null) {
+                Plots.Remove(aud);
+            }
+        }
+
+        public IPlot Add(IPlot plot) {
+            Plot p = new Plot(plot);
+            Plots.Add(p);
+
+            return p;
         }
 
         /// <summary>Gets or sets the movie promotional images.</summary>
         /// <value>The movie promotional images</value>
-        ICollection<IArt> IMovie.Art {
-            get { return new HashSet<IArt>(Art);}
+        IEnumerable<IArt> IMovie.Art {
+            get { return Art; }
+        }
+
+        public void Remove(IArt art) {
+            Art aud = Art.FirstOrDefault(v => v == art);
+            if (aud != null) {
+                Art.Remove(aud);
+            }
+        }
+
+        public IArt Add(IArt art) {
+            Art a = new Art(art);
+
+            Art.Add(a);
+            return a;
         }
 
         /// <summary>Gets or sets the information about this movie's certification ratings/restrictions in certain countries.</summary>
         /// <value>The information about this movie's certification ratings/restrictions in certain countries.</value>
-        ICollection<ICertification> IMovie.Certifications {
-            get { return new HashSet<ICertification>(Certifications);}
+        IEnumerable<ICertification> IMovie.Certifications {
+            get { return Certifications; }
+        }
+
+
+        public void Remove(ICertification certification) {
+            Certification aud = Certifications.FirstOrDefault(v => v == certification);
+            if (aud != null) {
+                Certifications.Remove(aud);
+            }
+        }
+
+        public ICertification Add(ICertification certification) {
+            Certification cert = new Certification(certification);
+
+            Certifications.Add(cert);
+            return cert;
         }
 
         /// <summary>Gets or sets the name of the credited writer(s).</summary>
         /// <value>The names of the credited script writer(s)</value>
-        ICollection<IPerson> IMovie.Writers {
-            get { return new HashSet<IPerson>(Writers);}
+        IEnumerable<IPerson> IMovie.Writers {
+            get { return Writers; }
+        }
+
+        public void Remove(IPerson person, PersonType type) {
+            Person aud;
+            switch (type) {
+                case PersonType.Director:
+                    aud = Directors.FirstOrDefault(p => p == person);
+                    if (aud != null) {
+                        Directors.Remove(aud);
+                    }
+                    break;
+                case PersonType.Writer:
+                    aud = Writers.FirstOrDefault(p => p == person);
+                    if (aud != null) {
+                        Writers.Remove(aud);
+                    }
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("type");
+            }
+        }
+
+        public IPerson Add(IPerson person, PersonType type) {
+            Person p = new Person(person);
+            switch (type) {
+                case PersonType.Director:
+                    Directors.Add(p);
+                    break;
+                case PersonType.Writer:
+                    Writers.Add(p);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("type");
+            }
+            return p;
         }
 
         /// <summary>Gets or sets the movie directors.</summary>
         /// <value>People that directed this movie.</value>
-        ICollection<IPerson> IMovie.Directors {
-            get { return new HashSet<IPerson>(Directors);}
+        IEnumerable<IPerson> IMovie.Directors {
+            get { return Directors; }
         }
 
         /// <summary>Gets or sets the Person to Movie link with payload as in character name the person is protraying.</summary>
         /// <value>The Person to Movie link with payload as in character name the person is protraying.</value>
-        ICollection<IActor> IMovie.Actors {
-            get { return new HashSet<IActor>(Actors);}
+        IEnumerable<IActor> IMovie.Actors {
+            get { return Actors; }
+        }
+
+        public void Remove(IActor actor) {
+            Actor aud = Actors.FirstOrDefault(v => v == actor);
+            if (aud != null) {
+                Actors.Remove(aud);
+            }
+        }
+
+        public IActor Add(IActor actor) {
+            Actor a = new Actor(actor);
+
+            Actors.Add(a);
+            return a;
         }
 
         /// <summary>Gets or sets the special information about this movie release.</summary>
         /// <value>The special information about this movie release</value>
-        ICollection<ISpecial> IMovie.Specials {
-            get { return new HashSet<ISpecial>(Specials);}
+        IEnumerable<ISpecial> IMovie.Specials {
+            get { return Specials; }
+        }
+
+        public void Remove(ISpecial special) {
+            Special aud = Specials.FirstOrDefault(v => v == special);
+            if (aud != null) {
+                Specials.Remove(aud);
+            }
+        }
+
+        public ISpecial Add(ISpecial special) {
+            Special s = new Special(special);
+
+            Specials.Add(s);
+            return s;
         }
 
         /// <summary>Gets or sets the movie genres.</summary>
         /// <value>The movie genres.</value>
-        ICollection<IGenre> IMovie.Genres {
-            get { return new HashSet<IGenre>(Genres);}
+        IEnumerable<IGenre> IMovie.Genres {
+            get { return Genres; }
         }
 
-        ICollection<IAward> IMovie.Awards {
-            get { return new HashSet<IAward>(Awards);}
+        public void Remove(IGenre genre) {
+            Genre aud = Genres.FirstOrDefault(v => v == genre);
+            if (aud != null) {
+                Genres.Remove(aud);
+            }
         }
 
-        ICollection<IPromotionalVideo> IMovie.PromotionalVideos {
-            get { return new HashSet<IPromotionalVideo>(PromotionalVideos);}
+        public IGenre Add(IGenre genre) {
+            Genre g = new Genre(genre);
+
+            Genres.Add(g);
+            return g;
+        }
+
+        IEnumerable<IAward> IMovie.Awards {
+            get { return Awards; }
+        }
+
+        public void Remove(IAward award) {
+            Award aud = Awards.FirstOrDefault(v => v == award);
+            if (aud != null) {
+                Awards.Remove(aud);
+            }
+        }
+
+        public IAward Add(IAward award) {
+            Award a = new Award(award);
+
+            Awards.Add(a);
+            return a;
+        }
+
+        IEnumerable<IPromotionalVideo> IMovie.PromotionalVideos {
+            get { return PromotionalVideos; }
+        }
+
+        public void Remove(IPromotionalVideo promotionalVideo) {
+            PromotionalVideo aud = PromotionalVideos.FirstOrDefault(v => v == promotionalVideo);
+            if (aud != null) {
+                PromotionalVideos.Remove(aud);
+            }
+        }
+
+        public IPromotionalVideo Add(IPromotionalVideo promotionalVideo) {
+            PromotionalVideo pv = new PromotionalVideo(promotionalVideo);
+
+            PromotionalVideos.Add(pv);
+            return pv;
         }
 
         #endregion

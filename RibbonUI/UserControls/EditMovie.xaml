@@ -181,7 +181,13 @@
 
                         <Label Grid.Row="0" Grid.ColumnSpan="2" Target="{Binding ElementName=MovieDirectors}" Content="{l:T Directors, Postfix=:}"/>
                         <ListBox Grid.Row="1" Grid.Column="0" MinHeight="20" MaxHeight="50" Grid.ColumnSpan="2"
-                                 x:Name="MovieDirectors" ItemsSource="{Binding SelectedMovie.Directors}" SelectionMode="Single" />
+                                 x:Name="MovieDirectors" ItemsSource="{Binding Directors}" SelectionMode="Single" >
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                         <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal"
                                     HorizontalAlignment="Center">
                             <fmm:ImageButton DockPanel.Dock="Right" Tag="Directors" ToolTip="{l:T Edit selected person}" Height="26" VerticalAlignment="Bottom"
@@ -193,7 +199,7 @@
                         </StackPanel>
 
                         <Label Grid.Column="0" Grid.Row="3" Target="{Binding ElementName=MovieCountries}" Margin="-5,-5,0,0"  Content="{l:T Countries, Postfix=:}"/>
-                        <ListBox Grid.Row="4" Grid.Column="0" x:Name="MovieCountries" ItemsSource="{Binding SelectedMovie.Countries}"
+                        <ListBox Grid.Row="4" Grid.Column="0" x:Name="MovieCountries" ItemsSource="{Binding Countries}"
                                  MinHeight="32">
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type db:Country}">
@@ -384,16 +390,13 @@
                             <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource EditButton}" ToolTip="{l:T Edit selected studio}"
                                              Command="{Binding EditStudioCommand}" CommandParameter="{Binding ElementName=MovieStudios, Path=SelectedItem}"/>                            
                         </DockPanel>
-                        <ListBox Grid.Row="3" x:Name="MovieStudios" ItemsSource="{Binding SelectedMovie.Studios}" MinHeight="32">
+                        <ListBox Grid.Row="3" x:Name="MovieStudios" ItemsSource="{Binding Studios}" MinHeight="32">
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type db:Studio}">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image
-                                            Source="{Binding Name, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Studio, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}"
-                                            MaxHeight="64" MaxWidth="64" />
-                                        <TextBlock
-                                            Text="{Binding Name, TargetNullValue=Unknown, FallbackValue=Unknown}"
-                                            Margin="5,0,0,0" VerticalAlignment="Center" />
+                                        <Image Source="{Binding Name, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Studio, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}"
+                                               MaxHeight="64" MaxWidth="64" />
+                                        <TextBlock Text="{Binding Name, TargetNullValue=Unknown, FallbackValue=Unknown}" Margin="5,0,0,0" VerticalAlignment="Center" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>

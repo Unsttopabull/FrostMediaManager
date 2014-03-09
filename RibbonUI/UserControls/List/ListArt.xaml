@@ -4,8 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
-             xmlns:arts="clr-namespace:Frost.Models.Frost.DB.Arts;assembly=Frost.Models.Frost"
+             xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls.List"
+             xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
+             xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
              mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="622">
+    <UserControl.DataContext>
+        <vm:ListArtViewModel/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="{Binding ElementName=ArtList, Path=ColumnHeaderHeight}" />
@@ -13,19 +18,17 @@
         </Grid.RowDefinitions>
         <StackPanel Margin="0,0,20,0" Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="0" ZIndex="2"
                     Background="Transparent">
-            <Button Height="{Binding ElementName=ArtList, Path=ColumnHeaderHeight}" Width="24"
-                    Click="RemoveOnClick" Style="{StaticResource TransparentBorderlessButton}" ToolTip="{l:T Remove selected art}">
-                <Image Source="../../Images/remove.png" />
-            </Button>
-            <Button Height="{Binding ElementName=ArtList, Path=ColumnHeaderHeight}" Width="24" Click="AddOnClick"
-                    Style="{StaticResource TransparentBorderlessButton}" ToolTip="{l:T Add new art}">
-                <Image Source="../../Images/add.png" />
-            </Button>
+            <fmm:ImageButton Height="{Binding ElementName=ArtList, Path=ColumnHeaderHeight}" Width="24"
+                             Command="{Binding RemoveCommand}" CommandParameter="{Binding ElementName=ArtList, Path=SelectedItem}"
+                             Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected art}"/>
+            <fmm:ImageButton Height="{Binding ElementName=ArtList, Path=ColumnHeaderHeight}" Width="24"
+                             Command="{Binding AddCommand}" CommandParameter="{Binding ElementName=ArtList, Path=SelectedItem}"
+                             Style="{StaticResource AddButton}" ToolTip="{l:T Add new art}"/>
         </StackPanel>
         <DataGrid Grid.Row="0" x:Name="ArtList" Grid.RowSpan="2" AutoGenerateColumns="False"
                   GridLinesVisibility="None" SelectionMode="Single"
-                  AlternatingRowBackground="#59D3D3D3"
-                  CanUserResizeColumns="False" CanUserResizeRows="False" ItemsSource="{Binding}"
+                  AlternatingRowBackground="#59D3D3D3" CanUserResizeRows="False"
+                  CanUserResizeColumns="False" ItemsSource="{Binding Art}"
                   CanUserReorderColumns="False" ClipToBounds="True" MinRowHeight="20"
                   MinColumnWidth="50" RowHeaderWidth="0" CanUserAddRows="False">
             <DataGrid.RowStyle>
@@ -50,7 +53,7 @@
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="{l:T Preview}" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate DataType="arts:Art">
+                        <DataTemplate DataType="models:IArt">
                             <Image Source="{Binding PreviewOrPath}" Stretch="Uniform" MaxHeight="300" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

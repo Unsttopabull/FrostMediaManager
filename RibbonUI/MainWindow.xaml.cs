@@ -11,34 +11,34 @@ namespace RibbonUI {
     /// <summary>Interaction logic for MainWindow.xaml</summary>
     public partial class MainWindow {
         internal readonly MovieVoContainer Container;
-        private readonly TextWriterTraceListener _logger;
+        //private readonly TextWriterTraceListener _logger;
 
         public MainWindow() {
             InitializeComponent();
 
-            _logger = new TextWriterTraceListener(File.Create("dbLog.txt"));
+            //_logger = new TextWriterTraceListener(File.Create("dbLog.txt"));
 
             Container = new MovieVoContainer();
-            Container.Database.Log = s => {
-                lock (_logger) {
-                    _logger.WriteLine(s);
-                }
-            };
+            //Container.Database.Log = s => {
+            //    lock (_logger) {
+            //        _logger.WriteLine(s);
+            //    }
+            //};
 
         }
 
         private void RibbonWindowLoaded(object sender, RoutedEventArgs e) {
-            Container.Movies.Load();
-                     //.Include("Studios")
-                     //.Include("Art")
-                     //.Include("Genres")
-                     //.Include("Awards")
-                     //.Include("ActorsLink")
-                     //.Include("Plots")
-                     //.Include("Directors")
-                     //.Include("Countries")
-                     //.Include("Audios")
-                     //.Include("Videos").Load();
+            Container.Movies//.Load();
+                     .Include("Studios")
+                     .Include("Art")
+                     .Include("Genres")
+                     .Include("Awards")
+                     .Include("Actors")
+                     .Include("Plots")
+                     .Include("Directors")
+                     .Include("Countries")
+                     .Include("Audios")
+                     .Include("Videos").Load();
 
             Container.Genres.Load();
             Container.Countries.Load();
@@ -76,7 +76,7 @@ namespace RibbonUI {
                 studiosSource.Source = Container.Studios.Local;
             }
 
-            _logger.WriteLine("End startup load");
+            //_logger.WriteLine("End startup load");
         }
 
         /// <summary>Raises the <see cref="E:System.Windows.Window.Closing"/> event.</summary>
@@ -109,20 +109,20 @@ namespace RibbonUI {
             }
 
             Container.Dispose();
-            _logger.Close();
+            //_logger.Close();
         }
     }
 
-    class ChangedEntry {
-        public string Property { get; set; }
-        public object Original { get; set; }
-        public object Current { get; set; }
+    //class ChangedEntry {
+    //    public string Property { get; set; }
+    //    public object Original { get; set; }
+    //    public object Current { get; set; }
 
-        /// <summary>Returns a string that represents the current object.</summary>
-        /// <returns>A string that represents the current object.</returns>
-        public override string ToString() {
-            return Original + " => " + Current;
-        }
-    }
+    //    /// <summary>Returns a string that represents the current object.</summary>
+    //    /// <returns>A string that represents the current object.</returns>
+    //    public override string ToString() {
+    //        return Original + " => " + Current;
+    //    }
+    //}
 
 }

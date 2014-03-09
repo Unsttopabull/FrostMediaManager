@@ -2,8 +2,9 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
-        xmlns:movieVo="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
-        xmlns:vm="clr-namespace:RibbonUI.ViewModels.Windows" Name="Countries"
+        xmlns:vm="clr-namespace:RibbonUI.ViewModels.Windows"
+        xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
+        Name="AddCountriesControl"
         Title="{l:T SelectCountry}" Height="212" Width="350" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <BitmapImage x:Key="UnknownCountry" UriSource="..\Images\unknown.png" />
@@ -20,9 +21,9 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="SelectedCountry" Grid.Row="0" Grid.ColumnSpan="2" ItemsSource="{Binding}" Margin="5,5,5,0" SelectionMode="Extended">
+        <ListBox x:Name="SelectedCountry" Grid.Row="0" Grid.ColumnSpan="2" ItemsSource="{Binding Countries.View}" Margin="5,5,5,0" SelectionMode="Extended">
             <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type movieVo:Country}">
+                <DataTemplate DataType="{x:Type models:ICountry}">
                     <StackPanel Orientation="Horizontal">
                         <Image
                             Source="{Binding ISO3166.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Country, TargetNullValue={StaticResource UnknownCountry}, FallbackValue={StaticResource UnknownCountry}}"
@@ -33,7 +34,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <Button Grid.Row="1" Grid.Column="0" Margin="5,5,5,5" Command="{Binding AddCommand}" Content="{l:T Add}" CommandParameter="{Binding ElementName=Countries}"/>
-        <Button Grid.Row="1" Grid.Column="1" Margin="5,5,5,5" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=Countries}" Content="{l:T Cancel}"/>
+        <Button Grid.Row="1" Grid.Column="0" Margin="5,5,5,5" Command="{Binding AddCommand}" Content="{l:T Add}" CommandParameter="{Binding ElementName=AddCountriesControl}"/>
+        <Button Grid.Row="1" Grid.Column="1" Margin="5,5,5,5" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=AddCountriesControl}" Content="{l:T Cancel}"/>
     </Grid>
 </Window>

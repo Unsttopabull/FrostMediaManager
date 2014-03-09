@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Frost.Common.Annotations;
+using Frost.Common.Models;
 using Frost.Models.Frost.DB;
 using Frost.XamlControls.Commands;
 using RibbonUI.UserControls;
@@ -55,13 +56,30 @@ namespace RibbonUI.ViewModels.UserControls {
                     return null;
                 }
 
-                if (SelectedMovie.Studios.Count > 0) {
-                    Studio studio = SelectedMovie.Studios.FirstOrDefault();
-                    if (studio != null) {
-                        return studio.Name;
+                try {
+                    if (SelectedMovie.Studios.Count > 0) {
+                        Studio studio = SelectedMovie.Studios.FirstOrDefault();
+                        if (studio != null) {
+                            return studio.Name;
+                        }
                     }
                 }
+                catch {
+                    return null;
+                }
                 return null;
+            }
+        }
+
+        public IPlot FirstPlot {
+            get {
+                if (SelectedMovie == null) {
+                    return null;
+                }
+
+                return SelectedMovie.Plots.Any()
+                           ? SelectedMovie.Plots.FirstOrDefault()
+                           : null;
             }
         }
 

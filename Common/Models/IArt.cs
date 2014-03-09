@@ -10,20 +10,13 @@ namespace Frost.Common.Models {
         /// <value>The path to the preview of the art (a smaller, lower resolution copy).</value>
         string Preview { get; set; }
 
-        /// <summary>Gets or sets the movie this art is for.</summary>
-        /// <value>The movie this art is for</value>
-        IMovie Movie { get; set; }
+        ///// <summary>Gets or sets the movie this art is for.</summary>
+        ///// <value>The movie this art is for</value>
+        //IMovie Movie { get; set; }
 
         ArtType Type { get; }
 
         string PreviewOrPath { get; }
-    }
-
-    public interface IArt<TMovie> : IArt where TMovie : IMovie {
-
-        /// <summary>Gets or sets the movie this art is for.</summary>
-        /// <value>The movie this art is for</value>
-        new TMovie Movie { get; set; }
     }
 
 }

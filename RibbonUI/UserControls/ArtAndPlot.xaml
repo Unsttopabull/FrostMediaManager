@@ -13,7 +13,6 @@
     x:Class="RibbonUI.UserControls.ArtAndPlot"
     mc:Ignorable="d"
     d:DesignHeight="625" d:DesignWidth="1071">
-    <!-- d:DataContext="{d:DesignInstance db:Movie}" -->
     <UserControl.DataContext>
         <vm:ArtAndPlotViewModel/>
     </UserControl.DataContext>

@@ -23,28 +23,6 @@ namespace Frost.Common.Models {
         /// <summary>Gets or sets movies where this person was a writer.</summary>
         /// <value>The movies where this person was a writer.</value>
         ICollection<IMovie> MoviesAsWriter { get; }
-
-        /// <summary>Gets movies this person acted in.</summary>
-        /// <value>The movies this person acted in.</value>
-        IEnumerable<IMovie> MoviesAsActor { get; }
-    }
-
-    public interface IPerson<TMovie, TActor> : IPerson where TMovie : IMovie where TActor : IActor {
-        /// <summary>Gets or sets movies where this person was a director.</summary>
-        /// <value>The movies where this person was a director.</value>
-        new ICollection<TMovie> MoviesAsDirector { get; }
-
-        /// <summary>Gets or sets a link to movies where this person was an actor.</summary>
-        /// <value>A link to movies where this person was an actor.</value>
-        new ICollection<TActor> MoviesLink { get; }
-
-        /// <summary>Gets or sets movies where this person was a writer.</summary>
-        /// <value>The movies where this person was a writer.</value>
-        new ICollection<TMovie> MoviesAsWriter { get; }
-
-        /// <summary>Gets movies this person acted in.</summary>
-        /// <value>The movies this person acted in.</value>
-        new IEnumerable<TMovie> MoviesAsActor { get; }        
     }
 
 }

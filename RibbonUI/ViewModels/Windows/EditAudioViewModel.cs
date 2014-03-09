@@ -6,9 +6,8 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using Frost.Common.Annotations;
+using Frost.Common.Models;
 using Frost.GettextMarkupExtension;
-using Frost.Models.Frost.DB;
-using Frost.Models.Frost.DB.Files;
 using Frost.XamlControls.Commands;
 using RibbonUI.Windows;
 
@@ -17,7 +16,7 @@ namespace RibbonUI.ViewModels.Windows {
         public event PropertyChangedEventHandler PropertyChanged;
         private bool _first = true;
         private string _codecId;
-        private Audio _selectedAudio;
+        private IAudio _selectedAudio;
 
         public EditAudioViewModel() {
             CodecSelectOnLoadCommand = new RelayCommand<ComboBox>(CodecSelectOnLoaded);
@@ -27,10 +26,10 @@ namespace RibbonUI.ViewModels.Windows {
                 window.Close();
             });
 
-            SelectedLanguageChanged = new RelayCommand<Language>(Execute);
+            SelectedLanguageChanged = new RelayCommand<ILanguage>(Execute);
         }
 
-        private void Execute(Language language) {
+        private void Execute(ILanguage language) {
             SelectedAudio.Language = language;
             OnPropertyChanged("SelectedAudio");
         }
@@ -46,7 +45,7 @@ namespace RibbonUI.ViewModels.Windows {
             }
         }
 
-        public Audio SelectedAudio {
+        public IAudio SelectedAudio {
             get { return _selectedAudio; }
             set {
                 if (Equals(value, _selectedAudio)) {
@@ -65,7 +64,7 @@ namespace RibbonUI.ViewModels.Windows {
         public ICommand<Codec> CodecSelectSelectionChangedCommand { get; private set; }
         public ICommand<Window> CloseCommand { get; private set; }
 
-        public ICommand<Language> SelectedLanguageChanged { get; private set; }
+        public ICommand<ILanguage> SelectedLanguageChanged { get; private set; }
 
 
         private void CodecSelectOnLoaded(ComboBox cb) {

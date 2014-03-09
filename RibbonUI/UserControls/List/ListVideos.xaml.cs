@@ -1,25 +1,25 @@
-﻿using System.Windows;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Controls;
-using Frost.Models.Frost.DB.Files;
-using RibbonUI.Util;
+using Frost.Common.Models;
 using RibbonUI.ViewModels.UserControls.List;
 
 namespace RibbonUI.UserControls.List {
 
     /// <summary>Interaction logic for EditVideos.xaml</summary>
     public partial class ListVideos : UserControl {
-        public static readonly DependencyProperty VideosProperty = DependencyProperty.Register("Videos", typeof(ObservableHashSet2<Video>), typeof(ListVideos), new PropertyMetadata(default(ObservableHashSet2<Video>), OnVideoListChanged));
+        public static readonly DependencyProperty VideosProperty = DependencyProperty.Register("Videos", typeof(ObservableCollection<IVideo>), typeof(ListVideos), new PropertyMetadata(default(ObservableCollection<IVideo>), OnVideoListChanged));
 
         public ListVideos() {
             InitializeComponent();
         }
 
         private static void OnVideoListChanged(DependencyObject d, DependencyPropertyChangedEventArgs args) {
-            ((ListVideosViewModel) (((ListVideos) d).DataContext)).Videos = (ObservableHashSet2<Video>) args.NewValue;
+            ((ListVideosViewModel) (((ListVideos) d).DataContext)).Videos = (ObservableCollection<IVideo>) args.NewValue;
         }
 
-        public ObservableHashSet2<Video> Videos {
-            get { return (ObservableHashSet2<Video>) GetValue(VideosProperty); }
+        public ObservableCollection<IVideo> Videos {
+            get { return (ObservableCollection<IVideo>) GetValue(VideosProperty); }
             set { SetValue(VideosProperty, value); }
         }
 

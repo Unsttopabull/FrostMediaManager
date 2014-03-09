@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using Frost.Common.Models;
 using Frost.Common.Models.ISO;
@@ -13,7 +12,7 @@ namespace Frost.Models.Frost.DB {
 
     /// <summary> Represents a country a movie was shot and/or produced in.</summary>
     [Table("Countries")]
-    public class Country : ICountry<Movie> {
+    public class Country : ICountry/*, IEquatable<ICountry>*/ {
 
         /// <summary>Initializes a new instance of the <see cref="Country"/> class.</summary>
         public Country() {
@@ -49,13 +48,11 @@ namespace Frost.Models.Frost.DB {
         }
 
         public Country(ICountry country) {
-            Contract.Requires<ArgumentNullException>(country != null);
-            Contract.Requires<ArgumentNullException>(country.Movies != null);
+            //Contract.Requires<ArgumentNullException>(country != null);
+            //Contract.Requires<ArgumentNullException>(country.Movies != null);
 
             Name = country.Name;
             ISO3166 = country.ISO3166;
-
-            Movies = new HashSet<Movie>(country.Movies.Where(m => m != null).Select(m => new Movie(m)));
         }
 
         /// <summary>Gets or sets the database Country Id.</summary>
@@ -77,10 +74,6 @@ namespace Frost.Models.Frost.DB {
         /// <value>The country movies</value>
         public virtual ICollection<Movie> Movies { get; set; }
 
-        ICollection<IMovie> ICountry.Movies {
-            get { return new HashSet<IMovie>(Movies); }
-        }
-
         /// <summary>Converts country names to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Country"/></summary>
         /// <param name="countryNames">The counry names.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Country"/> instances with specified country names</returns>
@@ -97,6 +90,24 @@ namespace Frost.Models.Frost.DB {
                 ? new Country(iso.EnglishName, iso.Alpha2, iso.Alpha3)
                 : null;
         }
+
+        ///// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        ///// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        ///// <param name="other">An object to compare with this object.</param>
+        //public bool Equals(ICountry other) {
+        //    if (ReferenceEquals(null, other)) {
+        //        return false;
+        //    }
+        //    if (ReferenceEquals(this, other)) {
+        //        return true;
+        //    }
+
+        //    if (other.Id != 0 && other.Id == Id) {
+        //        return true;
+        //    }
+
+        //    return string.Equals(Name, other.Name) && Equals(ISO3166, other.ISO3166);
+        //}
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>

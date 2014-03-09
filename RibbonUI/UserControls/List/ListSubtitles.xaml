@@ -5,13 +5,17 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"             
              xmlns:sys="clr-namespace:System.Text;assembly=mscorlib"
-             xmlns:files="clr-namespace:Frost.Models.Frost.DB.Files;assembly=Frost.Models.Frost"
-             mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="602">
+             xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls.List"
+             xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
+             mc:Ignorable="d" Name="ListSubtitlesControl"
+             d:DesignHeight="300" d:DesignWidth="602" Loaded="ListSubtitlesOnLoaded">
+    <UserControl.DataContext>
+        <vm:ListSubtitlesViewModel/>
+    </UserControl.DataContext>
     <UserControl.Resources>
         <ObjectDataProvider x:Key="Encodings" ObjectType="{x:Type sys:Encoding}" MethodName="GetEncodings"/>
     </UserControl.Resources>
-    <ListView x:Name="SubtitlesList" SelectionMode="Single" ItemsSource="{Binding}" ClipToBounds="True">
+    <ListView x:Name="SubtitlesList" SelectionMode="Single" ItemsSource="{Binding Subtitles}" ClipToBounds="True">
         <ListView.GroupStyle>
             <GroupStyle ContainerStyle="{StaticResource ExpanderGroup}" />
         </ListView.GroupStyle>
@@ -21,10 +25,10 @@
             </Style>
         </ListView.Resources>
         <ListView.ItemTemplate>
-            <DataTemplate DataType="files:Subtitle">
+            <DataTemplate DataType="models:ISubtitle">
                 <DockPanel LastChildFill="False">
                     <StackPanel DockPanel.Dock="Left">
-                        <Button Style="{StaticResource TransparentBorderlessButton}" Click="LangEdit">
+                        <Button Style="{StaticResource TransparentBorderlessButton}" Command="{Binding ElementName=ListSubtitlesControl, Path=DataContext.ChangeLanguageCommand}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}">
                             <Image Source="{Binding Language.ISO639.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, FallbackValue={StaticResource UnknownLanguageLarge}, TargetNullValue={StaticResource UnknownLanguageLarge}}"
                                    MinHeight="48" MaxHeight="100">
                                 <Image.CacheMode>
@@ -41,7 +45,7 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="{l:T Format, Postfix=:}"/>
-                            <ComboBox VerticalAlignment="Center" Margin="11,0,0,0" MinWidth="100" IsEditable="True" SelectedItem="{Binding Format}" Loaded="OnFormatSelectorLoaded"/>
+                            <ComboBox VerticalAlignment="Center" Margin="11,0,0,0" MinWidth="100" IsEditable="True" ItemsSource="{Binding ElementName=ListSubtitlesControl, Path=DataContext.SubtitleFormats}" SelectedItem="{Binding Format}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="{l:T Encoding, Postfix=:}"/>
@@ -58,7 +62,7 @@
                     </StackPanel>
 
                     <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
-                        <Button Click="OnRemoveClicked" Style="{StaticResource TransparentBorderlessButton}">
+                        <Button Command="{Binding ElementName=ListSubtitlesControl, Path=DataContext.RemoveCommand}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}" Style="{StaticResource TransparentBorderlessButton}">
                             <Image Source="../../Images/remove.png" MaxHeight="32" />
                         </Button>
                     </StackPanel>

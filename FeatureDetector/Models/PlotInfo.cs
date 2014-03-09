@@ -6,8 +6,14 @@ namespace Frost.DetectFeatures.Models {
 
         public PlotInfo(string full, string summary, string tagline, ISOLanguageCode language) {
             Full = full;
-            Summary = summary;
-            Tagline = tagline;
+
+            if (!string.IsNullOrEmpty(summary)) {
+                Summary = summary;
+            }
+
+            if (!string.IsNullOrEmpty(tagline)) {
+                Tagline = tagline;
+            }
             Language = language;
         }
 

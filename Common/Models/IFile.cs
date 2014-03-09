@@ -5,6 +5,8 @@ namespace Frost.Common.Models {
 
     public interface IFile : IMovieEntity {
 
+        long Id { get; }
+
         ///<summary>The File Extension without beginning point</summary>
         ///<value>The file extension withot begining point</value>
         ///<example>\eg{ ''<c>mp4</c>''}</example>
@@ -52,20 +54,6 @@ namespace Frost.Common.Models {
         /// <summary>Gets the name with extension.</summary>
         /// <value>The name with extension.</value>
         string NameWithExtension { get; }
-    }
-
-    public interface IFile<TAudio, TVideo, TSubtitle> : IFile where TAudio : IAudio where TVideo : IVideo where TSubtitle : ISubtitle {
-        /// <summary>Gets or sets the details about audio streams in this file</summary>
-        /// <value>The details about audio streams in this file</value>
-        new ICollection<TAudio> AudioDetails { get; }
-
-        /// <summary>Gets or sets the details about video streams in this file</summary>
-        /// <value>The details about video streams in this file</value>
-        new ICollection<TVideo> VideoDetails { get; }
-
-        /// <summary>Gets or sets the details about subtitles in this file</summary>
-        /// <value>The details about subtitles in this file</value>
-        new ICollection<TSubtitle> Subtitles { get; }
     }
 
 }

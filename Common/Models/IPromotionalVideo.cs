@@ -7,11 +7,5 @@
         string Duration { get; set; }
         string Language { get; set; }
         string SubtitleLanguage { get; set; }
-        IMovie Movie { get; set; }
     }
-
-    public interface IPromotionalVideo<TMovie> : IPromotionalVideo where TMovie : IMovie {
-        new TMovie Movie { get; set; }
-    }
-
 }

@@ -1,52 +1,53 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
 using Frost.Common.Annotations;
-using Frost.Models.Frost.DB.Files;
+using Frost.Common.Models;
 using Frost.XamlControls.Commands;
-using RibbonUI.Util;
 using RibbonUI.Windows;
 
 namespace RibbonUI.ViewModels.UserControls.List {
     class ListVideosViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private ICollectionView _collectionView;
-        private ObservableHashSet2<Video> _videos;
+        private ObservableCollection<IVideo> _videos;
 
         public ListVideosViewModel() {
-            EditVideoCommand = new RelayCommand<Video>(OnEditClicked, v => v != null);
-            RemoveVideoCommand = new RelayCommand<Video>(OnRemoveClicked, v => v != null);
+            EditVideoCommand = new RelayCommand<IVideo>(OnEditClicked, v => v != null);
+            RemoveVideoCommand = new RelayCommand<IVideo>(OnRemoveClicked, v => v != null);
         }
 
         public Window ParentWindow { get; set; }
 
-        public ObservableHashSet2<Video> Videos {
+        public ObservableCollection<IVideo> Videos {
             get { return _videos; }
             set {
                 _videos = value;
 
+                _collectionView = CollectionViewSource.GetDefaultView(_videos);
                 if (_videos == null) {
+                    OnPropertyChanged();
                     return;
                 }
-
-                _collectionView = CollectionViewSource.GetDefaultView(_videos);
 
                 PropertyGroupDescription groupDescription = new PropertyGroupDescription("File");
                 if (_collectionView.GroupDescriptions != null) {
                     _collectionView.GroupDescriptions.Add(groupDescription);
                 }
+                OnPropertyChanged();
             }
         }
 
-        public ICommand<Video> EditVideoCommand { get; private set; }
-        public ICommand<Video> RemoveVideoCommand { get; private set; }
+        public ICommand<IVideo> EditVideoCommand { get; private set; }
+        public ICommand<IVideo> RemoveVideoCommand { get; private set; }
 
-        private void OnEditClicked(Video selectedVideo) {
+        private void OnEditClicked(IVideo selectedVideo) {
 
             EditVideo editVideo = new EditVideo {
                 Owner = ParentWindow,
-                DataContext = selectedVideo,
+                Video = selectedVideo,
                 SelectedLanguage = {
                     ItemsSource = ((CollectionViewSource)ParentWindow.Resources["LanguagesSource"]).View
                 }
@@ -57,7 +58,7 @@ namespace RibbonUI.ViewModels.UserControls.List {
             _collectionView.Refresh();
         }
 
-        private void OnRemoveClicked(Video selectedVideo) {
+        private void OnRemoveClicked(IVideo selectedVideo) {
             
         }
 

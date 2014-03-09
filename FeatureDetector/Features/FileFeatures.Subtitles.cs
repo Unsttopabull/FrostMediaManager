@@ -40,12 +40,12 @@ namespace Frost.DetectFeatures {
 
             //regex from matching files with the same name but with a known subtitle extension
             string regex = string.Format(@"{0}{1}", Regex.Escape(Path.GetFileNameWithoutExtension(file.NameWithExtension) ?? ""), _subtitleExtensionsRegex);
-            IEnumerable<MediaListFile> mediaFiles = _directoryInfo.EnumerateFilesRegex(regex)
-                                                                  .Select(fi => _mf.GetOrOpen(fi.FullName))
-                                                                  .Where(mediaFile => mediaFile != null);
+            var mediaFiles = _directoryInfo.EnumerateFilesRegex(regex)
+                                           .Select(fi => new { FullPath = fi.FullName, MediaFile = _mf.GetOrOpen(fi.FullName) })
+                                           .Where(sub => sub.MediaFile != null);
 
-            foreach (MediaListFile mediaFile in mediaFiles) {
-                GetSideSubtitles(mediaFile, _fnInfos[file.NameWithExtension]);
+            foreach (var mediaFile in mediaFiles) {
+                GetSideSubtitles(mediaFile.MediaFile, mediaFile.FullPath);
             }
         }
 
@@ -91,22 +91,35 @@ namespace Frost.DetectFeatures {
             }
         }
 
-        private void GetSideSubtitles(MediaListFile mediaFile, FileNameInfo fnInfo) {
-            SubtitleLanguage subLang = GetLanguageAndEncoding(mediaFile.General.FileInfo.FullPath);
+        private void GetSideSubtitles(MediaListFile mediaFile, string fullPath) {
+            SubtitleLanguage subLang = GetLanguageAndEncoding(fullPath);
 
-            FileDetectionInfo file = GetFile(mediaFile, fnInfo.FilePath);
+            FileNameInfo fnInfo = null;
+            if (_fnInfos.ContainsKey(fullPath)) {
+                string fileNameWithExt = Path.GetFileName(fullPath);
+                if (!string.IsNullOrEmpty(fileNameWithExt)) {
+                    fnInfo = _fnInfos[fileNameWithExt];
+                }
+            }
+            
+            if(fnInfo == null){
+                fnInfo = GetFileNameInfo(mediaFile.General.FileInfo.FullPath);
+            }
+
+            FileDetectionInfo file = GetFile(mediaFile, fullPath);
             if (file == null) {
                 return;
             }
 
+            Movie.FileInfos.Add(file);
             if (mediaFile.Text.Count > 0) {
                 foreach (MediaText text in mediaFile.Text) {
-                    SubtitleDetectionInfo sub;
                     ISOLanguageCode lang = GetLanguage(true, text.Language, subLang.Language, fnInfo.SubtitleLanguage, fnInfo.Language);
 
                     string mediaFormat = text.FormatInfo.Name;
 
                     //if MediaInfo detected a format and it is a known subtitle format
+                    SubtitleDetectionInfo sub;
                     if (mediaFormat != null && KnownSubtitleFormats.BinarySearch(mediaFormat) >= 0) {
                         sub = new SubtitleDetectionInfo(lang, mediaFormat);
                     }
@@ -139,6 +152,14 @@ namespace Frost.DetectFeatures {
 
                 file.Subtitles.Add(sub);
             }
+        }
+
+        private FileNameInfo GetFileNameInfo(string fullPath) {
+            if (File.Exists(fullPath)) {
+                FileNameParser fnp = new FileNameParser(fullPath);
+                return fnp.Parse();
+            }
+            return new FileNameInfo(fullPath, Path.GetFileName(fullPath), new List<string>());
         }
 
         private FileDetectionInfo GetFile(MediaListFile mediaFile, string filePath) {

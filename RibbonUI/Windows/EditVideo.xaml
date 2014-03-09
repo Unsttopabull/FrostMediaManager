@@ -13,11 +13,14 @@
         xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:glob="clr-namespace:System.Globalization;assembly=mscorlib"
         xmlns:files="clr-namespace:Frost.Models.Frost.DB.Files;assembly=Frost.Models.Frost"
-        xmlns:dbModels="clr-namespace:Frost.Models.Frost;assembly=Frost.Models.Frost"
         xmlns:movieVo="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
-        mc:Ignorable="d"
+        xmlns:vm="clr-namespace:RibbonUI.ViewModels.Windows"
+        mc:Ignorable="d" Name="EditVideoWindow"
         Title="{l:T Edit video}" Height="443" Width="570" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
         d:DataContext="{d:DesignInstance files:Video}">
+    <Window.DataContext>
+        <vm:EditVideoViewModel/>
+    </Window.DataContext>
     <Window.Resources>
         <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
         <ObjectDataProvider x:Key="BitRateModes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
@@ -74,26 +77,25 @@
         </StackPanel>
         <StackPanel Grid.Row="0" Grid.Column="2" MinWidth="200">
             <Label Content="{l:T Source, Postfix=:}"/>
-            <TextBox VerticalAlignment="Center"
-                     Text="{Binding Source, Converter={StaticResource EmptyStringToNullConverter}}" />
+            <TextBox VerticalAlignment="Center" Text="{Binding SelectedVideo.Source, Converter={StaticResource EmptyStringToNullConverter}}" />
 
             <Label Content="{l:T Codec, Postfix=:}"/>
             <ComboBox x:Name="CodecSelect" x:FieldModifier="private" IsEditable="False" VerticalAlignment="Center"
-                      Loaded="CodecSelectOnLoaded"
-                      SelectionChanged="CodecSelectOnSelectionChanged" DisplayMemberPath="Name" SelectedIndex="0" />
+                      SelectedItem="{Binding SelectedCodec}" ItemsSource="{Binding Codecs}"
+                      DisplayMemberPath="Name" SelectedIndex="0" />
 
             <Label Content="{l:T Standard, Postfix=:}"/>
             <ComboBox x:Name="StandardSelect" x:FieldModifier="private" VerticalAlignment="Center" IsEditable="True"
-                      Loaded="StandardSelectOnLoaded" SelectedIndex="0" SelectedItem="{Binding Standard}"/>
+                      SelectedItem="{Binding SelectedVideo.Standard}" ItemsSource="{Binding VideoStandards}"/>
 
             <Label Content="{l:T Resolution, Postfix=:}"/>
             <ComboBox x:Name="ResolutionSelect" x:FieldModifier="private"
                       SelectedItem="{Binding FormattedVideoResolution}" VerticalAlignment="Center"
-                      Loaded="ResolutionSelectOnLoaded"/>
+                      ItemsSource="{Binding Resolutions}"/>
 
             <StackPanel Orientation="Horizontal">
                 <Label Content="{l:T FPS, Postfix=:}"/>
-                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{l:T Clear value}"
+                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{l:T Clear value}" 
                         Tag="{Binding ElementName=Fps, Path=Value}">
                     <in:Interaction.Triggers>
                         <in:EventTrigger EventName="Click">
@@ -104,7 +106,7 @@
                 </Button>
             </StackPanel>
             <e:DoubleUpDown Minimum="0" Watermark="{l:T Frame rate in frames/s}" VerticalAlignment="Center" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}"
-                            Value="{Binding FPS}" x:Name="Fps" x:FieldModifier="private" FormatString="F2">
+                            Value="{Binding SelectedVideo.FPS}" x:Name="Fps" x:FieldModifier="private" FormatString="F2">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=Fps, Path=Value}" Value="0">
                         <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}" />
@@ -125,7 +127,7 @@
                 </Button>
             </StackPanel>
             <e:DoubleUpDown Minimum="0" Watermark="{l:T Bit rate in kbps}" VerticalAlignment="Center" MinHeight="22" FormatString="F3"
-                            Value="{Binding BitRate}" x:Name="BitRate" x:FieldModifier="private" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}">
+                            Value="{Binding SelectedVideo.BitRate}" x:Name="BitRate" x:FieldModifier="private" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=BitRate, Path=Value}" Value="0">
                         <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}" />
@@ -134,7 +136,7 @@
             </e:DoubleUpDown>
 
             <Label Content="{l:T Compression mode, Postfix=:}"/>
-            <ComboBox VerticalAlignment="Center" SelectedItem="{Binding CompressionMode}"
+            <ComboBox VerticalAlignment="Center" SelectedItem="{Binding SelectedVideo.CompressionMode}"
                       ItemsSource="{Binding Source={StaticResource CompressionModes}}" SelectedIndex="0" />
 
         </StackPanel>
@@ -152,7 +154,7 @@
                 </Button>
             </StackPanel>
             <a:TimePicker x:Name="VideoDuration" Margin="0,-12,0,0" HorizontalAlignment="Left" MinTime="{x:Static sys:TimeSpan.Zero}"
-                          SelectedTime="{Binding Path=Duration, Converter={StaticResource MsToTimeSpanConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                          SelectedTime="{Binding SelectedVideo.Duration, Converter={StaticResource MsToTimeSpanConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=VideoDuration, Path=SelectedTime}"
                                    Value="{x:Static sys:TimeSpan.Zero}">
@@ -163,8 +165,8 @@
 
 
             <Label Margin="-5,0,0,0" Content="{l:T Color space, Postfix=:}"/>
-            <ComboBox VerticalAlignment="Center" SelectedItem="{Binding ColorSpace}" IsEditable="True"
-                      Loaded="OnColorSpaceSelectLoaded"/>
+            <ComboBox VerticalAlignment="Center" SelectedItem="{Binding SelectedVideo.ColorSpace}" IsEditable="True"
+                      ItemsSource="{Binding ColorSpaces}"/>
 
             <StackPanel Orientation="Horizontal">
                 <Label Content="{l:T Aspect, Postfix=:}"/>
@@ -259,6 +261,6 @@
 
         </StackPanel>
 
-        <Button Grid.Column="4" Grid.Row="1" Margin="0,0,0,5" Height="25" Click="CloseOnClick" Content="{l:T Close}"/>
+        <Button Grid.Column="4" Grid.Row="1" Margin="0,0,0,5" Height="25" Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=EditVideoWindow}" Content="{l:T Close}"/>
     </Grid>
 </Window>

@@ -160,8 +160,6 @@ namespace Frost.DetectFeatures {
 
             _subtitleExtensionsRegex = string.Format(@"\.({0})", string.Join("|", KnownSubtitleExtensions));
 
-            //DetectorFactory.LoadStaticProfiles();
-
             try {
                 if (Directory.GetFiles("LanguageProfiles").Length > 0) {
                     DetectorFactory.LoadProfilesFromFolder("LanguageProfiles");
@@ -176,7 +174,6 @@ namespace Frost.DetectFeatures {
         }
 
         private FileFeatures(NFOPriority nfoPriority) {
-            //_mvc = new MovieVoContainer(false);
             _nfoPriority = nfoPriority;
             _mf = new MediaInfoList();
 
@@ -432,7 +429,9 @@ namespace Frost.DetectFeatures {
                     Movie.Title = fnInfo.Title;
                 }
 
-                if (!Movie.ReleaseYear.HasValue) {
+                if (!Movie.ReleaseYear.HasValue && fnInfo.ReleaseYear.Year > 1800 ||
+                     Movie.ReleaseYear < 1800 && fnInfo.ReleaseYear.Year > 1800) {
+
                     Movie.ReleaseYear = fnInfo.ReleaseYear.Year;
                 }
 

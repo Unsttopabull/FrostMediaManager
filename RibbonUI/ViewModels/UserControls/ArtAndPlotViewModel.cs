@@ -186,6 +186,10 @@ namespace RibbonUI.ViewModels.UserControls {
 
         public IPlot FirstPlot {
             get {
+                if (SelectedMovie == null) {
+                    return null;
+                }
+
                 return SelectedMovie.Plots.Any()
                            ? SelectedMovie.Plots.FirstOrDefault()
                            : null;

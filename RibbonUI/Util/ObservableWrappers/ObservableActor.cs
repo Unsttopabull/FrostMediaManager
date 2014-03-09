@@ -55,23 +55,12 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return Actor.MoviesAsWriter; }
         }
 
-        /// <summary>Gets movies this person acted in.</summary>
-        /// <value>The movies this person acted in.</value>
-        public IEnumerable<IMovie> MoviesAsActor {
-            get { return Actor.MoviesAsActor; }
-        }
-
         public string Character {
             get { return Actor.Character; }
             set {
                 Actor.Character = value;
                 OnPropertyChanged();
             }
-        }
-
-        public IMovie Movie {
-            get { return _actor.Movie; }
-            set { _actor.Movie = value; }
         }
 
         public IActor Actor {

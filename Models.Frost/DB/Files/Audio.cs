@@ -4,12 +4,11 @@ using System.Data.Entity.ModelConfiguration;
 using Frost.Common;
 using Frost.Common.Models;
 using Frost.Model.Xbmc.NFO;
-using Frost.Models.Frost.DB.Arts;
 
 namespace Frost.Models.Frost.DB.Files {
 
     /// <summary>Represents information about an audio stream in a file.</summary>
-    public class Audio : IAudio<Movie, File, Language> {
+    public class Audio : IAudio {
         #region Constructors
 
         /// <summary>Initializes a new instance of the <see cref="Audio"/> class.</summary>
@@ -39,9 +38,9 @@ namespace Frost.Models.Frost.DB.Files {
                 File = new File(audio.File);
             }
 
-            if (audio.Movie != null) {
-                Movie = new Movie(audio.Movie);
-            }
+            //if (audio.Movie != null) {
+            //    Movie = new Movie(audio.Movie);
+            //}
         }
 
         /// <summary>Initializes a new instance of the <see cref="Audio"/> class.</summary>
@@ -194,19 +193,6 @@ namespace Frost.Models.Frost.DB.Files {
         /// <summary>Gets or sets the movie this audio is from.</summary>
         /// <value>The movie this audio is from.</value>
         public virtual Movie Movie { get; set; }
-
-        /// <summary>Gets or sets the movie this audio is from.</summary>
-        /// <value>The movie this audio is from.</value>
-        IMovie IAudio.Movie {
-            get { return Movie; }
-            set {
-                if (value == null) {
-                    Movie = null;
-                    return;
-                }
-                Movie = new Movie(value);
-            }
-        }
 
         #endregion
 

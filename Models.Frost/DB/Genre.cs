@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Linq;
 using Frost.Common.Models;
@@ -12,7 +11,7 @@ using Frost.Models.Xtreamer.DB;
 namespace Frost.Models.Frost.DB {
 
     /// <summary>Represents a movie genre.</summary>
-    public partial class Genre : IGenre<Movie> {
+    public partial class Genre : IGenre {
 
         /// <summary>Initializes a new instance of the <see cref="Genre"/> class.</summary>
         public Genre() {
@@ -30,11 +29,11 @@ namespace Frost.Models.Frost.DB {
         }
 
         public Genre(IGenre genre) {
-            Contract.Requires<ArgumentNullException>(genre != null);
-            Contract.Requires<ArgumentNullException>(genre.Movies != null);
+            //Contract.Requires<ArgumentNullException>(genre != null);
+            //Contract.Requires<ArgumentNullException>(genre.Movies != null);
 
             Name = genre.Name;
-            Movies = new HashSet<Movie>(genre.Movies.Select(m => new Movie(m)));
+            //Movies = new HashSet<Movie>(genre.Movies.Select(m => new Movie(m)));
         }
 
         /// <summary>Gets or sets the database Genre Id.</summary>
@@ -51,12 +50,6 @@ namespace Frost.Models.Frost.DB {
         /// <summary>Gets or sets the movies of this genre.</summary>
         /// <value>The movies of this genre.</value>
         public virtual ICollection<Movie> Movies { get; set; }
-
-        /// <summary>Gets or sets the movies of this genre.</summary>
-        /// <value>The movies of this genre.</value>
-        ICollection<IMovie> IGenre.Movies {
-            get { return new HashSet<IMovie>(Movies); }
-        }
 
         /// <summary>Converts genre names to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Genre"/></summary>
         /// <param name="genreNames">The genre names.</param>

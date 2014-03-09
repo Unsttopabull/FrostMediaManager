@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using Frost.Common.Models;
 
 namespace Frost.Models.Frost.DB {
 
     /// <summary>Represents a special information about a movie's release or type.</summary>
-    public class Special : ISpecial<Movie> {
+    public class Special : ISpecial {
         public Special() {
             Movies = new HashSet<Movie>();
         }
@@ -22,11 +20,10 @@ namespace Frost.Models.Frost.DB {
         }
 
         public Special(ISpecial special) {
-            Contract.Requires<ArgumentNullException>(special != null);
-            Contract.Requires<ArgumentNullException>(special.Movies != null);
+            //Contract.Requires<ArgumentNullException>(special != null);
+            //Contract.Requires<ArgumentNullException>(special.Movies != null);
 
             Value = special.Value;
-            Movies = new HashSet<Movie>(special.Movies.Select(m => new Movie(m)));
         }
 
         /// <summary>Gets or sets the database Specials Id.</summary>
@@ -43,12 +40,6 @@ namespace Frost.Models.Frost.DB {
         /// <summary>Gets or sets the movies that this special applies to</summary>
         /// <value>The movies this special applies to.</value>
         public ICollection<Movie> Movies { get; set; }
-
-        /// <summary>Gets or sets the movies that this special applies to</summary>
-        /// <value>The movies this special applies to.</value>
-        ICollection<IMovie> ISpecial.Movies {
-            get { return new HashSet<IMovie>(Movies); }
-        }
 
         /// <summary>Converts specials as string to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Special"/></summary>
         /// <param name="specials">The specials values.</param>

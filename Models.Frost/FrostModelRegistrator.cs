@@ -1,7 +1,6 @@
 ﻿using Frost.Common;
 using Frost.Common.Models;
 using Frost.Models.Frost.DB;
-using Frost.Models.Frost.DB.Arts;
 using Frost.Models.Frost.DB.Files;
 using Frost.Models.Frost.DB.People;
 

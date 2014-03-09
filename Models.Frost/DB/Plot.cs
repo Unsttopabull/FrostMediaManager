@@ -1,7 +1,5 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.Contracts;
 using Frost.Common.Models;
 
 namespace Frost.Models.Frost.DB {
@@ -9,7 +7,7 @@ namespace Frost.Models.Frost.DB {
 
     /// <summary>Contains information about movie story/plot.</summary>
     [Table("Plots")]
-    public class Plot : IPlot<Movie> {
+    public class Plot : IPlot {
 
         public Plot() {
             
@@ -46,16 +44,12 @@ namespace Frost.Models.Frost.DB {
         }
 
         public Plot(IPlot plot) {
-            Contract.Requires<ArgumentNullException>(plot != null);
+            //Contract.Requires<ArgumentNullException>(plot != null);
 
             Tagline = plot.Tagline;
             Summary = plot.Summary;
             Full = plot.Full;
             Language = plot.Language;
-
-            if (plot.Movie != null) {
-                Movie = new Movie(plot.Movie);
-            }
         }
 
         /// <summary>Gets or sets the database plot Id.</summary>
@@ -84,17 +78,6 @@ namespace Frost.Models.Frost.DB {
         /// <summary>Gets or sets the movie foreign key.</summary>
         /// <value>The movie foreign key.</value>
         public long MovieId { get; set; }
-
-        IMovie IPlot.Movie {
-            get { return Movie; }
-            set {
-                if (value == null) {
-                    Movie = null;
-                    return;
-                }
-                Movie = new Movie(value);
-            }
-        }
 
         /// <summary>Gets or sets the movie this plot belongs to.</summary>
         /// <value>Gets or sets the movie this plot belongs to.</value>

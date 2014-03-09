@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using Frost.Common.Models;
 
@@ -12,7 +10,7 @@ namespace Frost.Models.Frost.DB {
 
 
     /// <summary>Represents a studio that prodcuced a movie.</summary>
-    public class Studio : IStudio<Movie> {
+    public class Studio : IStudio {
 
         /// <summary>Initializes a new instance of the <see cref="Studio"/> class.</summary>
         public Studio() {
@@ -26,11 +24,10 @@ namespace Frost.Models.Frost.DB {
         }
 
         public Studio(IStudio studio) {
-            Contract.Requires<ArgumentNullException>(studio != null);
-            Contract.Requires<ArgumentNullException>(studio.Movies != null);
+            //Contract.Requires<ArgumentNullException>(studio != null);
+            //Contract.Requires<ArgumentNullException>(studio.Movies != null);
 
             Name = studio.Name;
-            Movies = new HashSet<Movie>(studio.Movies.Select(m => new Movie(m)));
         }
 
         /// <summary>Gets or sets the Id of this studio in the database.</summary>
@@ -47,12 +44,6 @@ namespace Frost.Models.Frost.DB {
         /// <summary>Gets or sets the movies this studio has produced.</summary>
         /// <value>The movies this studio has produced.</value>
         public virtual ICollection<Movie> Movies { get; set; }
-
-        /// <summary>Gets or sets the movies this studio has produced.</summary>
-        /// <value>The movies this studio has produced.</value>
-        ICollection<IMovie> IStudio.Movies {
-            get { return new HashSet<IMovie>(Movies); }
-        }
 
         /// <summary>Converts studio names to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Studio"/></summary>
         /// <param name="studioNames">The studio names.</param>

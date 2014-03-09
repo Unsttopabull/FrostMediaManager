@@ -4,7 +4,7 @@ using System.Data.Entity.ModelConfiguration;
 using Frost.Common;
 using Frost.Common.Models;
 
-namespace Frost.Models.Frost.DB.Arts {
+namespace Frost.Models.Frost.DB {
 
     /// <summary>Represents a promotional movie art.</summary>
     public class Art : IArt {
@@ -59,18 +59,6 @@ namespace Frost.Models.Frost.DB.Arts {
         /// <value>The movie this art is for</value>
         [ForeignKey("MovieId")]
         public virtual Movie Movie { get; set; }
-
-
-        IMovie IArt.Movie {
-            get { return Movie; }
-            set {
-                if (value == null) {
-                    Movie = null;
-                }
-                Movie = new Movie(value);
-            }
-        }
-
 
         [NotMapped]
         public string PreviewOrPath {

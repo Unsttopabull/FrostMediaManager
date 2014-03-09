@@ -10,8 +10,8 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Shell;
 using Frost.Common.Annotations;
+using Frost.Common.Models;
 using Frost.GettextMarkupExtension;
-using Frost.Models.Frost.DB;
 using Microsoft.Expression.Interactivity.Core;
 using RibbonUI.ViewModels.UserControls;
 
@@ -27,8 +27,8 @@ namespace RibbonUI.UserControls {
             set { SetValue(MinRequiredWidthProperty, value); }
         }
 
-        public Movie SelectedMovie {
-            get { return MovieList.SelectedItem as Movie; }
+        public IMovie SelectedMovie {
+            get { return MovieList.SelectedItem as IMovie; }
         }
 
         public ContentGrid() {

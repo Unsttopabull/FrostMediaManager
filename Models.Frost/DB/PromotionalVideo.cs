@@ -1,19 +1,17 @@
-﻿using System;
-using System.Data.Entity.ModelConfiguration;
-using System.Diagnostics.Contracts;
+﻿using System.Data.Entity.ModelConfiguration;
 using Frost.Common;
 using Frost.Common.Models;
 
 namespace Frost.Models.Frost.DB {
 
-    public class PromotionalVideo : IPromotionalVideo<Movie> {
+    public class PromotionalVideo : IPromotionalVideo {
 
         public PromotionalVideo() {
             
         }
 
         public PromotionalVideo(IPromotionalVideo promotionalVideo) {
-            Contract.Requires<ArgumentNullException>(promotionalVideo != null);
+            //Contract.Requires<ArgumentNullException>(promotionalVideo != null);
 
             Type = promotionalVideo.Type;
             Title = promotionalVideo.Title;
@@ -21,10 +19,6 @@ namespace Frost.Models.Frost.DB {
             Duration = promotionalVideo.Duration;
             Language = promotionalVideo.Language;
             SubtitleLanguage = promotionalVideo.Language;
-
-            if (promotionalVideo.Movie != null) {
-                Movie = new Movie(promotionalVideo.Movie);
-            }
         }
 
         public long Id { get; set; }
@@ -37,11 +31,6 @@ namespace Frost.Models.Frost.DB {
 
         public long MovieId { get; set; }
         public virtual Movie Movie { get; set; }
-
-        IMovie IPromotionalVideo.Movie {
-            get { return Movie; }
-            set { Movie = new Movie(value); }
-        }
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>

@@ -64,22 +64,9 @@ namespace Frost.Common.Models {
         /// <value>The file this audio is contained in.</value>
         IFile File { get; set; }
 
-        /// <summary>Gets or sets the movie this audio is from.</summary>
-        /// <value>The movie this audio is from.</value>
-        IMovie Movie { get; set; }
-    }
-
-    public interface IAudio<TMovie, TFile, TLanguage> : IAudio where TMovie : IMovie where TFile : IFile where TLanguage : ILanguage {
-
-        /// <summary>Gets or sets the file this audio is contained in.</summary>
-        /// <value>The file this audio is contained in.</value>
-        new TFile File { get; set; }
-
-        /// <summary>Gets or sets the movie this audio is from.</summary>
-        /// <value>The movie this audio is from.</value>
-        new TMovie Movie { get; set; }
-
-        new TLanguage Language { get; set; }
+        ///// <summary>Gets or sets the movie this audio is from.</summary>
+        ///// <value>The movie this audio is from.</value>
+        //IMovie Movie { get; set; }
     }
 
 }

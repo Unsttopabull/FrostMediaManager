@@ -1,6 +1,9 @@
 namespace Frost.Common.Models {
 
     public interface ISubtitle : IHasLanguage, IMovieEntity {
+
+        long Id { get; }
+
         long? PodnapisiId { get; set; }
 
         long? OpenSubtitlesId { get; set; }
@@ -22,10 +25,7 @@ namespace Frost.Common.Models {
         /// <summary>Gets or sets a value indicating whether this subtitle is for people that are hearing impaired.</summary>
         /// <value>Is <c>true</c> if this subtitle is for people that are hearing impaired; otherwise, <c>false</c>.</value>
         bool ForHearingImpaired { get; set; }
-    }
 
-
-    public interface ISubtitle<TLanguage> : ISubtitle {
-        new TLanguage Language { get; set; }
+        IFile File { get; }
     }
 }

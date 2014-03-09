@@ -16,18 +16,6 @@
         /// <summary>Gets or sets the language of this plot.</summary>
         /// <value>The language of this plot.</value>
         string Language { get; set; }
-
-        /// <summary>Gets or sets the movie foreign key.</summary>
-        /// <value>The movie foreign key.</value>
-        long MovieId { get; set; }
-
-        /// <summary>Gets or sets the movie this plot belongs to.</summary>
-        /// <value>Gets or sets the movie this plot belongs to.</value>
-        IMovie Movie { get; set; }
-    }
-
-    public interface IPlot<TMovie> : IPlot where TMovie : IMovie {
-        new TMovie Movie { get; set; }
     }
 
 }

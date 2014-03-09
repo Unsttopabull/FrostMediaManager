@@ -7,7 +7,6 @@ using Frost.Common.Models;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.Models;
 using Frost.Models.Frost.DB;
-using Frost.Models.Frost.DB.Arts;
 using Frost.Models.Frost.DB.Files;
 using Frost.Models.Frost.DB.People;
 
@@ -67,7 +66,7 @@ namespace RibbonUI.Util {
             Movie mv = FromMovieInfo(movie);
 
             mv.Set = GetHasName(movie.Set, _sets);
-            mv.Plots = new HashSet<Plot>(movie.Plots.ConvertAll(p => new Plot(p.Full, p.Summary, p.Tagline, p.Language != null ? p.Language.EnglishName : null)));
+            mv.Plots = new HashSet<Plot>(movie.Plots.ConvertAll(GetPlot));
             mv.Art = new HashSet<Art>(movie.Art.ConvertAll(art => new Art(art.Type, art.Path, art.Preview)));
             mv.Certifications = new HashSet<Certification>(movie.Certifications.ConvertAll(GetCertification));
             mv.Specials = new HashSet<Special>(movie.Specials.ConvertAll(GetSpecial));
@@ -83,6 +82,10 @@ namespace RibbonUI.Util {
             }
 
             _mvc.Movies.Add(mv);
+        }
+
+        public Plot GetPlot(PlotInfo p) {
+            return new Plot(p.Full, p.Summary, p.Tagline, p.Language != null ? p.Language.EnglishName : null);            
         }
 
         private void AddFileInfo(FileDetectionInfo fileInfo, Movie mv) {

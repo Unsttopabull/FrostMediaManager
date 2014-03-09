@@ -48,18 +48,6 @@ namespace Frost.Models.Frost.DB.People {
 
         public Movie Movie { get; set; }
 
-        IMovie IActor.Movie {
-            get { return Movie; }
-            set {
-                if (value == null) {
-                    Movie = null;
-                }
-
-                Movie = new Movie(value);
-            }
-        }
-
-
         [ForeignKey("Movie")]
         public long MovieId { get; set; }
 

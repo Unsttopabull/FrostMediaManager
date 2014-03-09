@@ -79,7 +79,7 @@ namespace Frost.DetectFeatures {
             Movie.OriginalTitle = Movie.OriginalTitle ?? xbmcMovie.OriginalTitle;
             Movie.SortTitle = Movie.SortTitle ?? xbmcMovie.SortTitle;
             Movie.ImdbID = Movie.ImdbID ?? xbmcMovie.ImdbId;
-            Movie.ReleaseYear = CheckReleaseYear(Movie.ReleaseYear) ? Movie.ReleaseYear : xbmcMovie.Year;
+            Movie.ReleaseYear = CheckReleaseYear(Movie.ReleaseYear) ? Movie.ReleaseYear : (CheckReleaseYear(xbmcMovie.Year) ? xbmcMovie.Year : (long?)null);
             Movie.Top250 = Movie.Top250 != default(int) ? Movie.Top250 : xbmcMovie.Top250;
             Movie.PlayCount = Movie.PlayCount != default(int) ? Movie.PlayCount : xbmcMovie.PlayCount;
             Movie.ReleaseDate = Movie.ReleaseDate != default(DateTime) ? Movie.ReleaseDate : xbmcMovie.ReleaseDate;

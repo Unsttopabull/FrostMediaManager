@@ -170,16 +170,6 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
         }
 
-        /// <summary>Gets or sets the movie this audio is from.</summary>
-        /// <value>The movie this audio is from.</value>
-        public IMovie Movie {
-            get { return _audio.Movie; }
-            set {
-                _audio.Movie = value;
-                OnPropertyChanged();
-            }
-        }
-
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
             PropertyChangedEventHandler handler = PropertyChanged;

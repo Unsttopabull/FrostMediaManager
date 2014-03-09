@@ -1,14 +1,12 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Diagnostics.Contracts;
 using Frost.Common.Models;
 
 namespace Frost.Models.Frost.DB {
 
     /// <summary>Represents a movie's rating from a certain critic.</summary>
     [Table("Ratings")]
-    public class Rating : IRating<Movie> {
+    public class Rating : IRating {
 
         public Rating() {
             
@@ -23,13 +21,10 @@ namespace Frost.Models.Frost.DB {
         }
 
         public Rating(IRating rating) {
-            Contract.Requires<ArgumentNullException>(rating != null);
+            //Contract.Requires<ArgumentNullException>(rating != null);
 
             Critic = rating.Critic;
             Value = rating.Value;
-            if (rating.Movie != null) {
-                Movie = new Movie(rating.Movie);
-            }
         }
 
         /// <summary>Gets or sets the database rating Id.</summary>
@@ -55,13 +50,6 @@ namespace Frost.Models.Frost.DB {
         /// <summary>Gets or sets the movie this rating is for.</summary>
         /// <value>The movie this rating is for.</value>
         public virtual Movie Movie { get; set; }
-
-        /// <summary>Gets or sets the movie this rating is for.</summary>
-        /// <value>The movie this rating is for.</value>
-        IMovie IRating.Movie {
-            get { return Movie; }
-            set { Movie = new Movie(value); }
-        }
     }
 
 }

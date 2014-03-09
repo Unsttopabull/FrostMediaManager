@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
@@ -10,27 +10,32 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Frost.Common.Annotations;
+using Frost.Common.Models;
 using Frost.Models.Frost.DB;
-using Frost.Models.Frost.DB.Arts;
-using Frost.Models.Frost.DB.Files;
 using Frost.XamlControls.Commands;
+using GalaSoft.MvvmLight;
+using RibbonUI.Messages.Country;
+using RibbonUI.Messages.Genre;
+using RibbonUI.Messages.People;
+using RibbonUI.Messages.Plot;
+using RibbonUI.Messages.Studio;
+using RibbonUI.Messages.Subtitles;
 using RibbonUI.UserControls;
-using RibbonUI.Util;
 
 namespace RibbonUI.ViewModels.UserControls {
 
-    public class ContentGridViewModel : INotifyPropertyChanged, IDisposable {
-        public event PropertyChangedEventHandler PropertyChanged;
+    public class ContentGridViewModel : ViewModelBase, IDisposable {
         private readonly IDisposable _searchObservable;
         private ICollectionView _collectionView;
         private string _movieSearchFilter;
-        private Movie _selectedMovie;
-        private ObservableHashSet2<Movie> _movieList;
-        private ObservableHashSet2<Video> _movieVideos;
-        private ObservableHashSet2<Audio> _movieAudios;
-        private ObservableHashSet2<Subtitle> _movieSubtitles;
-        private ObservableHashSet2<Art> _movieArt;
+        private IMovie _selectedMovie;
+        private ObservableCollection<IMovie> _movies;
+        private ObservableCollection<IVideo> _movieVideos;
+        private ObservableCollection<IAudio> _movieAudios;
+        private ObservableCollection<ISubtitle> _movieSubtitles;
+        private ObservableCollection<IArt> _movieArt;
         private Window _parentWindow;
+        private ObservableCollection<IStudio> _movieStudios;
 
         public ContentGridViewModel() {
             _searchObservable = Observable.FromEventPattern<PropertyChangedEventArgs>(this, "PropertyChanged")
@@ -41,18 +46,38 @@ namespace RibbonUI.ViewModels.UserControls {
 
             SubtitlesOnFocusCommand = new RelayCommand(MovieSubtitlesGotFocus);
             SubtitlesLostFocusCommand = new RelayCommand(MovieSubtitlesOnLostFocus);
+
+            MessengerInstance.Register<RemoveSubtitleMessage>(this, msg => RemoveSubtitle(msg.Subtitle));
+
+            MessengerInstance.Register<AddStudioMessage>(this, s => AddStudio(s.Studio));
+            MessengerInstance.Register<RemoveStudioMessage>(this, s => RemoveStudio(s.Studio));
+
+            MessengerInstance.Register<AddPlotMessage>(this, s => AddPlot(s.Plot));
+            MessengerInstance.Register<RemovePlotMessage>(this, s => RemovePlot(s.Plot));
+
+            MessengerInstance.Register<AddActorMessage>(this, s => AddActor(s.Actor));
+            MessengerInstance.Register<RemoveActorMessage>(this, s => RemoveActor(s.Actor));
+
+            MessengerInstance.Register<AddDirectorMessage>(this, s => AddDirector(s.Director));
+            MessengerInstance.Register<RemoveDirectorMessage>(this, s => RemoveDirector(s.Director));
+
+            MessengerInstance.Register<AddGenreMessage>(this, s => AddGenre(s.Genre));
+            MessengerInstance.Register<RemoveGenreMessage>(this, s => RemoveGenre(s.Genre));
+
+            MessengerInstance.Register<AddCountryMessage>(this, s => AddCountry(s.Country));
+            MessengerInstance.Register<RemoveCountryMessage>(this, s => RemoveCountry(s.Country));
         }
 
-        public ObservableHashSet2<Movie> MovieList {
-            get { return _movieList; }
+        public ObservableCollection<IMovie> Movies {
+            get { return _movies; }
             set {
-                if (Equals(value, _movieList)) {
+                if (Equals(value, _movies)) {
                     return;
                 }
-                _movieList = value;
+                _movies = value;
 
-                if (_movieList != null) {
-                    _collectionView = CollectionViewSource.GetDefaultView(_movieList);
+                _collectionView = CollectionViewSource.GetDefaultView(_movies);
+                if (_collectionView != null) {
                     _collectionView.SortDescriptions.Add(new SortDescription("SortTitle", ListSortDirection.Ascending));
                     _collectionView.SortDescriptions.Add(new SortDescription("Title", ListSortDirection.Ascending));
                     _collectionView.Filter = Filter;
@@ -62,7 +87,7 @@ namespace RibbonUI.ViewModels.UserControls {
             }
         }
 
-        public Movie SelectedMovie {
+        public IMovie SelectedMovie {
             get { return _selectedMovie; }
             set {
                 if (Equals(value, _selectedMovie)) {
@@ -71,10 +96,10 @@ namespace RibbonUI.ViewModels.UserControls {
                 _selectedMovie = value;
 
                 if (_selectedMovie != null) {
-                    MovieVideos = new ObservableHashSet2<Video>(_selectedMovie.Videos);
-                    MovieAudios = new ObservableHashSet2<Audio>(_selectedMovie.Audios);
-                    MovieSubtitles = new ObservableHashSet2<Subtitle>(_selectedMovie.Subtitles);
-                    MovieArt = new ObservableHashSet2<Art>(_selectedMovie.Art);
+                    MovieVideos = new ObservableCollection<IVideo>(_selectedMovie.Videos);
+                    MovieAudios = new ObservableCollection<IAudio>(_selectedMovie.Audios);
+                    MovieSubtitles = new ObservableCollection<ISubtitle>(_selectedMovie.Subtitles);
+                    MovieArt = new ObservableCollection<IArt>(_selectedMovie.Art);
                 }
 
                 OnPropertyChanged();
@@ -92,7 +117,7 @@ namespace RibbonUI.ViewModels.UserControls {
             }
         }
 
-        public ObservableHashSet2<Video> MovieVideos {
+        public ObservableCollection<IVideo> MovieVideos {
             get { return _movieVideos; }
             set {
                 if (Equals(value, _movieVideos)) {
@@ -102,7 +127,7 @@ namespace RibbonUI.ViewModels.UserControls {
                 OnPropertyChanged();
             }
         }
-        public ObservableHashSet2<Audio> MovieAudios {
+        public ObservableCollection<IAudio> MovieAudios {
             get { return _movieAudios; }
             set {
                 if (Equals(value, _movieAudios)) {
@@ -112,7 +137,7 @@ namespace RibbonUI.ViewModels.UserControls {
                 OnPropertyChanged();
             }
         }
-        public ObservableHashSet2<Subtitle> MovieSubtitles {
+        public ObservableCollection<ISubtitle> MovieSubtitles {
             get { return _movieSubtitles; }
             set {
                 if (Equals(value, _movieSubtitles)) {
@@ -122,7 +147,7 @@ namespace RibbonUI.ViewModels.UserControls {
                 OnPropertyChanged();
             }
         }
-        public ObservableHashSet2<Art> MovieArt {
+        public ObservableCollection<IArt> MovieArt {
             get { return _movieArt; }
             set {
                 if (Equals(value, _movieArt)) {
@@ -141,14 +166,15 @@ namespace RibbonUI.ViewModels.UserControls {
             set {
                 _parentWindow = value;
                 if (_parentWindow != null) {
-                    MovieList = new ObservableHashSet2<Movie>((ICollection<Movie>) ((CollectionViewSource) _parentWindow.Resources["MoviesSource"]).Source);
+                    IEnumerable source = (IEnumerable) ((CollectionViewSource) _parentWindow.Resources["MoviesSource"]).Source;
+                    Movies = new ObservableCollection<IMovie>(source.Cast<IMovie>());
                 }
             }
         }
 
         private bool Filter(object o) {
             try {
-                return ((Movie) o).Title.IndexOf(MovieSearchFilter ?? "", StringComparison.CurrentCultureIgnoreCase) != -1;
+                return ((IMovie) o).Title.IndexOf(MovieSearchFilter ?? "", StringComparison.CurrentCultureIgnoreCase) != -1;
             }
             catch (Exception e) {
                 return false;
@@ -167,11 +193,68 @@ namespace RibbonUI.ViewModels.UserControls {
             rb.Search.IsSelected = true;
         }
 
+        #region Message Handlers
+
+        private void RemoveSubtitle(ISubtitle subtitle) {
+            MovieSubtitles.Remove(subtitle);
+
+        }
+
+        private void RemovePlot(IPlot plot) {
+            SelectedMovie.Remove(plot);
+        }
+
+        private void AddPlot(IPlot plot) {
+            SelectedMovie.Add(plot);
+        }
+
+        private void AddStudio(IStudio studio) {
+            SelectedMovie.Add(studio);
+        }
+
+        private void RemoveStudio(IStudio studio) {
+            SelectedMovie.Add(studio);
+        }
+
+        private void AddActor(IActor actor) {
+            SelectedMovie.Add(actor);
+        }
+
+        private void RemoveActor(IActor actor) {
+            SelectedMovie.Remove(actor);
+        }
+
+        private void AddDirector(IPerson director) {
+            SelectedMovie.Add(director, PersonType.Director);
+        }
+
+        private void RemoveDirector(IPerson director) {
+            SelectedMovie.Remove(director, PersonType.Director);
+        }
+
+        private void AddGenre(IGenre genre) {
+            SelectedMovie.Add(genre);
+        }
+
+        private void RemoveGenre(IGenre genre) {
+            SelectedMovie.Remove(genre);
+        }
+
+        private void AddCountry(ICountry country) {
+            SelectedMovie.Add(country);
+        }
+
+        private void RemoveCountry(ICountry country) {
+            SelectedMovie.Remove(country);
+        }
+
+        #endregion
+
+
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) {
-                handler(this, new PropertyChangedEventArgs(propertyName));
+            if (PropertyChangedHandler != null) {
+                PropertyChangedHandler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 

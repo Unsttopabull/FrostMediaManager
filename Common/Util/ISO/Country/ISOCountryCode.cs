@@ -9,7 +9,7 @@ namespace Frost.Common.Util.ISO {
         /// <param name="alpha2">The ISO 3166-1 Two letter code.</param>
         /// <param name="alpha3">The ISO 3166-1 Three letter code.</param>
         /// <param name="numeric">The ISO 3166-1 Numeric code</param>
-        public ISOCountryCode(string englishName, string alpha2, string alpha3, int numeric) : base(englishName, alpha2, alpha3) {
+        internal ISOCountryCode(string englishName, string alpha2, string alpha3, int numeric) : base(englishName, alpha2, alpha3) {
             Numeric = numeric;
         }
 

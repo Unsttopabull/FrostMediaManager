@@ -8,6 +8,7 @@
     xmlns:list="clr-namespace:RibbonUI.UserControls.List"
     xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:converters="clr-namespace:RibbonUI.Converters"
     x:Class="RibbonUI.UserControls.ContentGrid"
     x:Name="ContentGridControl"
     mc:Ignorable="d" Loaded="OnWindowLoaded"
@@ -17,6 +18,7 @@
         <vm:ContentGridViewModel/>
     </UserControl.DataContext>
     <UserControl.Resources>
+        <converters:DebugConverter x:Key="DebugConverter" />
         <Style x:Key="BooleanImage" TargetType="{x:Type Image}">
             <Setter Property="Source" Value="../Images/error.ico" />
             <Style.Triggers>
@@ -93,7 +95,7 @@
 
         <DataGrid Grid.Column="0" Grid.Row="1" x:Name="MovieList" AutoGenerateColumns="False" SelectionChanged="MovieListOnSelectionChanged"
                   SelectedCellsChanged="MovieListSelectedChanged" CellStyle="{StaticResource NoBorderCell}" SelectedItem="{Binding SelectedMovie}"
-                  CanUserAddRows="False" ItemsSource="{Binding MovieList}" CanUserResizeRows="False"
+                  CanUserAddRows="False" ItemsSource="{Binding Movies}" CanUserResizeRows="False"
                   AlternatingRowBackground="{StaticResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}"
                   GridLinesVisibility="None" RowHeight="20" CanUserResizeColumns="False" SelectionMode="Single"
                   SnapsToDevicePixels="True" CanUserReorderColumns="False" SelectedIndex="0">
@@ -194,7 +196,7 @@
             <TabControl Grid.Row="1">
                 <TabItem Header="{l:T General Info}">
                     <userControls:ArtAndPlot x:Name="ArtAndPlot"
-                                             SelectedMovie="{Binding SelectedMovie, UpdateSourceTrigger=PropertyChanged}"
+                                             SelectedMovie="{Binding ElementName=MovieList, Path=SelectedItem}"
                                              Background="Transparent" />
                 </TabItem>
                 <TabItem Header="{l:T Trivia and goofs}">
@@ -211,10 +213,10 @@
                             <i:InvokeCommandAction Command="{Binding SubtitlesLostFocusCommand}"/>
                         </i:EventTrigger>                        
                     </i:Interaction.Triggers>
-                    <list:ListSubtitles Subtitles="{Binding MovieSubtitles}"/>
+                    <list:ListSubtitles Subtitles="{Binding ElementName=ContentGridControl, Path=DataContext.MovieSubtitles}"/>
                 </TabItem>
                 <TabItem Header="{l:T Videos}">
-                    <list:ListVideos Videos="{Binding MovieVideos}"/>
+                    <list:ListVideos Videos="{Binding MovieVideos, Converter={StaticResource DebugConverter}}"/>
                 </TabItem>
                 <TabItem Header="{l:T Audios}">
                     <list:ListAudios Audios="{Binding MovieAudios}"/>

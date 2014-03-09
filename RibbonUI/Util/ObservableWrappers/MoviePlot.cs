@@ -53,20 +53,6 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
         }
 
-        /// <summary>Gets or sets the movie foreign key.</summary>
-        /// <value>The movie foreign key.</value>
-        public long MovieId {
-            get { return Plot.MovieId; }
-            set { Plot.MovieId = value; }
-        }
-
-        /// <summary>Gets or sets the movie this plot belongs to.</summary>
-        /// <value>Gets or sets the movie this plot belongs to.</value>
-        public IMovie Movie {
-            get { return Plot.Movie; }
-            set { Plot.Movie = value; }
-        }
-
         public IPlot Plot {
             get { return _plot; }
         }

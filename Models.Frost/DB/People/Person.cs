@@ -69,10 +69,6 @@ namespace Frost.Models.Frost.DB.People {
         /// <value>The imdb identifier of the person.</value>
         public string ImdbID { get; set; }
 
-        /// <summary>Gets movies this person acted in.</summary>
-        /// <value>The movies this person acted in.</value>
-        public IEnumerable<IMovie> MoviesAsActor { get; private set; }
-
         /// <summary>Gets or sets movies where this person was a director.</summary>
         /// <value>The movies where this person was a director.</value>
         [InverseProperty("Directors")]

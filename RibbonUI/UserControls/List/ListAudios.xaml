@@ -5,9 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
              xmlns:converters="clr-namespace:RibbonUI.Converters"
-             xmlns:files="clr-namespace:Frost.Models.Frost.DB.Files;assembly=Frost.Models.Frost"
-             mc:Ignorable="d" 
+             xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls.List"
+             xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
+             xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
+             mc:Ignorable="d" Loaded="ListAudiosOnLoaded" Name="ListAudiosControl"
              d:DesignHeight="300" d:DesignWidth="582">
+    <UserControl.DataContext>
+        <vm:ListAudiosViewModel/>
+    </UserControl.DataContext>
     <UserControl.Resources>
         <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
         <converters:TranslateEnumConverter x:Key="TranslateEnumConverter" />
@@ -22,7 +27,7 @@
             </Style>
         </ListView.Resources>
         <ListView.ItemTemplate>
-            <DataTemplate DataType="files:Audio">
+            <DataTemplate DataType="models:IAudio">
                 <DockPanel LastChildFill="False">
                     <StackPanel DockPanel.Dock="Left">
                         <Image Source="{Binding CodecId, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioCodec, FallbackValue={StaticResource DefaultSoundLogo}, TargetNullValue={StaticResource DefaultSoundLogo}}"
@@ -96,12 +101,8 @@
                     </StackPanel>
 
                     <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
-                        <Button Click="OnRemoveClicked" Style="{StaticResource TransparentBorderlessButton}">
-                            <Image Source="../../Images/remove.png" MaxHeight="32"/>
-                        </Button>
-                        <Button Click="OnEditClicked" Style="{StaticResource TransparentBorderlessButton}">
-                            <Image Source="../../Images/edit.ico" />
-                        </Button>
+                        <fmm:ImageButton Command="{Binding ElementName=ListAudiosControl, Path=DataContext.RemoveCommand}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource RemoveButton}"/>
+                        <fmm:ImageButton Command="{Binding ElementName=ListAudiosControl, Path=DataContext.EditCommand}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}" Style="{StaticResource EditButton}"/>
                     </StackPanel>
                 </DockPanel>
             </DataTemplate>

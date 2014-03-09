@@ -239,26 +239,11 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
         }
 
-        public string FormattedVideoResolution {
-            get { return _video.FormattedVideoResolution; }
-            set {
-                _video.FormattedVideoResolution = value;
-                OnPropertyChanged();
-            }
-        }
-
         /// <summary>Gets or sets the file this video is contained in.</summary>
         /// <value>The file this video is contained in.</value>
         public IFile File {
             get { return _video.File; }
             set { _video.File = value; }
-        }
-
-        /// <summary>Gets or sets the movie this video is from.</summary>
-        /// <value>The movie this video is from.</value>
-        public IMovie Movie {
-            get { return _video.Movie; }
-            set { _video.Movie = value; }
         }
 
         [NotifyPropertyChangedInvocator]

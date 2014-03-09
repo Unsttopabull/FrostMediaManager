@@ -1,30 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.ModelConfiguration;
-using System.Diagnostics.Contracts;
-using System.Linq;
 using Frost.Common.Models;
 
 namespace Frost.Models.Frost.DB {
 
     /// <summary>Represents a movie award.</summary>
-    public class Award : IAward<Movie> {
+    public class Award : IAward {
 
         public Award() {
             Movies = new HashSet<Movie>();
         }
 
         public Award(IAward award) {
-            Contract.Requires<ArgumentNullException>(award.Movies != null);
+            //Contract.Requires<ArgumentNullException>(award.Movies != null);
 
             Organization = award.Organization;
             IsNomination = award.IsNomination;
             AwardType = award.AwardType;
-
-            if (award.Movies != null) {
-                Movies = new HashSet<Movie>(award.Movies.Select(m => new Movie(m)));
-            }
         }
 
         [Key]
@@ -37,10 +30,6 @@ namespace Frost.Models.Frost.DB {
         public string AwardType { get; set; }
 
         public virtual ICollection<Movie> Movies { get; set; }
-
-        ICollection<IMovie> IAward.Movies {
-            get { return new HashSet<IMovie>(Movies); }
-        }
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>

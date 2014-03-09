@@ -87,27 +87,8 @@ namespace Frost.Common.Models {
         /// <value>The height of the video.</value>
         int? Height { get; set; }
 
-        string FormattedVideoResolution { get; set; }
-
         /// <summary>Gets or sets the file this video is contained in.</summary>
         /// <value>The file this video is contained in.</value>
         IFile File { get; set; }
-
-        /// <summary>Gets or sets the movie this video is from.</summary>
-        /// <value>The movie this video is from.</value>
-        IMovie Movie { get; set; }
     }
-
-    public interface IVideo<TMovie, TFile, TLanguage> : IVideo where TMovie : IMovie where TFile : IFile where TLanguage : ILanguage {
-        /// <summary>Gets or sets the movie this video is from.</summary>
-        /// <value>The movie this video is from.</value>
-        new TMovie Movie { get; set; }
-
-        /// <summary>Gets or sets the file this video is contained in.</summary>
-        /// <value>The file this video is contained in.</value>
-        new TFile File { get; set; }
-
-        new TLanguage Language { get; set; }
-    }
-
 }

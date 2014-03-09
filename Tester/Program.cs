@@ -80,6 +80,8 @@ namespace Frost.Tester {
 
             Console.WriteLine("Detection took: " + sw.Elapsed);
 
+            IEnumerable<MovieInfo> movieInfos = movies.Where(m => m.FileInfos.Count(fd => fd.Subtitles.Any()) > 0);
+
             using (IMovieSaver sv = new MovieSaver(movies)) {
                 sv.Save();
             }

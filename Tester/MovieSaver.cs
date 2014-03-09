@@ -7,7 +7,6 @@ using Frost.Common.Models;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.Models;
 using Frost.Models.Frost.DB;
-using Frost.Models.Frost.DB.Arts;
 using Frost.Models.Frost.DB.Files;
 using Frost.Models.Frost.DB.People;
 using File = Frost.Models.Frost.DB.Files.File;
@@ -113,7 +112,9 @@ namespace Frost.Tester {
                 Aspect = v.Aspect,
                 AspectCommercialName = v.AspectCommercialName,
                 Width = v.Width,
-                Height = v.Height
+                Height = v.Height,
+                File = file,
+                Language = GetLanguage(v.Language)
             }));
 
             mv.Audios = new HashSet<Audio>(fileInfo.Audios.ConvertAll(a => new Audio(file) {
@@ -129,14 +130,19 @@ namespace Frost.Tester {
                 SamplingRate = a.SamplingRate,
                 BitDepth = a.BitDepth,
                 CompressionMode = a.CompressionMode,
-                Duration = a.Duration
+                Duration = a.Duration,
+                Language = GetLanguage(a.Language),
+                File = file
             }));
 
             mv.Subtitles = new HashSet<Subtitle>(fileInfo.Subtitles.ConvertAll(sd => new Subtitle(file) {
                 Language = GetLanguage(sd.Language),
                 Format = sd.Format,
                 EmbededInVideo = sd.EmbededInVideo,
-                ForHearingImpaired = sd.ForHearingImpaired
+                ForHearingImpaired = sd.ForHearingImpaired,
+                MD5 = sd.MD5,
+                Encoding = sd.Encoding,
+                File = file
             }));
         }
 

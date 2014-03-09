@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Linq;
 using Frost.Common;
 using Frost.Common.Models.ISO;
-using Frost.Models.Frost.DB.Arts;
 using Frost.Models.Frost.DB.Files;
 using Frost.Models.Frost.DB.People;
 using Frost.Models.Frost.Properties;

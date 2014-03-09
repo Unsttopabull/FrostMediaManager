@@ -1,9 +1,6 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using System.Diagnostics.Contracts;
-using System.Runtime.ConstrainedExecution;
 using Frost.Common.Models;
 using Frost.Model.Xbmc.NFO;
 
@@ -11,7 +8,7 @@ namespace Frost.Models.Frost.DB {
 
     /// <summary>Represents a movie certification/restriction in a certain country.</summary>
     [Table("Certifications")]
-    public class Certification : CertificationBase, ICertification<Movie, Country> {
+    public class Certification : CertificationBase, ICertification {
         /// <summary>Initializes a new instance of the <see cref="Certification"/> class.</summary>
         public Certification() {
         }
@@ -32,13 +29,9 @@ namespace Frost.Models.Frost.DB {
         }
 
         public Certification(ICertification certification) {
-            Contract.Requires<ArgumentNullException>(certification != null);
+            //Contract.Requires<ArgumentNullException>(certification != null);
 
             Rating = certification.Rating;
-            if (certification.Movie != null) {
-                Movie = new Movie(certification.Movie);
-            }
-
             if (certification.Country != null) {
                 Country = new Country(certification.Country);
             }
@@ -66,16 +59,6 @@ namespace Frost.Models.Frost.DB {
         /// <summary>Gets or sets the movie this certification applies to.</summary>
         /// <value>The movie this certification applies to.</value>
         public virtual Movie Movie { get; set; }
-
-        IMovie ICertification.Movie {
-            get { return Movie; }
-            set {
-                if (value == null) {
-                    Movie = null;
-                }
-                Movie = new Movie(value);
-            }
-        }
 
         /// <summary>Gets or sets the coutry this certification applies to.</summary>
         /// <value>The coutry this certification applies to.</value>

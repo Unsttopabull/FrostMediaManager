@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using Frost.Common.Models;
@@ -11,7 +10,7 @@ using Frost.Common.Models;
 namespace Frost.Models.Frost.DB.Files {
 
     /// <summary>Represents an information about a file.</summary>
-    public class File : IFile<Audio, Video, Subtitle> {
+    public class File : IFile/*, IEquatable<IFile> */{
 
         /// <summary>Initializes a new instance of the <see cref="File"/> class.</summary>
         public File() {
@@ -48,9 +47,9 @@ namespace Frost.Models.Frost.DB.Files {
         }
 
         public File(IFile value) {
-            Contract.Requires<ArgumentNullException>(value.AudioDetails != null);
-            Contract.Requires<ArgumentNullException>(value.VideoDetails != null);
-            Contract.Requires<ArgumentNullException>(value.Subtitles != null);
+            //Contract.Requires<ArgumentNullException>(value.AudioDetails != null);
+            //Contract.Requires<ArgumentNullException>(value.VideoDetails != null);
+            //Contract.Requires<ArgumentNullException>(value.Subtitles != null);
 
             Extension = value.Extension;
             Name = value.Name;
@@ -151,6 +150,33 @@ namespace Frost.Models.Frost.DB.Files {
             get { return new HashSet<ISubtitle>(Subtitles); }
         }
         #endregion
+
+        /*
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(IFile other) {
+            if (other == null) {
+                return false;
+            }
+
+            if (ReferenceEquals(other, this)) {
+                return true;
+            }
+
+            if (other.Id != 0 && other.Id == Id) {
+                return true;
+            }
+
+            if (other.NameWithExtension == NameWithExtension &&
+                other.FolderPath == FolderPath &&
+                other.Size == Size &&
+                other.DateAdded == DateAdded) {
+
+                return true;
+            }
+            return false;
+        }*/
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
