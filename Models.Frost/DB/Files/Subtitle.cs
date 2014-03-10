@@ -152,38 +152,38 @@ namespace Frost.Models.Frost.DB.Files {
             return new Subtitle(null, subtitle.LongLanguage ?? subtitle.Language, null);
         }
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(ISubtitle other) {
-            if (other == null) {
-                return false;
-            }
+        ///// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        ///// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        ///// <param name="other">An object to compare with this object.</param>
+        //public bool Equals(ISubtitle other) {
+        //    if (other == null) {
+        //        return false;
+        //    }
 
-            if (ReferenceEquals(other, this)) {
-                return true;
-            }
+        //    if (ReferenceEquals(other, this)) {
+        //        return true;
+        //    }
 
-            if (other.Id != 0 && other.Id == Id) {
-                return true;
-            }
+        //    if (other.Id != 0 && other.Id == Id) {
+        //        return true;
+        //    }
 
-            if(other.MD5 == MD5 &&
-               other.OpenSubtitlesId == OpenSubtitlesId &&
-               other.PodnapisiId == PodnapisiId &&
-               other.EmbededInVideo == EmbededInVideo &&
-               other.ForHearingImpaired == ForHearingImpaired &&
-               other.Encoding == Encoding &&
-               other.Format == Format
-            )
-            {
-                if (other.File != null && File != null) {
-                    return other.File.Equals(File);
-                }
-                return true;
-            }
-            return false;
-        }
+        //    if(other.MD5 == MD5 &&
+        //       other.OpenSubtitlesId == OpenSubtitlesId &&
+        //       other.PodnapisiId == PodnapisiId &&
+        //       other.EmbededInVideo == EmbededInVideo &&
+        //       other.ForHearingImpaired == ForHearingImpaired &&
+        //       other.Encoding == Encoding &&
+        //       other.Format == Format
+        //    )
+        //    {
+        //        if (other.File != null && File != null) {
+        //            return other.File.Equals(File);
+        //        }
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
@@ -202,12 +202,6 @@ namespace Frost.Models.Frost.DB.Files {
             }
 
             return sb.ToString();
-        }
-
-        /// <summary>Creates a new object that is a copy of the current instance.</summary>
-        /// <returns>A new object that is a copy of this instance.</returns>
-        public object Clone() {
-            return MemberwiseClone();
         }
 
         internal class Configuration : EntityTypeConfiguration<Subtitle> {

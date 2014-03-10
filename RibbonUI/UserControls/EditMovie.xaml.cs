@@ -1,23 +1,24 @@
-﻿using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using Frost.Common;
+using Frost.Common.Models;
 using Frost.GettextMarkupExtension;
-using Frost.Models.Frost.DB;
+using GalaSoft.MvvmLight.Ioc;
 using RibbonUI.ViewModels.UserControls;
 
 namespace RibbonUI.UserControls {
 
     /// <summary>Interaction logic for EditMovie.xaml</summary>
     public partial class EditMovie : UserControl {
-        public static readonly DependencyProperty SelectedMovieProperty = DependencyProperty.Register("SelectedMovie", typeof(Movie), typeof(EditMovie), new PropertyMetadata(default(Movie), OnSelectedMovieChanged));
+        public static readonly DependencyProperty SelectedMovieProperty = DependencyProperty.Register("SelectedMovie", typeof(IMovie), typeof(EditMovie), new PropertyMetadata(default(IMovie), OnSelectedMovieChanged));
 
         public EditMovie() {
             InitializeComponent();
+            DataContext = SimpleIoc.Default.GetInstance<EditMovieViewModel>();
         }
 
-        public Movie SelectedMovie {
-            get { return (Movie) GetValue(SelectedMovieProperty); }
+        public IMovie SelectedMovie {
+            get { return (IMovie) GetValue(SelectedMovieProperty); }
             set { SetValue(SelectedMovieProperty, value); }
         }
 
@@ -26,7 +27,7 @@ namespace RibbonUI.UserControls {
         }
 
         private static void OnSelectedMovieChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            ((EditMovie) d).ViewModel.SelectedMovie = (Movie) e.NewValue;
+            ((EditMovie) d).ViewModel.SelectedMovie = (IMovie) e.NewValue;
         }
 
          private void OnControlLoaded(object sender, RoutedEventArgs e) {
@@ -39,8 +40,8 @@ namespace RibbonUI.UserControls {
                 return;
             }
 
-            Genre g = (Genre) cb.DataContext;
-            if (ViewModel.SelectedMovie.Genres.Contains(g)) {
+            IGenre g = (IGenre) cb.DataContext;
+            if (ViewModel.Genres.Contains(g)) {
                 cb.IsChecked = true;
             }
         }

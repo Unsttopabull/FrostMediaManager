@@ -24,7 +24,7 @@ namespace Frost.Tester {
         private readonly IEnumerable<MovieInfo> _infos;
 
 
-        private readonly MovieVoContainer _mvc;
+        private readonly FrostDbContainer _mvc;
 
         public MovieSaver(IEnumerable<MovieInfo> movies) {
             _infos = movies;
@@ -38,7 +38,7 @@ namespace Frost.Tester {
             _people = new Dictionary<string, Person>(StringComparer.InvariantCultureIgnoreCase);
 
             //_mvc = new MovieVoContainer(true, "movieVo.db3");
-            _mvc = new MovieVoContainer(true);
+            _mvc = new FrostDbContainer(true);
 
         }
 

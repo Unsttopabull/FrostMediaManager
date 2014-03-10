@@ -4,6 +4,10 @@ namespace Frost.Common.Util.ISO {
     /// <summary>Represents an information about ISO 639 language codes and its english name.</summary>
     public class ISOLanguageCode : ISOCode {
 
+        public ISOLanguageCode() {
+            
+        }
+
         /// <summary>Initializes a new instance of the <see cref="ISOCountryCode" /> class.</summary>
         /// <param name="englishName">The ISO 3166-1 english language name.</param>
         /// <param name="alpha2">The ISO 639-1 Two letter code.</param>

@@ -21,7 +21,7 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="SelectedCountry" Grid.Row="0" Grid.ColumnSpan="2" ItemsSource="{Binding Countries.View}" Margin="5,5,5,0" SelectionMode="Extended">
+        <ListBox x:Name="SelectedCountry" Grid.Row="0" Grid.ColumnSpan="2" ItemsSource="{Binding Countries}" Margin="5,5,5,0" SelectionMode="Extended">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:ICountry}">
                     <StackPanel Orientation="Horizontal">

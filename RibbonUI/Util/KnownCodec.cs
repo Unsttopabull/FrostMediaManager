@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
-using Frost.Common.Annotations;
+using Frost.Common.Properties;
 
 namespace RibbonUI.Util {
     public class KnownCodec : INotifyPropertyChanged {

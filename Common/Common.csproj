@@ -94,6 +94,8 @@
     <Compile Include="IModelRegistrator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="IMovieSaver.cs" />
+    <Compile Include="IMoviesDataService.cs" />
     <Compile Include="ModelCreator.cs" />
     <Compile Include="Models\CertificationBase.cs" />
     <Compile Include="Models\IActor.cs" />

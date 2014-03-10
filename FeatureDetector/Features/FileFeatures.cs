@@ -20,7 +20,6 @@ namespace Frost.DetectFeatures {
         private readonly Dictionary<string, FileNameInfo> _fnInfos;
         private readonly MediaInfoList _mf;
         private readonly NFOPriority _nfoPriority;
-        //private readonly MovieVoContainer _mvc;
         private readonly FileDetectionInfo[] _files;
         private bool _error;
 
@@ -313,6 +312,10 @@ namespace Frost.DetectFeatures {
             GetGeneralVideoInfo();
 
             DetectMovieType();
+
+            bool b = Movie.FileInfos.All(f => f.Audios.Count == 0);
+            bool b2 = Movie.FileInfos.All(f => f.Videos.Count == 0);
+            bool iso = Movie.FileInfos.Any(f => f.Extension.Equals("iso", StringComparison.OrdinalIgnoreCase));
 
             //return Save();
             return true;

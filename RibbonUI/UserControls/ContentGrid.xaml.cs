@@ -9,9 +9,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Shell;
-using Frost.Common.Annotations;
 using Frost.Common.Models;
+using Frost.Common.Properties;
 using Frost.GettextMarkupExtension;
+using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Expression.Interactivity.Core;
 using RibbonUI.ViewModels.UserControls;
 
@@ -26,13 +27,15 @@ namespace RibbonUI.UserControls {
             get { return (double) GetValue(MinRequiredWidthProperty); }
             set { SetValue(MinRequiredWidthProperty, value); }
         }
-
+        
         public IMovie SelectedMovie {
             get { return MovieList.SelectedItem as IMovie; }
         }
 
         public ContentGrid() {
             InitializeComponent();
+            DataContext = SimpleIoc.Default.GetInstance<ContentGridViewModel>();
+
             MinRequiredWidth = MovieList.RenderSize.Width + MovieFlags.RenderSize.Width;
         }
 

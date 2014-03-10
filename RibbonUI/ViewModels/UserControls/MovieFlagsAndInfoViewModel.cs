@@ -3,8 +3,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using Frost.Common.Annotations;
 using Frost.Common.Models;
+using Frost.Common.Properties;
 using Frost.Models.Frost.DB;
 using Frost.XamlControls.Commands;
 using RibbonUI.UserControls;
@@ -13,16 +13,17 @@ namespace RibbonUI.ViewModels.UserControls {
 
     public class MovieFlagsAndInfoViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
-        private Movie _selectedMovie;
+        private IMovie _selectedMovie;
 
         public MovieFlagsAndInfoViewModel() {
-            OnSizeChangedCommand =
-                new RelayCommand<MovieFlagsAndInfo>(flags => { flags.MinRequiredWidth = flags.MovieFlags.RenderSize.Width + flags.MovieInfo.RenderSize.Width; });
+            OnSizeChangedCommand = new RelayCommand<MovieFlagsAndInfo>(
+                flags => { flags.MinRequiredWidth = flags.MovieFlags.RenderSize.Width + flags.MovieInfo.RenderSize.Width; }
+            );
         }
 
         public ICommand OnSizeChangedCommand { get; private set; }
 
-        public Movie SelectedMovie {
+        public IMovie SelectedMovie {
             get { return _selectedMovie; }
             set {
                 if (Equals(value, _selectedMovie)) {
@@ -57,8 +58,8 @@ namespace RibbonUI.ViewModels.UserControls {
                 }
 
                 try {
-                    if (SelectedMovie.Studios.Count > 0) {
-                        Studio studio = SelectedMovie.Studios.FirstOrDefault();
+                    if (SelectedMovie.Studios.Any()) {
+                        IStudio studio = SelectedMovie.Studios.FirstOrDefault();
                         if (studio != null) {
                             return studio.Name;
                         }

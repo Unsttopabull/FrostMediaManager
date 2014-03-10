@@ -113,6 +113,7 @@
     <Compile Include="Converters\ISO639Alpha3ToISOLanguageCodeConverter.cs" />
     <Compile Include="Converters\TranslateEnumConverter.cs" />
     <Compile Include="Messages\Plot\RemovePlotMessage.cs" />
+    <Compile Include="Messages\SelectRibbonMessage.cs" />
     <Compile Include="Messages\Subtitles\RemoveSubtitleMessage.cs" />
     <Compile Include="UserControls\ArtAndPlot.xaml.cs">
       <DependentUpon>ArtAndPlot.xaml</DependentUpon>
@@ -164,6 +165,7 @@
     <Compile Include="Messages\People\AddDirectorMessage.cs" />
     <Compile Include="Messages\Genre\AddGenreMessage.cs" />
     <Compile Include="Messages\Studio\AddStudioMessage.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\UserControls\ArtAndPlotViewModel.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -179,6 +181,7 @@
     <Compile Include="Messages\Studio\RemoveStudioMessage.cs" />
     <Compile Include="Messages\People\RemoveActorMessage.cs" />
     <Compile Include="Messages\Genre\RemoveGenreMessage.cs" />
+    <Compile Include="ViewModels\UserControls\RibbonViewModel.cs" />
     <Compile Include="ViewModels\UserControls\Settings\FeatureDetectorSettingsViewModel.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -193,11 +196,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Util\Extensions.cs" />
-    <Compile Include="Util\IMovieSaver.cs" />
     <Compile Include="Util\KnownCodec.cs" />
-    <Compile Include="Util\MovieSaver.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Util\ObservableWrappers\MoviePlot.cs">
       <SubType>Code</SubType>
     </Compile>

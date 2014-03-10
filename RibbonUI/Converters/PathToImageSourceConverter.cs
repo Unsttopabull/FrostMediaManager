@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 using Frost.Common;
+using Frost.Common.Models;
 using Frost.DetectFeatures;
 using Frost.Models.Frost.DB.Files;
 using File = System.IO.File;
@@ -53,7 +54,7 @@ namespace RibbonUI.Converters {
                         filePath = "Images/FlagsE/vres_" + value + ".png";
                         break;
                     case PathType.VideoResolutionV:
-                        Video v = (Video) value;
+                        IVideo v = (IVideo) value;
                         if (!v.Resolution.HasValue) {
                             return null;
                         }

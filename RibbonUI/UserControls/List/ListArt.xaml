@@ -7,10 +7,8 @@
              xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls.List"
              xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
-             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="622">
-    <UserControl.DataContext>
-        <vm:ListArtViewModel/>
-    </UserControl.DataContext>
+             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="622"
+             d:DataContext="{d:DesignInstance vm:ListArtViewModel}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="{Binding ElementName=ArtList, Path=ColumnHeaderHeight}" />

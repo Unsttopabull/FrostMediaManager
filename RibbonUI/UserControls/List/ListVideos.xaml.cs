@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using Frost.Common.Models;
+using GalaSoft.MvvmLight.Ioc;
 using RibbonUI.ViewModels.UserControls.List;
 
 namespace RibbonUI.UserControls.List {
@@ -12,6 +13,7 @@ namespace RibbonUI.UserControls.List {
 
         public ListVideos() {
             InitializeComponent();
+            DataContext = SimpleIoc.Default.GetInstance<ListVideosViewModel>();
         }
 
         private static void OnVideoListChanged(DependencyObject d, DependencyPropertyChangedEventArgs args) {

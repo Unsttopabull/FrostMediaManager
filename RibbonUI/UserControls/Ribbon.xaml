@@ -3,10 +3,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:db="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
-    x:Name="UserControl" x:Class="RibbonUI.UserControls.Ribbon"
-    mc:Ignorable="d" d:DataContext="{d:DesignInstance db:Movie}"
-    d:DesignHeight="140" d:DesignWidth="500">
+    xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    x:Name="RibbonControl" x:Class="RibbonUI.UserControls.Ribbon"
+    mc:Ignorable="d" d:DesignHeight="140" d:DesignWidth="500">
+    <UserControl.DataContext>
+        <vm:RibbonViewModel/>
+    </UserControl.DataContext>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding OnRibbonLoadedCommand}" CommandParameter="{Binding ElementName=RibbonControl}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Ribbon x:Name="RibbonHeader" Title="Frost Media Manager" Background="#FFDFE9F5">
         <Ribbon.ContextualTabGroups>
             <RibbonContextualTabGroup Visibility="Collapsed" Background="Red" x:Name="ContextSubtitle"
@@ -43,17 +51,17 @@
                 <RibbonApplicationMenu.AuxiliaryPaneContent>
                     <RibbonGallery />
                 </RibbonApplicationMenu.AuxiliaryPaneContent>
-                <RibbonApplicationMenuItem Header="Options" ImageSource="../Images/options.png" Click="MenuItemOptionsOnClick"/>
+                <RibbonApplicationMenuItem Header="Options" ImageSource="../Images/options.png" Command="{Binding OptionsCommand}"/>
             </RibbonApplicationMenu>
         </Ribbon.ApplicationMenu>
 
         <!-- Ribbon Tab #2: -->
 
         <!-- Ribbon Tab #1: Home -->
-        <RibbonTab x:Name="Search" Header="Search" Margin="0,1,0,-1">
+        <RibbonTab x:Name="Search" IsSelected="{Binding IsSearchTabSelected}" Header="Search" Margin="0,1,0,-1">
             <!-- Home  group-->
             <RibbonGroup x:Name="ClipboardGroup" Header="Home">
-                <RibbonButton LargeImageSource="../Images/search.ico" Label="Search" Click="SearchClick" />
+                <RibbonButton LargeImageSource="../Images/search.ico" Label="Search" Command="{Binding SearchCommand}" />
                 <RibbonButton SmallImageSource="../Images/cut.png" Label="Cut" />
                 <RibbonButton SmallImageSource="../Images/copy.png" Label="Copy" />
                 <RibbonButton SmallImageSource="../Images/format_painter.png" Label="Format Painter" />
@@ -61,15 +69,15 @@
             <RibbonGroup x:Name="Employee" Header="Employee And Payroll">
                 <RibbonButton x:Name="OpenInFolder" x:FieldModifier="private"
                               LargeImageSource="../Images/movieFolder.ico" Label="Open movie folder"
-                              ToolTip="{Binding DirectoryPath}"
-                              Click="OpenInFolder_Click" />
+                              ToolTip="{Binding SelectedMovie.DirectoryPath}"
+                              Command="{Binding OpenMovieInFolderCommand}" />
                 <RibbonButton SmallImageSource="../Images/save.png" Label="Save" />
                 <RibbonButton SmallImageSource="../Images/add.png" Label="Add" />
             </RibbonGroup>
         </RibbonTab>
 
         <!-- Ribbon Tab #3: -->
-        <RibbonTab x:Name="Detect" Header="Insert">
+        <RibbonTab x:Name="Detect" IsSelected="{Binding IsDetectTabSelected}" Header="Insert">
             <RibbonGroup x:Name="Clippy" Header="Home" Background="#00000000" Height="86" Margin="0">
                 <RibbonMenuButton LargeImageSource="../Images/paste.png" Label="Paste">
                     <RibbonMenuItem ImageSource="../Images/paste.png" Header="Keep Text Only" />
@@ -80,8 +88,8 @@
                 <RibbonButton SmallImageSource="../Images/format_painter.png" Label="Format Painter" />
             </RibbonGroup>
         </RibbonTab>
-        <RibbonTab x:Name="Export" Header="PageLayout" />
-        <RibbonTab x:Name="SubtitlesTab" Header="Subtitles" ContextualTabGroupHeader="Download &amp; Update">
+        <RibbonTab x:Name="Export" IsSelected="{Binding IsExportTabSelected}" Header="PageLayout" />
+        <RibbonTab x:Name="SubtitlesTab" IsSelected="{Binding IsSubtitlesTabSelected}" Header="Subtitles" ContextualTabGroupHeader="Download &amp; Update">
             <RibbonGroup Header="Update &amp; Download">
                 <RibbonMenuButton Label="Download" LargeImageSource="../Images/add.png">
                     <RibbonMenuItem ImageSource="../Images/podnapisiNet.ico" Header="Download from Podnapisi.NET" />

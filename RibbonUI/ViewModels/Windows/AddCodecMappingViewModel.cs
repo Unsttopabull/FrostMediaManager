@@ -9,7 +9,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Frost.Common.Annotations;
+using Frost.Common.Properties;
 using Frost.DetectFeatures;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
@@ -32,7 +32,12 @@ namespace RibbonUI.ViewModels.Windows {
             AddCommand = new RelayCommand<AddCodecMapping>(acm => {
                 acm.DialogResult = true;
                 acm.Close();
-            }, acm => SelectedCodec != null && !IsError && !string.IsNullOrEmpty(SelectedCodec.CodecId) && !string.IsNullOrEmpty(SelectedCodec.Mapping) && !string.IsNullOrEmpty(SelectedCodec.ImagePath));
+              }, 
+                acm => SelectedCodec != null && !IsError &&
+                       !string.IsNullOrEmpty(SelectedCodec.CodecId) &&
+                       !string.IsNullOrEmpty(SelectedCodec.Mapping) &&
+                       !string.IsNullOrEmpty(SelectedCodec.ImagePath)
+            );
 
             CancelCommand = new RelayCommand<Window>(w => {
                 w.DialogResult = false;

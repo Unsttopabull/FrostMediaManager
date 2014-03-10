@@ -12,12 +12,11 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:glob="clr-namespace:System.Globalization;assembly=mscorlib"
-        xmlns:files="clr-namespace:Frost.Models.Frost.DB.Files;assembly=Frost.Models.Frost"
         xmlns:movieVo="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
         xmlns:vm="clr-namespace:RibbonUI.ViewModels.Windows"
-        mc:Ignorable="d" Name="EditVideoWindow"
-        Title="{l:T Edit video}" Height="443" Width="570" WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
-        d:DataContext="{d:DesignInstance files:Video}">
+        xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
+        mc:Ignorable="d" Name="EditVideoWindow" Height="443" Width="570"
+        Title="{l:T Edit video}" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
     <Window.DataContext>
         <vm:EditVideoViewModel/>
     </Window.DataContext>
@@ -248,7 +247,7 @@
             </StackPanel>
             <ComboBox x:Name="SelectedLanguage" SelectedItem="{Binding Language}">
                 <ComboBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type movieVo:Language}">
+                    <DataTemplate DataType="{x:Type models:ILanguage}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{Binding ISO639.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, TargetNullValue={StaticResource UnknownCountryOrLanguage}, FallbackValue={StaticResource UnknownCountryOrLanguage}}"
                                    MaxHeight="32" MaxWidth="32" />

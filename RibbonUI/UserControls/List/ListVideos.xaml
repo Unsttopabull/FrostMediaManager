@@ -5,13 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"             
              xmlns:converters="clr-namespace:RibbonUI.Converters"
-             xmlns:files="clr-namespace:Frost.Models.Frost.DB.Files;assembly=Frost.Models.Frost"
              xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls.List"
+             xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
              mc:Ignorable="d" Loaded="OnWindowLoaded" Name="ListVideosControl"
-             d:DesignHeight="300" d:DesignWidth="580">
-    <UserControl.DataContext>
-        <vm:ListVideosViewModel/>
-    </UserControl.DataContext>
+             d:DesignHeight="300" d:DesignWidth="580" d:DataContext="{d:DesignInstance vm:ListVideosViewModel}">
     <UserControl.Resources>
         <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
         <converters:TranslateEnumConverter x:Key="TranslateEnumConverter"/>
@@ -26,7 +23,7 @@
             </Style>
         </ListView.Resources>
         <ListView.ItemTemplate>
-            <DataTemplate DataType="files:Video">
+            <DataTemplate DataType="models:IVideo">
                 <DockPanel LastChildFill="False">
                     <StackPanel DockPanel.Dock="Left">
                         <Image

@@ -9,6 +9,7 @@ using System.Diagnostics;
 using Frost.DetectFeatures.Models;
 using Frost.Models.Frost.DB;
 using Frost.Models.Frost.DB.Files;
+using Newtonsoft.Json;
 using FileVo = Frost.Models.Frost.DB.Files.File;
 using CoretisMovie = Frost.Models.Xtreamer.PHP.Coretis_VO_Movie;
 
@@ -38,7 +39,7 @@ namespace Frost.Tester {
 
             //TestXjbDbParser();
             TestMediaSearcher();
-            TestIntefaces();
+            //TestIntefaces();
 
             //TestFileFeatures();
             //TestGremoVKino();
@@ -70,19 +71,37 @@ namespace Frost.Tester {
 
             Stopwatch sw = Stopwatch.StartNew();
 
-            FeatureDetector ms = new FeatureDetector(@"E:\Torrenti\FILMI", @"F:\Torrenti\FILMI");
-            ms.PropertyChanged += WriteCount;
+            IEnumerable<MovieInfo> movies;
+            //if (!System.IO.File.Exists("detectedMovies.js")) {
+                FeatureDetector ms = new FeatureDetector(@"E:\Torrenti\FILMI", @"F:\Torrenti\FILMI");
+                ms.PropertyChanged += WriteCount;
 
-            IEnumerable<MovieInfo> movies = ms.Search();
-            ms.PropertyChanged -= WriteCount;
+                movies = ms.Search();
+                ms.PropertyChanged -= WriteCount;
 
-            sw.Stop();
+                sw.Stop();
 
-            Console.WriteLine("Detection took: " + sw.Elapsed);
+                Console.WriteLine("Detection took: " + sw.Elapsed);
 
-            IEnumerable<MovieInfo> movieInfos = movies.Where(m => m.FileInfos.Count(fd => fd.Subtitles.Any()) > 0);
+                //JsonSerializer jser = new JsonSerializer();
 
-            using (IMovieSaver sv = new MovieSaver(movies)) {
+                //using (JsonWriter jw = new JsonTextWriter(System.IO.File.CreateText("detectedMovies.js"))) {
+                //    jser.Serialize(jw, movies);
+                //}
+            //}
+            //else {
+            //    JsonSerializer jser = new JsonSerializer();
+
+            //    using (JsonReader jw = new JsonTextReader(System.IO.File.OpenText("detectedMovies.js"))) {
+            //        movies = jser.Deserialize<IEnumerable<MovieInfo>>(jw);
+            //    }
+            //}
+
+            IEnumerable<MovieInfo> videoInfos = movies.Where(m => m.FileInfos.All(f => f.Videos.Count == 0 && !f.Extension.Equals("iso", StringComparison.OrdinalIgnoreCase)));
+            IEnumerable<MovieInfo> subtitlesInfos = movies.Where(m => m.FileInfos.All(f => f.Subtitles.Count == 0));
+            IEnumerable<MovieInfo> audioInfos = movies.Where(m => m.FileInfos.All(f => f.Audios.Count == 0 && !f.Extension.Equals("iso", StringComparison.OrdinalIgnoreCase)));
+
+            using (Frost.Models.Frost.MovieSaver sv = new Models.Frost.MovieSaver(movies)) {
                 sv.Save();
             }
 

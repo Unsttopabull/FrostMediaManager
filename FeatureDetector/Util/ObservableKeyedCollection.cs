@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Frost.Common.Annotations;
+using Frost.Common.Properties;
 
 namespace Frost.DetectFeatures.Util {
 

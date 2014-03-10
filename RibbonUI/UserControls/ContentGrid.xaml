@@ -3,20 +3,18 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:userControls="clr-namespace:RibbonUI.UserControls"
-    xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
-    xmlns:list="clr-namespace:RibbonUI.UserControls.List"
+    xmlns:l="http://www.frostmediamanager.com/xaml/translation"
     xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:converters="clr-namespace:RibbonUI.Converters"
+    xmlns:userControls="clr-namespace:RibbonUI.UserControls"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:list="clr-namespace:RibbonUI.UserControls.List"
     x:Class="RibbonUI.UserControls.ContentGrid"
     x:Name="ContentGridControl"
     mc:Ignorable="d" Loaded="OnWindowLoaded"
-    d:DesignHeight="700" d:DesignWidth="1396">
+    d:DesignHeight="700" d:DesignWidth="1396"
+    d:DataContext="{d:DesignInstance vm:ContentGridViewModel}">
     <!--MinWidth="{Binding MinRequiredWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"-->
-    <UserControl.DataContext>
-        <vm:ContentGridViewModel/>
-    </UserControl.DataContext>
     <UserControl.Resources>
         <converters:DebugConverter x:Key="DebugConverter" />
         <Style x:Key="BooleanImage" TargetType="{x:Type Image}">
@@ -216,16 +214,16 @@
                     <list:ListSubtitles Subtitles="{Binding ElementName=ContentGridControl, Path=DataContext.MovieSubtitles}"/>
                 </TabItem>
                 <TabItem Header="{l:T Videos}">
-                    <list:ListVideos Videos="{Binding MovieVideos, Converter={StaticResource DebugConverter}}"/>
+                    <list:ListVideos Videos="{Binding ElementName=ContentGridControl, Path=DataContext.MovieVideos}"/>
                 </TabItem>
                 <TabItem Header="{l:T Audios}">
-                    <list:ListAudios Audios="{Binding MovieAudios}"/>
+                    <list:ListAudios Audios="{Binding ElementName=ContentGridControl, Path=DataContext.MovieAudios}"/>
                 </TabItem>
                 <TabItem Header="{l:T Promotional videos}" >
                     
                 </TabItem>
                 <TabItem Header="{l:T Art}">
-                    <list:ListArt Art="{Binding MovieArt}"/>
+                    <list:ListArt Art="{Binding ElementName=ContentGridControl, Path=DataContext.MovieArt}"/>
                 </TabItem>
             </TabControl>
         </Grid>

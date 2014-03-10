@@ -7,6 +7,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Frost.Common.Models;
 using Frost.Models.Frost.DB;
 
 namespace RibbonUI.Windows {
@@ -32,7 +33,7 @@ namespace RibbonUI.Windows {
         private void CheckStudioExists(EventPattern<TextChangedEventArgs> args) {
             string newStudio = NewStudioName.Text;
             if (StudiosList.ItemsSource
-                           .Cast<Studio>()
+                           .Cast<IStudio>()
                            .Any(studio => studio.Name.Equals(newStudio, StringComparison.CurrentCultureIgnoreCase))
                 ) {
                 Error.Visibility = Visibility.Visible;
@@ -62,7 +63,7 @@ namespace RibbonUI.Windows {
         }
 
         private bool Filter(object obj) {
-            Studio p = (Studio) obj;
+            IStudio p = (IStudio) obj;
 
             return p.Name.IndexOf(SearchBox.Text, StringComparison.CurrentCultureIgnoreCase) >= 0;
         }

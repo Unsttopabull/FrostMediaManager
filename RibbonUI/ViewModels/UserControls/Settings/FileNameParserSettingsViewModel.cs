@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using Frost.Common.Annotations;
+using Frost.Common.Properties;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
@@ -108,7 +108,6 @@ namespace RibbonUI.ViewModels.UserControls.Settings {
 
         #endregion
 
-
         #region IDataErrorInfo
 
         /// <summary>Gets the error message for the property with the given name.</summary>
@@ -140,7 +139,6 @@ namespace RibbonUI.ViewModels.UserControls.Settings {
         public string Error { get; private set; }
 
         #endregion
-
 
         private bool ValidateLanguageMapping() {
             string str;

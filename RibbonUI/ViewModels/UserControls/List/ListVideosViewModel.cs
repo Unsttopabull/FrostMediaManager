@@ -3,18 +3,21 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
-using Frost.Common.Annotations;
+using Frost.Common;
 using Frost.Common.Models;
+using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 using RibbonUI.Windows;
 
 namespace RibbonUI.ViewModels.UserControls.List {
     class ListVideosViewModel : INotifyPropertyChanged {
+        private readonly IMoviesDataService _service;
         public event PropertyChangedEventHandler PropertyChanged;
         private ICollectionView _collectionView;
         private ObservableCollection<IVideo> _videos;
 
-        public ListVideosViewModel() {
+        public ListVideosViewModel(IMoviesDataService service) {
+            _service = service;
             EditVideoCommand = new RelayCommand<IVideo>(OnEditClicked, v => v != null);
             RemoveVideoCommand = new RelayCommand<IVideo>(OnRemoveClicked, v => v != null);
         }
@@ -49,7 +52,7 @@ namespace RibbonUI.ViewModels.UserControls.List {
                 Owner = ParentWindow,
                 Video = selectedVideo,
                 SelectedLanguage = {
-                    ItemsSource = ((CollectionViewSource)ParentWindow.Resources["LanguagesSource"]).View
+                    ItemsSource = _service.Languages
                 }
             };
 

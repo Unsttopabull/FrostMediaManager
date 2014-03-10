@@ -3,18 +3,22 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
-using Frost.Common.Annotations;
+using Frost.Common;
 using Frost.Common.Models;
+using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 using RibbonUI.Windows;
 
 namespace RibbonUI.ViewModels.UserControls.List {
-    class ListAudiosViewModel : INotifyPropertyChanged{
+    class ListAudiosViewModel : INotifyPropertyChanged {
         private ObservableCollection<IAudio> _audios;
         public event PropertyChangedEventHandler PropertyChanged;
         private ICollectionView _collectionView;
+        private readonly IMoviesDataService _service;
 
-        public ListAudiosViewModel() {
+        public ListAudiosViewModel(IMoviesDataService service) {
+            _service = service;
+
             EditCommand = new RelayCommand<IAudio>(OnEditClicked, a => a != null);
             RemoveCommand = new RelayCommand<IAudio>(OnRemoveClicked, a => a != null);
         }
@@ -53,7 +57,7 @@ namespace RibbonUI.ViewModels.UserControls.List {
                 Owner = ParentWindow,
                 SelectedAudio = audio,
                 SelectedLanguage = {
-                    ItemsSource = ((CollectionViewSource) ParentWindow.Resources["LanguagesSource"]).View
+                    ItemsSource = _service.Languages
                 }
             };
 

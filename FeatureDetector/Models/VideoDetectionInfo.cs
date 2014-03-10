@@ -5,6 +5,10 @@ namespace Frost.DetectFeatures.Models {
 
     public class VideoDetectionInfo {
 
+        public VideoDetectionInfo() {
+            
+        }
+
         public string MovieHash { get; set; }
 
         /// <summary>With or from what this video was made from</summary>

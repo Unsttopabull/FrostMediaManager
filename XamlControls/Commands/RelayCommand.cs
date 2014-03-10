@@ -24,7 +24,7 @@ namespace Frost.XamlControls.Commands {
 
         [DebuggerStepThrough]
         public bool CanExecute(object parameter) {
-            return _canExecute == null || _canExecute((T) parameter);
+            return _canExecute == null || (parameter is T && _canExecute((T) parameter));
         }
 
         public event EventHandler CanExecuteChanged {

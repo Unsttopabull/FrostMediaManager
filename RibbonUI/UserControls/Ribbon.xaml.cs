@@ -1,46 +1,25 @@
-﻿using System.Diagnostics;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using Frost.Models.Frost.DB;
-using RibbonUI.Windows;
+using Frost.Common.Models;
+using RibbonUI.ViewModels.UserControls;
 
 namespace RibbonUI.UserControls {
 
     /// <summary>Interaction logic for Ribbon.xaml</summary>
     public partial class Ribbon : UserControl {
+        public static readonly DependencyProperty MovieProperty = DependencyProperty.Register("Movie", typeof(IMovie), typeof(Ribbon), new PropertyMetadata(default(IMovie), OnMovieChanged));
 
         public Ribbon() {
             InitializeComponent();
         }
 
-        private void OpenInFolder_Click(object sender, RoutedEventArgs e) {
-            Movie movie = DataContext as Movie;
-
-            if (movie != null) {
-                string directory = movie.DirectoryPath;
-                if (!string.IsNullOrEmpty(directory)) {
-                    Process.Start(directory);
-                }
-            }
+        public IMovie Movie {
+            get { return (IMovie) GetValue(MovieProperty); }
+            set { SetValue(MovieProperty, value); }
         }
 
-        private void SearchClick(object sender, RoutedEventArgs e) {
-            //using (MovieVoContainer mvc = new MovieVoContainer(true, "movieVo.db3")) {
-            //    int count = mvc.Movies.Count();
-            //}
-
-            //TestWindow tw = new TestWindow();
-            //Debug.Listeners.Add(tw.Listener);
-
-            //tw.Owner = Window.GetWindow(this);
-            //tw.ShowDialog();
-
-            //((MainWindow)((Grid)Parent).Parent).ContentGrid.;
-        }
-
-        private void MenuItemOptionsOnClick(object sender, RoutedEventArgs e) {
-            SettingsWindow sw = new SettingsWindow { Owner = Window.GetWindow(this) };
-            sw.ShowDialog();
+        private static void OnMovieChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            ((RibbonViewModel) ((Ribbon) d).DataContext).SelectedMovie = (IMovie) e.NewValue;
         }
     }
 

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Frost.Common.Annotations;
 using Frost.Common.Models;
+using Frost.Common.Properties;
 
 namespace RibbonUI.Util.ObservableWrappers {
     public class MovieStudio : INotifyPropertyChanged {

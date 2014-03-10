@@ -6,8 +6,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using Frost.Common;
-using Frost.Common.Annotations;
 using Frost.Common.Models;
+using Frost.Common.Properties;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 

@@ -1,11 +1,8 @@
 ﻿using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Input;
-using Frost.Common.Annotations;
 using Frost.Common.Models;
+using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 
 namespace RibbonUI.ViewModels.UserControls.List {

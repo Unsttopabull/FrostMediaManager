@@ -3,6 +3,10 @@ namespace Frost.DetectFeatures.Models {
 
     public class ActorInfo : PersonInfo {
 
+        public ActorInfo() {
+            
+        }
+
         /// <summary>Initializes a new instance of the <see cref="ActorInfo"/> class.</summary>
         /// <param name="name">The full name of the actor.</param>
         public ActorInfo(string name) : base(name) {

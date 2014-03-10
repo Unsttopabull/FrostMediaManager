@@ -10,7 +10,7 @@ using Frost.Models.Frost.DB;
 using Frost.Models.Frost.DB.Files;
 using Frost.Models.Frost.DB.People;
 
-namespace RibbonUI.Util {
+namespace Frost.Models.Frost {
 
     public class MovieSaver : IMovieSaver {
         private readonly Dictionary<ISOCountryCode, Country> _countries;
@@ -23,7 +23,7 @@ namespace RibbonUI.Util {
         private readonly IEnumerable<MovieInfo> _infos;
 
 
-        private readonly MovieVoContainer _mvc;
+        private readonly FrostDbContainer _mvc;
 
         public MovieSaver(IEnumerable<MovieInfo> movies) {
             _infos = movies;
@@ -37,8 +37,7 @@ namespace RibbonUI.Util {
             _people = new Dictionary<string, Person>(StringComparer.InvariantCultureIgnoreCase);
 
             //_mvc = new MovieVoContainer(true, "movieVo.db3");
-            _mvc = new MovieVoContainer(true);
-
+            _mvc = new FrostDbContainer(true);
         }
 
         public void Save() {
@@ -64,6 +63,7 @@ namespace RibbonUI.Util {
 
         private void Save(MovieInfo movie) {
             Movie mv = FromMovieInfo(movie);
+            mv = _mvc.Movies.Add(mv);
 
             mv.Set = GetHasName(movie.Set, _sets);
             mv.Plots = new HashSet<Plot>(movie.Plots.ConvertAll(GetPlot));
@@ -77,69 +77,86 @@ namespace RibbonUI.Util {
             mv.Directors = new HashSet<Person>(movie.Directors.ConvertAll(GetPerson));
             mv.Actors = new HashSet<Actor>(movie.Actors.ConvertAll(actorInfo => new Actor(GetPerson(actorInfo), actorInfo.Character)));
 
-            foreach (FileDetectionInfo fileInfo in movie.FileInfos) {
-                AddFileInfo(fileInfo, mv);
-            }
+            int videos = movie.FileInfos.Count(f => f.Videos.Count == 0 && !f.Extension.Equals("iso", StringComparison.OrdinalIgnoreCase));
+            int audios = movie.FileInfos.Count(f => f.Audios.Count == 0 && !f.Extension.Equals("iso", StringComparison.OrdinalIgnoreCase));
 
-            _mvc.Movies.Add(mv);
+            mv.Videos = new HashSet<Video>();
+            mv.Audios = new HashSet<Audio>();
+            mv.Subtitles = new HashSet<Subtitle>();
+            foreach (FileDetectionInfo fileInfo in movie.FileInfos) {
+                Debug.Indent();
+                File file = new File(fileInfo.Name, fileInfo.Extension, fileInfo.FolderPath, fileInfo.Size);
+                Debug.Unindent();
+
+                AddVideos(fileInfo, mv, file);
+                AddAudios(fileInfo, mv, file);
+                AddSubtitles(fileInfo, mv, file);
+            }
+            int ab = 5;
+        }
+
+        private void AddSubtitles(FileDetectionInfo fileInfo, Movie mv, File file) {
+            foreach (SubtitleDetectionInfo s in fileInfo.Subtitles) {
+                mv.Subtitles.Add(new Subtitle(file) {
+                    Language = GetLanguage(s.Language),
+                    Format = s.Format,
+                    EmbededInVideo = s.EmbededInVideo,
+                    ForHearingImpaired = s.ForHearingImpaired
+                });
+            }
+        }
+
+        private static void AddAudios(FileDetectionInfo fileInfo, Movie mv, File file) {
+            foreach (AudioDetectionInfo a in fileInfo.Audios) {
+                mv.Audios.Add(new Audio(file) {
+                    Source = a.Source,
+                    Type = a.Type,
+                    ChannelSetup = a.ChannelSetup,
+                    NumberOfChannels = a.NumberOfChannels,
+                    ChannelPositions = a.ChannelPositions,
+                    Codec = a.Codec,
+                    CodecId = a.CodecId,
+                    BitRate = a.BitRate,
+                    BitRateMode = a.BitRateMode,
+                    SamplingRate = a.SamplingRate,
+                    BitDepth = a.BitDepth,
+                    CompressionMode = a.CompressionMode,
+                    Duration = a.Duration
+                });
+            }
+        }
+
+        private static void AddVideos(FileDetectionInfo fileInfo, Movie mv, File file) {
+            foreach (VideoDetectionInfo v in fileInfo.Videos) {
+                mv.Videos.Add(new Video(file) {
+                    MovieHash = v.MovieHash,
+                    Source = v.Source,
+                    Type = v.Type,
+                    Resolution = v.Resolution,
+                    ResolutionName = v.ResolutionName,
+                    Standard = v.Standard,
+                    FPS = v.FPS,
+                    BitRate = v.BitRate,
+                    BitRateMode = v.BitRateMode,
+                    BitDepth = v.BitDepth,
+                    CompressionMode = v.CompressionMode,
+                    Duration = v.Duration,
+                    ScanType = v.ScanType,
+                    ColorSpace = v.ColorSpace,
+                    ChromaSubsampling = v.ChromaSubsampling,
+                    Format = v.Format,
+                    Codec = v.Codec,
+                    CodecId = v.CodecId,
+                    Aspect = v.Aspect,
+                    AspectCommercialName = v.AspectCommercialName,
+                    Width = v.Width,
+                    Height = v.Height
+                });
+            }
         }
 
         public Plot GetPlot(PlotInfo p) {
-            return new Plot(p.Full, p.Summary, p.Tagline, p.Language != null ? p.Language.EnglishName : null);            
-        }
-
-        private void AddFileInfo(FileDetectionInfo fileInfo, Movie mv) {
-            Debug.Indent();
-            File file = new File(fileInfo.Name, fileInfo.Extension, fileInfo.FolderPath, fileInfo.Size);
-            Debug.Unindent();
-
-            mv.Videos = new HashSet<Video>(fileInfo.Videos.ConvertAll(v => new Video(file) {
-                MovieHash = v.MovieHash,
-                Source = v.Source,
-                Type = v.Type,
-                Resolution = v.Resolution,
-                ResolutionName = v.ResolutionName,
-                Standard = v.Standard,
-                FPS = v.FPS,
-                BitRate = v.BitRate,
-                BitRateMode = v.BitRateMode,
-                BitDepth = v.BitDepth,
-                CompressionMode = v.CompressionMode,
-                Duration = v.Duration,
-                ScanType = v.ScanType,
-                ColorSpace = v.ColorSpace,
-                ChromaSubsampling = v.ChromaSubsampling,
-                Format = v.Format,
-                Codec = v.Codec,
-                CodecId = v.CodecId,
-                Aspect = v.Aspect,
-                AspectCommercialName = v.AspectCommercialName,
-                Width = v.Width,
-                Height = v.Height
-            }));
-
-            mv.Audios = new HashSet<Audio>(fileInfo.Audios.ConvertAll(a => new Audio(file) {
-                Source = a.Source,
-                Type = a.Type,
-                ChannelSetup = a.ChannelSetup,
-                NumberOfChannels = a.NumberOfChannels,
-                ChannelPositions = a.ChannelPositions,
-                Codec = a.Codec,
-                CodecId = a.CodecId,
-                BitRate = a.BitRate,
-                BitRateMode = a.BitRateMode,
-                SamplingRate = a.SamplingRate,
-                BitDepth = a.BitDepth,
-                CompressionMode = a.CompressionMode,
-                Duration = a.Duration
-            }));
-
-            mv.Subtitles = new HashSet<Subtitle>(fileInfo.Subtitles.ConvertAll(sd => new Subtitle(file) {
-                Language = GetLanguage(sd.Language),
-                Format = sd.Format,
-                EmbededInVideo = sd.EmbededInVideo,
-                ForHearingImpaired = sd.ForHearingImpaired
-            }));
+            return new Plot(p.Full, p.Summary, p.Tagline, p.Language != null ? p.Language.EnglishName : null);
         }
 
         private Person GetPerson(PersonInfo info) {

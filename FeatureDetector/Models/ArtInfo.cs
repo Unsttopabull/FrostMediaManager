@@ -4,6 +4,10 @@ namespace Frost.DetectFeatures.Models {
 
     public class ArtInfo {
 
+        public ArtInfo() {
+            
+        }
+
         /// <summary>Initializes a new instance of the <see cref="ArtInfo"/> class.</summary>
         /// <param name="type">The type.</param>
         /// <param name="path">The path.</param>

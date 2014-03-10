@@ -4,9 +4,10 @@
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
         xmlns:people="clr-namespace:Frost.Models.Frost.DB.People;assembly=Frost.Models.Frost"
         xmlns:vm="clr-namespace:RibbonUI.ViewModels.Windows"
-        Closed="AddPersonOnClosed" Loaded="AddPersonOnLoaded"
-        Title="{l:T Add a person}" Height="552" Width="590"
-        WindowStartupLocation="CenterOwner" Name="AddPersonWindow">
+        xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
+        Closed="AddPersonOnClosed" Height="552" Width="590"
+        Title="{l:T Add a person}" Name="AddPersonWindow"
+        WindowStartupLocation="CenterOwner">
     <Window.DataContext>
         <vm:AddPersonViewModel />            
     </Window.DataContext>
@@ -29,12 +30,12 @@
             <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,-5" Content="{l:T Search}"/>
             <TextBox Grid.Column="0" Grid.Row="1" Margin="5,5,5,0" x:Name="SearchBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
-        <ListBox x:Name="PeopleList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding People.View, UpdateSourceTrigger=PropertyChanged}" Margin="5,5,5,0" SelectedItem="{Binding SelectedPerson}" SelectionChanged="PeopleList_OnSelectionChanged">
+        <ListBox x:Name="PeopleList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding People}" Margin="5,5,5,0" SelectedItem="{Binding SelectedPerson}" SelectionChanged="PeopleList_OnSelectionChanged">
             <ListBox.Resources>
                 <BitmapImage x:Key="DefaultPerson" UriSource="../Images/person.png"/>
             </ListBox.Resources>
             <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type people:Person}">
+                <DataTemplate DataType="{x:Type models:IPerson}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="{Binding Thumb, TargetNullValue={StaticResource DefaultPerson}, FallbackValue={StaticResource DefaultPerson}}"
                                MaxWidth="100" />

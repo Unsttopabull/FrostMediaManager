@@ -11,16 +11,12 @@
              xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
-             xmlns:db="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
+             xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
              xmlns:common="clr-namespace:Frost.Common;assembly=Frost.Common"
-             xmlns:people="clr-namespace:Frost.Models.Frost.DB.People;assembly=Frost.Models.Frost"
              xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
              xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls"
-             mc:Ignorable="d" Loaded="OnControlLoaded"
+             mc:Ignorable="d" Loaded="OnControlLoaded" d:DataContext="{d:DesignInstance vm:EditMovieViewModel}"
              d:DesignHeight="725" d:DesignWidth="1071">
-    <UserControl.DataContext>
-        <vm:EditMovieViewModel/>
-    </UserControl.DataContext>
     <UserControl.Resources>
         <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
         <ObjectDataProvider x:Key="MovieTypes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
@@ -202,7 +198,7 @@
                         <ListBox Grid.Row="4" Grid.Column="0" x:Name="MovieCountries" ItemsSource="{Binding Countries}"
                                  MinHeight="32">
                             <ListBox.ItemTemplate>
-                                <DataTemplate DataType="{x:Type db:Country}">
+                                <DataTemplate DataType="{x:Type models:ICountry}">
                                     <StackPanel Orientation="Horizontal">
                                         <Image
                                             Source="{Binding ISO3166.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Country, TargetNullValue={StaticResource UnknownCountryOrLanguage}, FallbackValue={StaticResource UnknownCountryOrLanguage}}"
@@ -333,7 +329,7 @@
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="{l:T Image}" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate DataType="people:Actor">
+                                    <DataTemplate DataType="models:IActor">
                                         <Image Source="{Binding Thumb, TargetNullValue={StaticResource Person}, FallbackValue={StaticResource Person}}"
                                                Stretch="Uniform" MaxWidth="100" />
                                     </DataTemplate>
@@ -355,14 +351,14 @@
                             <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected genre}"
                                              Command="{Binding RemoveGenreCommand}" CommandParameter="{Binding SelectedItem, ElementName=MovieGenres}"/>
                             <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}" ToolTip="{l:T Add new genre}" Height="26" VerticalAlignment="Bottom"
-                                             Command="{Binding AddGenreCommand}" CommandParameter="{Binding ElementName=MovieGenres, Path=ItemsSource}"/>
+                                             Command="{Binding AddGenreCommand}"/>
                             <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource EditButton}" ToolTip="{l:T Edit selected genre}"
                                              Command="{Binding EditGenreCommand}" CommandParameter="{Binding SelectedItem, ElementName=MovieGenres}"/>
                         </DockPanel>
 
                         <ListBox Grid.Row="1" x:Name="MovieGenres" MinHeight="20" DataContext="{DynamicResource GenreSource}" ItemsSource="{Binding}">
                             <ListBox.ItemTemplate>
-                                <DataTemplate DataType="db:Genre">
+                                <DataTemplate DataType="models:IGenre">
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox x:Name="CbMovieGenreC" Loaded="CbMovieGenreCheckBoxLoaded">
                                             <in:Interaction.Triggers>
@@ -392,7 +388,7 @@
                         </DockPanel>
                         <ListBox Grid.Row="3" x:Name="MovieStudios" ItemsSource="{Binding Studios}" MinHeight="32">
                             <ListBox.ItemTemplate>
-                                <DataTemplate DataType="{x:Type db:Studio}">
+                                <DataTemplate DataType="{x:Type models:IStudio}">
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="{Binding Name, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Studio, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}"
                                                MaxHeight="64" MaxWidth="64" />

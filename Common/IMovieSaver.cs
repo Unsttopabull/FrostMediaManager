@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RibbonUI.Util {
+namespace Frost.Common {
 
     public interface IMovieSaver : IDisposable {
         void Save();

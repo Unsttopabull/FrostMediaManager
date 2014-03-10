@@ -4,6 +4,10 @@ namespace Frost.DetectFeatures.Models {
 
     public class SubtitleDetectionInfo {
 
+        public SubtitleDetectionInfo() {
+            
+        }
+
         public SubtitleDetectionInfo(ISOLanguageCode lang, string mediaFormat) {
             Language = lang;
             Format = mediaFormat;

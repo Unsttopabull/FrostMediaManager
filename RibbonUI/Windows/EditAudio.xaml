@@ -13,7 +13,9 @@
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
         xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
         xmlns:movieVo="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
-        xmlns:vm="clr-namespace:RibbonUI.ViewModels.Windows" Name="EditAudioWindow"
+        xmlns:vm="clr-namespace:RibbonUI.ViewModels.Windows"
+        xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
+        Name="EditAudioWindow"
         mc:Ignorable="d" Height="500" Width="570" ResizeMode="NoResize"
         Title="{l:T Edit audio}"  WindowStartupLocation="CenterOwner">
     <Window.DataContext>
@@ -172,7 +174,7 @@
                     </in:EventTrigger>
                 </in:Interaction.Triggers>
                 <ComboBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type movieVo:Language}">
+                    <DataTemplate DataType="{x:Type models:ILanguage}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="{Binding ISO639.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, TargetNullValue={StaticResource UnknownCountryOrLanguage}, FallbackValue={StaticResource UnknownCountryOrLanguage}}"
                                    MaxHeight="32" MaxWidth="32" />

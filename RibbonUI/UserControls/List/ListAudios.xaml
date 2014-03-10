@@ -9,10 +9,7 @@
              xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
              mc:Ignorable="d" Loaded="ListAudiosOnLoaded" Name="ListAudiosControl"
-             d:DesignHeight="300" d:DesignWidth="582">
-    <UserControl.DataContext>
-        <vm:ListAudiosViewModel/>
-    </UserControl.DataContext>
+             d:DesignHeight="300" d:DesignWidth="582" d:DataContext="{d:DesignInstance vm:ListAudiosViewModel}">
     <UserControl.Resources>
         <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
         <converters:TranslateEnumConverter x:Key="TranslateEnumConverter" />

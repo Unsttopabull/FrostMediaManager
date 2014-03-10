@@ -5,8 +5,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Frost.Common;
-using Frost.Common.Annotations;
 using Frost.Common.Models;
+using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 
 namespace RibbonUI.ViewModels.UserControls {
@@ -205,7 +205,6 @@ namespace RibbonUI.ViewModels.UserControls {
         public ICommand ActorImdbClickedCommand { get; private set; }
 
         #endregion
-
 
         private void GoToIMDB(string imdbId) {
             if (!string.IsNullOrEmpty(imdbId)) {

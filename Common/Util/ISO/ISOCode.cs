@@ -4,6 +4,10 @@ namespace Frost.Common.Util.ISO {
     /// <summary>A base class for information about ISO codes.</summary>
     public class ISOCode {
 
+        public ISOCode() {
+            
+        }
+
         /// <summary>Initializes a new instance of the <see cref="ISOCode" /> class.</summary>
         /// <param name="englishName">The ISO english language name.</param>
         /// <param name="alpha2">The ISO Two letter code.</param>

@@ -5,6 +5,10 @@ namespace Frost.DetectFeatures.Models {
 
     public class AudioDetectionInfo {
 
+        public AudioDetectionInfo() {
+            
+        }
+
         /// <summary>Gets or sets the source of the audio</summary>
         /// <value>the source of the audio</value>
         /// <example>\eg{<c>LD MD LINE MIC</c>}</example>

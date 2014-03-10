@@ -9,11 +9,13 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Frost.Common.Annotations;
+using Frost.Common;
 using Frost.Common.Models;
+using Frost.Common.Properties;
 using Frost.Models.Frost.DB;
 using Frost.XamlControls.Commands;
 using GalaSoft.MvvmLight;
+using RibbonUI.Messages;
 using RibbonUI.Messages.Country;
 using RibbonUI.Messages.Genre;
 using RibbonUI.Messages.People;
@@ -34,10 +36,10 @@ namespace RibbonUI.ViewModels.UserControls {
         private ObservableCollection<IAudio> _movieAudios;
         private ObservableCollection<ISubtitle> _movieSubtitles;
         private ObservableCollection<IArt> _movieArt;
-        private Window _parentWindow;
-        private ObservableCollection<IStudio> _movieStudios;
 
-        public ContentGridViewModel() {
+        public ContentGridViewModel(IMoviesDataService service) {
+            Movies = new ObservableCollection<IMovie>(service.Movies);
+
             _searchObservable = Observable.FromEventPattern<PropertyChangedEventArgs>(this, "PropertyChanged")
                                           .Where(ep => ep.EventArgs.PropertyName == "MovieSearchFilter")
                                           .Throttle(TimeSpan.FromSeconds(0.5))
@@ -161,16 +163,7 @@ namespace RibbonUI.ViewModels.UserControls {
         public ICommand SubtitlesOnFocusCommand { get; private set; }
         public ICommand SubtitlesLostFocusCommand { get; private set; }
 
-        public Window ParentWindow {
-            get { return _parentWindow; }
-            set {
-                _parentWindow = value;
-                if (_parentWindow != null) {
-                    IEnumerable source = (IEnumerable) ((CollectionViewSource) _parentWindow.Resources["MoviesSource"]).Source;
-                    Movies = new ObservableCollection<IMovie>(source.Cast<IMovie>());
-                }
-            }
-        }
+        public Window ParentWindow { get; set; }
 
         private bool Filter(object o) {
             try {
@@ -182,22 +175,17 @@ namespace RibbonUI.ViewModels.UserControls {
         }
 
         private void MovieSubtitlesGotFocus() {
-            Ribbon rb = ((MainWindow) ParentWindow).Ribbon;
-            rb.ContextSubtitle.Visibility = Visibility.Visible;
-            rb.SubtitlesTab.IsSelected = true;
+            MessengerInstance.Send(new SelectRibbonMessage(RibbonTabs.Subtitles));
         }
 
         private void MovieSubtitlesOnLostFocus() {
-            Ribbon rb = ((MainWindow) ParentWindow).Ribbon;
-            rb.ContextSubtitle.Visibility = Visibility.Collapsed;
-            rb.Search.IsSelected = true;
+            MessengerInstance.Send(new SelectRibbonMessage(RibbonTabs.Subtitles));
         }
 
         #region Message Handlers
 
         private void RemoveSubtitle(ISubtitle subtitle) {
             MovieSubtitles.Remove(subtitle);
-
         }
 
         private void RemovePlot(IPlot plot) {
@@ -249,7 +237,6 @@ namespace RibbonUI.ViewModels.UserControls {
         }
 
         #endregion
-
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {

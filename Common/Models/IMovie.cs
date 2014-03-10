@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using Frost.Common.Annotations;
 
 namespace Frost.Common.Models {
 

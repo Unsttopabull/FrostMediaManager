@@ -13,23 +13,23 @@ using Frost.Models.Frost.Properties;
 namespace Frost.Models.Frost.DB {
 
     /// <summary>Represents a context used for manipulation of the database.</summary>
-    public class MovieVoContainer : DbContext {
+    public class FrostDbContainer : DbContext {
 
-        /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
-        public MovieVoContainer(bool dropCreate, string filePath) : base(GetSQLiteConnection(filePath), true) {
-            Database.SetInitializer(new SQLiteInitializer<MovieVoContainer>(Resources.MovieVoSQL, dropCreate));
+        /// <summary>Initializes a new instance of the <see cref="FrostDbContainer"/> class.</summary>
+        public FrostDbContainer(bool dropCreate, string filePath) : base(GetSQLiteConnection(filePath), true) {
+            Database.SetInitializer(new SQLiteInitializer<FrostDbContainer>(Resources.MovieVoSQL, dropCreate));
         }
 
-        /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
-        public MovieVoContainer(string connectionString, bool dropCreate = true) : base(connectionString) {
-            Database.SetInitializer(new SQLiteInitializer<MovieVoContainer>(Resources.MovieVoSQL, dropCreate));
+        /// <summary>Initializes a new instance of the <see cref="FrostDbContainer"/> class.</summary>
+        public FrostDbContainer(string connectionString, bool dropCreate = true) : base(connectionString) {
+            Database.SetInitializer(new SQLiteInitializer<FrostDbContainer>(Resources.MovieVoSQL, dropCreate));
         }
 
-        /// <summary>Initializes a new instance of the <see cref="MovieVoContainer"/> class.</summary>
-        public MovieVoContainer(bool dropCreate = true) : this("name=MovieVoContainer", dropCreate) {
+        /// <summary>Initializes a new instance of the <see cref="FrostDbContainer"/> class.</summary>
+        public FrostDbContainer(bool dropCreate = true) : this("name=MovieVoContainer", dropCreate) {
         }
 
-        public MovieVoContainer() : this("name=MovieVoContainer", false) {
+        public FrostDbContainer() : this("name=MovieVoContainer", false) {
         }
 
         /// <summary>Gets or sets the information about the movies in the library.</summary>

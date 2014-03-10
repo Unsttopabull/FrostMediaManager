@@ -11,20 +11,38 @@ using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
 using Frost.GettextMarkupExtension;
 using Frost.Models.Frost;
+using GalaSoft.MvvmLight.Ioc;
 using RibbonUI.Properties;
+using RibbonUI.UserControls;
+using RibbonUI.UserControls.List;
+using RibbonUI.ViewModels;
+using RibbonUI.ViewModels.UserControls;
+using RibbonUI.ViewModels.UserControls.List;
 
 namespace RibbonUI {
 
     /// <summary>Interaction logic for App.xaml</summary>
     public partial class App : Application {
         public App() {
-            TranslationManager.CurrentTranslationProvider = new SecondLanguageTranslationProvider("Languages");
-            ModelCreator.RegisterSystem(new FrostModelRegistrator());
-            ModelCreator.ChangeSystem("Frost");
+            SimpleIoc.Default.Register<IMoviesDataService, FrostMoviesDataDataService>();
+            RegisterViewModels();
 
-            DispatcherUnhandledException += UnhandledExeption;
+            TranslationManager.CurrentTranslationProvider = new SecondLanguageTranslationProvider("Languages");
+            ModelCreator.RegisterSystem(new FrostModelRegistrator(), true);
+
+            //DispatcherUnhandledException += UnhandledExeption;
 
             LoadSettings();
+        }
+
+        private void RegisterViewModels() {
+            SimpleIoc.Default.Register<ContentGridViewModel>();
+            SimpleIoc.Default.Register<MainWindowViewModel>();
+            SimpleIoc.Default.Register<EditMovieViewModel>();
+            SimpleIoc.Default.Register<ListVideosViewModel>();
+            SimpleIoc.Default.Register<ListAudiosViewModel>();
+            SimpleIoc.Default.Register<ListSubtitlesViewModel>();
+            SimpleIoc.Default.Register<ListArtViewModel>();
         }
 
         internal static void LoadSettings() {

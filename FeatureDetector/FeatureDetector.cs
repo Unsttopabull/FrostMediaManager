@@ -8,7 +8,7 @@ using System.Security;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Frost.Common;
-using Frost.Common.Annotations;
+using Frost.Common.Properties;
 using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Models;
 

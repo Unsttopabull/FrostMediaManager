@@ -7,11 +7,8 @@
              xmlns:sys="clr-namespace:System.Text;assembly=mscorlib"
              xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls.List"
              xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
-             mc:Ignorable="d" Name="ListSubtitlesControl"
+             mc:Ignorable="d" Name="ListSubtitlesControl" d:DataContext="{d:DesignInstance vm:ListSubtitlesViewModel}"
              d:DesignHeight="300" d:DesignWidth="602" Loaded="ListSubtitlesOnLoaded">
-    <UserControl.DataContext>
-        <vm:ListSubtitlesViewModel/>
-    </UserControl.DataContext>
     <UserControl.Resources>
         <ObjectDataProvider x:Key="Encodings" ObjectType="{x:Type sys:Encoding}" MethodName="GetEncodings"/>
     </UserControl.Resources>

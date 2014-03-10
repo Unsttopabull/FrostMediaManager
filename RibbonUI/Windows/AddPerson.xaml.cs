@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using Frost.Common.Models;
 using RibbonUI.ViewModels.Windows;
 
 namespace RibbonUI.Windows {
 
     /// <summary>Interaction logic for SelectCountry.xaml</summary>
     public partial class AddPerson : Window {
-        
+        public static readonly DependencyProperty PeopleProperty = DependencyProperty.Register("People", typeof(IEnumerable<IPerson>), typeof(AddPerson), new PropertyMetadata(default(IEnumerable<IPerson>), OnPeopleChanged));
+
         public AddPerson(bool isActor = false) {
             InitializeComponent();
 
@@ -17,15 +21,21 @@ namespace RibbonUI.Windows {
             }
         }
 
+        public IEnumerable<IPerson> People {
+            get { return (IEnumerable<IPerson>) GetValue(PeopleProperty); }
+            set { SetValue(PeopleProperty, value); }
+        }
+
         private void AddPersonOnClosed(object sender, EventArgs e) {
             if (DataContext != null) {
                 ((AddPersonViewModel) DataContext).Dispose();
             }
         }
 
-        private void AddPersonOnLoaded(object sender, RoutedEventArgs e) {
-            if (DataContext != null) {
-                ((AddPersonViewModel) DataContext).ParentWindow = Owner;
+        private static void OnPeopleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            AddPerson addPerson = ((AddPerson) d);
+            if (addPerson.DataContext != null) {
+                ((AddPersonViewModel) addPerson.DataContext).People = (IEnumerable<IPerson>) e.NewValue;
             }
         }
 

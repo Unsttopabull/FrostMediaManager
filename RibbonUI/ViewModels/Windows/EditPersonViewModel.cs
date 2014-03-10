@@ -2,16 +2,16 @@
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using Frost.Common.Annotations;
 using Frost.Common.Models;
+using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 using Microsoft.Win32;
 
 namespace RibbonUI.ViewModels.Windows {
     class EditPersonViewModel : INotifyPropertyChanged {
+        public event PropertyChangedEventHandler PropertyChanged;
         private string _thumbnailPath;
         private IPerson _selectedPerson;
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public EditPersonViewModel() {
             ThumbnailSearchCommand = new RelayCommand(ThumbSearch);

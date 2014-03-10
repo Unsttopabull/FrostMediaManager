@@ -2,8 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
-        xmlns:movieVo="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
         xmlns:vm="clr-namespace:RibbonUI.ViewModels.Windows"
+        xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
         Title="{l:T Select language}" Height="110" Width="350"
         WindowStartupLocation="CenterOwner" Name="SelectLanguagesWindow">
     <Window.DataContext>
@@ -20,7 +20,7 @@
         </Grid.ColumnDefinitions>
         <ComboBox x:Name="SelectedLanguage" Grid.Row="0" Grid.ColumnSpan="2" ItemsSource="{Binding Languages}" Margin="5,5,5,0">
             <ComboBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type movieVo:Language}">
+                <DataTemplate DataType="{x:Type models:ILanguage}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="{Binding ISO639.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, TargetNullValue={StaticResource UnknownCountryOrLanguage}, FallbackValue={StaticResource UnknownCountryOrLanguage}}"
                                MaxHeight="32" MaxWidth="32" />

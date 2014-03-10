@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
@@ -8,8 +9,8 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Frost.Common;
-using Frost.Common.Annotations;
 using Frost.Common.Models;
+using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
@@ -18,8 +19,8 @@ namespace RibbonUI.ViewModels.Windows {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IDisposable _searchTextObservable;
         private string _searchText;
-        private Window _parentWindow;
-        private CollectionViewSource _people;
+        private IEnumerable<IPerson> _people;
+        private ICollectionView _collectionView;
         private IPerson _selectedPerson;
         private string _personName;
         private string _personThumb;
@@ -27,7 +28,7 @@ namespace RibbonUI.ViewModels.Windows {
 
         public AddPersonViewModel() {
             _selectedPerson = ModelCreator.Create<IPerson>();
-            _people = new CollectionViewSource();
+            _people = new List<IPerson>();
             _searchText = "";
 
             ThumbSearchCommand = new RelayCommand(ThumbSearch);
@@ -44,18 +45,14 @@ namespace RibbonUI.ViewModels.Windows {
                                               .Where(ep => ep.EventArgs.PropertyName == "SearchText")
                                               .Throttle(TimeSpan.FromSeconds(0.5))
                                               .ObserveOn(SynchronizationContext.Current)
-                                              .Subscribe(obj => _people.View.Refresh());
+                                              .Subscribe(obj => {
+                                                  if (_collectionView != null) {
+                                                      _collectionView.Refresh();
+                                                  }
+                                              });
         }
 
-        public Window ParentWindow {
-            get { return _parentWindow; }
-            set {
-                _parentWindow = value;
-                People = (CollectionViewSource) _parentWindow.Resources["PeopleSource"];
-            }
-        }
-
-        public CollectionViewSource People {
+        public IEnumerable<IPerson> People {
             get { return _people; }
             set {
                 if (Equals(value, _people)) {
@@ -63,8 +60,13 @@ namespace RibbonUI.ViewModels.Windows {
                 }
                 _people = value;
 
+                
                 if (_people != null) {
-                    _people.View.Filter = Filter;
+                    _collectionView = CollectionViewSource.GetDefaultView(_people);
+
+                    if (_collectionView != null) {
+                        _collectionView.Filter = Filter;
+                    }
                 }
                 OnPropertyChanged();
             }
@@ -95,9 +97,7 @@ namespace RibbonUI.ViewModels.Windows {
                 _personName = value;
 
                 if (!string.IsNullOrEmpty(_personName)) {
-                    IPerson person = _people.View.SourceCollection
-                                                 .Cast<IPerson>()
-                                                 .FirstOrDefault(p => p.Name.Equals(_personName, StringComparison.CurrentCultureIgnoreCase));
+                    IPerson person = _people.FirstOrDefault(p => p.Name.Equals(_personName, StringComparison.CurrentCultureIgnoreCase));
                     if (person != null) {
                         SelectedPerson = person;
                     }

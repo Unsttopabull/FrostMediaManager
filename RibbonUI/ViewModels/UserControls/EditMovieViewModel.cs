@@ -7,8 +7,8 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Frost.Common;
-using Frost.Common.Annotations;
 using Frost.Common.Models;
+using Frost.Common.Properties;
 using Frost.GettextMarkupExtension;
 using Frost.Models.Frost.DB;
 using Frost.XamlControls.Commands;
@@ -24,6 +24,7 @@ using RibbonUI.Windows;
 
 namespace RibbonUI.ViewModels.UserControls {
     public class EditMovieViewModel : ViewModelBase {
+        private readonly IMoviesDataService _service;
         private IMovie _selectedMovie;
         private ObservableCollection<MoviePlot> _moviePlots;
         private ObservableCollection<ObservableActor> _actors;
@@ -32,7 +33,8 @@ namespace RibbonUI.ViewModels.UserControls {
         private ObservableCollection<IGenre> _genres;
         private ObservableCollection<MoviePerson> _directors;
 
-        public EditMovieViewModel() {
+        public EditMovieViewModel(IMoviesDataService service) {
+            _service = service;
             MoviePlots = new ObservableCollection<MoviePlot>();
 
             #region Commands
@@ -53,7 +55,7 @@ namespace RibbonUI.ViewModels.UserControls {
                 genre => genre != null
             );
 
-            AddGenreCommand = new RelayCommand<ListCollectionView>(AddGenreClick);
+            AddGenreCommand = new RelayCommand(AddGenreClick);
             RemoveGenreCommand = new RelayCommand<IGenre>(RemoveGenreClick, genre => genre != null);
             EditGenreCommand = new RelayCommand<IGenre>(EditGenreOnClick, genre => genre != null);
 
@@ -191,7 +193,7 @@ namespace RibbonUI.ViewModels.UserControls {
         public RelayCommand<IGenre> AddMovieGenreCommand { get; private set; }
         public RelayCommand<IGenre> RemoveMovieGenreCommand { get; private set; }
 
-        public ICommand<ListCollectionView> AddGenreCommand { get; private set; }
+        public RelayCommand AddGenreCommand { get; private set; }
         public RelayCommand<IGenre> RemoveGenreCommand { get; private set; }
         public RelayCommand<IGenre> EditGenreCommand { get; private set; }
 
@@ -219,7 +221,7 @@ namespace RibbonUI.ViewModels.UserControls {
         private void AddCountryOnClick() {
             AddCountries sc = new AddCountries {
                 Owner = ParentWindow,
-                Countries = (CollectionViewSource) ParentWindow.Resources["CountriesSource"]
+                Countries = _service.Countries
             };
 
             if (sc.ShowDialog() != true) {
@@ -246,7 +248,7 @@ namespace RibbonUI.ViewModels.UserControls {
         #region Directors Handlers
 
         private void AddDirectorOnClick() {
-            AddPerson addPerson = new AddPerson { Owner = ParentWindow };
+            AddPerson addPerson = new AddPerson { Owner = ParentWindow, People = _service.People };
 
             if (addPerson.ShowDialog() != true) {
                 return;
@@ -275,19 +277,16 @@ namespace RibbonUI.ViewModels.UserControls {
 
         #region Genre Handlers
 
-        private void AddGenreClick(ListCollectionView genres) {
+        private void AddGenreClick() {
             string genreName = InputBox.Show(ParentWindow, "Genre name:", "Add genre", "Add");
 
             if (!string.IsNullOrEmpty(genreName)) {
-                if (genres.Cast<IGenre>().All(genre => !genre.Name.Equals(genreName, StringComparison.CurrentCultureIgnoreCase))) {
+                if (Genres.All(genre => !genre.Name.Equals(genreName, StringComparison.CurrentCultureIgnoreCase))) {
                     IGenre newGenre = ModelCreator.Create<IGenre>();
-                    newGenre = (Genre) genres.AddNewItem(new Genre(newGenre));
-                    genres.CommitNew();
+                    newGenre.Name = genreName;
 
                     Genres.Add(newGenre);
                     MessengerInstance.Send(new AddGenreMessage(newGenre));
-
-                    genres.Refresh();
                 }
                 else {
                     MessageBox.Show(ParentWindow, "Genre with specified name already exists.");
@@ -338,7 +337,7 @@ namespace RibbonUI.ViewModels.UserControls {
         #region Plot Handlers
 
         private void SetPlotLanguageClick(MoviePlot moviePlot) {
-            SelectLanguage sc = new SelectLanguage { Owner = ParentWindow, DataContext = ParentWindow.Resources["LanguagesSource"] };
+            SelectLanguage sc = new SelectLanguage { Owner = ParentWindow, Languages = _service.Languages };
 
             if (sc.ShowDialog() == true) {
                 ILanguage selectedLang = (ILanguage) sc.SelectedLanguage.SelectedItem;
@@ -366,7 +365,7 @@ namespace RibbonUI.ViewModels.UserControls {
         #region Actors Handlers
 
         private void AddActorOnClick() {
-            AddPerson addPerson = new AddPerson(true) { Owner = ParentWindow };
+            AddPerson addPerson = new AddPerson(true) { Owner = ParentWindow, People = _service.People };
 
             if (addPerson.ShowDialog() != true) {
                 return;
@@ -432,7 +431,7 @@ namespace RibbonUI.ViewModels.UserControls {
         #region Studio Handlers
 
         private void AddStudioOnClick() {
-            AddStudios addStudios = new AddStudios { Owner = ParentWindow, DataContext = ParentWindow.Resources["StudiosSource"] };
+            AddStudios addStudios = new AddStudios { Owner = ParentWindow, DataContext = _service.Studios };
 
             if (addStudios.ShowDialog() != true) {
                 return;

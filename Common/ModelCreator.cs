@@ -39,7 +39,7 @@ namespace Frost.Common {
             return true;
         }
 
-        public static void RegisterSystem(IModelRegistrator registrator) {
+        public static void RegisterSystem(IModelRegistrator registrator, bool changeImmediately = false) {
             SystemModels sm = new SystemModels();
             registrator.Register(sm);
 
@@ -52,6 +52,10 @@ namespace Frost.Common {
             }
             else {
                 Systems.Add(sm.SystemName, sm.TypeMappings);
+            }
+
+            if (changeImmediately) {
+                ChangeSystem(sm.SystemName);
             }
         }
 
