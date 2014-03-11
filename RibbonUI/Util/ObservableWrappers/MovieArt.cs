@@ -2,7 +2,8 @@
 using System.Runtime.CompilerServices;
 using Frost.Common;
 using Frost.Common.Models;
-using Frost.GettextMarkupExtension.Annotations;
+using RibbonUI.Annotations;
+using RibbonUI.Properties;
 
 namespace RibbonUI.Util.ObservableWrappers {
 

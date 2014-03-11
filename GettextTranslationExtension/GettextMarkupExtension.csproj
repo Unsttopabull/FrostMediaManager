@@ -39,7 +39,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\Annotations1.cs" />
     <Compile Include="SecondLanguageTranslationProvider.cs" />
     <Compile Include="IGettextProvider.cs" />
     <Compile Include="LanguageChangedEventManager.cs" />

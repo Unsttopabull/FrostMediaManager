@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using Frost.Common;
 using Frost.Common.Models;
@@ -40,7 +41,7 @@ namespace RibbonUI.UserControls {
             }
 
             IGenre g = (IGenre) cb.DataContext;
-            if (ViewModel.Genres.Contains(g)) {
+            if (ViewModel.Genres.Any(genre => genre.Name == g.Name)) {
                 cb.IsChecked = true;
             }
         }

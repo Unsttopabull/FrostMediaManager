@@ -115,6 +115,7 @@
     <Compile Include="Messages\Plot\RemovePlotMessage.cs" />
     <Compile Include="Messages\SelectRibbonMessage.cs" />
     <Compile Include="Messages\Subtitles\RemoveSubtitleMessage.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="UserControls\ArtAndPlot.xaml.cs">
       <DependentUpon>ArtAndPlot.xaml</DependentUpon>
     </Compile>
@@ -222,9 +223,15 @@
     <Compile Include="Util\ObservableWrappers\MoviePlot.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Validations\EmptyOrNullValidationRule.cs" />
     <Compile Include="Windows\AddCountriesViewModel.cs">
       <DependentUpon>AddCountries.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AddGenre.xaml.cs">
+      <DependentUpon>AddGenre.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AddGenreViewModel.cs">
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>AddGenre.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\AddPersonViewModel.cs">
       <DependentUpon>AddPerson.xaml</DependentUpon>
@@ -340,6 +347,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AddCodecMapping.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AddGenre.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

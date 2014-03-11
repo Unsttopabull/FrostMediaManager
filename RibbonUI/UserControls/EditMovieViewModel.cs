@@ -290,19 +290,21 @@ namespace RibbonUI.UserControls {
         #region Genre Handlers
 
         private void AddGenreClick() {
-            string genreName = InputBox.Show(ParentWindow, "Genre name:", "Add genre", "Add");
+            AddGenre ag = new AddGenre { Owner = ParentWindow, Genres = _service.Genres };
+            ag.ShowDialog();
 
-            if (!string.IsNullOrEmpty(genreName)) {
-                if (Genres.All(genre => !genre.Name.Equals(genreName, StringComparison.CurrentCultureIgnoreCase))) {
-                    IGenre newGenre = ModelCreator.Create<IGenre>();
-                    newGenre.Name = genreName;
-
-                    Genres.Add(newGenre);
-                    MessengerInstance.Send(new AddGenreMessage(newGenre));
+            if (string.IsNullOrEmpty(ag.NewGenre.Text)) {
+                foreach (IGenre genre in ag.GenreList.SelectedItems) {
+                    AddGenre(genre);
                 }
-                else {
-                    MessageBox.Show(ParentWindow, "Genre with specified name already exists.");
+            }
+            else {
+                IGenre genre = _service.Genres.FirstOrDefault(g => g.Name.Equals(ag.NewGenre.Text, StringComparison.CurrentCultureIgnoreCase));
+                if (genre == null) {
+                    genre = ModelCreator.Create<IGenre>();
+                    genre.Name = ag.NewGenre.Text;
                 }
+                AddGenre(genre);
             }
         }
 
@@ -342,7 +344,6 @@ namespace RibbonUI.UserControls {
 
         private void AddGenre(IGenre genre) {
             Genres.Add(genre);
-            MessengerInstance.Send(new AddGenreMessage(genre));
         }
         #endregion
 

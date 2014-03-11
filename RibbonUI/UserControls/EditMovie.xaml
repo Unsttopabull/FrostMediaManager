@@ -362,8 +362,8 @@
                                              Command="{Binding EditGenreCommand}" CommandParameter="{Binding SelectedItem, ElementName=MovieGenres}"/>
                         </DockPanel>
 
-                        <ListBox Grid.Row="1" x:Name="MovieGenres" MinHeight="20" DataContext="{DynamicResource GenreSource}" ItemsSource="{Binding}">
-                            <ListBox.ItemTemplate>
+                        <ListBox Grid.Row="1" x:Name="MovieGenres" MinHeight="20" DataContext="{Binding ElementName=MovieEdit, Path=DataContext.Genres}" ItemsSource="{Binding}">
+                            <!--<ListBox.ItemTemplate>
                                 <DataTemplate DataType="models:IGenre">
                                     <StackPanel Orientation="Horizontal">
                                         <CheckBox x:Name="CbMovieGenreC" Loaded="CbMovieGenreCheckBoxLoaded">
@@ -379,7 +379,7 @@
                                         <TextBlock x:Name="MovieGenre" Margin="5,0,0,0" Text="{Binding Name}" />
                                     </StackPanel>
                                 </DataTemplate>
-                            </ListBox.ItemTemplate>
+                            </ListBox.ItemTemplate>-->
                         </ListBox>
 
                         <DockPanel Grid.Row="2" LastChildFill="False">
