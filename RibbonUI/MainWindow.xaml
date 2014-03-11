@@ -4,12 +4,12 @@
               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"              
               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
               xmlns:userControls="clr-namespace:RibbonUI.UserControls"
-              xmlns:viewModels="clr-namespace:RibbonUI.ViewModels"
               xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+              xmlns:ribbonUi="clr-namespace:RibbonUI"
               Title="MainWindow" Icon="logo3.ico" x:Name="RibbonWindow"
               MinWidth="{Binding ElementName=ContentGrid, Path=MinRequiredWidth}"
               mc:Ignorable="d" Width="1386" Height="794"
-              d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}">
+              d:DataContext="{d:DesignInstance ribbonUi:MainWindowViewModel}">
               <!--
               MinWidth="{Binding ElementName=ContentGrid, Path=MinRequiredWidth}" Loaded="RibbonWindowLoaded">-->  
     <i:Interaction.Triggers>

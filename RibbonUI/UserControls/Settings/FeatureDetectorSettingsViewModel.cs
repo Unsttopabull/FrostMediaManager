@@ -9,7 +9,7 @@ using Frost.XamlControls.Commands;
 using RibbonUI.Util;
 using RibbonUI.Windows;
 
-namespace RibbonUI.ViewModels.UserControls.Settings {
+namespace RibbonUI.UserControls.Settings {
     public class FeatureDetectorSettingsViewModel {
 
         public FeatureDetectorSettingsViewModel() {

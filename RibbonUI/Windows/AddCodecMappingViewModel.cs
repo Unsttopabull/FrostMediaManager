@@ -15,9 +15,8 @@ using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using Microsoft.Win32;
 using RibbonUI.Util;
-using RibbonUI.Windows;
 
-namespace RibbonUI.ViewModels.Windows {
+namespace RibbonUI.Windows {
 
     public class AddCodecMappingViewModel : DependencyObject, INotifyPropertyChanged, IDisposable {
         private readonly bool _isVideo;
@@ -30,31 +29,21 @@ namespace RibbonUI.ViewModels.Windows {
 
         public AddCodecMappingViewModel() {
             AddCommand = new RelayCommand<AddCodecMapping>(acm => {
-                acm.DialogResult = true;
-                acm.Close();
-              }, 
-                acm => SelectedCodec != null && !IsError &&
-                       !string.IsNullOrEmpty(SelectedCodec.CodecId) &&
-                       !string.IsNullOrEmpty(SelectedCodec.Mapping) &&
-                       !string.IsNullOrEmpty(SelectedCodec.ImagePath)
-            );
+                    acm.DialogResult = true;
+                    acm.Close();
+                },
+                    acm => SelectedCodec != null && !IsError &&
+                           !string.IsNullOrEmpty(SelectedCodec.CodecId) &&
+                           !string.IsNullOrEmpty(SelectedCodec.Mapping) &&
+                           !string.IsNullOrEmpty(SelectedCodec.ImagePath)
+                );
 
             CancelCommand = new RelayCommand<Window>(w => {
                 w.DialogResult = false;
                 w.Close();
             });
 
-            SeachNewLogoCommand = new RelayCommand<string>(mapping => {
-                OpenFileDialog ofd = new OpenFileDialog {
-                    CheckFileExists = true,
-                    Multiselect = false,
-                    Filter = TranslationManager.T("Image Files") + " (*.bmp, *.jpg, *.jpeg, *.png, *.gif, *.tiff)|*.bmp;*.jpg;*.jpeg;*.png;*.gif;*.tiff"
-                };
-
-                if (ofd.ShowDialog() == true) {
-                    SelectedCodec.ImagePath = "file://" + ofd.FileName;
-                }
-            }, mapping => !CheckCodecExists(mapping));
+            SeachNewLogoCommand = new RelayCommand<string>(SearchForLogo, mapping => !CheckCodecExists(mapping));
 
             _searchTextObservable = Observable.FromEventPattern<PropertyChangedEventArgs>(this, "PropertyChanged")
                                               .Where(ep => ep.EventArgs.PropertyName == "SearchText")
@@ -65,10 +54,15 @@ namespace RibbonUI.ViewModels.Windows {
             SelectedCodec = new KnownCodec(null, null);
         }
 
+
         public AddCodecMappingViewModel(bool isVideo) : this() {
             _isVideo = isVideo;
             GetKnownCodecs(isVideo);
         }
+
+        public ICommand AddCommand { get; private set; }
+        public ICommand CancelCommand { get; private set; }
+        public ICommand SeachNewLogoCommand { get; private set; }
 
         public string SearchText {
             get { return _searchText; }
@@ -126,6 +120,18 @@ namespace RibbonUI.ViewModels.Windows {
             }
         }
 
+        private void SearchForLogo(string mapping) {
+            OpenFileDialog ofd = new OpenFileDialog {
+                CheckFileExists = true,
+                Multiselect = false,
+                Filter = TranslationManager.T("Image Files") + " (*.bmp, *.jpg, *.jpeg, *.png, *.gif, *.tiff)|*.bmp;*.jpg;*.jpeg;*.png;*.gif;*.tiff"
+            };
+
+            if (ofd.ShowDialog() == true) {
+                SelectedCodec.ImagePath = "file://" + ofd.FileName;
+            }
+        }
+
         private void SelectedCodecChanged(object sender, PropertyChangedEventArgs args) {
             switch (args.PropertyName) {
                 case "CodecId":
@@ -140,12 +146,6 @@ namespace RibbonUI.ViewModels.Windows {
                     break;
             }
         }
-
-        public ICommand AddCommand { get; private set; }
-
-        public ICommand CancelCommand { get; private set; }
-
-        public ICommand SeachNewLogoCommand { get; private set; }
 
         private void GetKnownCodecs(bool isVideo) {
             if (!Directory.Exists("Images/FlagsE")) {
@@ -183,6 +183,7 @@ namespace RibbonUI.ViewModels.Windows {
             }
         }
 
+        #region IDisposable
 
         public void Dispose() {
             Dispose(false);
@@ -206,6 +207,9 @@ namespace RibbonUI.ViewModels.Windows {
         ~AddCodecMappingViewModel() {
             Dispose(true);
         }
+
+        #endregion
+
     }
 
 }

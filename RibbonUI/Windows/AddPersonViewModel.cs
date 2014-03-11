@@ -12,9 +12,10 @@ using Frost.Common;
 using Frost.Common.Models;
 using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
-using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using Microsoft.Win32;
+using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.ViewModels.Windows {
+namespace RibbonUI.Windows {
     class AddPersonViewModel : INotifyPropertyChanged, IDisposable {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IDisposable _searchTextObservable;
@@ -155,7 +156,7 @@ namespace RibbonUI.ViewModels.Windows {
                 return false;
             }
 
-            IPerson p = (IPerson) obj;
+            MoviePerson p = (MoviePerson) obj;
             return p.Name.IndexOf(SearchText, StringComparison.CurrentCultureIgnoreCase) >= 0;
         }
 

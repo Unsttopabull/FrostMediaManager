@@ -9,12 +9,12 @@
     xmlns:l="http://www.frostmediamanager.com/xaml/translation"
     xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls"
+    xmlns:userControls="clr-namespace:RibbonUI.UserControls"
     x:Class="RibbonUI.UserControls.ArtAndPlot"
     mc:Ignorable="d"
     d:DesignHeight="625" d:DesignWidth="1071">
     <UserControl.DataContext>
-        <vm:ArtAndPlotViewModel/>
+        <userControls:ArtAndPlotViewModel/>
     </UserControl.DataContext>
     <Grid>
         <Grid.Resources>
@@ -78,7 +78,7 @@
             </Image.Effect>
         </Image>
         <Image Grid.ColumnSpan="5" Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Source="{Binding FirstFanart.Path, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" Stretch="Fill"/>
-        <fmm:BoxArt Grid.Column="1" Grid.Row="2" CoverImage="{Binding FirstCoverOrPoster.Path, UpdateSourceTrigger=PropertyChanged}" BoxImage="{StaticResource Box}"/>
+        <fmm:BoxArt Grid.Column="1" Grid.Row="2" CoverImage="{Binding FirstCoverOrPoster.Path, UpdateSourceTrigger=PropertyChanged}" BoxImage="{Binding BoxImage}"/>
         <Border Grid.Row="2" Grid.Column="2" CornerRadius="20" BorderThickness="5,5,0,5">
             <Border.Background>
                 <SolidColorBrush Color="Black" Opacity="0.8" />

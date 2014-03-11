@@ -10,7 +10,6 @@ using Frost.Common;
 using Frost.Common.Models;
 using Frost.Common.Properties;
 using Frost.GettextMarkupExtension;
-using Frost.Models.Frost.DB;
 using Frost.XamlControls.Commands;
 using GalaSoft.MvvmLight;
 using Microsoft.Win32;
@@ -22,20 +21,22 @@ using RibbonUI.Messages.Studio;
 using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Windows;
 
-namespace RibbonUI.ViewModels.UserControls {
+namespace RibbonUI.UserControls {
     public class EditMovieViewModel : ViewModelBase {
         private readonly IMoviesDataService _service;
         private IMovie _selectedMovie;
         private ObservableCollection<MoviePlot> _moviePlots;
-        private ObservableCollection<ObservableActor> _actors;
+        private ObservableCollection<MovieActor> _actors;
         private ObservableCollection<ICountry> _countries;
         private ObservableCollection<MovieStudio> _studios;
         private ObservableCollection<IGenre> _genres;
         private ObservableCollection<MoviePerson> _directors;
+        private ObservableCollection<IMovieSet> _sets;
 
         public EditMovieViewModel(IMoviesDataService service) {
             _service = service;
             MoviePlots = new ObservableCollection<MoviePlot>();
+            Sets = new ObservableCollection<IMovieSet>(_service.Sets);
 
             #region Commands
 
@@ -60,12 +61,12 @@ namespace RibbonUI.ViewModels.UserControls {
             EditGenreCommand = new RelayCommand<IGenre>(EditGenreOnClick, genre => genre != null);
 
             AddActorCommand = new RelayCommand(AddActorOnClick);
-            RemoveActorCommand = new RelayCommand<ObservableActor>(
+            RemoveActorCommand = new RelayCommand<MovieActor>(
                 RemoveActor,
                 actor => actor != null
             );
-            EditActorCommand = new RelayCommand<ObservableActor>(
-                actor => new EditPerson { Owner = ParentWindow, SelectedPerson = actor }.ShowDialog(),
+            EditActorCommand = new RelayCommand<MovieActor>(
+                actor => new EditPerson { Owner = ParentWindow, SelectedPerson = actor.ObservedPerson }.ShowDialog(),
                 actor => actor != null
             );
 
@@ -107,13 +108,24 @@ namespace RibbonUI.ViewModels.UserControls {
 
                 if (_selectedMovie != null) {
                     MoviePlots = new ObservableCollection<MoviePlot>(_selectedMovie.Plots.Select(p => new MoviePlot(p)));
-                    Actors = new ObservableCollection<ObservableActor>(_selectedMovie.Actors.Select(a => new ObservableActor(a)));
+                    Actors = new ObservableCollection<MovieActor>(_selectedMovie.Actors.Select(a => new MovieActor(a)));
                     Countries = new ObservableCollection<ICountry>(_selectedMovie.Countries);
                     Studios = new ObservableCollection<MovieStudio>(_selectedMovie.Studios.Select(s => new MovieStudio(s)));
                     Genres = new ObservableCollection<IGenre>(_selectedMovie.Genres);
                     Directors = new ObservableCollection<MoviePerson>(_selectedMovie.Directors.Select(p => new MoviePerson(p)));
                 }
 
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<IMovieSet> Sets {
+            get { return _sets; }
+            set {
+                if (Equals(value, _sets)) {
+                    return;
+                }
+                _sets = value;
                 OnPropertyChanged();
             }
         }
@@ -129,7 +141,7 @@ namespace RibbonUI.ViewModels.UserControls {
             }
         }
 
-        public ObservableCollection<ObservableActor> Actors {
+        public ObservableCollection<MovieActor> Actors {
             get { return _actors; }
             set {
                 if (Equals(value, _actors)) {
@@ -198,8 +210,8 @@ namespace RibbonUI.ViewModels.UserControls {
         public RelayCommand<IGenre> EditGenreCommand { get; private set; }
 
         public ICommand AddActorCommand { get; private set; }
-        public ICommand<ObservableActor> RemoveActorCommand { get; private set; }
-        public ICommand<ObservableActor> EditActorCommand { get; private set; }
+        public ICommand<MovieActor> RemoveActorCommand { get; private set; }
+        public ICommand<MovieActor> EditActorCommand { get; private set; }
 
         public ICommand<MoviePlot> SetPlotLanguageCommand { get; private set; }
         public ICommand AddPlotCommand { get; private set; }
@@ -270,7 +282,7 @@ namespace RibbonUI.ViewModels.UserControls {
 
         private void RemoveDirector(MoviePerson director) {
             Directors.Remove(director);
-            MessengerInstance.Send(new RemoveDirectorMessage(director.Person));
+            MessengerInstance.Send(new RemoveDirectorMessage(director.ObservedPerson));
         }
 
         #endregion
@@ -348,7 +360,7 @@ namespace RibbonUI.ViewModels.UserControls {
         private void RemovePotOnClick(MoviePlot moviePlot) {
             if (MessageBox.Show(ParentWindow, TranslationManager.T("Do you really want to remove plot: \"{0}\"?", moviePlot), TranslationManager.T("Confrim remove"), MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
                 MoviePlots.Remove(moviePlot);
-                MessengerInstance.Send(new RemovePlotMessage(moviePlot.Plot));
+                MessengerInstance.Send(new RemovePlotMessage(moviePlot.ObservedPlot));
             }
         }
 
@@ -388,8 +400,8 @@ namespace RibbonUI.ViewModels.UserControls {
 
                 if (string.IsNullOrEmpty(addActorCharacter)) {
                     //check if they have already been added as an actor without a character
-                    movieActor = Actors.FirstOrDefault(ma => ma.Name == person.Name && ma.Character == null);
-                    if (movieActor != null) {
+                    MovieActor ma = Actors.FirstOrDefault(a => a.Name == person.Name && a.Character == null);
+                    if (ma != null) {
                         MessageBox.Show(ParentWindow, "This actor with unspecified character already exists in the list. To add another role specify a character.");
                         return;
                     }
@@ -402,8 +414,8 @@ namespace RibbonUI.ViewModels.UserControls {
                 }
                 else {
                     //check if they have already been added as an actor with this character
-                    movieActor = Actors.FirstOrDefault(ma => ma.Name == person.Name && ma.Character == addActorCharacter);
-                    if (movieActor != null) {
+                    MovieActor ma = Actors.FirstOrDefault(a => a.Name == person.Name && a.Character == addActorCharacter);
+                    if (ma != null) {
                         MessageBox.Show(ParentWindow, "This actor already exists in the list. To add another actor's role specify a diffrent character.");
                         return;
                     }
@@ -417,13 +429,13 @@ namespace RibbonUI.ViewModels.UserControls {
                 }
             }
 
-            Actors.Add(new ObservableActor(movieActor));
+            Actors.Add(new MovieActor(movieActor));
             MessengerInstance.Send(new AddActorMessage(movieActor));
         }
 
-        private void RemoveActor(ObservableActor actor) {
+        private void RemoveActor(MovieActor actor) {
             Actors.Remove(actor);
-            MessengerInstance.Send(new RemoveActorMessage(actor.Actor));
+            MessengerInstance.Send(new RemoveActorMessage(actor.ObservedActor));
         }
 
         #endregion
@@ -447,7 +459,7 @@ namespace RibbonUI.ViewModels.UserControls {
             }
 
             foreach (IStudio studio in addStudios.StudiosList.SelectedItems) {
-                MovieStudio studio2 = Studios.FirstOrDefault(ms => ms.Studio == studio);
+                MovieStudio studio2 = Studios.FirstOrDefault(ms => ms.ObservedStudio == studio);
                 if (studio2 == null) {
                     Studios.Add(new MovieStudio(studio));
                     MessengerInstance.Send(new AddStudioMessage(studio));
@@ -474,7 +486,7 @@ namespace RibbonUI.ViewModels.UserControls {
         private void RemoveStudio(MovieStudio studio) {
             Studios.Remove(studio);
 
-            MessengerInstance.Send(new RemoveStudioMessage(studio.Studio));
+            MessengerInstance.Send(new RemoveStudioMessage(studio.ObservedStudio));
         }
 
         #endregion

@@ -10,7 +10,7 @@
              xmlns:util="clr-namespace:Frost.DetectFeatures.Util;assembly=Frost.FeatureDetector"
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
-             xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls.Settings"
+             xmlns:settings="clr-namespace:RibbonUI.UserControls.Settings"
              mc:Ignorable="d" x:Name="FileNameParserSettingsControl"
              d:DesignHeight="635" d:DesignWidth="620">
     <UserControl.Resources>
@@ -42,7 +42,7 @@
         </Style>        
     </UserControl.Resources>
     <UserControl.DataContext>
-        <vm:FileNameParserSettingsViewModel/>
+        <settings:FileNameParserSettingsViewModel/>
     </UserControl.DataContext>
     <Grid Margin="5,0,5,0">
         <Grid.Resources>

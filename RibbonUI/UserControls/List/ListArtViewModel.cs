@@ -1,21 +1,21 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Frost.Common.Models;
 using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
+using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.ViewModels.UserControls.List {
+namespace RibbonUI.UserControls.List {
     public class ListArtViewModel : INotifyPropertyChanged {
-        private ObservableCollection<IArt> _art;
+        private ObservableCollection<MovieArt> _art;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ListArtViewModel() {
-            RemoveCommand = new RelayCommand<IArt>(RemoveOnClick, art => art != null);
-            AddCommand = new RelayCommand<IArt>(AddOnClick, art => art != null);
+            RemoveCommand = new RelayCommand<MovieArt>(RemoveOnClick, art => art != null);
+            AddCommand = new RelayCommand<MovieArt>(AddOnClick, art => art != null);
         }
 
-        public ObservableCollection<IArt> Art {
+        public ObservableCollection<MovieArt> Art {
             get { return _art; }
             set {
                 if (Equals(value, _art)) {
@@ -26,15 +26,15 @@ namespace RibbonUI.ViewModels.UserControls.List {
             }
         }
 
-        public ICommand<IArt> RemoveCommand { get; private set; }
+        public ICommand<MovieArt> RemoveCommand { get; private set; }
 
-        public ICommand<IArt> AddCommand { get; private set; }
+        public ICommand<MovieArt> AddCommand { get; private set; }
 
-        private void RemoveOnClick(IArt art) {
+        private void RemoveOnClick(MovieArt art) {
             
         }
 
-        private void AddOnClick(IArt art) {
+        private void AddOnClick(MovieArt art) {
             
         }
 

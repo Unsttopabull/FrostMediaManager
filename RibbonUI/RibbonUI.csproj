@@ -124,6 +124,9 @@
     <Compile Include="UserControls\ContentGrid.xaml.cs">
       <DependentUpon>ContentGrid.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\List\ListArtViewModel.cs">
+      <DependentUpon>ListArt.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Settings\FeatureDetectorSettings.xaml.cs">
       <DependentUpon>FeatureDetectorSettings.xaml</DependentUpon>
     </Compile>
@@ -151,12 +154,13 @@
     <Compile Include="UserControls\Settings\GeneralSettings.xaml.cs">
       <DependentUpon>GeneralSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Util\ObservableHashSet2.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Util\Codec.cs" />
+    <Compile Include="Util\ObservableWrappers\MovieArt.cs" />
+    <Compile Include="Util\ObservableWrappers\MovieHasLanguageBase.cs" />
+    <Compile Include="Util\ObservableWrappers\MovieItemBase.cs" />
     <Compile Include="Util\ObservableWrappers\MoviePerson.cs" />
     <Compile Include="Util\ObservableWrappers\MovieStudio.cs" />
-    <Compile Include="Util\ObservableWrappers\ObservableActor.cs" />
+    <Compile Include="Util\ObservableWrappers\MovieActor.cs" />
     <Compile Include="Util\ObservableWrappers\MovieAudio.cs" />
     <Compile Include="Util\ObservableWrappers\MovieVideo.cs" />
     <Compile Include="Messages\Country\AddCountryMessage.cs" />
@@ -165,35 +169,53 @@
     <Compile Include="Messages\People\AddDirectorMessage.cs" />
     <Compile Include="Messages\Genre\AddGenreMessage.cs" />
     <Compile Include="Messages\Studio\AddStudioMessage.cs" />
-    <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\UserControls\ArtAndPlotViewModel.cs">
-      <SubType>Code</SubType>
+    <Compile Include="MainWindowViewModel.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\UserControls\ContentGridViewModel.cs">
+    <Compile Include="UserControls\ArtAndPlotViewModel.cs">
       <SubType>Code</SubType>
+      <DependentUpon>ArtAndPlot.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\UserControls\List\ListArtViewModel.cs" />
-    <Compile Include="ViewModels\UserControls\List\ListAudiosViewModel.cs" />
-    <Compile Include="ViewModels\UserControls\List\ListSubtitlesViewModel.cs" />
-    <Compile Include="ViewModels\UserControls\List\ListVideosViewModel.cs" />
+    <Compile Include="UserControls\ContentGridViewModel.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>ContentGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\List\ListAudiosViewModel.cs">
+      <DependentUpon>ListAudios.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\List\ListSubtitlesViewModel.cs">
+      <DependentUpon>ListSubtitles.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\List\ListVideosViewModel.cs">
+      <DependentUpon>ListVideos.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Messages\Country\RemoveCountryMessage.cs" />
     <Compile Include="Messages\People\RemoveDirectorMessage.cs" />
     <Compile Include="Messages\Studio\RemoveStudioMessage.cs" />
     <Compile Include="Messages\People\RemoveActorMessage.cs" />
     <Compile Include="Messages\Genre\RemoveGenreMessage.cs" />
-    <Compile Include="ViewModels\UserControls\RibbonViewModel.cs" />
-    <Compile Include="ViewModels\UserControls\Settings\FeatureDetectorSettingsViewModel.cs">
-      <SubType>Code</SubType>
+    <Compile Include="Util\ObservableWrappers\MovieSubtitle.cs" />
+    <Compile Include="UserControls\RibbonViewModel.cs">
+      <DependentUpon>Ribbon.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\UserControls\Settings\FileNameParserSettingsViewModel.cs" />
-    <Compile Include="ViewModels\UserControls\Settings\GeneralSettingsViewModel.cs">
+    <Compile Include="UserControls\Settings\FeatureDetectorSettingsViewModel.cs">
       <SubType>Code</SubType>
+      <DependentUpon>FeatureDetectorSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\UserControls\EditMovieViewModel.cs">
-      <SubType>Code</SubType>
+    <Compile Include="UserControls\Settings\FileNameParserSettingsViewModel.cs">
+      <DependentUpon>FileNameParserSettings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\UserControls\MovieFlagsAndInfoViewModel.cs">
+    <Compile Include="UserControls\Settings\GeneralSettingsViewModel.cs">
       <SubType>Code</SubType>
+      <DependentUpon>GeneralSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\EditMovieViewModel.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>EditMovie.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MovieFlagsAndInfoViewModel.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>MovieFlagsAndInfo.xaml</DependentUpon>
     </Compile>
     <Compile Include="Util\Extensions.cs" />
     <Compile Include="Util\KnownCodec.cs" />
@@ -201,17 +223,29 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Validations\EmptyOrNullValidationRule.cs" />
-    <Compile Include="ViewModels\Windows\AddCountriesViewModel.cs" />
-    <Compile Include="ViewModels\Windows\AddPersonViewModel.cs" />
-    <Compile Include="ViewModels\Windows\EditAudioViewModel.cs" />
-    <Compile Include="ViewModels\Windows\EditPersonViewModel.cs">
-      <SubType>Code</SubType>
+    <Compile Include="Windows\AddCountriesViewModel.cs">
+      <DependentUpon>AddCountries.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\Windows\EditVideoViewModel.cs">
-      <SubType>Code</SubType>
+    <Compile Include="Windows\AddPersonViewModel.cs">
+      <DependentUpon>AddPerson.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\Windows\SelectLanguageViewModel.cs" />
-    <Compile Include="ViewModels\Windows\SettingsWindowViewModel.cs" />
+    <Compile Include="Windows\EditAudioViewModel.cs">
+      <DependentUpon>EditAudio.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EditPersonViewModel.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>EditPerson.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EditVideoViewModel.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>EditVideo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SelectLanguageViewModel.cs">
+      <DependentUpon>SelectLanguage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SettingsWindowViewModel.cs">
+      <DependentUpon>SelectLanguage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\AddCodecMapping.xaml.cs">
       <DependentUpon>AddCodecMapping.xaml</DependentUpon>
     </Compile>
@@ -242,7 +276,9 @@
     <Compile Include="Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\Windows\AddCodecMappingViewModel.cs" />
+    <Compile Include="Windows\AddCodecMappingViewModel.cs">
+      <DependentUpon>AddCodecMapping.xaml</DependentUpon>
+    </Compile>
     <Page Include="UserControls\ArtAndPlot.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

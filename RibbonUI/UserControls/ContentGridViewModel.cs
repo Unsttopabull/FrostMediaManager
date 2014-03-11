@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -12,7 +11,6 @@ using System.Windows.Input;
 using Frost.Common;
 using Frost.Common.Models;
 using Frost.Common.Properties;
-using Frost.Models.Frost.DB;
 using Frost.XamlControls.Commands;
 using GalaSoft.MvvmLight;
 using RibbonUI.Messages;
@@ -22,9 +20,9 @@ using RibbonUI.Messages.People;
 using RibbonUI.Messages.Plot;
 using RibbonUI.Messages.Studio;
 using RibbonUI.Messages.Subtitles;
-using RibbonUI.UserControls;
+using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.ViewModels.UserControls {
+namespace RibbonUI.UserControls {
 
     public class ContentGridViewModel : ViewModelBase, IDisposable {
         private readonly IDisposable _searchObservable;
@@ -32,10 +30,10 @@ namespace RibbonUI.ViewModels.UserControls {
         private string _movieSearchFilter;
         private IMovie _selectedMovie;
         private ObservableCollection<IMovie> _movies;
-        private ObservableCollection<IVideo> _movieVideos;
-        private ObservableCollection<IAudio> _movieAudios;
-        private ObservableCollection<ISubtitle> _movieSubtitles;
-        private ObservableCollection<IArt> _movieArt;
+        private ObservableCollection<MovieVideo> _movieVideos;
+        private ObservableCollection<MovieAudio> _movieAudios;
+        private ObservableCollection<MovieSubtitle> _movieSubtitles;
+        private ObservableCollection<MovieArt> _movieArt;
 
         public ContentGridViewModel(IMoviesDataService service) {
             Movies = new ObservableCollection<IMovie>(service.Movies);
@@ -98,10 +96,10 @@ namespace RibbonUI.ViewModels.UserControls {
                 _selectedMovie = value;
 
                 if (_selectedMovie != null) {
-                    MovieVideos = new ObservableCollection<IVideo>(_selectedMovie.Videos);
-                    MovieAudios = new ObservableCollection<IAudio>(_selectedMovie.Audios);
-                    MovieSubtitles = new ObservableCollection<ISubtitle>(_selectedMovie.Subtitles);
-                    MovieArt = new ObservableCollection<IArt>(_selectedMovie.Art);
+                    MovieVideos = new ObservableCollection<MovieVideo>(_selectedMovie.Videos.Select(v => new MovieVideo(v)));
+                    MovieAudios = new ObservableCollection<MovieAudio>(_selectedMovie.Audios.Select(a => new MovieAudio(a)));
+                    MovieSubtitles = new ObservableCollection<MovieSubtitle>(_selectedMovie.Subtitles.Select(s => new MovieSubtitle(s)));
+                    MovieArt = new ObservableCollection<MovieArt>(_selectedMovie.Art.Select(a => new MovieArt(a)));
                 }
 
                 OnPropertyChanged();
@@ -119,7 +117,7 @@ namespace RibbonUI.ViewModels.UserControls {
             }
         }
 
-        public ObservableCollection<IVideo> MovieVideos {
+        public ObservableCollection<MovieVideo> MovieVideos {
             get { return _movieVideos; }
             set {
                 if (Equals(value, _movieVideos)) {
@@ -129,7 +127,7 @@ namespace RibbonUI.ViewModels.UserControls {
                 OnPropertyChanged();
             }
         }
-        public ObservableCollection<IAudio> MovieAudios {
+        public ObservableCollection<MovieAudio> MovieAudios {
             get { return _movieAudios; }
             set {
                 if (Equals(value, _movieAudios)) {
@@ -139,7 +137,7 @@ namespace RibbonUI.ViewModels.UserControls {
                 OnPropertyChanged();
             }
         }
-        public ObservableCollection<ISubtitle> MovieSubtitles {
+        public ObservableCollection<MovieSubtitle> MovieSubtitles {
             get { return _movieSubtitles; }
             set {
                 if (Equals(value, _movieSubtitles)) {
@@ -149,7 +147,7 @@ namespace RibbonUI.ViewModels.UserControls {
                 OnPropertyChanged();
             }
         }
-        public ObservableCollection<IArt> MovieArt {
+        public ObservableCollection<MovieArt> MovieArt {
             get { return _movieArt; }
             set {
                 if (Equals(value, _movieArt)) {
@@ -184,7 +182,7 @@ namespace RibbonUI.ViewModels.UserControls {
 
         #region Message Handlers
 
-        private void RemoveSubtitle(ISubtitle subtitle) {
+        private void RemoveSubtitle(MovieSubtitle subtitle) {
             MovieSubtitles.Remove(subtitle);
         }
 

@@ -64,16 +64,19 @@
     </Style>
     <!-- BUTTON BASE STYLE AERO NORMAL !-->
     <Style TargetType="{x:Type fmm:ImageButton}" x:Key="EditButton">
-      <Setter Property="EnabledSource" Value="{StaticResource Edit}" />
-      <Setter Property="DisabledSource" Value="{StaticResource EditDisabled}" />
+        <Setter Property="ImageMaxHeight" Value="16"/>
+        <Setter Property="EnabledSource" Value="{StaticResource Edit}" />
+        <Setter Property="DisabledSource" Value="{StaticResource EditDisabled}" />
     </Style>
     <Style TargetType="{x:Type fmm:ImageButton}" x:Key="AddButton">
-      <Setter Property="EnabledSource" Value="{StaticResource Add}" />
-      <Setter Property="DisabledSource" Value="{StaticResource AddDisabled}" />
+        <Setter Property="ImageMaxHeight" Value="16"/>
+        <Setter Property="EnabledSource" Value="{StaticResource Add}" />
+        <Setter Property="DisabledSource" Value="{StaticResource AddDisabled}" />
     </Style>
     <Style TargetType="{x:Type fmm:ImageButton}" x:Key="RemoveButton">
-      <Setter Property="EnabledSource" Value="{StaticResource Remove}" />
-      <Setter Property="DisabledSource" Value="{StaticResource RemoveDisabled}" />
+        <Setter Property="ImageMaxHeight" Value="16"/>
+        <Setter Property="EnabledSource" Value="{StaticResource Remove}" />
+        <Setter Property="DisabledSource" Value="{StaticResource RemoveDisabled}" />
     </Style>
     <Style x:Key="CollapseOnTagNull" TargetType="{x:Type FrameworkElement}">
       <Style.Triggers>

@@ -3,13 +3,13 @@ using System.Windows;
 using System.Windows.Controls;
 using Frost.Common.Models;
 using GalaSoft.MvvmLight.Ioc;
-using RibbonUI.ViewModels.UserControls.List;
+using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls.List {
 
     /// <summary>Interaction logic for EditVideos.xaml</summary>
     public partial class ListVideos : UserControl {
-        public static readonly DependencyProperty VideosProperty = DependencyProperty.Register("Videos", typeof(ObservableCollection<IVideo>), typeof(ListVideos), new PropertyMetadata(default(ObservableCollection<IVideo>), OnVideoListChanged));
+        public static readonly DependencyProperty VideosProperty = DependencyProperty.Register("Videos", typeof(ObservableCollection<MovieVideo>), typeof(ListVideos), new PropertyMetadata(default(ObservableCollection<MovieVideo>), OnVideoListChanged));
 
         public ListVideos() {
             InitializeComponent();
@@ -17,11 +17,11 @@ namespace RibbonUI.UserControls.List {
         }
 
         private static void OnVideoListChanged(DependencyObject d, DependencyPropertyChangedEventArgs args) {
-            ((ListVideosViewModel) (((ListVideos) d).DataContext)).Videos = (ObservableCollection<IVideo>) args.NewValue;
+            ((ListVideosViewModel) (((ListVideos) d).DataContext)).Videos = (ObservableCollection<MovieVideo>) args.NewValue;
         }
 
-        public ObservableCollection<IVideo> Videos {
-            get { return (ObservableCollection<IVideo>) GetValue(VideosProperty); }
+        public ObservableCollection<MovieVideo> Videos {
+            get { return (ObservableCollection<MovieVideo>) GetValue(VideosProperty); }
             set { SetValue(VideosProperty, value); }
         }
 

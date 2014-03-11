@@ -3,11 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:settings="clr-namespace:RibbonUI.UserControls.Settings"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
-        xmlns:vm="clr-namespace:RibbonUI.ViewModels.Windows"
+        xmlns:windows="clr-namespace:RibbonUI.Windows"
         Loaded="WindowLoaded" Name="SettingssWindow"
         Title="Settings" Height="635" Width="800" Background="#BCD6F5">
     <Window.DataContext>
-        <vm:SettingsWindowViewModel/>
+        <windows:SettingsWindowViewModel/>
     </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>

@@ -3,7 +3,7 @@ using System.Windows.Input;
 using Frost.Common;
 using Frost.XamlControls.Commands;
 
-namespace RibbonUI.ViewModels {
+namespace RibbonUI {
     class MainWindowViewModel {
         private readonly IMoviesDataService _service;
 

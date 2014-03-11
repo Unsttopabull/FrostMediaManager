@@ -1,4 +1,4 @@
-﻿using RibbonUI.ViewModels.UserControls;
+﻿using RibbonUI.UserControls;
 
 namespace RibbonUI.Messages {
     public class SelectRibbonMessage {

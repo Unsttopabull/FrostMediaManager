@@ -174,7 +174,13 @@ namespace Frost.Models.Frost.DB.Files {
         /// <value>The language of this audio.</value>
         ILanguage IHasLanguage.Language {
             get { return Language; }
-            set { Language = new Language(value); }
+            set {
+                if (value == null) {
+                    Language = null;
+                    return;
+                }
+                Language = new Language(value);
+            }
         }
 
         /// <summary>Gets or sets the file this audio is contained in.</summary>
@@ -186,6 +192,10 @@ namespace Frost.Models.Frost.DB.Files {
         IFile IAudio.File {
             get { return File; }
             set {
+                if (value == null) {
+                    File = null;
+                    return;
+                }
                 File = new File(value);
             }
         }

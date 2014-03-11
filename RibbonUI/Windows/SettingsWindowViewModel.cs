@@ -2,7 +2,7 @@
 using Frost.XamlControls.Commands;
 using RibbonUI.Properties;
 
-namespace RibbonUI.ViewModels.Windows {
+namespace RibbonUI.Windows {
     public class SettingsWindowViewModel {
 
         public SettingsWindowViewModel() {

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:settings="clr-namespace:RibbonUI.ViewModels.UserControls.Settings"
+             xmlns:settings="clr-namespace:RibbonUI.UserControls.Settings"
              mc:Ignorable="d" Loaded="GeneralSettingsOnLoaded"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.DataContext>

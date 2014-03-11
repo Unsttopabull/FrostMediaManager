@@ -2,16 +2,16 @@
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using Frost.Common.Models;
 using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 using Microsoft.Win32;
+using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.ViewModels.Windows {
+namespace RibbonUI.Windows {
     class EditPersonViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private string _thumbnailPath;
-        private IPerson _selectedPerson;
+        private MoviePerson _selectedPerson;
 
         public EditPersonViewModel() {
             ThumbnailSearchCommand = new RelayCommand(ThumbSearch);
@@ -24,7 +24,7 @@ namespace RibbonUI.ViewModels.Windows {
 
         public MainWindow ParentWindow { get; set; }
 
-        public IPerson SelectedPerson {
+        public MoviePerson SelectedPerson {
             get { return _selectedPerson; }
             set {
                 if (Equals(value, _selectedPerson)) {

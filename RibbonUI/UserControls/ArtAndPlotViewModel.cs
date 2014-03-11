@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
@@ -9,7 +10,7 @@ using Frost.Common.Models;
 using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 
-namespace RibbonUI.ViewModels.UserControls {
+namespace RibbonUI.UserControls {
     public class ArtAndPlotViewModel : INotifyPropertyChanged {
         private const string IMDB_PERSON_URI = "http://www.imdb.com/name/nm{0}";
         private const string IMDB_TITLE_URI = "http://www.imdb.com/title/{0}";
@@ -45,12 +46,26 @@ namespace RibbonUI.ViewModels.UserControls {
                 OnPropertyChanged("FirstFanart");
                 OnPropertyChanged("FirstCoverOrPoster");
                 OnPropertyChanged("FirstPlot");
+                OnPropertyChanged("BoxImage");
 
                 OnPropertyChanged();
             }
         }
 
         #region Utility properties
+
+        public string BoxImage {
+            get {
+                string path;
+                if (SelectedMovie == null || (SelectedMovie != null && SelectedMovie.Type == MovieType.Unknown)) {
+                    path = "Images/Boxes/generic.png";
+                }
+                else {
+                    path = "Images/Boxes/" + SelectedMovie.Type + ".png";
+                }
+                return Path.Combine(Directory.GetCurrentDirectory(), path);;
+            }
+        }
 
         #region Awards
 

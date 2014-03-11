@@ -8,17 +8,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:e="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
-        xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
+        xmlns:l="http://www.frostmediamanager.com/xaml/translation"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:glob="clr-namespace:System.Globalization;assembly=mscorlib"
-        xmlns:movieVo="clr-namespace:Frost.Models.Frost.DB;assembly=Frost.Models.Frost"
-        xmlns:vm="clr-namespace:RibbonUI.ViewModels.Windows"
         xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
+        xmlns:windows="clr-namespace:RibbonUI.Windows"
         mc:Ignorable="d" Name="EditVideoWindow" Height="443" Width="570"
         Title="{l:T Edit video}" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
     <Window.DataContext>
-        <vm:EditVideoViewModel/>
+        <windows:EditVideoViewModel/>
     </Window.DataContext>
     <Window.Resources>
         <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
@@ -59,15 +58,15 @@
                     <BitmapCache />
                 </Image.CacheMode>
             </Image>
-            <Image Source="{Binding FormattedVideoResolution, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=VideoResolution, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}, UpdateSourceTrigger=PropertyChanged}"
+            <Image Source="{Binding SelectedVideo.ResolutionImage, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}, UpdateSourceTrigger=PropertyChanged}"
                    MinHeight="48" MaxHeight="100" MaxWidth="115">
                 <Image.CacheMode>
                     <BitmapCache />
                 </Image.CacheMode>
             </Image>
             <Image
-                Source="{Binding Language.ISO639.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, FallbackValue={StaticResource UnknownLanguageLarge}, TargetNullValue={StaticResource UnknownLanguageLarge}}"
-                MinHeight="48" MaxHeight="100" MaxWidth="115" Tag="{Binding Language}"
+                Source="{Binding SelectedVideo.LanguageImage, FallbackValue={StaticResource UnknownLanguageLarge}, TargetNullValue={StaticResource UnknownLanguageLarge}}"
+                MinHeight="48" MaxHeight="100" MaxWidth="115" Tag="{Binding SelectedVideo.Language}"
                 Style="{StaticResource CollapseOnTagNull}">
                 <Image.CacheMode>
                     <BitmapCache />
@@ -105,7 +104,7 @@
                 </Button>
             </StackPanel>
             <e:DoubleUpDown Minimum="0" Watermark="{l:T Frame rate in frames/s}" VerticalAlignment="Center" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}"
-                            Value="{Binding SelectedVideo.FPS}" x:Name="Fps" x:FieldModifier="private" FormatString="F2">
+                            Value="{Binding SelectedVideo.FPS, UpdateSourceTrigger=PropertyChanged}" x:Name="Fps" x:FieldModifier="private" FormatString="F2">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=Fps, Path=Value}" Value="0">
                         <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}" />
@@ -126,7 +125,7 @@
                 </Button>
             </StackPanel>
             <e:DoubleUpDown Minimum="0" Watermark="{l:T Bit rate in kbps}" VerticalAlignment="Center" MinHeight="22" FormatString="F3"
-                            Value="{Binding SelectedVideo.BitRate}" x:Name="BitRate" x:FieldModifier="private" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}">
+                            Value="{Binding SelectedVideo.BitRate, UpdateSourceTrigger=PropertyChanged}" x:Name="BitRate" x:FieldModifier="private" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=BitRate, Path=Value}" Value="0">
                         <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}" />
@@ -179,7 +178,7 @@
                     <Image Source="../Images/clear.ico" Width="14" Height="14" />
                 </Button>
             </StackPanel>
-            <e:DoubleUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding Aspect}" MinHeight="22" FormatString="F3"
+            <e:DoubleUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding SelectedVideo.Aspect, UpdateSourceTrigger=PropertyChanged}" MinHeight="22" FormatString="F3"
                             x:Name="Aspect" x:FieldModifier="private" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=Aspect, Path=Value}" Value="0">
@@ -200,7 +199,7 @@
                     <Image Source="../Images/clear.ico" Width="14" Height="14" />
                 </Button>
             </StackPanel>
-            <e:IntegerUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding Width}" MinHeight="22"
+            <e:IntegerUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding SelectedVideo.Width, UpdateSourceTrigger=PropertyChanged}" MinHeight="22"
                              x:Name="WidthSelector" x:FieldModifier="private" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=WidthSelector, Path=Value}" Value="0">
@@ -221,7 +220,7 @@
                     <Image Source="../Images/clear.ico" Width="14" Height="14" />
                 </Button>
             </StackPanel>
-            <e:IntegerUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding Height}" x:Name="VideoHeight"
+            <e:IntegerUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding SelectedVideo.Height, UpdateSourceTrigger=PropertyChanged}" x:Name="VideoHeight"
                              x:FieldModifier="private" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=VideoHeight, Path=Value}" Value="0">
@@ -231,7 +230,7 @@
             </e:IntegerUpDown>
 
             <Label Content="{l:T Bit rate mode, Postfix=:}"/>
-            <ComboBox VerticalAlignment="Center" SelectedItem="{Binding BitRateMode}" SelectedIndex="0"
+            <ComboBox VerticalAlignment="Center" SelectedItem="{Binding SelectedVideo.BitRateMode, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="0"
                       ItemsSource="{Binding Source={StaticResource BitRateModes}}" />
 
             <StackPanel Orientation="Horizontal">
@@ -245,7 +244,7 @@
                     <Image Source="../Images/clear.ico" Width="14" Height="14"/>
                 </Button>
             </StackPanel>
-            <ComboBox x:Name="SelectedLanguage" SelectedItem="{Binding Language}">
+            <ComboBox x:Name="SelectedLanguage" SelectedItem="{Binding SelectedVideo.Language, UpdateSourceTrigger=PropertyChanged}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate DataType="{x:Type models:ILanguage}">
                         <StackPanel Orientation="Horizontal">

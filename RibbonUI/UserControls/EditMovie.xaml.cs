@@ -4,7 +4,6 @@ using Frost.Common;
 using Frost.Common.Models;
 using Frost.GettextMarkupExtension;
 using GalaSoft.MvvmLight.Ioc;
-using RibbonUI.ViewModels.UserControls;
 
 namespace RibbonUI.UserControls {
 

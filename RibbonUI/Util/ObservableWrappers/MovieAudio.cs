@@ -5,7 +5,7 @@ using Frost.Common.Models;
 using Frost.Common.Properties;
 
 namespace RibbonUI.Util.ObservableWrappers {
-    public class MovieAudio : IAudio, INotifyPropertyChanged {
+    public class MovieAudio : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IAudio _audio;
 
@@ -169,6 +169,8 @@ namespace RibbonUI.Util.ObservableWrappers {
                 OnPropertyChanged();
             }
         }
+
+        public IAudio ObservedAudio {get { return _audio; }}
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {

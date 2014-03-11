@@ -3,12 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"             
+             xmlns:l="http://www.frostmediamanager.com/xaml/translation"             
              xmlns:converters="clr-namespace:RibbonUI.Converters"
-             xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls.List"
              xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
+             xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
+             xmlns:list="clr-namespace:RibbonUI.UserControls.List"
              mc:Ignorable="d" Loaded="OnWindowLoaded" Name="ListVideosControl"
-             d:DesignHeight="300" d:DesignWidth="580" d:DataContext="{d:DesignInstance vm:ListVideosViewModel}">
+             d:DesignHeight="300" d:DesignWidth="580" d:DataContext="{d:DesignInstance list:ListVideosViewModel}">
     <UserControl.Resources>
         <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
         <converters:TranslateEnumConverter x:Key="TranslateEnumConverter"/>
@@ -23,18 +24,24 @@
             </Style>
         </ListView.Resources>
         <ListView.ItemTemplate>
-            <DataTemplate DataType="models:IVideo">
+            <DataTemplate DataType="o:MovieVideo">
                 <DockPanel LastChildFill="False">
                     <StackPanel DockPanel.Dock="Left">
                         <Image
-                            Source="{Binding CodecId, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=VideoCodec, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}}"
+                            Source="{Binding CodecImage, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}}"
                             MinHeight="48">
                             <Image.CacheMode>
                                 <BitmapCache />
                             </Image.CacheMode>
                         </Image>
-                        <Image Source="{Binding IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=VideoResolutionV, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}}"
+                        <Image Source="{Binding ResolutionImage, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}}"
                                MinHeight="48">
+                            <Image.CacheMode>
+                                <BitmapCache />
+                            </Image.CacheMode>
+                        </Image>
+                        <Image Source="{Binding LanguageImage, FallbackValue={StaticResource UnknownLanguageLarge}, TargetNullValue={StaticResource UnknownLanguageLarge}}"
+                               MinHeight="48" MaxHeight="100" Tag="{Binding Language}" Style="{StaticResource CollapseOnTagNull}">
                             <Image.CacheMode>
                                 <BitmapCache />
                             </Image.CacheMode>
@@ -123,15 +130,15 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding Language}" Style="{StaticResource CollapseOnTagNull}">
                             <Label Content="{l:T Language, Postfix=:}"/>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding Language}" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Language.Name}" />
                         </StackPanel>
                     </StackPanel>
 
                     <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
-                        <Button Command="{Binding ElementName=ListVideosControl, Path=DataContext.RemoveVideoCommand}" CommandParameter="{Binding ElementName=VideosList, Path=SelectedItem}" Style="{StaticResource TransparentBorderlessButton}">
+                        <Button Command="{Binding ElementName=ListVideosControl, Path=DataContext.RemoveVideoCommand}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}" Style="{StaticResource TransparentBorderlessButton}">
                             <Image Source="../../Images/remove.png" MaxHeight="32"/>
                         </Button>
-                        <Button Command="{Binding ElementName=ListVideosControl, Path=DataContext.EditVideoCommand}" CommandParameter="{Binding ElementName=VideosList, Path=SelectedItem}" Style="{StaticResource TransparentBorderlessButton}">
+                        <Button Command="{Binding ElementName=ListVideosControl, Path=DataContext.EditVideoCommand}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}" Style="{StaticResource TransparentBorderlessButton}">
                             <Image Source="../../Images/edit.ico" />
                         </Button>
                     </StackPanel>

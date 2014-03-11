@@ -4,7 +4,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:l="http://www.frostmediamanager.com/xaml/translation"
-    xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls"
     xmlns:converters="clr-namespace:RibbonUI.Converters"
     xmlns:userControls="clr-namespace:RibbonUI.UserControls"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -13,7 +12,7 @@
     x:Name="ContentGridControl"
     mc:Ignorable="d" Loaded="OnWindowLoaded"
     d:DesignHeight="700" d:DesignWidth="1396"
-    d:DataContext="{d:DesignInstance vm:ContentGridViewModel}">
+    d:DataContext="{d:DesignInstance userControls:ContentGridViewModel}">
     <!--MinWidth="{Binding MinRequiredWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"-->
     <UserControl.Resources>
         <converters:DebugConverter x:Key="DebugConverter" />

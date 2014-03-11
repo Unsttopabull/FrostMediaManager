@@ -7,11 +7,11 @@
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls"
+             xmlns:userControls="clr-namespace:RibbonUI.UserControls"
              mc:Ignorable="d" x:Name="FlagsInfo"
              d:DesignHeight="75" d:DesignWidth="950">
     <UserControl.DataContext>
-        <vm:MovieFlagsAndInfoViewModel/>
+        <userControls:MovieFlagsAndInfoViewModel/>
     </UserControl.DataContext>
     <DockPanel>
         <DockPanel.Background>

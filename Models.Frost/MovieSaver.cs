@@ -101,7 +101,8 @@ namespace Frost.Models.Frost {
                     Language = GetLanguage(s.Language),
                     Format = s.Format,
                     EmbededInVideo = s.EmbededInVideo,
-                    ForHearingImpaired = s.ForHearingImpaired
+                    ForHearingImpaired = s.ForHearingImpaired,
+                    Encoding =  s.Encoding
                 });
             }
         }

@@ -6,7 +6,7 @@ using Frost.Common.Models;
 using Frost.GettextMarkupExtension.Annotations;
 using Frost.XamlControls.Commands;
 
-namespace RibbonUI.ViewModels.Windows {
+namespace RibbonUI.Windows {
     class SelectLanguageViewModel : INotifyPropertyChanged {
         private IEnumerable<ILanguage> _languages;
         public event PropertyChangedEventHandler PropertyChanged;

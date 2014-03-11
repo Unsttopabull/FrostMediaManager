@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Windows.Media;
 using Frost.Common;
 using Frost.Common.Models;
 using Frost.Common.Properties;
+using Frost.DetectFeatures;
 
 namespace RibbonUI.Util.ObservableWrappers {
-    public class MovieVideo : IVideo, INotifyPropertyChanged {
+
+    public class MovieVideo : MovieHasLanguageBase, INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IVideo _video;
 
@@ -13,11 +15,14 @@ namespace RibbonUI.Util.ObservableWrappers {
             _video = video;
         }
 
-        public ILanguage Language {
+        #region Observed properties
+
+        public override ILanguage Language {
             get { return _video.Language; }
             set {
                 _video.Language = value;
-                OnPropertyChanged();
+                OnPropertyChanged("Language");
+                OnPropertyChanged("LanguageImage");
             }
         }
 
@@ -25,7 +30,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.MovieHash; }
             set {
                 _video.MovieHash = value;
-                OnPropertyChanged();
+                OnPropertyChanged("MovieHash");
             }
         }
 
@@ -35,7 +40,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.Source; }
             set {
                 _video.Source = value;
-                OnPropertyChanged();
+                OnPropertyChanged("Source");
             }
         }
 
@@ -45,7 +50,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.Type; }
             set {
                 _video.Type = value;
-                OnPropertyChanged();
+                OnPropertyChanged("Type");
             }
         }
 
@@ -55,7 +60,9 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.Resolution; }
             set {
                 _video.Resolution = value;
-                OnPropertyChanged();
+
+                OnPropertyChanged("ResolutionImage");
+                OnPropertyChanged("Resolution");
             }
         }
 
@@ -65,7 +72,9 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.ResolutionName; }
             set {
                 _video.ResolutionName = value;
-                OnPropertyChanged();
+
+                OnPropertyChanged("ResolutionImage");
+                OnPropertyChanged("ResolutionName");
             }
         }
 
@@ -73,7 +82,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.Standard; }
             set {
                 _video.Standard = value;
-                OnPropertyChanged();
+                OnPropertyChanged("Standard");
             }
         }
 
@@ -83,7 +92,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.FPS; }
             set {
                 _video.FPS = value;
-                OnPropertyChanged();
+                OnPropertyChanged("FPS");
             }
         }
 
@@ -93,7 +102,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.BitRate; }
             set {
                 _video.BitRate = value;
-                OnPropertyChanged();
+                OnPropertyChanged("BitRate");
             }
         }
 
@@ -103,7 +112,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.BitRateMode; }
             set {
                 _video.BitRateMode = value;
-                OnPropertyChanged();
+                OnPropertyChanged("BitRateMode");
             }
         }
 
@@ -113,7 +122,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.BitDepth; }
             set {
                 _video.BitDepth = value;
-                OnPropertyChanged();
+                OnPropertyChanged("BitDepth");
             }
         }
 
@@ -123,7 +132,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.CompressionMode; }
             set {
                 _video.CompressionMode = value;
-                OnPropertyChanged();
+                OnPropertyChanged("CompressionMode");
             }
         }
 
@@ -133,7 +142,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.Duration; }
             set {
                 _video.Duration = value;
-                OnPropertyChanged();
+                OnPropertyChanged("Duration");
             }
         }
 
@@ -143,7 +152,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.ScanType; }
             set {
                 _video.ScanType = value;
-                OnPropertyChanged();
+                OnPropertyChanged("ScanType");
             }
         }
 
@@ -154,7 +163,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.ColorSpace; }
             set {
                 _video.ColorSpace = value;
-                OnPropertyChanged();
+                OnPropertyChanged("ColorSpace");
             }
         }
 
@@ -164,7 +173,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.ChromaSubsampling; }
             set {
                 _video.ChromaSubsampling = value;
-                OnPropertyChanged();
+                OnPropertyChanged("ChromaSubsampling");
             }
         }
 
@@ -172,7 +181,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.Format; }
             set {
                 _video.Format = value;
-                OnPropertyChanged();
+                OnPropertyChanged("Format");
             }
         }
 
@@ -183,7 +192,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.Codec; }
             set {
                 _video.Codec = value;
-                OnPropertyChanged();
+                OnPropertyChanged("Codec");
             }
         }
 
@@ -194,7 +203,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.CodecId; }
             set {
                 _video.CodecId = value;
-                OnPropertyChanged();
+                OnPropertyChanged("CodecImage");
+                OnPropertyChanged("CodecId");
             }
         }
 
@@ -205,7 +215,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.Aspect; }
             set {
                 _video.Aspect = value;
-                OnPropertyChanged();
+                OnPropertyChanged("Aspect");
             }
         }
 
@@ -215,7 +225,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.AspectCommercialName; }
             set {
                 _video.AspectCommercialName = value;
-                OnPropertyChanged();
+                OnPropertyChanged("AspectCommercialName");
             }
         }
 
@@ -225,7 +235,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.Width; }
             set {
                 _video.Width = value;
-                OnPropertyChanged();
+                OnPropertyChanged("Width");
             }
         }
 
@@ -235,7 +245,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _video.Height; }
             set {
                 _video.Height = value;
-                OnPropertyChanged();
+                OnPropertyChanged("Height");
             }
         }
 
@@ -246,12 +256,61 @@ namespace RibbonUI.Util.ObservableWrappers {
             set { _video.File = value; }
         }
 
+        #endregion
+
+        public IVideo ObservedVideo {
+            get { return _video; }
+        }
+
+        #region Images
+
+        public ImageSource CodecImage {
+            get {
+                string mapping;
+                FileFeatures.VideoCodecIdMappings.TryGetValue(CodecId, out mapping);
+                return GetImageSourceFromPath("Images/FlagsE/vcodec_" + (mapping ?? CodecId) + ".png");
+            }
+        }
+
+        public ImageSource ResolutionImage {
+            get {
+                string filePath;
+                if (!string.IsNullOrEmpty(ResolutionName)) {
+                    filePath = "Images/FlagsE/vres_" + ResolutionName + ".png";
+                    return GetImageSourceFromPath(filePath);
+                }
+
+                if (!Resolution.HasValue) {
+                    return null;
+                }
+
+                int res = Resolution.Value;
+                switch (ScanType) {
+                    case ScanType.Interlaced:
+                        filePath = "Images/FlagsE/vres_" + res + "i.png";
+                        break;
+                    case ScanType.Progressive:
+                        filePath = "Images/FlagsE/vres_" + res + "p.png";
+                        break;
+                    default:
+                        filePath = "Images/FlagsE/vres_" + res + ".png";
+                        break;
+                }
+                return GetImageSourceFromPath(filePath);
+            }
+        }
+
+
+        #endregion
+
+
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+        protected virtual void OnPropertyChanged(string propertyName) {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) {
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }
+
 }

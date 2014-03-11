@@ -10,7 +10,7 @@ using Frost.XamlControls.Commands;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ComboBox = System.Windows.Controls.ComboBox;
 
-namespace RibbonUI.ViewModels.UserControls.Settings {
+namespace RibbonUI.UserControls.Settings {
 
     public class GeneralSettingsViewModel {
 

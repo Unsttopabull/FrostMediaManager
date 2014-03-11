@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using RibbonUI.ViewModels.UserControls.Settings;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace RibbonUI.UserControls.Settings {

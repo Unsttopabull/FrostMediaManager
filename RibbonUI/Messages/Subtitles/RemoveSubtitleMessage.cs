@@ -1,12 +1,12 @@
-﻿using Frost.Common.Models;
+﻿using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.Messages.Subtitles {
     public class RemoveSubtitleMessage {
 
-        public RemoveSubtitleMessage(ISubtitle subtitle) {
+        public RemoveSubtitleMessage(MovieSubtitle subtitle) {
             Subtitle = subtitle;
         }
 
-        public ISubtitle Subtitle { get; private set; }
+        public MovieSubtitle Subtitle { get; private set; }
     }
 }

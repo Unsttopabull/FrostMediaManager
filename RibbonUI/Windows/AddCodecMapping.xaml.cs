@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using RibbonUI.Util;
-using RibbonUI.ViewModels.Windows;
 
 namespace RibbonUI.Windows {
 

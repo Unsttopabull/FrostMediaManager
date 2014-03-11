@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using Frost.Common.Models;
-using RibbonUI.ViewModels.UserControls;
 
 namespace RibbonUI.UserControls {
 

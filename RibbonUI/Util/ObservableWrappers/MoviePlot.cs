@@ -5,7 +5,7 @@ using Frost.Common.Properties;
 
 namespace RibbonUI.Util.ObservableWrappers {
 
-    public class MoviePlot : IPlot, INotifyPropertyChanged {
+    public class MoviePlot : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IPlot _plot;
 
@@ -16,9 +16,9 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <summary>Gets or sets the tagline (short one-liner).</summary>
         /// <value>The tagline (short promotional slogan / one-liner / clarification).</value>
         public string Tagline {
-            get { return Plot.Tagline; }
+            get { return ObservedPlot.Tagline; }
             set {
-                Plot.Tagline = value;
+                ObservedPlot.Tagline = value;
                 OnPropertyChanged();
             }
         }
@@ -26,9 +26,9 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <summary>Gets or sets the story summary.</summary>
         /// <value>A short story summary, the plot outline</value>
         public string Summary {
-            get { return Plot.Summary; }
+            get { return ObservedPlot.Summary; }
             set {
-                Plot.Summary = value;
+                ObservedPlot.Summary = value;
                 OnPropertyChanged();
             }
         }
@@ -36,9 +36,9 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <summary>Gets or sets the full plot.</summary>
         /// <value>The full plot.</value>
         public string Full {
-            get { return Plot.Full; }
+            get { return ObservedPlot.Full; }
             set {
-                Plot.Full = value;
+                ObservedPlot.Full = value;
                 OnPropertyChanged();
             }
         }
@@ -46,21 +46,21 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <summary>Gets or sets the language of this plot.</summary>
         /// <value>The language of this plot.</value>
         public string Language {
-            get { return Plot.Language; }
+            get { return ObservedPlot.Language; }
             set {
-                Plot.Language = value;
+                ObservedPlot.Language = value;
                 OnPropertyChanged();
             }
         }
 
-        public IPlot Plot {
+        public IPlot ObservedPlot {
             get { return _plot; }
         }
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString() {
-            return Plot.ToString();
+            return ObservedPlot.ToString();
         }
 
         [NotifyPropertyChangedInvocator]

@@ -10,13 +10,14 @@ using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 using GalaSoft.MvvmLight;
 using RibbonUI.Messages.Subtitles;
+using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Windows;
 
-namespace RibbonUI.ViewModels.UserControls.List {
+namespace RibbonUI.UserControls.List {
 
     public class ListSubtitlesViewModel : ViewModelBase {
         private readonly IMoviesDataService _service;
-        private ObservableCollection<ISubtitle> _subtitles;
+        private ObservableCollection<MovieSubtitle> _subtitles;
         private ICollectionView _collectionView;
 
         public ListSubtitlesViewModel(IMoviesDataService service) {
@@ -43,11 +44,11 @@ namespace RibbonUI.ViewModels.UserControls.List {
                 "VobSub"
             };
 
-            ChangeLanguageCommand = new RelayCommand<ISubtitle>(LangEdit);
-            RemoveCommand = new RelayCommand<ISubtitle>(OnRemoveClicked, s => s != null);
+            ChangeLanguageCommand = new RelayCommand<MovieSubtitle>(LangEdit);
+            RemoveCommand = new RelayCommand<MovieSubtitle>(OnRemoveClicked, s => s != null);
         }
 
-        public ObservableCollection<ISubtitle> Subtitles {
+        public ObservableCollection<MovieSubtitle> Subtitles {
             get { return _subtitles; }
             set {
                 if (Equals(value, _subtitles)) {
@@ -71,16 +72,16 @@ namespace RibbonUI.ViewModels.UserControls.List {
 
         public ObservableCollection<string> SubtitleFormats { get; set; }
 
-        public RelayCommand<ISubtitle> ChangeLanguageCommand { get; private set; }
-        public RelayCommand<ISubtitle> RemoveCommand { get; private set; }
+        public RelayCommand<MovieSubtitle> ChangeLanguageCommand { get; private set; }
+        public RelayCommand<MovieSubtitle> RemoveCommand { get; private set; }
 
 
-        private void OnRemoveClicked(ISubtitle subtitle) {
+        private void OnRemoveClicked(MovieSubtitle subtitle) {
             RemoveSubtitleMessage msg = new RemoveSubtitleMessage(subtitle);
             MessengerInstance.Send(msg);
         }
 
-        private void LangEdit(ISubtitle subtitle) {
+        private void LangEdit(MovieSubtitle subtitle) {
             SelectLanguage sc = new SelectLanguage {
                 Owner = ParentWindow,
                 Languages = _service.Languages

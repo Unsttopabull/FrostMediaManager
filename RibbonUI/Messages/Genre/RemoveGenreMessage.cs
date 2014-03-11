@@ -1,6 +1,6 @@
 using Frost.Common.Models;
 
-namespace RibbonUI.ViewModels.UserControls {
+namespace RibbonUI.Messages.Genre {
 
     internal class RemoveGenreMessage {
 

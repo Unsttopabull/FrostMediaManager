@@ -3,13 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
         xmlns:people="clr-namespace:Frost.Models.Frost.DB.People;assembly=Frost.Models.Frost"
-        xmlns:vm="clr-namespace:RibbonUI.ViewModels.Windows"
         xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
+        xmlns:windows="clr-namespace:RibbonUI.Windows"
         Closed="AddPersonOnClosed" Height="552" Width="590"
         Title="{l:T Add a person}" Name="AddPersonWindow"
         WindowStartupLocation="CenterOwner">
     <Window.DataContext>
-        <vm:AddPersonViewModel />            
+        <windows:AddPersonViewModel />            
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>

@@ -14,8 +14,8 @@
              xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
              xmlns:common="clr-namespace:Frost.Common;assembly=Frost.Common"
              xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
-             xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls"
-             mc:Ignorable="d" Loaded="OnControlLoaded" d:DataContext="{d:DesignInstance vm:EditMovieViewModel}"
+             xmlns:userControls="clr-namespace:RibbonUI.UserControls"
+             mc:Ignorable="d" Loaded="OnControlLoaded" d:DataContext="{d:DesignInstance userControls:EditMovieViewModel}"
              d:DesignHeight="725" d:DesignWidth="1071">
     <UserControl.Resources>
         <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
@@ -58,6 +58,8 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Label Grid.Row="0" Target="{Binding ElementName=MovieTitle}" Content="{l:T Title, Postfix=:}"/>
                     <TextBox Grid.Row="1" x:Name="MovieTitle" Text="{Binding SelectedMovie.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -71,7 +73,11 @@
                     <Label Grid.Row="6" Target="{Binding ElementName=MovieEdithion}" Content="{l:T Edithion, Postfix=:}"/>
                     <TextBox Grid.Row="7" x:Name="MovieEdithion" Text="{Binding SelectedMovie.Edithion, Converter={StaticResource EmptyStringToNullConverter}}" />
 
-                    <Grid x:Name="TypeRatingDuration" x:FieldModifier="private" Grid.Row="8">
+                    <Label Grid.Row="8" Target="{Binding ElementName=MovieSet}" Content="{l:T Set, Postfix=:}"/>
+                    <ComboBox Grid.Row="9" x:Name="MovieSet" SelectedItem="{Binding SelectedMovie.Set}"
+                              ItemsSource="{Binding Sets}" DisplayMemberPath="Name"/>
+
+                    <Grid x:Name="TypeRatingDuration" x:FieldModifier="private" Grid.Row="10">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="5" />
@@ -147,8 +153,8 @@
                             <e:IntegerUpDown Minimum="0" Maximum="250" Value="{Binding SelectedMovie.Top250, TargetNullValue={x:Null}, UpdateSourceTrigger=PropertyChanged}" MinHeight="30" VerticalContentAlignment="Center" />
                         </StackPanel>
                     </Grid>
-                    <Label Grid.Row="9" Content="{l:T Trailer, Postfix=:}"/>
-                    <Grid x:Name="TrailerGrid" x:FieldModifier="private" Grid.Row="10">
+                    <Label Grid.Row="11" Content="{l:T Trailer, Postfix=:}"/>
+                    <Grid x:Name="TrailerGrid" x:FieldModifier="private" Grid.Row="12">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
@@ -160,7 +166,7 @@
                         </Button>
                     </Grid>
 
-                    <Grid x:Name="CountriesGenresDirectors" x:FieldModifier="private" Grid.Row="11">
+                    <Grid x:Name="CountriesGenresDirectors" x:FieldModifier="private" Grid.Row="13">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />

@@ -2,12 +2,12 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
-        xmlns:vm="clr-namespace:RibbonUI.ViewModels.Windows"
         xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
+        xmlns:windows="clr-namespace:RibbonUI.Windows"
         Title="{l:T Select language}" Height="110" Width="350"
         WindowStartupLocation="CenterOwner" Name="SelectLanguagesWindow">
     <Window.DataContext>
-        <vm:SelectLanguageViewModel/>
+        <windows:SelectLanguageViewModel/>
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>

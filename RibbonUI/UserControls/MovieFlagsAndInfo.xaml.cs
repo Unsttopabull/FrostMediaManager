@@ -2,7 +2,6 @@
 using System.Windows.Controls;
 using Frost.Common.Models;
 using Frost.Models.Frost.DB;
-using RibbonUI.ViewModels.UserControls;
 
 namespace RibbonUI.UserControls {
 

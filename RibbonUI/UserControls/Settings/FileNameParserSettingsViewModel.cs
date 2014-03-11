@@ -10,7 +10,7 @@ using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
 using Frost.XamlControls.Commands;
 
-namespace RibbonUI.ViewModels.UserControls.Settings {
+namespace RibbonUI.UserControls.Settings {
 
     internal class FileNameParserSettingsViewModel : INotifyPropertyChanged, IDataErrorInfo {
         private string _releaseGroupError;

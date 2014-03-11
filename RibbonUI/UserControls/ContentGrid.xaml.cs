@@ -14,7 +14,6 @@ using Frost.Common.Properties;
 using Frost.GettextMarkupExtension;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Expression.Interactivity.Core;
-using RibbonUI.ViewModels.UserControls;
 
 namespace RibbonUI.UserControls {
 

@@ -5,20 +5,20 @@ using Frost.Common.Models;
 using Frost.Common.Properties;
 
 namespace RibbonUI.Util.ObservableWrappers {
-    public class ObservableActor : IActor, INotifyPropertyChanged {
-        private readonly IActor _actor;
+    public class MovieActor : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
+        private readonly IActor _actor;
 
-        public ObservableActor(IActor actor) {
+        public MovieActor(IActor actor) {
             _actor = actor;
         }
 
         /// <summary>Gets or sets the full name of the person.</summary>
         /// <value>The full name of the person.</value>
         public string Name {
-            get { return Actor.Name; }
+            get { return ObservedActor.Name; }
             set {
-                Actor.Name = value;
+                _actor.Name = value;
                 OnPropertyChanged();
             }
         }
@@ -26,9 +26,9 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <summary>Gets or sets the persons thumbnail image.</summary>
         /// <value>The thumbnail image.</value>
         public string Thumb {
-            get { return Actor.Thumb; }
+            get { return ObservedActor.Thumb; }
             set {
-                Actor.Thumb = value;
+                _actor.Thumb = value;
                 OnPropertyChanged();
             }
         }
@@ -36,9 +36,9 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <summary>Gets or sets the Persons imdb identifier.</summary>
         /// <value>The imdb identifier of the person.</value>
         public string ImdbID {
-            get { return Actor.ImdbID; }
+            get { return ObservedActor.ImdbID; }
             set {
-                Actor.ImdbID = value;
+                _actor.ImdbID = value;
                 OnPropertyChanged();
             }
         }
@@ -46,25 +46,29 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <summary>Gets or sets movies where this person was a director.</summary>
         /// <value>The movies where this person was a director.</value>
         public ICollection<IMovie> MoviesAsDirector {
-            get { return Actor.MoviesAsDirector; }
+            get { return _actor.MoviesAsDirector; }
         }
 
         /// <summary>Gets or sets movies where this person was a writer.</summary>
         /// <value>The movies where this person was a writer.</value>
         public ICollection<IMovie> MoviesAsWriter {
-            get { return Actor.MoviesAsWriter; }
+            get { return _actor.MoviesAsWriter; }
         }
 
         public string Character {
-            get { return Actor.Character; }
+            get { return _actor.Character; }
             set {
-                Actor.Character = value;
+                _actor.Character = value;
                 OnPropertyChanged();
             }
         }
 
-        public IActor Actor {
+        public IActor ObservedActor {
             get { return _actor; }
+        }
+
+        public MoviePerson ObservedPerson {
+            get { return new MoviePerson(_actor); }
         }
 
         [NotifyPropertyChangedInvocator]

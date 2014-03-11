@@ -6,12 +6,12 @@ using Frost.Common.Properties;
 
 namespace RibbonUI.Util.ObservableWrappers {
 
-    public class MoviePerson : INotifyPropertyChanged, IPerson {
-        private IPerson _person;
+    public class MoviePerson : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
+        private readonly IPerson _person;
 
         public MoviePerson(IPerson person) {
-            Person = person;
+            _person = person;
         }
 
         /// <summary>Gets or sets the full name of the person.</summary>
@@ -58,20 +58,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _person.MoviesAsWriter; }
         }
 
-        public IPerson Person {
+        public IPerson ObservedPerson {
             get { return _person; }
-            set {
-                if (Equals(value, _person)) {
-                    return;
-                }
-                _person = value;
-                OnPropertyChanged();
-                OnPropertyChanged("Name");
-                OnPropertyChanged("Thumb");
-                OnPropertyChanged("ImdbID");
-                OnPropertyChanged("MoviesAsDirector");
-                OnPropertyChanged("MoviesAsWriter");
-            }
         }
 
         [NotifyPropertyChangedInvocator]

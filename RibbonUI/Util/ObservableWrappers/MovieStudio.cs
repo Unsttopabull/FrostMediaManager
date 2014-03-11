@@ -6,20 +6,21 @@ using Frost.Common.Properties;
 namespace RibbonUI.Util.ObservableWrappers {
     public class MovieStudio : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
+        private readonly IStudio _studio;
 
         public MovieStudio(IStudio studio) {
-            Studio = studio;
+            _studio = studio;
         }
 
         public string Name {
-            get { return Studio.Name; }
+            get { return ObservedStudio.Name; }
             set {
-                Studio.Name = value;
+                ObservedStudio.Name = value;
                 OnPropertyChanged();
             }
         }
 
-        public IStudio Studio { get; set; }
+        public IStudio ObservedStudio { get { return _studio; }}
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {

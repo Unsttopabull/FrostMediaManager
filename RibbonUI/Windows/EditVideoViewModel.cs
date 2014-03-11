@@ -3,21 +3,21 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using Frost.Common;
-using Frost.Common.Models;
 using Frost.Common.Properties;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
+using RibbonUI.Util;
+using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.ViewModels.Windows {
+namespace RibbonUI.Windows {
     public class EditVideoViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private ObservableCollection<Codec> _codecs;
         private ObservableCollection<string> _resolutions;
         private ObservableCollection<string> _colorSpaces;
-        private IVideo _selectedVideo;
+        private MovieVideo _selectedVideo;
         private Codec _codecId;
 
         public EditVideoViewModel() {
@@ -115,17 +115,7 @@ namespace RibbonUI.ViewModels.Windows {
             });
         }
 
-        public class Codec {
-            public Codec(string name, string id) {
-                Name = name;
-                Id = id;
-            }
-
-            public string Name { get; set; }
-            public string Id { get; set; }
-        }
-
-        public IVideo SelectedVideo {
+        public MovieVideo SelectedVideo {
             get { return _selectedVideo; }
             set {
                 if (Equals(value, _selectedVideo)) {
@@ -144,7 +134,7 @@ namespace RibbonUI.ViewModels.Windows {
                 }
 
                 OnPropertyChanged("FormattedVideoResolution");
-                OnPropertyChanged();
+                OnPropertyChanged("SelectedVideo");
             }
         }
 
@@ -156,7 +146,7 @@ namespace RibbonUI.ViewModels.Windows {
                 }
                 _codecId = value;
 
-                if (_codecId != null) {
+                if (_codecId != null && SelectedVideo != null) {
                     if (value.Id == "unk") {
                         SelectedVideo.Codec = null;
                         SelectedVideo.CodecId = null;
@@ -167,7 +157,7 @@ namespace RibbonUI.ViewModels.Windows {
                     SelectedVideo.CodecId = value.Id;
                 }
 
-                OnPropertyChanged();
+                OnPropertyChanged("SelectedCodec");
             }
         }
 
@@ -210,6 +200,8 @@ namespace RibbonUI.ViewModels.Windows {
                     SelectedVideo.Resolution = null;
                     SelectedVideo.ResolutionName = null;
                     SelectedVideo.ScanType = ScanType.Unknown;
+
+                    OnPropertyChanged("FormattedVideoResolution");
                     return;
                 }
 
@@ -241,6 +233,7 @@ namespace RibbonUI.ViewModels.Windows {
 
                     SelectedVideo.ScanType = ScanType.Unknown;
                 }
+                OnPropertyChanged("FormattedVideoResolution");
             }
         }
 
@@ -251,7 +244,7 @@ namespace RibbonUI.ViewModels.Windows {
                     return;
                 }
                 _codecs = value;
-                OnPropertyChanged();
+                OnPropertyChanged("Codecs");
             }
         }
 
@@ -262,7 +255,7 @@ namespace RibbonUI.ViewModels.Windows {
                     return;
                 }
                 _resolutions = value;
-                OnPropertyChanged();
+                OnPropertyChanged("Resolutions");
             }
         }
 
@@ -273,7 +266,7 @@ namespace RibbonUI.ViewModels.Windows {
                     return;
                 }
                 _colorSpaces = value;
-                OnPropertyChanged();
+                OnPropertyChanged("ColorSpaces");
             }
         }
 
@@ -282,10 +275,9 @@ namespace RibbonUI.ViewModels.Windows {
         public ICommand<Window> CloseCommand { get; private set; }
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) {
-                handler(this, new PropertyChangedEventArgs(propertyName));
+        protected virtual void OnPropertyChanged(string propertyName) {
+            if (PropertyChanged != null) {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

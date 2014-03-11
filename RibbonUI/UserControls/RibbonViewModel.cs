@@ -11,7 +11,7 @@ using GalaSoft.MvvmLight;
 using RibbonUI.Messages;
 using RibbonUI.Windows;
 
-namespace RibbonUI.ViewModels.UserControls {
+namespace RibbonUI.UserControls {
 
     public enum RibbonTabs {
         None,

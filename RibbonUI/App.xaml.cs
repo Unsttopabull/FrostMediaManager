@@ -15,9 +15,6 @@ using GalaSoft.MvvmLight.Ioc;
 using RibbonUI.Properties;
 using RibbonUI.UserControls;
 using RibbonUI.UserControls.List;
-using RibbonUI.ViewModels;
-using RibbonUI.ViewModels.UserControls;
-using RibbonUI.ViewModels.UserControls.List;
 
 namespace RibbonUI {
 

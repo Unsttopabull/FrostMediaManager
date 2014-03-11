@@ -4,14 +4,14 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
 using Frost.Common;
-using Frost.Common.Models;
 using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
+using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Windows;
 
-namespace RibbonUI.ViewModels.UserControls.List {
+namespace RibbonUI.UserControls.List {
     class ListAudiosViewModel : INotifyPropertyChanged {
-        private ObservableCollection<IAudio> _audios;
+        private ObservableCollection<MovieAudio> _audios;
         public event PropertyChangedEventHandler PropertyChanged;
         private ICollectionView _collectionView;
         private readonly IMoviesDataService _service;
@@ -19,11 +19,11 @@ namespace RibbonUI.ViewModels.UserControls.List {
         public ListAudiosViewModel(IMoviesDataService service) {
             _service = service;
 
-            EditCommand = new RelayCommand<IAudio>(OnEditClicked, a => a != null);
-            RemoveCommand = new RelayCommand<IAudio>(OnRemoveClicked, a => a != null);
+            EditCommand = new RelayCommand<MovieAudio>(OnEditClicked, a => a != null);
+            RemoveCommand = new RelayCommand<MovieAudio>(OnRemoveClicked, a => a != null);
         }
 
-        public ObservableCollection<IAudio> Audios {
+        public ObservableCollection<MovieAudio> Audios {
             get { return _audios; }
             set {
                 if (Equals(value, _audios)) {
@@ -48,11 +48,11 @@ namespace RibbonUI.ViewModels.UserControls.List {
 
         public Window ParentWindow { get; set; }
 
-        public ICommand<IAudio> EditCommand { get; private set; }
-        public ICommand<IAudio> RemoveCommand { get; private set; }
+        public ICommand<MovieAudio> EditCommand { get; private set; }
+        public ICommand<MovieAudio> RemoveCommand { get; private set; }
 
 
-        private void OnEditClicked(IAudio audio) {
+        private void OnEditClicked(MovieAudio audio) {
             EditAudio editAudio = new EditAudio {
                 Owner = ParentWindow,
                 SelectedAudio = audio,
@@ -66,7 +66,7 @@ namespace RibbonUI.ViewModels.UserControls.List {
             _collectionView.Refresh();
         }
 
-        private void OnRemoveClicked(IAudio audio) {
+        private void OnRemoveClicked(MovieAudio audio) {
             
         }
 

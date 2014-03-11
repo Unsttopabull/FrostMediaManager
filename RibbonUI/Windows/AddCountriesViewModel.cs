@@ -6,7 +6,7 @@ using Frost.Common.Models;
 using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 
-namespace RibbonUI.ViewModels.Windows {
+namespace RibbonUI.Windows {
     class AddCountriesViewModel : INotifyPropertyChanged {
         private IEnumerable<ICountry> _countries;
         public event PropertyChangedEventHandler PropertyChanged;

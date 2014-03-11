@@ -6,11 +6,11 @@
              xmlns:detectFeatures="clr-namespace:Frost.DetectFeatures;assembly=Frost.FeatureDetector"
              xmlns:l="http://www.frostmediamanager.com/xaml/translation"
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
-             xmlns:vm="clr-namespace:RibbonUI.ViewModels.UserControls.Settings"
+             xmlns:settings="clr-namespace:RibbonUI.UserControls.Settings"
              mc:Ignorable="d" Loaded="FeatureDetectorSettingsLoaded"
              d:DesignHeight="641" d:DesignWidth="522">
     <UserControl.DataContext>
-        <vm:FeatureDetectorSettingsViewModel/>
+        <settings:FeatureDetectorSettingsViewModel/>
     </UserControl.DataContext>
     <Grid Margin="5,0,5,0">
         <Grid.Resources>

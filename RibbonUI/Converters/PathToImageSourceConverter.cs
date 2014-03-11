@@ -7,6 +7,7 @@ using Frost.Common;
 using Frost.Common.Models;
 using Frost.DetectFeatures;
 using Frost.Models.Frost.DB.Files;
+using RibbonUI.Util.ObservableWrappers;
 using File = System.IO.File;
 
 namespace RibbonUI.Converters {
@@ -54,10 +55,16 @@ namespace RibbonUI.Converters {
                         filePath = "Images/FlagsE/vres_" + value + ".png";
                         break;
                     case PathType.VideoResolutionV:
-                        IVideo v = (IVideo) value;
+                        MovieVideo v = (MovieVideo) value;
+                        if (!string.IsNullOrEmpty(v.ResolutionName)) {
+                            filePath = "Images/FlagsE/vres_" + v.ResolutionName + ".png";
+                            break;
+                        }
+
                         if (!v.Resolution.HasValue) {
                             return null;
                         }
+
                         int res = v.Resolution.Value;
                         switch (v.ScanType) {
                             case ScanType.Interlaced:
