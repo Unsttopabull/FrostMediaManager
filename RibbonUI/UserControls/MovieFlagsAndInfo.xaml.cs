@@ -1,14 +1,13 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using Frost.Common.Models;
-using Frost.Models.Frost.DB;
+using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls {
 
     /// <summary>Interaction logic for MovieFlagsAndInfo.xaml</summary>
     public partial class MovieFlagsAndInfo : UserControl {
         public static readonly DependencyProperty MinRequiredWidthProperty = DependencyProperty.Register("MinRequiredWidth", typeof(double), typeof(MovieFlagsAndInfo), new PropertyMetadata(default(double)));
-        public static readonly DependencyProperty SelectedMovieProperty = DependencyProperty.Register("SelectedMovie", typeof(IMovie), typeof(MovieFlagsAndInfo), new PropertyMetadata(default(IMovie), SelectedMovieChanged));
+        public static readonly DependencyProperty SelectedMovieProperty = DependencyProperty.Register("SelectedMovie", typeof(ObservableMovie), typeof(MovieFlagsAndInfo), new PropertyMetadata(default(ObservableMovie), SelectedMovieChanged));
 
         public MovieFlagsAndInfo() {
             InitializeComponent();
@@ -19,13 +18,13 @@ namespace RibbonUI.UserControls {
             set { SetValue(MinRequiredWidthProperty, value); }
         }
       
-        public IMovie SelectedMovie {
-            get { return (IMovie) GetValue(SelectedMovieProperty); }
+        public ObservableMovie SelectedMovie {
+            get { return (ObservableMovie) GetValue(SelectedMovieProperty); }
             set { SetValue(SelectedMovieProperty, value); }
         }
 
         private static void SelectedMovieChanged(DependencyObject d, DependencyPropertyChangedEventArgs args) {
-            ((MovieFlagsAndInfoViewModel) ((MovieFlagsAndInfo) d).DataContext).SelectedMovie = (IMovie) args.NewValue;
+            ((MovieFlagsAndInfoViewModel) ((MovieFlagsAndInfo) d).DataContext).SelectedMovie = (ObservableMovie) args.NewValue;
         }
     }
 }

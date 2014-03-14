@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Frost.Common;
+using Frost.Common.Models;
 using Frost.Model.Xbmc.NFO;
 using Frost.Models.Frost.DB.Files;
 using Frost.Models.Frost.DB.People;
 using Frost.Models.Xtreamer.NFO;
 using Frost.Models.Xtreamer.PHP;
+using MovieVo = Frost.Models.Xtreamer.PHP.Coretis_VO_Movie;
 
 namespace Frost.Models.Frost.DB
 {
@@ -15,7 +17,7 @@ namespace Frost.Models.Frost.DB
 
         #region Xtreamer
 
-        public static explicit operator Movie(Coretis_VO_Movie m) {
+        public static explicit operator Movie(MovieVo m) {
             Movie mov = new Movie();
 
             GetMovieTitle(m, mov);
@@ -36,7 +38,7 @@ namespace Frost.Models.Frost.DB
             return mov;
         }
 
-        private static void AddAudioVideoInfo(Coretis_VO_Movie m, Movie mov) {
+        private static void AddAudioVideoInfo(MovieVo m, Movie mov) {
             mov.Audios.Add(new Audio(
                 m.audioSource,
                 m.audioType,
@@ -56,7 +58,7 @@ namespace Frost.Models.Frost.DB
                 ));
         }
 
-        private static void AddActors(Coretis_VO_Movie m, Movie mov) {
+        private static void AddActors(MovieVo m, Movie mov) {
             foreach (Coretis_VO_Person cPerson in m.personArr) {
                 if (cPerson.job.OrdinalEquals("actor")) {
                     mov.Actors.Add(new Actor(cPerson.name, null, cPerson.character));
@@ -73,7 +75,7 @@ namespace Frost.Models.Frost.DB
             }
         }
 
-        private static void GetMovieTitle(Coretis_VO_Movie m, Movie mov) {
+        private static void GetMovieTitle(MovieVo m, IMovie mov) {
             mov.Title = m.name;
             if (!string.IsNullOrEmpty(m.titleOrg)) {
                 mov.OriginalTitle = m.titleOrg;
@@ -84,7 +86,7 @@ namespace Frost.Models.Frost.DB
             }
         }
 
-        private static void AddArt(Coretis_VO_Movie m, Movie mov) {
+        private static void AddArt(MovieVo m, Movie mov) {
             if (!string.IsNullOrEmpty(m.pathCover)) {
                 mov.Art.Add(new Art(ArtType.Cover, m.pathCover));
             }
@@ -102,7 +104,7 @@ namespace Frost.Models.Frost.DB
             }
         }
 
-        public static void GetInfo(Coretis_VO_Movie phpMovie, Movie mov) {
+        public static void GetInfo(MovieVo phpMovie, Movie mov) {
             //convert the year to int if valid number
             int result;
             if (int.TryParse(phpMovie.year, out result)) {

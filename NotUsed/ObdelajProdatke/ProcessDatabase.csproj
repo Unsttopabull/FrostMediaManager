@@ -69,10 +69,6 @@
       <Project>{b404da8f-fbf4-4ccc-be01-22c488863ec2}</Project>
       <Name>Models.Frost</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NetworkShares\NetworkShares.csproj">
-      <Project>{A85F5E2B-149A-4FB5-A749-056AE20AB72F}</Project>
-      <Name>NetworkShares</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Models.Xbmc\Models.Xbmc.csproj">
       <Project>{2e311a90-347b-47e1-8aa7-87a276c88f4e}</Project>
       <Name>Models.Xbmc</Name>
@@ -80,10 +76,6 @@
     <ProjectReference Include="..\Models.Xtreamer\Models.Xtreamer.csproj">
       <Project>{8491dccf-354e-4ff6-89d4-88a0bb9cb8af}</Project>
       <Name>Models.Xtreamer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\PHPtoNet\PHPtoNET.csproj">
-      <Project>{4661DD6C-BE69-4BCB-A835-53D192DE841C}</Project>
-      <Name>PHPtoNET</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

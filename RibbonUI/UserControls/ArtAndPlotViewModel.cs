@@ -7,15 +7,16 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Frost.Common;
 using Frost.Common.Models;
-using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
+using RibbonUI.Annotations;
+using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls {
     public class ArtAndPlotViewModel : INotifyPropertyChanged {
         private const string IMDB_PERSON_URI = "http://www.imdb.com/name/nm{0}";
         private const string IMDB_TITLE_URI = "http://www.imdb.com/title/{0}";
         public event PropertyChangedEventHandler PropertyChanged;
-        private IMovie _selectedMovie;
+        private ObservableMovie _selectedMovie;
 
         public ArtAndPlotViewModel() {
             GoToImdbCommand = new RelayCommand<string>(GoToIMDB);
@@ -28,7 +29,7 @@ namespace RibbonUI.UserControls {
             GoToTrailerCommand = new RelayCommand<string>(GoToTrailer);
         }
 
-        public IMovie SelectedMovie {
+        public ObservableMovie SelectedMovie {
             get { return _selectedMovie; }
             set {
                 if (Equals(value, _selectedMovie)) {
@@ -71,46 +72,41 @@ namespace RibbonUI.UserControls {
 
         public int NumberOfOscarsWon {
             get {
-                if (SelectedMovie == null) {
-                    return 0;
-                }
-                return SelectedMovie.Awards.Count(a => a.Organization == "Oscar" && !a.IsNomination);
+                return SelectedMovie != null
+                    ? SelectedMovie.Awards.Count(a => a.Organization == "Oscar" && !a.IsNomination) 
+                    : 0;
             }
         }
 
         public int NumberOfGoldenGlobesWon {
             get {
-                if (SelectedMovie == null) {
-                    return 0;
-                }
-                return SelectedMovie.Awards.Count(a => a.Organization == "Golden Globe" && !a.IsNomination);
+                return SelectedMovie != null 
+                    ? SelectedMovie.Awards.Count(a => a.Organization == "Golden Globe" && !a.IsNomination)
+                    : 0;
             }
         }
 
         public int NumberOfGoldenGlobeNominations {
             get {
-                if (SelectedMovie == null) {
-                    return 0;
-                }
-                return SelectedMovie.Awards.Count(a => a.Organization == "Golden Globe" && a.IsNomination);
+                return SelectedMovie != null 
+                    ? SelectedMovie.Awards.Count(a => a.Organization == "Golden Globe" && a.IsNomination)
+                    : 0;
             }
         }
 
         public int NumberOfCannesAwards {
             get {
-                if (SelectedMovie == null) {
-                    return 0;
-                }
-                return SelectedMovie.Awards.Count(a => a.Organization == "Cannes" && !a.IsNomination);
+                return SelectedMovie != null
+                    ? SelectedMovie.Awards.Count(a => a.Organization == "Cannes" && !a.IsNomination)
+                    : 0;
             }
         }
 
         public int NumberOfCannesNominations {
             get {
-                if (SelectedMovie == null) {
-                    return 0;
-                }
-                return SelectedMovie.Awards.Count(a => a.Organization == "Cannes" && a.IsNomination);
+                return SelectedMovie != null
+                    ? SelectedMovie.Awards.Count(a => a.Organization == "Cannes" && a.IsNomination)
+                    : 0;
             }
         }
 

@@ -45,13 +45,13 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         /// <summary>Gets or sets movies where this person was a director.</summary>
         /// <value>The movies where this person was a director.</value>
-        public ICollection<IMovie> MoviesAsDirector {
+        public IEnumerable<IMovie> MoviesAsDirector {
             get { return _actor.MoviesAsDirector; }
         }
 
         /// <summary>Gets or sets movies where this person was a writer.</summary>
         /// <value>The movies where this person was a writer.</value>
-        public ICollection<IMovie> MoviesAsWriter {
+        public IEnumerable<IMovie> MoviesAsWriter {
             get { return _actor.MoviesAsWriter; }
         }
 

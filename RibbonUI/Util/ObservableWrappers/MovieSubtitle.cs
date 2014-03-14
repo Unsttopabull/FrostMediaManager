@@ -5,7 +5,7 @@ using Frost.Common.Properties;
 
 namespace RibbonUI.Util.ObservableWrappers {
 
-    public class MovieSubtitle : INotifyPropertyChanged {
+    public class MovieSubtitle : MovieHasLanguageBase, INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly ISubtitle _subtitle;
 
@@ -85,7 +85,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _subtitle.File; }
         }
 
-        public ILanguage Language {
+        public override ILanguage Language {
             get { return _subtitle.Language; }
             set {
                 _subtitle.Language = value;

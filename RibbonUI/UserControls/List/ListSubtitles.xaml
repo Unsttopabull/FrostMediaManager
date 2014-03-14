@@ -7,6 +7,7 @@
              xmlns:sys="clr-namespace:System.Text;assembly=mscorlib"
              xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
              xmlns:list="clr-namespace:RibbonUI.UserControls.List"
+             xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
              mc:Ignorable="d" Name="ListSubtitlesControl" d:DataContext="{d:DesignInstance list:ListSubtitlesViewModel}"
              d:DesignHeight="300" d:DesignWidth="602" Loaded="ListSubtitlesOnLoaded">
     <UserControl.Resources>
@@ -22,11 +23,11 @@
             </Style>
         </ListView.Resources>
         <ListView.ItemTemplate>
-            <DataTemplate DataType="models:ISubtitle">
+            <DataTemplate DataType="o:MovieSubtitle">
                 <DockPanel LastChildFill="False">
                     <StackPanel DockPanel.Dock="Left">
                         <Button Style="{StaticResource TransparentBorderlessButton}" Command="{Binding ElementName=ListSubtitlesControl, Path=DataContext.ChangeLanguageCommand}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}">
-                            <Image Source="{Binding Language.ISO639.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, FallbackValue={StaticResource UnknownLanguageLarge}, TargetNullValue={StaticResource UnknownLanguageLarge}}"
+                            <Image Source="{Binding LanguageImage, FallbackValue={StaticResource UnknownLanguageLarge}, TargetNullValue={StaticResource UnknownLanguageLarge}}"
                                    MinHeight="48" MaxHeight="100">
                                 <Image.CacheMode>
                                     <BitmapCache />

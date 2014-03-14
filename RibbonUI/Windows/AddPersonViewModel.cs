@@ -8,12 +8,10 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Frost.Common;
 using Frost.Common.Models;
 using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 using Microsoft.Win32;
-using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.Windows {
     class AddPersonViewModel : INotifyPropertyChanged, IDisposable {
@@ -28,7 +26,7 @@ namespace RibbonUI.Windows {
         private string _personCharacter;
 
         public AddPersonViewModel() {
-            _selectedPerson = ModelCreator.Create<IPerson>();
+            //_selectedPerson = LightInjectContainer.GetInstance<IPerson>(App.SystemType);
             _people = new List<IPerson>();
             _searchText = "";
 
@@ -95,6 +93,7 @@ namespace RibbonUI.Windows {
                 if (value == _personName) {
                     return;
                 }
+
                 _personName = value;
 
                 if (!string.IsNullOrEmpty(_personName)) {
@@ -114,7 +113,8 @@ namespace RibbonUI.Windows {
                 if (value == _personThumb) {
                     return;
                 }
-                _personThumb = value;
+
+                _personThumb = string.IsNullOrEmpty(value) ? null : value;
                 OnPropertyChanged();
             }
         }
@@ -156,7 +156,7 @@ namespace RibbonUI.Windows {
                 return false;
             }
 
-            MoviePerson p = (MoviePerson) obj;
+            IPerson p = (IPerson) obj;
             return p.Name.IndexOf(SearchText, StringComparison.CurrentCultureIgnoreCase) >= 0;
         }
 

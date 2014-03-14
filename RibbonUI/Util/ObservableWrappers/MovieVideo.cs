@@ -1,9 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows.Media;
 using Frost.Common;
 using Frost.Common.Models;
-using Frost.Common.Properties;
 using Frost.DetectFeatures;
+using RibbonUI.Annotations;
 
 namespace RibbonUI.Util.ObservableWrappers {
 
@@ -39,7 +40,7 @@ namespace RibbonUI.Util.ObservableWrappers {
         public string Source {
             get { return _video.Source; }
             set {
-                _video.Source = value;
+                _video.Source = string.IsNullOrEmpty(value) ? null : value;
                 OnPropertyChanged("Source");
             }
         }
@@ -143,6 +144,17 @@ namespace RibbonUI.Util.ObservableWrappers {
             set {
                 _video.Duration = value;
                 OnPropertyChanged("Duration");
+            }
+        }
+
+        public TimeSpan DurationTimeSpan {
+            get {
+                return Duration.HasValue
+                    ? TimeSpan.FromMilliseconds((double) Duration)
+                    : new TimeSpan();
+            }
+            set {
+                Duration = Convert.ToInt64(value.TotalMilliseconds);
             }
         }
 
@@ -302,7 +314,6 @@ namespace RibbonUI.Util.ObservableWrappers {
 
 
         #endregion
-
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged(string propertyName) {

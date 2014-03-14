@@ -2,14 +2,14 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using Frost.Common.Models;
 using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
+using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.Windows {
     class AddCountriesViewModel : INotifyPropertyChanged {
-        private IEnumerable<ICountry> _countries;
         public event PropertyChangedEventHandler PropertyChanged;
+        private IEnumerable<MovieCountry> _countries;
 
         public AddCountriesViewModel() {
             AddCommand = new RelayCommand<Window>(w => {
@@ -26,7 +26,7 @@ namespace RibbonUI.Windows {
         public ICommand<Window> AddCommand { get; private set; }
         public ICommand<Window> CancelCommand { get; private set; }
 
-        public IEnumerable<ICountry> Countries {
+        public IEnumerable<MovieCountry> Countries {
             get { return _countries; }
             set {
                 if (Equals(value, _countries)) {

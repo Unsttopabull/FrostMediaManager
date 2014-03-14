@@ -153,7 +153,7 @@
       <Name>SharpMediaInfo</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpOpenSubtitles\SharpOpenSubtitles.csproj">
-      <Project>{10711252-7056-44A6-AC29-5C7C203B0095}</Project>
+      <Project>{10711252-7056-44a6-ac29-5c7c203b0095}</Project>
       <Name>SharpOpenSubtitles</Name>
     </ProjectReference>
     <ProjectReference Include="..\UniversalCharsetDetector\SharpCharsetDetector.csproj">

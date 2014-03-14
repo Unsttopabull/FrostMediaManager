@@ -8,6 +8,33 @@ namespace Frost.Models.Xtreamer {
             
         }
 
+        public XjbCertification(ICertification certification) {
+            Rating = certification.Rating;
+
+            if (certification.Country == null || certification.Country.ISO3166 == null) {
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(certification.Country.ISO3166.Alpha3)) {
+                ISOCountryCode isoCode = ISOCountryCodes.Instance.GetByISOCode(certification.Country.ISO3166.Alpha3);
+                if (isoCode != null) {
+                    Country = isoCode;
+                }
+            }
+            else if (!string.IsNullOrEmpty(certification.Country.ISO3166.Alpha2)) {
+                ISOCountryCode isoCode = ISOCountryCodes.Instance.GetByISOCode(certification.Country.ISO3166.Alpha2);
+                if (isoCode != null) {
+                    Country = isoCode;
+                }
+            }
+            else {
+                ISOCountryCode isoCode = ISOCountryCodes.Instance.GetByEnglishName(certification.Country.Name);
+                if (isoCode != null) {
+                    Country = isoCode;
+                }
+            }
+        }
+
         public XjbCertification(ISOCountryCode country, string rating) {
             Country = country;
             Rating = rating;

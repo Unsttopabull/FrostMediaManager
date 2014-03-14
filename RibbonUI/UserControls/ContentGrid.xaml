@@ -15,7 +15,6 @@
     d:DataContext="{d:DesignInstance userControls:ContentGridViewModel}">
     <!--MinWidth="{Binding MinRequiredWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"-->
     <UserControl.Resources>
-        <converters:DebugConverter x:Key="DebugConverter" />
         <Style x:Key="BooleanImage" TargetType="{x:Type Image}">
             <Setter Property="Source" Value="../Images/error.ico" />
             <Style.Triggers>
@@ -210,19 +209,19 @@
                             <i:InvokeCommandAction Command="{Binding SubtitlesLostFocusCommand}"/>
                         </i:EventTrigger>                        
                     </i:Interaction.Triggers>
-                    <list:ListSubtitles Subtitles="{Binding ElementName=ContentGridControl, Path=DataContext.MovieSubtitles}"/>
+                    <list:ListSubtitles Subtitles="{Binding ElementName=ContentGridControl, Path=DataContext.Subtitles}"/>
                 </TabItem>
                 <TabItem Header="{l:T Videos}">
-                    <list:ListVideos Videos="{Binding ElementName=ContentGridControl, Path=DataContext.MovieVideos}"/>
+                    <list:ListVideos Videos="{Binding ElementName=ContentGridControl, Path=DataContext.Videos}"/>
                 </TabItem>
                 <TabItem Header="{l:T Audios}">
-                    <list:ListAudios Audios="{Binding ElementName=ContentGridControl, Path=DataContext.MovieAudios}"/>
+                    <list:ListAudios Audios="{Binding ElementName=ContentGridControl, Path=DataContext.Audios}"/>
                 </TabItem>
                 <TabItem Header="{l:T Promotional videos}" >
                     
                 </TabItem>
                 <TabItem Header="{l:T Art}">
-                    <list:ListArt Art="{Binding ElementName=ContentGridControl, Path=DataContext.MovieArt}"/>
+                    <list:ListArt Art="{Binding ElementName=ContentGridControl, Path=DataContext.Art}"/>
                 </TabItem>
             </TabControl>
         </Grid>

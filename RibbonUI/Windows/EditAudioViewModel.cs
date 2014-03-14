@@ -48,21 +48,9 @@ namespace RibbonUI.Windows {
 
             SelectedLanguageChanged = new RelayCommand<ILanguage>(language => {
                 SelectedAudio.Language = language;
-                OnPropertyChanged("SelectedAudio");
             });
         }
 
-        public string CodecId {
-            get { return _codecId; }
-            set {
-                if (value == _codecId) {
-                    return;
-                }
-                _codecId = value;
-                OnPropertyChanged();
-            }
-        }
-        
         public MovieAudio SelectedAudio {
             get { return _selectedAudio; }
             set {
@@ -72,8 +60,6 @@ namespace RibbonUI.Windows {
                 _selectedAudio = value;
 
                 if (_selectedAudio != null) {
-                    CodecId = _selectedAudio.CodecId;
-
                     if (_selectedAudio.CodecId != null) {
                         Codec audioCodec = Codecs.FirstOrDefault(c => c.Id.Equals(_selectedAudio.CodecId, StringComparison.InvariantCultureIgnoreCase));
                         if (audioCodec != null) {
@@ -101,9 +87,7 @@ namespace RibbonUI.Windows {
                     }
 
                     SelectedAudio.Codec = _selectedCodec.Name;
-                    SelectedAudio.CodecId = _selectedCodec.Id;
-
-                    CodecId = SelectedAudio.CodecId;                    
+                    SelectedAudio.CodecId = _selectedCodec.Id;                
                 }
 
                 OnPropertyChanged();

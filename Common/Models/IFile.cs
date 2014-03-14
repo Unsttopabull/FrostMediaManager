@@ -5,8 +5,6 @@ namespace Frost.Common.Models {
 
     public interface IFile : IMovieEntity {
 
-        long Id { get; }
-
         ///<summary>The File Extension without beginning point</summary>
         ///<value>The file extension withot begining point</value>
         ///<example>\eg{ ''<c>mp4</c>''}</example>
@@ -37,15 +35,15 @@ namespace Frost.Common.Models {
 
         /// <summary>Gets or sets the details about audio streams in this file</summary>
         /// <value>The details about audio streams in this file</value>
-        ICollection<IAudio> AudioDetails { get; }
+        IEnumerable<IAudio> AudioDetails { get; }
 
         /// <summary>Gets or sets the details about video streams in this file</summary>
         /// <value>The details about video streams in this file</value>
-        ICollection<IVideo> VideoDetails { get; }
+        IEnumerable<IVideo> VideoDetails { get; }
 
         /// <summary>Gets or sets the details about subtitles in this file</summary>
         /// <value>The details about subtitles in this file</value>
-        ICollection<ISubtitle> Subtitles { get; }
+        IEnumerable<ISubtitle> Subtitles { get; }
 
         /// <summary>Gets the full path to the file.</summary>
         /// <value>A full path filename to the fille or <b>null</b> if any of <b>FolderPath</b> or <b>FileName</b> are null</value>

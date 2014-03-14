@@ -10,7 +10,7 @@ namespace Frost.Models.Frost.DB {
             
         }
 
-        public PromotionalVideo(IPromotionalVideo promotionalVideo) {
+        internal PromotionalVideo(IPromotionalVideo promotionalVideo) {
             //Contract.Requires<ArgumentNullException>(promotionalVideo != null);
 
             Type = promotionalVideo.Type;

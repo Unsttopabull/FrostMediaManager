@@ -7,12 +7,10 @@
              xmlns:converters="clr-namespace:RibbonUI.Converters"
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
              xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:list="clr-namespace:RibbonUI.UserControls.List"
              mc:Ignorable="d" Loaded="ListAudiosOnLoaded" Name="ListAudiosControl"
              d:DesignHeight="300" d:DesignWidth="582" d:DataContext="{d:DesignInstance list:ListAudiosViewModel}">
     <UserControl.Resources>
-        <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
         <converters:TranslateEnumConverter x:Key="TranslateEnumConverter" />
     </UserControl.Resources>
     <ListView x:Name="AudiosList" SelectionMode="Single" ItemsSource="{Binding Audios}" ClipToBounds="True">
@@ -29,24 +27,21 @@
                 <Border BorderThickness="0,0,0,1" BorderBrush="Gainsboro">
                     <DockPanel LastChildFill="False">
                         <StackPanel DockPanel.Dock="Left">
-                            <Image
-                                Source="{Binding CodecId, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioCodec, FallbackValue={StaticResource DefaultSoundLogo}, TargetNullValue={StaticResource DefaultSoundLogo}}"
-                                MinHeight="48">
+                            <Image Source="{Binding CodecImage, FallbackValue={StaticResource DefaultSoundLogo}, TargetNullValue={StaticResource DefaultSoundLogo}}"
+                                   MinHeight="48">
                                 <Image.CacheMode>
                                     <BitmapCache />
                                 </Image.CacheMode>
                             </Image>
-                            <Image
-                                Source="{Binding NumberOfChannels, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioChannels, FallbackValue={StaticResource DefaultSoundLogo}, TargetNullValue={StaticResource DefaultSoundLogo}}"
-                                MinHeight="48">
+                            <Image Source="{Binding AudioChannelsImage, FallbackValue={StaticResource DefaultSoundLogo}, TargetNullValue={StaticResource DefaultSoundLogo}}"
+                                   MinHeight="48">
                                 <Image.CacheMode>
                                     <BitmapCache />
                                 </Image.CacheMode>
                             </Image>
-                            <Image
-                                Source="{Binding Language.ISO639.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, FallbackValue={StaticResource UnknownLanguageLarge}, TargetNullValue={StaticResource UnknownLanguageLarge}}"
-                                MinHeight="48" MaxHeight="100" Tag="{Binding Language}"
-                                Style="{StaticResource CollapseOnTagNull}">
+                            <Image Source="{Binding LanguageImage, FallbackValue={StaticResource UnknownLanguageLarge}, TargetNullValue={StaticResource UnknownLanguageLarge}}"
+                                   MinHeight="48" MaxHeight="100" Tag="{Binding Language}"
+                                   Style="{StaticResource CollapseOnTagNull}">
                                 <Image.CacheMode>
                                     <BitmapCache />
                                 </Image.CacheMode>
@@ -107,7 +102,7 @@
                                         Style="{StaticResource CollapseOnTagNull}">
                                 <Label Content="{l:T Duration, Postfix=:}" />
                                 <TextBlock VerticalAlignment="Center"
-                                           Text="{Binding Duration, StringFormat=hh\\:mm\\:ss, Converter={StaticResource MsToTimeSpanConverter}}" />
+                                           Text="{Binding DurationTimeSpan, StringFormat=hh\\:mm\\:ss}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Tag="{Binding Language}"
                                         Style="{StaticResource CollapseOnTagNull}">

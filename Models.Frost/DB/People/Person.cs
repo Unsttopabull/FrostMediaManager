@@ -39,11 +39,13 @@ namespace Frost.Models.Frost.DB.People {
             PersonId = id;
         }
 
-        public Person(IPerson person) {
+        internal Person(IPerson person) {
             Name = person.Name;
             Thumb = person.Thumb;
             ImdbID = person.Name;
         }
+
+        #region Properties/Columns
 
         /// <summary>Gets or sets the database person Id.</summary>
         /// <value>The database person Id</value>
@@ -59,8 +61,8 @@ namespace Frost.Models.Frost.DB.People {
         public string Thumb {
             get {
                 return string.IsNullOrEmpty(_thumb)
-                    ? null
-                    : _thumb;
+                           ? null
+                           : _thumb;
             }
             set { _thumb = value; }
         }
@@ -69,28 +71,32 @@ namespace Frost.Models.Frost.DB.People {
         /// <value>The imdb identifier of the person.</value>
         public string ImdbID { get; set; }
 
+        #endregion
+
         /// <summary>Gets or sets movies where this person was a director.</summary>
         /// <value>The movies where this person was a director.</value>
         [InverseProperty("Directors")]
-        public virtual ICollection<Movie> MoviesAsDirector { get; set; }
+        public virtual HashSet<Movie> MoviesAsDirector { get; set; }
 
         /// <summary>Gets or sets movies where this person was a writer.</summary>
         /// <value>The movies where this person was a writer.</value>
         [InverseProperty("Writers")]
-        public virtual ICollection<Movie> MoviesAsWriter { get; set; }
+        public virtual HashSet<Movie> MoviesAsWriter { get; set; }
 
         #region IPerson
 
+        long IMovieEntity.Id {get { return PersonId; }}
+
         /// <summary>Gets or sets movies where this person was a director.</summary>
         /// <value>The movies where this person was a director.</value>
-        ICollection<IMovie> IPerson.MoviesAsDirector {
-            get { return null; }
+        IEnumerable<IMovie> IPerson.MoviesAsDirector {
+            get { return MoviesAsDirector; }
         }
 
         /// <summary>Gets or sets movies where this person was a writer.</summary>
         /// <value>The movies where this person was a writer.</value>
-        ICollection<IMovie> IPerson.MoviesAsWriter {
-            get { return null; }
+        IEnumerable<IMovie> IPerson.MoviesAsWriter {
+            get { return MoviesAsWriter; }
         }
 
         #endregion

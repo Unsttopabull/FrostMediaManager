@@ -43,7 +43,7 @@ namespace Frost.Models.Frost.DB {
             }
         }
 
-        public Plot(IPlot plot) {
+        internal Plot(IPlot plot) {
             //Contract.Requires<ArgumentNullException>(plot != null);
 
             Tagline = plot.Tagline;

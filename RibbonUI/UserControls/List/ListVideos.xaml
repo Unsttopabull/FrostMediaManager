@@ -5,13 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:l="http://www.frostmediamanager.com/xaml/translation"             
              xmlns:converters="clr-namespace:RibbonUI.Converters"
-             xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
              xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
              xmlns:list="clr-namespace:RibbonUI.UserControls.List"
              mc:Ignorable="d" Loaded="OnWindowLoaded" Name="ListVideosControl"
              d:DesignHeight="300" d:DesignWidth="580" d:DataContext="{d:DesignInstance list:ListVideosViewModel}">
     <UserControl.Resources>
-        <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
         <converters:TranslateEnumConverter x:Key="TranslateEnumConverter"/>
     </UserControl.Resources>
     <ListView x:Name="VideosList" SelectionMode="Single" ItemsSource="{Binding Videos}" ClipToBounds="True">
@@ -126,7 +124,7 @@
                         <StackPanel Orientation="Horizontal" Tag="{Binding Duration}"
                                     Style="{StaticResource CollapseOnTagNull}">
                             <Label Content="{l:T Duration, Postfix=:}"/>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding Duration, StringFormat=hh\\:mm\\:ss, Converter={StaticResource MsToTimeSpanConverter}}" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding DurationTimeSpan, StringFormat=hh\\:mm\\:ss}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding Language}" Style="{StaticResource CollapseOnTagNull}">
                             <Label Content="{l:T Language, Postfix=:}"/>

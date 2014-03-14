@@ -12,7 +12,7 @@ namespace Frost.Models.Frost.DB {
             Movies = new HashSet<Movie>();
         }
 
-        public Award(IAward award) {
+        internal Award(IAward award) {
             //Contract.Requires<ArgumentNullException>(award.Movies != null);
 
             Organization = award.Organization;
@@ -29,7 +29,7 @@ namespace Frost.Models.Frost.DB {
 
         public string AwardType { get; set; }
 
-        public virtual ICollection<Movie> Movies { get; set; }
+        public virtual HashSet<Movie> Movies { get; set; }
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>

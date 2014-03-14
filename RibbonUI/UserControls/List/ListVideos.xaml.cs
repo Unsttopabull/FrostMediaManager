@@ -1,8 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using Frost.Common.Models;
-using GalaSoft.MvvmLight.Ioc;
+using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls.List {
@@ -13,7 +12,7 @@ namespace RibbonUI.UserControls.List {
 
         public ListVideos() {
             InitializeComponent();
-            DataContext = SimpleIoc.Default.GetInstance<ListVideosViewModel>();
+            DataContext = LightInjectContainer.GetInstance<ListVideosViewModel>();
         }
 
         private static void OnVideoListChanged(DependencyObject d, DependencyPropertyChangedEventArgs args) {

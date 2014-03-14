@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
+             xmlns:l="http://www.frostmediamanager.com/xaml/translation"
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:userControls="clr-namespace:RibbonUI.UserControls"
@@ -63,29 +63,30 @@
                     <i:InvokeCommandAction Command="{Binding OnSizeChangedCommand}" CommandParameter="{Binding ElementName=FlagsInfo}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-            <Image DockPanel.Dock="Right" Source="{Binding FirstStudioName, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Studio, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}}"
+            <Image DockPanel.Dock="Right" Source="{Binding FirstStudioLogo, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}}"
                    ToolTip="{Binding FirstStudioName, IsAsync=True, TargetNullValue=Unknown Studio, FallbackValue=Unknown Studio}" MaxWidth="150" MaxHeight="55">
                 <Image.CacheMode>
                     <BitmapCache/>
                 </Image.CacheMode>
             </Image>
-            <Image Source="{Binding SelectedMovie.NumberOfAudioChannels, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioChannels, TargetNullValue={StaticResource DefaultSoundLogo}, FallbackValue={StaticResource DefaultSoundLogo}}"
+            <Image Source="{Binding SelectedMovie.AudioChannelsImage, TargetNullValue={StaticResource DefaultSoundLogo}, FallbackValue={StaticResource DefaultSoundLogo}}"
                    DockPanel.Dock="Right" MaxWidth="150" MaxHeight="55">
                 <Image.CacheMode>
                     <BitmapCache/>
                 </Image.CacheMode>
             </Image>
-            <Image DockPanel.Dock="Right" Source="{Binding SelectedMovie.AudioCodec, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=AudioCodec, TargetNullValue={StaticResource DefaultSoundLogo}, FallbackValue={StaticResource DefaultSoundLogo}}" MaxWidth="150" MaxHeight="55">
+            <Image DockPanel.Dock="Right" Source="{Binding SelectedMovie.AudioCodecImage,
+                TargetNullValue={StaticResource DefaultSoundLogo}, FallbackValue={StaticResource DefaultSoundLogo}}" MaxWidth="150" MaxHeight="55">
                 <Image.CacheMode>
                     <BitmapCache/>
                 </Image.CacheMode>
             </Image>
-            <Image DockPanel.Dock="Right" Source="{Binding SelectedMovie.VideoResolution, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=VideoResolution, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}" MaxWidth="150" MaxHeight="55">
+            <Image DockPanel.Dock="Right" Source="{Binding SelectedMovie.VideoResolutionImage, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}" MaxWidth="150" MaxHeight="55">
                 <Image.CacheMode>
                     <BitmapCache/>
                 </Image.CacheMode>
             </Image>
-            <Image DockPanel.Dock="Right" Source="{Binding SelectedMovie.VideoCodec, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=VideoCodec, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}" MaxWidth="150" MaxHeight="55">
+            <Image DockPanel.Dock="Right" Source="{Binding SelectedMovie.VideoCodecImage, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}" MaxWidth="150" MaxHeight="55">
                 <Image.CacheMode>
                     <BitmapCache/>
                 </Image.CacheMode>

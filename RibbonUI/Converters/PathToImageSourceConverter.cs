@@ -3,23 +3,12 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
-using Frost.Common;
-using Frost.Common.Models;
-using Frost.DetectFeatures;
-using Frost.Models.Frost.DB.Files;
-using RibbonUI.Util.ObservableWrappers;
 using File = System.IO.File;
 
 namespace RibbonUI.Converters {
 
     public enum PathType {
-        Studio,
-        AudioChannels,
-        VideoResolution,
-        VideoResolutionV,
-        VideoCodec,
-        AudioCodec,
-        Box,
+        Unknown,
         Language,
         Country
     }
@@ -37,64 +26,11 @@ namespace RibbonUI.Converters {
             string path = value.ToString();
 
             PathType type;
-            if (!Enum.TryParse(parameter as string, out type)) {
-                type = PathType.Studio;
-            }
+            Enum.TryParse(parameter as string, out type);
 
             if (!string.IsNullOrEmpty(path)) {
                 string filePath;
-                string mapping;
                 switch (type) {
-                    case PathType.Studio:
-                        filePath = "Images/StudiosE/" + value + ".png";
-                        break;
-                    case PathType.AudioChannels:
-                        filePath = "Images/FlagsE/achan_" + value + ".png";
-                        break;
-                    case PathType.VideoResolution:
-                        filePath = "Images/FlagsE/vres_" + value + ".png";
-                        break;
-                    case PathType.VideoResolutionV:
-                        MovieVideo v = (MovieVideo) value;
-                        if (!string.IsNullOrEmpty(v.ResolutionName)) {
-                            filePath = "Images/FlagsE/vres_" + v.ResolutionName + ".png";
-                            break;
-                        }
-
-                        if (!v.Resolution.HasValue) {
-                            return null;
-                        }
-
-                        int res = v.Resolution.Value;
-                        switch (v.ScanType) {
-                            case ScanType.Interlaced:
-                                filePath = "Images/FlagsE/vres_" + res + "i.png";
-                                break;
-                            case ScanType.Progressive:
-                                filePath = "Images/FlagsE/vres_" + res + "p.png";
-                                break;
-                            default:
-                                filePath = "Images/FlagsE/vres_" + res + ".png";
-                                break;
-                        }
-                        break;
-                    case PathType.VideoCodec:
-                        if (FileFeatures.VideoCodecIdMappings.TryGetValue(path, out mapping)) {
-                            value = mapping;
-                        }
-
-                        filePath = "Images/FlagsE/vcodec_" + value + ".png";
-                        break;
-                    case PathType.AudioCodec:
-                        if (FileFeatures.AudioCodecIdMappings.TryGetValue(path, out mapping)) {
-                            value = mapping;
-                        }
-
-                        filePath = "Images/FlagsE/acodec_" + value + ".png";
-                        break;
-                    case PathType.Box:
-                        filePath = "Images/Boxes/" + value + ".png";
-                        break;
                     case PathType.Language:
                         filePath = "Images/Languages/" + value + ".png";
                         break;

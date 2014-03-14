@@ -1,11 +1,14 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Media;
 using Frost.Common;
 using Frost.Common.Models;
-using Frost.Common.Properties;
+using Frost.DetectFeatures;
+using RibbonUI.Annotations;
 
 namespace RibbonUI.Util.ObservableWrappers {
-    public class MovieAudio : INotifyPropertyChanged {
+    public class MovieAudio : MovieHasLanguageBase, INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IAudio _audio;
 
@@ -15,7 +18,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             _audio = audio;
         }
 
-        public ILanguage Language {
+        public override ILanguage Language {
             get { return _audio.Language; }
             set {
                 _audio.Language = value;
@@ -29,7 +32,7 @@ namespace RibbonUI.Util.ObservableWrappers {
         public string Source {
             get { return _audio.Source; }
             set {
-                _audio.Source = value;
+                _audio.Source = string.IsNullOrEmpty(value) ? null : value;
                 OnPropertyChanged();
             }
         }
@@ -156,7 +159,20 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _audio.Duration; }
             set {
                 _audio.Duration = value;
+
+                OnPropertyChanged("DurationTimeSpan");
                 OnPropertyChanged();
+            }
+        }
+
+        public TimeSpan DurationTimeSpan {
+            get {
+                return Duration.HasValue
+                    ? TimeSpan.FromMilliseconds((double) Duration)
+                    : new TimeSpan();
+            }
+            set {
+                Duration = Convert.ToInt64(value.TotalMilliseconds);
             }
         }
 
@@ -171,6 +187,21 @@ namespace RibbonUI.Util.ObservableWrappers {
         }
 
         public IAudio ObservedAudio {get { return _audio; }}
+
+        #region Images
+
+        public ImageSource CodecImage {
+            get {
+                string mapping;
+                FileFeatures.AudioCodecIdMappings.TryGetValue(CodecId, out mapping);
+                return GetImageSourceFromPath("Images/FlagsE/acodec_" + (mapping ?? CodecId) + ".png");
+            }
+        }
+
+        public ImageSource AudioChannelsImage {
+            get { return GetImageSourceFromPath("Images/FlagsE/achan_" + NumberOfChannels + ".png"); }
+        }
+        #endregion 
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {

@@ -19,6 +19,7 @@
                 <x:Type TypeName="fileName:SegmentType" />
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+        <converters:PathToImageSourceConverter x:Key="PathToImageSourceConverter" />
         <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter"/>
         <converters:ISO639Alpha3ToISOLanguageCodeConverter x:Key="Alpha3ToIsoLanguageCodeConverter"/>
         <Style TargetType="{x:Type TextBox}">

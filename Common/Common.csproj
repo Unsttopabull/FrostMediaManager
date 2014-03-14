@@ -75,28 +75,15 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\EF6\EntityFramework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite, Version=1.0.91.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\SQLite\EF6\System.Data.SQLite.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="IModelRegistrator.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IMovieSaver.cs" />
     <Compile Include="IMoviesDataService.cs" />
-    <Compile Include="ModelCreator.cs" />
+    <Compile Include="IsPluginAttribute.cs" />
     <Compile Include="Models\CertificationBase.cs" />
     <Compile Include="Models\IActor.cs" />
     <Compile Include="Models\IArt.cs">
@@ -167,7 +154,6 @@
     <Compile Include="Models\XmlActor.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SQLiteInitializer.cs" />
     <Compile Include="Util\IsoImageMount.cs" />
     <Compile Include="Util\ISO\ISOCode.cs">
       <SubType>Code</SubType>
@@ -189,7 +175,6 @@
     </Compile>
     <Compile Include="Util\KeyedCollectionGeneric.cs" />
     <Compile Include="Util\ObservableHashSet.cs" />
-    <Compile Include="XmlIndentedTextWriter.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

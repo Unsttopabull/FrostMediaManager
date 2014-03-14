@@ -1,8 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using Frost.Common.Models;
-using GalaSoft.MvvmLight.Ioc;
+using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls.List {
@@ -13,7 +12,7 @@ namespace RibbonUI.UserControls.List {
 
         public ListAudios() {
             InitializeComponent();
-            DataContext = SimpleIoc.Default.GetInstance<ListAudiosViewModel>();
+            DataContext = LightInjectContainer.GetInstance<ListAudiosViewModel>();
         }
 
         public ObservableCollection<MovieAudio> Audios {

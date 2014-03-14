@@ -11,7 +11,7 @@ namespace Frost.Models.Frost.DB.People {
         public Actor() {
         }
 
-        public Actor(IActor actor) {
+        internal Actor(IActor actor) {
             Name = actor.Name;
             Thumb = actor.Thumb;
             ImdbID = actor.ImdbID;

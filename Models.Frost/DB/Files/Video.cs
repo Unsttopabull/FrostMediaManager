@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Frost.Common;
 using Frost.Common.Models;
-using Frost.Model.Xbmc.NFO;
 
 namespace Frost.Models.Frost.DB.Files {
 
@@ -22,7 +21,7 @@ namespace Frost.Models.Frost.DB.Files {
             File = file;
         }
 
-        public Video(IVideo video) {
+        internal Video(IVideo video) {
             MovieHash = video.MovieHash;
             Source = video.Source;
             Type = video.Type;
@@ -279,13 +278,6 @@ namespace Frost.Models.Frost.DB.Files {
                 return res;
             }
             return null;
-        }
-
-        /// <summary>Converts an instance of <see cref="XbmcXmlVideoInfo"/> to an instance of <see cref="Video">Video</see>.</summary>
-        /// <param name="video">The video instance to convert.</param>
-        /// <returns>An instance of <see cref="Video">Video</see> converted from <see cref="XbmcXmlVideoInfo"/></returns>
-        public static explicit operator Video(XbmcXmlVideoInfo video) {
-            return new Video(video.Codec, video.Width, video.Height, video.Aspect);
         }
 
         internal class Configuration : EntityTypeConfiguration<Video> {

@@ -35,7 +35,7 @@ namespace Frost.Models.Frost.DB.Files {
         /// <summary>Initializes a new instance of the <see cref="File" /> class.</summary>
         /// <param name="info">The file information.</param>
         /// <exception cref="System.ArgumentNullException">Throw if <paramref name="info"/> is <c>null</c>.</exception>
-        public File(FileInfo info) {
+        internal File(FileInfo info) {
             if (info == null) {
                 throw new ArgumentNullException("info");
             }
@@ -138,45 +138,20 @@ namespace Frost.Models.Frost.DB.Files {
         #endregion
 
         #region IFile
-        ICollection<IAudio> IFile.AudioDetails {
-            get { return new HashSet<IAudio>(AudioDetails); }
+
+        IEnumerable<IAudio> IFile.AudioDetails {
+            get { return AudioDetails; }
         }
 
-        ICollection<IVideo> IFile.VideoDetails {
-            get { return new HashSet<IVideo>(VideoDetails); }
+        IEnumerable<IVideo> IFile.VideoDetails {
+            get { return VideoDetails; }
         }
 
-        ICollection<ISubtitle> IFile.Subtitles {
-            get { return new HashSet<ISubtitle>(Subtitles); }
+        IEnumerable<ISubtitle> IFile.Subtitles {
+            get { return Subtitles; }
         }
+
         #endregion
-
-        /*
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(IFile other) {
-            if (other == null) {
-                return false;
-            }
-
-            if (ReferenceEquals(other, this)) {
-                return true;
-            }
-
-            if (other.Id != 0 && other.Id == Id) {
-                return true;
-            }
-
-            if (other.NameWithExtension == NameWithExtension &&
-                other.FolderPath == FolderPath &&
-                other.Size == Size &&
-                other.DateAdded == DateAdded) {
-
-                return true;
-            }
-            return false;
-        }*/
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>

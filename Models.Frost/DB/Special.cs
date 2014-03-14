@@ -19,11 +19,11 @@ namespace Frost.Models.Frost.DB {
             Value = value;
         }
 
-        public Special(ISpecial special) {
+        internal Special(ISpecial special) {
             //Contract.Requires<ArgumentNullException>(special != null);
             //Contract.Requires<ArgumentNullException>(special.Movies != null);
 
-            Value = special.Value;
+            Value = special.Name;
         }
 
         /// <summary>Gets or sets the database Specials Id.</summary>
@@ -37,9 +37,14 @@ namespace Frost.Models.Frost.DB {
         ///<example>\eg{ <c>INTERNAL, DUBBED, LIMITED, PROPER, REPACK, RERIP, SUBBED</c>}</example>
         public string Value { get; set; }
 
+        string IHasName.Name {
+            get { return Value; }
+            set { Value = value; }
+        }
+
         /// <summary>Gets or sets the movies that this special applies to</summary>
         /// <value>The movies this special applies to.</value>
-        public ICollection<Movie> Movies { get; set; }
+        public HashSet<Movie> Movies { get; set; }
 
         /// <summary>Converts specials as string to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Special"/></summary>
         /// <param name="specials">The specials values.</param>

@@ -2,8 +2,6 @@ namespace Frost.Common.Models {
 
     public interface ISubtitle : IHasLanguage, IMovieEntity {
 
-        long Id { get; }
-
         long? PodnapisiId { get; set; }
 
         long? OpenSubtitlesId { get; set; }

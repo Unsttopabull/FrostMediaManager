@@ -1,17 +1,19 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Frost.Common.Models;
-using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
+using RibbonUI.Annotations;
+using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls {
 
     public class MovieFlagsAndInfoViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
-        private IMovie _selectedMovie;
+        private ObservableMovie _selectedMovie;
 
         public MovieFlagsAndInfoViewModel() {
             OnSizeChangedCommand = new RelayCommand<MovieFlagsAndInfo>(
@@ -21,7 +23,7 @@ namespace RibbonUI.UserControls {
 
         public ICommand OnSizeChangedCommand { get; private set; }
 
-        public IMovie SelectedMovie {
+        public ObservableMovie SelectedMovie {
             get { return _selectedMovie; }
             set {
                 if (Equals(value, _selectedMovie)) {
@@ -67,6 +69,16 @@ namespace RibbonUI.UserControls {
                     return null;
                 }
                 return null;
+            }
+        }
+
+        public string FirstStudioLogo {
+            get {
+                if (string.IsNullOrEmpty(FirstStudioName)) {
+                    return null;
+                }
+
+                return Path.Combine(Directory.GetCurrentDirectory(), "Images/StudiosE/" + FirstStudioName + ".png");
             }
         }
 

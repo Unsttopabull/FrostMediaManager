@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
 using Frost.Common;
@@ -10,36 +12,107 @@ using Frost.DetectFeatures;
 using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
 using Frost.GettextMarkupExtension;
-using Frost.Models.Frost;
-using GalaSoft.MvvmLight.Ioc;
 using RibbonUI.Properties;
 using RibbonUI.UserControls;
 using RibbonUI.UserControls.List;
+using RibbonUI.Util;
 
 namespace RibbonUI {
 
     /// <summary>Interaction logic for App.xaml</summary>
     public partial class App : Application {
+
+        public static string SystemType { get; internal set; }
+
+        public static List<string> Systems { get; private set; }
+
+        static App() {
+            SystemType = "Frost";
+            Systems = new List<string>();
+        }
+
         public App() {
-            SimpleIoc.Default.Register<IMoviesDataService, FrostMoviesDataDataService>();
+            LoadPlugins();
             RegisterViewModels();
 
             TranslationManager.CurrentTranslationProvider = new SecondLanguageTranslationProvider("Languages");
-            ModelCreator.RegisterSystem(new FrostModelRegistrator(), true);
-
             //DispatcherUnhandledException += UnhandledExeption;
 
             LoadSettings();
         }
 
+        private void LoadPlugins() {
+            if (Directory.Exists("plugins")) {
+                string[] plugins;
+                try {
+                    plugins = Directory.GetFiles("plugins", "*.dll");
+                }
+                catch (Exception) {
+                    MessageBox.Show("Could not access plugin folder. Program will now exit");
+                    Shutdown();
+                    return;
+                }
+
+                int numFailed = 0;
+                foreach (string plugin in plugins) {
+                    Assembly assembly;
+                    string systemName;
+                    if (CheckIsPlugin(plugin, out assembly, out systemName)) {
+                        try {
+                            LightInjectContainer.RegisterAssembly(assembly);
+                            Systems.Add(systemName);
+                        }
+                        catch (Exception e) {
+                            numFailed++;
+                        }
+                    }
+                }
+
+                if (numFailed == plugins.Length) {
+                    MessageBox.Show("Couldn't load any plugins in the plugin folder. Program will now exit.");
+                    Shutdown();
+                }
+                return;
+            }
+
+            MessageBox.Show("No plugins for movie library manipulation found. Program will now exit.");
+            Shutdown();
+        }
+
+        private bool CheckIsPlugin(string plugin, out Assembly assembly, out string pluginSystemName) {
+            try {
+                Assembly asm = Assembly.LoadFile(Path.Combine(Directory.GetCurrentDirectory(), plugin));
+                IsPluginAttribute isPlugin = asm.GetCustomAttribute<IsPluginAttribute>();
+                if (isPlugin != null) {
+                    assembly = asm;
+                    pluginSystemName = isPlugin.SystemName;
+                    return true;
+                }
+
+                assembly = null;
+                pluginSystemName = null;
+                return false;
+            }
+            catch (FileLoadException e) {
+                assembly = null;
+                pluginSystemName = null;
+                return false;
+            }
+            catch (Exception e) {
+                assembly = null;
+                pluginSystemName = null;
+                return false;
+            }
+        }
+
         private void RegisterViewModels() {
-            SimpleIoc.Default.Register<ContentGridViewModel>();
-            SimpleIoc.Default.Register<MainWindowViewModel>();
-            SimpleIoc.Default.Register<EditMovieViewModel>();
-            SimpleIoc.Default.Register<ListVideosViewModel>();
-            SimpleIoc.Default.Register<ListAudiosViewModel>();
-            SimpleIoc.Default.Register<ListSubtitlesViewModel>();
-            SimpleIoc.Default.Register<ListArtViewModel>();
+            LightInjectContainer.Register<ContentGridViewModel>();
+            LightInjectContainer.Register<MainWindowViewModel>();
+            LightInjectContainer.Register<EditMovieViewModel>();
+            LightInjectContainer.Register<ListVideosViewModel>();
+            LightInjectContainer.Register<ListAudiosViewModel>();
+            LightInjectContainer.Register<ListSubtitlesViewModel>();
+            LightInjectContainer.Register<ListArtViewModel>();
         }
 
         internal static void LoadSettings() {
@@ -103,7 +176,7 @@ namespace RibbonUI {
                 FileNameParser.ReleaseGroups = new ObservableHashSet<string>(StringComparer.OrdinalIgnoreCase);
                 foreach (string releaseGroup in Settings.Default.ReleaseGroups) {
                     FileNameParser.ReleaseGroups.Add(releaseGroup);
-                }                
+                }
             }
 
             Settings.Default.Save();
@@ -175,8 +248,15 @@ namespace RibbonUI {
         #endregion
 
         private void UnhandledExeption(object sender, DispatcherUnhandledExceptionEventArgs e) {
-           MessageBox.Show(e.Exception.Message);
+            MessageBox.Show(e.Exception.Message);
             e.Handled = true;
+        }
+
+        /// <summary>Raises the <see cref="E:System.Windows.Application.Exit"/> event.</summary>
+        /// <param name="e">An <see cref="T:System.Windows.ExitEventArgs"/> that contains the event data.</param>
+        protected override void OnExit(ExitEventArgs e) {
+            LightInjectContainer.Dispose();
+            base.OnExit(e);
         }
     }
 

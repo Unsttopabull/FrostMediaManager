@@ -1,10 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Frost.Common;
+using Frost.Common.Models;
 
 namespace Frost.Models.Xtreamer.NFO {
 
@@ -24,6 +28,12 @@ namespace Frost.Models.Xtreamer.NFO {
             Fileinfo = "";
             GenreString = "";
         }
+
+        public XjbXmlMovie(IMovie movie) {
+            FromIMovie(movie);
+        }
+
+        #region Properties
 
         /// <summary>Gets or sets the title of the movie in the local language.</summary>
         /// <value>The title of the movie in the local language.</value>
@@ -84,7 +94,7 @@ namespace Frost.Models.Xtreamer.NFO {
         [XmlIgnore]
         public XjbCertification[] Certifications {
             get { return XjbCertification.ParseCertificationsString(CertificationsString); }
-            set { CertificationsString = string.Join<XjbCertification>(SEPARATOR, value);}
+            set { CertificationsString = string.Join<XjbCertification>(SEPARATOR, value); }
         }
 
         /// <summary>Gets or sets the movie genres.</summary>
@@ -101,8 +111,8 @@ namespace Frost.Models.Xtreamer.NFO {
         public string[] Genres {
             get {
                 return !string.IsNullOrEmpty(GenreString)
-                    ? GenreString.SplitWithoutEmptyEntries(SEPARATOR)
-                    : null;
+                           ? GenreString.SplitWithoutEmptyEntries(SEPARATOR)
+                           : null;
             }
             set { GenreString = string.Join(SEPARATOR, value); }
         }
@@ -170,15 +180,15 @@ namespace Frost.Models.Xtreamer.NFO {
                 long runtimeVal;
                 if (long.TryParse(runtimeInMinutes, out runtimeVal)) {
                     return runtimeVal > 0
-                        ? (long?) runtimeVal
-                        : null;
+                               ? (long?) runtimeVal
+                               : null;
                 }
                 return null;
             }
             set {
                 RuntimeString = (value.HasValue)
-                    ? value + " min"
-                    : null;
+                                    ? value + " min"
+                                    : null;
             }
         }
 
@@ -191,6 +201,9 @@ namespace Frost.Models.Xtreamer.NFO {
         /// <value>The file info of this movie (video/audio/subtitle details).</value>
         [XmlElement("fileinfo", Form = XmlSchemaForm.Unqualified)]
         public string Fileinfo { get; set; }
+
+        #endregion
+
 
         #region Serialization
 
@@ -211,6 +224,72 @@ namespace Frost.Models.Xtreamer.NFO {
 
             return (XjbXmlMovie) xs.Deserialize(new XmlTextReader(pathToXml));
         }
+        #endregion
+
+        #region Conversion
+
+        private void FromIMovie(IMovie movie) {
+            Certifications = movie.Certifications.Select(c => new XjbCertification(c)).ToArray();
+            Director = GetDirectorNames(movie);
+            GenreString = GetGenreNames(movie);
+            ImdbId = movie.ImdbID;
+            OriginalTitle = movie.OriginalTitle;
+            //Outline = movie.MainPlot.Summary,
+            //Plot = movie.MainPlot.Full,
+            AverageRating = (float) (movie.RatingAverage ?? 0);
+            //TODO: CHECK FOR CORECT FORMAT
+            ReleaseDate = movie.ReleaseDate.HasValue ? movie.ReleaseDate.Value.ToString(CultureInfo.InvariantCulture) : null;
+            Runtime = movie.Runtime.HasValue
+                          ? (movie.Runtime / 60)
+                          : 0;
+
+            SortTitle = movie.Title;
+            Studio = GetStudioNamesFormatted(movie);
+            //Tagline = movie.MainPlot.Summary,
+            Title = movie.Title;
+            Year = (int) (movie.ReleaseYear ?? 0);
+            Actors = GetXjbXmlActors(movie).ToArray();
+            MPAA = GetMpaaRating(movie);
+            Credits = string.Join(SEPARATOR, movie.Writers.Select(p => p.Name));
+            Fileinfo = "";
+        }
+
+        /// <summary>Gets the director names in a formatted string.</summary>
+        /// <returns>The director names in a single string separated with " / "</returns>
+        private static string GetDirectorNames(IMovie movie) {
+            string directorsJoin = string.Join(SEPARATOR, movie.Directors.Select(d => d.Name));
+            return string.IsNullOrEmpty(directorsJoin)
+                       ? null
+                       : directorsJoin;
+        }
+
+        /// <summary>Gets the genre names in a formatted string.</summary>
+        /// <returns>The genre names in a single string separated with " / "</returns>
+        /// <example>\eg{ <c>"Horor / SciFi"</c>}</example>
+        private static string GetGenreNames(IMovie movie) {
+            return string.Join(SEPARATOR, movie.Genres.Select(g => g.Name));
+        }
+
+        /// <summary>Gets the studio names in a formatted string.</summary>
+        /// <returns>The studio names in a single string separated with " / "</returns>
+        /// <example>\eg{ ''<c>MGM / Fox</c>''}</example>
+        private static string GetStudioNamesFormatted(IMovie movie) {
+            return String.Join(SEPARATOR, movie.Studios.Select(stud => stud.Name));
+        }
+
+        /// <summary>Gets the movie actors as an <see cref="IEnumerable{T}"/> of <see cref="XjbXmlActor">XjbXmlActor</see> instances.</summary>
+        /// <returns>An <see cref="IEnumerable{T}"/> of this movie actors as <see cref="XjbXmlActor">XjbXmlActor</see> instances</returns>
+        public static IEnumerable<XjbXmlActor> GetXjbXmlActors(IMovie movie) {
+            return movie.Actors.Select(a => new XjbXmlActor(a));
+        }
+
+        public static string GetMpaaRating(IMovie movie) {
+            ICertification certification = movie.Certifications.FirstOrDefault(c => c.Country.ISO3166.Alpha3 == "USA");
+            return certification != null
+                ? certification.Rating 
+                : null;
+        }
+
         #endregion
     }
 

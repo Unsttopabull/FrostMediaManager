@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Net.Mime;
 
 namespace Frost.Common.Models {
 
@@ -18,11 +17,11 @@ namespace Frost.Common.Models {
 
         /// <summary>Gets or sets movies where this person was a director.</summary>
         /// <value>The movies where this person was a director.</value>
-        ICollection<IMovie> MoviesAsDirector { get; }
+        IEnumerable<IMovie> MoviesAsDirector { get; }
 
         /// <summary>Gets or sets movies where this person was a writer.</summary>
         /// <value>The movies where this person was a writer.</value>
-        ICollection<IMovie> MoviesAsWriter { get; }
+        IEnumerable<IMovie> MoviesAsWriter { get; }
     }
 
 }

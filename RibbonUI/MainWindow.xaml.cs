@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Ioc;
+using RibbonUI.Util;
 
 namespace RibbonUI {
 
@@ -9,7 +10,7 @@ namespace RibbonUI {
         public MainWindow() {
             InitializeComponent();
 
-            DataContext = SimpleIoc.Default.GetInstance<MainWindowViewModel>();
+            DataContext = LightInjectContainer.GetInstance<MainWindowViewModel>();
         }
     }
 }

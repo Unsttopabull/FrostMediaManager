@@ -1,22 +1,20 @@
-using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Text;
 using Frost.Common.Models;
-using Frost.Model.Xbmc.NFO;
 
 namespace Frost.Models.Frost.DB.Files {
 
     /// <summary>Represents information about a subtitle stream in a file.</summary>
-    public class Subtitle : ISubtitle /*, IEquatable<ISubtitle>*/ {
+    public class Subtitle : ISubtitle {
 
         /// <summary>Initializes a new instance of the <see cref="Subtitle" /> class.</summary>
         public Subtitle() {
             
         }
 
-        public Subtitle(ISubtitle subtitle) {
+        internal Subtitle(ISubtitle subtitle) {
             PodnapisiId = subtitle.PodnapisiId;
             OpenSubtitlesId = subtitle.OpenSubtitlesId;
             MD5 = subtitle.MD5;
@@ -144,46 +142,6 @@ namespace Frost.Models.Frost.DB.Files {
         public virtual Movie Movie { get; set; }
 
         #endregion
-
-        /// <summary>Converts <see cref="XbmcXmlSubtitleInfo"/> to an instance of <see cref="Subtitle">Subtitle</see></summary>
-        /// <param name="subtitle">The instance of <see cref="XbmcXmlAudioInfo"/> to convert</param>
-        /// <returns>An instance of <see cref="Subtitle">Subtitle</see> converted from <see cref="XbmcXmlSubtitleInfo"/></returns>
-        public static explicit operator Subtitle(XbmcXmlSubtitleInfo subtitle) {
-            return new Subtitle(null, subtitle.LongLanguage ?? subtitle.Language, null);
-        }
-
-        ///// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        ///// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
-        ///// <param name="other">An object to compare with this object.</param>
-        //public bool Equals(ISubtitle other) {
-        //    if (other == null) {
-        //        return false;
-        //    }
-
-        //    if (ReferenceEquals(other, this)) {
-        //        return true;
-        //    }
-
-        //    if (other.Id != 0 && other.Id == Id) {
-        //        return true;
-        //    }
-
-        //    if(other.MD5 == MD5 &&
-        //       other.OpenSubtitlesId == OpenSubtitlesId &&
-        //       other.PodnapisiId == PodnapisiId &&
-        //       other.EmbededInVideo == EmbededInVideo &&
-        //       other.ForHearingImpaired == ForHearingImpaired &&
-        //       other.Encoding == Encoding &&
-        //       other.Format == Format
-        //    )
-        //    {
-        //        if (other.File != null && File != null) {
-        //            return other.File.Equals(File);
-        //        }
-        //        return true;
-        //    }
-        //    return false;
-        //}
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>

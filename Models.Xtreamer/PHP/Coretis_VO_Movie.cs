@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace Frost.Models.Xtreamer.PHP {
 
     public class Coretis_VO_Movie {
+
         /// <example>\eg{ <c>DOKU MANGA XXX MOVIE SERIE -> (S01E01 S01 staffel1 staffel.12 season folge1 folge.12 complete)</c>}</example>
         public string art;
 

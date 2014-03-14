@@ -54,6 +54,9 @@
     <Reference Include="GalaSoft.MvvmLight.WPF45">
       <HintPath>..\packages\MvvmLightLibs.4.2.30.0\lib\net45\GalaSoft.MvvmLight.WPF45.dll</HintPath>
     </Reference>
+    <Reference Include="LightInject.Annotation">
+      <HintPath>..\packages\LightInject.Annotation.1.0.0.3\lib\net45\LightInject.Annotation.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -106,11 +109,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Converters\BooleanToYesNoConverter.cs" />
-    <Compile Include="Converters\DebugConverter.cs" />
-    <Compile Include="Converters\EmptyStringToNullConverter.cs" />
     <Compile Include="Converters\EnumDescriptionConverter.cs" />
     <Compile Include="Converters\ISO639Alpha3ToISOLanguageCodeConverter.cs" />
+    <Compile Include="Converters\PathToImageSourceConverter.cs" />
     <Compile Include="Converters\TranslateEnumConverter.cs" />
     <Compile Include="Messages\Plot\RemovePlotMessage.cs" />
     <Compile Include="Messages\SelectRibbonMessage.cs" />
@@ -119,9 +120,7 @@
     <Compile Include="UserControls\ArtAndPlot.xaml.cs">
       <DependentUpon>ArtAndPlot.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Converters\MilisecondsToTimeSpanConverter.cs" />
     <Compile Include="Converters\NominationConverter.cs" />
-    <Compile Include="Converters\PathToImageSourceConverter.cs" />
     <Compile Include="UserControls\ContentGrid.xaml.cs">
       <DependentUpon>ContentGrid.xaml</DependentUpon>
     </Compile>
@@ -156,9 +155,12 @@
       <DependentUpon>GeneralSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Util\Codec.cs" />
+    <Compile Include="Util\LightInjectContainer.cs" />
     <Compile Include="Util\ObservableWrappers\MovieArt.cs" />
+    <Compile Include="Util\ObservableWrappers\MovieCountry.cs" />
     <Compile Include="Util\ObservableWrappers\MovieHasLanguageBase.cs" />
     <Compile Include="Util\ObservableWrappers\MovieItemBase.cs" />
+    <Compile Include="Util\ObservableWrappers\MovieLanguage.cs" />
     <Compile Include="Util\ObservableWrappers\MoviePerson.cs" />
     <Compile Include="Util\ObservableWrappers\MovieStudio.cs" />
     <Compile Include="Util\ObservableWrappers\MovieActor.cs" />
@@ -223,6 +225,7 @@
     <Compile Include="Util\ObservableWrappers\MoviePlot.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Util\ObservableWrappers\ObservableMovie.cs" />
     <Compile Include="Windows\AddCountriesViewModel.cs">
       <DependentUpon>AddCountries.xaml</DependentUpon>
     </Compile>
@@ -235,6 +238,9 @@
     </Compile>
     <Compile Include="Windows\AddPersonViewModel.cs">
       <DependentUpon>AddPerson.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AddStudiosViewModel.cs">
+      <DependentUpon>AddStudios.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\EditAudioViewModel.cs">
       <DependentUpon>EditAudio.xaml</DependentUpon>
@@ -490,13 +496,13 @@
     <Resource Include="Images\Stars\starempty.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\Libraries\Martin\Downloads\LI\LightInject.csproj">
+      <Project>{3d54591b-b055-4edd-96b6-e6f184e8ca6e}</Project>
+      <Name>LightInject</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{73F12859-D8B1-49C1-A835-0810CE7BD006}</Project>
       <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Models.Frost\Models.Frost.csproj">
-      <Project>{b404da8f-fbf4-4ccc-be01-22c488863ec2}</Project>
-      <Name>Models.Frost</Name>
     </ProjectReference>
     <ProjectReference Include="..\FeatureDetector\FeatureDetector.csproj">
       <Project>{8542C013-AA9A-4852-98FA-6F05CC037A91}</Project>

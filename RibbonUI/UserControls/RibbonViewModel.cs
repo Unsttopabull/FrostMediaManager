@@ -9,6 +9,7 @@ using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 using GalaSoft.MvvmLight;
 using RibbonUI.Messages;
+using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Windows;
 
 namespace RibbonUI.UserControls {
@@ -22,7 +23,7 @@ namespace RibbonUI.UserControls {
     }
 
     class RibbonViewModel : ViewModelBase {
-        private IMovie _selectedMovie;
+        private ObservableMovie _selectedMovie;
         private bool _isSearchTabSelected;
         private bool _isSubtitlesTabSelected;
         private bool _isExportTabSelected;
@@ -46,7 +47,7 @@ namespace RibbonUI.UserControls {
 
         #endregion
 
-        public IMovie SelectedMovie {
+        public ObservableMovie SelectedMovie {
             get { return _selectedMovie; }
             set {
                 if (Equals(value, _selectedMovie)) {

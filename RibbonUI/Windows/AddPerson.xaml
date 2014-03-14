@@ -2,7 +2,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
-        xmlns:people="clr-namespace:Frost.Models.Frost.DB.People;assembly=Frost.Models.Frost"
         xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
         xmlns:windows="clr-namespace:RibbonUI.Windows"
         Closed="AddPersonOnClosed" Height="552" Width="590"
@@ -57,17 +56,17 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Label Margin="-5,0,0,0" Grid.Row="0" Grid.Column="0" Content="{l:T Name, Postfix=:}"/>
-                <TextBox Grid.Column="0" Grid.Row="1" x:Name="PersonName" Text="{Binding PersonName, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource EmptyStringToNullConverter}}"/>
+                <TextBox Grid.Column="0" Grid.Row="1" x:Name="PersonName" Text="{Binding PersonName, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <Label Margin="-5,0,0,0" Grid.Row="0" Grid.Column="2" Content="{l:T Thumb, Postfix=:}"/>
-                <TextBox Grid.Row="1" Grid.Column="2" x:Name="PersonThumb" Text="{Binding PersonThumb, Converter={StaticResource EmptyStringToNullConverter}}"/>
+                <TextBox Grid.Row="1" Grid.Column="2" x:Name="PersonThumb" Text="{Binding PersonThumb}"/>
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="1" Grid.Column="2" Margin="0,0,5,0" ToolTip="{l:T Open file search dialog}">
                     <Button Height="16" Style="{StaticResource TransparentBorderlessButton}" Command="{Binding ThumbSearchCommand}">
                         <Image Source="../Images/folder.ico"/>
                     </Button>
                 </StackPanel>
             </Grid>
-            <Label Margin="-5,0,0,0" x:Name="CharacterLabel" x:FieldModifier="private" Target="{Binding ElementName=ActorCharacter, Converter={StaticResource EmptyStringToNullConverter}}" Content="{l:T Character}"/>
+            <Label Margin="-5,0,0,0" x:Name="CharacterLabel" x:FieldModifier="private" Target="{Binding ElementName=ActorCharacter}" Content="{l:T Character}"/>
             <TextBox x:Name="ActorCharacter" Margin="0,0,0,5" Text="{Binding PersonCharacter}"/>
         </StackPanel>
         <Button Grid.Row="3" Grid.Column="0" Margin="5,5,5,5" Command="{Binding AddCommand}" CommandParameter="{Binding ElementName=AddPersonWindow}" Content="{l:T Add}"/>

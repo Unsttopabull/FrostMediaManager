@@ -18,16 +18,17 @@ using RibbonUI.Messages.Genre;
 using RibbonUI.Messages.People;
 using RibbonUI.Messages.Plot;
 using RibbonUI.Messages.Studio;
+using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Windows;
 
 namespace RibbonUI.UserControls {
     public class EditMovieViewModel : ViewModelBase {
         private readonly IMoviesDataService _service;
-        private IMovie _selectedMovie;
+        private ObservableMovie _selectedMovie;
         private ObservableCollection<MoviePlot> _moviePlots;
         private ObservableCollection<MovieActor> _actors;
-        private ObservableCollection<ICountry> _countries;
+        private ObservableCollection<MovieCountry> _countries;
         private ObservableCollection<MovieStudio> _studios;
         private ObservableCollection<IGenre> _genres;
         private ObservableCollection<MoviePerson> _directors;
@@ -75,7 +76,7 @@ namespace RibbonUI.UserControls {
             RemovePlotCommand = new RelayCommand<MoviePlot>(RemovePotOnClick, plot => plot != null);
 
             AddCountryCommand = new RelayCommand(AddCountryOnClick);
-            RemoveCountryCommand = new RelayCommand<ICountry>(
+            RemoveCountryCommand = new RelayCommand<MovieCountry>(
                 RemoveCountry,
                 country => country != null
             );
@@ -98,7 +99,7 @@ namespace RibbonUI.UserControls {
 
         public Window ParentWindow { get; set; }
 
-        public IMovie SelectedMovie {
+        public ObservableMovie SelectedMovie {
             get { return _selectedMovie; }
             set {
                 if (Equals(value, _selectedMovie)) {
@@ -109,7 +110,7 @@ namespace RibbonUI.UserControls {
                 if (_selectedMovie != null) {
                     MoviePlots = new ObservableCollection<MoviePlot>(_selectedMovie.Plots.Select(p => new MoviePlot(p)));
                     Actors = new ObservableCollection<MovieActor>(_selectedMovie.Actors.Select(a => new MovieActor(a)));
-                    Countries = new ObservableCollection<ICountry>(_selectedMovie.Countries);
+                    Countries = new ObservableCollection<MovieCountry>(_selectedMovie.Countries.Select(c => new MovieCountry(c)));
                     Studios = new ObservableCollection<MovieStudio>(_selectedMovie.Studios.Select(s => new MovieStudio(s)));
                     Genres = new ObservableCollection<IGenre>(_selectedMovie.Genres);
                     Directors = new ObservableCollection<MoviePerson>(_selectedMovie.Directors.Select(p => new MoviePerson(p)));
@@ -152,7 +153,7 @@ namespace RibbonUI.UserControls {
             }
         }
 
-        public ObservableCollection<ICountry> Countries {
+        public ObservableCollection<MovieCountry> Countries {
             get { return _countries; }
             set {
                 if (Equals(value, _countries)) {
@@ -218,7 +219,7 @@ namespace RibbonUI.UserControls {
         public ICommand<MoviePlot> RemovePlotCommand { get; private set; }
 
         public ICommand AddCountryCommand { get; private set; }
-        public RelayCommand<ICountry> RemoveCountryCommand { get; private set; }
+        public RelayCommand<MovieCountry> RemoveCountryCommand { get; private set; }
 
         public ICommand AddDirectorCommand { get; private set; }
         public RelayCommand<MoviePerson> RemoveDirectorCommand { get; private set; }
@@ -233,26 +234,26 @@ namespace RibbonUI.UserControls {
         private void AddCountryOnClick() {
             AddCountries sc = new AddCountries {
                 Owner = ParentWindow,
-                Countries = _service.Countries
+                Countries = new ObservableCollection<MovieCountry>(_service.Countries.Select(c => new MovieCountry(c)))
             };
 
             if (sc.ShowDialog() != true) {
                 return;
             }
 
-            foreach (ICountry country in sc.SelectedCountry.SelectedItems) {
+            foreach (MovieCountry country in sc.SelectedCountry.SelectedItems) {
                 if (!Countries.Contains(country)) {
                     Countries.Add(country);
 
-                    MessengerInstance.Send(new AddCountryMessage(country));
+                    MessengerInstance.Send(new AddCountryMessage(country.ObservedCountry));
                 }
             }
         }
 
-        private void RemoveCountry(ICountry country) {
+        private void RemoveCountry(MovieCountry country) {
             Countries.Remove(country);
 
-            MessengerInstance.Send(new RemoveCountryMessage(country));
+            MessengerInstance.Send(new RemoveCountryMessage(country.ObservedCountry));
         }
 
         #endregion
@@ -268,7 +269,7 @@ namespace RibbonUI.UserControls {
 
             IPerson director;
             if (addPerson.PersonName.Text != ((IPerson) addPerson.PeopleList.SelectedItem).Name) {
-                director = ModelCreator.Create<IPerson>();
+                director = LightInjectContainer.GetInstance<IPerson>(App.SystemType);
                 director.Name = addPerson.PersonName.Text;
                 director.Thumb = addPerson.PersonThumb.Text;
             }
@@ -301,7 +302,7 @@ namespace RibbonUI.UserControls {
             else {
                 IGenre genre = _service.Genres.FirstOrDefault(g => g.Name.Equals(ag.NewGenre.Text, StringComparison.CurrentCultureIgnoreCase));
                 if (genre == null) {
-                    genre = ModelCreator.Create<IGenre>();
+                    genre = LightInjectContainer.GetInstance<IGenre>(App.SystemType);
                     genre.Name = ag.NewGenre.Text;
                 }
                 AddGenre(genre);
@@ -366,7 +367,7 @@ namespace RibbonUI.UserControls {
         }
 
         private void AddPlot() {
-            IPlot plot = ModelCreator.Create<IPlot>();
+            IPlot plot = LightInjectContainer.GetInstance<IPlot>(App.SystemType);
             plot.Full = TranslationManager.T("Enter full description");
 
             MoviePlots.Add(new MoviePlot(plot));
@@ -385,14 +386,13 @@ namespace RibbonUI.UserControls {
             }
 
             IPerson person = (IPerson) addPerson.PeopleList.SelectedItem;
-
             string addActorCharacter = addPerson.ActorCharacter.Text;
 
             IActor movieActor;
-            if (addPerson.PersonName.Text != person.Name) {
+            if (person == null || addPerson.PersonName.Text != person.Name) {
                 //the person/actor is not in the database yet
 
-                movieActor = ModelCreator.Create<IActor>();
+                movieActor = LightInjectContainer.GetInstance<IActor>(App.SystemType);
                 movieActor.Name = addPerson.PersonName.Text;
                 movieActor.Thumb = addPerson.PersonThumb.Text;
             }
@@ -408,7 +408,7 @@ namespace RibbonUI.UserControls {
                     }
 
                     //else add it as actor with unspecified character
-                    movieActor = ModelCreator.Create<IActor>();
+                    movieActor = LightInjectContainer.GetInstance<IActor>(App.SystemType);
                     movieActor.Name = person.Name;
                     movieActor.Thumb = person.Thumb;
                     movieActor.ImdbID = person.ImdbID;
@@ -422,7 +422,7 @@ namespace RibbonUI.UserControls {
                     }
 
                     //else add them as an actor with the specified character
-                    movieActor = ModelCreator.Create<IActor>();//new MovieActor(SelectedMovie, person, addActorCharacter);
+                    movieActor = LightInjectContainer.GetInstance<IActor>(App.SystemType);
                     movieActor.Name = person.Name;
                     movieActor.Thumb = person.Thumb;
                     movieActor.ImdbID = person.ImdbID;
@@ -444,14 +444,14 @@ namespace RibbonUI.UserControls {
         #region Studio Handlers
 
         private void AddStudioOnClick() {
-            AddStudios addStudios = new AddStudios { Owner = ParentWindow, DataContext = _service.Studios };
+            AddStudios addStudios = new AddStudios { Owner = ParentWindow, Studios = new ObservableCollection<MovieStudio>(_service.Studios.Select(s => new MovieStudio(s))) };
 
             if (addStudios.ShowDialog() != true) {
                 return;
             }
 
             if (addStudios.StudiosList.SelectedIndex == -1 && !string.IsNullOrEmpty(addStudios.NewStudioName.Text)) {
-                IStudio studio = ModelCreator.Create<IStudio>();
+                IStudio studio = LightInjectContainer.GetInstance<IStudio>(App.SystemType);
                 studio.Name = addStudios.NewStudioName.Text;
 
                 Studios.Add(new MovieStudio(studio));

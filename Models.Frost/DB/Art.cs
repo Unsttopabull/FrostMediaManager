@@ -30,7 +30,7 @@ namespace Frost.Models.Frost.DB {
             Type = type;
         }
 
-        public Art(IArt art) {
+        internal Art(IArt art) {
             
         }
 

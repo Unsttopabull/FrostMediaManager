@@ -4,6 +4,7 @@
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
         xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
         xmlns:windows="clr-namespace:RibbonUI.Windows"
+        xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
         Name="AddCountriesControl"
         Title="{l:T SelectCountry}" Height="212" Width="350" WindowStartupLocation="CenterOwner">
     <Window.Resources>
@@ -23,10 +24,10 @@
         </Grid.ColumnDefinitions>
         <ListBox x:Name="SelectedCountry" Grid.Row="0" Grid.ColumnSpan="2" ItemsSource="{Binding Countries}" Margin="5,5,5,0" SelectionMode="Extended">
             <ListBox.ItemTemplate>
-                <DataTemplate DataType="{x:Type models:ICountry}">
+                <DataTemplate DataType="{x:Type o:MovieCountry}">
                     <StackPanel Orientation="Horizontal">
                         <Image
-                            Source="{Binding ISO3166.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Country, TargetNullValue={StaticResource UnknownCountry}, FallbackValue={StaticResource UnknownCountry}}"
+                            Source="{Binding Image, TargetNullValue={StaticResource UnknownCountry}, FallbackValue={StaticResource UnknownCountry}}"
                             MaxHeight="32" MaxWidth="32" />
                         <TextBlock Text="{Binding Name, TargetNullValue=Unknown, FallbackValue=Unknown}"
                                    Margin="5,0,0,0" VerticalAlignment="Center" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using Frost.Common.Models;
 
 namespace Frost.Model.Xbmc.NFO {
 
@@ -10,6 +11,15 @@ namespace Frost.Model.Xbmc.NFO {
 
         /// <summary>Initializes a new instance of the <see cref="XbmcXmlAudioInfo"/> class.</summary>
         public XbmcXmlAudioInfo() {
+        }
+
+        public XbmcXmlAudioInfo(IAudio audio) {
+            Codec = audio.Codec;
+            Channels = audio.NumberOfChannels ?? 0;
+
+            if (audio.Language != null && audio.Language.ISO639 != null) {
+                Language = audio.Language.ISO639.Alpha3;
+            }
         }
 
         /// <summary>Initializes a new instance of the <see cref="XbmcXmlAudioInfo"/> class.</summary>

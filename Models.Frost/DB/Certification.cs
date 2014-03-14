@@ -2,7 +2,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Frost.Common.Models;
-using Frost.Model.Xbmc.NFO;
 
 namespace Frost.Models.Frost.DB {
 
@@ -28,7 +27,7 @@ namespace Frost.Models.Frost.DB {
             Rating = rating;
         }
 
-        public Certification(ICertification certification) {
+        internal Certification(ICertification certification) {
             //Contract.Requires<ArgumentNullException>(certification != null);
 
             Rating = certification.Rating;
@@ -95,13 +94,6 @@ namespace Frost.Models.Frost.DB {
         /// <returns>An instance of <see cref="Certification"/> from the Country name and its rating</returns>
         protected override T FromCountyRating<T>(string country, string rating) {
             return new Certification(country, rating) as T;
-        }
-
-        /// <summary>Converts <see cref="XbmcXmlCertification"/> to an instance of <see cref="Certification">Certification</see></summary>
-        /// <param name="cert">The instance of <see cref="XbmcXmlCertification"/> to convert</param>
-        /// <returns>An instance of <see cref="MovieVo.Certification">Certification</see> converted from <see cref="XbmcXmlCertification"/></returns>
-        public static explicit operator Certification(XbmcXmlCertification cert) {
-            return new Certification(cert.Country, cert.Rating);
         }
 
         internal class Configuration : EntityTypeConfiguration<Certification> {

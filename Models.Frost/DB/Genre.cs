@@ -6,7 +6,6 @@ using System.Data.Entity.ModelConfiguration;
 using System.Globalization;
 using System.Linq;
 using Frost.Common.Models;
-using Frost.Models.Xtreamer.DB;
 
 namespace Frost.Models.Frost.DB {
 
@@ -28,7 +27,7 @@ namespace Frost.Models.Frost.DB {
             Name = CultureInfo.InvariantCulture.TextInfo.ToTitleCase(name);
         }
 
-        public Genre(IGenre genre) {
+        internal Genre(IGenre genre) {
             //Contract.Requires<ArgumentNullException>(genre != null);
             //Contract.Requires<ArgumentNullException>(genre.Movies != null);
 
@@ -49,7 +48,7 @@ namespace Frost.Models.Frost.DB {
 
         /// <summary>Gets or sets the movies of this genre.</summary>
         /// <value>The movies of this genre.</value>
-        public virtual ICollection<Movie> Movies { get; set; }
+        public virtual HashSet<Movie> Movies { get; set; }
 
         /// <summary>Converts genre names to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Genre"/></summary>
         /// <param name="genreNames">The genre names.</param>
@@ -63,17 +62,6 @@ namespace Frost.Models.Frost.DB {
         /// <returns>An instance of <see cref="Genre"/> with string as a genre name</returns>
         public static implicit operator Genre(string genreName) {
             return new Genre(genreName);
-        }
-
-        /// <summary>Converts a <see cref="Genre"/> instance to an instance of <see cref="XjbGenre">XjbGenre</see>.</summary>
-        /// <param name="genre">The genre to convert.</param>
-        /// <returns>An instance of <see cref="XjbGenre">XjbGenre</see> converted from <see cref="Genre"/>.</returns>
-        public static explicit operator XjbGenre(Genre genre) {
-            string genreName = genre.Name.ToLower();
-
-            return GenreTags.ContainsKey(genreName)
-                    ? new XjbGenre(GenreTags[genreName])
-                    : new XjbGenre(genre.Name);
         }
 
         /// <summary>Returns a string that represents the current object.</summary>

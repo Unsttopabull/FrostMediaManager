@@ -20,7 +20,7 @@ namespace Frost.Models.Frost.DB {
             Value = rating;
         }
 
-        public Rating(IRating rating) {
+        internal Rating(IRating rating) {
             //Contract.Requires<ArgumentNullException>(rating != null);
 
             Critic = rating.Critic;

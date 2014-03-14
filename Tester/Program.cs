@@ -8,8 +8,6 @@ using Frost.DetectFeatures;
 using System.Diagnostics;
 using Frost.DetectFeatures.Models;
 using Frost.Models.Frost.DB;
-using Frost.Models.Frost.DB.Files;
-using Newtonsoft.Json;
 using FileVo = Frost.Models.Frost.DB.Files.File;
 using CoretisMovie = Frost.Models.Xtreamer.PHP.Coretis_VO_Movie;
 
@@ -39,7 +37,7 @@ namespace Frost.Tester {
 
             //TestXjbDbParser();
             TestMediaSearcher();
-            //TestIntefaces();
+            Test();
 
             //TestFileFeatures();
             //TestGremoVKino();
@@ -57,12 +55,11 @@ namespace Frost.Tester {
             Console.Read();
         }
 
-        private static void TestIntefaces() {
-            HashSet<Plot> p = new HashSet<Plot>();
-
-            HashSet<IPlot> p2 = new HashSet<IPlot>(p);
-            p2.Add(new Plot());
+        private static void Test() {
+            
+            
         }
+
 
         private static TimeSpan TestMediaSearcher() {
             //using (MovieVoContainer mvc = new MovieVoContainer(true, "movieVo.db3")) {

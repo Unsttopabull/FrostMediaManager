@@ -7,8 +7,6 @@ using Frost.Common.Models;
 
 namespace Frost.Models.Frost.DB {
 
-
-
     /// <summary>Represents a studio that prodcuced a movie.</summary>
     public class Studio : IStudio {
 
@@ -23,10 +21,7 @@ namespace Frost.Models.Frost.DB {
             Name = name;
         }
 
-        public Studio(IStudio studio) {
-            //Contract.Requires<ArgumentNullException>(studio != null);
-            //Contract.Requires<ArgumentNullException>(studio.Movies != null);
-
+        internal Studio(IStudio studio) {
             Name = studio.Name;
         }
 
@@ -43,7 +38,7 @@ namespace Frost.Models.Frost.DB {
 
         /// <summary>Gets or sets the movies this studio has produced.</summary>
         /// <value>The movies this studio has produced.</value>
-        public virtual ICollection<Movie> Movies { get; set; }
+        public virtual HashSet<Movie> Movies { get; set; }
 
         /// <summary>Converts studio names to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Studio"/></summary>
         /// <param name="studioNames">The studio names.</param>

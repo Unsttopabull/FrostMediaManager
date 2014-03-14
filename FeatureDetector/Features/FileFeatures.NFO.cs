@@ -33,7 +33,7 @@ namespace Frost.DetectFeatures {
             return year != null && year != 0 && year != 1;
         }
 
-        private void AddActors<T>(IEnumerable<T> actors, bool overrideValues = false) where T : XmlActor {
+        private void AddActors<T>(IEnumerable<T> actors, bool overrideValues = false) where T : IXmlActor {
             foreach (T actor in actors) {
                 if (string.IsNullOrEmpty(actor.Name)) {
                     continue;

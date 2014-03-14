@@ -3,38 +3,9 @@
 namespace Frost.Models.Frost.DB {
 
     public partial class Genre {
-
         private static readonly Dictionary<string, string> GenreTags;
-        //private static readonly Dictionary<string, string> GenreAbbreviations;
 
         static Genre() {
-            //GenreAbbreviations = new Dictionary<string, string>(27){
-            //    {"acti", "action"},
-            //    {"adve", "adventure"},
-            //    {"anim", "animation"},
-            //    {"biog", "biography"},
-            //    {"come", "comedy"},
-            //    {"crim", "crime"},
-            //    {"disa", "disaster"},
-            //    {"docu", "documentary"},
-            //    {"dram", "drama"},
-            //    {"fami", "family"},
-            //    {"fant", "fantasy"},
-            //    {"noir", "film-noir"},
-            //    {"hist", "history"},
-            //    {"horr", "horror"},
-            //    {"musi", "music"},
-            //    {"musl", "musical"},
-            //    {"myst", "mystery"},
-            //    {"real", "reality-tv"},
-            //    {"roma", "romance"},
-            //    {"scif", "sci-fi"},
-            //    {"spor", "sport"},
-            //    {"talk", "talk-show"},
-            //    {"thri", "thriller"},
-            //    {"war", "war"},
-            //    {"west", "western"},
-            //};
 
             GenreTags = new Dictionary<string, string>(136) {
                 {"action", "acti"},
@@ -175,27 +146,6 @@ namespace Frost.Models.Frost.DB {
                 {"guerra", "war"}
             };
         }
-
-        ///// <summary>Converts a <see cref="XjbGenre"/> instance to an instance of <see cref="Genre">Genre</see>.</summary>
-        ///// <param name="genre">The genre to convert.</param>
-        ///// <returns>An instance of <see cref="Genre">Genre</see> converted from <see cref="XjbGenre"/>.</returns>
-        //public static explicit operator Genre(XjbGenre genre) {
-        //    return GenreAbbreviations.ContainsKey(genre.Name)
-        //            ? new Genre(GenreTags[genre.Name])
-        //            : new Genre(genre.Name);
-        //}
-
-        ///// <summary>Converts an Xtreamer Movie Jukebox genre abbreviation to the genre name.</summary>
-        ///// <param name="genreAbbreviation">Genre abbreviation to convert.</param>
-        ///// <returns>Returns a <see cref="Genre"/> instance converted from Xtreamer Movie Jukebox genre abbreviation or <c>null</c> if the abbreviation is unknown.</returns>
-        //public static Genre FromGenreAbbreviation(string genreAbbreviation) {
-        //    string genreName;
-        //    GenreAbbreviations.TryGetValue(genreAbbreviation, out genreName);
-
-        //    return !string.IsNullOrEmpty(genreName)
-        //        ? genreName
-        //        : null;
-        //}
     }
 
 }

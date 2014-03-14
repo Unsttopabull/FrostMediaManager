@@ -4,7 +4,7 @@ using Frost.Models.Frost.DB;
 using Frost.Models.Frost.DB.Files;
 using Frost.Models.Frost.DB.People;
 
-namespace Frost.Models.Frost {
+namespace Frost.Models.Frost.Service {
     public class FrostModelRegistrator : IModelRegistrator {
         public void Register(SystemModels models) {
             models.SystemName = "Frost";

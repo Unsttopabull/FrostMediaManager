@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using GalaSoft.MvvmLight.Ioc;
+using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls.List {
@@ -12,7 +12,7 @@ namespace RibbonUI.UserControls.List {
 
         public ListSubtitles() {
             InitializeComponent();
-            DataContext = SimpleIoc.Default.GetInstance<ListSubtitlesViewModel>();
+            DataContext = LightInjectContainer.GetInstance<ListSubtitlesViewModel>();
         }
 
         public ObservableCollection<MovieSubtitle> Subtitles {

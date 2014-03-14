@@ -1,13 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 
 namespace Frost.Common.Models {
-
-    public enum PersonType {
-        Director,
-        Writer
-    }
 
     public interface IMovie : IMovieEntity {
 
@@ -140,64 +134,41 @@ namespace Frost.Common.Models {
         /// <value>The movie subtitles.</value>
         IEnumerable<ISubtitle> Subtitles { get; }
 
-        void Remove(ISubtitle subtitle);
-        ISubtitle Add(ISubtitle subtitle);
-
-
         /// <summary>Gets or sets the countries that this movie was shot or/and produced in.</summary>
         /// <summary>The countries that this movie was shot or/and produced in.</summary>
         IEnumerable<ICountry> Countries { get; }
-        void Remove(ICountry country);
-        ICountry Add(ICountry country);
-
 
         /// <summary>Gets or sets the studio(s) that produced the movie.</summary>
         /// <value>The studio(s) that produced the movie.</value>
         IEnumerable<IStudio> Studios { get; }
-        void Remove(IStudio studio);
-        IStudio Add(IStudio studio);
 
         /// <summary>Gets or sets the information about video streams of this movie.</summary>
         /// <value>The information about video streams of this movie</value>
         IEnumerable<IVideo> Videos { get; }
-        void Remove(IVideo video);
-        IVideo Add(IVideo video);
 
         /// <summary>Gets or sets the information about audio streams of this movie.</summary>
         /// <value>The information about audio streams of this movie</value>
         IEnumerable<IAudio> Audios { get; }
-        void Remove(IAudio audio);
-        IAudio Add(IAudio audio);
 
         /// <summary>Gets or sets the information about this movie's critics and their ratings</summary>
         /// <value>The information about this movie's critics and their ratings</value>
         IEnumerable<IRating> Ratings { get; }
-        void Remove(IRating rating);
-        IRating Add(IRating rating);
 
         /// <summary>Gets or sets this movie's story and plot with summary and a tagline.</summary>
         /// <value>This movie's story and plot with summary and a tagline</value>
         IEnumerable<IPlot> Plots { get; }
-        void Remove(IPlot plot);
-        IPlot Add(IPlot plot);
 
         /// <summary>Gets or sets the movie promotional images.</summary>
         /// <value>The movie promotional images</value>
         IEnumerable<IArt> Art { get; }
-        void Remove(IArt art);
-        IArt Add(IArt art);
 
         /// <summary>Gets or sets the information about this movie's certification ratings/restrictions in certain countries.</summary>
         /// <value>The information about this movie's certification ratings/restrictions in certain countries.</value>
         IEnumerable<ICertification> Certifications { get; }
-        void Remove(ICertification certification);
-        ICertification Add(ICertification certification);
 
         /// <summary>Gets or sets the name of the credited writer(s).</summary>
         /// <value>The names of the credited script writer(s)</value>
         IEnumerable<IPerson> Writers { get; }
-        void Remove(IPerson person, PersonType type);
-        IPerson Add(IPerson person, PersonType type);
 
         /// <summary>Gets or sets the movie directors.</summary>
         /// <value>People that directed this movie.</value>
@@ -206,28 +177,18 @@ namespace Frost.Common.Models {
         /// <summary>Gets or sets the Person to Movie link with payload as in character name the person is protraying.</summary>
         /// <value>The Person to Movie link with payload as in character name the person is protraying.</value>
         IEnumerable<IActor> Actors { get; }
-        void Remove(IActor actor);
-        IActor Add(IActor actor);
 
         /// <summary>Gets or sets the special information about this movie release.</summary>
         /// <value>The special information about this movie release</value>
         IEnumerable<ISpecial> Specials { get; }
-        void Remove(ISpecial special);
-        ISpecial Add(ISpecial special);
 
         /// <summary>Gets or sets the movie genres.</summary>
         /// <value>The movie genres.</value>
         IEnumerable<IGenre> Genres { get; }
-        void Remove(IGenre genre);
-        IGenre Add(IGenre genre);
 
         IEnumerable<IAward> Awards { get; }
-        void Remove(IAward award);
-        IAward Add(IAward award);
 
         IEnumerable<IPromotionalVideo> PromotionalVideos { get; }
-        void Remove(IPromotionalVideo promotionalVideo);
-        IPromotionalVideo Add(IPromotionalVideo promotionalVideo);
 
         /// <summary>Gets a value indicating whether this movie has a trailer video availale.</summary>
         /// <value>Is <c>true</c> if the movie has a trailer video available; otherwise, <c>false</c>.</value>

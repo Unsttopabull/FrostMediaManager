@@ -14,13 +14,13 @@
         xmlns:glob="clr-namespace:System.Globalization;assembly=mscorlib"
         xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
         xmlns:windows="clr-namespace:RibbonUI.Windows"
+        xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
         mc:Ignorable="d" Name="EditVideoWindow" Height="443" Width="570"
         Title="{l:T Edit video}" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
     <Window.DataContext>
         <windows:EditVideoViewModel/>
     </Window.DataContext>
     <Window.Resources>
-        <converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />
         <ObjectDataProvider x:Key="BitRateModes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="common:FrameOrBitRateMode" />
@@ -52,7 +52,7 @@
         </Grid.RowDefinitions>
         <StackPanel DockPanel.Dock="Left" Grid.Column="0" MinWidth="115">
             <Image x:Name="CodecImg" x:FieldModifier="private"
-                   Source="{Binding ElementName=CodecSelect, Path=SelectedItem.Id, IsAsync=True, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=VideoCodec, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}, UpdateSourceTrigger=PropertyChanged}"
+                   Source="{Binding SelectedVideo.CodecImage, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}, UpdateSourceTrigger=PropertyChanged}"
                    MinHeight="48" MaxHeight="100" MaxWidth="115">
                 <Image.CacheMode>
                     <BitmapCache />
@@ -75,7 +75,7 @@
         </StackPanel>
         <StackPanel Grid.Row="0" Grid.Column="2" MinWidth="200">
             <Label Content="{l:T Source, Postfix=:}"/>
-            <TextBox VerticalAlignment="Center" Text="{Binding SelectedVideo.Source, Converter={StaticResource EmptyStringToNullConverter}}" />
+            <TextBox VerticalAlignment="Center" Text="{Binding SelectedVideo.Source}" />
 
             <Label Content="{l:T Codec, Postfix=:}"/>
             <ComboBox x:Name="CodecSelect" x:FieldModifier="private" IsEditable="False" VerticalAlignment="Center"
@@ -152,7 +152,7 @@
                 </Button>
             </StackPanel>
             <a:TimePicker x:Name="VideoDuration" Margin="0,-12,0,0" HorizontalAlignment="Left" MinTime="{x:Static sys:TimeSpan.Zero}"
-                          SelectedTime="{Binding SelectedVideo.Duration, Converter={StaticResource MsToTimeSpanConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                          SelectedTime="{Binding SelectedVideo.DurationTimeSpan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <in:Interaction.Triggers>
                     <i:DataTrigger Binding="{Binding ElementName=VideoDuration, Path=SelectedTime}"
                                    Value="{x:Static sys:TimeSpan.Zero}">
@@ -246,9 +246,9 @@
             </StackPanel>
             <ComboBox x:Name="SelectedLanguage" SelectedItem="{Binding SelectedVideo.Language, UpdateSourceTrigger=PropertyChanged}">
                 <ComboBox.ItemTemplate>
-                    <DataTemplate DataType="{x:Type models:ILanguage}">
+                    <DataTemplate DataType="{x:Type o:MovieLanguage}">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="{Binding ISO639.Alpha3, Converter={StaticResource PathToImageSourceConverter}, ConverterParameter=Language, TargetNullValue={StaticResource UnknownCountryOrLanguage}, FallbackValue={StaticResource UnknownCountryOrLanguage}}"
+                            <Image Source="{Binding Image, TargetNullValue={StaticResource UnknownCountryOrLanguage}, FallbackValue={StaticResource UnknownCountryOrLanguage}}"
                                    MaxHeight="32" MaxWidth="32" />
                             <TextBlock Text="{Binding Name, TargetNullValue=Unknown, FallbackValue=Unknown}"
                                        Margin="5,0,0,0" VerticalAlignment="Center" />

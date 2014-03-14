@@ -19,10 +19,7 @@ namespace Frost.Models.Frost.DB {
             Name = name;
         }
 
-        public Set(IMovieSet value) {
-            //Contract.Requires<ArgumentNullException>(value != null);
-            //Contract.Requires<ArgumentNullException>(value.Movies != null);
-
+        internal Set(IMovieSet value) {
             Name = value.Name;
         }
 

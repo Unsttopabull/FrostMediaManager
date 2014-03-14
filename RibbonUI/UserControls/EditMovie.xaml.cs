@@ -4,21 +4,23 @@ using System.Windows.Controls;
 using Frost.Common;
 using Frost.Common.Models;
 using Frost.GettextMarkupExtension;
-using GalaSoft.MvvmLight.Ioc;
+using RibbonUI.Util;
+using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls {
 
     /// <summary>Interaction logic for EditMovie.xaml</summary>
     public partial class EditMovie : UserControl {
-        public static readonly DependencyProperty SelectedMovieProperty = DependencyProperty.Register("SelectedMovie", typeof(IMovie), typeof(EditMovie), new PropertyMetadata(default(IMovie), OnSelectedMovieChanged));
+        public static readonly DependencyProperty SelectedMovieProperty = DependencyProperty.Register("SelectedMovie", typeof(ObservableMovie), typeof(EditMovie), new PropertyMetadata(default(ObservableMovie), OnSelectedMovieChanged));
 
         public EditMovie() {
             InitializeComponent();
-            DataContext = SimpleIoc.Default.GetInstance<EditMovieViewModel>();
+
+            DataContext = LightInjectContainer.GetInstance<EditMovieViewModel>();
         }
 
-        public IMovie SelectedMovie {
-            get { return (IMovie) GetValue(SelectedMovieProperty); }
+        public ObservableMovie SelectedMovie {
+            get { return (ObservableMovie) GetValue(SelectedMovieProperty); }
             set { SetValue(SelectedMovieProperty, value); }
         }
 
@@ -27,7 +29,7 @@ namespace RibbonUI.UserControls {
         }
 
         private static void OnSelectedMovieChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            ((EditMovie) d).ViewModel.SelectedMovie = (IMovie) e.NewValue;
+            ((EditMovie) d).ViewModel.SelectedMovie = (ObservableMovie) e.NewValue;
         }
 
          private void OnControlLoaded(object sender, RoutedEventArgs e) {

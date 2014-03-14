@@ -25,18 +25,21 @@ using RibbonUI.Util.ObservableWrappers;
 namespace RibbonUI.UserControls {
 
     public class ContentGridViewModel : ViewModelBase, IDisposable {
+        private readonly IMoviesDataService _service;
         private readonly IDisposable _searchObservable;
         private ICollectionView _collectionView;
         private string _movieSearchFilter;
-        private IMovie _selectedMovie;
-        private ObservableCollection<IMovie> _movies;
-        private ObservableCollection<MovieVideo> _movieVideos;
-        private ObservableCollection<MovieAudio> _movieAudios;
-        private ObservableCollection<MovieSubtitle> _movieSubtitles;
-        private ObservableCollection<MovieArt> _movieArt;
+        private ObservableMovie _selectedMovie;
+        private ObservableCollection<ObservableMovie> _movies;
+        private ObservableCollection<MovieVideo> _videos;
+        private ObservableCollection<MovieAudio> _audios;
+        private ObservableCollection<MovieSubtitle> _subtitles;
+        private ObservableCollection<MovieArt> _art;
 
         public ContentGridViewModel(IMoviesDataService service) {
-            Movies = new ObservableCollection<IMovie>(service.Movies);
+            _service = service;
+
+            Movies = new ObservableCollection<ObservableMovie>(service.Movies.Select(m => new ObservableMovie(m)));
 
             _searchObservable = Observable.FromEventPattern<PropertyChangedEventArgs>(this, "PropertyChanged")
                                           .Where(ep => ep.EventArgs.PropertyName == "MovieSearchFilter")
@@ -68,7 +71,7 @@ namespace RibbonUI.UserControls {
             MessengerInstance.Register<RemoveCountryMessage>(this, s => RemoveCountry(s.Country));
         }
 
-        public ObservableCollection<IMovie> Movies {
+        public ObservableCollection<ObservableMovie> Movies {
             get { return _movies; }
             set {
                 if (Equals(value, _movies)) {
@@ -87,7 +90,7 @@ namespace RibbonUI.UserControls {
             }
         }
 
-        public IMovie SelectedMovie {
+        public ObservableMovie SelectedMovie {
             get { return _selectedMovie; }
             set {
                 if (Equals(value, _selectedMovie)) {
@@ -96,10 +99,10 @@ namespace RibbonUI.UserControls {
                 _selectedMovie = value;
 
                 if (_selectedMovie != null) {
-                    MovieVideos = new ObservableCollection<MovieVideo>(_selectedMovie.Videos.Select(v => new MovieVideo(v)));
-                    MovieAudios = new ObservableCollection<MovieAudio>(_selectedMovie.Audios.Select(a => new MovieAudio(a)));
-                    MovieSubtitles = new ObservableCollection<MovieSubtitle>(_selectedMovie.Subtitles.Select(s => new MovieSubtitle(s)));
-                    MovieArt = new ObservableCollection<MovieArt>(_selectedMovie.Art.Select(a => new MovieArt(a)));
+                    Videos = new ObservableCollection<MovieVideo>(_selectedMovie.Videos.Select(v => new MovieVideo(v)));
+                    Audios = new ObservableCollection<MovieAudio>(_selectedMovie.Audios.Select(a => new MovieAudio(a)));
+                    Subtitles = new ObservableCollection<MovieSubtitle>(_selectedMovie.Subtitles.Select(s => new MovieSubtitle(s)));
+                    Art = new ObservableCollection<MovieArt>(_selectedMovie.Art.Select(a => new MovieArt(a)));
                 }
 
                 OnPropertyChanged();
@@ -117,43 +120,43 @@ namespace RibbonUI.UserControls {
             }
         }
 
-        public ObservableCollection<MovieVideo> MovieVideos {
-            get { return _movieVideos; }
+        public ObservableCollection<MovieVideo> Videos {
+            get { return _videos; }
             set {
-                if (Equals(value, _movieVideos)) {
+                if (Equals(value, _videos)) {
                     return;
                 }
-                _movieVideos = value;
+                _videos = value;
                 OnPropertyChanged();
             }
         }
-        public ObservableCollection<MovieAudio> MovieAudios {
-            get { return _movieAudios; }
+        public ObservableCollection<MovieAudio> Audios {
+            get { return _audios; }
             set {
-                if (Equals(value, _movieAudios)) {
+                if (Equals(value, _audios)) {
                     return;
                 }
-                _movieAudios = value;
+                _audios = value;
                 OnPropertyChanged();
             }
         }
-        public ObservableCollection<MovieSubtitle> MovieSubtitles {
-            get { return _movieSubtitles; }
+        public ObservableCollection<MovieSubtitle> Subtitles {
+            get { return _subtitles; }
             set {
-                if (Equals(value, _movieSubtitles)) {
+                if (Equals(value, _subtitles)) {
                     return;
                 }
-                _movieSubtitles = value;
+                _subtitles = value;
                 OnPropertyChanged();
             }
         }
-        public ObservableCollection<MovieArt> MovieArt {
-            get { return _movieArt; }
+        public ObservableCollection<MovieArt> Art {
+            get { return _art; }
             set {
-                if (Equals(value, _movieArt)) {
+                if (Equals(value, _art)) {
                     return;
                 }
-                _movieArt = value;
+                _art = value;
                 OnPropertyChanged();
             }
         }
@@ -165,7 +168,7 @@ namespace RibbonUI.UserControls {
 
         private bool Filter(object o) {
             try {
-                return ((IMovie) o).Title.IndexOf(MovieSearchFilter ?? "", StringComparison.CurrentCultureIgnoreCase) != -1;
+                return ((ObservableMovie) o).Title.IndexOf(MovieSearchFilter ?? "", StringComparison.CurrentCultureIgnoreCase) != -1;
             }
             catch (Exception e) {
                 return false;
@@ -182,56 +185,62 @@ namespace RibbonUI.UserControls {
 
         #region Message Handlers
 
+        private void AddSubtitle(MovieSubtitle subtitle) {
+            ISubtitle sub = _service.AddSubtitle(SelectedMovie.ObservedMovie, subtitle.ObservedSubtitle);
+            Subtitles.Add(new MovieSubtitle(sub));
+        }
+
         private void RemoveSubtitle(MovieSubtitle subtitle) {
-            MovieSubtitles.Remove(subtitle);
+            _service.RemoveSubtitle(SelectedMovie.ObservedMovie, subtitle.ObservedSubtitle);
+            Subtitles.Remove(subtitle);
         }
 
         private void RemovePlot(IPlot plot) {
-            SelectedMovie.Remove(plot);
+            _service.RemovePlot(_selectedMovie.ObservedMovie, plot);
         }
 
         private void AddPlot(IPlot plot) {
-            SelectedMovie.Add(plot);
+            _service.AddPlot(_selectedMovie.ObservedMovie, plot);
         }
 
         private void AddStudio(IStudio studio) {
-            SelectedMovie.Add(studio);
+            _service.AddStudio(_selectedMovie.ObservedMovie, studio);
         }
 
         private void RemoveStudio(IStudio studio) {
-            SelectedMovie.Add(studio);
+            _service.RemoveStudio(_selectedMovie.ObservedMovie, studio);
         }
 
         private void AddActor(IActor actor) {
-            SelectedMovie.Add(actor);
+            _service.AddActor(_selectedMovie.ObservedMovie, actor);
         }
 
         private void RemoveActor(IActor actor) {
-            SelectedMovie.Remove(actor);
+            _service.RemoveActor(_selectedMovie.ObservedMovie, actor);
         }
 
         private void AddDirector(IPerson director) {
-            SelectedMovie.Add(director, PersonType.Director);
+            _service.AddDirector(_selectedMovie.ObservedMovie, director);
         }
 
         private void RemoveDirector(IPerson director) {
-            SelectedMovie.Remove(director, PersonType.Director);
+            _service.RemoveDirector(_selectedMovie.ObservedMovie, director);
         }
 
         private void AddGenre(IGenre genre) {
-            SelectedMovie.Add(genre);
+            _service.AddGenre(_selectedMovie.ObservedMovie, genre);
         }
 
         private void RemoveGenre(IGenre genre) {
-            SelectedMovie.Remove(genre);
+            _service.RemoveGenre(_selectedMovie.ObservedMovie, genre);
         }
 
         private void AddCountry(ICountry country) {
-            SelectedMovie.Add(country);
+            _service.AddCountry(_selectedMovie.ObservedMovie, country);
         }
 
         private void RemoveCountry(ICountry country) {
-            SelectedMovie.Remove(country);
+            _service.RemoveCountry(_selectedMovie.ObservedMovie, country);
         }
 
         #endregion

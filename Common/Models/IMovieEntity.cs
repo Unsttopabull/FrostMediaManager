@@ -1,9 +1,8 @@
-﻿using System;
+﻿namespace Frost.Common.Models {
 
-namespace Frost.Common.Models {
+    public interface IMovieEntity {
 
-    public interface IMovieEntity /*: ICloneable*/ {
-         
+        long Id { get; }
     }
 
 }

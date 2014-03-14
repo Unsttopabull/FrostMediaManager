@@ -20,7 +20,7 @@ namespace Frost.Models.Frost.DB {
 
         /// <summary>Initializes a new instance of the <see cref="Language"/> class.</summary>
         /// <param name="language">The ILanguage implementation.</param>
-        public Language(ILanguage language) {
+        internal Language(ILanguage language) {
             ISO639 = language.ISO639;
             Name = language.Name;
         }

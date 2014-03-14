@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Frost.Common;
 using Frost.Common.Models;
-using Frost.Model.Xbmc.NFO;
 
 namespace Frost.Models.Frost.DB.Files {
 
@@ -15,7 +14,7 @@ namespace Frost.Models.Frost.DB.Files {
         public Audio() {
         }
 
-        public Audio(IAudio audio) {
+        internal Audio(IAudio audio) {
             Source = audio.Source;
             Type = audio.Type;
             ChannelPositions = audio.ChannelPositions;
@@ -205,20 +204,6 @@ namespace Frost.Models.Frost.DB.Files {
         public virtual Movie Movie { get; set; }
 
         #endregion
-
-        /// <summary>Converts and instance of <see cref="Audio"/> to an instance of <see cref="XbmcXmlAudioInfo">XbmcXmlAudioInfo</see></summary>
-        /// <param name="audio">The audio to convert</param>
-        /// <returns>An instance of <see cref="XbmcXmlAudioInfo">XbmcXmlAudioInfo</see> converted from <see cref="Audio"/></returns>
-        public static explicit operator XbmcXmlAudioInfo(Audio audio) {
-            return new XbmcXmlAudioInfo(audio.Codec, audio.NumberOfChannels ?? 0, audio.Language.ISO639.Alpha3);
-        }
-
-        /// <summary>Converts <see cref="XbmcXmlAudioInfo"/> to an instance of <see cref="Audio">Audio</see></summary>
-        /// <param name="audio">The instance of <see cref="XbmcXmlAudioInfo"/> to convert</param>
-        /// <returns>An instance of <see cref="Audio">Audio</see> converted from <see cref="XbmcXmlAudioInfo"/></returns>
-        public static explicit operator Audio(XbmcXmlAudioInfo audio) {
-            return new Audio(audio.Codec, audio.Channels.ToICString(), audio.Language);
-        }
 
         internal class Configuration : EntityTypeConfiguration<Audio> {
             public Configuration() {
