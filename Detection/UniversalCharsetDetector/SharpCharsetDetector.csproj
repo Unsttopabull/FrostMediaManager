@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7BECB850-389A-44FC-8523-3EF0B2540F07}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Frost.SharpCharsetDetector</RootNamespace>
+    <AssemblyName>Frost.SharpCharsetDetector</AssemblyName>
+    <StartupObject>
+    </StartupObject>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Frost.SharpCharsetDetector</RootNamespace>
+    <AssemblyName>Frost.SharpCharsetDetector</AssemblyName>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <OutputType>Library</OutputType>
+    <DebugSymbols>false</DebugSymbols>
+    <RootNamespace>Frost.SharpCharsetDetector</RootNamespace>
+    <AssemblyName>Frost.SharpCharsetDetector</AssemblyName>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="ContextAnalysers\EUCJPContextAnalyser.cs" />
+    <Compile Include="ContextAnalysers\SJISContextAnalyser.cs" />
+    <Compile Include="DistributionAnalysers\BIG5DistributionAnalyser.cs" />
+    <Compile Include="DistributionAnalysers\CharDistributionAnalyser.cs" />
+    <Compile Include="DistributionAnalysers\EUCJPDistributionAnalyser.cs" />
+    <Compile Include="DistributionAnalysers\EUCKRDistributionAnalyser.cs" />
+    <Compile Include="DistributionAnalysers\EUCTWDistributionAnalyser.cs" />
+    <Compile Include="DistributionAnalysers\GB18030DistributionAnalyser.cs" />
+    <Compile Include="DistributionAnalysers\SJISDistributionAnalyser.cs" />
+    <Compile Include="Models\SMModels\BIG5SMModel.cs" />
+    <Compile Include="Models\SMModels\EUCJPSMModel.cs" />
+    <Compile Include="Models\SMModels\EUCKRSMModel.cs" />
+    <Compile Include="Models\SMModels\EUCTWSMModel.cs" />
+    <Compile Include="Models\SMModels\GB18030SMModel.cs" />
+    <Compile Include="Models\SequenceModels\Cyrillic\Ibm855Model.cs" />
+    <Compile Include="Models\SequenceModels\Cyrillic\Ibm866Model.cs" />
+    <Compile Include="Models\SMModels\ISO2022CNSMModel.cs" />
+    <Compile Include="Models\SMModels\ISO2022JPSMModel.cs" />
+    <Compile Include="Models\SMModels\ISO2022KRSMModel.cs" />
+    <Compile Include="Models\SequenceModels\Cyrillic\Koi8rModel.cs" />
+    <Compile Include="Models\SequenceModels\Hungarian\Latin2HungarianModel.cs" />
+    <Compile Include="Models\SequenceModels\Bulgarian\Latin5BulgarianModel.cs" />
+    <Compile Include="Models\SequenceModels\Cyrillic\Latin5Model.cs" />
+    <Compile Include="Models\SequenceModels\Greek\Latin7Model.cs" />
+    <Compile Include="Models\SequenceModels\Cyrillic\MacCyrillicModel.cs" />
+    <Compile Include="Models\SMModels\SJISSMModel.cs" />
+    <Compile Include="Models\SMModels\UCS2BESMModel.cs" />
+    <Compile Include="Models\SMModels\UCS2LESMModel.cs" />
+    <Compile Include="Models\SequenceModels\Hungarian\Win1250HungarianModel.cs" />
+    <Compile Include="Models\SequenceModels\Bulgarian\Win1251BulgarianModel.cs" />
+    <Compile Include="Models\SequenceModels\Cyrillic\Win1251Model.cs" />
+    <Compile Include="Models\SequenceModels\Greek\Win1253Model.cs" />
+    <Compile Include="Models\SequenceModels\Hebrew\Win1255Model.cs" />
+    <Compile Include="Probers\CharsetProber.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CodingStateMachine.cs" />
+    <Compile Include="Probers\EscCharsetProber.cs" />
+    <Compile Include="Models\SMModels\HZSMModel.cs" />
+    <Compile Include="Probers\HebrewProber.cs" />
+    <Compile Include="Probers\Latin1Prober.cs" />
+    <Compile Include="Probers\MBCSGroupProber.cs" />
+    <Compile Include="BitPackage.cs" />
+    <Compile Include="Probers\SBCharsetProber.cs" />
+    <Compile Include="Probers\SBCSGroupProber.cs" />
+    <Compile Include="UniversalDetector.cs" />
+    <Compile Include="Probers\UTF8Prober.cs" />
+    <Compile Include="Models\SMModels\UTF8SMModel.cs" />
+    <Compile Include="Models\SequenceModel.cs" />
+    <Compile Include="Probers\GB18030Prober.cs" />
+    <Compile Include="Models\SMModel.cs" />
+    <Compile Include="Models\SequenceModels\Cyrillic\CyrillicModel.cs" />
+    <Compile Include="Models\SequenceModels\Bulgarian\BulgarianModel.cs" />
+    <Compile Include="Models\SequenceModels\Hebrew\HebrewModel.cs" />
+    <Compile Include="Models\SequenceModels\Greek\GreekModel.cs" />
+    <Compile Include="Models\SequenceModels\Hungarian\HungarianModel.cs" />
+    <Compile Include="Models\SequenceModels\ThaiModel.cs" />
+    <Compile Include="Probers\Big5Prober.cs" />
+    <Compile Include="Probers\EUCJPProber.cs" />
+    <Compile Include="Probers\EUCKRProber.cs" />
+    <Compile Include="Probers\EUCTWProber.cs" />
+    <Compile Include="ContextAnalysers\JapaneseContextAnalyser.cs" />
+    <Compile Include="Probers\SJISProber.cs" />
+    <Compile Include="DetectionConfidence.cs" />
+    <Compile Include="Charsets.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

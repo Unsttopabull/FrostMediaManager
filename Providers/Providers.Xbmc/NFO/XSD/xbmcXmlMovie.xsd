@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="MovieInfo" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="movie">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="title" type="xs:string" minOccurs="1" maxOccurs="1" />
+        <xs:element name="originaltitle" type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="sorttitle" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="rating" type="xs:float" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="epbookmark" type="xs:float" minOccurs="0" maxOccurs="1" />
+        <xs:element name="year" type="xs:gYear" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="releasedate" type="xs:string" minOccurs="0"  maxOccurs="1"/>
+        <xs:element name="top250" type="xs:unsignedInt" minOccurs="0"  maxOccurs="1"/>
+        <!-- Integer thousand separated by comma ',' -->
+        <xs:element name="votes" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="certification" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="outline" type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="plot" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="tagline" type="xs:string" minOccurs="0" maxOccurs="1" />
+        <xs:element name="runtime" type="runtimeMin" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="watched" type="xs:boolean" minOccurs="0" maxOccurs="1" />
+        <xs:element name="thumb" type="thumb" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="fanart" type="fanart" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="mpaa" type="xs:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+        <xs:element name="playcount" type="xs:unsignedInt" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="lastplayed" type="xs:date" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="id" type="MovieDbId" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="filenameandpath" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="genre" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="country" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element name="set" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="credits" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="director" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="premiered" type="xs:date" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="status" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="code" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="aired" type="xs:date" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="studio" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="trailer" type="xs:anyURI" minOccurs="0" />
+        <xs:element name="fileinfo" type="fileInfo" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="actor" type="actor" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:element name="resume" type="resumeInfo" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="dateadded" type="MySqlDate" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 
+  //////////////////////////////
+  ///////Custom data types//////
+  /////////////////////////////
+  -->
+  <!-- Thumb URIs -->
+  <xs:complexType name="thumb">
+    <xs:simpleContent>
+      <xs:extension base="xs:anyURI">
+        <xs:attribute name="aspect" type="xs:string" />
+        <xs:attribute name="preview" type="xs:anyURI" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <!-- Actor info -->
+  <xs:complexType name="actor">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="0" />
+      <xs:element name="role" type="xs:string" minOccurs="0" />
+      <xs:element name="thumb" type="xs:anyURI" minOccurs="0" />
+    </xs:sequence>
+  </xs:complexType>
+  <!-- Simple mySQL date -->
+  <xs:simpleType name="MySqlDate">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Runtime in minutes -->
+  <xs:simpleType name="runtimeMin">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d+( min)?"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!-- Fanart array -->
+  <xs:complexType name="fanart">
+    <xs:sequence>
+      <xs:element name="thumb" type="thumb" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="url" type="xs:anyURI" />
+  </xs:complexType>
+  <!-- Video Info -->
+  <xs:complexType name="videoInfo">
+    <!-- unordered seq. elements occuring min 0 max 1 -->
+    <xs:all>
+      <xs:element name="aspect" type="xs:float" minOccurs="0" />
+      <xs:element name="codec" type="xs:string" minOccurs="0" />
+      <xs:element name="durationinseconds" type="xs:unsignedInt" minOccurs="0" />
+      <xs:element name="height" type="xs:unsignedInt" minOccurs="0" />
+      <xs:element name="scantype" type="xs:string" minOccurs="0"/>
+      <xs:element name="width" type="xs:unsignedInt" minOccurs="0" />
+      <xs:element name="language" type="xs:string" minOccurs="0" />
+      <xs:element name="longlanguage" type="xs:string" minOccurs="0" />
+    </xs:all>
+  </xs:complexType>
+  <!-- Audio Info -->
+  <xs:complexType name="audioInfo">
+    <!-- unordered seq. elements occuring min 0 max 1 -->
+    <xs:all>
+      <xs:element name="channels" type="xs:unsignedInt" minOccurs="0" />
+      <xs:element name="codec" type="xs:string" minOccurs="0" />
+      <xs:element name="language" type="xs:string" minOccurs="0" />
+      <xs:element name="longlanguage" type="xs:string" minOccurs="0" />
+    </xs:all>
+  </xs:complexType>
+  <!-- Subtitle Info -->
+  <xs:complexType name="subtitleInfo">
+    <xs:all>
+      <xs:element name="language" type="xs:string" minOccurs="0" />
+      <xs:element name="longlanguage" type="xs:string" minOccurs="0" />
+    </xs:all>
+  </xs:complexType>
+  <!-- Info about resuming -->
+  <xs:complexType name="resumeInfo">
+    <xs:sequence>
+      <xs:element name="position" type="xs:float" minOccurs="0" />
+      <xs:element name="total" type="xs:float" minOccurs="0" />
+    </xs:sequence>
+  </xs:complexType>
+  <!-- File Info and metadata -->
+  <xs:complexType name="fileInfo">
+    <xs:sequence>
+      <xs:element name="streamdetails" minOccurs="1" maxOccurs="1">
+        <xs:complexType>
+          <!-- multiple occurrences of audio/video/subs allowed -->
+          <xs:choice maxOccurs="unbounded">
+            <xs:element name="audio" type="audioInfo"/>
+            <xs:element name="video" type="videoInfo"/>
+            <xs:element name="subtitle" type="subtitleInfo"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <!-- Different movie db IDs (no attribute -> imdb) -->
+  <xs:complexType name="MovieDbId">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="moviedb" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:schema>

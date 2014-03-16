@@ -5,33 +5,33 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "Tester\Tester.csproj", "{05F98D48-B9A3-4B2B-8648-498FAA41B7EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureDetector", "FeatureDetector\FeatureDetector.csproj", "{8542C013-AA9A-4852-98FA-6F05CC037A91}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FeatureDetector", "Detection\FeatureDetector\FeatureDetector.csproj", "{8542C013-AA9A-4852-98FA-6F05CC037A91}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpMediaInfo", "SharpMediaInfo\SharpMediaInfo.csproj", "{4EA24C1B-3AF2-4EB0-AA98-62EAFB0C2682}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpMediaInfo", "Detection\SharpMediaInfo\SharpMediaInfo.csproj", "{4EA24C1B-3AF2-4EB0-AA98-62EAFB0C2682}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{73F12859-D8B1-49C1-A835-0810CE7BD006}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLanguageDetect", "SharpLanguageDetect\SharpLanguageDetect.csproj", "{977BDAC0-B1E4-4198-A0AD-6B93E30EF480}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpLanguageDetect", "Detection\SharpLanguageDetect\SharpLanguageDetect.csproj", "{977BDAC0-B1E4-4198-A0AD-6B93E30EF480}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCharsetDetector", "UniversalCharsetDetector\SharpCharsetDetector.csproj", "{7BECB850-389A-44FC-8523-3EF0B2540F07}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpCharsetDetector", "Detection\UniversalCharsetDetector\SharpCharsetDetector.csproj", "{7BECB850-389A-44FC-8523-3EF0B2540F07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RibbonUI", "RibbonUI\RibbonUI.csproj", "{FD95157C-7CDE-4E94-AAF7-259BABD583A6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RibbonUI", "UI\RibbonUI\RibbonUI.csproj", "{FD95157C-7CDE-4E94-AAF7-259BABD583A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GettextMarkupExtension", "GettextTranslationExtension\GettextMarkupExtension.csproj", "{A3CE8F2A-9950-409C-AA35-74CD1D1D6D87}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GettextMarkupExtension", "UI\GettextTranslationExtension\GettextMarkupExtension.csproj", "{A3CE8F2A-9950-409C-AA35-74CD1D1D6D87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecondLanguage", "SecondLanguage\SecondLanguage.csproj", "{728B73DF-466A-43ED-BC90-1FC4A6CCD959}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecondLanguage", "UI\SecondLanguage\SecondLanguage.csproj", "{728B73DF-466A-43ED-BC90-1FC4A6CCD959}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamlControls", "XamlControls\XamlControls.csproj", "{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XamlControls", "UI\XamlControls\XamlControls.csproj", "{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Providers.Frost", "Models.Frost\Providers.Frost.csproj", "{B404DA8F-FBF4-4CCC-BE01-22C488863EC2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Providers.Frost", "Providers\Providers.Frost\Providers.Frost.csproj", "{B404DA8F-FBF4-4CCC-BE01-22C488863EC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Providers.Xtreamer", "Models.Xtreamer\Providers.Xtreamer.csproj", "{8491DCCF-354E-4FF6-89D4-88A0BB9CB8AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Providers.Xtreamer", "Providers\Providers.Xtreamer\Providers.Xtreamer.csproj", "{8491DCCF-354E-4FF6-89D4-88A0BB9CB8AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Providers.Xbmc", "Models.Xbmc\Providers.Xbmc.csproj", "{2E311A90-347B-47E1-8AA7-87A276C88F4E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Providers.Xbmc", "Providers\Providers.Xbmc\Providers.Xbmc.csproj", "{2E311A90-347B-47E1-8AA7-87A276C88F4E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{ED24ACDC-DD9F-4ED8-A66E-7491E829A14E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{AD8B4AC3-5A0D-4363-8A79-3767012A1998}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI\UI", "{AD8B4AC3-5A0D-4363-8A79-3767012A1998}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Detection", "Detection", "{178CEDB0-8A3F-4DFC-BDDD-3E36B7625293}"
 EndProject

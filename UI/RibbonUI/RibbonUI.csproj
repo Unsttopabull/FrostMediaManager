@@ -1,0 +1,628 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FD95157C-7CDE-4E94-AAF7-259BABD583A6}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RibbonUI</RootNamespace>
+    <AssemblyName>RibbonUI</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>logo3.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Converters\EnumDescriptionConverter.cs" />
+    <Compile Include="Converters\ISO639Alpha3ToISOLanguageCodeConverter.cs" />
+    <Compile Include="Converters\PathToImageSourceConverter.cs" />
+    <Compile Include="Converters\TranslateEnumConverter.cs" />
+    <Compile Include="Messages\Plot\RemovePlotMessage.cs" />
+    <Compile Include="Messages\SelectRibbonMessage.cs" />
+    <Compile Include="Messages\Subtitles\RemoveSubtitleMessage.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="UserControls\ArtAndPlot.xaml.cs">
+      <DependentUpon>ArtAndPlot.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\NominationConverter.cs" />
+    <Compile Include="UserControls\ContentGrid.xaml.cs">
+      <DependentUpon>ContentGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\List\ListArtViewModel.cs">
+      <DependentUpon>ListArt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Settings\FeatureDetectorSettings.xaml.cs">
+      <DependentUpon>FeatureDetectorSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\List\ListArt.xaml.cs">
+      <DependentUpon>ListArt.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\List\ListAudios.xaml.cs">
+      <DependentUpon>ListAudios.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\EditMovie.xaml.cs">
+      <DependentUpon>EditMovie.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\List\ListSubtitles.xaml.cs">
+      <DependentUpon>ListSubtitles.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\List\ListVideos.xaml.cs">
+      <DependentUpon>ListVideos.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Ribbon.xaml.cs">
+      <DependentUpon>Ribbon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Settings\FileNameParserSettings.xaml.cs">
+      <DependentUpon>FileNameParserSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Settings\GeneralSettings.xaml.cs">
+      <DependentUpon>GeneralSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Util\Codec.cs" />
+    <Compile Include="Util\LightInjectContainer.cs" />
+    <Compile Include="Util\ObservableWrappers\MovieArt.cs" />
+    <Compile Include="Util\ObservableWrappers\MovieCountry.cs" />
+    <Compile Include="Util\ObservableWrappers\MovieHasLanguageBase.cs" />
+    <Compile Include="Util\ObservableWrappers\MovieItemBase.cs" />
+    <Compile Include="Util\ObservableWrappers\MovieLanguage.cs" />
+    <Compile Include="Util\ObservableWrappers\MoviePerson.cs" />
+    <Compile Include="Util\ObservableWrappers\MovieStudio.cs" />
+    <Compile Include="Util\ObservableWrappers\MovieActor.cs" />
+    <Compile Include="Util\ObservableWrappers\MovieAudio.cs" />
+    <Compile Include="Util\ObservableWrappers\MovieVideo.cs" />
+    <Compile Include="Messages\Country\AddCountryMessage.cs" />
+    <Compile Include="Messages\Plot\AddPlotMessage.cs" />
+    <Compile Include="Messages\People\AddActorMessage.cs" />
+    <Compile Include="Messages\People\AddDirectorMessage.cs" />
+    <Compile Include="Messages\Genre\AddGenreMessage.cs" />
+    <Compile Include="Messages\Studio\AddStudioMessage.cs" />
+    <Compile Include="MainWindowViewModel.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ArtAndPlotViewModel.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>ArtAndPlot.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ContentGridViewModel.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>ContentGrid.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\List\ListAudiosViewModel.cs">
+      <DependentUpon>ListAudios.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\List\ListSubtitlesViewModel.cs">
+      <DependentUpon>ListSubtitles.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\List\ListVideosViewModel.cs">
+      <DependentUpon>ListVideos.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Messages\Country\RemoveCountryMessage.cs" />
+    <Compile Include="Messages\People\RemoveDirectorMessage.cs" />
+    <Compile Include="Messages\Studio\RemoveStudioMessage.cs" />
+    <Compile Include="Messages\People\RemoveActorMessage.cs" />
+    <Compile Include="Messages\Genre\RemoveGenreMessage.cs" />
+    <Compile Include="Util\ObservableWrappers\MovieSubtitle.cs" />
+    <Compile Include="UserControls\RibbonViewModel.cs">
+      <DependentUpon>Ribbon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Settings\FeatureDetectorSettingsViewModel.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>FeatureDetectorSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Settings\FileNameParserSettingsViewModel.cs">
+      <DependentUpon>FileNameParserSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Settings\GeneralSettingsViewModel.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>GeneralSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\EditMovieViewModel.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>EditMovie.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\MovieFlagsAndInfoViewModel.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>MovieFlagsAndInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Util\Extensions.cs" />
+    <Compile Include="Util\KnownCodec.cs" />
+    <Compile Include="Util\ObservableWrappers\MoviePlot.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Util\ObservableWrappers\ObservableBase.cs" />
+    <Compile Include="Util\ObservableWrappers\ObservableMovie.cs" />
+    <Compile Include="Windows\AddCountriesViewModel.cs">
+      <DependentUpon>AddCountries.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AddGenre.xaml.cs">
+      <DependentUpon>AddGenre.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AddGenreViewModel.cs">
+      <Generator>MSBuild:Compile</Generator>
+      <DependentUpon>AddGenre.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AddPersonViewModel.cs">
+      <DependentUpon>AddPerson.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AddStudiosViewModel.cs">
+      <DependentUpon>AddStudios.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EditAudioViewModel.cs">
+      <DependentUpon>EditAudio.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EditPersonViewModel.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>EditPerson.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EditVideoViewModel.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>EditVideo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SelectLanguageViewModel.cs">
+      <DependentUpon>SelectLanguage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SettingsWindowViewModel.cs">
+      <DependentUpon>SelectLanguage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AddCodecMapping.xaml.cs">
+      <DependentUpon>AddCodecMapping.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AddStudios.xaml.cs">
+      <DependentUpon>AddStudios.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AddPerson.xaml.cs">
+      <DependentUpon>AddPerson.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EditVideo.xaml.cs">
+      <DependentUpon>EditVideo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EditAudio.xaml.cs">
+      <DependentUpon>EditAudio.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\EditPerson.xaml.cs">
+      <DependentUpon>EditPerson.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\InputBox.xaml.cs">
+      <DependentUpon>InputBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SelectLanguage.xaml.cs">
+      <DependentUpon>SelectLanguage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AddCountries.xaml.cs">
+      <DependentUpon>AddCountries.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\AddCodecMappingViewModel.cs">
+      <DependentUpon>AddCodecMapping.xaml</DependentUpon>
+    </Compile>
+    <Page Include="UserControls\ArtAndPlot.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\ContentGrid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UserControls\Settings\FeatureDetectorSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\List\ListArt.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\List\ListAudios.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\EditMovie.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="UserControls\List\ListSubtitles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\List\ListVideos.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\MovieFlagsAndInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Ribbon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Settings\FileNameParserSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\Settings\GeneralSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AddCodecMapping.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AddGenre.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AddStudios.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\AddPerson.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\EditVideo.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\EditAudio.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\EditPerson.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\InputBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SelectLanguage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Windows\AddCountries.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="UserControls\MovieFlagsAndInfo.xaml.cs">
+      <DependentUpon>MovieFlagsAndInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Languages\en.po">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Languages\sl.po">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\add.png" />
+    <Resource Include="Images\copy.png" />
+    <Resource Include="Images\cut.png" />
+    <Resource Include="Images\format_painter.png" />
+    <Resource Include="Images\help.png" />
+    <Resource Include="Images\home.png" />
+    <Resource Include="Images\options.png" />
+    <Resource Include="Images\paste.png" />
+    <Resource Include="Images\quit.png" />
+    <Resource Include="Images\save.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\export.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\xbmc.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\xtreamer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\default\cover.png" />
+    <Resource Include="Images\default\fanart.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\defaultsound.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Stars\star.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Stars\starhalf.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\valid.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logo3.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Headers\fanart.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Headers\nfo.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Headers\error.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Headers\trailer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Headers\watched.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Headers\subtitles.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Stars\starempty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Headers\trailer2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\missing2.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\defaultscreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\search.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\filter.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\error.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\validEdit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\missingEdit.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\person.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\IMDbNew.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\person3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\trailer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\awards\golden-globes-nomination.png" />
+    <Resource Include="Images\awards\golden-globes.png" />
+    <Resource Include="Images\awards\oscar-icon-nomination.png" />
+    <Resource Include="Images\awards\oscar-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\awards\cannes-nomination.png" />
+    <Resource Include="Images\awards\cannes.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\movieFolder.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\unknown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\search_subs.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\podnapisiNet.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\opensubtitles.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\remove.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\folder.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\edit.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\unknown_large.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <SplashScreen Include="SplashScreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\speaker.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\woofer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\speaker_disabled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\woofer_disabled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\clear.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\sofa.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\default\mpaaur.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\go-next.png" />
+    <Resource Include="Images\go-previous.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\remove_disabled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\add_disabled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\default\generic.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\edit_disabled.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\Common.csproj">
+      <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Detection\FeatureDetector\FeatureDetector.csproj">
+      <Project>{8542c013-aa9a-4852-98fa-6f05cc037a91}</Project>
+      <Name>FeatureDetector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GettextTranslationExtension\GettextMarkupExtension.csproj">
+      <Project>{a3ce8f2a-9950-409c-aa35-74cd1d1d6d87}</Project>
+      <Name>GettextMarkupExtension</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XamlControls\XamlControls.csproj">
+      <Project>{39d8b812-d2b3-476e-ba81-10beea1d5eee}</Project>
+      <Name>XamlControls</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="AvalonControlsLibrary, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\FrostMediaManager\Libraries\AvalonControlsLibrary\AvalonControlsLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.WPF45, Version=4.2.30.23246, Culture=neutral, PublicKeyToken=eabbf6a5f5af5004, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\MvvmLightLibs.4.2.30.0\lib\net45\GalaSoft.MvvmLight.WPF45.dll</HintPath>
+    </Reference>
+    <Reference Include="LightInject, Version=3.0.1.5, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\LightInject.3.0.1.5\lib\net45\LightInject.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\FrostMediaManager\Libraries\Windows API CodePack\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\FrostMediaManager\Libraries\Windows API CodePack\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Reactive.Core, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Rx-Core.2.2.2\lib\net45\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Rx-Interfaces.2.2.2\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Rx-Linq.2.2.2\lib\net45\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Controls.Ribbon" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MvvmLightLibs.4.2.30.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="Xceed.Wpf.Toolkit, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\FrostMediaManager\Libraries\ExtendedWPFToolkit\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

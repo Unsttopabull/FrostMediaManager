@@ -58,24 +58,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\EF6\EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\JsonNET\Net35\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite, Version=1.0.91.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\System.Data.SQLite.1.0.91.3\lib\net45\System.Data.SQLite.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data.SQLite.EF6">
-      <HintPath>..\packages\System.Data.SQLite.1.0.91.3\lib\net45\System.Data.SQLite.EF6.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data.SQLite.Linq, Version=1.0.91.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>..\packages\System.Data.SQLite.1.0.91.3\lib\net45\System.Data.SQLite.Linq.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
@@ -94,19 +78,19 @@
       <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Models.Frost\Providers.Frost.csproj">
+    <ProjectReference Include="..\Providers\Providers.Frost\Providers.Frost.csproj">
       <Project>{b404da8f-fbf4-4ccc-be01-22c488863ec2}</Project>
       <Name>Providers.Frost</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FeatureDetector\FeatureDetector.csproj">
+    <ProjectReference Include="..\Detection\FeatureDetector\FeatureDetector.csproj">
       <Project>{8542C013-AA9A-4852-98FA-6F05CC037A91}</Project>
       <Name>FeatureDetector</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Models.Xbmc\Providers.Xbmc.csproj">
+    <ProjectReference Include="..\Providers\Providers.Xbmc\Providers.Xbmc.csproj">
       <Project>{2e311a90-347b-47e1-8aa7-87a276c88f4e}</Project>
       <Name>Providers.Xbmc</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Models.Xtreamer\Providers.Xtreamer.csproj">
+    <ProjectReference Include="..\Providers\Providers.Xtreamer\Providers.Xtreamer.csproj">
       <Project>{8491dccf-354e-4ff6-89d4-88a0bb9cb8af}</Project>
       <Name>Providers.Xtreamer</Name>
     </ProjectReference>

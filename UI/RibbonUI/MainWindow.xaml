@@ -1,0 +1,29 @@
+﻿<RibbonWindow x:Class="RibbonUI.MainWindow"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"              
+              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+              xmlns:userControls="clr-namespace:RibbonUI.UserControls"
+              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+              xmlns:ribbonUi="clr-namespace:RibbonUI"
+              Title="MainWindow" Icon="logo3.ico" x:Name="RibbonWindow"
+              MinWidth="{Binding ElementName=ContentGrid, Path=MinRequiredWidth}"
+              mc:Ignorable="d" Width="1386" Height="794"
+              d:DataContext="{d:DesignInstance ribbonUi:MainWindowViewModel}">
+              <!--
+              MinWidth="{Binding ElementName=ContentGrid, Path=MinRequiredWidth}" Loaded="RibbonWindowLoaded">-->  
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closed">
+            <i:InvokeCommandAction Command="{Binding OnCloseCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid x:Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <userControls:Ribbon x:Name="Ribbon" Movie="{Binding ElementName=ContentGrid, Path=SelectedMovie}"/>
+        <userControls:ContentGrid x:Name="ContentGrid" Grid.Row="1"/>
+    </Grid>
+</RibbonWindow>

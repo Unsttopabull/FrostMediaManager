@@ -1,0 +1,264 @@
+﻿<Window x:Class="RibbonUI.Windows.EditVideo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:common="clr-namespace:Frost.Common;assembly=Frost.Common"
+        xmlns:converters="clr-namespace:RibbonUI.Converters"
+        xmlns:a="http://schemas.AvalonControls/AvalonControlsLibrary/Controls"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:e="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+        xmlns:l="http://www.frostmediamanager.com/xaml/translation"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:glob="clr-namespace:System.Globalization;assembly=mscorlib"
+        xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
+        xmlns:windows="clr-namespace:RibbonUI.Windows"
+        xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
+        mc:Ignorable="d" Name="EditVideoWindow" Height="443" Width="570"
+        Title="{l:T Edit video}" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <Window.DataContext>
+        <windows:EditVideoViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <ObjectDataProvider x:Key="BitRateModes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="common:FrameOrBitRateMode" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="CompressionModes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="common:CompressionMode" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Window.Resources>
+    <Grid HorizontalAlignment="Stretch">
+        <Grid.Resources>
+            <Style TargetType="{x:Type Label}">
+                <Setter Property="Margin" Value="-5,0,0,0" />
+            </Style>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="10" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="5" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel DockPanel.Dock="Left" Grid.Column="0" MinWidth="115">
+            <Image x:Name="CodecImg" x:FieldModifier="private"
+                   Source="{Binding SelectedVideo.CodecImage, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}, UpdateSourceTrigger=PropertyChanged}"
+                   MinHeight="48" MaxHeight="100" MaxWidth="115">
+                <Image.CacheMode>
+                    <BitmapCache />
+                </Image.CacheMode>
+            </Image>
+            <Image Source="{Binding SelectedVideo.ResolutionImage, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}, UpdateSourceTrigger=PropertyChanged}"
+                   MinHeight="48" MaxHeight="100" MaxWidth="115">
+                <Image.CacheMode>
+                    <BitmapCache />
+                </Image.CacheMode>
+            </Image>
+            <Image
+                Source="{Binding SelectedVideo.LanguageImage, FallbackValue={StaticResource UnknownLanguageLarge}, TargetNullValue={StaticResource UnknownLanguageLarge}}"
+                MinHeight="48" MaxHeight="100" MaxWidth="115" Tag="{Binding SelectedVideo.Language}"
+                Style="{StaticResource CollapseOnTagNull}">
+                <Image.CacheMode>
+                    <BitmapCache />
+                </Image.CacheMode>
+            </Image>
+        </StackPanel>
+        <StackPanel Grid.Row="0" Grid.Column="2" MinWidth="200">
+            <Label Content="{l:T Source, Postfix=:}"/>
+            <TextBox VerticalAlignment="Center" Text="{Binding SelectedVideo.Source}" />
+
+            <Label Content="{l:T Codec, Postfix=:}"/>
+            <ComboBox x:Name="CodecSelect" x:FieldModifier="private" IsEditable="False" VerticalAlignment="Center"
+                      SelectedItem="{Binding SelectedCodec}" ItemsSource="{Binding Codecs}"
+                      DisplayMemberPath="Name" SelectedIndex="0" />
+
+            <Label Content="{l:T Standard, Postfix=:}"/>
+            <ComboBox x:Name="StandardSelect" x:FieldModifier="private" VerticalAlignment="Center" IsEditable="True"
+                      SelectedItem="{Binding SelectedVideo.Standard}" ItemsSource="{Binding VideoStandards}"/>
+
+            <Label Content="{l:T Resolution, Postfix=:}"/>
+            <ComboBox x:Name="ResolutionSelect" x:FieldModifier="private"
+                      SelectedItem="{Binding FormattedVideoResolution}" VerticalAlignment="Center"
+                      ItemsSource="{Binding Resolutions}"/>
+
+            <StackPanel Orientation="Horizontal">
+                <Label Content="{l:T FPS, Postfix=:}"/>
+                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{l:T Clear value}" 
+                        Tag="{Binding ElementName=Fps, Path=Value}">
+                    <in:Interaction.Triggers>
+                        <in:EventTrigger EventName="Click">
+                            <i:ChangePropertyAction TargetName="Fps" PropertyName="Value" Value="{x:Null}" />
+                        </in:EventTrigger>
+                    </in:Interaction.Triggers>
+                    <Image Source="../Images/clear.ico" Width="14" Height="14" />
+                </Button>
+            </StackPanel>
+            <e:DoubleUpDown Minimum="0" Watermark="{l:T Frame rate in frames/s}" VerticalAlignment="Center" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}"
+                            Value="{Binding SelectedVideo.FPS, UpdateSourceTrigger=PropertyChanged}" x:Name="Fps" x:FieldModifier="private" FormatString="F2">
+                <in:Interaction.Triggers>
+                    <i:DataTrigger Binding="{Binding ElementName=Fps, Path=Value}" Value="0">
+                        <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}" />
+                    </i:DataTrigger>
+                </in:Interaction.Triggers>
+            </e:DoubleUpDown>
+
+            <StackPanel Orientation="Horizontal">
+                <Label Content="{l:T Bit rate (kb/s), Postfix=:}"/>
+                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{l:T Clear value}"
+                        Tag="{Binding ElementName=BitRate, Path=Value}">
+                    <in:Interaction.Triggers>
+                        <in:EventTrigger EventName="Click">
+                            <i:ChangePropertyAction TargetName="BitRate" PropertyName="Value" Value="{x:Null}" />
+                        </in:EventTrigger>
+                    </in:Interaction.Triggers>
+                    <Image Source="../Images/clear.ico" Width="14" Height="14" />
+                </Button>
+            </StackPanel>
+            <e:DoubleUpDown Minimum="0" Watermark="{l:T Bit rate in kbps}" VerticalAlignment="Center" MinHeight="22" FormatString="F3"
+                            Value="{Binding SelectedVideo.BitRate, UpdateSourceTrigger=PropertyChanged}" x:Name="BitRate" x:FieldModifier="private" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}">
+                <in:Interaction.Triggers>
+                    <i:DataTrigger Binding="{Binding ElementName=BitRate, Path=Value}" Value="0">
+                        <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}" />
+                    </i:DataTrigger>
+                </in:Interaction.Triggers>
+            </e:DoubleUpDown>
+
+            <Label Content="{l:T Compression mode, Postfix=:}"/>
+            <ComboBox VerticalAlignment="Center" SelectedItem="{Binding SelectedVideo.CompressionMode}"
+                      ItemsSource="{Binding Source={StaticResource CompressionModes}}" SelectedIndex="0" />
+
+        </StackPanel>
+        <StackPanel Grid.Row="0" Grid.Column="4">
+            <StackPanel Orientation="Horizontal">
+                <Label VerticalAlignment="Center" Content="{l:T Duration, Postfix=:}"/>
+                <Button Style="{StaticResource TransparentBorderlessButton}" ToolTip="{l:T Clear value}">
+                    <in:Interaction.Triggers>
+                        <in:EventTrigger EventName="Click">
+                            <i:ChangePropertyAction TargetName="VideoDuration" PropertyName="SelectedTime"
+                                                    Value="{x:Null}" />
+                        </in:EventTrigger>
+                    </in:Interaction.Triggers>
+                    <Image Source="../Images/clear.ico" Width="14" Height="14" />
+                </Button>
+            </StackPanel>
+            <a:TimePicker x:Name="VideoDuration" Margin="0,-12,0,0" HorizontalAlignment="Left" MinTime="{x:Static sys:TimeSpan.Zero}"
+                          SelectedTime="{Binding SelectedVideo.DurationTimeSpan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <in:Interaction.Triggers>
+                    <i:DataTrigger Binding="{Binding ElementName=VideoDuration, Path=SelectedTime}"
+                                   Value="{x:Static sys:TimeSpan.Zero}">
+                        <i:ChangePropertyAction PropertyName="SelectedTime" Value="{x:Null}" />
+                    </i:DataTrigger>
+                </in:Interaction.Triggers>
+            </a:TimePicker>
+
+
+            <Label Margin="-5,0,0,0" Content="{l:T Color space, Postfix=:}"/>
+            <ComboBox VerticalAlignment="Center" SelectedItem="{Binding SelectedVideo.ColorSpace}" IsEditable="True"
+                      ItemsSource="{Binding ColorSpaces}"/>
+
+            <StackPanel Orientation="Horizontal">
+                <Label Content="{l:T Aspect, Postfix=:}"/>
+                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{l:T Clear value}"
+                        Tag="{Binding ElementName=Aspect, Path=Value}">
+                    <in:Interaction.Triggers>
+                        <in:EventTrigger EventName="Click">
+                            <i:ChangePropertyAction TargetName="Aspect" PropertyName="Value" Value="{x:Null}" />
+                        </in:EventTrigger>
+                    </in:Interaction.Triggers>
+                    <Image Source="../Images/clear.ico" Width="14" Height="14" />
+                </Button>
+            </StackPanel>
+            <e:DoubleUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding SelectedVideo.Aspect, UpdateSourceTrigger=PropertyChanged}" MinHeight="22" FormatString="F3"
+                            x:Name="Aspect" x:FieldModifier="private" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}">
+                <in:Interaction.Triggers>
+                    <i:DataTrigger Binding="{Binding ElementName=Aspect, Path=Value}" Value="0">
+                        <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}" />
+                    </i:DataTrigger>
+                </in:Interaction.Triggers>
+            </e:DoubleUpDown>
+
+            <StackPanel Orientation="Horizontal">
+                <Label Content="{l:T Width, Postfix=:}"/>
+                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{l:T Clear value}"
+                        Tag="{Binding ElementName=WidthSelector, Path=Value}">
+                    <in:Interaction.Triggers>
+                        <in:EventTrigger EventName="Click">
+                            <i:ChangePropertyAction TargetName="WidthSelector" PropertyName="Value" Value="{x:Null}" />
+                        </in:EventTrigger>
+                    </in:Interaction.Triggers>
+                    <Image Source="../Images/clear.ico" Width="14" Height="14" />
+                </Button>
+            </StackPanel>
+            <e:IntegerUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding SelectedVideo.Width, UpdateSourceTrigger=PropertyChanged}" MinHeight="22"
+                             x:Name="WidthSelector" x:FieldModifier="private" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}">
+                <in:Interaction.Triggers>
+                    <i:DataTrigger Binding="{Binding ElementName=WidthSelector, Path=Value}" Value="0">
+                        <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}" />
+                    </i:DataTrigger>
+                </in:Interaction.Triggers>
+            </e:IntegerUpDown>
+
+            <StackPanel Orientation="Horizontal">
+                <Label Content="{l:T Height, Postfix=:}"/>
+                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{l:T Clear value}"
+                        Tag="{Binding ElementName=VideoHeight, Path=Value}">
+                    <in:Interaction.Triggers>
+                        <in:EventTrigger EventName="Click">
+                            <i:ChangePropertyAction TargetName="VideoHeight" PropertyName="Value" Value="{x:Null}" />
+                        </in:EventTrigger>
+                    </in:Interaction.Triggers>
+                    <Image Source="../Images/clear.ico" Width="14" Height="14" />
+                </Button>
+            </StackPanel>
+            <e:IntegerUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding SelectedVideo.Height, UpdateSourceTrigger=PropertyChanged}" x:Name="VideoHeight"
+                             x:FieldModifier="private" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}">
+                <in:Interaction.Triggers>
+                    <i:DataTrigger Binding="{Binding ElementName=VideoHeight, Path=Value}" Value="0">
+                        <i:ChangePropertyAction PropertyName="Value" Value="{x:Null}" />
+                    </i:DataTrigger>
+                </in:Interaction.Triggers>
+            </e:IntegerUpDown>
+
+            <Label Content="{l:T Bit rate mode, Postfix=:}"/>
+            <ComboBox VerticalAlignment="Center" SelectedItem="{Binding SelectedVideo.BitRateMode, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="0"
+                      ItemsSource="{Binding Source={StaticResource BitRateModes}}" />
+
+            <StackPanel Orientation="Horizontal">
+                <Label Content="{l:T Language, Postfix=:}"/>
+                <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{l:T Clear value}" Tag="{Binding ElementName=SelectedLanguage, Path=SelectedItem}">
+                    <in:Interaction.Triggers>
+                        <in:EventTrigger EventName="Click">
+                            <i:ChangePropertyAction TargetName="SelectedLanguage" PropertyName="SelectedIndex" Value="-1"/>
+                        </in:EventTrigger>
+                    </in:Interaction.Triggers>
+                    <Image Source="../Images/clear.ico" Width="14" Height="14"/>
+                </Button>
+            </StackPanel>
+            <ComboBox x:Name="SelectedLanguage" SelectedItem="{Binding SelectedVideo.Language, UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type o:MovieLanguage}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="{Binding Image, TargetNullValue={StaticResource UnknownCountryOrLanguage}, FallbackValue={StaticResource UnknownCountryOrLanguage}}"
+                                   MaxHeight="32" MaxWidth="32" />
+                            <TextBlock Text="{Binding Name, TargetNullValue=Unknown, FallbackValue=Unknown}"
+                                       Margin="5,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+        </StackPanel>
+
+        <Button Grid.Column="4" Grid.Row="1" Margin="0,0,0,5" Height="25" Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=EditVideoWindow}" Content="{l:T Close}"/>
+    </Grid>
+</Window>
