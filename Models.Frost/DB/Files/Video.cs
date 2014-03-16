@@ -5,7 +5,7 @@ using System.Data.Entity.ModelConfiguration;
 using Frost.Common;
 using Frost.Common.Models;
 
-namespace Frost.Models.Frost.DB.Files {
+namespace Frost.Providers.Frost.DB.Files {
 
     /// <summary>Represents information about a video stream in a file.</summary>
     public class Video : IVideo {
@@ -244,13 +244,13 @@ namespace Frost.Models.Frost.DB.Files {
         /// <value>The file this video is contained in.</value>
         IFile IVideo.File {
             get { return File; }
-            set {
-                if (value == null) {
-                    File = null;
-                    return;
-                }
-                File = new File(value);
-            }
+            //set {
+            //    if (value == null) {
+            //        File = null;
+            //        return;
+            //    }
+            //    File = new File(value);
+            //}
         }
 
         /// <summary>Gets or sets the movie this video is from.</summary>
@@ -258,6 +258,10 @@ namespace Frost.Models.Frost.DB.Files {
         public virtual Movie Movie { get; set; }
 
         #endregion
+
+        public bool this[string propertyName] {
+            get { return true; }
+        }
 
         private int? GetVideoResolution(string resolution) {
             if (!string.IsNullOrEmpty(resolution)) {

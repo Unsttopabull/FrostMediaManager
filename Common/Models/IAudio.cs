@@ -62,7 +62,7 @@ namespace Frost.Common.Models {
 
         /// <summary>Gets or sets the file this audio is contained in.</summary>
         /// <value>The file this audio is contained in.</value>
-        IFile File { get; set; }
+        IFile File { get; }
     }
 
 }

@@ -2,7 +2,7 @@
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace Frost.Model.Xbmc.NFO {
+namespace Frost.Providers.Xtreamer {
 
     /// <summary>Represents information about where to resume the movie, ready to be serialized.</summary>
     [Serializable]

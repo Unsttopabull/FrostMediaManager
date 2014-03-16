@@ -1,42 +1,36 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Frost.Common.Models;
-using Frost.Common.Properties;
+﻿using Frost.Common.Models;
 
 namespace RibbonUI.Util.ObservableWrappers {
 
-    public class MovieSubtitle : MovieHasLanguageBase, INotifyPropertyChanged {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private readonly ISubtitle _subtitle;
+    public class MovieSubtitle : MovieHasLanguageBase<ISubtitle> {
 
-        public MovieSubtitle(ISubtitle subtitle) {
-            _subtitle = subtitle;
+        public MovieSubtitle(ISubtitle subtitle) : base(subtitle) {
         }
 
         public long Id {
-            get { return _subtitle.Id; }
+            get { return _observedEntity.Id; }
         }
 
         public long? PodnapisiId {
-            get { return _subtitle.PodnapisiId; }
+            get { return _observedEntity.PodnapisiId; }
             set {
-                _subtitle.PodnapisiId = value;
+                _observedEntity.PodnapisiId = value;
                 OnPropertyChanged();
             }
         }
 
         public long? OpenSubtitlesId {
-            get { return _subtitle.OpenSubtitlesId; }
+            get { return _observedEntity.OpenSubtitlesId; }
             set {
-                _subtitle.OpenSubtitlesId = value;
+                _observedEntity.OpenSubtitlesId = value;
                 OnPropertyChanged();
             }
         }
 
         public string MD5 {
-            get { return _subtitle.MD5; }
+            get { return _observedEntity.MD5; }
             set {
-                _subtitle.MD5 = value;
+                _observedEntity.MD5 = value;
                 OnPropertyChanged();
             }
         }
@@ -44,9 +38,9 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <summary>Gets or sets the type or format of the subtitle.</summary>
         /// <value>The type or format of the subtitle.</value>
         public string Format {
-            get { return _subtitle.Format; }
+            get { return _observedEntity.Format; }
             set {
-                _subtitle.Format = value;
+                _observedEntity.Format = value;
                 OnPropertyChanged();
             }
         }
@@ -54,9 +48,9 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <summary>Gets or sets the character set this subtitle is encoded in.</summary>
         /// <value>The character set this subtitle is encoded in</value>
         public string Encoding {
-            get { return _subtitle.Encoding; }
+            get { return _observedEntity.Encoding; }
             set {
-                _subtitle.Encoding = value;
+                _observedEntity.Encoding = value;
                 OnPropertyChanged();
             }
         }
@@ -64,9 +58,9 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <summary>Gets or sets a value indicating whether this subtitle is embeded in the movie video.</summary>
         /// <value>Is <c>true</c> if this subtitle is embeded in the movie video; otherwise, <c>false</c>.</value>
         public bool EmbededInVideo {
-            get { return _subtitle.EmbededInVideo; }
+            get { return _observedEntity.EmbededInVideo; }
             set {
-                _subtitle.EmbededInVideo = value;
+                _observedEntity.EmbededInVideo = value;
                 OnPropertyChanged();
             }
         }
@@ -74,34 +68,22 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <summary>Gets or sets a value indicating whether this subtitle is for people that are hearing impaired.</summary>
         /// <value>Is <c>true</c> if this subtitle is for people that are hearing impaired; otherwise, <c>false</c>.</value>
         public bool ForHearingImpaired {
-            get { return _subtitle.ForHearingImpaired; }
+            get { return _observedEntity.ForHearingImpaired; }
             set {
-                _subtitle.ForHearingImpaired = value;
+                _observedEntity.ForHearingImpaired = value;
                 OnPropertyChanged();
             }
         }
 
         public IFile File {
-            get { return _subtitle.File; }
+            get { return _observedEntity.File; }
         }
 
         public override ILanguage Language {
-            get { return _subtitle.Language; }
+            get { return _observedEntity.Language; }
             set {
-                _subtitle.Language = value;
+                _observedEntity.Language = value;
                 OnPropertyChanged();
-            }
-        }
-
-        public ISubtitle ObservedSubtitle {
-            get { return _subtitle; }
-        }
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) {
-                handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

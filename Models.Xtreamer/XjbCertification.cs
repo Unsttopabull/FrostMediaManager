@@ -1,7 +1,7 @@
 ﻿using Frost.Common.Models;
 using Frost.Common.Util.ISO;
 
-namespace Frost.Models.Xtreamer {
+namespace Frost.Providers.Xtreamer {
     public class XjbCertification : CertificationBase {
 
         public XjbCertification() {

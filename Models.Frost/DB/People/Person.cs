@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Frost.Common.Models;
 
-namespace Frost.Models.Frost.DB.People {
+namespace Frost.Providers.Frost.DB.People {
 
     /// <summary>Represents a person that worked on a movie.</summary>
     public class Person : IPerson {
@@ -87,17 +87,21 @@ namespace Frost.Models.Frost.DB.People {
 
         long IMovieEntity.Id {get { return PersonId; }}
 
-        /// <summary>Gets or sets movies where this person was a director.</summary>
-        /// <value>The movies where this person was a director.</value>
-        IEnumerable<IMovie> IPerson.MoviesAsDirector {
-            get { return MoviesAsDirector; }
+        public bool this[string propertyName] {
+            get { return true; }
         }
 
-        /// <summary>Gets or sets movies where this person was a writer.</summary>
-        /// <value>The movies where this person was a writer.</value>
-        IEnumerable<IMovie> IPerson.MoviesAsWriter {
-            get { return MoviesAsWriter; }
-        }
+        ///// <summary>Gets or sets movies where this person was a director.</summary>
+        ///// <value>The movies where this person was a director.</value>
+        //IEnumerable<IMovie> IPerson.MoviesAsDirector {
+        //    get { return MoviesAsDirector; }
+        //}
+
+        ///// <summary>Gets or sets movies where this person was a writer.</summary>
+        ///// <value>The movies where this person was a writer.</value>
+        //IEnumerable<IMovie> IPerson.MoviesAsWriter {
+        //    get { return MoviesAsWriter; }
+        //}
 
         #endregion
 

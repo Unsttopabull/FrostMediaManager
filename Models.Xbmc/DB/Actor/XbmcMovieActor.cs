@@ -1,28 +1,29 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
+using Frost.Common.Models;
 
-namespace Frost.Model.Xbmc.DB.Actor {
+namespace Frost.Providers.Xbmc.DB.Actor {
 
     /// <summary>Represents a link table in XBMC database between a movie and a person containing the name of the persons charater.</summary>
     [Table("actorlinkmovie")]
-    public class XbmcMovieActor {
+    public class XbmcMovieActor : IActor {
 
         /// <summary>Initializes a new instance of the <see cref="XbmcMovieActor"/> class.</summary>
         public XbmcMovieActor() {
-            Movie = new XbmcMovie();
-            Person = new XbmcPerson();
         }
 
         /// <summary>Initializes a new instance of the <see cref="XbmcMovieActor"/> class.</summary>
         /// <param name="actor">The actor.</param>
+        /// <param name="order"></param>
         /// <param name="movieId">The movie identifier.</param>
-        public XbmcMovieActor(XbmcActor actor, long movieId) {
+        /// <param name="role"></param>
+        public XbmcMovieActor(XbmcPerson actor, string role, long order, long movieId) {
             Movie = new XbmcMovie();
             MovieId = movieId;
 
-            Person = (XbmcPerson) actor;
-            Role = actor.Role;
-            Order = actor.Order;
+            Person = actor;
+            Role = role;
+            Order = order;
         }
 
         /// <summary>Gets or sets the foreign key to the person.</summary>
@@ -47,24 +48,58 @@ namespace Frost.Model.Xbmc.DB.Actor {
 
         /// <summary>Gets or sets the movie where the linked person is portraying that character.</summary>
         /// <value>The movie where the linked person is portraying that character.</value>
-        public XbmcMovie Movie { get; set; }
+        public virtual XbmcMovie Movie { get; set; }
 
         /// <summary>Gets or sets the person that is portraying that character in the linked movie</summary>
         /// <value>The person that is portraying that character in the linked movie</value>
-        public XbmcPerson Person { get; set; }
+        public virtual XbmcPerson Person { get; set; }
 
-        /// <summary>Converts this instance to an instance of <see cref="Frost.XbmcActorActor</see>.</summary>
-        /// <returns>An instance of <see cref="Frost.XbmcActorActor</see> converted from <see cref="XbmcMovieActor"/>.</returns>
-        public XbmcActor ToActor() {
-            return (XbmcActor) this;
+        #region IActor
+
+        long IMovieEntity.Id {
+            get { return default(long); }
         }
 
-        /// <summary>Converts an instance of <see cref="XbmcMovieActor"/> to an instance of <see cref="XbmcActor"/>.</summary>
-        /// <param name="actor">The movie to actor link to convert</param>
-        /// <returns>An instance of <see cref="XbmcActor"/> converted from <see cref="XbmcMovieActor"/>.</returns>
-        public static explicit operator XbmcActor(XbmcMovieActor actor) {
-            return new XbmcActor(actor.Person, actor.Role, actor.Order, actor.MovieId);
+        bool IMovieEntity.this[string propertyName] {
+            get {
+                switch (propertyName) {
+                    case "Name":
+                    case "Thumb":
+                    case "Character":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
         }
+
+        /// <summary>Gets or sets the full name of the person.</summary>
+        /// <value>The full name of the person.</value>
+        string IPerson.Name {
+            get { return Person.Name; }
+            set { Person.Name = value; }
+        }
+
+        /// <summary>Gets or sets the persons thumbnail image.</summary>
+        /// <value>The thumbnail image.</value>
+        string IPerson.Thumb {
+            get { return Person.ThumbURL; }
+            set { Person.ThumbURL = value; }
+        }
+
+        /// <summary>Gets or sets the Persons imdb identifier.</summary>
+        /// <value>The imdb identifier of the person.</value>
+        string IPerson.ImdbID {
+            get { return default(string); }
+            set { }
+        }
+
+        string IActor.Character {
+            get { return Role; }
+            set { Role = value; }
+        }
+
+        #endregion
 
         internal class Configuration : EntityTypeConfiguration<XbmcMovieActor> {
 
@@ -80,11 +115,10 @@ namespace Frost.Model.Xbmc.DB.Actor {
                     .HasForeignKey(m => m.MovieId);
 
                 //composite primary key
-                HasKey(ma => new {ma.PersonId, ma.MovieId});
+                HasKey(ma => new { ma.PersonId, ma.MovieId });
             }
 
         }
-
     }
 
 }

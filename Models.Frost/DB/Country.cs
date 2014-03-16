@@ -8,11 +8,11 @@ using Frost.Common.Models;
 using Frost.Common.Models.ISO;
 using Frost.Common.Util.ISO;
 
-namespace Frost.Models.Frost.DB {
+namespace Frost.Providers.Frost.DB {
 
     /// <summary> Represents a country a movie was shot and/or produced in.</summary>
     [Table("Countries")]
-    public class Country : ICountry/*, IEquatable<ICountry>*/ {
+    public class Country : ICountry {
 
         /// <summary>Initializes a new instance of the <see cref="Country"/> class.</summary>
         public Country() {
@@ -48,9 +48,6 @@ namespace Frost.Models.Frost.DB {
         }
 
         internal Country(ICountry country) {
-            //Contract.Requires<ArgumentNullException>(country != null);
-            //Contract.Requires<ArgumentNullException>(country.Movies != null);
-
             Name = country.Name;
             ISO3166 = country.ISO3166;
         }
@@ -74,6 +71,12 @@ namespace Frost.Models.Frost.DB {
         /// <value>The country movies</value>
         public virtual HashSet<Movie> Movies { get; set; }
 
+        bool IMovieEntity.this[string propertyName] {
+            get { return true; }
+        }
+
+        #region Utility
+
         /// <summary>Converts country names to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Country"/></summary>
         /// <param name="countryNames">The counry names.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Country"/> instances with specified country names</returns>
@@ -87,9 +90,11 @@ namespace Frost.Models.Frost.DB {
         public static Country FromISO3166(string iso3166) {
             ISOCountryCode iso = ISOCountryCodes.Instance.GetByISOCode(iso3166);
             return iso != null
-                ? new Country(iso.EnglishName, iso.Alpha2, iso.Alpha3)
-                : null;
+                       ? new Country(iso.EnglishName, iso.Alpha2, iso.Alpha3)
+                       : null;
         }
+
+        #endregion
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>

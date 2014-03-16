@@ -1,14 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Frost.Model.Xbmc.DB.Actor {
+namespace Frost.Providers.Xbmc.DB.Actor {
 
     /// <summary>Represents an actor in the XBMC library.</summary>
     [NotMapped]
     public class XbmcActor : IEquatable<XbmcActor> {
 
         private readonly long _movieID;
-        private XbmcPerson _person;
+        private readonly XbmcPerson _person;
 
         /// <summary>Initializes a new instance of the <see cref="XbmcActor"/> class.</summary>
         public XbmcActor() {
@@ -74,22 +74,22 @@ namespace Frost.Model.Xbmc.DB.Actor {
             return _person.Equals(other._person) && Role == other.Role;
         }
 
-        /// <summary>Converts this instance to an instance of <see cref="Frost.XbmcMovieActorMovieActor</see></summary>
-        /// <returns>An instance of <see cref="Frost.XbmcMovieActorMovieActor</see> converted from <see cref="XbmcActor"/></returns>
+        /// <summary>Converts this instance to an instance of <see cref="XbmcActor"></see></summary>
+        /// <returns>An instance of <see cref="XbmcActor"></see> converted from <see cref="XbmcActor"/></returns>
         public XbmcMovieActor ToMovieActor() {
             return (XbmcMovieActor) this;
         }
 
-        /// <summary>Converts the specifed <see cref="XbmcActor"/> to an instance of <see cref="Frost.XbmcMovieActorMovieActor</see></summary>
+        /// <summary>Converts the specifed <see cref="XbmcActor"/> to an instance of <see cref="XbmcActor"/></summary>
         /// <param name="actor">The <see cref="XbmcActor"/> to convert</param>
-        /// <returns>An instance of <see cref="Frost.XbmcMovieActorMovieActor</see> converted from <see cref="XbmcActor"/></returns>
+        /// <returns>An instance of <see cref="XbmcActor"/> converted from <see cref="XbmcActor"/></returns>
         public static explicit operator XbmcMovieActor(XbmcActor actor) {
             return new XbmcMovieActor(actor, actor._movieID);
         }
 
-        /// <summary>Returns an underlying instance <see cref="Frost.XbmcPersonPeson</see> in <see cref="XbmcActor"/>.</summary>
+        /// <summary>Returns an underlying instance <see cref="XbmcActor"></see> in <see cref="XbmcActor"/>.</summary>
         /// <param name="actor">The <see cref="XbmcActor"/> from which to get the person instance from.</param>
-        /// <returns>An underlying instance of <see cref="Frost.XbmcPersonPeson</see> in <see cref="XbmcActor"/>.</returns>
+        /// <returns>An underlying instance of <see cref="XbmcActor"></see> in <see cref="XbmcActor"/>.</returns>
         public static explicit operator XbmcPerson(XbmcActor actor) {
             return actor._person;
         }

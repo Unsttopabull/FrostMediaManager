@@ -4,7 +4,7 @@ using System.Data.Entity.ModelConfiguration;
 using Frost.Common;
 using Frost.Common.Models;
 
-namespace Frost.Models.Frost.DB {
+namespace Frost.Providers.Frost.DB {
 
     /// <summary>Represents a promotional movie art.</summary>
     public class Art : IArt {
@@ -68,6 +68,10 @@ namespace Frost.Models.Frost.DB {
                 }
                 return Path;
             }
+        }
+
+        bool IMovieEntity.this[string propertyName] {
+            get { return true; }
         }
 
         internal class Configuration : EntityTypeConfiguration<Art> {

@@ -186,61 +186,61 @@ namespace RibbonUI.UserControls {
         #region Message Handlers
 
         private void AddSubtitle(MovieSubtitle subtitle) {
-            ISubtitle sub = _service.AddSubtitle(SelectedMovie.ObservedMovie, subtitle.ObservedSubtitle);
+            ISubtitle sub = _service.AddSubtitle(SelectedMovie.ObservedEntity, subtitle.ObservedEntity);
             Subtitles.Add(new MovieSubtitle(sub));
         }
 
         private void RemoveSubtitle(MovieSubtitle subtitle) {
-            _service.RemoveSubtitle(SelectedMovie.ObservedMovie, subtitle.ObservedSubtitle);
+            _service.RemoveSubtitle(SelectedMovie.ObservedEntity, subtitle.ObservedEntity);
             Subtitles.Remove(subtitle);
         }
 
         private void RemovePlot(IPlot plot) {
-            _service.RemovePlot(_selectedMovie.ObservedMovie, plot);
+            _service.RemovePlot(_selectedMovie.ObservedEntity, plot);
         }
 
         private void AddPlot(IPlot plot) {
-            _service.AddPlot(_selectedMovie.ObservedMovie, plot);
+            _service.AddPlot(_selectedMovie.ObservedEntity, plot);
         }
 
         private void AddStudio(IStudio studio) {
-            _service.AddStudio(_selectedMovie.ObservedMovie, studio);
+            _service.AddStudio(_selectedMovie.ObservedEntity, studio);
         }
 
         private void RemoveStudio(IStudio studio) {
-            _service.RemoveStudio(_selectedMovie.ObservedMovie, studio);
+            _service.RemoveStudio(_selectedMovie.ObservedEntity, studio);
         }
 
         private void AddActor(IActor actor) {
-            _service.AddActor(_selectedMovie.ObservedMovie, actor);
+            _service.AddActor(_selectedMovie.ObservedEntity, actor);
         }
 
         private void RemoveActor(IActor actor) {
-            _service.RemoveActor(_selectedMovie.ObservedMovie, actor);
+            _service.RemoveActor(_selectedMovie.ObservedEntity, actor);
         }
 
         private void AddDirector(IPerson director) {
-            _service.AddDirector(_selectedMovie.ObservedMovie, director);
+            _service.AddDirector(_selectedMovie.ObservedEntity, director);
         }
 
         private void RemoveDirector(IPerson director) {
-            _service.RemoveDirector(_selectedMovie.ObservedMovie, director);
+            _service.RemoveDirector(_selectedMovie.ObservedEntity, director);
         }
 
         private void AddGenre(IGenre genre) {
-            _service.AddGenre(_selectedMovie.ObservedMovie, genre);
+            _service.AddGenre(_selectedMovie.ObservedEntity, genre);
         }
 
         private void RemoveGenre(IGenre genre) {
-            _service.RemoveGenre(_selectedMovie.ObservedMovie, genre);
+            _service.RemoveGenre(_selectedMovie.ObservedEntity, genre);
         }
 
         private void AddCountry(ICountry country) {
-            _service.AddCountry(_selectedMovie.ObservedMovie, country);
+            _service.AddCountry(_selectedMovie.ObservedEntity, country);
         }
 
         private void RemoveCountry(ICountry country) {
-            _service.RemoveCountry(_selectedMovie.ObservedMovie, country);
+            _service.RemoveCountry(_selectedMovie.ObservedEntity, country);
         }
 
         #endregion

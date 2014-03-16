@@ -7,6 +7,7 @@
              xmlns:converters="clr-namespace:RibbonUI.Converters"
              xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
              xmlns:list="clr-namespace:RibbonUI.UserControls.List"
+             xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
              mc:Ignorable="d" Loaded="OnWindowLoaded" Name="ListVideosControl"
              d:DesignHeight="300" d:DesignWidth="580" d:DataContext="{d:DesignInstance list:ListVideosViewModel}">
     <UserControl.Resources>
@@ -46,10 +47,10 @@
                         </Image>
                     </StackPanel>
                     <StackPanel Margin="15,0,0,0" MinWidth="200">
-                        <StackPanel Orientation="Horizontal" Tag="{Binding File.NameWithExtension}"
+                        <StackPanel Orientation="Horizontal" Tag="{Binding File.(models:IFile.NameWithExtension)}"
                                     Style="{StaticResource CollapseOnTagNull}">
                             <Label Content="{l:T File name, Postfix=:}"/>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding File.NameWithExtension}" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding File.(models:IFile.NameWithExtension)}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding Source}"
                                     Style="{StaticResource CollapseOnTagNull}">
@@ -128,7 +129,7 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Tag="{Binding Language}" Style="{StaticResource CollapseOnTagNull}">
                             <Label Content="{l:T Language, Postfix=:}"/>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding Language.Name}" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Language.(models:ILanguage.Name)}" />
                         </StackPanel>
                     </StackPanel>
 

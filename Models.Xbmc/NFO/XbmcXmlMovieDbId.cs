@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace Frost.Model.Xbmc.NFO {
+namespace Frost.Providers.Xbmc.NFO {
 
     /// <summary>Represent the online movie databse indentifier</summary>
     [Serializable]

@@ -5,7 +5,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using Frost.Common;
 
-namespace Frost.Model.Xbmc.NFO {
+namespace Frost.Providers.Xbmc.NFO.Files {
 
     /// <summary>Represents movie's file information ready to be serialized</summary>
     [Serializable]

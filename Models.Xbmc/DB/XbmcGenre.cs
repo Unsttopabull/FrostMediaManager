@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
+using Frost.Common.Models;
 
-namespace Frost.Model.Xbmc.DB {
+namespace Frost.Providers.Xbmc.DB {
 
     /// <summary>This table list genres of the movies in the XBMC library.</summary>
     [Table("genre")]
-    public class XbmcGenre : IEquatable<XbmcGenre> {
+    public class XbmcGenre : IGenre {
 
         /// <summary>Initializes a new instance of the <see cref="XbmcGenre"/> class.</summary>
         public XbmcGenre() {
@@ -30,23 +30,13 @@ namespace Frost.Model.Xbmc.DB {
         /// <value>The movies of this genre.</value>
         public HashSet<XbmcMovie> Movies { get; set; }
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(XbmcGenre other) {
-            if (other == null) {
-                return false;
-            }
+        #region IGenre
 
-            if (ReferenceEquals(this, other)) {
-                return true;
-            }
-
-            if (Id != 0 && other.Id != 0) {
-                return Id == other.Id;
-            }
-            return Name == other.Name;
+        bool IMovieEntity.this[string propertyName] {
+            get { return true; }
         }
+
+        #endregion
 
         internal class Configuration : EntityTypeConfiguration<XbmcGenre> {
 

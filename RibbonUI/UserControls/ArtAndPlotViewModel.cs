@@ -12,6 +12,7 @@ using RibbonUI.Annotations;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls {
+
     public class ArtAndPlotViewModel : INotifyPropertyChanged {
         private const string IMDB_PERSON_URI = "http://www.imdb.com/name/nm{0}";
         private const string IMDB_TITLE_URI = "http://www.imdb.com/title/{0}";
@@ -24,7 +25,7 @@ namespace RibbonUI.UserControls {
             ActorImdbClickedCommand = new RelayCommand<string>(
                 imdbId => Process.Start(string.Format(IMDB_PERSON_URI, imdbId)),
                 s => !string.IsNullOrEmpty(s)
-            );
+                );
 
             GoToTrailerCommand = new RelayCommand<string>(GoToTrailer);
         }
@@ -36,6 +37,10 @@ namespace RibbonUI.UserControls {
                     return;
                 }
                 _selectedMovie = value;
+
+                //if (_selectedMovie != null) {
+                //    Actors = _selectedMovie.Actors;
+                //}
 
                 OnPropertyChanged("NumberOfOscarsWon");
                 OnPropertyChanged("NumberOfOscarNominations");
@@ -55,6 +60,8 @@ namespace RibbonUI.UserControls {
 
         #region Utility properties
 
+        //public IEnumerable<IActor> Actors { get; set; }
+
         public string BoxImage {
             get {
                 string path;
@@ -64,7 +71,8 @@ namespace RibbonUI.UserControls {
                 else {
                     path = "Images/Boxes/" + SelectedMovie.Type + ".png";
                 }
-                return Path.Combine(Directory.GetCurrentDirectory(), path);;
+                return Path.Combine(Directory.GetCurrentDirectory(), path);
+                ;
             }
         }
 
@@ -72,50 +80,49 @@ namespace RibbonUI.UserControls {
 
         public int NumberOfOscarsWon {
             get {
-                return SelectedMovie != null
-                    ? SelectedMovie.Awards.Count(a => a.Organization == "Oscar" && !a.IsNomination) 
-                    : 0;
+                return SelectedMovie != null && SelectedMovie.Awards != null
+                           ? SelectedMovie.Awards.Count(a => a.Organization == "Oscar" && !a.IsNomination)
+                           : 0;
             }
         }
 
         public int NumberOfGoldenGlobesWon {
             get {
-                return SelectedMovie != null 
-                    ? SelectedMovie.Awards.Count(a => a.Organization == "Golden Globe" && !a.IsNomination)
-                    : 0;
+                return SelectedMovie != null && SelectedMovie.Awards != null
+                           ? SelectedMovie.Awards.Count(a => a.Organization == "Golden Globe" && !a.IsNomination)
+                           : 0;
             }
         }
 
         public int NumberOfGoldenGlobeNominations {
             get {
-                return SelectedMovie != null 
-                    ? SelectedMovie.Awards.Count(a => a.Organization == "Golden Globe" && a.IsNomination)
-                    : 0;
+                return SelectedMovie != null && SelectedMovie.Awards != null
+                           ? SelectedMovie.Awards.Count(a => a.Organization == "Golden Globe" && a.IsNomination)
+                           : 0;
             }
         }
 
         public int NumberOfCannesAwards {
             get {
-                return SelectedMovie != null
-                    ? SelectedMovie.Awards.Count(a => a.Organization == "Cannes" && !a.IsNomination)
-                    : 0;
+                return SelectedMovie != null && SelectedMovie.Awards != null
+                           ? SelectedMovie.Awards.Count(a => a.Organization == "Cannes" && !a.IsNomination)
+                           : 0;
             }
         }
 
         public int NumberOfCannesNominations {
             get {
-                return SelectedMovie != null
-                    ? SelectedMovie.Awards.Count(a => a.Organization == "Cannes" && a.IsNomination)
-                    : 0;
+                return SelectedMovie != null && SelectedMovie.Awards != null
+                           ? SelectedMovie.Awards.Count(a => a.Organization == "Cannes" && a.IsNomination)
+                           : 0;
             }
         }
 
         public int NumberOfOscarNominations {
             get {
-                if (SelectedMovie == null) {
-                    return 0;
-                }
-                return SelectedMovie.Awards.Count(a => a.Organization == "Oscar" && a.IsNomination);
+                return SelectedMovie != null && SelectedMovie.Awards != null
+                           ? SelectedMovie.Awards.Count(a => a.Organization == "Oscar" && a.IsNomination)
+                           : 0;
             }
         }
 
@@ -126,17 +133,21 @@ namespace RibbonUI.UserControls {
         public string MPAARating {
             get {
                 ICertification mpaa = null;
-                try {
-                    mpaa = mpaa = SelectedMovie.Certifications.FirstOrDefault(c => c.Country.Name.Equals("United States", StringComparison.OrdinalIgnoreCase));
-                }
-                catch (Exception e) {
-                    Console.WriteLine(e);
+
+                if (SelectedMovie != null && SelectedMovie.Certifications != null) {
+                    try {
+                        ICertification certification = SelectedMovie.Certifications.FirstOrDefault();
+
+                        mpaa = SelectedMovie.Certifications.FirstOrDefault(c => c.Country.ISO3166.Alpha3.Equals("usa", StringComparison.OrdinalIgnoreCase));
+                    }
+                    catch (Exception e) {
+                        Console.WriteLine(e);
+                    }
                 }
 
-                if (mpaa != null) {
-                    return mpaa.Rating;
-                }
-                return null;
+                return mpaa != null
+                    ? mpaa.Rating
+                    : null;
             }
         }
 
@@ -149,47 +160,70 @@ namespace RibbonUI.UserControls {
                 string rating = MPAARating;
                 if (!string.IsNullOrEmpty(rating)) {
                     rating = rating.Replace("Rated ", "").ToUpper();
+                    string mpaa = null;
                     switch (rating) {
                         case "G":
-                            return "Images/RatingsE/usa/mpaag.png";
+                            mpaa = "Images/RatingsE/usa/mpaag.png";
+                            break;
                         case "NC-17":
-                            return "Images/RatingsE/usa/mpaanc17.png";
+                            mpaa = "Images/RatingsE/usa/mpaanc17.png";
+                            break;
                         case "PG":
-                            return "Images/RatingsE/usa/mpaapg.png";
+                            mpaa = "Images/RatingsE/usa/mpaapg.png";
+                            break;
                         case "PG-13":
-                            return "Images/RatingsE/usa/mpaapg13.png";
+                            mpaa = "Images/RatingsE/usa/mpaapg13.png";
+                            break;
                         case "R":
-                            return "Images/RatingsE/usa/mpaar.png";
+                            mpaa = "Images/RatingsE/usa/mpaar.png";
+                            break;
+                        default:
+                            return null;
                     }
+                    return string.Format("file://{0}/{1}", Directory.GetCurrentDirectory(), mpaa);
                 }
                 return null;
             }
         }
 
-        public IArt FirstFanart {
+        public string FirstFanart {
             get {
-                if (SelectedMovie == null) {
+                if (SelectedMovie == null || SelectedMovie.Art == null) {
                     return null;
                 }
 
-                return SelectedMovie.Art.Any(a => a.Type == ArtType.Fanart)
-                           ? SelectedMovie.Art.FirstOrDefault(a => a.Type == ArtType.Fanart)
-                           : null;
+                if (SelectedMovie.Art.Any(a => a.Type == ArtType.Fanart)) {
+                    IArt v = SelectedMovie.Art.FirstOrDefault(a => a.Type == ArtType.Fanart);
+                    if (v != null && File.Exists(v.PreviewOrPath)) {
+                        return v.PreviewOrPath;
+                    }
+                }
+
+                return  null;
             }
         }
 
-        public IArt FirstCoverOrPoster {
+        public string FirstCoverOrPoster {
             get {
-                if (SelectedMovie == null) {
+                if (SelectedMovie == null || SelectedMovie.Art == null) {
                     return null;
                 }
 
+                IArt art;
                 if (SelectedMovie.Art.Any(a => a.Type == ArtType.Cover)) {
-                    return SelectedMovie.Art.FirstOrDefault(a => a.Type == ArtType.Cover);
+                    art = SelectedMovie.Art.FirstOrDefault(a => a.Type == ArtType.Cover);
+                    if (art != null && File.Exists(art.PreviewOrPath)) {
+                        return art.PreviewOrPath;
+                    }
                 }
 
-                if (SelectedMovie.Art.Any(a => a.Type == ArtType.Poster)) {
-                    return SelectedMovie.Art.FirstOrDefault(a => a.Type == ArtType.Poster);
+                if (SelectedMovie.Art.All(a => a.Type != ArtType.Poster)) {
+                    return null;
+                }
+
+                art = SelectedMovie.Art.FirstOrDefault(a => a.Type == ArtType.Poster);
+                if (art != null && File.Exists(art.PreviewOrPath)) {
+                    return art.PreviewOrPath;
                 }
                 return null;
             }
@@ -197,7 +231,7 @@ namespace RibbonUI.UserControls {
 
         public IPlot FirstPlot {
             get {
-                if (SelectedMovie == null) {
+                if (SelectedMovie == null || SelectedMovie.Plots == null) {
                     return null;
                 }
 
@@ -237,4 +271,5 @@ namespace RibbonUI.UserControls {
             }
         }
     }
+
 }

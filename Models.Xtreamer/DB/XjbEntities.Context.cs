@@ -1,9 +1,8 @@
 ﻿using System.Data.Entity;
 using System.Data.SQLite;
-using Frost.Common;
-using Frost.Models.Xtreamer.Properties;
+using Frost.Providers.Xtreamer.Properties;
 
-namespace Frost.Models.Xtreamer.DB {
+namespace Frost.Providers.Xtreamer.DB {
 
     public class XjbEntities : DbContext {
 

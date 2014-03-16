@@ -2,7 +2,7 @@
 using Frost.Common;
 using Frost.Common.Models;
 
-namespace Frost.Models.Frost.DB {
+namespace Frost.Providers.Frost.DB {
 
     public class PromotionalVideo : IPromotionalVideo {
 
@@ -31,6 +31,10 @@ namespace Frost.Models.Frost.DB {
 
         public long MovieId { get; set; }
         public virtual Movie Movie { get; set; }
+
+        bool IMovieEntity.this[string propertyName] {
+            get { return true; }
+        }
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>

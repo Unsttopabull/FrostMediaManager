@@ -4,7 +4,7 @@ using System.Data.Entity.ModelConfiguration;
 using System.Text;
 using Frost.Common.Models;
 
-namespace Frost.Models.Frost.DB.Files {
+namespace Frost.Providers.Frost.DB.Files {
 
     /// <summary>Represents information about a subtitle stream in a file.</summary>
     public class Subtitle : ISubtitle {
@@ -142,6 +142,10 @@ namespace Frost.Models.Frost.DB.Files {
         public virtual Movie Movie { get; set; }
 
         #endregion
+
+        public bool this[string propertyName] {
+            get { return true; }
+        }
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>

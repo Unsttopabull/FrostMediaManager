@@ -136,13 +136,13 @@
       <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Models.Xbmc\Models.Xbmc.csproj">
+    <ProjectReference Include="..\Models.Xbmc\Providers.Xbmc.csproj">
       <Project>{2E311A90-347B-47E1-8AA7-87A276C88F4E}</Project>
-      <Name>Models.Xbmc</Name>
+      <Name>Providers.Xbmc</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Models.Xtreamer\Models.Xtreamer.csproj">
+    <ProjectReference Include="..\Models.Xtreamer\Providers.Xtreamer.csproj">
       <Project>{8491DCCF-354E-4FF6-89D4-88A0BB9CB8AF}</Project>
-      <Name>Models.Xtreamer</Name>
+      <Name>Providers.Xtreamer</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpLanguageDetect\SharpLanguageDetect.csproj">
       <Project>{977BDAC0-B1E4-4198-A0AD-6B93E30EF480}</Project>
@@ -151,10 +151,6 @@
     <ProjectReference Include="..\SharpMediaInfo\SharpMediaInfo.csproj">
       <Project>{4EA24C1B-3AF2-4EB0-AA98-62EAFB0C2682}</Project>
       <Name>SharpMediaInfo</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharpOpenSubtitles\SharpOpenSubtitles.csproj">
-      <Project>{10711252-7056-44a6-ac29-5c7c203b0095}</Project>
-      <Name>SharpOpenSubtitles</Name>
     </ProjectReference>
     <ProjectReference Include="..\UniversalCharsetDetector\SharpCharsetDetector.csproj">
       <Project>{7BECB850-389A-44FC-8523-3EF0B2540F07}</Project>

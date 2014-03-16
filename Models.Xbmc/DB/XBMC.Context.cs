@@ -1,11 +1,12 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.SQLite;
-using Frost.Model.Xbmc.DB.Actor;
-using Frost.Model.Xbmc.DB.StreamDetails;
-using Frost.Model.Xbmc.DB.Tag;
+using Frost.Providers.Xbmc.DB.Actor;
+using Frost.Providers.Xbmc.DB.Art;
+using Frost.Providers.Xbmc.DB.StreamDetails;
+using Frost.Providers.Xbmc.DB.Tag;
 
-namespace Frost.Model.Xbmc.DB {
+namespace Frost.Providers.Xbmc.DB {
 
     /// <summary>Represents a context used for manipulation of the XBMC database.</summary>
     public class XbmcContainer : DbContext {
@@ -78,6 +79,7 @@ namespace Frost.Model.Xbmc.DB {
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
+            modelBuilder.Configurations.Add(new XbmcArt.Configuration());
             modelBuilder.Configurations.Add(new XbmcBookmark.Configuration());
             modelBuilder.Configurations.Add(new XbmcFile.Configuration());
             modelBuilder.Configurations.Add(new XbmcMovie.Configuration());

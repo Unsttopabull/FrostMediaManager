@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
+using Frost.Common.Models;
 
-namespace Frost.Model.Xbmc.DB {
+namespace Frost.Providers.Xbmc.DB {
 
     /// <summary>Represents a table that lists movie sets and collections.</summary>
     [Table("sets")]
-    public class XbmcSet : IEquatable<XbmcSet> {
+    public class XbmcSet : IMovieSet {
 
         /// <summary>Initializes a new instance of the <see cref="XbmcSet"/> class.</summary>
         public XbmcSet() {
@@ -19,6 +19,10 @@ namespace Frost.Model.Xbmc.DB {
         /// <param name="name">The name.</param>
         public XbmcSet(string name) : this() {
             Name = name;
+        }
+
+        internal XbmcSet(IMovieSet set) {
+            Name = set.Name;
         }
 
         /// <summary>Gets or sets the id of the set or collection in the database.</summary>
@@ -36,23 +40,8 @@ namespace Frost.Model.Xbmc.DB {
         /// <value>The movies contained in this set or collection</value>
         public virtual HashSet<XbmcMovie> Movies { get; set; }
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(XbmcSet other) {
-            if (other == null) {
-                return false;
-            }
-
-            if (ReferenceEquals(this, other)) {
-                return true;
-            }
-
-            if (Id != 0 && other.Id != 0) {
-                return Id == other.Id;
-            }
-
-            return Name == other.Name;
+        public bool this[string propertyName] {
+            get { return true; }
         }
 
         internal class Configuration : EntityTypeConfiguration<XbmcSet> {

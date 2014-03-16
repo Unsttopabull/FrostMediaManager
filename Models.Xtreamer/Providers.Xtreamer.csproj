@@ -7,8 +7,8 @@
     <ProjectGuid>{8491DCCF-354E-4FF6-89D4-88A0BB9CB8AF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Frost.Models.Xtreamer</RootNamespace>
-    <AssemblyName>Frost.Models.Xtreamer</AssemblyName>
+    <RootNamespace>Frost.Providers.Xtreamer</RootNamespace>
+    <AssemblyName>Frost.Providers.Xtreamer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
@@ -70,6 +70,9 @@
     <Reference Include="EntityFramework">
       <HintPath>..\Libraries\EF6\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="LightInject">
+      <HintPath>..\packages\LightInject.3.0.1.5\lib\net45\LightInject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -100,7 +103,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Service\XjbMoviesDataService.cs" />
+    <Compile Include="Provider\XtreamerCompositionRoot.cs" />
+    <Compile Include="Provider\XjbMoviesDataService.cs" />
     <Compile Include="SQLiteInitializer.cs" />
     <Compile Include="XbmcXmlResumeInfo.cs" />
     <Compile Include="XjbCertification.cs" />
@@ -121,7 +125,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. 

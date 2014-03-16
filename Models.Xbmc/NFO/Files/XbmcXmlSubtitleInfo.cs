@@ -2,7 +2,7 @@
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace Frost.Model.Xbmc.NFO {
+namespace Frost.Providers.Xbmc.NFO.Files {
 
     /// <summary>Represents serialized information about a subtitle in a movie</summary>
     [Serializable]

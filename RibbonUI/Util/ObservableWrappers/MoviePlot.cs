@@ -1,24 +1,18 @@
-﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using Frost.Common.Models;
-using Frost.Common.Properties;
+﻿using Frost.Common.Models;
 
 namespace RibbonUI.Util.ObservableWrappers {
 
-    public class MoviePlot : INotifyPropertyChanged {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private readonly IPlot _plot;
+    public class MoviePlot : ObservableBase<IPlot> {
 
-        public MoviePlot(IPlot plot) {
-            _plot = plot;
+        public MoviePlot(IPlot plot) : base(plot) {
         }
 
         /// <summary>Gets or sets the tagline (short one-liner).</summary>
         /// <value>The tagline (short promotional slogan / one-liner / clarification).</value>
         public string Tagline {
-            get { return ObservedPlot.Tagline; }
+            get { return _observedEntity.Tagline; }
             set {
-                ObservedPlot.Tagline = value;
+                _observedEntity.Tagline = value;
                 OnPropertyChanged();
             }
         }
@@ -26,9 +20,9 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <summary>Gets or sets the story summary.</summary>
         /// <value>A short story summary, the plot outline</value>
         public string Summary {
-            get { return ObservedPlot.Summary; }
+            get { return _observedEntity.Summary; }
             set {
-                ObservedPlot.Summary = value;
+                _observedEntity.Summary = value;
                 OnPropertyChanged();
             }
         }
@@ -36,9 +30,9 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <summary>Gets or sets the full plot.</summary>
         /// <value>The full plot.</value>
         public string Full {
-            get { return ObservedPlot.Full; }
+            get { return _observedEntity.Full; }
             set {
-                ObservedPlot.Full = value;
+                _observedEntity.Full = value;
                 OnPropertyChanged();
             }
         }
@@ -46,29 +40,17 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <summary>Gets or sets the language of this plot.</summary>
         /// <value>The language of this plot.</value>
         public string Language {
-            get { return ObservedPlot.Language; }
+            get { return _observedEntity.Language; }
             set {
-                ObservedPlot.Language = value;
+                _observedEntity.Language = value;
                 OnPropertyChanged();
             }
-        }
-
-        public IPlot ObservedPlot {
-            get { return _plot; }
         }
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString() {
-            return ObservedPlot.ToString();
-        }
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
+            return _observedEntity.ToString();
         }
     }
 

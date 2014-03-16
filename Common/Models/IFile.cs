@@ -12,7 +12,7 @@ namespace Frost.Common.Models {
 
         /// <summary>Gets or sets the filename.</summary>
         /// <value>The filename in folder.</value>
-        /// <example>\eg{ ''<c>Wall_E.avi</c>''}</example>
+        /// <example>\eg{ ''<c>Wall_E</c>''}</example>
         string Name { get; set; }
 
         /// <summary>Gets or sets the path to the folder that contains this file</summary>

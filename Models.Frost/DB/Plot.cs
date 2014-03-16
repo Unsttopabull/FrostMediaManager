@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Frost.Common.Models;
 
-namespace Frost.Models.Frost.DB {
+namespace Frost.Providers.Frost.DB {
 
 
     /// <summary>Contains information about movie story/plot.</summary>
@@ -92,6 +92,10 @@ namespace Frost.Models.Frost.DB {
                 }
                 return Tagline;
             }
+        }
+
+        bool IMovieEntity.this[string propertyName] {
+            get { return true; }
         }
 
         /// <summary>Returns a string that represents the current object.</summary>

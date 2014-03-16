@@ -1,4 +1,4 @@
-﻿namespace Frost.Model.Xbmc {
+﻿namespace Frost.Providers.Xbmc {
 
 
     /// <summary>The type of the bookmark.</summary>

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
-namespace Frost.Model.Xbmc.DB.StreamDetails {
+namespace Frost.Providers.Xbmc.DB.StreamDetails {
 
     /// <summary>Represents information about a stream in a file.</summary>
     [Table("streamdetails")]
@@ -9,7 +9,6 @@ namespace Frost.Model.Xbmc.DB.StreamDetails {
 
         /// <summary>Initializes a new instance of the <see cref="XbmcDbStreamDetails"/> class.</summary>
         public XbmcDbStreamDetails() {
-            File = new XbmcFile();
         }
 
         /// <summary>Initializes a new instance of the <see cref="XbmcDbStreamDetails"/> class.</summary>

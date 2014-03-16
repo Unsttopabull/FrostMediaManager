@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2E311A90-347B-47E1-8AA7-87A276C88F4E}</ProjectGuid>
+    <ProjectGuid>{B404DA8F-FBF4-4CCC-BE01-22C488863EC2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Frost.Model.Xbmc</RootNamespace>
-    <AssemblyName>Frost.Model.Xbmc</AssemblyName>
+    <RootNamespace>Frost.Providers.Frost</RootNamespace>
+    <AssemblyName>Frost.Providers.Frost</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
@@ -21,8 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
-    <CodeContractsEnableRuntimeChecking>False</CodeContractsEnableRuntimeChecking>
+    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
     <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
     <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
     <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
@@ -43,7 +42,7 @@
     <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
     <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
     <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
-    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
+    <CodeContractsEmitXMLDocs>True</CodeContractsEmitXMLDocs>
     <CodeContractsCustomRewriterAssembly />
     <CodeContractsCustomRewriterClass />
     <CodeContractsLibPaths />
@@ -53,8 +52,8 @@
     <CodeContractsBaseLineFile />
     <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
     <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
-    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
-    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
+    <CodeContractsRuntimeCheckingLevel>Preconditions</CodeContractsRuntimeCheckingLevel>
+    <CodeContractsReferenceAssembly>%28none%29</CodeContractsReferenceAssembly>
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -64,11 +63,14 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
       <HintPath>..\Libraries\EF6\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="LightInject, Version=3.0.1.5, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\LightInject.3.0.1.5\lib\net45\LightInject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -78,93 +80,90 @@
       <HintPath>..\Libraries\SQLite\EF6\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DB\Actor\XbmcActor.cs" />
-    <Compile Include="DB\Actor\XbmcMovieActor.cs" />
-    <Compile Include="DB\Actor\XbmcPerson.cs" />
-    <Compile Include="DB\StreamDetails\XbmcAudioDetails.cs" />
-    <Compile Include="DB\StreamDetails\XbmcDbStreamDetails.cs" />
-    <Compile Include="DB\StreamDetails\XbmcSubtitleDetails.cs" />
-    <Compile Include="DB\StreamDetails\XbmcVideoDetails.cs" />
-    <Compile Include="DB\Tag\XbmcTag.cs" />
-    <Compile Include="DB\Tag\XbmcTagLink.cs" />
-    <Compile Include="DB\XBMC.Context.cs" />
-    <Compile Include="DB\XbmcArt.cs" />
-    <Compile Include="DB\XbmcBookmark.cs" />
-    <Compile Include="DB\XbmcCountry.cs" />
-    <Compile Include="DB\XbmcFile.cs" />
-    <Compile Include="DB\XbmcGenre.cs" />
-    <Compile Include="DB\XbmcMovie.cs" />
-    <Compile Include="DB\XbmcPath.cs" />
-    <Compile Include="DB\XbmcSet.cs" />
-    <Compile Include="DB\XbmcSettings.cs" />
-    <Compile Include="DB\XbmcStackTimes.cs" />
-    <Compile Include="DB\XbmcStudio.cs" />
-    <Compile Include="DB\XbmcVersion.cs" />
-    <Compile Include="Enums.cs" />
-    <Compile Include="XmlIndentedTextWriter.cs" />
+    <Compile Include="DB\Art.cs" />
+    <Compile Include="DB\Award.cs" />
+    <Compile Include="DB\Certification.cs" />
+    <Compile Include="DB\Country.cs" />
+    <Compile Include="DB\Files\Audio.cs" />
+    <Compile Include="DB\Files\File.cs" />
+    <Compile Include="DB\Files\Subtitle.cs" />
+    <Compile Include="DB\Files\Video.cs" />
+    <Compile Include="DB\Genre.cs" />
+    <Compile Include="DB\Language.cs" />
+    <Compile Include="DB\Movie.Configuration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DB\Movie.cs" />
+    <Compile Include="DB\MovieVo.Context.cs" />
+    <Compile Include="DB\People\Actor.cs" />
+    <Compile Include="DB\People\Person.cs" />
+    <Compile Include="DB\Plot.cs" />
+    <Compile Include="DB\PromotionalVideo.cs" />
+    <Compile Include="DB\Rating.cs" />
+    <Compile Include="DB\Set.cs" />
+    <Compile Include="DB\Special.cs" />
+    <Compile Include="SQLiteInitializer.cs" />
+    <Compile Include="DB\Studio.cs" />
+    <Compile Include="Provider\FrostCompositionRoot.cs" />
+    <Compile Include="MovieSaver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="NFO\XbmcStreamDetails.cs" />
-    <Compile Include="NFO\XbmcXmlActor.cs" />
-    <Compile Include="NFO\Files\XbmcXmlAudioInfo.cs" />
-    <Compile Include="NFO\XbmcXmlCertification.cs" />
-    <Compile Include="NFO\Art\XbmcXmlFanart.cs" />
-    <Compile Include="NFO\Files\XbmcXmlFileInfo.cs" />
-    <Compile Include="NFO\XbmcXmlMovie.cs" />
-    <Compile Include="NFO\XbmcXmlMovieDbId.cs" />
-    <Compile Include="NFO\XbmcXmlResumeInfo.cs" />
-    <Compile Include="NFO\Files\XbmcXmlSubtitleInfo.cs" />
-    <Compile Include="NFO\Art\XbmcXmlThumb.cs" />
-    <Compile Include="NFO\Files\XbmcXmlVideoInfo.cs" />
-    <Compile Include="Service\XbmcMoviesDataService.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Provider\FrostMoviesDataDataService.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="NFO\XSD\xbmcXmlMovie.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="NFO\XSD\xbmcXmlMovie_xsd11.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="NFO\XSD\yamjXmlMovie.xsd">
-      <SubType>Designer</SubType>
-    </None>
+    <Content Include="..\libraries\sqlite\ef6\x64\SQLite.Interop.dll">
+      <Link>x64\SQLite.Interop.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\libraries\sqlite\ef6\x64\SQLite.Interop.pdb">
+      <Link>x64\SQLite.Interop.pdb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\libraries\sqlite\ef6\x86\SQLite.Interop.dll">
+      <Link>x86\SQLite.Interop.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\libraries\sqlite\ef6\x86\SQLite.Interop.pdb">
+      <Link>x86\SQLite.Interop.pdb</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DB\MovieVo.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FeatureDetector\FeatureDetector.csproj">
+      <Project>{8542C013-AA9A-4852-98FA-6F05CC037A91}</Project>
+      <Name>FeatureDetector</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DB\extendSettings.sql" />
-    <Content Include="DB\extendStreamDetails.sql" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets. 
+       Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
-   <Delete
-     Files="$(TargetDir)$(TargetName).XmlSerializers.dll"
-     ContinueOnError="true" />
-   <SGen
-     BuildAssemblyName="$(TargetFileName)"
-     BuildAssemblyPath="$(OutputPath)"
-     References="@(ReferencePath)"
-     ShouldGenerateSerializer="true"
-     UseProxyTypes="false"
-     KeyContainer="$(KeyContainerName)"
-     KeyFile="$(KeyOriginatorFile)"
-     DelaySign="$(DelaySign)"
-     ToolPath="$(TargetFrameworkSDKToolsDirectory)"
-     Platform="$(Platform)">
-      <Output
-       TaskParameter="SerializationAssembly"
-       ItemName="SerializationAssembly" />
-   </SGen>  
   </Target>
   -->
 </Project>

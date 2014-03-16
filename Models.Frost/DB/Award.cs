@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Data.Entity.ModelConfiguration;
 using Frost.Common.Models;
 
-namespace Frost.Models.Frost.DB {
+namespace Frost.Providers.Frost.DB {
 
     /// <summary>Represents a movie award.</summary>
     public class Award : IAward {
@@ -30,6 +30,10 @@ namespace Frost.Models.Frost.DB {
         public string AwardType { get; set; }
 
         public virtual HashSet<Movie> Movies { get; set; }
+
+        bool IMovieEntity.this[string propertyName] {
+            get { return true; }
+        }
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Frost.Model.Xbmc.DB {
+namespace Frost.Providers.Xbmc.DB {
 
     /// <summary>This table stores XBMC settings for individual files.</summary>
     [Table("settings")]

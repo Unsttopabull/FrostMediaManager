@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Frost.DetectFeatures.Models;
-using Frost.Models.Xtreamer;
-using Frost.Models.Xtreamer.DB;
-using Frost.Models.Xtreamer.NFO;
+using Frost.Providers.Xtreamer;
+using Frost.Providers.Xtreamer.DB;
+using Frost.Providers.Xtreamer.NFO;
 
 namespace Frost.DetectFeatures {
 

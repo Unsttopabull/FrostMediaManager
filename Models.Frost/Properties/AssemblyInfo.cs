@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 using Frost.Common;
 
-[assembly: AssemblyTitle("Frost.Models.Frost")]
+[assembly: AssemblyTitle("Frost.Providers.Frost")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Frost.Models.Frost")]
+[assembly: AssemblyProduct("Frost.Providers.Frost")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

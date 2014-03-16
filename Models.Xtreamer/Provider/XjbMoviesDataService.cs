@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using Frost.Common;
 using Frost.Common.Models;
-using Frost.Model.Xbmc.DB;
+using Frost.Providers.Xtreamer.DB;
 
-namespace Frost.Model.Xbmc.Service {
-    public class XbmcMoviesDataService : IMoviesDataService {
-        private readonly XbmcContainer _xbmc;
+namespace Frost.Providers.Xtreamer.Provider {
+    public class XjbMoviesDataService : IMoviesDataService {
+        private readonly XjbEntities _xjb;
 
-        public XbmcMoviesDataService() {
-            _xbmc = new XbmcContainer();
+        public XjbMoviesDataService() {
+            _xjb = new XjbEntities();
         }
 
         public IEnumerable<IMovie> Movies { get; private set; }
@@ -142,8 +142,8 @@ namespace Frost.Model.Xbmc.Service {
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         private void Dispose(bool finalizer) {
             if (!IsDisposed) {
-                if (_xbmc != null) {
-                    _xbmc.Dispose();
+                if (_xjb != null) {
+                    _xjb.Dispose();
                 }
 
                 if (!finalizer) {
@@ -153,7 +153,7 @@ namespace Frost.Model.Xbmc.Service {
             }
         }
 
-        ~XbmcMoviesDataService() {
+        ~XjbMoviesDataService() {
             Dispose(true);
         }
 

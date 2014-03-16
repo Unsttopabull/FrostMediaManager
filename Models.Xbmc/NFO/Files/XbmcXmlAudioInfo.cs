@@ -3,7 +3,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using Frost.Common.Models;
 
-namespace Frost.Model.Xbmc.NFO {
+namespace Frost.Providers.Xbmc.NFO.Files {
 
     /// <summary>Represents serialized information about an audio stream in a movie</summary>
     [Serializable]

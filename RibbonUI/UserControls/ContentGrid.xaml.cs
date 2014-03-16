@@ -10,7 +10,6 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Shell;
 using Frost.GettextMarkupExtension;
-using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Expression.Interactivity.Core;
 using RibbonUI.Annotations;
 using RibbonUI.Util;

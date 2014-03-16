@@ -4,11 +4,11 @@ using System.Data.Entity;
 using System.Linq;
 using Frost.Common;
 using Frost.Common.Models;
-using Frost.Models.Frost.DB;
-using Frost.Models.Frost.DB.Files;
-using Frost.Models.Frost.DB.People;
+using Frost.Providers.Frost.DB;
+using Frost.Providers.Frost.DB.Files;
+using Frost.Providers.Frost.DB.People;
 
-namespace Frost.Models.Frost.Service {
+namespace Frost.Providers.Frost.Service {
     public class FrostMoviesDataDataService : IMoviesDataService {
         private readonly FrostDbContainer _mvc;
         private IEnumerable<IMovie> _movies;

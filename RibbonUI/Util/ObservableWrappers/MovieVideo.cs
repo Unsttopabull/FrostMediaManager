@@ -1,149 +1,143 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Windows.Media;
 using Frost.Common;
 using Frost.Common.Models;
 using Frost.DetectFeatures;
-using RibbonUI.Annotations;
 
 namespace RibbonUI.Util.ObservableWrappers {
 
-    public class MovieVideo : MovieHasLanguageBase, INotifyPropertyChanged {
-        public event PropertyChangedEventHandler PropertyChanged;
-        private readonly IVideo _video;
+    public class MovieVideo : MovieHasLanguageBase<IVideo> {
 
-        public MovieVideo(IVideo video) {
-            _video = video;
+        public MovieVideo(IVideo video) : base(video) {
         }
 
         #region Observed properties
 
         public override ILanguage Language {
-            get { return _video.Language; }
+            get { return _observedEntity.Language; }
             set {
-                _video.Language = value;
-                OnPropertyChanged("Language");
+                _observedEntity.Language = value;
+                OnPropertyChanged();
                 OnPropertyChanged("LanguageImage");
             }
         }
 
         public string MovieHash {
-            get { return _video.MovieHash; }
+            get { return _observedEntity.MovieHash; }
             set {
-                _video.MovieHash = value;
-                OnPropertyChanged("MovieHash");
+                _observedEntity.MovieHash = value;
+                OnPropertyChanged();
             }
         }
 
         /// <summary>With or from what this video was made from</summary>
         /// <example>\eg{ <c>TS, TC, TELESYNC, CAM, HDRIP, DVDRIP, BDRIP, DTV, HD2DVD, HDDVDRIP, HDTVRIP, VHS, SCREENER, RECODE</c>}</example>
         public string Source {
-            get { return _video.Source; }
+            get { return _observedEntity.Source; }
             set {
-                _video.Source = string.IsNullOrEmpty(value) ? null : value;
-                OnPropertyChanged("Source");
+                _observedEntity.Source = string.IsNullOrEmpty(value) ? null : value;
+                OnPropertyChanged();
             }
         }
 
         /// <summary>The type of the video</summary>
         /// <example>\eg{ <c>XVID, DVD5, DVD9, DVDR, BLUERAY, BD, HD2DVD, X264</c>}</example>
         public string Type {
-            get { return _video.Type; }
+            get { return _observedEntity.Type; }
             set {
-                _video.Type = value;
-                OnPropertyChanged("Type");
+                _observedEntity.Type = value;
+                OnPropertyChanged();
             }
         }
 
         /// <summary>Resolution and format of the video</summary>
         /// <example>\eg{ <c>720p, 1080p, 720i, 1080i, PAL, HDTV, NTSC</c>}</example>
         public int? Resolution {
-            get { return _video.Resolution; }
+            get { return _observedEntity.Resolution; }
             set {
-                _video.Resolution = value;
+                _observedEntity.Resolution = value;
 
                 OnPropertyChanged("ResolutionImage");
-                OnPropertyChanged("Resolution");
+                OnPropertyChanged();
             }
         }
 
         /// <summary>Gets or sets the name of the resolution.</summary>
         /// <value>The name of the resolution.</value>
         public string ResolutionName {
-            get { return _video.ResolutionName; }
+            get { return _observedEntity.ResolutionName; }
             set {
-                _video.ResolutionName = value;
+                _observedEntity.ResolutionName = value;
 
                 OnPropertyChanged("ResolutionImage");
-                OnPropertyChanged("ResolutionName");
+                OnPropertyChanged();
             }
         }
 
         public string Standard {
-            get { return _video.Standard; }
+            get { return _observedEntity.Standard; }
             set {
-                _video.Standard = value;
-                OnPropertyChanged("Standard");
+                _observedEntity.Standard = value;
+                OnPropertyChanged();
             }
         }
 
         /// <summary>Gets or sets the frames per second in this video.</summary>
         /// <value>The Frames per second.</value>
         public float? FPS {
-            get { return _video.FPS; }
+            get { return _observedEntity.FPS; }
             set {
-                _video.FPS = value;
-                OnPropertyChanged("FPS");
+                _observedEntity.FPS = value;
+                OnPropertyChanged();
             }
         }
 
         /// <summary>Gets or sets the video bit rate.</summary>
         /// <value>The bit rate in Kbps.</value>
         public float? BitRate {
-            get { return _video.BitRate; }
+            get { return _observedEntity.BitRate; }
             set {
-                _video.BitRate = value;
-                OnPropertyChanged("BitRate");
+                _observedEntity.BitRate = value;
+                OnPropertyChanged();
             }
         }
 
         /// <summary>Gets or sets the video bit rate mode.</summary>
         /// <value>The bit rate mode</value>
         public FrameOrBitRateMode BitRateMode {
-            get { return _video.BitRateMode; }
+            get { return _observedEntity.BitRateMode; }
             set {
-                _video.BitRateMode = value;
-                OnPropertyChanged("BitRateMode");
+                _observedEntity.BitRateMode = value;
+                OnPropertyChanged();
             }
         }
 
         /// <summary>Gets or sets the video bit depth.</summary>
         /// <value>The video depth in bits.</value>
         public long? BitDepth {
-            get { return _video.BitDepth; }
+            get { return _observedEntity.BitDepth; }
             set {
-                _video.BitDepth = value;
-                OnPropertyChanged("BitDepth");
+                _observedEntity.BitDepth = value;
+                OnPropertyChanged();
             }
         }
 
         /// <summary>Gets or sets the compression mode of this video.</summary>
         /// <value>The compression mode of this video.</value>
         public CompressionMode CompressionMode {
-            get { return _video.CompressionMode; }
+            get { return _observedEntity.CompressionMode; }
             set {
-                _video.CompressionMode = value;
-                OnPropertyChanged("CompressionMode");
+                _observedEntity.CompressionMode = value;
+                OnPropertyChanged();
             }
         }
 
         /// <summary>Gets or sets the video duration in miliseconds.</summary>
         /// <value>The video duration in miliseconds.</value>
         public long? Duration {
-            get { return _video.Duration; }
+            get { return _observedEntity.Duration; }
             set {
-                _video.Duration = value;
-                OnPropertyChanged("Duration");
+                _observedEntity.Duration = value;
+                OnPropertyChanged();
             }
         }
 
@@ -161,10 +155,10 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <summary>Gets or sets the video scan type.</summary>
         /// <value>The type video scan type.</value>
         public ScanType ScanType {
-            get { return _video.ScanType; }
+            get { return _observedEntity.ScanType; }
             set {
-                _video.ScanType = value;
-                OnPropertyChanged("ScanType");
+                _observedEntity.ScanType = value;
+                OnPropertyChanged();
             }
         }
 
@@ -172,28 +166,28 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <value>The video color space.</value>
         /// <example>\eg{ <c>YUV, YDbDr, YPbPr, YCbCr, RGB, CYMK</c>}</example>
         public string ColorSpace {
-            get { return _video.ColorSpace; }
+            get { return _observedEntity.ColorSpace; }
             set {
-                _video.ColorSpace = value;
-                OnPropertyChanged("ColorSpace");
+                _observedEntity.ColorSpace = value;
+                OnPropertyChanged();
             }
         }
 
         /// <summary>Gets or sets the type of chroma subsampling.</summary>
         /// <value>The chroma subsampling.</value>
         public string ChromaSubsampling {
-            get { return _video.ChromaSubsampling; }
+            get { return _observedEntity.ChromaSubsampling; }
             set {
-                _video.ChromaSubsampling = value;
-                OnPropertyChanged("ChromaSubsampling");
+                _observedEntity.ChromaSubsampling = value;
+                OnPropertyChanged();
             }
         }
 
         public string Format {
-            get { return _video.Format; }
+            get { return _observedEntity.Format; }
             set {
-                _video.Format = value;
-                OnPropertyChanged("Format");
+                _observedEntity.Format = value;
+                OnPropertyChanged();
             }
         }
 
@@ -201,10 +195,10 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <value>The codec this video is encoded in.</value>
         /// <example>\eg{ <c>WMV3 DIVX XVID H264 VP6 AVC</c>}</example>
         public string Codec {
-            get { return _video.Codec; }
+            get { return _observedEntity.Codec; }
             set {
-                _video.Codec = value;
-                OnPropertyChanged("Codec");
+                _observedEntity.Codec = value;
+                OnPropertyChanged();
             }
         }
 
@@ -212,11 +206,11 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <value>The codec this video is encoded in.</value>
         /// <example>\eg{ <c>x265, div3, dx50, mpeg2v</c>}</example>
         public string CodecId {
-            get { return _video.CodecId; }
+            get { return _observedEntity.CodecId; }
             set {
-                _video.CodecId = value;
+                _observedEntity.CodecId = value;
                 OnPropertyChanged("CodecImage");
-                OnPropertyChanged("CodecId");
+                OnPropertyChanged();
             }
         }
 
@@ -224,59 +218,55 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <value>Aspect ratio of the video</value>
         /// <example>\eg{ <c>1.333</c>}</example>
         public double? Aspect {
-            get { return _video.Aspect; }
+            get { return _observedEntity.Aspect; }
             set {
-                _video.Aspect = value;
-                OnPropertyChanged("Aspect");
+                _observedEntity.Aspect = value;
+                OnPropertyChanged();
             }
         }
 
         /// <summary>Gets or sets the the commercial name of the aspect ratio.</summary>
         /// <value>The the commercial name of the aspect ratio.</value>
         public string AspectCommercialName {
-            get { return _video.AspectCommercialName; }
+            get { return _observedEntity.AspectCommercialName; }
             set {
-                _video.AspectCommercialName = value;
-                OnPropertyChanged("AspectCommercialName");
+                _observedEntity.AspectCommercialName = value;
+                OnPropertyChanged();
             }
         }
 
         /// <summary>Gets or sets the width of the video.</summary>
         /// <value>The width of the video.</value>
         public int? Width {
-            get { return _video.Width; }
+            get { return _observedEntity.Width; }
             set {
-                _video.Width = value;
-                OnPropertyChanged("Width");
+                _observedEntity.Width = value;
+                OnPropertyChanged();
             }
         }
 
         /// <summary>Gets or sets the height of the video.</summary>
         /// <value>The height of the video.</value>
         public int? Height {
-            get { return _video.Height; }
+            get { return _observedEntity.Height; }
             set {
-                _video.Height = value;
-                OnPropertyChanged("Height");
+                _observedEntity.Height = value;
+                OnPropertyChanged();
             }
         }
 
         /// <summary>Gets or sets the file this video is contained in.</summary>
         /// <value>The file this video is contained in.</value>
         public IFile File {
-            get { return _video.File; }
-            set { _video.File = value; }
+            get { return _observedEntity.File; }
+            //set { _video.File = value; }
         }
 
         #endregion
 
-        public IVideo ObservedVideo {
-            get { return _video; }
-        }
-
         #region Images
 
-        public ImageSource CodecImage {
+        public string CodecImage {
             get {
                 string mapping;
                 FileFeatures.VideoCodecIdMappings.TryGetValue(CodecId, out mapping);
@@ -284,7 +274,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
         }
 
-        public ImageSource ResolutionImage {
+        public string ResolutionImage {
             get {
                 string filePath;
                 if (!string.IsNullOrEmpty(ResolutionName)) {
@@ -314,14 +304,6 @@ namespace RibbonUI.Util.ObservableWrappers {
 
 
         #endregion
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged(string propertyName) {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) {
-                handler(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
     }
 
 }

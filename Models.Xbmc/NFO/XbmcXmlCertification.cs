@@ -1,6 +1,6 @@
 ﻿using Frost.Common.Models;
 
-namespace Frost.Model.Xbmc.NFO {
+namespace Frost.Providers.Xbmc.NFO {
 
     /// <summary>Holds movie certifications information to be serialized</summary>
     public class XbmcXmlCertification : CertificationBase {

@@ -80,7 +80,6 @@
   <ItemGroup>
     <Compile Include="Extensions.cs" />
     <Compile Include="IMovieSaver.cs" />
-    <Compile Include="Outputer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -95,17 +94,21 @@
       <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Models.Frost\Models.Frost.csproj">
+    <ProjectReference Include="..\Models.Frost\Providers.Frost.csproj">
       <Project>{b404da8f-fbf4-4ccc-be01-22c488863ec2}</Project>
-      <Name>Models.Frost</Name>
+      <Name>Providers.Frost</Name>
     </ProjectReference>
     <ProjectReference Include="..\FeatureDetector\FeatureDetector.csproj">
       <Project>{8542C013-AA9A-4852-98FA-6F05CC037A91}</Project>
       <Name>FeatureDetector</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Models.Xtreamer\Models.Xtreamer.csproj">
+    <ProjectReference Include="..\Models.Xbmc\Providers.Xbmc.csproj">
+      <Project>{2e311a90-347b-47e1-8aa7-87a276c88f4e}</Project>
+      <Name>Providers.Xbmc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Models.Xtreamer\Providers.Xtreamer.csproj">
       <Project>{8491dccf-354e-4ff6-89d4-88a0bb9cb8af}</Project>
-      <Name>Models.Xtreamer</Name>
+      <Name>Providers.Xtreamer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Frost.Models.Xtreamer.PHP {
+namespace Frost.Providers.Xtreamer.PHP {
 
     public class Coretis_VO_Movie {
 

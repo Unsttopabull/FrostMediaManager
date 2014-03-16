@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Xml;
 
-namespace Frost.Models.Xtreamer {
+namespace Frost.Providers.Xtreamer {
 
     /// <summary>Represents an xml writer of which tags are indented.</summary>
     public class XmlIndentedTextWriter : XmlTextWriter {

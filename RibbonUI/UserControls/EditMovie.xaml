@@ -5,7 +5,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:e="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
-             xmlns:converters="clr-namespace:RibbonUI.Converters"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
              xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
@@ -44,7 +43,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <Grid x:Name="LeftInfo" x:FieldModifier="private">
+                <Grid x:Name="LeftInfo" x:FieldModifier="private" MaxWidth="300">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -65,17 +64,17 @@
                     <TextBox Grid.Row="1" x:Name="MovieTitle" Text="{Binding SelectedMovie.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     <Label Grid.Row="2" Target="{Binding ElementName=MovieOriginalTitle}" Content="{l:T Original title, Postfix=:}"/>
-                    <TextBox Grid.Row="3" x:Name="MovieOriginalTitle" Text="{Binding SelectedMovie.OriginalTitle, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBox Grid.Row="3" x:Name="MovieOriginalTitle" Text="{Binding SelectedMovie.OriginalTitle, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SelectedMovie[OriginalTitle]}"/>
 
                     <Label Grid.Row="4" Target="{Binding ElementName=MovieSortTitle}" Content="{l:T Sort title, Postfix=:}"/>
-                    <TextBox Grid.Row="5" x:Name="MovieSortTitle" Text="{Binding SelectedMovie.SortTitle}" />
+                    <TextBox Grid.Row="5" x:Name="MovieSortTitle" Text="{Binding SelectedMovie.SortTitle}" IsEnabled="{Binding SelectedMovie[SortTitle]}"/>
 
                     <Label Grid.Row="6" Target="{Binding ElementName=MovieEdithion}" Content="{l:T Edithion, Postfix=:}"/>
-                    <TextBox Grid.Row="7" x:Name="MovieEdithion" Text="{Binding SelectedMovie.Edithion}" />
+                    <TextBox Grid.Row="7" x:Name="MovieEdithion" Text="{Binding SelectedMovie.Edithion}" IsEnabled="{Binding SelectedMovie[Edithion]}"/>
 
                     <Label Grid.Row="8" Target="{Binding ElementName=MovieSet}" Content="{l:T Set, Postfix=:}"/>
-                    <ComboBox Grid.Row="9" x:Name="MovieSet" SelectedItem="{Binding SelectedMovie.Set}"
-                              ItemsSource="{Binding Sets}" DisplayMemberPath="Name"/>
+                    <ComboBox Grid.Row="9" x:Name="MovieSet" SelectedItem="{Binding SelectedMovieSet}"
+                              IsEnabled="{Binding SelectedMovie[Set]}" ItemsSource="{Binding Sets}" DisplayMemberPath="Name"/>
 
                     <Grid x:Name="TypeRatingDuration" x:FieldModifier="private" Grid.Row="10">
                         <Grid.ColumnDefinitions>
@@ -95,7 +94,7 @@
                         <Label Grid.Row="0" Grid.Column="0" Content="{l:T Type, Postfix=:}"/>
                         <ComboBox Grid.Row="1" Grid.Column="0" x:Name="MovieTypeComboBox"
                                   ItemsSource="{Binding Source={StaticResource MovieTypes}}"
-                                  SelectedItem="{Binding SelectedMovie.Type}" />
+                                  SelectedItem="{Binding SelectedMovie.Type}" IsEnabled="{Binding SelectedMovie[Type]}" />
 
                         <Label Grid.Column="2" Grid.Row="0" Content="{l:T DVD Region, Postfix=:}"/>
                         <ComboBox Grid.Row="1" Grid.Column="2" IsEnabled="False"
@@ -241,7 +240,7 @@
                     <Label Grid.Row="0" Grid.Column="2" Content="{l:T Tagline, Postfix=:}"/>
                     <TextBox x:Name="MoviePlotTagline" Height="{Binding ElementName=MoviePlotCombo, Path=ActualHeight}"
                              Grid.Column="2" Grid.Row="1"
-                             Text="{Binding ElementName=MoviePlotCombo, Path=SelectedItem.Tagline, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding ElementName=MoviePlotCombo, Path=SelectedItem.(models:IPlot.Tagline), UpdateSourceTrigger=PropertyChanged}"
                              IsEnabled="{Binding ElementName=MoviePlotCombo, Path=HasItems}" />
 
                     <Grid x:Name="PlotSelectGrid" x:FieldModifier="private" Grid.Column="0" Grid.Row="0"
@@ -294,12 +293,12 @@
 
                     <Label Grid.Column="0" Grid.Row="2" Content="{l:T Plot summary, Postfix=:}"/>
                     <TextBox Grid.Column="0" Grid.Row="3" x:Name="MoviePlotSummary"
-                             Text="{Binding ElementName=MoviePlotCombo, Path=SelectedItem.Summary, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding ElementName=MoviePlotCombo, Path=SelectedItem.(models:IPlot.Summary), UpdateSourceTrigger=PropertyChanged}"
                              IsEnabled="{Binding ElementName=MoviePlotCombo, Path=HasItems}" TextWrapping="Wrap"
                              MinHeight="150" />
                     <Label Grid.Row="2" Grid.Column="2" Content="{l:T Plot full, Postfix=:}"/>
                     <TextBox Grid.Row="3" Grid.Column="2" x:Name="MoviePlotFull"
-                             Text="{Binding ElementName=MoviePlotCombo, Path=SelectedItem.Full}"
+                             Text="{Binding ElementName=MoviePlotCombo, Path=SelectedItem.(models:IPlot.Full)}"
                              IsEnabled="{Binding ElementName=MoviePlotCombo, Path=HasItems}" TextWrapping="Wrap"
                              MinHeight="150" />
                 </Grid>

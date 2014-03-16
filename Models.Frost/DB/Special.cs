@@ -5,7 +5,7 @@ using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using Frost.Common.Models;
 
-namespace Frost.Models.Frost.DB {
+namespace Frost.Providers.Frost.DB {
 
     /// <summary>Represents a special information about a movie's release or type.</summary>
     public class Special : ISpecial {
@@ -50,14 +50,11 @@ namespace Frost.Models.Frost.DB {
         /// <param name="specials">The specials values.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Special"/> instances with specified specials values.</returns>
         public static IEnumerable<Special> FromValues(IEnumerable<string> specials) {
-            return specials.Select(special => (Special) special).ToList();
+            return specials.Select(special => new Special(special)).ToArray();
         }
 
-        /// <summary>Converts a <see cref="string"/> to an instance of <see cref="Special"/></summary>
-        /// <param name="specialName">The value of the special</param>
-        /// <returns>An instance of <see cref="Special"/> converted from <see cref="string"/></returns>
-        public static explicit operator Special(string specialName) {
-            return new Special(specialName);
+        bool IMovieEntity.this[string propertyName] {
+            get { return true; }
         }
 
         /// <summary>Returns a string that represents the current object.</summary>

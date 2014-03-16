@@ -7,7 +7,7 @@ using Frost.Common.Models;
 using Frost.Common.Models.ISO;
 using Frost.Common.Util.ISO;
 
-namespace Frost.Models.Frost.DB {
+namespace Frost.Providers.Frost.DB {
 
     /// <summary>Represents a language information.</summary>
     [Table("Languages")]
@@ -78,6 +78,10 @@ namespace Frost.Models.Frost.DB {
         /// <summary>Gets or sets the ISO639 language codes.</summary>
         /// <value>The ISO639 language codes.</value>
         public ISO639 ISO639 { get; set; }
+
+        bool IMovieEntity.this[string propertyName] {
+            get { return true; }
+        }
 
         /// <summary>Get an instance of <see cref="Language"/> from an ISO 639 2 or 3 letter code.</summary>
         /// <param name="iso639">The ISO 639 2 or 3 letter code.</param>

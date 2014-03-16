@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 
-namespace Frost.Model.Xbmc.DB {
+namespace Frost.Providers.Xbmc.DB {
 
     /// <summary>This table stores bookmarks, which are timestamps representing the point in a video where a user stopped playback, an explicit bookmark requested by the user, or an automatically generated episode bookmark.</summary>
     [Table("bookmark")]
-    public class XbmcBookmark : IEquatable<XbmcBookmark> {
+    public class XbmcBookmark {
 
         public XbmcBookmark() {
         }
@@ -51,30 +51,6 @@ namespace Frost.Model.Xbmc.DB {
         /// <summary>Gets or sets the file for which this bookmark this bookmark was created.</summary>
         /// <value>The file for which this bookmark this bookmark was created.</value>
         public virtual XbmcFile File { get; set; }
-
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(XbmcBookmark other) {
-            if (other == null) {
-                return false;
-            }
-
-            if (ReferenceEquals(this, other)) {
-                return true;
-            }
-
-            if (Id != 0 && other.Id != 0) {
-                return Id == other.Id;
-            }
-
-            return TimeInSeconds == other.TimeInSeconds &&
-                   TotalTimeInSeconds == other.TotalTimeInSeconds &&
-                   ThumbnailImage == other.ThumbnailImage &&
-                   Player == other.Player &&
-                   PlayerState == other.PlayerState &&
-                   Type == other.Type;
-        }
 
         internal class Configuration : EntityTypeConfiguration<XbmcBookmark> {
 

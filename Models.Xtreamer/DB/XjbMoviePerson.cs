@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Frost.Models.Xtreamer.DB {
+namespace Frost.Providers.Xtreamer.DB {
 
     /// <summary>
     /// Represents a link table between Movie and a Person containing person's job in the movie.

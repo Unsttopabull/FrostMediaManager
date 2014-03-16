@@ -7,10 +7,10 @@ using System.Globalization;
 using System.Linq;
 using Frost.Common.Models;
 
-namespace Frost.Models.Frost.DB {
+namespace Frost.Providers.Frost.DB {
 
     /// <summary>Represents a movie genre.</summary>
-    public partial class Genre : IGenre {
+    public class Genre : IGenre {
 
         /// <summary>Initializes a new instance of the <see cref="Genre"/> class.</summary>
         public Genre() {
@@ -28,11 +28,7 @@ namespace Frost.Models.Frost.DB {
         }
 
         internal Genre(IGenre genre) {
-            //Contract.Requires<ArgumentNullException>(genre != null);
-            //Contract.Requires<ArgumentNullException>(genre.Movies != null);
-
             Name = genre.Name;
-            //Movies = new HashSet<Movie>(genre.Movies.Select(m => new Movie(m)));
         }
 
         /// <summary>Gets or sets the database Genre Id.</summary>
@@ -50,18 +46,15 @@ namespace Frost.Models.Frost.DB {
         /// <value>The movies of this genre.</value>
         public virtual HashSet<Movie> Movies { get; set; }
 
+        bool IMovieEntity.this[string propertyName] {
+            get { return true; }
+        }
+
         /// <summary>Converts genre names to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Genre"/></summary>
         /// <param name="genreNames">The genre names.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Genre"/> instances with specified genre names</returns>
         public static IEnumerable<Genre> GetFromNames(IEnumerable<string> genreNames) {
             return genreNames.Select(genreName => new Genre(genreName));
-        }
-
-        /// <summary>Converts the genre name to a <see cref="Genre"/> instance</summary>
-        /// <param name="genreName">Name of the genre.</param>
-        /// <returns>An instance of <see cref="Genre"/> with string as a genre name</returns>
-        public static implicit operator Genre(string genreName) {
-            return new Genre(genreName);
         }
 
         /// <summary>Returns a string that represents the current object.</summary>

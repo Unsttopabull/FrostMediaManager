@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using Frost.Providers.Xbmc.NFO.Files;
 
-namespace Frost.Model.Xbmc.NFO {
+namespace Frost.Providers.Xbmc.NFO {
 
     /// <summary>Holds information about streams details in a movie.</summary>
     [Serializable]

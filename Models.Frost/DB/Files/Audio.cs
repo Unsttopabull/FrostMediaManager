@@ -4,7 +4,7 @@ using System.Data.Entity.ModelConfiguration;
 using Frost.Common;
 using Frost.Common.Models;
 
-namespace Frost.Models.Frost.DB.Files {
+namespace Frost.Providers.Frost.DB.Files {
 
     /// <summary>Represents information about an audio stream in a file.</summary>
     public class Audio : IAudio {
@@ -190,13 +190,13 @@ namespace Frost.Models.Frost.DB.Files {
         /// <value>The file this audio is contained in.</value>
         IFile IAudio.File {
             get { return File; }
-            set {
-                if (value == null) {
-                    File = null;
-                    return;
-                }
-                File = new File(value);
-            }
+            //set {
+            //    if (value == null) {
+            //        File = null;
+            //        return;
+            //    }
+            //    File = new File(value);
+            //}
         }
 
         /// <summary>Gets or sets the movie this audio is from.</summary>
@@ -204,6 +204,10 @@ namespace Frost.Models.Frost.DB.Files {
         public virtual Movie Movie { get; set; }
 
         #endregion
+
+        bool IMovieEntity.this[string propertyName] {
+            get { return true; }
+        }
 
         internal class Configuration : EntityTypeConfiguration<Audio> {
             public Configuration() {

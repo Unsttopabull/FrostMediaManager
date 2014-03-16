@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Frost.Common.Models;
 
-namespace Frost.Models.Frost.DB {
+namespace Frost.Providers.Frost.DB {
 
     /// <summary>Represents a movie set or collection.</summary>
     [Table("Sets")]
@@ -36,6 +36,10 @@ namespace Frost.Models.Frost.DB {
         /// <summary>Gets or sets the movies in this set.</summary>
         /// <value>The movies in this set.</value>
         public ICollection<Movie> Movies { get; set; }
+
+        bool IMovieEntity.this[string propertyName] {
+            get { return true; }
+        }
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>

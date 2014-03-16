@@ -39,7 +39,7 @@
                     <StackPanel Margin="15,0,0,0" MinWidth="200" x:Name="DetailsHolder">
                         <StackPanel Orientation="Horizontal">
                             <Label Content="{l:T Language, Postfix=:}"/>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding Language.Name}" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Language.(models:ILanguage.Name)}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="{l:T Format, Postfix=:}"/>

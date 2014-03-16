@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 using Frost.Common;
 using Frost.Common.Models;
 
-namespace Frost.Models.Xtreamer.NFO {
+namespace Frost.Providers.Xtreamer.NFO {
 
     /// <summary>Represents an infromation about a movie in Xtreamer Movie Jukebox database that is ready to be serialized.</summary>
     [Serializable]

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Frost.Common.Models;
 
-namespace Frost.Models.Xtreamer.DB {
+namespace Frost.Providers.Xtreamer.DB {
 
     /// <summary>Represents a Xtreamer Movie Jukebox genre.</summary>
     [Table("genres")]

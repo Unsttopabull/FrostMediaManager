@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using Frost.Common;
 using Frost.Common.Models;
 using Frost.DetectFeatures;
 using System.Diagnostics;
 using Frost.DetectFeatures.Models;
-using Frost.Models.Frost.DB;
-using FileVo = Frost.Models.Frost.DB.Files.File;
-using CoretisMovie = Frost.Models.Xtreamer.PHP.Coretis_VO_Movie;
+using Frost.Providers.Frost;
+using Frost.Providers.Xbmc.DB;
+using Frost.Providers.Xbmc.Provider;
+using CoretisMovie = Frost.Providers.Xtreamer.PHP.Coretis_VO_Movie;
 
 namespace Frost.Tester {
 
@@ -23,7 +25,7 @@ namespace Frost.Tester {
         private static void Main() {
             //EntityFrameworkProfiler.Initialize();
 
-            FileStream debugLog = System.IO.File.Create("debug.txt");
+            FileStream debugLog = File.Create("debug.txt");
             Debug.Listeners.Add(new TextWriterTraceListener(debugLog));
             Debug.Listeners.Add(new ConsoleTraceListener());
             Debug.AutoFlush = true;
@@ -36,8 +38,9 @@ namespace Frost.Tester {
             //TestPHPDeserialize2();
 
             //TestXjbDbParser();
-            TestMediaSearcher();
-            Test();
+            //TestMediaSearcher();
+            TestDataService();
+            //TestXbmcContext();
 
             //TestFileFeatures();
             //TestGremoVKino();
@@ -55,11 +58,24 @@ namespace Frost.Tester {
             Console.Read();
         }
 
-        private static void Test() {
-            
-            
+        private static void TestXbmcContext() {
+            using (XbmcContainer xbmc = new XbmcContainer()) {
+                XbmcMovie xbmcMovie = xbmc.Movies.Include("Path").Single(m => m.Id == 323);
+                XbmcPath xbmcPath = xbmcMovie.Path;
+
+                //IQueryable<XbmcPath> queryable = from m in xbmc.Movies where m.Id == 323 select m.Path;
+                //List<XbmcPath> list = queryable.ToList();
+            }
         }
 
+        private static void TestDataService() {
+            IMoviesDataService service = new XbmcMoviesDataService();
+            IEnumerable<IMovie> movies = service.Movies;
+            IEnumerable<XbmcPath> xbmcPaths = movies.Select(m => ((XbmcMovie) m).Path);
+            int count = xbmcPaths.Count(p => p == null);
+
+            IEnumerable<IMovieSet> movieSets = service.Sets;
+        }
 
         private static TimeSpan TestMediaSearcher() {
             //using (MovieVoContainer mvc = new MovieVoContainer(true, "movieVo.db3")) {
@@ -98,7 +114,7 @@ namespace Frost.Tester {
             IEnumerable<MovieInfo> subtitlesInfos = movies.Where(m => m.FileInfos.All(f => f.Subtitles.Count == 0));
             IEnumerable<MovieInfo> audioInfos = movies.Where(m => m.FileInfos.All(f => f.Audios.Count == 0 && !f.Extension.Equals("iso", StringComparison.OrdinalIgnoreCase)));
 
-            using (Frost.Models.Frost.MovieSaver sv = new Models.Frost.MovieSaver(movies)) {
+            using (MovieSaver sv = new MovieSaver(movies)) {
                 sv.Save();
             }
 

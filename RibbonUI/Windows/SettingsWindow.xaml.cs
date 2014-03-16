@@ -2,7 +2,6 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
-using RibbonUI.Properties;
 
 namespace RibbonUI.Windows {
 

@@ -4,13 +4,12 @@ using System.Data.Entity.Infrastructure;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Linq;
-using Frost.Common;
 using Frost.Common.Models.ISO;
-using Frost.Models.Frost.DB.Files;
-using Frost.Models.Frost.DB.People;
-using Frost.Models.Frost.Properties;
+using Frost.Providers.Frost.DB.Files;
+using Frost.Providers.Frost.DB.People;
+using Frost.Providers.Frost.Properties;
 
-namespace Frost.Models.Frost.DB {
+namespace Frost.Providers.Frost.DB {
 
     /// <summary>Represents a context used for manipulation of the database.</summary>
     public class FrostDbContainer : DbContext {

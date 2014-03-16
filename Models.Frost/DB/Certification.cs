@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Frost.Common.Models;
 
-namespace Frost.Models.Frost.DB {
+namespace Frost.Providers.Frost.DB {
 
     /// <summary>Represents a movie certification/restriction in a certain country.</summary>
     [Table("Certifications")]
@@ -73,6 +73,10 @@ namespace Frost.Models.Frost.DB {
                 }
                 Country = new Country(value);
             }
+        }
+
+        bool IMovieEntity.this[string propertyName] {
+            get { return true; }
         }
 
         /// <summary>Returns a string that represents the current object.</summary>

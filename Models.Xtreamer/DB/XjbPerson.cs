@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Frost.Models.Xtreamer.DB {
+namespace Frost.Providers.Xtreamer.DB {
 
     /// <summary>Represents a preson that participated in a movie.</summary>
     [Table("persons")]

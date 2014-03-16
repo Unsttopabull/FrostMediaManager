@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
+using Frost.Common.Models;
 
-namespace Frost.Model.Xbmc.DB.Actor {
+namespace Frost.Providers.Xbmc.DB.Actor {
 
     /// <summary>Represents a person that worked on a movie.</summary>
     [Table("actors")]
-    public class XbmcPerson : IEquatable<XbmcPerson> {
+    public class XbmcPerson : IPerson {
 
         public XbmcPerson() {
             MoviesAsDirector = new HashSet<XbmcMovie>();
@@ -65,25 +66,36 @@ namespace Frost.Model.Xbmc.DB.Actor {
         /// <value>The movies where this person was a writer.</value>
         public virtual HashSet<XbmcMovie> MoviesAsWriter { get; set; }
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(XbmcPerson other) {
-            if (other == null) {
-                return false;
-            }
+        #region IPerson
 
-            if (ReferenceEquals(this, other)) {
-                return true;
+        bool IMovieEntity.this[string propertyName] {
+            get {
+                switch (propertyName) {
+                    case "Thumb":
+                    case "Id":
+                    case "Name":
+                        return true;
+                    default:
+                        return false;
+                }
             }
-
-            if (Id != 0 && other.Id != 0) {
-                return Id == other.Id;
-            }
-
-            return Name == other.Name &&
-                   ThumbXml == other.ThumbXml;
         }
+
+        /// <summary>Gets or sets the persons thumbnail image.</summary>
+        /// <value>The thumbnail image.</value>
+        string IPerson.Thumb {
+            get { return ThumbURL; }
+            set { ThumbURL = value; }
+        }
+
+        /// <summary>Gets or sets the Persons imdb identifier.</summary>
+        /// <value>The imdb identifier of the person.</value>
+        string IPerson.ImdbID {
+            get { return default(string); }
+            set { }
+        }
+
+        #endregion
 
         internal class Configuration : EntityTypeConfiguration<XbmcPerson> {
 

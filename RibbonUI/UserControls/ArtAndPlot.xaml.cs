@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using Frost.Common.Models;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls {

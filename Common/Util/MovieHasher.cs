@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Frost.SharpOpenSubtitles.Util {
+namespace Frost.Common.Util {
+    /// <summary>Simple movie hasher for movie file indentification</summary>
     public static class MovieHasher {
 
         #region Extensions

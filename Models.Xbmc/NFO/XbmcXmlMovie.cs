@@ -9,9 +9,11 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Frost.Common;
-using Frost.Model.Xbmc.DB;
+using Frost.Providers.Xbmc.DB;
+using Frost.Providers.Xbmc.NFO.Art;
+using Frost.Providers.Xbmc.NFO.Files;
 
-namespace Frost.Model.Xbmc.NFO {
+namespace Frost.Providers.Xbmc.NFO {
     /// <summary>Represents an information about a movie in XBMC library ready to be serialized.</summary>
     [Serializable]
     [XmlType(AnonymousType = true)]
@@ -468,7 +470,7 @@ namespace Frost.Model.Xbmc.NFO {
                 DirectorNames = xm.Directors.ToArray(),
                 GenreNames = xm.Genres.ToArray(),
                 FolderPath = GetFolderPath(xm.FilenameAndPath),
-                ImdbId = xm.ImdbId,
+                ImdbID = xm.ImdbId,
                 ImdbTop250 = xm.Top250.ToString(CultureInfo.InvariantCulture),
                 MpaaRating = xm.MPAA,
                 OriginalTitle = xm.OriginalTitle,

@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using Frost.Common.Models;
 
-namespace Frost.Models.Frost.DB.Files {
+namespace Frost.Providers.Frost.DB.Files {
 
     /// <summary>Represents an information about a file.</summary>
     public class File : IFile/*, IEquatable<IFile> */{
@@ -78,7 +78,7 @@ namespace Frost.Models.Frost.DB.Files {
 
         /// <summary>Gets or sets the filename.</summary>
         /// <value>The filename in folder.</value>
-        /// <example>\eg{ ''<c>Wall_E.avi</c>''}</example>
+        /// <example>\eg{ ''<c>Wall_E</c>''}</example>
         [Required]
         public string Name { get; set; }
 
@@ -149,6 +149,10 @@ namespace Frost.Models.Frost.DB.Files {
 
         IEnumerable<ISubtitle> IFile.Subtitles {
             get { return Subtitles; }
+        }
+
+        bool IMovieEntity.this[string propertyName] {
+            get { return true; }
         }
 
         #endregion

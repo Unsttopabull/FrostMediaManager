@@ -6,10 +6,10 @@ using System.IO;
 using System.Linq;
 using Frost.Common;
 using Frost.Common.Models;
-using Frost.Models.Frost.DB.Files;
-using Frost.Models.Frost.DB.People;
+using Frost.Providers.Frost.DB.Files;
+using Frost.Providers.Frost.DB.People;
 
-namespace Frost.Models.Frost.DB {
+namespace Frost.Providers.Frost.DB {
 
     /// <summary>Represents an information about a movie in the library.</summary>
     public partial class Movie : IMovie {
@@ -310,11 +310,11 @@ namespace Frost.Models.Frost.DB {
         /// <value>The set this movie is a part of.</value>
         IMovieSet IMovie.Set {
             get { return Set; }
-            set {
-                Set = value != null
-                          ? new Set(value)
-                          : null;
-            }
+            //set {
+            //    Set = value != null
+            //              ? new Set(value)
+            //              : null;
+            //}
         }
 
         /// <summary>Gets or sets the movie subtitles.</summary>
@@ -409,6 +409,10 @@ namespace Frost.Models.Frost.DB {
 
         IEnumerable<IPromotionalVideo> IMovie.PromotionalVideos {
             get { return PromotionalVideos; }
+        }
+
+        bool IMovieEntity.this[string propertyName] {
+            get { return true; }
         }
 
         #endregion

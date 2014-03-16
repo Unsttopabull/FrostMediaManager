@@ -5,7 +5,7 @@ using System.Data.Entity.ModelConfiguration;
 using System.Linq;
 using Frost.Common.Models;
 
-namespace Frost.Models.Frost.DB {
+namespace Frost.Providers.Frost.DB {
 
     /// <summary>Represents a studio that prodcuced a movie.</summary>
     public class Studio : IStudio {
@@ -40,18 +40,15 @@ namespace Frost.Models.Frost.DB {
         /// <value>The movies this studio has produced.</value>
         public virtual HashSet<Movie> Movies { get; set; }
 
+        bool IMovieEntity.this[string propertyName] {
+            get { return true; }
+        }
+
         /// <summary>Converts studio names to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Studio"/></summary>
         /// <param name="studioNames">The studio names.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Studio"/> instances with specified studio names</returns>
         public static IEnumerable<Studio> GetFromNames(IEnumerable<string> studioNames) {
             return studioNames.Select(studioName => new Studio(studioName));
-        }
-
-        /// <summary>Converts the studio name to a <see cref="Studio"/> instance</summary>
-        /// <param name="studioName">Name of the studio.</param>
-        /// <returns>An instance of <see cref="Studio"/> with string as a studio name</returns>
-        public static implicit operator Studio(string studioName) {
-            return new Studio(studioName);
         }
 
         /// <summary>Returns a string that represents the current object.</summary>

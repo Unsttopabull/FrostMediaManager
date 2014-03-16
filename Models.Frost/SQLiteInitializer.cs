@@ -3,7 +3,7 @@ using System.Data.Entity;
 using System.Data.SQLite;
 using System.IO;
 
-namespace Frost.Models.Frost {
+namespace Frost.Providers.Frost {
 
     /// <summary>If the databse doesn't exist it creates it and seeds it with data.</summary>
     public class SQLiteInitializer<TContext> : IDatabaseInitializer<TContext> where TContext : DbContext {

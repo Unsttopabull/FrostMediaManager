@@ -1,18 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
+using Frost.Common.Models;
+using Frost.Common.Models.ISO;
+using Frost.Common.Util.ISO;
 
-namespace Frost.Model.Xbmc.DB {
+namespace Frost.Providers.Xbmc.DB {
 
     /// <summary>This table lists all countries in which the movies were shot and/or produced.</summary>
     [Table("country")]
-    public class XbmcCountry : IEquatable<XbmcCountry> {
+    public class XbmcCountry : ICountry {
+        private string _countryName;
+        private ISO3166 _iso3166;
 
         /// <summary>Initializes a new instance of the <see cref="XbmcCountry"/> class.</summary>
         public XbmcCountry() {
             Movies = new HashSet<XbmcMovie>();
+        }
+
+        public XbmcCountry(ISOCountryCode isoCode) {
+            Name = isoCode.EnglishName;
+            ISO3166 = new ISO3166(isoCode.Alpha2, isoCode.Alpha3);
         }
 
         /// <summary>Gets or sets the Id of the country in the database.</summary>
@@ -24,30 +33,48 @@ namespace Frost.Model.Xbmc.DB {
         /// <summary>Gets or sets the name of the country.</summary>
         /// <value>The name of the country.</value>
         [Column("strCountry")]
-        public string Name { get; set; }
+        public string Name {
+            get { return _countryName; }
+            set {
+                _countryName = value;
+
+                if (!string.IsNullOrEmpty(_countryName)) {
+                    ISOCountryCode isoCode = ISOCountryCodes.Instance.GetByEnglishName(_countryName);
+                    if (isoCode != null) {
+                        _iso3166 = new ISO3166(isoCode.Alpha2, isoCode.Alpha3);
+                    }
+                }
+            }
+        }
 
         /// <summary>Gets or sets the movies that were shor and/or produced in this country.</summary>
         /// <value>The movies that were shor and/or produced in this country.</value>
         public HashSet<XbmcMovie> Movies { get; set; }
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(XbmcCountry other) {
-            if (other == null) {
-                return false;
-            }
+        #region ICountry
 
-            if (ReferenceEquals(this, other)) {
-                return true;
+        bool IMovieEntity.this[string propertyName] {
+            get {
+                switch (propertyName) {
+                    case "Id":
+                    case "Name":
+                    case "ISO3166":
+                        return true;
+                    default:
+                        return false;
+                }
             }
-
-            if (Id != 0 && other.Id != 0) {
-                return Id == other.Id;
-            }
-
-            return Name == other.Name;
         }
+
+        /// <summary>Gets or sets the ISO 3166-1 Information.</summary>
+        /// <value>The ISO 3166-1 Information.</value>
+        [NotMapped]
+        public ISO3166 ISO3166 {
+            get { return _iso3166; }
+            set { _iso3166 = value; }
+        }
+
+        #endregion
 
         internal class Configuration : EntityTypeConfiguration<XbmcCountry> {
 

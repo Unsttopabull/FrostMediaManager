@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace Frost.Model.Xbmc.NFO {
+namespace Frost.Providers.Xbmc.NFO.Art {
 
     /// <summary>Represent a promotional image of the movie ready to be serialized.</summary>
     [Serializable]

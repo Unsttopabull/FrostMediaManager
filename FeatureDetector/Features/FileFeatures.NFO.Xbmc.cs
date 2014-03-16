@@ -5,7 +5,8 @@ using System.Linq;
 using Frost.Common;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.Models;
-using Frost.Model.Xbmc.NFO;
+using Frost.Providers.Xbmc.NFO;
+using Frost.Providers.Xbmc.NFO.Art;
 
 namespace Frost.DetectFeatures {
 

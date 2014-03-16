@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Xml;
 
-namespace Frost.Model.Xbmc {
+namespace Frost.Providers.Xbmc {
 
     /// <summary>Represents an xml writer of which tags are indented.</summary>
     public class XmlIndentedTextWriter : XmlTextWriter {

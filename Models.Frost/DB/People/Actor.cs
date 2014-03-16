@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using Frost.Common.Models;
 
-namespace Frost.Models.Frost.DB.People {
+namespace Frost.Providers.Frost.DB.People {
 
     public class Actor : Person, IActor {
 

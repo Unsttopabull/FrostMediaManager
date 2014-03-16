@@ -1,6 +1,6 @@
 ﻿using System.Data.Entity.ModelConfiguration;
 
-namespace Frost.Models.Frost.DB {
+namespace Frost.Providers.Frost.DB {
 
     public partial class Movie {
         internal class Configuration : EntityTypeConfiguration<Movie> {
@@ -20,7 +20,7 @@ namespace Frost.Models.Frost.DB {
 
                 //Movie <--> Plots
                 HasMany(m => m.Plots)
-                    .WithRequired(p => (Movie) p.Movie)
+                    .WithRequired(p => p.Movie)
                     .HasForeignKey(p => p.MovieId)
                     .WillCascadeOnDelete();
             }

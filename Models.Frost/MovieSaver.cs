@@ -6,11 +6,11 @@ using Frost.Common;
 using Frost.Common.Models;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.Models;
-using Frost.Models.Frost.DB;
-using Frost.Models.Frost.DB.Files;
-using Frost.Models.Frost.DB.People;
+using Frost.Providers.Frost.DB;
+using Frost.Providers.Frost.DB.Files;
+using Frost.Providers.Frost.DB.People;
 
-namespace Frost.Models.Frost {
+namespace Frost.Providers.Frost {
 
     public class MovieSaver : IMovieSaver {
         private readonly Dictionary<ISOCountryCode, Country> _countries;

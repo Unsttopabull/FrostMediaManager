@@ -120,6 +120,18 @@ namespace RibbonUI.UserControls {
             }
         }
 
+        public IMovieSet SelectedMovieSet {
+            get {
+                if (SelectedMovie != null) {
+                    return SelectedMovie.Set;
+                }
+                return null;
+            }
+            set {
+                //TODO:
+            }
+        }
+
         public ObservableCollection<IMovieSet> Sets {
             get { return _sets; }
             set {
@@ -245,7 +257,7 @@ namespace RibbonUI.UserControls {
                 if (!Countries.Contains(country)) {
                     Countries.Add(country);
 
-                    MessengerInstance.Send(new AddCountryMessage(country.ObservedCountry));
+                    MessengerInstance.Send(new AddCountryMessage(country.ObservedEntity));
                 }
             }
         }
@@ -253,7 +265,7 @@ namespace RibbonUI.UserControls {
         private void RemoveCountry(MovieCountry country) {
             Countries.Remove(country);
 
-            MessengerInstance.Send(new RemoveCountryMessage(country.ObservedCountry));
+            MessengerInstance.Send(new RemoveCountryMessage(country.ObservedEntity));
         }
 
         #endregion
@@ -283,7 +295,7 @@ namespace RibbonUI.UserControls {
 
         private void RemoveDirector(MoviePerson director) {
             Directors.Remove(director);
-            MessengerInstance.Send(new RemoveDirectorMessage(director.ObservedPerson));
+            MessengerInstance.Send(new RemoveDirectorMessage(director.ObservedEntity));
         }
 
         #endregion
@@ -362,7 +374,7 @@ namespace RibbonUI.UserControls {
         private void RemovePotOnClick(MoviePlot moviePlot) {
             if (MessageBox.Show(ParentWindow, TranslationManager.T("Do you really want to remove plot: \"{0}\"?", moviePlot), TranslationManager.T("Confrim remove"), MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
                 MoviePlots.Remove(moviePlot);
-                MessengerInstance.Send(new RemovePlotMessage(moviePlot.ObservedPlot));
+                MessengerInstance.Send(new RemovePlotMessage(moviePlot.ObservedEntity));
             }
         }
 
@@ -436,7 +448,7 @@ namespace RibbonUI.UserControls {
 
         private void RemoveActor(MovieActor actor) {
             Actors.Remove(actor);
-            MessengerInstance.Send(new RemoveActorMessage(actor.ObservedActor));
+            MessengerInstance.Send(new RemoveActorMessage(actor.ObservedEntity));
         }
 
         #endregion
@@ -460,7 +472,7 @@ namespace RibbonUI.UserControls {
             }
 
             foreach (IStudio studio in addStudios.StudiosList.SelectedItems) {
-                MovieStudio studio2 = Studios.FirstOrDefault(ms => ms.ObservedStudio == studio);
+                MovieStudio studio2 = Studios.FirstOrDefault(ms => ms.ObservedEntity == studio);
                 if (studio2 == null) {
                     Studios.Add(new MovieStudio(studio));
                     MessengerInstance.Send(new AddStudioMessage(studio));
@@ -487,7 +499,7 @@ namespace RibbonUI.UserControls {
         private void RemoveStudio(MovieStudio studio) {
             Studios.Remove(studio);
 
-            MessengerInstance.Send(new RemoveStudioMessage(studio.ObservedStudio));
+            MessengerInstance.Send(new RemoveStudioMessage(studio.ObservedEntity));
         }
 
         #endregion

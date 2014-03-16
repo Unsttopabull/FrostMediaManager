@@ -4,15 +4,20 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
+using System.Globalization;
+using System.Linq;
 using System.Text;
 using Frost.Common;
-using Frost.Model.Xbmc.DB.StreamDetails;
+using Frost.Common.Models;
+using Frost.Providers.Xbmc.DB.StreamDetails;
 
-namespace Frost.Model.Xbmc.DB {
+namespace Frost.Providers.Xbmc.DB {
 
     /// <summary>This table stores filenames and links to the Path table.</summary>
     [Table("files")]
-    public class XbmcFile : IEquatable<XbmcFile> {
+    public class XbmcFile : IFile {
+        private DateTime _dateAdded;
+        private string _dateAddedString;
 
         /// <summary>Prefix for movies split into multiple files</summary>
         public const string STACK_PREFIX = "stack://";
@@ -53,6 +58,26 @@ namespace Frost.Model.Xbmc.DB {
         /// <param name="fileName">The filename in folder.</param>
         public XbmcFile(string dateAdded, string lastPlayed, long? playCount, string fileName) : this(dateAdded, lastPlayed, playCount) {
             FileNames = new[] {fileName};
+        }
+
+        internal XbmcFile(IFile file) : this() {
+            Id = file.Id;
+            DateAdded = file.DateAdded.ToString("yyyy-mm-dd hh:ii:ss");
+
+            Path = new XbmcPath { FolderPath = file.FolderPath };
+            FileNames = new[] { file.NameWithExtension };
+
+            foreach (IAudio audio in file.AudioDetails) {
+                StreamDetails.Add(new XbmcAudioDetails(audio));
+            }
+
+            foreach (IVideo video in file.VideoDetails) {
+                StreamDetails.Add(new XbmcVideoDetails(video));
+            }
+
+            foreach (ISubtitle subtitle in file.Subtitles) {
+                StreamDetails.Add(new XbmcSubtitleDetails(subtitle));
+            }
         }
 
         #endregion
@@ -146,7 +171,15 @@ namespace Frost.Model.Xbmc.DB {
         /// <summary>Gets or sets the date and time the file was added.</summary>
         /// <value>The date and time the file was added.</value>
         [Column("dateAdded")]
-        public string DateAdded { get; set; }
+        public string DateAdded {
+            get { return _dateAddedString; }
+            set {
+                _dateAddedString = value;
+                if (!string.IsNullOrEmpty(_dateAddedString)) {
+                    DateTime.TryParseExact(DateAdded, "yyyy-mm-dd hh:ii:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out _dateAdded);
+                }
+            }
+        }
 
         #endregion
 
@@ -171,28 +204,109 @@ namespace Frost.Model.Xbmc.DB {
 
         #endregion
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(XbmcFile other) {
-            if (other == null) {
-                return false;
-            }
+        #region IFile
 
-            if (ReferenceEquals(this, other)) {
-                return true;
+        bool IMovieEntity.this[string propertyName] {
+            get {
+                switch (propertyName) {
+                    case "AudioDetails":
+                    case "VideoDetails":
+                    case "SubtitleDetails":
+                    case "DateAdded":
+                    case "FolderPath":
+                    case "FullPath":
+                    case "Name":
+                    case "NameWithExtension":
+                        return true;
+                    default:
+                        return false;
+                }
             }
-
-            if (Id != 0 && other.Id != 0) {
-                return Id == other.Id;
-            }
-
-            return PathId == other.PathId &&
-                   FileNameString == other.FileNameString &&
-                   PlayCount == other.PlayCount &&
-                   LastPlayed == other.LastPlayed &&
-                   DateAdded == other.DateAdded;
         }
+
+        /// <summary>Gets or sets the details about audio streams in this file</summary>
+        /// <value>The details about audio streams in this file</value>
+        IEnumerable<IAudio> IFile.AudioDetails {
+            get { return StreamDetails.OfType<XbmcAudioDetails>(); }
+        }
+
+        /// <summary>Gets or sets the details about video streams in this file</summary>
+        /// <value>The details about video streams in this file</value>
+        IEnumerable<IVideo> IFile.VideoDetails {
+            get { return StreamDetails.OfType<XbmcVideoDetails>(); }
+        }
+
+        /// <summary>Gets or sets the details about subtitles in this file</summary>
+        /// <value>The details about subtitles in this file</value>
+        IEnumerable<ISubtitle> IFile.Subtitles {
+            get { return StreamDetails.OfType<XbmcSubtitleDetails>(); }
+        }
+
+        /// <summary>Gets or sets the date and time the file was added.</summary>
+        /// <value>The date and time the file was added.</value>
+        DateTime IFile.DateAdded {
+            get { return _dateAdded; }
+            set {
+                _dateAdded = value;
+                DateAdded = value.ToString("yyyy-mm-dd hh:ii:ss");
+            }
+        }
+
+        /// <summary>Gets or sets the path to the folder that contains this file</summary>
+        /// <value>The full path to the folder that contains this file with trailing '/' without quotes (" or ')</value>
+        /// <example>\eg{
+        /// 	<list type="bullet">
+        ///         <item><description>''<c>C:/Movies/</c>''</description></item>
+        /// 		<item><description>''<c>smb://MYXTREAMER/Xtreamer_PRO/sda1/Movies/</c>''</description></item>
+        /// 	</list>}
+        /// </example>
+        string IFile.FolderPath {
+            get { return Path.FolderPath; }
+            set { Path.FolderPath = value; }
+        }
+
+        /// <summary>Gets the full path to the file.</summary>
+        /// <value>A full path filename to the fille or <b>null</b> if any of <b>FolderPath</b> or <b>FileName</b> are null</value>
+        string IFile.FullPath {
+            get {
+                string fileName = FileNames.FirstOrDefault();
+                if (fileName != null) {
+                    return System.IO.Path.Combine(Path.FolderPath, fileName);
+                }
+                return null;
+            }
+        }
+
+        /// <summary>Gets or sets the filename.</summary>
+        /// <value>The filename in folder.</value>
+        /// <example>\eg{ ''<c>Wall_E.avi</c>''}</example>
+        string IFile.Name {
+            get { return System.IO.Path.GetFileNameWithoutExtension(FileNames[0]); }
+            set { }
+        }
+
+        /// <summary>Gets the name with extension.</summary>
+        /// <value>The name with extension.</value>
+        string IFile.NameWithExtension {
+            get { return FileNames[0]; }
+        }
+
+        /// <summary>Gets or sets the file size in bytes.</summary>
+        /// <value>The file size in bytes.</value>
+        long? IFile.Size {
+            get { return default(long?); }
+            set { }
+        }
+
+        ///<summary>The File Extension without beginning point</summary>
+        ///<value>The file extension withot begining point</value>
+        ///<example>\eg{ ''<c>mp4</c>''}</example>
+        string IFile.Extension {
+            get { return default(string); }
+            set { }
+        }
+
+        #endregion
 
         /// <summary>Converts a Windows network path to SAMBA path.</summary>
         /// <param name="fn">The filename to convert</param>

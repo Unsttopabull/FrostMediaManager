@@ -5,7 +5,6 @@ using System.Windows;
 using Frost.Common.Models;
 using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;
-using RibbonUI.Properties;
 
 namespace RibbonUI.Windows {
     class SelectLanguageViewModel : INotifyPropertyChanged {

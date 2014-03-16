@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Frost.Model.Xbmc.DB.Tag {
+namespace Frost.Providers.Xbmc.DB.Tag {
 
     /// <summary>Represents a table that links a tag to a Movie/Episode/TvShow ...</summary>
     [Table("taglinks")]

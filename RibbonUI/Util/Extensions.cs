@@ -6,6 +6,7 @@ using System.Reflection;
 namespace RibbonUI.Util {
 
     public static class Extensions {
+
         public static string GetDescription(this Enum enumObj) {
             DescriptionAttribute description = enumObj.GetType()
                                                       .GetField(enumObj.ToString())

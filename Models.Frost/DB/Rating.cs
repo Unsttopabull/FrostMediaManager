@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Frost.Common.Models;
 
-namespace Frost.Models.Frost.DB {
+namespace Frost.Providers.Frost.DB {
 
     /// <summary>Represents a movie's rating from a certain critic.</summary>
     [Table("Ratings")]
@@ -50,6 +50,10 @@ namespace Frost.Models.Frost.DB {
         /// <summary>Gets or sets the movie this rating is for.</summary>
         /// <value>The movie this rating is for.</value>
         public virtual Movie Movie { get; set; }
+
+        bool IMovieEntity.this[string propertyName] {
+            get { return true; }
+        }
     }
 
 }

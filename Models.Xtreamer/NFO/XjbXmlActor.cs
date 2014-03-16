@@ -3,7 +3,7 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using Frost.Common.Models;
 
-namespace Frost.Models.Xtreamer.NFO {
+namespace Frost.Providers.Xtreamer.NFO {
 
     /// <summary>Represents an actor in a movie.</summary>
     [Serializable]

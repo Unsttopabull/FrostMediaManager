@@ -10,6 +10,7 @@
     xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:userControls="clr-namespace:RibbonUI.UserControls"
+    xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
     x:Class="RibbonUI.UserControls.ArtAndPlot"
     mc:Ignorable="d"
     d:DesignHeight="625" d:DesignWidth="1071">
@@ -76,8 +77,8 @@
                 <DropShadowEffect/>
             </Image.Effect>
         </Image>
-        <Image Grid.ColumnSpan="5" Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Source="{Binding FirstFanart.Path, IsAsync=True, UpdateSourceTrigger=PropertyChanged}" Stretch="Fill"/>
-        <fmm:BoxArt Grid.Column="1" Grid.Row="2" CoverImage="{Binding FirstCoverOrPoster.Path, UpdateSourceTrigger=PropertyChanged}" BoxImage="{Binding BoxImage}"/>
+        <Image Grid.ColumnSpan="5" Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Source="{Binding FirstFanart.(models:IArt.Path), IsAsync=True, UpdateSourceTrigger=PropertyChanged}" Stretch="Fill"/>
+        <fmm:BoxArt Grid.Column="1" Grid.Row="2" CoverImage="{Binding FirstCoverOrPoster.(models:IArt.Path), UpdateSourceTrigger=PropertyChanged}" BoxImage="{Binding BoxImage}"/>
         <Border Grid.Row="2" Grid.Column="2" CornerRadius="20" BorderThickness="5,5,0,5">
             <Border.Background>
                 <SolidColorBrush Color="Black" Opacity="0.8" />
@@ -90,7 +91,7 @@
                 <ScrollViewer Grid.Row="0">
                     <ScrollViewer.Resources>
                     </ScrollViewer.Resources>
-                    <TextBlock Text="{Binding FirstPlot.Full, FallbackValue={l:T No plot available}, TargetNullValue={l:T No plot available}}"
+                    <TextBlock Text="{Binding FirstPlot.(models:IPlot.Full), FallbackValue={l:T No plot available}, TargetNullValue={l:T No plot available}}"
                                Foreground="White" Margin="10,10,0,0" TextWrapping="Wrap" FontSize="20" ScrollViewer.CanContentScroll="True" />
                 </ScrollViewer>
                 <ListView Grid.Row="1" Background="Transparent" ItemsSource="{Binding SelectedMovie.Awards, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0,1,0,0" Focusable="False">
@@ -99,13 +100,13 @@
                             <TextBlock Foreground="White">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}{0} {1} for {2}">
-                                        <Binding Path="Organization"/>
-                                        <Binding Path="IsNomination">
+                                        <Binding Path="(models:IAward.Organization)"/>
+                                        <Binding Path="(models:IAward:IsNomination)">
                                             <Binding.Converter>
                                                 <converters:NominationConverter/>
                                             </Binding.Converter>
                                         </Binding>
-                                        <Binding Path="AwardType"/>
+                                        <Binding Path="(models:IAward.AwardType)"/>
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>
@@ -168,14 +169,15 @@
                                 <ColumnDefinition Width="{Binding Columns[0].ActualWidth, ElementName=ActorsList}"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Image Name="ActorImdb" Grid.Column="1" Source="../Images/IMDbNew.png" Margin="10,0,0,0" Tag="{Binding ElementName=ActorsList, Path=SelectedItem.ImdbId}" ToolTip="{Binding ElementName=ActorsList, Path=SelectedItem.ImdbId, FallbackValue=Not Available, TargetNullValue=Not Available}">
+                            <Image Name="ActorImdb" Grid.Column="1" Source="../Images/IMDbNew.png" Margin="10,0,0,0" Tag="{Binding ElementName=ActorsList, Path=SelectedItem.(models:IPerson.ImdbID)}"
+                                   ToolTip="{Binding ElementName=ActorsList, Path=SelectedItem.(models:IPerson.ImdbID), FallbackValue=Not Available, TargetNullValue=Not Available}" >
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="MouseDown">
-                                        <i:InvokeCommandAction Command="{Binding ActorImdbClickedCommand}" CommandParameter="{Binding ElementName=ActorImdb, Path=Tag}"/>
+                                        <i:InvokeCommandAction Command="{Binding ElementName=PlotAndArt, Path=DataContext.ActorImdbClickedCommand}" CommandParameter="{Binding ElementName=ActorImdb, Path=Tag}"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </Image>
-                            <Image Grid.Column="0" MaxWidth="{Binding Columns[0].ActualWidth, ElementName=ActorsList}" Source="{Binding ElementName=ActorsList, Path=SelectedItem.Thumb, IsAsync=True, TargetNullValue={StaticResource Person}, FallbackValue={StaticResource Person}}" Stretch="Uniform">
+                            <Image Grid.Column="0" MaxWidth="{Binding Columns[0].ActualWidth, ElementName=ActorsList}" Source="{Binding ElementName=ActorsList, Path=SelectedItem.(models:IPerson.Thumb), IsAsync=True, TargetNullValue={StaticResource Person}, FallbackValue={StaticResource Person}}" Stretch="Uniform">
                                 <Image.CacheMode>
                                     <BitmapCache/>
                                 </Image.CacheMode>
@@ -184,8 +186,8 @@
                     </DataTemplate>
                 </DataGrid.RowDetailsTemplate>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Name}" Header="{l:T Actor}" IsReadOnly="True"/>
-                    <DataGridTextColumn Binding="{Binding Character, TargetNullValue={l:T Unknown}}" Header="{l:T Character}" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding (models:IPerson.Name)}" Header="{l:T Actor}" IsReadOnly="True"/>
+                    <DataGridTextColumn Binding="{Binding (models:IActor.Character), TargetNullValue={l:T Unknown}}" Header="{l:T Character}" IsReadOnly="True"/>
                 </DataGrid.Columns>
             </DataGrid>
         </fmm:ClippingBorder>

@@ -9,11 +9,6 @@ namespace RibbonUI.Util {
     public static class LightInjectContainer {
         private static readonly ServiceContainer Container = new ServiceContainer();
 
-        static LightInjectContainer() {
-            Container.EnableAnnotatedPropertyInjection();
-            Container.EnableAnnotatedConstructorInjection();
-        }
-
         public static void Dispose() {
             if (Container != null) {
                 Container.Dispose();

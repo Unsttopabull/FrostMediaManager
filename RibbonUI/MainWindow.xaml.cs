@@ -1,5 +1,4 @@
-﻿using GalaSoft.MvvmLight.Ioc;
-using RibbonUI.Util;
+﻿using RibbonUI.Util;
 
 namespace RibbonUI {
 

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using Frost.Common.Models;
 using Frost.Common.Properties;
+using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using GalaSoft.MvvmLight;
 using RibbonUI.Messages;
@@ -118,8 +119,11 @@ namespace RibbonUI.UserControls {
         private void OpenInFolder() {
             if (SelectedMovie != null) {
                 string directory = SelectedMovie.DirectoryPath;
-                if (!string.IsNullOrEmpty(directory)) {
+                if (!string.IsNullOrEmpty(directory) && Directory.Exists(directory)) {
                     Process.Start(directory);
+                }
+                else {
+                    MessageBox.Show(ParentWindow, TranslationManager.T("Folder not accessible"));
                 }
             }
         }

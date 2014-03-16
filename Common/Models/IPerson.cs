@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Frost.Common.Models {
 
     public interface IPerson : IMovieEntity {
@@ -15,13 +13,13 @@ namespace Frost.Common.Models {
         /// <value>The imdb identifier of the person.</value>
         string ImdbID { get; set; }
 
-        /// <summary>Gets or sets movies where this person was a director.</summary>
-        /// <value>The movies where this person was a director.</value>
-        IEnumerable<IMovie> MoviesAsDirector { get; }
+        ///// <summary>Gets or sets movies where this person was a director.</summary>
+        ///// <value>The movies where this person was a director.</value>
+        //IEnumerable<IMovie> MoviesAsDirector { get; }
 
-        /// <summary>Gets or sets movies where this person was a writer.</summary>
-        /// <value>The movies where this person was a writer.</value>
-        IEnumerable<IMovie> MoviesAsWriter { get; }
+        ///// <summary>Gets or sets movies where this person was a writer.</summary>
+        ///// <value>The movies where this person was a writer.</value>
+        //IEnumerable<IMovie> MoviesAsWriter { get; }
     }
 
 }

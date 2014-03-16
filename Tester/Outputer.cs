@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Frost.Common;
-using Frost.Models.Frost.DB;
-using Frost.Models.Frost.DB.Files;
 
 namespace Frost.Tester {
 
