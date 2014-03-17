@@ -11,7 +11,7 @@ namespace RibbonUI.Util.ObservableWrappers {
         public string Name {
             get { return _observedEntity.Name; }
             set {
-                _observedEntity.Name = value;
+                _observedEntity.Name = string.IsNullOrEmpty(value) ? null : value;
                 OnPropertyChanged();
             }
         }
@@ -19,9 +19,12 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <summary>Gets or sets the persons thumbnail image.</summary>
         /// <value>The thumbnail image.</value>
         public string Thumb {
-            get { return _observedEntity.Thumb; }
+            get {
+                string thumb = _observedEntity.Thumb;
+                return !string.IsNullOrEmpty(thumb) ? thumb : null;
+            }
             set {
-                _observedEntity.Thumb = value;
+                _observedEntity.Thumb = string.IsNullOrEmpty(value) ? null : value;
                 OnPropertyChanged();
             }
         }
@@ -31,7 +34,7 @@ namespace RibbonUI.Util.ObservableWrappers {
         public string ImdbID {
             get { return _observedEntity.ImdbID; }
             set {
-                _observedEntity.ImdbID = value;
+                _observedEntity.ImdbID = string.IsNullOrEmpty(value) ? null : value;
                 OnPropertyChanged();
             }
         }
@@ -51,7 +54,7 @@ namespace RibbonUI.Util.ObservableWrappers {
         public string Character {
             get { return _observedEntity.Character; }
             set {
-                _observedEntity.Character = value;
+                _observedEntity.Character = string.IsNullOrEmpty(value) ? null : value;
                 OnPropertyChanged();
             }
         }

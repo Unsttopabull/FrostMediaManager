@@ -89,6 +89,16 @@ namespace Frost.Providers.Xbmc.DB.StreamDetails {
             }
         }
 
+        long? IVideo.Duration {
+            get { return Duration * 1000; }
+            set {
+                if (value.HasValue) {
+                    Duration = value / 1000;
+                }
+                Duration = null;
+            }
+        }
+
         /// <summary>Gets or sets the width of the video.</summary>
         /// <value>The width of the video.</value>
         int? IVideo.Width {

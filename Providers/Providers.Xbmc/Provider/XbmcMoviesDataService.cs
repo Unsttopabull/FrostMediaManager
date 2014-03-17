@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
-using System.Diagnostics;
 using System.Linq;
 using Frost.Common;
 using Frost.Common.Models;
 using Frost.Providers.Xbmc.DB;
-using Frost.Providers.Xbmc.DB.Actor;
-using Frost.Providers.Xbmc.DB.Art;
 
 namespace Frost.Providers.Xbmc.Provider {
     public class XbmcMoviesDataService : IMoviesDataService {
@@ -20,6 +17,7 @@ namespace Frost.Providers.Xbmc.Provider {
         private IEnumerable<IArt> _art;
         private IEnumerable<IPlot> _plots;
         private IEnumerable<IPerson> _people;
+        private IEnumerable<IGenre> _genres;
 
         public XbmcMoviesDataService() {
             _xbmc = new XbmcContainer();
@@ -32,6 +30,11 @@ namespace Frost.Providers.Xbmc.Provider {
                 if (_movies == null) {
                     _xbmc.Movies
                          .Include("Path")
+                         .Include("Art")
+                         .Include("Set")
+                         .Include("Genres")
+                         .Include("Countries")
+                         .Include("Studios")
                          .Load();
                     _movies = _xbmc.Movies.Local;
                 }
@@ -59,7 +62,7 @@ namespace Frost.Providers.Xbmc.Provider {
 
         public IEnumerable<IArt> Art {
             get {
-                if (_art != null) {
+                if (_art == null) {
                     _xbmc.Art.Load();
                     _art = _xbmc.Art.Local;
                 }
@@ -93,7 +96,7 @@ namespace Frost.Providers.Xbmc.Provider {
 
         public IEnumerable<IStudio> Studios {
             get {
-                if (_studios != null) {
+                if (_studios == null) {
                     _xbmc.Studios.Load();
                     _studios = _xbmc.Studios.Local;
                 }
@@ -125,7 +128,7 @@ namespace Frost.Providers.Xbmc.Provider {
 
         public IEnumerable<IPlot> Plots {
             get {
-                if (_plots != null) {
+                if (_plots == null) {
                     _plots = Movies.SelectMany(m => m.Plots);
                 }
                 return _plots;
@@ -144,7 +147,15 @@ namespace Frost.Providers.Xbmc.Provider {
 
         #region Genres
 
-        public IEnumerable<IGenre> Genres { get; private set; }
+        public IEnumerable<IGenre> Genres {
+            get {
+                if (_genres == null) {
+                    _xbmc.Genres.Load();
+                    _genres = _xbmc.Genres.Local;
+                }
+                return _genres;
+            }
+        }
 
         public IGenre AddGenre(IGenre genre) {
             throw new NotImplementedException();
@@ -247,11 +258,11 @@ namespace Frost.Providers.Xbmc.Provider {
         #endregion
 
         public bool HasUnsavedChanges() {
-            throw new NotImplementedException();
+            return false;
         }
 
         public void SaveChanges() {
-            throw new NotImplementedException();
+            
         }
 
         #region IDisposable

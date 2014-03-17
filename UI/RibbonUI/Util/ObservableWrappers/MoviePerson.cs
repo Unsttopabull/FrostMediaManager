@@ -12,7 +12,8 @@ namespace RibbonUI.Util.ObservableWrappers {
         public string Name {
             get { return _observedEntity.Name; }
             set {
-                _observedEntity.Name = value;
+                _observedEntity.Name = string.IsNullOrEmpty(value) ? null : value;
+
                 OnPropertyChanged();
             }
         }
@@ -24,7 +25,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 return _observedEntity.Thumb;
             }
             set {
-                _observedEntity.Thumb = value;
+                _observedEntity.Thumb = string.IsNullOrEmpty(value) ? null : value;
                 OnPropertyChanged();
             }
         }
@@ -34,7 +35,7 @@ namespace RibbonUI.Util.ObservableWrappers {
         public string ImdbID {
             get { return _observedEntity.ImdbID; }
             set {
-                _observedEntity.ImdbID = value;
+                _observedEntity.ImdbID = string.IsNullOrEmpty(value) ? null : value;
                 OnPropertyChanged();
             }
         }

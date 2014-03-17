@@ -53,7 +53,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SecondLanguage\SecondLanguage.csproj">
+    <ProjectReference Include="..\..\Libraries\SecondLanguage\SecondLanguage.csproj">
       <Project>{728b73df-466a-43ed-bc90-1fc4a6ccd959}</Project>
       <Name>SecondLanguage</Name>
     </ProjectReference>

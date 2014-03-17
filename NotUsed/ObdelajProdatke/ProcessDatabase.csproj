@@ -43,7 +43,7 @@
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\EF6\EntityFramework.dll</HintPath>
+      <HintPath>..\..\..\FrostMediaManager\Libraries\EF6\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -61,21 +61,29 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{73F12859-D8B1-49C1-A835-0810CE7BD006}</Project>
+    <ProjectReference Include="..\..\Common\Common.csproj">
+      <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Models.Frost\Models.Frost.csproj">
+    <ProjectReference Include="..\..\Providers\Providers.Frost\Providers.Frost.csproj">
       <Project>{b404da8f-fbf4-4ccc-be01-22c488863ec2}</Project>
-      <Name>Models.Frost</Name>
+      <Name>Providers.Frost</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Models.Xbmc\Models.Xbmc.csproj">
+    <ProjectReference Include="..\..\Providers\Providers.Xbmc\Providers.Xbmc.csproj">
       <Project>{2e311a90-347b-47e1-8aa7-87a276c88f4e}</Project>
-      <Name>Models.Xbmc</Name>
+      <Name>Providers.Xbmc</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Models.Xtreamer\Models.Xtreamer.csproj">
+    <ProjectReference Include="..\..\Providers\Providers.Xtreamer\Providers.Xtreamer.csproj">
       <Project>{8491dccf-354e-4ff6-89d4-88a0bb9cb8af}</Project>
-      <Name>Models.Xtreamer</Name>
+      <Name>Providers.Xtreamer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetworkShares\NetworkShares.csproj">
+      <Project>{a85f5e2b-149a-4fb5-a749-056ae20ab72f}</Project>
+      <Name>NetworkShares</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PHPtoNet\PHPtoNET.csproj">
+      <Project>{4661dd6c-be69-4bcb-a835-53d192de841c}</Project>
+      <Name>PHPtoNET</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

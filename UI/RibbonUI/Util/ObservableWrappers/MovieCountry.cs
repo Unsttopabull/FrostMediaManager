@@ -27,7 +27,13 @@ namespace RibbonUI.Util.ObservableWrappers {
         }
 
         public string Image {
-            get { return GetImageSourceFromPath("Images/Countries/" + ISO3166.Alpha3 + ".png"); }
+            get {
+                if (ISO3166 == null) {
+                    return null;
+                }
+
+                return GetImageSourceFromPath("Images/Countries/" + ISO3166.Alpha3 + ".png");
+            }
         }
     }
 }

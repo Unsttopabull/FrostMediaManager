@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Frost.Common;
-using Frost.Model.Xbmc.DB;
-using Frost.Models.Frost.DB;
+using Frost.Providers.Frost.DB;
+using Frost.Providers.Xbmc.DB;
 
 namespace Frost.ProcessDatabase {
     public class XbmcParser : MediaManager<XbmcMovie> {

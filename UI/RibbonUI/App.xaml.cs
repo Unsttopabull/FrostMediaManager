@@ -26,7 +26,7 @@ namespace RibbonUI {
         public static List<string> Systems { get; private set; }
 
         static App() {
-            SystemType = "XBMC";
+            SystemType = "FMM";
             Systems = new List<string>();
         }
 

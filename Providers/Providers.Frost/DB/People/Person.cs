@@ -25,10 +25,13 @@ namespace Frost.Providers.Frost.DB.People {
         /// <summary>Initializes a new instance of the <see cref="Person"/> class.</summary>
         /// <param name="name">The full name of the actor.</param>
         /// <param name="thumb">The thumbnail image.</param>
-        public Person(string name, string thumb) : this(name) {
+        /// <param name="imdb"></param>
+        public Person(string name, string thumb, string imdb = null) : this(name) {
             if (!string.IsNullOrEmpty(thumb)) {
                 _thumb = thumb;
             }
+
+            ImdbID = imdb;
         }
 
         /// <summary>Initializes a new instance of the <see cref="Person"/> class.</summary>

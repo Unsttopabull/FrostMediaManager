@@ -281,7 +281,9 @@ namespace Frost.Providers.Xbmc.DB {
         /// <value>The filename in folder.</value>
         /// <example>\eg{ ''<c>Wall_E.avi</c>''}</example>
         string IFile.Name {
-            get { return System.IO.Path.GetFileNameWithoutExtension(FileNames[0]); }
+            get {
+                return System.IO.Path.GetFileNameWithoutExtension(FileNames[0]);
+            }
             set { }
         }
 
@@ -317,6 +319,12 @@ namespace Frost.Providers.Xbmc.DB {
                 return "smb://" + fn.Remove(0, 2);
             }
             return fn;
+        }
+
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString() {
+            return ((IFile) this).NameWithExtension;
         }
 
         internal class Configuration : EntityTypeConfiguration<XbmcFile> {

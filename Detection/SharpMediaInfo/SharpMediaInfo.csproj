@@ -113,10 +113,10 @@
     <Compile Include="Options\SSL.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\Libraries\MediaInfo\x64\MediaInfo.dll">
+    <Content Include="..\ThirdParty\MediaInfo\x64\MediaInfo.dll">
       <Link>x64\MediaInfo.dll</Link>
     </Content>
-    <Content Include="..\Libraries\MediaInfo\x86\MediaInfo.dll">
+    <Content Include="..\ThirdParty\MediaInfo\x86\MediaInfo.dll">
       <Link>x86\MediaInfo.dll</Link>
     </Content>
   </ItemGroup>

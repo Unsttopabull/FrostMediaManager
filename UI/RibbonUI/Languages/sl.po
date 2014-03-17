@@ -345,7 +345,7 @@ msgid "Side right channel"
 msgstr "Stranski desni kanal"
 
 msgid "Sort title"
-msgstr "Naslov za urejanje"
+msgstr "Naslov za sortiranje"
 
 msgid "Source"
 msgstr "Vir"

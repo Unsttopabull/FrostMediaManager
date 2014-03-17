@@ -471,11 +471,11 @@ namespace RibbonUI.UserControls {
                 return;
             }
 
-            foreach (IStudio studio in addStudios.StudiosList.SelectedItems) {
-                MovieStudio studio2 = Studios.FirstOrDefault(ms => ms.ObservedEntity == studio);
+            foreach (MovieStudio studio in addStudios.StudiosList.SelectedItems) {
+                MovieStudio studio2 = Studios.FirstOrDefault(ms => ms.ObservedEntity == studio.ObservedEntity);
                 if (studio2 == null) {
-                    Studios.Add(new MovieStudio(studio));
-                    MessengerInstance.Send(new AddStudioMessage(studio));
+                    Studios.Add(studio2);
+                    MessengerInstance.Send(new AddStudioMessage(studio.ObservedEntity));
                 }
             }
         }

@@ -36,9 +36,9 @@
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:IPerson}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="{Binding Thumb, TargetNullValue={StaticResource DefaultPerson}, FallbackValue={StaticResource DefaultPerson}}"
+                        <Image Source="{Binding (models:IPerson.Thumb), TargetNullValue={StaticResource DefaultPerson}, FallbackValue={StaticResource DefaultPerson}}"
                                MaxWidth="100" />
-                        <TextBlock Text="{Binding Name, TargetNullValue=Unknown, FallbackValue=Unknown}"
+                        <TextBlock Text="{Binding (models:IPerson.Name), TargetNullValue=Unknown, FallbackValue=Unknown}"
                                    Margin="5,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
                 </DataTemplate>

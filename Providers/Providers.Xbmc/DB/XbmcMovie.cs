@@ -44,7 +44,7 @@ namespace Frost.Providers.Xbmc.DB {
             Art = new HashSet<XbmcMovieArt>();
 
             _plots = new[] { new XbmcPlot(this) };
-
+            _numChannels = -1;
             _certifications = new[] { new XbmcCertification(this) };
         }
 
@@ -332,6 +332,7 @@ namespace Frost.Providers.Xbmc.DB {
                     case "SortTitle":
                     case "ImdbId":
                     case "FolderPath":
+                    case "OriginalTitle":
                         return true;
                     default:
                         return false;

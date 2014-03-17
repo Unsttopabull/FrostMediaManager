@@ -38,8 +38,8 @@ namespace Frost.Tester {
             //TestPHPDeserialize2();
 
             //TestXjbDbParser();
-            //TestMediaSearcher();
-            TestDataService();
+            TestMediaSearcher();
+            //TestDataService();
             //TestXbmcContext();
 
             //TestFileFeatures();
@@ -78,41 +78,17 @@ namespace Frost.Tester {
         }
 
         private static TimeSpan TestMediaSearcher() {
-            //using (MovieVoContainer mvc = new MovieVoContainer(true, "movieVo.db3")) {
-            //    int count = mvc.Movies.Count();
-            //}
-
             Stopwatch sw = Stopwatch.StartNew();
 
-            IEnumerable<MovieInfo> movies;
-            //if (!System.IO.File.Exists("detectedMovies.js")) {
-                FeatureDetector ms = new FeatureDetector(@"E:\Torrenti\FILMI", @"F:\Torrenti\FILMI");
-                ms.PropertyChanged += WriteCount;
+            FeatureDetector ms = new FeatureDetector(@"E:\Torrenti\FILMI", @"F:\Torrenti\FILMI");
+            ms.PropertyChanged += WriteCount;
 
-                movies = ms.Search();
-                ms.PropertyChanged -= WriteCount;
+            IEnumerable<MovieInfo> movies = ms.Search();
+            ms.PropertyChanged -= WriteCount;
 
-                sw.Stop();
+            sw.Stop();
 
-                Console.WriteLine("Detection took: " + sw.Elapsed);
-
-                //JsonSerializer jser = new JsonSerializer();
-
-                //using (JsonWriter jw = new JsonTextWriter(System.IO.File.CreateText("detectedMovies.js"))) {
-                //    jser.Serialize(jw, movies);
-                //}
-            //}
-            //else {
-            //    JsonSerializer jser = new JsonSerializer();
-
-            //    using (JsonReader jw = new JsonTextReader(System.IO.File.OpenText("detectedMovies.js"))) {
-            //        movies = jser.Deserialize<IEnumerable<MovieInfo>>(jw);
-            //    }
-            //}
-
-            IEnumerable<MovieInfo> videoInfos = movies.Where(m => m.FileInfos.All(f => f.Videos.Count == 0 && !f.Extension.Equals("iso", StringComparison.OrdinalIgnoreCase)));
-            IEnumerable<MovieInfo> subtitlesInfos = movies.Where(m => m.FileInfos.All(f => f.Subtitles.Count == 0));
-            IEnumerable<MovieInfo> audioInfos = movies.Where(m => m.FileInfos.All(f => f.Audios.Count == 0 && !f.Extension.Equals("iso", StringComparison.OrdinalIgnoreCase)));
+            Console.WriteLine("Detection took: " + sw.Elapsed);
 
             using (MovieSaver sv = new MovieSaver(movies)) {
                 sv.Save();

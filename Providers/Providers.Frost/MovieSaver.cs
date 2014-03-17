@@ -180,7 +180,7 @@ namespace Frost.Providers.Frost {
                 return p;
             }
 
-            p = new Person(info.Name, info.Thumb);
+            p = new Person(info.Name, info.Thumb, info.ImdbID);
             _people.Add(p.Name, p);
 
             Debug.WriteLine("Created new person");

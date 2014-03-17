@@ -33,7 +33,21 @@ namespace RibbonUI.UserControls {
 
                 OnPropertyChanged("DurationFormatted");
                 OnPropertyChanged("FirstStudioName");
+                OnPropertyChanged("FirstStudioLogo");
+                OnPropertyChanged("OriginalTitle");
                 OnPropertyChanged();
+            }
+        }
+
+        public string OriginalTitle {
+            get {
+                if (SelectedMovie != null &&
+                    SelectedMovie.OriginalTitle != null &&
+                    !SelectedMovie.OriginalTitle.Equals(SelectedMovie.Title))
+                {
+                    return SelectedMovie.OriginalTitle;
+                }
+                return null;
             }
         }
 
@@ -53,7 +67,7 @@ namespace RibbonUI.UserControls {
 
         public string FirstStudioName {
             get {
-                if (SelectedMovie == null) {
+                if (SelectedMovie == null || SelectedMovie.Studios == null) {
                     return null;
                 }
 
@@ -78,7 +92,8 @@ namespace RibbonUI.UserControls {
                     return null;
                 }
 
-                return Path.Combine(Directory.GetCurrentDirectory(), "Images/StudiosE/" + FirstStudioName + ".png");
+                var studio = Path.Combine(Directory.GetCurrentDirectory(), "Images/StudiosE/" + FirstStudioName + ".png");
+                return studio;
             }
         }
 

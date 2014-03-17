@@ -19,6 +19,8 @@
     </UserControl.DataContext>
     <Grid>
         <Grid.Resources>
+            <converters:EmtpyOrNullToFalseConverter x:Key="EmtpyOrNullToFalseConverter"/>
+            <BitmapImage x:Key="DefaultCover" UriSource="../Images/default/cover.png"/>
             <BitmapImage x:Key="DefaultFanart"  UriSource="../Images/default/fanart.jpg" />
             <BitmapImage x:Key="DefaultMpaa"    UriSource="../Images/default/mpaaur.png"/>
             <BitmapImage x:Key="OscarWon"       UriSource="../Images/awards/oscar-icon.png"/>
@@ -77,8 +79,8 @@
                 <DropShadowEffect/>
             </Image.Effect>
         </Image>
-        <Image Grid.ColumnSpan="5" Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Source="{Binding FirstFanart.(models:IArt.Path), IsAsync=True, UpdateSourceTrigger=PropertyChanged}" Stretch="Fill"/>
-        <fmm:BoxArt Grid.Column="1" Grid.Row="2" CoverImage="{Binding FirstCoverOrPoster.(models:IArt.Path), UpdateSourceTrigger=PropertyChanged}" BoxImage="{Binding BoxImage}"/>
+        <Image Grid.ColumnSpan="5" Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Source="{Binding FirstFanart, IsAsync=True, UpdateSourceTrigger=PropertyChanged, TargetNullValue={StaticResource DefaultFanart}, FallbackValue={StaticResource DefaultFanart}}" Stretch="Fill"/>
+        <fmm:BoxArt Grid.Column="1" Grid.Row="2" CoverImage="{Binding FirstCoverOrPoster, UpdateSourceTrigger=PropertyChanged, TargetNullValue={StaticResource DefaultCover}, FallbackValue={StaticResource DefaultCover}}" BoxImage="{Binding BoxImage}"/>
         <Border Grid.Row="2" Grid.Column="2" CornerRadius="20" BorderThickness="5,5,0,5">
             <Border.Background>
                 <SolidColorBrush Color="Black" Opacity="0.8" />
@@ -169,15 +171,13 @@
                                 <ColumnDefinition Width="{Binding Columns[0].ActualWidth, ElementName=ActorsList}"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Image Name="ActorImdb" Grid.Column="1" Source="../Images/IMDbNew.png" Margin="10,0,0,0" Tag="{Binding ElementName=ActorsList, Path=SelectedItem.(models:IPerson.ImdbID)}"
-                                   ToolTip="{Binding ElementName=ActorsList, Path=SelectedItem.(models:IPerson.ImdbID), FallbackValue=Not Available, TargetNullValue=Not Available}" >
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseDown">
-                                        <i:InvokeCommandAction Command="{Binding ElementName=PlotAndArt, Path=DataContext.ActorImdbClickedCommand}" CommandParameter="{Binding ElementName=ActorImdb, Path=Tag}"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                            </Image>
-                            <Image Grid.Column="0" MaxWidth="{Binding Columns[0].ActualWidth, ElementName=ActorsList}" Source="{Binding ElementName=ActorsList, Path=SelectedItem.(models:IPerson.Thumb), IsAsync=True, TargetNullValue={StaticResource Person}, FallbackValue={StaticResource Person}}" Stretch="Uniform">
+                            <fmm:ImageButton Name="ActorImdb" Grid.Column="1" EnabledSource="../Images/IMDbNew.png" DisabledSource="../Images/IMDbNew_disabled.png"
+                                             Margin="10,0,0,0" Tag="{Binding ElementName=ActorsList, Path=SelectedItem.(models:IPerson.ImdbID)}" IsEnabled="{Binding ElementName=ActorsList, Path=SelectedItem.(models:IPerson.ImdbID)}"
+                                             ToolTip="{Binding ElementName=ActorsList, Path=SelectedItem.(models:IPerson.ImdbID), FallbackValue=Not Available, TargetNullValue=Not Available}"
+                                             Command="{Binding ElementName=PlotAndArt, Path=DataContext.ActorImdbClickedCommand}" CommandParameter="{Binding ElementName=ActorImdb, Path=Tag}"/>
+
+                            <Image Grid.Column="0" MaxWidth="{Binding Columns[0].ActualWidth, ElementName=ActorsList}" Stretch="Uniform"
+                                   Source="{Binding ElementName=ActorsList, Path=SelectedItem.(models:IPerson.Thumb), IsAsync=True, TargetNullValue={StaticResource Person}, FallbackValue={StaticResource Person}}">
                                 <Image.CacheMode>
                                     <BitmapCache/>
                                 </Image.CacheMode>

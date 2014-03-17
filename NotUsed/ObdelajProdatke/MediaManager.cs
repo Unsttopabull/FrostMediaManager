@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Frost.Common;
-using Frost.Models.Frost.DB;
+using Frost.Providers.Frost.DB;
 
 namespace Frost.ProcessDatabase {
     public abstract class MediaManager<T> where T : class {

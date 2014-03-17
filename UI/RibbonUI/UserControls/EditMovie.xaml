@@ -240,7 +240,7 @@
                     <Label Grid.Row="0" Grid.Column="2" Content="{l:T Tagline, Postfix=:}"/>
                     <TextBox x:Name="MoviePlotTagline" Height="{Binding ElementName=MoviePlotCombo, Path=ActualHeight}"
                              Grid.Column="2" Grid.Row="1"
-                             Text="{Binding ElementName=MoviePlotCombo, Path=SelectedItem.(models:IPlot.Tagline), UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding ElementName=MoviePlotCombo, Path=SelectedItem.Tagline, UpdateSourceTrigger=PropertyChanged}"
                              IsEnabled="{Binding ElementName=MoviePlotCombo, Path=HasItems}" />
 
                     <Grid x:Name="PlotSelectGrid" x:FieldModifier="private" Grid.Column="0" Grid.Row="0"
@@ -293,12 +293,12 @@
 
                     <Label Grid.Column="0" Grid.Row="2" Content="{l:T Plot summary, Postfix=:}"/>
                     <TextBox Grid.Column="0" Grid.Row="3" x:Name="MoviePlotSummary"
-                             Text="{Binding ElementName=MoviePlotCombo, Path=SelectedItem.(models:IPlot.Summary), UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding ElementName=MoviePlotCombo, Path=SelectedItem.Summary, UpdateSourceTrigger=PropertyChanged}"
                              IsEnabled="{Binding ElementName=MoviePlotCombo, Path=HasItems}" TextWrapping="Wrap"
                              MinHeight="150" />
                     <Label Grid.Row="2" Grid.Column="2" Content="{l:T Plot full, Postfix=:}"/>
                     <TextBox Grid.Row="3" Grid.Column="2" x:Name="MoviePlotFull"
-                             Text="{Binding ElementName=MoviePlotCombo, Path=SelectedItem.(models:IPlot.Full)}"
+                             Text="{Binding ElementName=MoviePlotCombo, Path=SelectedItem.Full}"
                              IsEnabled="{Binding ElementName=MoviePlotCombo, Path=HasItems}" TextWrapping="Wrap"
                              MinHeight="150" />
                 </Grid>
@@ -361,7 +361,7 @@
                                              Command="{Binding EditGenreCommand}" CommandParameter="{Binding SelectedItem, ElementName=MovieGenres}"/>
                         </DockPanel>
 
-                        <ListBox Grid.Row="1" x:Name="MovieGenres" MinHeight="20" DataContext="{Binding ElementName=MovieEdit, Path=DataContext.Genres}" ItemsSource="{Binding}">
+                        <ListBox Grid.Row="1" x:Name="MovieGenres" MinHeight="20" DataContext="{Binding ElementName=MovieEdit, Path=DataContext.Genres}" ItemsSource="{Binding}" DisplayMemberPath="(models:IGenre.Name)">
                             <!--<ListBox.ItemTemplate>
                                 <DataTemplate DataType="models:IGenre">
                                     <StackPanel Orientation="Horizontal">

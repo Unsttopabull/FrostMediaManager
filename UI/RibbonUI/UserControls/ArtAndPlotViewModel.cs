@@ -4,10 +4,14 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Frost.Common;
 using Frost.Common.Models;
 using Frost.XamlControls.Commands;
+using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using RibbonUI.Annotations;
 using RibbonUI.Util.ObservableWrappers;
 
@@ -136,8 +140,6 @@ namespace RibbonUI.UserControls {
 
                 if (SelectedMovie != null && SelectedMovie.Certifications != null) {
                     try {
-                        ICertification certification = SelectedMovie.Certifications.FirstOrDefault();
-
                         mpaa = SelectedMovie.Certifications.FirstOrDefault(c => c.Country.ISO3166.Alpha3.Equals("usa", StringComparison.OrdinalIgnoreCase));
                     }
                     catch (Exception e) {
@@ -146,8 +148,8 @@ namespace RibbonUI.UserControls {
                 }
 
                 return mpaa != null
-                    ? mpaa.Rating
-                    : null;
+                           ? mpaa.Rating
+                           : null;
             }
         }
 
@@ -193,13 +195,13 @@ namespace RibbonUI.UserControls {
                 }
 
                 if (SelectedMovie.Art.Any(a => a.Type == ArtType.Fanart)) {
-                    IArt v = SelectedMovie.Art.FirstOrDefault(a => a.Type == ArtType.Fanart);
-                    if (v != null && File.Exists(v.PreviewOrPath)) {
-                        return v.PreviewOrPath;
+                    IArt v = SelectedMovie.Art.FirstOrDefault(a => a.Type == ArtType.Fanart && !string.IsNullOrEmpty(a.PreviewOrPath));
+                    if (v != null) {
+                        return CheckIfValid(v);
                     }
                 }
 
-                return  null;
+                return null;
             }
         }
 
@@ -211,9 +213,9 @@ namespace RibbonUI.UserControls {
 
                 IArt art;
                 if (SelectedMovie.Art.Any(a => a.Type == ArtType.Cover)) {
-                    art = SelectedMovie.Art.FirstOrDefault(a => a.Type == ArtType.Cover);
-                    if (art != null && File.Exists(art.PreviewOrPath)) {
-                        return art.PreviewOrPath;
+                    art = SelectedMovie.Art.FirstOrDefault(a => a.Type == ArtType.Cover && !string.IsNullOrEmpty(a.PreviewOrPath));
+                    if (art != null) {
+                        return CheckIfValid(art);
                     }
                 }
 
@@ -222,8 +224,8 @@ namespace RibbonUI.UserControls {
                 }
 
                 art = SelectedMovie.Art.FirstOrDefault(a => a.Type == ArtType.Poster);
-                if (art != null && File.Exists(art.PreviewOrPath)) {
-                    return art.PreviewOrPath;
+                if (art != null) {
+                    return CheckIfValid(art);
                 }
                 return null;
             }
@@ -260,6 +262,20 @@ namespace RibbonUI.UserControls {
         private void GoToTrailer(string trailer) {
             if (!string.IsNullOrEmpty(trailer)) {
                 Process.Start(trailer);
+            }
+        }
+
+        private static string CheckIfValid(IArt art) {
+            string path = art.PreviewOrPath;
+            if (Uri.IsWellFormedUriString(path, UriKind.RelativeOrAbsolute)) {
+                return art.PreviewOrPath;
+            }
+
+            if (!File.Exists(path)) {
+                return null;
+            }
+            else {
+                return art.PreviewOrPath;
             }
         }
 

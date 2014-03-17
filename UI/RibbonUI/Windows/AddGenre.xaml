@@ -3,9 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:RibbonUI.Windows"
         xmlns:l="http://www.frostmediamanager.com/xaml/translation"
+        xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"        
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:in="http://schemas.microsoft.com/expression/2010/interactions"
-        Title="{l:T Add new genres}" Height="340" Width="390" Name="AddGenreWindow">
+        Title="{l:T Add new genres}" Height="382" Width="390" Name="AddGenreWindow">
     <Window.DataContext>
         <vm:AddGenreViewModel />
     </Window.DataContext>
@@ -18,7 +19,7 @@
         </Grid.RowDefinitions>
         <TextBlock Grid.Row="0" Text="{l:T Select genres or add a new one, Postfix=:}" Margin="0,0,0,5" />
 
-        <ListBox Grid.Row="1" ItemsSource="{Binding Genres}" SelectionMode="Extended" x:Name="GenreList"/>
+        <ListBox Grid.Row="1" ItemsSource="{Binding Genres}" SelectionMode="Extended" x:Name="GenreList" DisplayMemberPath="(models:IGenre.Name)"/>
         <StackPanel Grid.Row="2" Margin="0,0,0,5">
             <Label Content="{l:T New genre name, Postfix=:}" Margin="-5,0,0,0" />
             <TextBox Text="{Binding NewGenreName, UpdateSourceTrigger=PropertyChanged}" x:Name="NewGenre">

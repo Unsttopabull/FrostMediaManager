@@ -6,7 +6,7 @@ namespace Frost.XamlControls {
     public class ImageButton : ButtonBase {
         public static readonly DependencyProperty EnabledSourceProperty = DependencyProperty.Register("EnabledSource", typeof(ImageSource), typeof(ImageButton), new PropertyMetadata(default(ImageSource)));
         public static readonly DependencyProperty DisabledSourceProperty = DependencyProperty.Register("DisabledSource", typeof(ImageSource), typeof(ImageButton), new PropertyMetadata(default(ImageSource)));
-        public static readonly DependencyProperty ImageMaxHeightProperty = DependencyProperty.Register("ImageMaxHeight", typeof(double), typeof(ImageButton), new PropertyMetadata(default(double)));
+        public static readonly DependencyProperty ImageMaxHeightProperty = DependencyProperty.Register("ImageMaxHeight", typeof(double), typeof(ImageButton), new PropertyMetadata(double.PositiveInfinity));
 
         static ImageButton() {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(ImageButton), new FrameworkPropertyMetadata(typeof(ImageButton)));

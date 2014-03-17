@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Frost.Common;
-using Frost.Models.Frost.DB;
-using Frost.Models.Xtreamer.DB;
 using Frost.PHPtoNET;
-
-using CoretisMovie = Frost.Models.Xtreamer.PHP.Coretis_VO_Movie;
+using Frost.Providers.Frost.DB;
+using Frost.Providers.Xtreamer.DB;
+using CoretisMovie = Frost.Providers.Xtreamer.PHP.Coretis_VO_Movie;
 
 namespace Frost.ProcessDatabase {
     public class XjbDbParser : MediaManager<CoretisMovie> {
@@ -27,7 +26,10 @@ namespace Frost.ProcessDatabase {
         }
 
         public override IEnumerable<Movie> Movies {
-            get { return ObdelaniFilmi.ConvertAll(cm => (Movie) cm); }
+            get {
+                //return ObdelaniFilmi.ConvertAll(cm => (Movie) cm);
+                return null;
+            }
         }
 
         protected override void Process(string dbLoc) {

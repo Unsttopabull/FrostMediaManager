@@ -84,7 +84,10 @@ namespace Frost.Providers.Xbmc.DB.Actor {
         /// <summary>Gets or sets the persons thumbnail image.</summary>
         /// <value>The thumbnail image.</value>
         string IPerson.Thumb {
-            get { return ThumbURL; }
+            get {
+                string thumb = ThumbURL;
+                return string.IsNullOrEmpty(thumb) ? null : ThumbURL;
+            }
             set { ThumbURL = value; }
         }
 

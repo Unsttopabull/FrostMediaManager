@@ -49,7 +49,7 @@
                     </TextBlock.Style>
                 </TextBlock>
                 <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding SelectedMovie.ReleaseYear, StringFormat=({0}), TargetNullValue=(?), FallbackValue=(?)}"/>
-                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding SelectedMovie.OriginalTitle, StringFormat=aka {0}, TargetNullValue={}, FallbackValue={}}"/>
+                <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding OriginalTitle, StringFormat=aka {0}, TargetNullValue={}, FallbackValue={}}"/>
             </StackPanel>
             <TextBlock Grid.Row="1" FontSize="14" Text="{Binding FirstPlot.(models:IPlot.Tagline), TargetNullValue={l:T No tagline}, FallbackValue={l:T No tagline}}"/>
             <StackPanel Grid.Row="3" Orientation="Horizontal">

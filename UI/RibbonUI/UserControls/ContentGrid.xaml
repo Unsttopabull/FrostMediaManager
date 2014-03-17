@@ -94,7 +94,7 @@
                   CanUserAddRows="False" ItemsSource="{Binding Movies}" CanUserResizeRows="False"
                   AlternatingRowBackground="{StaticResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}"
                   GridLinesVisibility="None" RowHeight="20" CanUserResizeColumns="False" SelectionMode="Single"
-                  SnapsToDevicePixels="True" CanUserReorderColumns="False" SelectedIndex="0">
+                  SnapsToDevicePixels="True" CanUserReorderColumns="False" SelectedIndex="0" VirtualizingStackPanel.VirtualizationMode="Recycling">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="{l:T Title}" IsReadOnly="True" CanUserReorder="False" Binding="{Binding Title}" />
                 <DataGridTextColumn Header="{l:T Release year}" IsReadOnly="True"

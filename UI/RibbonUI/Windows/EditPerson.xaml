@@ -40,13 +40,13 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Margin="-5,0,0,0" Content="{l:T Name, Postfix=:}"/>
-            <TextBox x:Name="NameBox" x:FieldModifier="private" Grid.Row="1" Text="{Binding SelectedPerson.Name, Converter={StaticResource EmptyStringToNullConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox x:Name="NameBox" x:FieldModifier="private" Grid.Row="1" Text="{Binding SelectedPerson.Name, UpdateSourceTrigger=PropertyChanged}"/>
 
             <Label Grid.Row="2" Margin="-5,0,0,0" Content="{l:T ImdbID, Postfix=:}"/>
-            <TextBox Grid.Row="3" Text="{Binding SelectedPerson.ImdbID, Converter={StaticResource EmptyStringToNullConverter}}"/>
+            <TextBox Grid.Row="3" Text="{Binding SelectedPerson.ImdbID}"/>
 
             <Label Grid.Row="4" Margin="-5,0,0,0" Content="{l:T Thumb, Postfix=:}"/>
-            <TextBox Grid.Row="5" Text="{Binding ThumbnailPath, Converter={StaticResource EmptyStringToNullConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Row="5" Text="{Binding ThumbnailPath, UpdateSourceTrigger=PropertyChanged}"/>
             <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="5" Margin="0,0,5,0" ToolTip="Open file search dialog">
                 <Button Height="16" Style="{StaticResource TransparentBorderlessButton}" Command="{Binding ThumbnailSearchCommand}">
                     <Image Source="../Images/folder.ico"/>
