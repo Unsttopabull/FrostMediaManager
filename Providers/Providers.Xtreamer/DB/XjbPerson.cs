@@ -1,13 +1,13 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Frost.Common.Models;
 
 namespace Frost.Providers.Xtreamer.DB {
 
     /// <summary>Represents a preson that participated in a movie.</summary>
     [Table("persons")]
-    public class XjbPerson : IEquatable<XjbPerson> {
+    public class XjbPerson : IPerson {
 
         public XjbPerson() {
             Movies = new HashSet<XjbMoviePerson>();
@@ -34,23 +34,30 @@ namespace Frost.Providers.Xtreamer.DB {
         /// <value>The link to the movies that this person worked on</value>
         public virtual HashSet<XjbMoviePerson> Movies { get; set; }
 
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(XjbPerson other) {
-            if (other == null) {
-                return false;
+        bool IMovieEntity.this[string propertyName] {
+            get {
+                switch (propertyName) {
+                    case "Id":
+                    case "Name":
+                        return true;
+                    default:
+                        return false;
+                }
             }
+        }
 
-            if (ReferenceEquals(this, other)) {
-                return true;
-            }
+        /// <summary>Gets or sets the Persons imdb identifier.</summary>
+        /// <value>The imdb identifier of the person.</value>
+        string IPerson.ImdbID {
+            get { return null; }
+            set { }
+        }
 
-            if (Id != 0 && other.Id != 0) {
-                return Id == other.Id;
-            }
-
-            return Name == other.Name;
+        /// <summary>Gets or sets the persons thumbnail image.</summary>
+        /// <value>The thumbnail image.</value>
+        string IPerson.Thumb {
+            get { return null; }
+            set { }
         }
     }
 

@@ -93,10 +93,12 @@
     <Compile Include="DB\XjbMoviePerson.cs" />
     <Compile Include="DB\XjbOption.cs" />
     <Compile Include="DB\XjbPerson.cs" />
-    <Compile Include="PHP\Coretis_VO_Genre.cs" />
-    <Compile Include="PHP\Coretis_VO_Movie.cs" />
-    <Compile Include="PHP\Coretis_VO_Person.cs" />
-    <Compile Include="PHP\Coretis_VO_Picture.cs" />
+    <Compile Include="PHP\XjbPhpGenre.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PHP\XjbPhpMovie.cs" />
+    <Compile Include="PHP\XjbPhpPerson.cs" />
+    <Compile Include="PHP\XjbPhpPicture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NFO\XjbXmlActor.cs" />
     <Compile Include="NFO\XjbXmlMovie.cs" />
@@ -105,8 +107,27 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Provider\FindDb.cs" />
     <Compile Include="Provider\XtreamerCompositionRoot.cs" />
     <Compile Include="Provider\XjbMoviesDataService.cs" />
+    <Compile Include="Proxies\XtActor.cs" />
+    <Compile Include="Proxies\XtFanart.cs" />
+    <Compile Include="Proxies\XtAudio.cs" />
+    <Compile Include="Proxies\XtCertification.cs" />
+    <Compile Include="Proxies\XtCountry.cs" />
+    <Compile Include="Proxies\XtCover.cs" />
+    <Compile Include="Proxies\XtFile.cs" />
+    <Compile Include="Proxies\XtGenre.cs" />
+    <Compile Include="Proxies\XtLanguage.cs" />
+    <Compile Include="Proxies\XtMovie.cs" />
+    <Compile Include="Proxies\XtPerson.cs" />
+    <Compile Include="Proxies\XtPlot.cs" />
+    <Compile Include="Proxies\XtRating.cs" />
+    <Compile Include="Proxies\XtSpecial.cs" />
+    <Compile Include="Proxies\XtStudio.cs" />
+    <Compile Include="Proxies\XtSubtitle.cs" />
+    <Compile Include="Proxies\XtSubtitleFile.cs" />
+    <Compile Include="Proxies\XtVideo.cs" />
     <Compile Include="SQLiteInitializer.cs" />
     <Compile Include="XbmcXmlResumeInfo.cs" />
     <Compile Include="XjbCertification.cs" />
@@ -129,8 +150,19 @@
       <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\PHPtoNet\PHPtoNET.csproj">
+      <Project>{4661DD6C-BE69-4BCB-A835-53D192DE841C}</Project>
+      <Name>PHPtoNET</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NotUsed\NetworkShares\NetworkShares.csproj">
+      <Project>{A85F5E2B-149A-4FB5-A749-056AE20AB72F}</Project>
+      <Name>NetworkShares</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetPath)" "E:\Workspace\Ostalo\Repos\Git\FrostMediaManager2\UI\RibbonUI\bin\Debug\plugins" /Y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. 
   <Target Name="BeforeBuild">

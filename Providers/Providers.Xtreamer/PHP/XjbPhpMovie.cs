@@ -1,59 +1,74 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using Frost.PHPtoNET.Attributes;
 
 namespace Frost.Providers.Xtreamer.PHP {
 
-    public class Coretis_VO_Movie {
+    [PHPName("Coretis_VO_Movie")]
+    public class XjbPhpMovie {
 
         /// <example>\eg{ <c>DOKU MANGA XXX MOVIE SERIE -> (S01E01 S01 staffel1 staffel.12 season folge1 folge.12 complete)</c>}</example>
-        public string art;
+        [PHPName("art")]
+        public string ArtType;
 
         /// <summary>The episode in the series</summary>
         /// <example>\eg{ ''<c>S01E01 E01</c>''}</example>
-        public string episode;
+        [PHPName("episode")]
+        public string Episode;
 
         ///<summary>The id for this row in DB</summary>
-        public long id;
+        [PHPName("id")]
+        public long Id;
 
         /// <summary>Languages available</summary>
         /// <example>\eg{ <c>GERMAN/DE</c> <c>ENGLISH/EN</c>}</example>
-        public string[] languageArr;
+        [PHPName("languageArr")]
+        public string[] AvailableLanguage;
 
         /// <summary>Defines the unix timestamp of last scraper run on this object</summary>
         /// <remarks>array( 'Scraper_Name' => 'unixtimestamp')</remarks>
         /// <example>\eg{ <code>array ('Coretis_Scraper_Filename' => '946707734')</code>}</example>
-        public Dictionary<string, long> scraperLastRun;
+        [PHPName("scraperLastRun")]
+        public Dictionary<string, long> ScraperLastRunTimestamp;
 
         /// <summary>Language and type of the subtitles</summary>
         /// <remarks>Language or Keyword ''<c>SUBBED</c>'' if language is the text-language with undefined audio language</remarks>
-        /// <example>\eg{ ''<c>GERMAN SUBBED</c>''}</example>
-        public string subtitle;
+        /// <example>\eg{ ''<c>GERMAN, SUBBED</c>''}</example>
+        [PHPName("subtitle")]
+        public string SubtitleLanguage;
 
         #region Type information
 
         /// <summary>The source of the audio</summary>
         /// <example>\eg{ <c>TS, TC, TELESYNC, CAM, HDRIP, DVDRIP, BDRIP, DTV, HD2DVD, HDDVDRIP, HDTVRIP, VHS, SCREENER, RECODE</c>}</example>
-        public string audioSource;
+        [PHPName("audioSource")]
+        public string AudioSource;
 
         ///<summary>The type of the audio</summary>
-        ///<example>\eg{ <c>AC3 DTS</c>}</example>
-        public string audioType;
+        ///<example>\eg{ <c>AC3, DTS</c>}</example>
+        [PHPName("audioType")]
+        public string AudioType;
 
         ///<summary>Special addithions or types</summary>
         ///<example>\eg{ <c>INTERNAL, DUBBED, LIMITED, PROPER, REPACK, RERIP, SUBBED</c>}</example>
-        public string specials;
+        [PHPName("specials")]
+        public string Specials;
 
         /// <summary>Resolution and format of the video</summary>
         /// <example>\eg{ <c>720p, 1080p, 720i, 1080i, PAL, HDTV, INTERLACED, LETTERBOX</c>}</example>
-        public string videoFormat;
+        [PHPName("videoFormat")]
+        public string VideoResolution;
 
         ///<summary>With what this video was made from</summary>
         /// <example>\eg{TS TC TELESYNC CAM HDRIP DVDRIP BDRIP DTV HD2DVD HDDVDRIP HDTVRIP VHS SCREENER RECODE}</example>
-        public string videoSource;
+        [PHPName("videoSource")]
+        public string VideoSource;
 
         /// <summary>The type of the video</summary>
         /// <example>\eg{ <c>XVID, DVD5, DVD9, DVDR, BLUERAY, BD, HD2DVD, X264</c>}</example>
-        public string videoType;
+        [PHPName("videoType")]
+        public string VideoType;
 
         #endregion
 
@@ -61,54 +76,68 @@ namespace Frost.Providers.Xtreamer.PHP {
 
         /// <summary>The audio channels setting.</summary>
         /// <example>\eg{ <c>Stereo, 2, 5.1, 6</c>}</example>
-        public string achannels;
+        [PHPName("achannels")]
+        public string AudioChannels;
 
         /// <summary>The codec of the audio is encoded in.</summary>
         /// <example>\eg{ <c>MP3, AC3, FLAC</c>}</example>
-        public string acodec;
+        [PHPName("acodec")]
+        public string AudioCodec;
 
         /// <summary>Aspect; ratio between width and height (width / height)</summary>
         /// <example>\eg{ <c>1.333</c>}</example>
-        public double? aspect;
+        [PHPName("aspect")]
+        public double? Aspect;
 
         /// <summary>frame count</summary>
-        public int? fps;
+        [PHPName("fps")]
+        public int? FPS;
 
         /// <summary>The height of the video in pixel.</summary>
-        public int? height;
+        [PHPName("height")]
+        public int? Height;
 
         /// <summary>The length in seconds</summary>
-        public double? length;
+        [PHPName("length")]
+        public double? Runtime;
 
         /// <summary>Gets or sets the codec of the video is encoded in.</summary>
         /// <value>The codec of the video is encoded in.</value>
         /// <example>\eg{ <c>WMV3 DIVX XVID H264 VP6 AVC</c>}</example>
-        public string vcodec;
+        [PHPName("vcodec")]
+        public string VideoCodec;
 
         /// <summary>The width of the video in pixel.</summary>
-        public int? width; // 
+        [PHPName("width")]
+        public int? Width; // 
 
         #endregion
 
         #region info-file-paths:
 
         ///<example>\eg{ ''<c>/movies/Kill Bill/folder.jpg</c>''}</example>
-        public string pathCover;
+        [PHPName("pathCover")]
+        public string CoverPath;
 
         /// <example>\eg{ <code>array ( '/movies/Kill Bill/Kill Bill-fanart', '...' )</code>}</example>
-        public string[] pathFanartArr;
+        [PHPName("pathFanartArr")]
+        public string[] Fanart;
 
         /// <example>\eg{''<c>/movies/Kill Bill/Kill Bill.xml</c>''}</example>
-        public string pathInfoXml;
+        [PHPName("pathInfoXml")]
+        public string NfoPath;
 
         /// <example>\eg{ <code>array ( '/movies/Kill Bill/Kill Bill-screen.jpg', '...' )</code>}</example>
-        public string[] pathScreenArr;
+        [PHPName("pathScreenArr")]
+        public string[] Screens;
 
         /// <example>\eg{/Kill Bill/Kill Bill_xjb_sheet.jpg || /Kill Bill/Kill Bill_sheet.jpg}</example>
-        public string pathSheet;
+        [PHPName("pathSheet")]
+        public string SheetPath;
 
         /// <example>\eg{ <code>array ( 'de' => '/movies/Kill Bill/Kill Bill.srt')</code>}</example>
-        public string[] pathSubtitlesArr;
+        [PHPName("pathSubtitlesArr")]
+        public string[] Subtitles;
 
         #endregion
 
@@ -118,24 +147,29 @@ namespace Frost.Providers.Xtreamer.PHP {
 
         /// <summary>The imdb id</summary>
         /// <example>\eg{''<c>tt0266697</c>'' is in IMDB http://www.imdb.com/title/tt0266697/ }</example>
-        public string imdbId;
+        [PHPName("imdbId")]
+        public string ImdbId;
 
         /// <summary>The imdb rating</summary>
         /// <remarks>10-100</remarks>
-        public double? imdbRating;
+        [PHPName("imdbRating")]
+        public double? ImdbRating;
 
         ///<summary>The movie id at a online sources</summary>
         ///<example>\eg{ <code>array ( 'imdb' => 'tt0266697', 'tmbd => '70703', 'allocine' => '60502')</code>}</example>
-        public Hashtable movieOnlineIdArr;
+        [PHPName("movieOnlineIdArr")]
+        public Hashtable OnlineDatabaseIds;
 
         // http://www.imdb.com/title/tt0266697/ http://www.themoviedb.org/movie/70703
 
         ///<summary>The ratings at online sources</summary>
         ///<example>\eg{ <code>array ( 'imdb' => '10', 'tmbd => '50', 'allocine' => '100')</code> from 10 to 100 (1-10 for view)}</example>
-        public Dictionary<string, double> ratingArr;
+        [PHPName("ratingArr")]
+        public Dictionary<string, double> Ratings;
 
         ///<summary> average of all scrapped ratings, if more ratings exist, use average of all aviabled</summary>
-        public int ratingAverage;
+        [PHPName("ratingAverage")]
+        public int RatingAverage;
 
         #endregion
 
@@ -143,43 +177,55 @@ namespace Frost.Providers.Xtreamer.PHP {
 
         /// <remarks>Keys must be ISO 3166-1 like country codes, see here: http://www.iso.org/iso/english_country_names_and_code_elements </remarks>
         /// <example>\eg{ <code>array( 'us' => 'PG-13' )</code>}</example>
-        public Dictionary<string, string> certificationArr;
+        [PHPName("certificationArr")]
+        public Dictionary<string, string> Certifications;
 
         ///<remarks>In ISO 3166-1</remarks>
         /// <example>\eg{ <code>array('de', 'us', 'uk')</code>}</example>
-        public string[] countryArr;
+        [PHPName("countryArr")]
+        public string[] Countries;
 
         /// <example>\eg{ <code>array( Coretis_VO_Genre object1, Coretis_VO_Genre object2 )</code>}</example>
-        public Coretis_VO_Genre[] genreArr;
+        [PHPName("genreArr")]
+        public XjbPhpGenre[] Genres;
 
         /// <example>\eg{ <code>array( Coretis_VO_Person object1, Coretis_VO_Person object2 )</code>}</example>
-        public Coretis_VO_Person[] personArr;
+        [PHPName("personArr")]
+        public XjbPhpPerson[] Cast;
 
         /// <example>\eg{ <code>array( Coretis_VO_Picture object1, Coretis_VO_Picture object2 )</code>}</example>
-        public Coretis_VO_Picture[] pictureArr;
+        [PHPName("pictureArr")]
+        public XjbPhpPicture[] Art;
 
         /// <summary>full description</summary>
-        public string plotFull;
+        [PHPName("plotFull")]
+        public string PlotFull;
 
         /// <summary>a short description</summary>
-        public string plotSummary;
+        [PHPName("plotSummary")]
+        public string PlotSummary;
 
         /// <summary>Gets or sets the name of the studio.</summary>
         ///<example>\eg{''<c>universal pictures</c>''}</example>
-        public string studio;
+        [PHPName("studio")]
+        public string Studio;
 
         /// <summary>The text right to left</summary>
         /// <remarks>1 for using right text alignment</remarks>
-        public int? textRightToLeft;
+        [PHPName("textRightToLeft")]
+        public int? TextRightToLeft;
 
         /// <summary>alternate movie titles</summary>
-        public string[] titleAlternateArr;
+        [PHPName("titleAlternateArr")]
+        public string[] AlternateTitles;
 
         /// <summary>the original title of the movie</summary>
-        public string titleOrg;
+        [PHPName("titleOrg")]
+        public string OriginalTitle { get; set; }
 
         /// <summary>the title for sorting movies alphabetical</summary>
-        public string titleSort;
+        [PHPName("titleSort")]
+        public string SortTitle;
 
         #endregion
 
@@ -187,33 +233,41 @@ namespace Frost.Providers.Xtreamer.PHP {
 
         ///<summary>Unique ID of the drive</summary>
         ///<example>\eg{ ''<c>989e59b4c82b76f9a7c0d3db3208da87</c>''}</example>
-        public string driveUniqueId;
+        [PHPName("driveUniqueId")]
+        public string UniqueDriveId;
 
         ///<summary>The File Extension without beginning point</summary>
         ///<example>\eg{ ''<c>mp4</c>'' - without beginning point}</example>
-        public string fileExtension;
+        [PHPName("fileExtension")]
+        public string FileExtension;
 
         ///<summary>The Filename</summary>
         ///<example>\eg{ ''<c>Family.Guy.S05E08.Dei.Gesetzeshueter.German.Dubbed.FS.DVDRip.XviD-iNSPiRED.mp4</c>''}</example>
-        public string fileName;
+        [PHPName("fileName")]
+        public string FileName;
 
         ///<summary>Full path to the file relative to the device</summary>
         ///<example>\eg{ ''<c>/tmp/usbmounts/sda1/movies/Family.Guy</c>''}</example>
         ///<remarks>Realy needed full path ?</remarks>
-        public string filePathFull;
+        [PHPName("filePathFull")]
+        public string FullPath;
 
         ///<summary>Path to file relative to the drive its stored in</summary>
         ///<example>'/movies/Family.Guy'</example>
-        public string filePathOnDrive;
+        [PHPName("filePathOnDrive")]
+        public string FilePathOnDrive;
 
         ///<summary>File Size in Bytes (longint)</summary>
-        public double fileSize;
+        [PHPName("fileSize")]
+        public double FileSize;
 
         ///<summary>UNIXTIMESTAMP FileLastAccessTime</summary>
-        public string fileTSaccess;
+        [PHPName("fileTSaccess")]
+        public string LastAccessTime;
 
         ///<summary>UNIXTIMESTAMP FileCreateTime</summary>
-        public string fileTScreate;
+        [PHPName("fileTScreate")]
+        public string FileCreateTime;
 
         #endregion
 
@@ -221,16 +275,32 @@ namespace Frost.Providers.Xtreamer.PHP {
 
         /// <summary>The movie title in the language of the movie</summary>
         /// <example>\eg{ ''<c>Family Guy</c>''}</example>
-        public string name;
+        [PHPName("name")]
+        public string Title;
 
         ///<example>\eg{ ''<c>Dei.Gesetzeshueter</c>''}</example>
-        public string nameSub;
+        [PHPName("nameSub")]
+        public string TranslatedName;
 
         /// <summary></summary>
         /// <remarks>1910 2009 (date('Y')) - not in future !</remarks>
-        public string year;
+        [PHPName("year")]
+        public string ReleaseYear;
 
         #endregion
+
+        public void AddSpecial(string special) {
+            if (CultureInfo.CurrentCulture.CompareInfo.IndexOf(Specials, special, CompareOptions.IgnoreCase) < 0) {
+                Specials = string.Join(",", Specials, special);
+            }
+        }
+
+        public void RemoveSpecial(string special) {
+            int idx = CultureInfo.CurrentCulture.CompareInfo.IndexOf(Specials, special, CompareOptions.IgnoreCase);
+            if (idx >= 0) {
+                Specials = Specials.Remove(idx, special.Length);
+            }            
+        }
     }
 
 }

@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
     <UseVSHostingProcess>true</UseVSHostingProcess>
     <DocumentationFile>
@@ -61,7 +61,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\Common.csproj">
+    <ProjectReference Include="..\..\Libraries\Common\Common.csproj">
       <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>
     </ProjectReference>
@@ -81,7 +81,7 @@
       <Project>{a85f5e2b-149a-4fb5-a749-056ae20ab72f}</Project>
       <Name>NetworkShares</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PHPtoNet\PHPtoNET.csproj">
+    <ProjectReference Include="..\..\Libraries\PHPtoNet\PHPtoNET.csproj">
       <Project>{4661dd6c-be69-4bcb-a835-53d192de841c}</Project>
       <Name>PHPtoNET</Name>
     </ProjectReference>

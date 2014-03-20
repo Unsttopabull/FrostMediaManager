@@ -1,6 +1,9 @@
+using Frost.PHPtoNET.Attributes;
+
 namespace Frost.Providers.Xtreamer.PHP {
 
-    public class Coretis_VO_Picture {
+    [PHPName("Coretis_VO_Picture")]
+    public class XjbPhpPicture {
         #region Konstante
 
         ///<summary>The DVD / Blu-ray cover art.</summary>
@@ -23,43 +26,51 @@ namespace Frost.Providers.Xtreamer.PHP {
 
         #endregion
 
-        ///<summary>Picture height in pixels</summary>
-        /// <example>\eg{ <c>720</c>}</example>
-        public string height;
+        public XjbPhpPicture() {
+        }
+
+        public XjbPhpPicture(string picId, string type, string size, string width, string height, string path) {
+            PictureId = picId;
+            Type = type;
+            Size = size;
+            Width = width;
+            Height = height;
+            Path = path;
+        }
 
         ///<summary>The id for this row in DB</summary>
-        public long id;
+        [PHPName("id")]
+        public long Id;
+
+        ///<summary>Picture height in pixels</summary>
+        /// <example>\eg{ <c>720</c>}</example>
+        [PHPName("height")]
+        public string Height;
 
         ///<summary>Scraper"s picture Id prefixed with scraper"s name</summary>
         ///<example>\eg{ <c>tmdb4bc92150017a3c57fe00d378</c>}</example>
-        public string picId;
+        [PHPName("picId")]
+        public string PictureId;
 
         ///<summary>Picture type (original, mid, thumb)</summary>
         ///<example>eg{''<c>original</c>'', ''<c>mid</c>'', ''<c>thumb</c>''}</example>
-        public string size;
+        [PHPName("size")]
+        public string Size;
 
         ///<summary>Picture type (poster, fanart)</summary>
         ///<example>\eg{ ''<c>poster</c>'' (portrait) or ''<c>fanart</c>'' (landscape)}</example>
-        public string type;
+        [PHPName("type")]
+        public string Type;
 
         ///<summary>Picture url</summary>
         /// <example>\eg{ <c>http://passion-xbmc.org/scraper/Gallery/main/Poster_Transformers2laRevanche-288440.jpg</c>}</example>
-        public string url;
+        [PHPName("url")]
+        public string Path;
 
         ///<summary>Picture width in pixels</summary>
         ///<example>\eg{ <c>1280</c>}</example>
-        public string width;
-
-        public Coretis_VO_Picture() {
-        }
-
-        public Coretis_VO_Picture(string picId, string type, string size, string width, string height, string url) {
-            this.picId = picId;
-            this.type = type;
-            this.size = size;
-            this.width = height;
-            this.url = url;
-        }
+        [PHPName("width")]
+        public string Width;
 
     }
 

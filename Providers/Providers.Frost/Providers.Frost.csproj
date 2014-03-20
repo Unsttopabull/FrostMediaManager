@@ -91,13 +91,14 @@
     <Compile Include="DB\Files\File.cs" />
     <Compile Include="DB\Files\Subtitle.cs" />
     <Compile Include="DB\Files\Video.cs" />
+    <Compile Include="DB\FrostDbContainer.Views.cs" />
     <Compile Include="DB\Genre.cs" />
     <Compile Include="DB\Language.cs" />
     <Compile Include="DB\Movie.Configuration.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DB\Movie.cs" />
-    <Compile Include="DB\MovieVo.Context.cs" />
+    <Compile Include="DB\FrostDbContainer.Context.cs" />
     <Compile Include="DB\People\Actor.cs" />
     <Compile Include="DB\People\Person.cs" />
     <Compile Include="DB\Plot.cs" />
@@ -160,6 +161,9 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetPath)" "E:\Workspace\Ostalo\Repos\Git\FrostMediaManager2\UI\RibbonUI\bin\Debug\plugins" /Y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

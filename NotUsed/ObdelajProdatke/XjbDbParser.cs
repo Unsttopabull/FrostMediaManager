@@ -6,7 +6,7 @@ using Frost.Common;
 using Frost.PHPtoNET;
 using Frost.Providers.Frost.DB;
 using Frost.Providers.Xtreamer.DB;
-using CoretisMovie = Frost.Providers.Xtreamer.PHP.Coretis_VO_Movie;
+using CoretisMovie = Frost.Providers.Xtreamer.PHP.XjbPhpMovie;
 
 namespace Frost.ProcessDatabase {
     public class XjbDbParser : MediaManager<CoretisMovie> {

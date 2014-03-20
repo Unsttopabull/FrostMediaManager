@@ -1,3 +1,9 @@
+/*
+ *  CPOL Licence http://www.codeproject.com/info/cpol10.aspx 
+ *  Copyright @ Richard Deeming 
+ *  
+ *  Modified and adapted by Martin Kraner
+ */
 using System;
 using System.IO;
 

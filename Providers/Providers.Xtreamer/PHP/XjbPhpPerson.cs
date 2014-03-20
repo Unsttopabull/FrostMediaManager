@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Xml.Serialization;
+using Frost.PHPtoNET.Attributes;
 
 namespace Frost.Providers.Xtreamer.PHP {
 
-    public class Coretis_VO_Person {
+    [PHPName("Coretis_VO_Person")]
+    public class XjbPhpPerson {
 
         public const string JOB_DIRECTOR = "director";
         public const string JOB_PRODUCER = "producer";
@@ -17,9 +19,26 @@ namespace Frost.Providers.Xtreamer.PHP {
         public const string JOB_CASTING = "casting";
         public const string JOB_OTHER = "other";
 
+        public XjbPhpPerson() {
+        }
+
+        public XjbPhpPerson(string name, string character, string job = "actor") : this(name, job) {
+            Character = character;
+        }
+
+        public XjbPhpPerson(string name, string job) {
+            Name = name;
+            Job = job;
+        }
+
+        ///<summary>The id for this row in DB</summary>
+        [PHPName("id")]
+        public string Id { get; set; }
+
         ///<summary>Name of the Character</summary>
         ///<example>eg{''<c>Sarah Connor</c>''}</example>
-        public string character;
+        [PHPName("character")]
+        public string Character;
 
         ///<summary>Type of job</summary>
         ///<example>
@@ -28,32 +47,20 @@ namespace Frost.Providers.Xtreamer.PHP {
         ///Makeup Artist, Music, Novel, Original Music Composer, Producer, Production Design,
         ///Produzent, Screenplay, Set Decoration, Set Designer, Sound Designer, Sound Editor, Visual Effects, Writer, ...</c>''}
         ///</example>
-        public string job;
+        [PHPName("job")]
+        public string Job;
 
         ///<summary>string	Name of the Person in format "Firstname Surname"</summary>
         ///<example>eg{''<c>Teddy Chan</c>''}</example>
-        public string name;
+        [PHPName("name")]
+        public string Name;
 
         ///<summary>The person id at a online sources</summary>
         ///<example>\eg{ <code>array ( "imdb" => "nm0269463", "tmbd => "70703")</code>}</example>
         ///<remarks>http://www.themoviedb.org/person/70703</remarks>
         [XmlIgnore]
-        public Hashtable personOnlineIdArr;
-
-        public Coretis_VO_Person() {
-        }
-
-        public Coretis_VO_Person(string name, string character, string job = "actor") : this(name, job) {
-            this.character = character;
-        }
-
-        public Coretis_VO_Person(string name, string job) {
-            this.name = name;
-            this.job = job;
-        }
-
-        ///<summary>The id for this row in DB</summary>
-        public string id { get; set; }
+        [PHPName("personOnlineIdArr")]
+        public Hashtable PersonOnlineIds;
 
     }
 

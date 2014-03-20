@@ -1,5 +1,7 @@
 ﻿using Frost.Common;
+using Frost.Common.Models;
 using Frost.Providers.Xtreamer.Provider;
+using Frost.Providers.Xtreamer.Proxies;
 using LightInject;
 
 [assembly: CompositionRootType(typeof(XtreamerCompositionRoot))]
@@ -14,6 +16,7 @@ namespace Frost.Providers.Xtreamer.Provider {
         public void Compose(IServiceRegistry serviceRegistry) {
             serviceRegistry.Register<IMoviesDataService, XjbMoviesDataService>(SYSTEM_NAME, new PerContainerLifetime());
 
+            //serviceRegistry.Register<IMovie, XtMovie>(SYSTEM_NAME, new PerRequestLifeTime());
             //serviceRegistry.Register<IActor>(f => new Actor(), SYSTEM_NAME, new PerRequestLifeTime());
             //serviceRegistry.Register<IArt>(f => new Art(), SYSTEM_NAME, new PerRequestLifeTime());
             //serviceRegistry.Register<IAudio>(f => new Audio(), SYSTEM_NAME, new PerRequestLifeTime());

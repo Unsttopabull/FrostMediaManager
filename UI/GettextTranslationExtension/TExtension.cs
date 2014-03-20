@@ -25,6 +25,14 @@ namespace Frost.GettextMarkupExtension {
         }
 
         /// <summary>Initializes a new instance of a class derived from <see cref="T:System.Windows.Markup.MarkupExtension"/>. </summary>
+        public TExtension(string key, string prefix, string postfix, string context) {
+            Key = key;
+            Prefix = prefix;
+            Postfix = postfix;
+            Context = context;
+        }
+
+        /// <summary>Initializes a new instance of a class derived from <see cref="T:System.Windows.Markup.MarkupExtension"/>. </summary>
         public TExtension(string key, string prefix, string postfix, string context, object[] args) {
             Key = key;
             Prefix = prefix;

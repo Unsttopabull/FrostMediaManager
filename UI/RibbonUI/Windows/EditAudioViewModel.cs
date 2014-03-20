@@ -51,6 +51,8 @@ namespace RibbonUI.Windows {
             });
         }
 
+        public bool ChannelInfoEditable { get; private set; }
+
         public MovieAudio SelectedAudio {
             get { return _selectedAudio; }
             set {
@@ -60,6 +62,8 @@ namespace RibbonUI.Windows {
                 _selectedAudio = value;
 
                 if (_selectedAudio != null) {
+                    ChannelInfoEditable = _selectedAudio["ChannelSetup"] || _selectedAudio["NumberOfChannels"];
+
                     if (_selectedAudio.CodecId != null) {
                         Codec audioCodec = Codecs.FirstOrDefault(c => c.Id.Equals(_selectedAudio.CodecId, StringComparison.InvariantCultureIgnoreCase));
                         if (audioCodec != null) {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms.VisualStyles;
 using Frost.Common;
 using Frost.Common.Models;
 using Frost.DetectFeatures;
@@ -148,7 +149,9 @@ namespace RibbonUI.Util.ObservableWrappers {
                     : new TimeSpan();
             }
             set {
-                Duration = Convert.ToInt64(value.TotalMilliseconds);
+                Duration = value != TimeSpan.Zero
+                    ? Convert.ToInt64(value.TotalMilliseconds)
+                    : (long?) null;
             }
         }
 
@@ -268,6 +271,10 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         public string CodecImage {
             get {
+                if (CodecId == null) {
+                    return null;
+                }
+
                 string mapping;
                 FileFeatures.VideoCodecIdMappings.TryGetValue(CodecId, out mapping);
                 return GetImageSourceFromPath("Images/FlagsE/vcodec_" + (mapping ?? CodecId) + ".png");

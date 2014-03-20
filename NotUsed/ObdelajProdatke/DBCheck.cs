@@ -17,19 +17,22 @@ namespace Frost.ProcessDatabase {
         private static readonly string[] XtNames = { "Xtreamer", "Xtreamer_PRO" };
         private static readonly string[] HostNames = { "MYXTREAMER" };
 
-        public static string FindDB(DBSystem sistem) {
-            switch (sistem) {
+        public static string FindDB(DBSystem system) {
+            switch (system) {
                 case DBSystem.Xtreamer:
                     return FindXjbDB();
                 case DBSystem.XBMC:
                     return FindXbmcDB();
                 default:
-                    throw new ArgumentOutOfRangeException("sistem");
+                    throw new ArgumentOutOfRangeException("system");
             }
         }
 
-        public static string FindXjbDriveLocation() {
-            string dbLoc = FindDB(DBSystem.Xtreamer);
+        public static string FindXjbDriveLocation(string dbLoc = null) {
+            if (dbLoc == null) {
+                dbLoc = FindDB(DBSystem.Xtreamer);
+            }
+
             if (dbLoc != null) {
                 int num = 0;
                 string driveLoc = dbLoc.TakeWhile(c => {

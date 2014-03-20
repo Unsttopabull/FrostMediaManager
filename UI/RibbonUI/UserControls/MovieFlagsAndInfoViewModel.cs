@@ -99,7 +99,7 @@ namespace RibbonUI.UserControls {
 
         public IPlot FirstPlot {
             get {
-                if (SelectedMovie == null) {
+                if (SelectedMovie == null || SelectedMovie.Plots == null) {
                     return null;
                 }
 
@@ -110,6 +110,10 @@ namespace RibbonUI.UserControls {
         }
 
         private long? GetVideoRuntimeSum() {
+            if (SelectedMovie.Videos == null) {
+                return null;
+            }
+
             long l = SelectedMovie.Videos.Where(v => v.Duration.HasValue).Sum(v => v.Duration.Value);
 
             if (!SelectedMovie.Runtime.HasValue && l > 0) {

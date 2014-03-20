@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using Frost.Common;
-using Frost.Common.Models;
 using Frost.DetectFeatures;
 using System.Diagnostics;
 using Frost.DetectFeatures.Models;
+using Frost.ProcessDatabase;
 using Frost.Providers.Frost;
-using Frost.Providers.Xbmc.DB;
-using Frost.Providers.Xbmc.Provider;
-using CoretisMovie = Frost.Providers.Xtreamer.PHP.Coretis_VO_Movie;
+using Frost.Providers.Xtreamer.DB;
 
 namespace Frost.Tester {
 
@@ -38,7 +37,10 @@ namespace Frost.Tester {
             //TestPHPDeserialize2();
 
             //TestXjbDbParser();
-            TestMediaSearcher();
+            //TestMediaSearcher();
+            //TestPhpDeserializeAttribute();
+            TestXjbDB();
+            //TestDbCheck();
             //TestDataService();
             //TestXbmcContext();
 
@@ -58,24 +60,35 @@ namespace Frost.Tester {
             Console.Read();
         }
 
-        private static void TestXbmcContext() {
-            using (XbmcContainer xbmc = new XbmcContainer()) {
-                XbmcMovie xbmcMovie = xbmc.Movies.Include("Path").Single(m => m.Id == 323);
-                XbmcPath xbmcPath = xbmcMovie.Path;
+        //private static void TestPhpDeserializeAttribute() {
+        //    string serialized = File.ReadAllText("string.php", Encoding.UTF8);
 
-                //IQueryable<XbmcPath> queryable = from m in xbmc.Movies where m.Id == 323 select m.Path;
-                //List<XbmcPath> list = queryable.ToList();
+        //    PHPDeserializer2 deser = new PHPDeserializer2();
+        //    XjbPhpMovie mv;
+        //    using (PHPSerializedStream phpSerialized = new PHPSerializedStream(serialized, Encoding.UTF8)) {
+        //        mv = deser.Deserialize<XjbPhpMovie>(phpSerialized);
+        //    }
+
+        //    if (mv != null) {
+        //        Console.WriteLine(mv.OriginalTitle);
+        //    }
+        //}
+
+        public static void TestXjbDB() {
+            //using (XjbEntities xjb = new XjbEntities(@"C:\Users\Martin\Desktop\SQLite DBs\xjb.db3")) {
+            using (XjbEntities xjb = new XjbEntities(@"\\\\MYXTREAMER\Xtreamer_PRO\sda1\scripts\Xtreamering\var\db\xjb.db")) {
+                xjb.Genres.Load();
             }
+            
         }
 
-        private static void TestDataService() {
-            IMoviesDataService service = new XbmcMoviesDataService();
-            IEnumerable<IMovie> movies = service.Movies;
-            IEnumerable<XbmcPath> xbmcPaths = movies.Select(m => ((XbmcMovie) m).Path);
-            int count = xbmcPaths.Count(p => p == null);
-
-            IEnumerable<IMovieSet> movieSets = service.Sets;
+        public static void TestDbCheck() {
+            //Shares.LDAP();
+           
+            string xjb = DBCheck.FindDB(DBSystem.Xtreamer);
+            string findXjbDriveLocation = DBCheck.FindXjbDriveLocation(xjb);
         }
+
 
         private static TimeSpan TestMediaSearcher() {
             Stopwatch sw = Stopwatch.StartNew();

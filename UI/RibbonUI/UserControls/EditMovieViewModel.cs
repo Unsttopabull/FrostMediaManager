@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -37,7 +38,11 @@ namespace RibbonUI.UserControls {
         public EditMovieViewModel(IMoviesDataService service) {
             _service = service;
             MoviePlots = new ObservableCollection<MoviePlot>();
-            Sets = new ObservableCollection<IMovieSet>(_service.Sets);
+
+            IEnumerable<IMovieSet> sets = _service.Sets;
+            Sets = sets != null
+                ? new ObservableCollection<IMovieSet>(_service.Sets)
+                : new ObservableCollection<IMovieSet>();
 
             #region Commands
 
@@ -72,8 +77,8 @@ namespace RibbonUI.UserControls {
             );
 
             SetPlotLanguageCommand = new RelayCommand<MoviePlot>(SetPlotLanguageClick, plot => plot != null);
-            AddPlotCommand = new RelayCommand(AddPlot);
-            RemovePlotCommand = new RelayCommand<MoviePlot>(RemovePotOnClick, plot => plot != null);
+            AddPlotCommand = new RelayCommand(AddPlot, o => SelectedMovie != null && SelectedMovie["Plots"]);
+            RemovePlotCommand = new RelayCommand<MoviePlot>(RemovePotOnClick, plot => plot != null && SelectedMovie != null && SelectedMovie["Plots"]);
 
             AddCountryCommand = new RelayCommand(AddCountryOnClick);
             RemoveCountryCommand = new RelayCommand<MovieCountry>(
@@ -108,12 +113,24 @@ namespace RibbonUI.UserControls {
                 _selectedMovie = value;
 
                 if (_selectedMovie != null) {
-                    MoviePlots = new ObservableCollection<MoviePlot>(_selectedMovie.Plots.Select(p => new MoviePlot(p)));
-                    Actors = new ObservableCollection<MovieActor>(_selectedMovie.Actors.Select(a => new MovieActor(a)));
-                    Countries = new ObservableCollection<MovieCountry>(_selectedMovie.Countries.Select(c => new MovieCountry(c)));
-                    Studios = new ObservableCollection<MovieStudio>(_selectedMovie.Studios.Select(s => new MovieStudio(s)));
-                    Genres = new ObservableCollection<IGenre>(_selectedMovie.Genres);
-                    Directors = new ObservableCollection<MoviePerson>(_selectedMovie.Directors.Select(p => new MoviePerson(p)));
+                    MoviePlots = _selectedMovie.Plots == null
+                        ? new ObservableCollection<MoviePlot>()
+                        : new ObservableCollection<MoviePlot>(_selectedMovie.Plots.Select(p => new MoviePlot(p)));
+                    Actors = _selectedMovie.Actors == null
+                        ? new ObservableCollection<MovieActor>()
+                        : new ObservableCollection<MovieActor>(_selectedMovie.Actors.Select(a => new MovieActor(a)));
+                    Countries = _selectedMovie.Countries == null
+                        ? new ObservableCollection<MovieCountry>()
+                        : new ObservableCollection<MovieCountry>(_selectedMovie.Countries.Select(c => new MovieCountry(c)));
+                    Studios = _selectedMovie.Studios == null 
+                        ? new ObservableCollection<MovieStudio>()
+                        : new ObservableCollection<MovieStudio>(_selectedMovie.Studios.Select(s => new MovieStudio(s)));
+                    Genres = _selectedMovie.Genres == null 
+                        ? new ObservableCollection<IGenre>() 
+                        : new ObservableCollection<IGenre>(_selectedMovie.Genres);
+                    Directors = _selectedMovie.Directors == null 
+                        ? new ObservableCollection<MoviePerson>() 
+                        : new ObservableCollection<MoviePerson>(_selectedMovie.Directors.Select(p => new MoviePerson(p)));
                 }
 
                 OnPropertyChanged();

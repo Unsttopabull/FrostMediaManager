@@ -80,7 +80,7 @@
             </Image.Effect>
         </Image>
         <Image Grid.ColumnSpan="5" Grid.Column="0" Grid.Row="0" Grid.RowSpan="4" Source="{Binding FirstFanart, IsAsync=True, UpdateSourceTrigger=PropertyChanged, TargetNullValue={StaticResource DefaultFanart}, FallbackValue={StaticResource DefaultFanart}}" Stretch="Fill"/>
-        <fmm:BoxArt Grid.Column="1" Grid.Row="2" CoverImage="{Binding FirstCoverOrPoster, UpdateSourceTrigger=PropertyChanged, TargetNullValue={StaticResource DefaultCover}, FallbackValue={StaticResource DefaultCover}}" BoxImage="{Binding BoxImage}"/>
+        <fmm:BoxArt Grid.Column="1" Grid.Row="2" CoverImage="{Binding FirstCoverOrPoster, IsAsync=True, UpdateSourceTrigger=PropertyChanged, TargetNullValue={StaticResource DefaultCover}, FallbackValue={StaticResource DefaultCover}}" BoxImage="{Binding BoxImage}"/>
         <Border Grid.Row="2" Grid.Column="2" CornerRadius="20" BorderThickness="5,5,0,5">
             <Border.Background>
                 <SolidColorBrush Color="Black" Opacity="0.8" />

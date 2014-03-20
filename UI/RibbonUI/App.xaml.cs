@@ -4,9 +4,9 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using Frost.Common;
 using Frost.Common.Util;
 using Frost.DetectFeatures;
 using Frost.DetectFeatures.FileName;
@@ -23,11 +23,12 @@ namespace RibbonUI {
     public partial class App : Application {
         public static string SystemType { get; internal set; }
 
-        public static List<string> Systems { get; private set; }
+        internal static List<Provider> Systems { get; private set; }
 
         static App() {
             SystemType = "FMM";
-            Systems = new List<string>();
+            //SystemType = "XJB";
+            Systems = new List<Provider>();
         }
 
         public App() {
@@ -36,8 +37,6 @@ namespace RibbonUI {
 
             TranslationManager.CurrentTranslationProvider = new SecondLanguageTranslationProvider("Languages");
             //DispatcherUnhandledException += UnhandledExeption;
-
-            LoadSettings();
         }
 
         private void LoadPlugins() {
@@ -55,19 +54,14 @@ namespace RibbonUI {
                 int numFailed = 0;
                 foreach (string plugin in plugins) {
                     Assembly assembly;
-                    string systemName;
-                    if (!CheckIsPlugin(plugin, out assembly, out systemName)) {
+                    Provider provider;
+                    if (!AssemblyEx.CheckIsPlugin(plugin, out assembly, out provider)) {
                         numFailed++;
-                        break;
+                        continue;
                     }
 
-                    try {
-                        LightInjectContainer.RegisterAssembly(assembly);
-                        Systems.Add(systemName);
-                    }
-                    catch (Exception e) {
-                        numFailed++;
-                    }
+                    provider.AssemblyPath = plugin;
+                    Systems.Add(provider);
                 }
 
                 if (numFailed == plugins.Length) {
@@ -81,94 +75,6 @@ namespace RibbonUI {
             Shutdown();
         }
 
-        private bool CheckIsPlugin(string plugin, out Assembly assembly, out string pluginSystemName) {
-            string path = Path.Combine(Directory.GetCurrentDirectory(), plugin);
-            if (!CheckIsAssembly(path)) {
-                assembly = null;
-                pluginSystemName = null;
-                return false;
-            }
-
-            try {
-                Assembly asm = Assembly.LoadFile(path);
-                IsPluginAttribute isPlugin = asm.GetCustomAttribute<IsPluginAttribute>();
-                if (isPlugin != null) {
-                    assembly = asm;
-                    pluginSystemName = isPlugin.SystemName;
-                    return true;
-                }
-
-                assembly = null;
-                pluginSystemName = null;
-                return false;
-            }
-            catch (FileLoadException e) {
-                assembly = null;
-                pluginSystemName = null;
-                return false;
-            }
-            catch (Exception e) {
-                assembly = null;
-                pluginSystemName = null;
-                return false;
-            }
-        }
-
-        /// <summary>Checks if the file is a valid CLR assembly.</summary>
-        /// <param name="fileName">Name of the file.</param>
-        /// <returns></returns>
-        /// <remarks>Taken from http://geekswithblogs.net/rupreet/archive/2005/11/02/58873.aspx </remarks>
-        private bool CheckIsAssembly(string fileName) {
-            uint[] dataDictionaryRva = new uint[16];
-            uint[] dataDictionarySize = new uint[16];
-
-            using (Stream fs = new FileStream(fileName, FileMode.Open, FileAccess.Read)) {
-                using (BinaryReader reader = new BinaryReader(fs)) {
-
-                    //PE Header starts @ 0x3C (60). Its a 4 byte header.
-                    fs.Position = 0x3C;
-
-                    uint peHeader = reader.ReadUInt32();
-
-                    //Moving to PE Header start location...
-                    fs.Position = peHeader;
-                    reader.ReadUInt32();
-
-                    //We can also show all these value, but we will be       
-                    //limiting to the CLI header test.
-
-                    reader.ReadUInt16();
-                    reader.ReadUInt16();
-                    reader.ReadUInt32();
-                    reader.ReadUInt32();
-                    reader.ReadUInt32();
-                    reader.ReadUInt16();
-                    reader.ReadUInt16();
-
-                    /*
-                     *    Now we are at the end of the PE Header and from here, the PE Optional Headers starts...
-                     *    To go directly to the datadictionary, we'll increase the stream’s current position to with 96 (0x60). 96 because,
-                     *    28 for Standard fields, 68 for NT-specific fields
-                     *    From here DataDictionary starts...and its of total 128 bytes.
-                     *    DataDictionay has 16 directories in total, doing simple maths 128/16 = 8.
-                     * 
-                     *    So each directory is of 8 bytes.
-                     *    In this 8 bytes, 4 bytes is of RVA and 4 bytes of Size.
-                     *
-                     *    btw, the 15th directory consist of CLR header! if its 0, its not a CLR file :)
-                     */
-                    ushort dataDictionaryStart = Convert.ToUInt16(Convert.ToUInt16(fs.Position) + 0x60);
-                    fs.Position = dataDictionaryStart;
-                    for (int i = 0; i < 15; i++) {
-                        dataDictionaryRva[i] = reader.ReadUInt32();
-                        dataDictionarySize[i] = reader.ReadUInt32();
-                    }
-
-                    return dataDictionaryRva[14] != 0;
-                }
-            }
-        }
-
         private void RegisterViewModels() {
             LightInjectContainer.Register<ContentGridViewModel>();
             LightInjectContainer.Register<MainWindowViewModel>();
@@ -180,68 +86,88 @@ namespace RibbonUI {
         }
 
         internal static void LoadSettings() {
-            if (Settings.Default.KnownSubtitleExtensions == null) {
-                SaveKnownSubtitleExtensionSetting();
-            }
-            else {
-                FileFeatures.KnownSubtitleExtensions = new List<string>(Settings.Default.KnownSubtitleExtensions.Cast<string>());
-            }
+            Task[] settings = new Task[8];
 
-            if (Settings.Default.KnownSubtitleFormats == null) {
-                SaveKnownSubtitleFormatsSetting();
-            }
-            else {
-                FileFeatures.KnownSubtitleFormats = new List<string>(Settings.Default.KnownSubtitleFormats.Cast<string>());
-            }
-
-            if (Settings.Default.AudioCodecIdBindings == null) {
-                SaveAudioCodecIdSettiing();
-            }
-            else {
-                FileFeatures.AudioCodecIdMappings = new CodecIdMappingCollection(Settings.Default.AudioCodecIdBindings);
-            }
-
-            if (Settings.Default.VideoCodecIdBindings == null) {
-                SaveVideoCodecIdBindingsSetting();
-            }
-            else {
-                FileFeatures.VideoCodecIdMappings = new CodecIdMappingCollection(Settings.Default.VideoCodecIdBindings);
-            }
-
-            if (Settings.Default.KnownSegments == null) {
-                SaveKnownSegmentsSetting();
-            }
-            else {
-                FileNameParser.KnownSegments = new SegmentCollection(Settings.Default.KnownSegments);
-            }
-
-            if (Settings.Default.CustomLanguageMappings == null) {
-                SaveCustomLanguageMappingsSetting();
-            }
-            else {
-                FileNameParser.CustomLanguageMappings = new LanguageMappingCollection(Settings.Default.CustomLanguageMappings);
-            }
-
-
-            if (Settings.Default.ExcludedSegments == null) {
-                SaveExcludedSegmentsSetting();
-            }
-            else {
-                FileNameParser.ExcludedSegments = new ObservableHashSet<string>(StringComparer.OrdinalIgnoreCase);
-                foreach (string segment in Settings.Default.ExcludedSegments) {
-                    FileNameParser.ExcludedSegments.Add(segment);
+            settings[0] = Task.Run(() => {
+                if (Settings.Default.KnownSubtitleExtensions == null) {
+                    SaveKnownSubtitleExtensionSetting();
                 }
-            }
-
-            if (Settings.Default.ReleaseGroups == null) {
-                SaveReleaseGroupsSetting();
-            }
-            else {
-                FileNameParser.ReleaseGroups = new ObservableHashSet<string>(StringComparer.OrdinalIgnoreCase);
-                foreach (string releaseGroup in Settings.Default.ReleaseGroups) {
-                    FileNameParser.ReleaseGroups.Add(releaseGroup);
+                else {
+                    FileFeatures.KnownSubtitleExtensions = new List<string>(Settings.Default.KnownSubtitleExtensions.Cast<string>());
                 }
-            }
+            });
+
+            settings[1] = Task.Run(() => {
+                if (Settings.Default.KnownSubtitleFormats == null) {
+                    SaveKnownSubtitleFormatsSetting();
+                }
+                else {
+                    FileFeatures.KnownSubtitleFormats = new List<string>(Settings.Default.KnownSubtitleFormats.Cast<string>());
+                }
+            });
+
+            settings[2] = Task.Run(() => {
+                if (Settings.Default.AudioCodecIdBindings == null) {
+                    SaveAudioCodecIdSettiing();
+                }
+                else {
+                    FileFeatures.AudioCodecIdMappings = new CodecIdMappingCollection(Settings.Default.AudioCodecIdBindings);
+                }
+            });
+
+            settings[3] = Task.Run(() => {
+                if (Settings.Default.VideoCodecIdBindings == null) {
+                    SaveVideoCodecIdBindingsSetting();
+                }
+                else {
+                    FileFeatures.VideoCodecIdMappings = new CodecIdMappingCollection(Settings.Default.VideoCodecIdBindings);
+                }
+            });
+
+            settings[4] = Task.Run(() => {
+                if (Settings.Default.KnownSegments == null) {
+                    SaveKnownSegmentsSetting();
+                }
+                else {
+                    FileNameParser.KnownSegments = new SegmentCollection(Settings.Default.KnownSegments);
+                }
+            });
+
+            settings[5] = Task.Run(() => {
+                if (Settings.Default.CustomLanguageMappings == null) {
+                    SaveCustomLanguageMappingsSetting();
+                }
+                else {
+                    FileNameParser.CustomLanguageMappings = new LanguageMappingCollection(Settings.Default.CustomLanguageMappings);
+                }
+            });
+
+
+            settings[6] = Task.Run(() => {
+                if (Settings.Default.ExcludedSegments == null) {
+                    SaveExcludedSegmentsSetting();
+                }
+                else {
+                    FileNameParser.ExcludedSegments = new ObservableHashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    foreach (string segment in Settings.Default.ExcludedSegments) {
+                        FileNameParser.ExcludedSegments.Add(segment);
+                    }
+                }
+            });
+
+            settings[7] = Task.Run(() => {
+                if (Settings.Default.ReleaseGroups == null) {
+                    SaveReleaseGroupsSetting();
+                }
+                else {
+                    FileNameParser.ReleaseGroups = new ObservableHashSet<string>(StringComparer.OrdinalIgnoreCase);
+                    foreach (string releaseGroup in Settings.Default.ReleaseGroups) {
+                        FileNameParser.ReleaseGroups.Add(releaseGroup);
+                    }
+                }
+            });
+
+            Task.WaitAll(settings);
 
             Settings.Default.Save();
         }

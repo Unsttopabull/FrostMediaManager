@@ -4,7 +4,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:l="http://www.frostmediamanager.com/xaml/translation"
-    xmlns:converters="clr-namespace:RibbonUI.Converters"
     xmlns:userControls="clr-namespace:RibbonUI.UserControls"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:list="clr-namespace:RibbonUI.UserControls.List"
@@ -188,17 +187,16 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <userControls:MovieFlagsAndInfo x:Name="MovieFlags" SelectedMovie="{Binding ElementName=MovieList, Path=SelectedItem}" />
+            <userControls:MovieFlagsAndInfo x:Name="MovieFlags" SelectedMovie="{Binding ElementName=ContentGridControl, Path=DataContext.SelectedMovie}" />
             <TabControl Grid.Row="1">
                 <TabItem Header="{l:T General Info}">
-                    <userControls:ArtAndPlot x:Name="ArtAndPlot"
-                                             SelectedMovie="{Binding ElementName=MovieList, Path=SelectedItem}"
-                                             Background="Transparent" />
+                    <userControls:ArtAndPlot x:Name="ArtAndPlot" Background="Transparent"
+                                             SelectedMovie="{Binding ElementName=ContentGridControl, Path=DataContext.SelectedMovie}"/>
                 </TabItem>
                 <TabItem Header="{l:T Trivia and goofs}">
                 </TabItem>
                 <TabItem x:Name="MovieEditTab" x:FieldModifier="private" Header="{l:T Edit Movie info}">
-                    <userControls:EditMovie x:Name="EditMovie" SelectedMovie="{Binding ElementName=MovieList, Path=SelectedItem}" />
+                    <userControls:EditMovie x:Name="EditMovie" SelectedMovie="{Binding ElementName=ContentGridControl, Path=DataContext.SelectedMovie}" />
                 </TabItem>
                 <TabItem Header="{l:T Subtitles}" x:Name="MovieSubtitles">
                     <i:Interaction.Triggers>
@@ -216,6 +214,9 @@
                 </TabItem>
                 <TabItem Header="{l:T Audios}">
                     <list:ListAudios Audios="{Binding ElementName=ContentGridControl, Path=DataContext.Audios}"/>
+                </TabItem>
+                <TabItem Header="Certifications">
+                    <list:ListCertifications Certifications="{Binding ElementName=ContentGridControl, Path=DataContext.Certifications}"/>
                 </TabItem>
                 <TabItem Header="{l:T Promotional videos}" >
                     

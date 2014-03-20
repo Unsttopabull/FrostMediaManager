@@ -124,6 +124,8 @@ namespace RibbonUI.Windows {
                 _selectedVideo = value;
 
                 if (_selectedVideo != null) {
+                    IsResolutionEditable = _selectedVideo["Resolution"] || _selectedVideo["ResolutionName"];
+
                     Codec codec = Codecs.FirstOrDefault(c => c.Id == _selectedVideo.CodecId);
 
                     if (codec == null) {
@@ -160,6 +162,8 @@ namespace RibbonUI.Windows {
                 OnPropertyChanged("SelectedCodec");
             }
         }
+
+        public bool IsResolutionEditable { get; private set; }
 
         public string FormattedVideoResolution {
             get {

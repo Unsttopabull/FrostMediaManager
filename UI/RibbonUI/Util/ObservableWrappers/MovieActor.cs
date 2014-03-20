@@ -52,7 +52,12 @@ namespace RibbonUI.Util.ObservableWrappers {
         //}
 
         public string Character {
-            get { return _observedEntity.Character; }
+            get { 
+                string role = _observedEntity.Character;
+                return string.IsNullOrEmpty(role)
+                    ? null
+                    : role;
+            }
             set {
                 _observedEntity.Character = string.IsNullOrEmpty(value) ? null : value;
                 OnPropertyChanged();

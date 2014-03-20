@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"             
+             xmlns:l="http://www.frostmediamanager.com/xaml/translation"
              xmlns:sys="clr-namespace:System.Text;assembly=mscorlib"
              xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
              xmlns:list="clr-namespace:RibbonUI.UserControls.List"
@@ -26,7 +26,8 @@
             <DataTemplate DataType="o:MovieSubtitle">
                 <DockPanel LastChildFill="False">
                     <StackPanel DockPanel.Dock="Left">
-                        <Button Style="{StaticResource TransparentBorderlessButton}" Command="{Binding ElementName=ListSubtitlesControl, Path=DataContext.ChangeLanguageCommand}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}">
+                        <Button Style="{StaticResource TransparentBorderlessButton}" Command="{Binding ElementName=ListSubtitlesControl, Path=DataContext.ChangeLanguageCommand}"
+                                CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}">
                             <Image Source="{Binding LanguageImage, FallbackValue={StaticResource UnknownLanguageLarge}, TargetNullValue={StaticResource UnknownLanguageLarge}}"
                                    MinHeight="48" MaxHeight="100">
                                 <Image.CacheMode>

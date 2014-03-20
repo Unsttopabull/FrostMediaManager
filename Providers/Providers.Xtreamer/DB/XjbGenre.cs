@@ -9,7 +9,7 @@ namespace Frost.Providers.Xtreamer.DB {
 
     /// <summary>Represents a Xtreamer Movie Jukebox genre.</summary>
     [Table("genres")]
-    public partial class XjbGenre : IEquatable<XjbGenre> {
+    public class XjbGenre {
         private static readonly Dictionary<string, string> GenreAbbreviations;
         private static readonly Dictionary<string, string> GenreTags;
 
@@ -182,6 +182,10 @@ namespace Frost.Providers.Xtreamer.DB {
             };
         }
 
+        public XjbGenre() {
+            
+        }
+
         /// <summary>Initializes a new instance of the <see cref="XjbGenre"/> class.</summary>
         /// <param name="name">The name of the genre abbreviation.</param>
         public XjbGenre(string name) {
@@ -222,25 +226,6 @@ namespace Frost.Providers.Xtreamer.DB {
             return !string.IsNullOrEmpty(genreName)
                 ? genreName
                 : null;
-        }
-
-        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
-        /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(XjbGenre other) {
-            if (other == null) {
-                return false;
-            }
-
-            if (ReferenceEquals(this, other)) {
-                return true;
-            }
-
-            if (Id != 0 && other.Id != 0) {
-                return Id == other.Id;
-            }
-
-            return Name == other.Name;
         }
 
         internal class Configuration : EntityTypeConfiguration<XjbGenre> {

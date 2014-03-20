@@ -71,23 +71,22 @@
                 </Image.CacheMode>
             </Image>
             <Image Source="{Binding SelectedMovie.AudioChannelsImage, TargetNullValue={StaticResource DefaultSoundLogo}, FallbackValue={StaticResource DefaultSoundLogo}}"
-                   DockPanel.Dock="Right" MaxWidth="150" MaxHeight="55">
+                   DockPanel.Dock="Right" MaxWidth="150" MaxHeight="55" ToolTip="{Binding SelectedMovie.NumberOfAudioChannels}">
                 <Image.CacheMode>
                     <BitmapCache/>
                 </Image.CacheMode>
             </Image>
-            <Image DockPanel.Dock="Right" Source="{Binding SelectedMovie.AudioCodecImage,
-                TargetNullValue={StaticResource DefaultSoundLogo}, FallbackValue={StaticResource DefaultSoundLogo}}" MaxWidth="150" MaxHeight="55">
+            <Image DockPanel.Dock="Right" Source="{Binding SelectedMovie.AudioCodecImage, TargetNullValue={StaticResource DefaultSoundLogo}, FallbackValue={StaticResource DefaultSoundLogo}}" MaxWidth="150" MaxHeight="55" ToolTip="{Binding SelectedMovie.AudioCodec}">
                 <Image.CacheMode>
                     <BitmapCache/>
                 </Image.CacheMode>
             </Image>
-            <Image DockPanel.Dock="Right" Source="{Binding SelectedMovie.VideoResolutionImage, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}" MaxWidth="150" MaxHeight="55">
+            <Image DockPanel.Dock="Right" Source="{Binding SelectedMovie.VideoResolutionImage, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}" ToolTip="{Binding SelectedMovie.VideoResolution}" MaxWidth="150" MaxHeight="55">
                 <Image.CacheMode>
                     <BitmapCache/>
                 </Image.CacheMode>
             </Image>
-            <Image DockPanel.Dock="Right" Source="{Binding SelectedMovie.VideoCodecImage, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}" MaxWidth="150" MaxHeight="55">
+            <Image DockPanel.Dock="Right" Source="{Binding SelectedMovie.VideoCodecImage, TargetNullValue={StaticResource DefaultLogo}, FallbackValue={StaticResource DefaultLogo}}" ToolTip="{Binding SelectedMovie.VideoCodec}" MaxWidth="150" MaxHeight="55">
                 <Image.CacheMode>
                     <BitmapCache/>
                 </Image.CacheMode>

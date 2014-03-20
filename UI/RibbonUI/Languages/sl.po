@@ -144,7 +144,7 @@ msgid "Edit selected studio"
 msgstr "Uredi izbran studijo"
 
 msgid "Edit video"
-msgstr "Uredi zvok"
+msgstr "Uredi video"
 
 msgid "Edithion"
 msgstr "Izdaja"
@@ -331,6 +331,9 @@ msgstr "Izberite studije"
 
 msgid "Set"
 msgstr "Nastavi"
+
+msgid "Movie set"
+msgstr "Zbirka"
 
 msgid "Set plot language"
 msgsrt "Nastavi jezik opisa"

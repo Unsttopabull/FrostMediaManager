@@ -80,12 +80,17 @@ namespace RibbonUI.Windows {
 
                 _selectedPerson = value;
                 if (_selectedPerson != null) {
+                    IsThumbEditable = _selectedPerson["Thumb"];
+                    IsThumbEditable = _selectedPerson["Character"];
+
                     PersonName = _selectedPerson.Name;
                     PersonThumb = _selectedPerson.Thumb;
                 }
                 OnPropertyChanged();
             }
         }
+
+        public bool IsThumbEditable { get; private set; }
 
         public string PersonName {
             get { return _personName; }

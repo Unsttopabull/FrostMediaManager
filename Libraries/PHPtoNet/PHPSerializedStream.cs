@@ -359,100 +359,100 @@ namespace Frost.PHPtoNET {
         internal T DeserializeElement<T>(Type type = null) {
             Type t = type ?? typeof(T);
 
-            Debug.WriteLine("Deserializing element with expected type: " + t.FullName);
-            Debug.Indent();
+            //Debug.WriteLine("Deserializing element with expected type: " + t.FullName);
+            //Debug.Indent();
 
             object obj;
             switch (Peek()) {
                 case 's': {
-                    Debug.WriteLine("Found string:");
+                    //Debug.WriteLine("Found string:");
 
                     if (t == StringType || (t.FullName == "System.Object" && t.Module.ScopeName == COMMON_LANGUAGE_RUNTIME_LIBRARY)) {
                         obj = ReadString();
 
-                        Debug.WriteLine("Finished deserializing string as String.");
-                        Debug.Unindent();
+                        //Debug.WriteLine("Finished deserializing string as String.");
+                        //Debug.Unindent();
                         return (T) obj;
                     }
 
                     if (t.IsValueType) {
                         T tObj = DeserializeStructFromString<T>(t);
 
-                        Debug.WriteLine("Finished deserializing string as struct.");
-                        Debug.Unindent();
+                        //Debug.WriteLine("Finished deserializing string as struct.");
+                        //Debug.Unindent();
                         return tObj;
                     }
 
                     throw new ParsingException(t, "a serialized string", _ms.Position);
                 }
                 case 'N': {
-                    Debug.WriteLine("Found null:");
+                    //Debug.WriteLine("Found null:");
                     if (t.IsClass || (t.Name == "Nullable`1" && t.Namespace == "System" && t.Module.ScopeName == COMMON_LANGUAGE_RUNTIME_LIBRARY)) {
                         obj = ReadNull();
 
                         T tObj = (T) obj;
 
-                        Debug.WriteLine("Finished deserializing null.");
-                        Debug.Unindent();
+                        //Debug.WriteLine("Finished deserializing null.");
+                        //Debug.Unindent();
                         return tObj;
                     }
                     throw new ParsingException(t, "a nullable type", _ms.Position);
                 }
                 case 'i': {
-                    Debug.WriteLine("Found integer:");
-                    Debug.Indent();
+                    //Debug.WriteLine("Found integer:");
+                    //Debug.Indent();
 
                     T tObj = DeserializeInteger<T>(t);
 
-                    Debug.Unindent();
-                    Debug.WriteLine("Finished deserializing integer.");
-                    Debug.Unindent();
+                    //Debug.Unindent();
+                    //Debug.WriteLine("Finished deserializing integer.");
+                    //Debug.Unindent();
                     return tObj;
                 }
                 case 'd': {
-                    Debug.WriteLine("Found double:");
-                    Debug.Indent();
+                    //Debug.WriteLine("Found double:");
+                    //Debug.Indent();
 
                     T tObj = DeserializeDouble<T>(t);
 
-                    Debug.Unindent();
-                    Debug.WriteLine("Finished deserializing double.");
-                    Debug.Unindent();
+                    //Debug.Unindent();
+                    //Debug.WriteLine("Finished deserializing double.");
+                    //Debug.Unindent();
                     return tObj;
                 }
                 case 'b': {
-                    Debug.WriteLine("Found bool:");
+                    //Debug.WriteLine("Found bool:");
 
                     if (t == BoolType) {
                         obj = ReadBoolean();
                         T tObj = (T) obj;
 
-                        Debug.WriteLine("Finished deserializing bool");
-                        Debug.Unindent();
+                        //Debug.WriteLine("Finished deserializing bool");
+                        //Debug.Unindent();
                         return tObj;
                     }
                     throw new ParsingException(t, "a serialized boolean", _ms.Position);
                 }
                 case 'a': {
-                    Debug.WriteLine("Found array:");
-                    Debug.Indent();
+                    //Debug.WriteLine("Found array:");
+                    //Debug.Indent();
 
                     T tObj = DeserializePHPArray<T>(t);
 
-                    Debug.Unindent();
-                    Debug.WriteLine("Finished deserializing Array");
-                    Debug.Unindent();
+                    //Debug.Unindent();
+                    //Debug.WriteLine("Finished deserializing Array");
+                    //Debug.Unindent();
                     return tObj;
                 }
                 case 'O': {
-                    Debug.WriteLine("Found object:");
-                    Debug.Indent();
+                    //Debug.WriteLine("Found object:");
+                    //Debug.Indent();
 
                     T tObj = DeserializeObject<T>(t);
 
-                    Debug.Unindent();
-                    Debug.WriteLine("Finished deserializing Object");
-                    Debug.Unindent();
+                    //Debug.Unindent();
+                    //Debug.WriteLine("Finished deserializing Object");
+                    //Debug.Unindent();
                     return tObj;
                 }
                 default:
@@ -494,8 +494,8 @@ namespace Frost.PHPtoNET {
             int numFields = ReadIntegerValue();
             CheckString(":{");
 
-            Debug.WriteLine("Reading object with name: " + objName);
-            Debug.WriteLine("Number of fields " + numFields);
+            //Debug.WriteLine("Reading object with name: " + objName);
+            //Debug.WriteLine("Number of fields " + numFields);
 
             T obj = (T) Activator.CreateInstance(type);
 
@@ -507,12 +507,12 @@ namespace Frost.PHPtoNET {
                                        .ToArray();
 
             for (int i = 0; i < numFields; i++) {
-                Debug.WriteLine("Starting to deserialize object member: " + i);
-                Debug.Indent();
+                //Debug.WriteLine("Starting to deserialize object member: " + i);
+                //Debug.Indent();
 
                 string fieldName = ReadString();
 
-                Debug.WriteLine("Member name: " + fieldName);
+                //Debug.WriteLine("Member name: " + fieldName);
                 MemberInfo member = Array.Find(members, mi => GetMemberByName(mi, fieldName));
 
                 if (member != null) {
@@ -521,11 +521,11 @@ namespace Frost.PHPtoNET {
                 else {
                     //the member with the same name does not exits
                     //read but do nothing with the output
-                    Debug.WriteLine("Member missing on class.");
+                    //Debug.WriteLine("Member missing on class.");
                     ReadElement();
                 }
 
-                Debug.Unindent();
+                //Debug.Unindent();
             }
 
             CheckChar('}');
@@ -552,13 +552,13 @@ namespace Frost.PHPtoNET {
                 FieldInfo fieldInfo = (FieldInfo) member;
                 Type memberType = fieldInfo.FieldType;
 
-                Debug.WriteLine("Member type: Field");
-                Debug.Indent();
+                //Debug.WriteLine("Member type: Field");
+                //Debug.Indent();
 
                 object value = InvokeGenericMethod("DeserializeElement", memberType, memberType);
 
-                Debug.Unindent();
-                Debug.WriteLine("Succesfully deserialized member");
+                //Debug.Unindent();
+                //Debug.WriteLine("Succesfully deserialized member");
 
                 fieldInfo.SetValue(obj, value);
             }
@@ -566,91 +566,91 @@ namespace Frost.PHPtoNET {
                 PropertyInfo propertyInfo = (PropertyInfo) member;
                 Type memberType = propertyInfo.PropertyType;
 
-                Debug.WriteLine("Member type: Property");
-                Debug.Indent();
+                //Debug.WriteLine("Member type: Property");
+                //Debug.Indent();
 
                 object value = InvokeGenericMethod("DeserializeElement", new[] { memberType }, memberType);
 
-                Debug.Unindent();
-                Debug.WriteLine("Succesfully deserialized member");
+                //Debug.Unindent();
+                //Debug.WriteLine("Succesfully deserialized member");
 
                 propertyInfo.SetValue(obj, value, null);
             }
         }
 
         private T DeserializePHPArray<T>(Type type) {
-            Debug.WriteLine("Deserializing array with type: " + type.FullName);
+            //Debug.WriteLine("Deserializing array with type: " + type.FullName);
 
             if (type.IsArray) {
-                Debug.WriteLine("Array is a plain array");
+                //Debug.WriteLine("Array is a plain array");
 
-                Debug.WriteLine("Starting to deserialize array.");
-                Debug.Indent();
+                //Debug.WriteLine("Starting to deserialize array.");
+                //Debug.Indent();
 
                 T tObj = (T) InvokeGenericMethod("DeserializeArray", type.GetElementType());
 
-                Debug.Unindent();
-                Debug.WriteLine("Finished Deserializing array.");
+                //Debug.Unindent();
+                //Debug.WriteLine("Finished Deserializing array.");
                 return tObj;
             }
 
             if (type.IsGenericType && type.GetInterface("IList`1") != null) {
-                Debug.WriteLine("Array is a generic list");
+                //Debug.WriteLine("Array is a generic list");
 
-                Debug.WriteLine("Starting to deserialize generic list.");
-                Debug.Indent();
+                //Debug.WriteLine("Starting to deserialize generic list.");
+                //Debug.Indent();
 
                 T tObj = DeserializeGenericList<T>(type);
 
-                Debug.Unindent();
-                Debug.WriteLine("Finished Deserializing array.");
+                //Debug.Unindent();
+                //Debug.WriteLine("Finished Deserializing array.");
                 return tObj;
             }
 
             if (type.GetInterface("IList") != null) {
-                Debug.WriteLine("Array is an IList");
+                //Debug.WriteLine("Array is an IList");
 
-                Debug.WriteLine("Starting to deserialize an IList.");
-                Debug.Indent();
+                //Debug.WriteLine("Starting to deserialize an IList.");
+                //Debug.Indent();
 
                 T tObj = DeserializeList<T>(type);
 
-                Debug.Unindent();
-                Debug.WriteLine("Finished Deserializing array.");
+                //Debug.Unindent();
+                //Debug.WriteLine("Finished Deserializing array.");
                 return tObj;
             }
 
             if (type.IsGenericType && type.GetInterface("IDictionary`2") != null) {
-                Debug.WriteLine("Array is an generic dictionary");
+                //Debug.WriteLine("Array is an generic dictionary");
 
-                Debug.WriteLine("Starting to deserialize a generic dictionary.");
-                Debug.Indent();
+                //Debug.WriteLine("Starting to deserialize a generic dictionary.");
+                //Debug.Indent();
 
                 T tObj = DeserializeGenericDictionary<T>(type);
 
-                Debug.Unindent();
-                Debug.WriteLine("Finished desrializing generic dictionary.");
+                //Debug.Unindent();
+                //Debug.WriteLine("Finished desrializing generic dictionary.");
                 return tObj;
             }
 
             if (type.GetInterface("IDictionary") != null) {
-                Debug.WriteLine("Array is an IDictionary");
+                //Debug.WriteLine("Array is an IDictionary");
 
-                Debug.WriteLine("Starting to deserialize an IDictionary.");
-                Debug.Indent();
+                //Debug.WriteLine("Starting to deserialize an IDictionary.");
+                //Debug.Indent();
 
                 Hashtable ht = ReadAsociativeArray();
                 T tObj;
                 if (type == HashTableType) {
                     tObj = ht.CastAs<T>();
 
-                    Debug.WriteLine("Array is a hashtable");
-                    Debug.Unindent();
-                    Debug.WriteLine("Finished desrializing the hashtable.");
+                    //Debug.WriteLine("Array is a hashtable");
+                    //Debug.Unindent();
+                    //Debug.WriteLine("Finished desrializing the hashtable.");
                     return tObj;
                 }
 
-                Debug.WriteLine("Converting Hashtable to the " + type.FullName);
+                //Debug.WriteLine("Converting Hashtable to the " + type.FullName);
 
                 IDictionary dict = (IDictionary) Activator.CreateInstance(type);
                 foreach (DictionaryEntry entry in ht) {
@@ -659,9 +659,9 @@ namespace Frost.PHPtoNET {
 
                 tObj = (T) dict;
 
-                Debug.WriteLine("Finished converting.");
-                Debug.Unindent();
-                Debug.WriteLine("Finished desrializing the hashtable.");
+                //Debug.WriteLine("Finished converting.");
+                //Debug.Unindent();
+                //Debug.WriteLine("Finished desrializing the hashtable.");
                 return tObj;
             }
             return default(T);
@@ -670,15 +670,15 @@ namespace Frost.PHPtoNET {
         private T DeserializeGenericDictionary<T>(Type type) {
             Type[] genericArguments = type.GetGenericArguments();
 
-            Debug.WriteLine("Deserializing generic dictionary with expected type " + type.FullName);
-            Debug.Indent();
+            //Debug.WriteLine("Deserializing generic dictionary with expected type " + type.FullName);
+            //Debug.Indent();
 
             IDictionary genericDict = (IDictionary) InvokeGenericMethod("DeserializeDictionary", genericArguments);
 
-            Debug.Unindent();
-            Debug.WriteLine("Finished deserializing.");
+            //Debug.Unindent();
+            //Debug.WriteLine("Finished deserializing.");
 
-            Debug.WriteLine("Converting generic IDictionary to type: " + type.FullName);
+            //Debug.WriteLine("Converting generic IDictionary to type: " + type.FullName);
 
             object instance = Activator.CreateInstance(type);
 
@@ -687,52 +687,52 @@ namespace Frost.PHPtoNET {
                 addToDict.Invoke(instance, new[] { entry.Key, entry.Value });
             }
 
-            Debug.WriteLine("Finished converting.");
+            //Debug.WriteLine("Finished converting.");
 
             return (T) instance;
         }
 
         private T DeserializeList<T>(Type t) {
-            Debug.WriteLine("Deserializing as an object array.");
-            Debug.Indent();
+            //Debug.WriteLine("Deserializing as an object array.");
+            //Debug.Indent();
 
             object[] arr = DeserializeArray<object>();
 
-            Debug.Unindent();
-            Debug.WriteLine("Finished deserializing object array.");
+            //Debug.Unindent();
+            //Debug.WriteLine("Finished deserializing object array.");
 
-            Debug.WriteLine("Converting to: " + t.FullName);
+            //Debug.WriteLine("Converting to: " + t.FullName);
 
             IList list = (IList) Activator.CreateInstance(t);
             foreach (object value in arr) {
                 list.Add(value);
             }
 
-            Debug.WriteLine("Finished converting");
+            //Debug.WriteLine("Finished converting");
             return (T) list;
         }
 
         private T DeserializeGenericList<T>(Type t) {
             Type[] genericArguments = t.GetGenericArguments();
 
-            Debug.WriteLine("Deserializing generic list of type: {0} with elements of type: {1}", t.FullName, genericArguments[0]);
-            Debug.Indent();
+            //Debug.WriteLine("Deserializing generic list of type: {0} with elements of type: {1}", t.FullName, genericArguments[0]);
+            //Debug.Indent();
 
             object[] arr = (object[]) InvokeGenericMethod("DeserializeArray", genericArguments);
 
-            Debug.Unindent();
-            Debug.WriteLine("Finished deserializing generic list");
+            //Debug.Unindent();
+            //Debug.WriteLine("Finished deserializing generic list");
 
             object genericList = Activator.CreateInstance(t);
 
-            Debug.WriteLine("Coverting generic IList to type: " + t.FullName);
+            //Debug.WriteLine("Coverting generic IList to type: " + t.FullName);
 
             MethodInfo addToList = t.GetMethod("Add");
             foreach (object element in arr) {
                 addToList.Invoke(genericList, new[] { element });
             }
 
-            Debug.WriteLine("Finished coverting generic IList");
+            //Debug.WriteLine("Finished coverting generic IList");
 
             return (T) genericList;
         }
@@ -791,13 +791,13 @@ namespace Frost.PHPtoNET {
             int len = ReadIntegerValue();
             CheckString(":{");
 
-            Debug.WriteLine("Deserializing array with expected elements of type " + typeof(TElement).FullName);
-            Debug.Indent();
+            //Debug.WriteLine("Deserializing array with expected elements of type " + typeof(TElement).FullName);
+            //Debug.Indent();
 
             TElement[] arr = DeserializeArrayElements<TElement>(len);
 
-            Debug.Unindent();
-            Debug.WriteLine("Finished deserializing array");
+            //Debug.Unindent();
+            //Debug.WriteLine("Finished deserializing array");
 
             CheckChar('}');
 
@@ -809,13 +809,13 @@ namespace Frost.PHPtoNET {
             int len = ReadIntegerValue();
             CheckString(":{");
 
-            Debug.WriteLine("Deserializing dictionary with expected elements of type {0} and keys of type {1}", typeof(TValue).FullName, typeof(TKey).FullName);
-            Debug.Indent();
+            //Debug.WriteLine("Deserializing dictionary with expected elements of type {0} and keys of type {1}", typeof(TValue).FullName, typeof(TKey).FullName);
+            //Debug.Indent();
 
             IDictionary<TKey, TValue> dict = DeserializeDictionaryElements<TKey, TValue>(len);
 
-            Debug.Unindent();
-            Debug.WriteLine("Finished deserializing dictionary");
+            //Debug.Unindent();
+            //Debug.WriteLine("Finished deserializing dictionary");
 
             CheckChar('}');
 
@@ -825,21 +825,21 @@ namespace Frost.PHPtoNET {
         private IDictionary<TKey, TValue> DeserializeDictionaryElements<TKey, TValue>(int len) {
             IDictionary<TKey, TValue> dict = new Dictionary<TKey, TValue>();
             for (int i = 0; i < len; i++) {
-                Debug.WriteLine("Deserializing dictionary entry key.");
-                Debug.Indent();
+                //Debug.WriteLine("Deserializing dictionary entry key.");
+                //Debug.Indent();
 
                 TKey key = DeserializeKey<TKey>();
 
-                Debug.Unindent();
-                Debug.WriteLine("Finshed deserializing dictionary entry with value: " + key);
+                //Debug.Unindent();
+                //Debug.WriteLine("Finshed deserializing dictionary entry with value: " + key);
 
-                Debug.WriteLine("Deserializing dictionary entry value.");
-                Debug.Indent();
+                //Debug.WriteLine("Deserializing dictionary entry value.");
+                //Debug.Indent();
 
                 TValue value = DeserializeElement<TValue>();
 
-                Debug.Unindent();
-                Debug.WriteLine("Finshed deserializing dictionary entry value");
+                //Debug.Unindent();
+                //Debug.WriteLine("Finshed deserializing dictionary entry value");
 
                 dict.Add(key, value);
             }
@@ -857,13 +857,13 @@ namespace Frost.PHPtoNET {
                     return null;
                 }
 
-                Debug.WriteLine("Deserializing element with index: " + idx);
-                Debug.Indent();
+                //Debug.WriteLine("Deserializing element with index: " + idx);
+                //Debug.Indent();
 
                 elements[idx] = DeserializeElement<TElement>();
 
-                Debug.Unindent();
-                Debug.WriteLine("Finished deserializing element with index: " + idx);
+                //Debug.Unindent();
+                //Debug.WriteLine("Finished deserializing element with index: " + idx);
             }
             return elements;
         }

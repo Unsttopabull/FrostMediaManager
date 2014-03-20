@@ -10,9 +10,9 @@ using System.Windows.Data;
 using System.Windows.Input;
 using Frost.Common;
 using Frost.Common.Models;
-using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 using GalaSoft.MvvmLight;
+using RibbonUI.Annotations;
 using RibbonUI.Messages;
 using RibbonUI.Messages.Country;
 using RibbonUI.Messages.Genre;
@@ -35,9 +35,12 @@ namespace RibbonUI.UserControls {
         private ObservableCollection<MovieAudio> _audios;
         private ObservableCollection<MovieSubtitle> _subtitles;
         private ObservableCollection<MovieArt> _art;
+        private DateTime _lastChangedMovie;
+        private ObservableCollection<MovieCertification> _certifications;
 
         public ContentGridViewModel(IMoviesDataService service) {
             _service = service;
+            _lastChangedMovie = DateTime.Now;
 
             Movies = new ObservableCollection<ObservableMovie>(service.Movies.Select(m => new ObservableMovie(m)));
 
@@ -96,13 +99,43 @@ namespace RibbonUI.UserControls {
                 if (Equals(value, _selectedMovie)) {
                     return;
                 }
+
+                DateTime now = DateTime.Now;
+                if ((now - _lastChangedMovie).TotalSeconds < 0.5) {
+                    _lastChangedMovie = now;
+                    return;
+                }
+                _lastChangedMovie = now;
+
                 _selectedMovie = value;
 
                 if (_selectedMovie != null) {
-                    Videos = new ObservableCollection<MovieVideo>(_selectedMovie.Videos.Select(v => new MovieVideo(v)));
-                    Audios = new ObservableCollection<MovieAudio>(_selectedMovie.Audios.Select(a => new MovieAudio(a)));
-                    Subtitles = new ObservableCollection<MovieSubtitle>(_selectedMovie.Subtitles.Select(s => new MovieSubtitle(s)));
-                    Art = new ObservableCollection<MovieArt>(_selectedMovie.Art.Select(a => new MovieArt(a)));
+                    var videos = _selectedMovie.Videos;
+                    var audios = _selectedMovie.Audios;
+                    var subs = _selectedMovie.Subtitles;
+                    var art = _selectedMovie.Art;
+                    var certs = _selectedMovie.Certifications;
+
+                    Videos = videos == null
+                        ? new ObservableCollection<MovieVideo>()
+                        : new ObservableCollection<MovieVideo>(videos.Select(v => new MovieVideo(v)));
+
+                    Audios = audios == null
+                        ? new ObservableCollection<MovieAudio>()
+                        : new ObservableCollection<MovieAudio>(audios.Select(a => new MovieAudio(a)));
+
+                    Subtitles = subs == null
+                        ? new ObservableCollection<MovieSubtitle>()
+                        : new ObservableCollection<MovieSubtitle>(subs.Select(s => new MovieSubtitle(s)));
+
+
+                    Art = art == null
+                        ? new ObservableCollection<MovieArt>()
+                        : new ObservableCollection<MovieArt>(art.Select(a => new MovieArt(a)));
+
+                    Certifications = certs == null
+                        ? new ObservableCollection<MovieCertification>()
+                        : new ObservableCollection<MovieCertification>(certs.Select(c => new MovieCertification(c)));
                 }
 
                 OnPropertyChanged();
@@ -116,6 +149,17 @@ namespace RibbonUI.UserControls {
                     return;
                 }
                 _movieSearchFilter = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<MovieCertification> Certifications {
+            get { return _certifications; }
+            set {
+                if (Equals(value, _certifications)) {
+                    return;
+                }
+                _certifications = value;
                 OnPropertyChanged();
             }
         }

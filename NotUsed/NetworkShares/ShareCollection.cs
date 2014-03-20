@@ -1,3 +1,10 @@
+/*
+ *  CPOL Licence http://www.codeproject.com/info/cpol10.aspx 
+ *  Copyright @ Richard Deeming 
+ *  
+ *  Modified and adapted by Martin Kraner
+ */
+
 using System;
 using System.Collections;
 using System.IO;
@@ -53,7 +60,7 @@ namespace Trinet.Networking {
 		
         /// <summary>Unc name</summary>
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Auto)]
-        protected struct UNIVERSAL_NAME_INFO 
+        protected struct UniversalNameInfo 
         {
             [MarshalAs(UnmanagedType.LPTStr)]
             public string lpUniversalName;
@@ -64,7 +71,7 @@ namespace Trinet.Networking {
         /// Requires admin rights to work. 
         /// </remarks>
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
-        protected struct SHARE_INFO_2 
+        protected struct ShareInfo2 
         {
             [MarshalAs(UnmanagedType.LPWStr)]
             public string NetName;
@@ -85,7 +92,7 @@ namespace Trinet.Networking {
         /// Fallback when no admin rights.
         /// </remarks>
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
-        protected struct SHARE_INFO_1 
+        protected struct ShareInfo1 
         {
             [MarshalAs(UnmanagedType.LPWStr)]
             public string NetName;
@@ -96,7 +103,7 @@ namespace Trinet.Networking {
 		
         /// <summary>Share information, Win9x</summary>
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi, Pack=1)]
-        protected struct SHARE_INFO_50 
+        protected struct ShareInfo50 
         {
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst=13)]
             public string NetName;
@@ -122,7 +129,7 @@ namespace Trinet.Networking {
 		
         /// <summary>Share information level 1, Win9x</summary>
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi, Pack=1)]
-        protected struct SHARE_INFO_1_9x 
+        protected struct ShareInfo1_9X 
         {
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst=13)]
             public string NetName;
@@ -145,13 +152,11 @@ namespace Trinet.Networking {
 		
         /// <summary>Get a UNC name</summary>
         [DllImport("mpr", CharSet=CharSet.Auto)]
-        protected static extern int WNetGetUniversalName (string lpLocalPath,
-                                                          int dwInfoLevel, ref UNIVERSAL_NAME_INFO lpBuffer, ref int lpBufferSize);
+        protected static extern int WNetGetUniversalName (string lpLocalPath, int dwInfoLevel, ref UniversalNameInfo lpBuffer, ref int lpBufferSize);
 
         /// <summary>Get a UNC name</summary>
         [DllImport("mpr", CharSet=CharSet.Auto)]
-        protected static extern int WNetGetUniversalName (string lpLocalPath,
-                                                          int dwInfoLevel, IntPtr lpBuffer, ref int lpBufferSize);
+        protected static extern int WNetGetUniversalName (string lpLocalPath, int dwInfoLevel, IntPtr lpBuffer, ref int lpBufferSize);
 
         /// <summary>Enumerate shares (NT)</summary>
         [DllImport("netapi32", CharSet=CharSet.Unicode)]
@@ -200,20 +205,20 @@ namespace Trinet.Networking {
                     return;
                 }
 
-                Type t = (2 == level) ? typeof(SHARE_INFO_2) : typeof(SHARE_INFO_1);
+                Type t = (2 == level) ? typeof(ShareInfo2) : typeof(ShareInfo1);
                 int offset = Marshal.SizeOf(t);
 
-                for (int i=0, lpItem = pBuffer.ToInt32(); i<entriesRead; i++, lpItem+=offset) 
+                for (long i=0, lpItem = Environment.Is64BitProcess ? pBuffer.ToInt64() : pBuffer.ToInt32(); i < entriesRead; i++, lpItem +=offset)
                 {
                     IntPtr pItem = new IntPtr(lpItem);
                     if (1 == level) 
                     {
-                        SHARE_INFO_1 si = (SHARE_INFO_1)Marshal.PtrToStructure(pItem, t);
+                        ShareInfo1 si = (ShareInfo1)Marshal.PtrToStructure(pItem, t);
                         shares.Add(si.NetName, string.Empty, si.ShareType, si.Remark);
                     }
                     else 
                     {
-                        SHARE_INFO_2 si = (SHARE_INFO_2)Marshal.PtrToStructure(pItem, t);
+                        ShareInfo2 si = (ShareInfo2)Marshal.PtrToStructure(pItem, t);
                         shares.Add(si.NetName, si.Path, si.ShareType, si.Remark);
                     }
                 }
@@ -233,10 +238,8 @@ namespace Trinet.Networking {
         protected static void EnumerateShares9x(string server, ShareCollection shares)
         {
             int level = 50;
-            int nRet = 0;
-            ushort entriesRead, totalEntries;
-			
-            Type t = typeof(SHARE_INFO_50);
+
+            Type t = typeof(ShareInfo50);
             int size = Marshal.SizeOf(t);
             ushort cbBuffer = (ushort)(MAX_SI50_ENTRIES * size);
             //On Win9x, must allocate buffer before calling API
@@ -244,12 +247,14 @@ namespace Trinet.Networking {
 
             try 
             {
-                nRet = NetShareEnum(server, level, pBuffer, cbBuffer, out entriesRead, out totalEntries);
+                ushort entriesRead;
+                ushort totalEntries;
+                int nRet = NetShareEnum(server, level, pBuffer, cbBuffer, out entriesRead, out totalEntries);
 				
                 if (ERROR_WRONG_LEVEL == nRet)
                 {
                     level = 1;
-                    t = typeof(SHARE_INFO_1_9x);
+                    t = typeof(ShareInfo1_9X);
                     size = Marshal.SizeOf(t);
 					
                     nRet = NetShareEnum(server, level, pBuffer, cbBuffer, out entriesRead, out totalEntries);
@@ -263,12 +268,12 @@ namespace Trinet.Networking {
 						
                         if (1 == level)
                         {
-                            SHARE_INFO_1_9x si = (SHARE_INFO_1_9x)Marshal.PtrToStructure(pItem, t);
+                            ShareInfo1_9X si = (ShareInfo1_9X)Marshal.PtrToStructure(pItem, t);
                             shares.Add(si.NetName, string.Empty, si.ShareType, si.Remark);
                         }
                         else
                         {
-                            SHARE_INFO_50 si = (SHARE_INFO_50)Marshal.PtrToStructure(pItem, t);
+                            ShareInfo50 si = (ShareInfo50)Marshal.PtrToStructure(pItem, t);
                             shares.Add(si.NetName, si.Path, si.ShareType, si.Remark);
                         }
                     }
@@ -355,7 +360,7 @@ namespace Trinet.Networking {
             }
 			
             int nRet = 0;
-            UNIVERSAL_NAME_INFO rni = new UNIVERSAL_NAME_INFO();
+            UniversalNameInfo rni = new UniversalNameInfo();
             int bufferSize = Marshal.SizeOf(rni);
 
             nRet = WNetGetUniversalName(fileName, UNIVERSAL_NAME_INFO_LEVEL, ref rni, ref bufferSize);
@@ -369,7 +374,7 @@ namespace Trinet.Networking {
 
                     if (NO_ERROR == nRet) 
                     {
-                        rni = (UNIVERSAL_NAME_INFO)Marshal.PtrToStructure(pBuffer, typeof(UNIVERSAL_NAME_INFO));
+                        rni = (UniversalNameInfo)Marshal.PtrToStructure(pBuffer, typeof(UniversalNameInfo));
                     }
                 }
                 finally 

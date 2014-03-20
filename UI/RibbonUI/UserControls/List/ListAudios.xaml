@@ -101,8 +101,7 @@
                             <StackPanel Orientation="Horizontal" Tag="{Binding Duration}"
                                         Style="{StaticResource CollapseOnTagNull}">
                                 <Label Content="{l:T Duration, Postfix=:}" />
-                                <TextBlock VerticalAlignment="Center"
-                                           Text="{Binding DurationTimeSpan, StringFormat=hh\\:mm\\:ss}" />
+                                <TextBlock VerticalAlignment="Center" Text="{Binding DurationTimeSpan, StringFormat=hh\\:mm\\:ss, TargetNullValue={x:Null}}" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Tag="{Binding Language}"
                                         Style="{StaticResource CollapseOnTagNull}">

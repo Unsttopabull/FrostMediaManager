@@ -35,7 +35,7 @@
         XBMC,
 
         /// <summary>The Frost Media Manager cache database.</summary>
-        Cache
+        Frost
 
     }
 

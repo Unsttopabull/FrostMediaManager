@@ -60,6 +60,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
@@ -78,6 +82,18 @@
       <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Libraries\PHPtoNet\PHPtoNET.csproj">
+      <Project>{4661DD6C-BE69-4BCB-A835-53D192DE841C}</Project>
+      <Name>PHPtoNET</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NotUsed\NetworkShares\NetworkShares.csproj">
+      <Project>{a85f5e2b-149a-4fb5-a749-056ae20ab72f}</Project>
+      <Name>NetworkShares</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NotUsed\ObdelajProdatke\ProcessDatabase.csproj">
+      <Project>{deaba63d-465e-4ab2-a643-d7fbe7ac3181}</Project>
+      <Name>ProcessDatabase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Providers\Providers.Frost\Providers.Frost.csproj">
       <Project>{b404da8f-fbf4-4ccc-be01-22c488863ec2}</Project>
       <Name>Providers.Frost</Name>
@@ -85,10 +101,6 @@
     <ProjectReference Include="..\Detection\FeatureDetector\FeatureDetector.csproj">
       <Project>{8542C013-AA9A-4852-98FA-6F05CC037A91}</Project>
       <Name>FeatureDetector</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Providers\Providers.Xbmc\Providers.Xbmc.csproj">
-      <Project>{2e311a90-347b-47e1-8aa7-87a276c88f4e}</Project>
-      <Name>Providers.Xbmc</Name>
     </ProjectReference>
     <ProjectReference Include="..\Providers\Providers.Xtreamer\Providers.Xtreamer.csproj">
       <Project>{8491dccf-354e-4ff6-89d4-88a0bb9cb8af}</Project>

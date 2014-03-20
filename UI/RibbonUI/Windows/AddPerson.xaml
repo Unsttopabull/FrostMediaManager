@@ -59,9 +59,9 @@
                 <TextBox Grid.Column="0" Grid.Row="1" x:Name="PersonName" Text="{Binding PersonName, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <Label Margin="-5,0,0,0" Grid.Row="0" Grid.Column="2" Content="{l:T Thumb, Postfix=:}"/>
-                <TextBox Grid.Row="1" Grid.Column="2" x:Name="PersonThumb" Text="{Binding PersonThumb}"/>
+                <TextBox Grid.Row="1" Grid.Column="2" x:Name="PersonThumb" Text="{Binding PersonThumb}" IsEnabled="{Binding IsThumbEditable}"/>
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="1" Grid.Column="2" Margin="0,0,5,0" ToolTip="{l:T Open file search dialog}">
-                    <Button Height="16" Style="{StaticResource TransparentBorderlessButton}" Command="{Binding ThumbSearchCommand}">
+                    <Button Height="16" Style="{StaticResource TransparentBorderlessButton}" Command="{Binding ThumbSearchCommand}" IsEnabled="{Binding ElementName=PersonThumb, Path=IsEnabled}">
                         <Image Source="../Images/folder.ico"/>
                     </Button>
                 </StackPanel>

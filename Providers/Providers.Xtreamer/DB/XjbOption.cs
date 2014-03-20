@@ -7,6 +7,10 @@ namespace Frost.Providers.Xtreamer.DB {
     [Table("options")]
     public class XjbOption {
 
+        public XjbOption() {
+            
+        }
+
         /// <summary>Initializes a new instance of the <see cref="XjbOption"/> class.</summary>
         /// <param name="key">The key (what this option represents)</param>
         /// <param name="value">The value.</param>

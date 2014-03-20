@@ -46,14 +46,14 @@ namespace Frost.Providers.Frost.Service {
                 _mvc.Movies
                     .Include("Studios")
                     .Include("Art")
-                    .Include("Genres")
-                    .Include("Awards")
+                    //.Include("Genres")
+                    //.Include("Awards")
                     .Include("Actors")
                     .Include("Plots")
-                    .Include("Directors")
-                    .Include("Countries")
-                    .Include("Audios")
-                    .Include("Videos")
+                    //.Include("Directors")
+                    //.Include("Countries")
+                    //.Include("Audios")
+                    //.Include("Videos")
                     .Load();
 
                 _movies = _mvc.Movies.Local;
