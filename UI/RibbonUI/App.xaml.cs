@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -32,6 +33,10 @@ namespace RibbonUI {
         }
 
         public App() {
+            FileStream debugLog = File.Create("debug.txt");
+            Debug.Listeners.Add(new TextWriterTraceListener(debugLog));
+            Debug.AutoFlush = true;
+
             LoadPlugins();
             RegisterViewModels();
 
@@ -240,13 +245,6 @@ namespace RibbonUI {
         private void UnhandledExeption(object sender, DispatcherUnhandledExceptionEventArgs e) {
             MessageBox.Show(e.Exception.Message);
             e.Handled = true;
-        }
-
-        /// <summary>Raises the <see cref="E:System.Windows.Application.Exit"/> event.</summary>
-        /// <param name="e">An <see cref="T:System.Windows.ExitEventArgs"/> that contains the event data.</param>
-        protected override void OnExit(ExitEventArgs e) {
-            LightInjectContainer.Dispose();
-            base.OnExit(e);
         }
     }
 

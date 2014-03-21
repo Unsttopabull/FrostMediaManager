@@ -106,6 +106,12 @@
     <Compile Include="DB\Rating.cs" />
     <Compile Include="DB\Set.cs" />
     <Compile Include="DB\Special.cs" />
+    <Compile Include="Proxies\FrostAudio.cs" />
+    <Compile Include="Proxies\FrostCertification.cs" />
+    <Compile Include="Proxies\FrostMovie.cs" />
+    <Compile Include="Proxies\FrostSubtitle.cs" />
+    <Compile Include="Proxies\FrostVideo.cs" />
+    <Compile Include="Proxies\ProxyBase.cs" />
     <Compile Include="SQLiteInitializer.cs" />
     <Compile Include="DB\Studio.cs" />
     <Compile Include="Provider\FrostCompositionRoot.cs" />

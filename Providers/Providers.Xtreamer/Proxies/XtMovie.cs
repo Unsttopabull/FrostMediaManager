@@ -470,6 +470,70 @@ namespace Frost.Providers.Xtreamer.Proxies {
                 return false;                
             }
         }
+
+        public IActor AddActor(IActor actor) {
+            throw new NotImplementedException();
+        }
+
+        public ICountry AddCountry(ICountry country) {
+            throw new NotImplementedException();
+        }
+
+        public IPerson AddDirector(IPerson director) {
+            throw new NotImplementedException();
+        }
+
+        public IGenre AddGenre(IGenre genre) {
+            throw new NotImplementedException();
+        }
+
+        public IPlot AddPlot(IPlot plot) {
+            throw new NotImplementedException();
+        }
+
+        public ISpecial AddSpecial(ISpecial special) {
+            throw new NotImplementedException();
+        }
+
+        public IStudio AddStudio(IStudio studio) {
+            throw new NotImplementedException();
+        }
+
+        public ISubtitle AddSubtitle(ISubtitle subtitle) {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveActor(IActor actor) {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveCountry(ICountry country) {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveDirector(IPerson director) {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveGenre(IGenre genre) {
+            throw new NotImplementedException();
+        }
+
+        public void RemovePlot(IPlot plot) {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveSpecial(ISpecial special) {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveStudio(IStudio studio) {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveSubtitle(ISubtitle subtitle) {
+            throw new NotImplementedException();
+        }
     }
 
 }

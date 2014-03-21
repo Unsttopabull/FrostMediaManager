@@ -48,13 +48,11 @@
                             </Image>
                         </StackPanel>
                         <StackPanel Margin="15,0,0,0" MinWidth="200">
-                            <StackPanel Orientation="Horizontal" Tag="{Binding Source}"
-                                        Style="{StaticResource CollapseOnTagNull}">
+                            <StackPanel Orientation="Horizontal" Tag="{Binding Source}" Style="{StaticResource CollapseOnTagNull}">
                                 <Label Content="{l:T Source, Postfix=:}" />
                                 <TextBlock VerticalAlignment="Center" Text="{Binding Source}" />
                             </StackPanel>
-                            <StackPanel Orientation="Horizontal" x:Name="StandardPanel" Tag="{Binding ChannelSetup}"
-                                        Style="{StaticResource CollapseOnTagNull}">
+                            <StackPanel Orientation="Horizontal" x:Name="StandardPanel" Tag="{Binding ChannelSetup}" Style="{StaticResource CollapseOnTagNull}">
                                 <Label Content="{l:T Channel layout, Postfix=:}" />
                                 <TextBlock VerticalAlignment="Center" Text="{Binding ChannelSetup}"/>
                             </StackPanel>

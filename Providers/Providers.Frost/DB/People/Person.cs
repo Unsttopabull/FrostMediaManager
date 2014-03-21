@@ -91,20 +91,18 @@ namespace Frost.Providers.Frost.DB.People {
         long IMovieEntity.Id {get { return PersonId; }}
 
         public bool this[string propertyName] {
-            get { return true; }
+            get {
+                switch (propertyName) {
+                    case "Name":
+                    case "Thumb":
+                    case "ImdbID":
+                    case "Id":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
         }
-
-        ///// <summary>Gets or sets movies where this person was a director.</summary>
-        ///// <value>The movies where this person was a director.</value>
-        //IEnumerable<IMovie> IPerson.MoviesAsDirector {
-        //    get { return MoviesAsDirector; }
-        //}
-
-        ///// <summary>Gets or sets movies where this person was a writer.</summary>
-        ///// <value>The movies where this person was a writer.</value>
-        //IEnumerable<IMovie> IPerson.MoviesAsWriter {
-        //    get { return MoviesAsWriter; }
-        //}
 
         #endregion
 

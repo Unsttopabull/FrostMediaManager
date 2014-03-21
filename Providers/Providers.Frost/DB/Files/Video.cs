@@ -8,7 +8,7 @@ using Frost.Common.Models;
 namespace Frost.Providers.Frost.DB.Files {
 
     /// <summary>Represents information about a video stream in a file.</summary>
-    public class Video : IVideo {
+    public class Video {
         #region Constructors
 
         /// <summary>Initializes a new instance of the <see cref="Video"/> class.</summary>
@@ -223,45 +223,15 @@ namespace Frost.Providers.Frost.DB.Files {
         [ForeignKey("LanguageId")]
         public Language Language { get; set; }
 
-        /// <summary>Gets or sets the language of this video.</summary>
-        /// <value>The language of this video.</value>
-        ILanguage IHasLanguage.Language {
-            get { return Language; }
-            set {
-                if (value == null) {
-                    Language = null;
-                    return;
-                }
-                Language = new Language(value);
-            }
-        }
-
         /// <summary>Gets or sets the file this video is contained in.</summary>
         /// <value>The file this video is contained in.</value>
         public virtual File File { get; set; }
-
-        /// <summary>Gets or sets the file this video is contained in.</summary>
-        /// <value>The file this video is contained in.</value>
-        IFile IVideo.File {
-            get { return File; }
-            //set {
-            //    if (value == null) {
-            //        File = null;
-            //        return;
-            //    }
-            //    File = new File(value);
-            //}
-        }
 
         /// <summary>Gets or sets the movie this video is from.</summary>
         /// <value>The movie this video is from.</value>
         public virtual Movie Movie { get; set; }
 
         #endregion
-
-        public bool this[string propertyName] {
-            get { return true; }
-        }
 
         private int? GetVideoResolution(string resolution) {
             if (!string.IsNullOrEmpty(resolution)) {

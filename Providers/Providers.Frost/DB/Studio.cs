@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using System.Linq;
 using Frost.Common.Models;
 
 namespace Frost.Providers.Frost.DB {
@@ -42,13 +41,6 @@ namespace Frost.Providers.Frost.DB {
 
         bool IMovieEntity.this[string propertyName] {
             get { return true; }
-        }
-
-        /// <summary>Converts studio names to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Studio"/></summary>
-        /// <param name="studioNames">The studio names.</param>
-        /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Studio"/> instances with specified studio names</returns>
-        public static IEnumerable<Studio> GetFromNames(IEnumerable<string> studioNames) {
-            return studioNames.Select(studioName => new Studio(studioName));
         }
 
         /// <summary>Returns a string that represents the current object.</summary>

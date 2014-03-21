@@ -67,17 +67,17 @@ namespace Frost.Providers.Xbmc.DB {
             Path = new XbmcPath { FolderPath = file.FolderPath };
             FileNames = new[] { file.NameWithExtension };
 
-            foreach (IAudio audio in file.AudioDetails) {
-                StreamDetails.Add(new XbmcAudioDetails(audio));
-            }
+            //foreach (IAudio audio in file.AudioDetails) {
+            //    StreamDetails.Add(new XbmcAudioDetails(audio));
+            //}
 
-            foreach (IVideo video in file.VideoDetails) {
-                StreamDetails.Add(new XbmcVideoDetails(video));
-            }
+            //foreach (IVideo video in file.VideoDetails) {
+            //    StreamDetails.Add(new XbmcVideoDetails(video));
+            //}
 
-            foreach (ISubtitle subtitle in file.Subtitles) {
-                StreamDetails.Add(new XbmcSubtitleDetails(subtitle));
-            }
+            //foreach (ISubtitle subtitle in file.Subtitles) {
+            //    StreamDetails.Add(new XbmcSubtitleDetails(subtitle));
+            //}
         }
 
         #endregion
@@ -224,23 +224,23 @@ namespace Frost.Providers.Xbmc.DB {
             }
         }
 
-        /// <summary>Gets or sets the details about audio streams in this file</summary>
-        /// <value>The details about audio streams in this file</value>
-        IEnumerable<IAudio> IFile.AudioDetails {
-            get { return StreamDetails.OfType<XbmcAudioDetails>(); }
-        }
+        ///// <summary>Gets or sets the details about audio streams in this file</summary>
+        ///// <value>The details about audio streams in this file</value>
+        //IEnumerable<IAudio> IFile.AudioDetails {
+        //    get { return StreamDetails.OfType<XbmcAudioDetails>(); }
+        //}
 
-        /// <summary>Gets or sets the details about video streams in this file</summary>
-        /// <value>The details about video streams in this file</value>
-        IEnumerable<IVideo> IFile.VideoDetails {
-            get { return StreamDetails.OfType<XbmcVideoDetails>(); }
-        }
+        ///// <summary>Gets or sets the details about video streams in this file</summary>
+        ///// <value>The details about video streams in this file</value>
+        //IEnumerable<IVideo> IFile.VideoDetails {
+        //    get { return StreamDetails.OfType<XbmcVideoDetails>(); }
+        //}
 
-        /// <summary>Gets or sets the details about subtitles in this file</summary>
-        /// <value>The details about subtitles in this file</value>
-        IEnumerable<ISubtitle> IFile.Subtitles {
-            get { return StreamDetails.OfType<XbmcSubtitleDetails>(); }
-        }
+        ///// <summary>Gets or sets the details about subtitles in this file</summary>
+        ///// <value>The details about subtitles in this file</value>
+        //IEnumerable<ISubtitle> IFile.Subtitles {
+        //    get { return StreamDetails.OfType<XbmcSubtitleDetails>(); }
+        //}
 
         /// <summary>Gets or sets the date and time the file was added.</summary>
         /// <value>The date and time the file was added.</value>

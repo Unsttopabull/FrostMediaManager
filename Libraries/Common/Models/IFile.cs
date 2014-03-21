@@ -33,17 +33,17 @@ namespace Frost.Common.Models {
         /// <value>The date and time the file was added.</value>
         DateTime DateAdded { get; set; }
 
-        /// <summary>Gets or sets the details about audio streams in this file</summary>
-        /// <value>The details about audio streams in this file</value>
-        IEnumerable<IAudio> AudioDetails { get; }
+        ///// <summary>Gets or sets the details about audio streams in this file</summary>
+        ///// <value>The details about audio streams in this file</value>
+        //IEnumerable<IAudio> AudioDetails { get; }
 
-        /// <summary>Gets or sets the details about video streams in this file</summary>
-        /// <value>The details about video streams in this file</value>
-        IEnumerable<IVideo> VideoDetails { get; }
+        ///// <summary>Gets or sets the details about video streams in this file</summary>
+        ///// <value>The details about video streams in this file</value>
+        //IEnumerable<IVideo> VideoDetails { get; }
 
-        /// <summary>Gets or sets the details about subtitles in this file</summary>
-        /// <value>The details about subtitles in this file</value>
-        IEnumerable<ISubtitle> Subtitles { get; }
+        ///// <summary>Gets or sets the details about subtitles in this file</summary>
+        ///// <value>The details about subtitles in this file</value>
+        //IEnumerable<ISubtitle> Subtitles { get; }
 
         /// <summary>Gets the full path to the file.</summary>
         /// <value>A full path filename to the fille or <b>null</b> if any of <b>FolderPath</b> or <b>FileName</b> are null</value>

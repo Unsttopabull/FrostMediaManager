@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using Frost.XamlControls.Commands;
@@ -32,6 +31,7 @@ namespace RibbonUI.Windows {
         public Window Window { get; set; }
 
         private void OnSelectProvider(Provider obj) {
+            Window.Tag = true;
             Window.Close();
 
             Application.Current.MainWindow = new MainWindow(obj.AssemblyPath);

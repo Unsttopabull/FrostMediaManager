@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Data.SQLite;
 using System.Diagnostics;
@@ -13,7 +15,6 @@ namespace Frost.Providers.Frost.DB {
 
     /// <summary>Represents a context used for manipulation of the database.</summary>
     public class FrostDbContainer : DbContext {
-
         /// <summary>Initializes a new instance of the <see cref="FrostDbContainer"/> class.</summary>
         public FrostDbContainer(bool dropCreate, string filePath) : base(GetSQLiteConnection(filePath), true) {
             Database.SetInitializer(new SQLiteInitializer<FrostDbContainer>(Resources.MovieVoSQL, dropCreate));
@@ -109,8 +110,8 @@ namespace Frost.Providers.Frost.DB {
         public bool HasUnsavedChanges() {
             ChangeTracker.DetectChanges();
             return ChangeTracker.Entries().Any(e => e.State == EntityState.Added
-                                                         || e.State == EntityState.Modified
-                                                         || e.State == EntityState.Deleted);
+                                                    || e.State == EntityState.Modified
+                                                    || e.State == EntityState.Deleted);
         }
 
         /// <summary>Checks if the context has unsaved changed (added, modified or deleted entites)</summary>
@@ -118,8 +119,8 @@ namespace Frost.Providers.Frost.DB {
         public IEnumerable<DbEntityEntry> GetUnsavedEntites() {
             ChangeTracker.DetectChanges();
             return ChangeTracker.Entries().Where(e => e.State == EntityState.Added
-                                                         || e.State == EntityState.Modified
-                                                         || e.State == EntityState.Deleted);
+                                                      || e.State == EntityState.Modified
+                                                      || e.State == EntityState.Deleted);
         }
 
         private static SQLiteConnection GetSQLiteConnection(string filePath) {
@@ -161,6 +162,44 @@ namespace Frost.Providers.Frost.DB {
             modelBuilder.Configurations.Add(new Subtitle.Configuration());
 
             base.OnModelCreating(modelBuilder);
+        }
+
+        public override int SaveChanges() {
+            ChangeTracker.DetectChanges(); // Important!
+
+            ObjectContext ctx = ((IObjectContextAdapter) this).ObjectContext;
+
+            List<ObjectStateEntry> objectStateEntryList = ctx.ObjectStateManager
+                                                             .GetObjectStateEntries(EntityState.Added | EntityState.Modified | EntityState.Deleted)
+                                                             .ToList();
+
+            foreach (ObjectStateEntry entry in objectStateEntryList) {
+                if (entry.IsRelationship || entry.State != EntityState.Modified) {
+                    continue;
+                }
+
+                foreach (string propertyName in entry.GetModifiedProperties()) {
+                    DbDataRecord original = entry.OriginalValues;
+                    string oldValue = original.GetValue(original.GetOrdinal(propertyName)).ToString();
+
+                    CurrentValueRecord current = entry.CurrentValues;
+                    string newValue = current.GetValue(current.GetOrdinal(propertyName)).ToString();
+
+                    // probably not necessary 
+                    if (oldValue == newValue) {
+                        continue;
+                    }
+
+                    if (oldValue == "") {
+                        oldValue = "<empty string>";
+                    }
+                    if (newValue == "") {
+                        newValue = "<empty string>";
+                    }
+                    Debug.WriteLine("Entry: {0} Original: {1} New: {2}", entry.Entity.GetType().Name, oldValue, newValue);
+                }
+            }
+            return base.SaveChanges();
         }
     }
 

@@ -32,7 +32,17 @@ namespace Frost.Providers.Frost.DB {
         public virtual HashSet<Movie> Movies { get; set; }
 
         bool IMovieEntity.this[string propertyName] {
-            get { return true; }
+            get {
+                switch (propertyName) {
+                    case "Id":
+                    case "Organization":
+                    case "IsNomination":
+                    case "AwardType":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
         }
 
         /// <summary>Returns a string that represents the current object.</summary>

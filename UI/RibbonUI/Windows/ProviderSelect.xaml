@@ -3,7 +3,8 @@
         xmlns:l="http://www.frostmediamanager.com/xaml/translation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:RibbonUI.Windows" Loaded="ProviderSelectOnLoaded"
-        Title="{l:T Provider select}" Height="422.325" Width="374" Icon="..\logo3.ico"
+        Title="{l:T Provider select}" Height="422.325" Width="374"
+        Icon="..\logo3.ico" Closed="ProviderSelectOnClosed" Name="ProviderSelectWindow"
         ResizeMode="NoResize" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:ProviderSelectViewModel/>
@@ -14,9 +15,18 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <ListBox Grid.Row="0" Name="ProvidersList" ItemsSource="{Binding Providers}">
+            <ListBox.Resources>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListBox.Resources>
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
+                        <Grid.InputBindings>
+                            <MouseBinding Command="{Binding ElementName=ProviderSelectWindow, Path=DataContext.SelectProviderCommand}"
+                                          CommandParameter="{Binding ElementName=ProvidersList, Path=SelectedItem}" Gesture="LeftDoubleClick"/>
+                        </Grid.InputBindings>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>

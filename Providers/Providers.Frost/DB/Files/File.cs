@@ -10,7 +10,7 @@ using Frost.Common.Models;
 namespace Frost.Providers.Frost.DB.Files {
 
     /// <summary>Represents an information about a file.</summary>
-    public class File : IFile/*, IEquatable<IFile> */{
+    public class File : IFile {
 
         /// <summary>Initializes a new instance of the <see cref="File"/> class.</summary>
         public File() {
@@ -57,9 +57,9 @@ namespace Frost.Providers.Frost.DB.Files {
             Size = value.Size;
             DateAdded = value.DateAdded;
 
-            AudioDetails = new HashSet<Audio>(value.AudioDetails.Select(a => new Audio(a)));
-            VideoDetails = new HashSet<Video>(value.VideoDetails.Select(v => new Video(v)));
-            Subtitles = new HashSet<Subtitle>(value.Subtitles.Select(sub => new Subtitle(sub)));
+            //AudioDetails = new HashSet<Audio>(value.AudioDetails.Select(a => new Audio(a)));
+            //VideoDetails = new HashSet<Video>(value.VideoDetails.Select(v => new Video(v)));
+            //Subtitles = new HashSet<Subtitle>(value.Subtitles.Select(sub => new Subtitle(sub)));
         }
 
         #region Properties/Columns
@@ -137,25 +137,9 @@ namespace Frost.Providers.Frost.DB.Files {
 
         #endregion
 
-        #region IFile
-
-        IEnumerable<IAudio> IFile.AudioDetails {
-            get { return AudioDetails; }
-        }
-
-        IEnumerable<IVideo> IFile.VideoDetails {
-            get { return VideoDetails; }
-        }
-
-        IEnumerable<ISubtitle> IFile.Subtitles {
-            get { return Subtitles; }
-        }
-
         bool IMovieEntity.this[string propertyName] {
             get { return true; }
         }
-
-        #endregion
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>

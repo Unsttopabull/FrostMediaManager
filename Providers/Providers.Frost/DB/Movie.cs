@@ -8,11 +8,12 @@ using Frost.Common;
 using Frost.Common.Models;
 using Frost.Providers.Frost.DB.Files;
 using Frost.Providers.Frost.DB.People;
+using Frost.Providers.Frost.Proxies;
 
 namespace Frost.Providers.Frost.DB {
 
     /// <summary>Represents an information about a movie in the library.</summary>
-    public partial class Movie : IMovie {
+    public partial class Movie {
         /// <summary>Separator between multiple genres, certifications, person names ...</summary>
         private const string SEPARATOR = " / ";
 
@@ -301,119 +302,6 @@ namespace Frost.Providers.Frost.DB {
         public virtual HashSet<Award> Awards { get; set; }
 
         public virtual HashSet<PromotionalVideo> PromotionalVideos { get; set; }
-
-        #endregion
-
-        #region IMovie
-
-        /// <summary>Gets or sets the set this movie is a part of.</summary>
-        /// <value>The set this movie is a part of.</value>
-        IMovieSet IMovie.Set {
-            get { return Set; }
-            //set {
-            //    Set = value != null
-            //              ? new Set(value)
-            //              : null;
-            //}
-        }
-
-        /// <summary>Gets or sets the movie subtitles.</summary>
-        /// <value>The movie subtitles.</value>
-        IEnumerable<ISubtitle> IMovie.Subtitles {
-            get { return Subtitles; }
-        }
-
-        /// <summary>Gets or sets the countries that this movie was shot or/and produced in.</summary>
-        /// <summary>The countries that this movie was shot or/and produced in.</summary>
-        IEnumerable<ICountry> IMovie.Countries {
-            get { return Countries; }
-        }
-
-        /// <summary>Gets or sets the studio(s) that produced the movie.</summary>
-        /// <value>The studio(s) that produced the movie.</value>
-        IEnumerable<IStudio> IMovie.Studios {
-            get { return Studios; }
-        }
-
-        /// <summary>Gets or sets the information about video streams of this movie.</summary>
-        /// <value>The information about video streams of this movie</value>
-        IEnumerable<IVideo> IMovie.Videos {
-            get { return Videos; }
-        }
-
-        /// <summary>Gets or sets the information about audio streams of this movie.</summary>
-        /// <value>The information about audio streams of this movie</value>
-        IEnumerable<IAudio> IMovie.Audios {
-            get { return Audios; }
-        }
-
-        /// <summary>Gets or sets the information about this movie's critics and their ratings</summary>
-        /// <value>The information about this movie's critics and their ratings</value>
-        IEnumerable<IRating> IMovie.Ratings {
-            get { return Ratings; }
-        }
-
-        /// <summary>Gets or sets this movie's story and plot with summary and a tagline.</summary>
-        /// <value>This movie's story and plot with summary and a tagline</value>
-        IEnumerable<IPlot> IMovie.Plots {
-            get { return Plots; }
-        }
-
-
-        /// <summary>Gets or sets the movie promotional images.</summary>
-        /// <value>The movie promotional images</value>
-        IEnumerable<IArt> IMovie.Art {
-            get { return Art; }
-        }
-
-        /// <summary>Gets or sets the information about this movie's certification ratings/restrictions in certain countries.</summary>
-        /// <value>The information about this movie's certification ratings/restrictions in certain countries.</value>
-        IEnumerable<ICertification> IMovie.Certifications {
-            get { return Certifications; }
-        }
-
-
-        /// <summary>Gets or sets the name of the credited writer(s).</summary>
-        /// <value>The names of the credited script writer(s)</value>
-        IEnumerable<IPerson> IMovie.Writers {
-            get { return Writers; }
-        }
-
-        /// <summary>Gets or sets the movie directors.</summary>
-        /// <value>People that directed this movie.</value>
-        IEnumerable<IPerson> IMovie.Directors {
-            get { return Directors; }
-        }
-
-        /// <summary>Gets or sets the Person to Movie link with payload as in character name the person is protraying.</summary>
-        /// <value>The Person to Movie link with payload as in character name the person is protraying.</value>
-        IEnumerable<IActor> IMovie.Actors {
-            get { return Actors; }
-        }
-
-        /// <summary>Gets or sets the special information about this movie release.</summary>
-        /// <value>The special information about this movie release</value>
-        IEnumerable<ISpecial> IMovie.Specials {
-            get { return Specials; }
-        }
-
-        /// <summary>Gets or sets the movie genres.</summary>
-        /// <value>The movie genres.</value>
-        IEnumerable<IGenre> IMovie.Genres {
-            get { return Genres; }
-        }
-
-        IEnumerable<IAward> IMovie.Awards {
-            get { return Awards; }
-        }
-
-        IEnumerable<IPromotionalVideo> IMovie.PromotionalVideos {
-            get { return PromotionalVideos; }
-        }
-
-        bool IMovieEntity.this[string propertyName] {
-            get { return true; }
-        }
 
         #endregion
 

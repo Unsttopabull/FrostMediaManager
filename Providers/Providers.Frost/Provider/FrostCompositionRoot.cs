@@ -4,7 +4,7 @@ using Frost.Providers.Frost.DB;
 using Frost.Providers.Frost.DB.Files;
 using Frost.Providers.Frost.DB.People;
 using Frost.Providers.Frost.Provider;
-using Frost.Providers.Frost.Service;
+using Frost.Providers.Frost.Proxies;
 using LightInject;
 
 [assembly: CompositionRootType(typeof(FrostCompositionRoot))]
@@ -21,22 +21,22 @@ namespace Frost.Providers.Frost.Provider {
 
             serviceRegistry.Register<IActor, Actor>(SYSTEM_NAME, new PerRequestLifeTime());
             serviceRegistry.Register<IArt, Art>(SYSTEM_NAME, new PerRequestLifeTime());
-            serviceRegistry.Register<IAudio, Audio>(SYSTEM_NAME, new PerRequestLifeTime());
+            serviceRegistry.Register<IAudio, FrostAudio>(SYSTEM_NAME, new PerRequestLifeTime());
             serviceRegistry.Register<IAward, Award>(SYSTEM_NAME, new PerRequestLifeTime());
-            serviceRegistry.Register<ICertification, Certification>(SYSTEM_NAME, new PerRequestLifeTime());
+            serviceRegistry.Register<ICertification, FrostCertification>(SYSTEM_NAME, new PerRequestLifeTime());
             serviceRegistry.Register<ICountry, Country>(SYSTEM_NAME, new PerRequestLifeTime());
             serviceRegistry.Register<IFile, File>(SYSTEM_NAME, new PerRequestLifeTime());
             serviceRegistry.Register<IGenre, Genre>(SYSTEM_NAME, new PerRequestLifeTime());
             serviceRegistry.Register<ILanguage, Language>(SYSTEM_NAME, new PerRequestLifeTime());
-            serviceRegistry.Register<IMovie, Movie>(SYSTEM_NAME, new PerRequestLifeTime());
+            serviceRegistry.Register<IMovie, FrostMovie>(SYSTEM_NAME, new PerRequestLifeTime());
             serviceRegistry.Register<IMovieSet, Set>(SYSTEM_NAME, new PerRequestLifeTime());
             serviceRegistry.Register<IPerson, Person>(SYSTEM_NAME, new PerRequestLifeTime());
             serviceRegistry.Register<IPlot, Plot>(SYSTEM_NAME, new PerRequestLifeTime());
             serviceRegistry.Register<IPromotionalVideo, PromotionalVideo>(SYSTEM_NAME, new PerRequestLifeTime());
             serviceRegistry.Register<IRating, Rating>(SYSTEM_NAME, new PerRequestLifeTime());
             serviceRegistry.Register<ISpecial, Special>(SYSTEM_NAME, new PerRequestLifeTime());
-            serviceRegistry.Register<ISubtitle, Subtitle>(SYSTEM_NAME, new PerRequestLifeTime());
-            serviceRegistry.Register<IVideo, Video>(SYSTEM_NAME, new PerRequestLifeTime());
+            serviceRegistry.Register<ISubtitle, FrostSubtitle>(SYSTEM_NAME, new PerRequestLifeTime());
+            serviceRegistry.Register<IVideo, FrostVideo>(SYSTEM_NAME, new PerRequestLifeTime());
             serviceRegistry.Register<IStudio, Studio>(SYSTEM_NAME, new PerRequestLifeTime());
         }
     }

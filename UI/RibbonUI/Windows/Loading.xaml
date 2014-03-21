@@ -5,7 +5,7 @@
         mc:Ignorable="d" x:Class="RibbonUI.Windows.Loading" 
         Title="Loading" x:Name="LoadingWindow"
         WindowStartupLocation="CenterScreen"
-        Topmost="True" WindowStyle="None"
+        Topmost="True" WindowStyle="None" Icon="..\logo3.ico"
         AllowsTransparency="True" Height="580" Width="500">
     <Grid Background="Transparent">
         <Grid.RowDefinitions>
@@ -19,7 +19,7 @@
         <Border.Background>
             <SolidColorBrush Color="Black" Opacity="0.3" />
         </Border.Background>
-            <TextBlock Text="{Binding LabelText, ElementName=LoadingWindow, UpdateSourceTrigger=PropertyChanged}" Margin="5,5,5,0" FontWeight="Bold" Foreground="White"/>
+            <TextBlock Text="{Binding LabelText, ElementName=LoadingWindow, UpdateSourceTrigger=PropertyChanged}" Margin="5,5,5,2" FontWeight="Bold" Foreground="White" VerticalAlignment="Center"/>
         </Border>
         <ProgressBar Name="ProgressBar" Grid.Row="2" MinHeight="20" Value="{Binding ProgressValue, ElementName=LoadingWindow, UpdateSourceTrigger=PropertyChanged}" Margin="5,5,5,5"/>
     </Grid>

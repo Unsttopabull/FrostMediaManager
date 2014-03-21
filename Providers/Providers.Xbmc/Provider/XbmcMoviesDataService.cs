@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Linq;
 using Frost.Common;
@@ -46,19 +45,7 @@ namespace Frost.Providers.Xbmc.Provider {
         public IEnumerable<IVideo> Videos { get; private set; }
         public IEnumerable<IAudio> Audios { get; private set; }
 
-        #region Subtitles
-
         public IEnumerable<ISubtitle> Subtitles { get; private set; }
-
-        public ISubtitle AddSubtitle(IMovie movie, ISubtitle subtitle) {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveSubtitle(IMovie selectedMovie, ISubtitle observedSubtitle) {
-            throw new NotImplementedException();
-        }
-
-        #endregion
 
         public IEnumerable<IArt> Art {
             get {
@@ -70,8 +57,6 @@ namespace Frost.Providers.Xbmc.Provider {
             }
         }
 
-        #region Countries
-
         public IEnumerable<ICountry> Countries {
             get {
                 if (_countries == null) {
@@ -81,18 +66,6 @@ namespace Frost.Providers.Xbmc.Provider {
                 return _countries;
             }
         }
-
-        public ICountry AddCountry(IMovie movie, ICountry country) {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveCountry(IMovie movie, ICountry country) {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
-        #region Studios
 
         public IEnumerable<IStudio> Studios {
             get {
@@ -104,48 +77,11 @@ namespace Frost.Providers.Xbmc.Provider {
             }
         }
 
-        public IStudio AddStudio(IStudio studio) {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveStudio(IStudio studio) {
-            throw new NotImplementedException();
-        }
-
-        public IStudio AddStudio(IMovie movie, IStudio studio) {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveStudio(IMovie movie, IStudio studio) {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
-        public IEnumerable<IRating> Ratings { get; private set; }
-
-        #region Plots
+        public IEnumerable<IRating> Ratings { get { return null; } }
 
         public IEnumerable<IPlot> Plots {
-            get {
-                if (_plots == null) {
-                    _plots = Movies.SelectMany(m => m.Plots);
-                }
-                return _plots;
-            }
+            get { return _plots ?? (_plots = Movies.SelectMany(m => m.Plots)); }
         }
-
-        public void RemovePlot(IMovie movie, IPlot plot) {
-            throw new NotImplementedException();
-        }
-
-        public IPlot AddPlot(IMovie movie, IPlot plot) {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
-        #region Genres
 
         public IEnumerable<IGenre> Genres {
             get {
@@ -157,29 +93,9 @@ namespace Frost.Providers.Xbmc.Provider {
             }
         }
 
-        public IGenre AddGenre(IGenre genre) {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveGenre(IGenre genre) {
-            throw new NotImplementedException();
-        }
-
-        public IGenre AddGenre(IMovie movie, IGenre genre) {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveGenre(IMovie movie, IGenre genre) {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
         public IEnumerable<IAward> Awards { get; private set; }
         public IEnumerable<IPromotionalVideo> PromotionalVideos { get; private set; }
         public IEnumerable<ICertification> Certifications { get; private set; }
-
-        #region Sets
 
         public IEnumerable<IMovieSet> Sets {
             get {
@@ -191,33 +107,9 @@ namespace Frost.Providers.Xbmc.Provider {
             }
         }
 
-        public IMovieSet AddSet(IMovieSet set) {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveSet(IMovieSet set) {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
         public IEnumerable<ILanguage> Languages { get; private set; }
 
-        #region Specials
-
         public IEnumerable<ISpecial> Specials { get; private set; }
-
-        public ISpecial AddSpecial(ISpecial special) {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveSpecial(ISpecial special) {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
-        #region People
 
         public IEnumerable<IPerson> People {
             get {
@@ -229,33 +121,7 @@ namespace Frost.Providers.Xbmc.Provider {
             }
         }
 
-        public IPerson AddPerson(IPerson person) {
-            throw new NotImplementedException();
-        }
-
-        public IPerson AddDirector(IMovie movie, IPerson director) {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveDirector(IMovie movie, IPerson director) {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
-        #region Actors
-
         public IEnumerable<IActor> Actors { get; private set; }
-
-        public IActor AddActor(IMovie movie, IActor actor) {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveActor(IMovie movie, IActor actor) {
-            throw new NotImplementedException();
-        }
-
-        #endregion
 
         public bool HasUnsavedChanges() {
             return false;

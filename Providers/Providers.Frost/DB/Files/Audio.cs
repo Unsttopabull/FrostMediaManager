@@ -7,7 +7,7 @@ using Frost.Common.Models;
 namespace Frost.Providers.Frost.DB.Files {
 
     /// <summary>Represents information about an audio stream in a file.</summary>
-    public class Audio : IAudio {
+    public class Audio {
         #region Constructors
 
         /// <summary>Initializes a new instance of the <see cref="Audio"/> class.</summary>
@@ -169,45 +169,15 @@ namespace Frost.Providers.Frost.DB.Files {
         [ForeignKey("LanguageId")]
         public Language Language { get; set; }
 
-        /// <summary>Gets or sets the language of this audio.</summary>
-        /// <value>The language of this audio.</value>
-        ILanguage IHasLanguage.Language {
-            get { return Language; }
-            set {
-                if (value == null) {
-                    Language = null;
-                    return;
-                }
-                Language = new Language(value);
-            }
-        }
-
         /// <summary>Gets or sets the file this audio is contained in.</summary>
         /// <value>The file this audio is contained in.</value>
         public virtual File File { get; set; }
-
-        /// <summary>Gets or sets the file this audio is contained in.</summary>
-        /// <value>The file this audio is contained in.</value>
-        IFile IAudio.File {
-            get { return File; }
-            //set {
-            //    if (value == null) {
-            //        File = null;
-            //        return;
-            //    }
-            //    File = new File(value);
-            //}
-        }
 
         /// <summary>Gets or sets the movie this audio is from.</summary>
         /// <value>The movie this audio is from.</value>
         public virtual Movie Movie { get; set; }
 
         #endregion
-
-        bool IMovieEntity.this[string propertyName] {
-            get { return true; }
-        }
 
         internal class Configuration : EntityTypeConfiguration<Audio> {
             public Configuration() {

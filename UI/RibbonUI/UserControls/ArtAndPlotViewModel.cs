@@ -4,21 +4,17 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using Frost.Common;
 using Frost.Common.Models;
 using Frost.XamlControls.Commands;
-using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using RibbonUI.Annotations;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls {
 
     public class ArtAndPlotViewModel : INotifyPropertyChanged {
-        private const string IMDB_PERSON_URI = "http://www.imdb.com/name/nm{0}";
+        private const string IMDB_PERSON_URI = "http://www.imdb.com/name/{0}";
         private const string IMDB_TITLE_URI = "http://www.imdb.com/title/{0}";
         public event PropertyChangedEventHandler PropertyChanged;
         private ObservableMovie _selectedMovie;

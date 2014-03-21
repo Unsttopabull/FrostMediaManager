@@ -7,7 +7,7 @@ namespace Frost.Providers.Frost.DB {
 
     /// <summary>Represents a movie certification/restriction in a certain country.</summary>
     [Table("Certifications")]
-    public class Certification : CertificationBase, ICertification {
+    public class Certification {
         /// <summary>Initializes a new instance of the <see cref="Certification"/> class.</summary>
         public Certification() {
         }
@@ -65,39 +65,10 @@ namespace Frost.Providers.Frost.DB {
         [ForeignKey("CountryId")]
         public virtual Country Country { get; set; }
 
-        ICountry ICertification.Country {
-            get { return Country; }
-            set {
-                if (value == null) {
-                    Country = null;
-                }
-                Country = new Country(value);
-            }
-        }
-
-        bool IMovieEntity.this[string propertyName] {
-            get { return true; }
-        }
-
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString() {
-            return Country.Name + COUNTRY_RATING_SEPARATOR + Rating;
-        }
-
-        /// <summary>Parses the certifications string and returns certifications as an array of <see cref="Certification"/> instances.</summary>
-        /// <param name="certStr">The certification string to parse.</param>
-        /// <returns>An array of <see cref="Certification"/> instances parsed from the certifications string</returns>
-        public static Certification[] ParseCertificationsString(string certStr) {
-            return ParseCertificationsString<Certification>(certStr);
-        }
-
-        /// <summary>Gets an instance of <see cref="Certification"/> from the Country name and its rating</summary>
-        /// <param name="country">The country name.</param>
-        /// <param name="rating">The rating.</param>
-        /// <returns>An instance of <see cref="Certification"/> from the Country name and its rating</returns>
-        protected override T FromCountyRating<T>(string country, string rating) {
-            return new Certification(country, rating) as T;
+            return string.Format("{0} / {1}", Country != null ? Country.Name : "Unknown", Rating);
         }
 
         internal class Configuration : EntityTypeConfiguration<Certification> {

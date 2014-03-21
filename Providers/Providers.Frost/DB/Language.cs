@@ -83,16 +83,6 @@ namespace Frost.Providers.Frost.DB {
             get { return true; }
         }
 
-        /// <summary>Get an instance of <see cref="Language"/> from an ISO 639 2 or 3 letter code.</summary>
-        /// <param name="iso639">The ISO 639 2 or 3 letter code.</param>
-        /// <returns>Returns a language information from ISO 639 2 or 3 letter code. If an inapropriate string is passed it returns <c>null</c>.</returns>
-        public static Language FromISO639(string iso639) {
-            ISOLanguageCode iso = ISOLanguageCodes.Instance.GetByISOCode(iso639);
-            return iso != null
-                ? new Language(iso.EnglishName, iso.Alpha2, iso.Alpha3)
-                : null;
-        }
-
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString() {

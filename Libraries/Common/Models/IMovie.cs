@@ -204,6 +204,22 @@ namespace Frost.Common.Models {
 
         bool HasNfo { get; }
 
+        IActor AddActor(IActor actor);
+        void RemoveActor(IActor actor);
+        IPerson AddDirector(IPerson director);
+        void RemoveDirector(IPerson director);
+        ISpecial AddSpecial(ISpecial special);
+        void RemoveSpecial(ISpecial special);
+        IGenre AddGenre(IGenre genre);
+        void RemoveGenre(IGenre genre);
+        IPlot AddPlot(IPlot plot);
+        void RemovePlot(IPlot plot);
+        IStudio AddStudio(IStudio studio);
+        void RemoveStudio(IStudio studio);
+        ICountry AddCountry(ICountry country);
+        void RemoveCountry(ICountry country);
+        ISubtitle AddSubtitle(ISubtitle subtitle);
+        void RemoveSubtitle(ISubtitle subtitle);
     }
 
 }

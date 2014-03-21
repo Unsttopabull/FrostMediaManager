@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Windows;
 
 namespace RibbonUI.Windows {
@@ -16,6 +17,12 @@ namespace RibbonUI.Windows {
 
             if (vm.Providers != null && vm.Providers.Count == 1) {
                 vm.SelectProviderCommand.Execute(vm.Providers.FirstOrDefault());
+            }
+        }
+
+        private void ProviderSelectOnClosed(object sender, EventArgs e) {
+            if (Tag is bool && (bool) Tag != true) {
+                Application.Current.Shutdown();
             }
         }
     }

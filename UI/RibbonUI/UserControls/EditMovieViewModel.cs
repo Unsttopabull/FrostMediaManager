@@ -380,10 +380,10 @@ namespace RibbonUI.UserControls {
         #region Plot Handlers
 
         private void SetPlotLanguageClick(MoviePlot moviePlot) {
-            SelectLanguage sc = new SelectLanguage { Owner = ParentWindow, Languages = _service.Languages };
+            SelectLanguage sc = new SelectLanguage { Owner = ParentWindow, Languages = _service.Languages.Select(l => new MovieLanguage(l)) };
 
             if (sc.ShowDialog() == true) {
-                ILanguage selectedLang = (ILanguage) sc.SelectedLanguage.SelectedItem;
+                ILanguage selectedLang = ((MovieLanguage) sc.SelectedLanguage.SelectedItem).ObservedEntity;
                 moviePlot.Language = selectedLang.Name;
             }
         }

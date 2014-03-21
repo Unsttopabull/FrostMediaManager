@@ -2,13 +2,13 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using Frost.Common.Models;
 using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;
+using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.Windows {
     class SelectLanguageViewModel : INotifyPropertyChanged {
-        private IEnumerable<ILanguage> _languages;
+        private IEnumerable<MovieLanguage> _languages;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public SelectLanguageViewModel() {
@@ -26,7 +26,7 @@ namespace RibbonUI.Windows {
         public ICommand<Window> AddCommand { get; private set; }
         public ICommand<Window> CancelCommand { get; private set; }
 
-        public IEnumerable<ILanguage> Languages {
+        public IEnumerable<MovieLanguage> Languages {
             get { return _languages; }
             set {
                 if (Equals(value, _languages)) {

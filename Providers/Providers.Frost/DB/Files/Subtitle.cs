@@ -7,7 +7,7 @@ using Frost.Common.Models;
 namespace Frost.Providers.Frost.DB.Files {
 
     /// <summary>Represents information about a subtitle stream in a file.</summary>
-    public class Subtitle : ISubtitle {
+    public class Subtitle {
 
         /// <summary>Initializes a new instance of the <see cref="Subtitle" /> class.</summary>
         public Subtitle() {
@@ -116,36 +116,15 @@ namespace Frost.Providers.Frost.DB.Files {
         [ForeignKey("LanguageId")]
         public Language Language { get; set; }
 
-        /// <summary>Gets or sets the language this subtitle is in.</summary>
-        /// <value>The language of this subtitle.</value>
-        ILanguage IHasLanguage.Language {
-            get { return Language; }
-            set {
-                if (value == null) {
-                    Language = null;
-                    return;
-                }
-                Language = new Language(value);
-            }
-        }
-
         /// <summary>Gets or sets the file this subtitle is contained in.</summary>
         /// <value>The file this subtitle is contained in.</value>
         public virtual File File { get; set; }
-
-        IFile ISubtitle.File {
-            get { return File; }
-        }
 
         /// <summary>Gets or sets the movie this subtitle if for.</summary>
         /// <value>The movie this subtitle if for.</value>
         public virtual Movie Movie { get; set; }
 
         #endregion
-
-        public bool this[string propertyName] {
-            get { return true; }
-        }
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>

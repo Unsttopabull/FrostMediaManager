@@ -29,9 +29,13 @@ namespace Frost.Providers.Xbmc.DB {
         private string _aCodec;
         private string _vCodec;
         private int? _vRes;
+        private const string YT_SITE_URL = "www.youtube.com/watch?v=";
 
         /// <summary>Separator between multiple genres, certifications, person names ...</summary>
         private const string SEPARATOR = " / ";
+
+        /// <summary>The XBMC YouTube plugin prefix for a movie trailer</summary>
+        private const string YT_TRAILER_PREFIX = "plugin://plugin.video.youtube/?action=play_video&videoid=";
 
         /// <summary>Initializes a new instance of the <see cref="XbmcMovie"/> class.</summary>
         public XbmcMovie() {
@@ -540,8 +544,29 @@ namespace Frost.Providers.Xbmc.DB {
         /// <summary>Gets or sets the URL to the movie trailer.</summary>
         /// <value>The URL to the movie trailer.</value>
         string IMovie.Trailer {
-            get { return TrailerUrl; }
-            set { TrailerUrl = value; }
+            get {
+            //if the trailer is not empty or null and starts with the YouTube plugin prefix
+            //we extract the video Id and return the desktop YouTube video URL
+            if (!string.IsNullOrEmpty(TrailerUrl)) {
+                if (TrailerUrl.StartsWith(YT_TRAILER_PREFIX)) {
+                    string ytId = TrailerUrl.Replace(YT_TRAILER_PREFIX, "");
+                    return YT_SITE_URL + ytId;
+                }
+                //otherwise we just return trailer as is
+                return TrailerUrl;
+            }
+            return null;
+            }
+            set {
+                int idx = value.IndexOf(YT_SITE_URL, StringComparison.InvariantCultureIgnoreCase);
+                if (idx >= 0) {
+                    string newTrailer = value.Remove(0, YT_SITE_URL.Length + idx);
+                    TrailerUrl = YT_TRAILER_PREFIX + newTrailer;
+                }
+                else {
+                    TrailerUrl = value;
+                }
+            }
         }
 
         /// <summary>Gets or sets the movie ranking on IMDB Top 250 list.</summary>
@@ -731,6 +756,70 @@ namespace Frost.Providers.Xbmc.DB {
         IMovieSet IMovie.Set {
             get { return Set; }
             //set { Set = new XbmcSet(value); }
+        }
+
+        IActor IMovie.AddActor(IActor actor) {
+            throw new NotImplementedException();
+        }
+
+        ICountry IMovie.AddCountry(ICountry country) {
+            throw new NotImplementedException();
+        }
+
+        IPerson IMovie.AddDirector(IPerson director) {
+            throw new NotImplementedException();
+        }
+
+        IGenre IMovie.AddGenre(IGenre genre) {
+            throw new NotImplementedException();
+        }
+
+        IPlot IMovie.AddPlot(IPlot plot) {
+            throw new NotImplementedException();
+        }
+
+        ISpecial IMovie.AddSpecial(ISpecial special) {
+            throw new NotImplementedException();
+        }
+
+        IStudio IMovie.AddStudio(IStudio studio) {
+            throw new NotImplementedException();
+        }
+
+        ISubtitle IMovie.AddSubtitle(ISubtitle subtitle) {
+            throw new NotImplementedException();
+        }
+
+        void IMovie.RemoveActor(IActor actor) {
+            throw new NotImplementedException();
+        }
+
+        void IMovie.RemoveCountry(ICountry country) {
+            throw new NotImplementedException();
+        }
+
+        void IMovie.RemoveDirector(IPerson director) {
+            throw new NotImplementedException();
+        }
+
+        void IMovie.RemoveGenre(IGenre genre) {
+            throw new NotImplementedException();
+        }
+
+        void IMovie.RemovePlot(IPlot plot) {
+            throw new NotImplementedException();
+        }
+
+        void IMovie.RemoveSpecial(ISpecial special) {
+            throw new NotImplementedException();
+        }
+
+        void IMovie.RemoveStudio(IStudio studio) {
+            throw new NotImplementedException();
+        }
+
+        void IMovie.RemoveSubtitle(ISubtitle subtitle) {
+            throw new NotImplementedException();
         }
 
         #endregion

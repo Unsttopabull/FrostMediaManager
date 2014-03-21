@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using Frost.Common;
 using Frost.XamlControls.Commands;
+using RibbonUI.Util;
 
 namespace RibbonUI {
     class MainWindowViewModel {
@@ -27,7 +28,7 @@ namespace RibbonUI {
                 _service.SaveChanges();
             }  
 
-            _service.Dispose();
+            LightInjectContainer.Dispose();
         }
     }
 }

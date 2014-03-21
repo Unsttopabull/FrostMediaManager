@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
@@ -84,7 +85,7 @@ namespace RibbonUI.UserControls.List {
         private void LangEdit(MovieSubtitle subtitle) {
             SelectLanguage sc = new SelectLanguage {
                 Owner = ParentWindow,
-                Languages = _service.Languages
+                Languages = _service.Languages.Select(l => new MovieLanguage(l))
             };
 
             if (subtitle.Language != null) {

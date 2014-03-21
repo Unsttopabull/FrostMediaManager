@@ -7,8 +7,9 @@ using Frost.Common.Models;
 using Frost.Providers.Frost.DB;
 using Frost.Providers.Frost.DB.Files;
 using Frost.Providers.Frost.DB.People;
+using Frost.Providers.Frost.Proxies;
 
-namespace Frost.Providers.Frost.Service {
+namespace Frost.Providers.Frost.Provider {
     public class FrostMoviesDataDataService : IMoviesDataService {
         private readonly FrostDbContainer _mvc;
         private IEnumerable<IMovie> _movies;
@@ -56,16 +57,9 @@ namespace Frost.Providers.Frost.Service {
                     //.Include("Videos")
                     .Load();
 
-                _movies = _mvc.Movies.Local;
+                _movies = _mvc.Movies.Local.Select(m => new FrostMovie(m, this));
                 return _movies;
             }
-        }
-
-        private Movie FindMovie(IMovie movie) {
-            if (movie.Id > 0) {
-                return _mvc.Movies.Find(movie.Id);
-            }
-            return _mvc.Movies.FirstOrDefault(m => (movie.ImdbID != null && m.ImdbID == movie.ImdbID) || m.Title == movie.Title);
         }
 
         #endregion
@@ -93,7 +87,7 @@ namespace Frost.Providers.Frost.Service {
                     .Include("Language")
                     .Load();
 
-                _videos = _mvc.VideoDetails.Local;
+                _videos = _mvc.VideoDetails.Local.Select(v => new FrostVideo(v, this));
                 return _videos;
             }
         }
@@ -109,7 +103,7 @@ namespace Frost.Providers.Frost.Service {
                     .Include("Language")
                     .Load();
 
-                _audios = _mvc.AudioDetails.Local;
+                _audios = _mvc.AudioDetails.Local.Select(a => new FrostAudio(a, this));
                 return _audios;
             }
         }
@@ -123,45 +117,39 @@ namespace Frost.Providers.Frost.Service {
                         .Include("Language")
                         .Load();
 
-                    _subtitles = _mvc.Subtitles.Local;
+                    _subtitles = _mvc.Subtitles.Local.Select(s => new FrostSubtitle(s, this));
                 }
                 return _subtitles;
             }
         }
 
-        public ISubtitle AddSubtitle(IMovie movie, ISubtitle subtitle) {
-
-            Subtitle sub = FindSubtitle(subtitle);
-            Movie mv = movie as Movie ?? FindMovie(movie);
-            mv.Subtitles.Add(sub);
-
-            return sub;
-        }
-
-        public void RemoveSubtitle(IMovie movie, ISubtitle subtitle) {
-            Subtitle sub = FindSubtitle(subtitle);
-            Movie mv = movie as Movie ?? FindMovie(movie);
-
-            mv.Subtitles.Remove(sub);
-        }
-
-        private Subtitle FindSubtitle(ISubtitle subtitle) {
+        internal Subtitle FindOrCreateSubtitle(ISubtitle subtitle, bool createIfNotFound) {
             Subtitle p;
             if (subtitle.Id > 0) {
                 p = _mvc.Subtitles.Find(subtitle.Id);
                 if (p == null || (subtitle.MD5 != null && p.MD5 != subtitle.MD5)) {
-                    p = _mvc.Subtitles.Add(new Subtitle(subtitle));
+                    if (createIfNotFound) {
+                        p = _mvc.Subtitles.Add(new Subtitle(subtitle));
+                    }
+                    else {
+                        return null;
+                    }
                 }
                 return p;
             }
 
-            p = _mvc.Subtitles.FirstOrDefault(pr => (subtitle.MD5 != null && pr.MD5 == subtitle.MD5) ||
-                                                    (subtitle.OpenSubtitlesId != null && pr.OpenSubtitlesId == subtitle.OpenSubtitlesId) ||
-                                                    (subtitle.PodnapisiId != null && pr.PodnapisiId == subtitle.PodnapisiId) ||
-                                                    (subtitle.EmbededInVideo == pr.EmbededInVideo &&
-                                                     subtitle.ForHearingImpaired == pr.ForHearingImpaired &&
-                                                     subtitle.Encoding == pr.Encoding)
-                    ) ?? _mvc.Subtitles.Add(new Subtitle(subtitle));
+            p = _mvc.Subtitles
+                    .FirstOrDefault(pr =>
+                        (subtitle.MD5 != null && pr.MD5 == subtitle.MD5) ||
+                        (subtitle.OpenSubtitlesId != null && pr.OpenSubtitlesId == subtitle.OpenSubtitlesId) ||
+                        (subtitle.PodnapisiId != null && pr.PodnapisiId == subtitle.PodnapisiId) ||
+                        (subtitle.EmbededInVideo == pr.EmbededInVideo &&
+                        subtitle.ForHearingImpaired == pr.ForHearingImpaired &&
+                        subtitle.Encoding == pr.Encoding));
+
+            if (p == null && createIfNotFound) {
+                _mvc.Subtitles.Add(new Subtitle(subtitle));
+            }
             return p;             
         }
 
@@ -193,35 +181,26 @@ namespace Frost.Providers.Frost.Service {
             }
         }
 
-        private Country FindCountry(ICountry country) {
+        internal Country FindOrCreateCountry(ICountry country, bool createIfNotFound) {
             Country c;
             if (country.Id > 0) {
                 c = _mvc.Countries.Find(country.Id);
                 if (c == null || (c.Name != country.Name)) {
-                    c = _mvc.Countries.Add(new Country(country));
+                    if (createIfNotFound) {
+                        c = _mvc.Countries.Add(new Country(country));
+                    }
+                    else {
+                        return null;
+                    }
                 }
                 return c;
             }
 
-            c = _mvc.Countries.FirstOrDefault(pr => (country.ISO3166 != null && pr.ISO3166.Alpha3 == country.ISO3166.Alpha3) || pr.Name == country.Name)
-                ?? _mvc.Countries.Add(new Country(country));
+            c = _mvc.Countries.FirstOrDefault(pr => (country.ISO3166 != null && pr.ISO3166.Alpha3 == country.ISO3166.Alpha3) || pr.Name == country.Name);
+            if (c == null && createIfNotFound) {
+                _mvc.Countries.Add(new Country(country));
+            }
             return c;
-        }
-
-        public ICountry AddCountry(IMovie movie, ICountry country) {
-            Country c = FindCountry(country);
-
-            Movie mv = movie as Movie ?? FindMovie(movie);
-            mv.Countries.Add(c);
-
-            return c;
-        }
-
-        public void RemoveCountry(IMovie movie, ICountry country) {
-            Country c = FindCountry(country);
-
-            Movie mv = movie as Movie ?? FindMovie(movie);
-            mv.Countries.Remove(c);
         }
 
         #endregion
@@ -240,41 +219,23 @@ namespace Frost.Providers.Frost.Service {
             }
         }
 
-        public IStudio AddStudio(IStudio studio) {
-            return AddHasName(_mvc.Studios, studio);
-        }
-
-        public void RemoveStudio(IStudio studio) {
-            RemoveHasName(_mvc.Studios, studio);
-        }
-
-        public IStudio AddStudio(IMovie movie, IStudio studio) {
-            Studio s = FindStudio(studio);
-
-            Movie mv = movie as Movie ?? FindMovie(movie);
-            mv.Studios.Add(s);
-            return s;
-        }
-
-        private Studio FindStudio(IStudio studio) {
-            Studio s;
+        internal Studio FindStudio(IStudio studio, bool createNotFound) {
             if (studio.Id > 0) {
-                s = _mvc.Studios.Find(studio.Id);
-                if (s == null || (s.Name != studio.Name)) {
-                    s = _mvc.Studios.Add(new Studio(studio));
+                Studio s = _mvc.Studios.Find(studio.Id);
+                if (s != null && (s.Name == studio.Name)) {
+                    return s;
                 }
-                return s;
+
+                return createNotFound
+                    ? _mvc.Studios.Add(new Studio(studio))
+                    : null;
             }
 
-            s = _mvc.Studios.FirstOrDefault(pr => pr.Name == studio.Name) ?? _mvc.Studios.Add(new Studio(studio));
-            return s;    
-        }
-
-        public void RemoveStudio(IMovie movie, IStudio studio) {
-            Studio s = FindStudio(studio);
-
-            Movie mv = movie as Movie ?? FindMovie(movie);
-            mv.Studios.Remove(s);
+            Studio stud = _mvc.Studios.FirstOrDefault(pr => pr.Name == studio.Name);
+            if (stud == null && createNotFound) {
+                _mvc.Studios.Add(new Studio(studio));
+            }
+            return stud;    
         }
 
         #endregion
@@ -305,27 +266,17 @@ namespace Frost.Providers.Frost.Service {
             }
         }
 
-        public void RemovePlot(IMovie movie, IPlot plot) {
-            Plot p = FindPlot(plot);
-
-            Movie mv = movie as Movie ?? FindMovie(movie);
-            mv.Plots.Remove(p);
-        }
-
-        public IPlot AddPlot(IMovie movie, IPlot plot) {
-            Plot p = FindPlot(plot);
-
-            Movie mv = movie as Movie ?? FindMovie(movie);
-            mv.Plots.Add(p);
-            return p;
-        }
-
-        private Plot FindPlot(IPlot plot) {
+        internal Plot FindOrCreatePlot(IPlot plot, bool createIfNotFound) {
             Plot p;
             if (plot.Id > 0) {
                 p = _mvc.Plots.Find(plot.Id);
                 if (p == null || (p.Full != plot.Full)) {
-                    p = _mvc.Plots.Add(new Plot(plot));
+                    if (createIfNotFound) {
+                        p = _mvc.Plots.Add(new Plot(plot));
+                    }
+                    else {
+                        return null;
+                    }
                 }
                 return p;
             }
@@ -349,44 +300,6 @@ namespace Frost.Providers.Frost.Service {
                 return _genres;
             }
         }
-
-        public IGenre AddGenre(IGenre genre) {
-            return AddHasName(_mvc.Genres, genre);
-        }
-
-        public void RemoveGenre(IGenre genre) {
-            RemoveHasName(_mvc.Genres, genre);
-        }
-
-        public IGenre AddGenre(IMovie movie, IGenre genre) {
-            Genre g = FindGenre(genre);
-
-            Movie mv = movie as Movie ?? FindMovie(movie);
-            mv.Genres.Add(g);
-            return g;
-        }
-
-        public void RemoveGenre(IMovie movie, IGenre genre) {
-            Genre g = FindGenre(genre);
-
-            Movie mv = movie as Movie ?? FindMovie(movie);
-            mv.Genres.Remove(g);
-        }
-
-        private Genre FindGenre(IGenre genre) {
-            Genre p;
-            if (genre.Id > 0) {
-                p = _mvc.Genres.Find(genre.Id);
-                if (p == null || (p.Name != genre.Name)) {
-                    p = _mvc.Genres.Add(new Genre(genre));
-                }
-                return p;
-            }
-
-            p = _mvc.Genres.FirstOrDefault(pr => genre.Name == pr.Name) ?? _mvc.Genres.Add(new Genre(genre));
-            return p; 
-        }
-
         #endregion
 
         public IEnumerable<IAward> Awards {
@@ -423,7 +336,7 @@ namespace Frost.Providers.Frost.Service {
                     .Include("Country")
                     .Load();
 
-                _certifications = _mvc.Certifications.Local;
+                _certifications = _mvc.Certifications.Local.Select(c => new FrostCertification(c, this));
                 return _certifications;
             }
         }
@@ -442,14 +355,6 @@ namespace Frost.Providers.Frost.Service {
             }
         }
 
-        public IMovieSet AddSet(IMovieSet set) {
-            return AddHasName(_mvc.Sets, set);
-        }
-
-        public void RemoveSet(IMovieSet set) {
-            RemoveHasName(_mvc.Sets, set);
-        }
-
         #endregion
 
         public IEnumerable<ILanguage> Languages {
@@ -464,6 +369,27 @@ namespace Frost.Providers.Frost.Service {
             }
         }
 
+        internal Language FindOrCreate(ILanguage language, bool createIfNotFound) {
+            Language c;
+            if (language.Id > 0) {
+                c = _mvc.Languages.Find(language.Id);
+                if (c == null || (c.Name != language.Name)) {
+                    if (createIfNotFound) {
+                        c = _mvc.Languages.Add(new Language(language));
+                    }
+                    else {
+                        return null;
+                    }
+                }
+                return c;
+            }
+
+            c = _mvc.Languages.FirstOrDefault(pr => (language.ISO639 != null && pr.ISO639.Alpha3 == language.ISO639.Alpha3) || pr.Name == language.Name);
+            if (c == null) {
+                return null;
+            }
+            return _mvc.Languages.Add(new Language(language));
+        }
         #region Specials
 
         public IEnumerable<ISpecial> Specials {
@@ -478,13 +404,6 @@ namespace Frost.Providers.Frost.Service {
             }
         }
 
-        public ISpecial AddSpecial(ISpecial special) {
-            return AddHasName(_mvc.Specials, special);
-        }
-
-        public void RemoveSpecial(ISpecial special) {
-            RemoveHasName(_mvc.Specials, special);
-        }
 
         #endregion
 
@@ -502,40 +421,26 @@ namespace Frost.Providers.Frost.Service {
             }
         }
 
-        private Person GetPerson(IPerson person) {
+        internal Person FindOrCreatePerson(IPerson person, bool createIfNotFound) {
             Person p;
             if (person.Id > 0) {
                 p = _mvc.People.Find(person.Id);
                 if (p == null || p.Name != person.Name) {
-                    p = _mvc.People.Add(new Person(person));
+                    if (createIfNotFound) {
+                        p = _mvc.People.Add(new Person(person));
+                    }
+                    else {
+                        return null;
+                    }
                 }
                 return p;
             }
 
             p = _mvc.People.FirstOrDefault(pr => (person.ImdbID != null && pr.ImdbID == person.ImdbID) || pr.Name == person.Name);
-            if (p == null) {
+            if (p == null && createIfNotFound) {
                 p = _mvc.People.Add(new Person(person));
             }
             return p;
-        }
-
-        public IPerson AddPerson(IPerson person) {
-            return null;
-        }
-
-        public IPerson AddDirector(IMovie movie, IPerson director) {
-            Person p = GetPerson(director);
-
-            Movie mv = movie as Movie ?? FindMovie(movie);
-            mv.Directors.Add(p);
-            return p;
-        }
-
-        public void RemoveDirector(IMovie movie, IPerson director) {
-            Person p = GetPerson(director);
-
-            Movie mv = movie as Movie ?? FindMovie(movie);
-            mv.Directors.Remove(p);
         }
 
         #endregion
@@ -554,64 +459,51 @@ namespace Frost.Providers.Frost.Service {
             }
         }
 
-        public IActor AddActor(IMovie movie, IActor actor) {
-            Actor a = FindActor(actor);
-
-            Movie mv = movie as Movie ?? FindMovie(movie);
-            mv.Actors.Add(a);
-
-            return a;
-        }
-
-        public void RemoveActor(IMovie movie, IActor actor) {
-            Actor a = FindActor(actor);
-
-            Movie mv = movie as Movie ?? FindMovie(movie);
-            mv.Actors.Remove(a);
-        }
-
-        private Actor FindActor(IActor actor) {
+        internal Actor FindOrCreateActor(IActor actor, bool createIfNotFound) {
             Actor p;
             if (actor.Id > 0) {
                 p = _mvc.Actors.Find(actor.Id);
                 if (p == null || p.Name != actor.Name) {
-                    p = _mvc.Actors.Add(new Actor(actor));
+                    if (createIfNotFound) {
+                        p = _mvc.Actors.Add(new Actor(actor));
+                    }
+                    else {
+                        return null;
+                    }
                 }
                 return p;
             }
 
-            p = _mvc.Actors.FirstOrDefault(pr => (actor.ImdbID != null && pr.ImdbID == actor.ImdbID) || (pr.Name == actor.Name && pr.Character == actor.Character))
-                ?? _mvc.Actors.Add(new Actor(actor));
+            p = _mvc.Actors.FirstOrDefault(pr => (actor.ImdbID != null && pr.ImdbID == actor.ImdbID) || (pr.Name == actor.Name && pr.Character == actor.Character));
+            if (p == null && createIfNotFound) {
+                p = _mvc.Actors.Add(new Actor(actor));
+            }
             return p;               
         }
 
         #endregion
 
-
-        public bool HasUnsavedChanges() {
-            return _mvc.HasUnsavedChanges();
-        }
-
-        public void SaveChanges() {
-            _mvc.SaveChanges();
-        }
-
-
-        private TSet AddHasName<TEntity, TSet>(IDbSet<TSet> set, TEntity hasName) where TEntity : class, IHasName, IMovieEntity
-                                                                                  where TSet : class, IHasName, IMovieEntity {
+        internal TSet FindHasName<TEntity, TSet>(TEntity hasName, bool createIfNotFound) where TEntity : class, IHasName, IMovieEntity
+                                                                                         where TSet : class, IHasName, IMovieEntity {
+            DbSet<TSet> set = _mvc.Set<TSet>();
             if (hasName.Id > 0) {
                 TSet find = set.Find(hasName.Id);
-                if (find == null || find.Name != hasName.Name) {
-                    find = set.Create();
-                    find.Name = hasName.Name;
+                if ((find == null || find.Name != hasName.Name)) {
+                    if (createIfNotFound) {
+                        find = set.Create();
+                        find.Name = hasName.Name;
 
-                    find = set.Add(find);
+                        find = set.Add(find);
+                    }
+                    else {
+                        return null;
+                    }
                 }
                 return find;
             }
 
             TSet hn = set.FirstOrDefault(n => n.Name == hasName.Name);
-            if (hn == null) {
+            if (hn == null && createIfNotFound) {
                 hn = set.Create();
                 hn.Name = hasName.Name;
 
@@ -620,25 +512,12 @@ namespace Frost.Providers.Frost.Service {
             return hn;            
         }
 
-        private void RemoveHasName<TEntity, TSet>(IDbSet<TSet> set, TEntity hasName) where TEntity : class, IHasName, IMovieEntity
-                                                                                     where TSet : class, IHasName, IMovieEntity {
-            if (hasName.Id > 0) {
-                TSet find = set.Find(hasName.Id);
-                if (find == null) {
-                    find = set.FirstOrDefault(s => s.Name == hasName.Name);
-                    if (find != null) {
-                        set.Remove(find);
-                        return;
-                    }
-                }
-                set.Remove(find);
-                return;
-            }
+        public bool HasUnsavedChanges() {
+            return _mvc.HasUnsavedChanges();
+        }
 
-            TSet hn = set.FirstOrDefault(n => n.Name == hasName.Name);
-            if (hn != null) {
-                set.Remove(hn);
-            }      
+        public void SaveChanges() {
+            _mvc.SaveChanges();
         }
 
         #region IDisposable

@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using System.Linq;
 using Frost.Common.Models;
 
 namespace Frost.Providers.Frost.DB {
@@ -45,13 +44,6 @@ namespace Frost.Providers.Frost.DB {
         /// <summary>Gets or sets the movies that this special applies to</summary>
         /// <value>The movies this special applies to.</value>
         public HashSet<Movie> Movies { get; set; }
-
-        /// <summary>Converts specials as string to an <see cref="IEnumerable{T}"/> with elements of type <see cref="Special"/></summary>
-        /// <param name="specials">The specials values.</param>
-        /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Special"/> instances with specified specials values.</returns>
-        public static IEnumerable<Special> FromValues(IEnumerable<string> specials) {
-            return specials.Select(special => new Special(special)).ToArray();
-        }
 
         bool IMovieEntity.this[string propertyName] {
             get { return true; }
