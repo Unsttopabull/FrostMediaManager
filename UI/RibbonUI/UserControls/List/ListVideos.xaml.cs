@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls.List {
@@ -12,7 +11,6 @@ namespace RibbonUI.UserControls.List {
 
         public ListVideos() {
             InitializeComponent();
-            DataContext = LightInjectContainer.GetInstance<ListVideosViewModel>();
         }
 
         private static void OnVideoListChanged(DependencyObject d, DependencyPropertyChangedEventArgs args) {

@@ -5,6 +5,7 @@ using System.Windows.Data;
 using Frost.Common;
 using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
+using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Windows;
 
@@ -16,8 +17,10 @@ namespace RibbonUI.UserControls.List {
         private ICollectionView _collectionView;
         private ObservableCollection<MovieVideo> _videos;
 
-        public ListVideosViewModel(IMoviesDataService service) {
-            _service = service;
+        public ListVideosViewModel() {
+            _service = LightInjectContainer.GetInstance<IMoviesDataService>();
+
+
             EditVideoCommand = new RelayCommand<MovieVideo>(OnEditClicked); //, v => v != null);
             RemoveVideoCommand = new RelayCommand<MovieVideo>(OnRemoveClicked); //, v => v != null);
         }

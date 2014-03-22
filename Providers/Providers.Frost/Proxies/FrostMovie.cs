@@ -20,7 +20,61 @@ namespace Frost.Providers.Frost.Proxies {
         }
 
         public bool this[string propertyName] {
-            get { throw new NotImplementedException(); }
+            get {
+                switch (propertyName) {
+                    case "Title":
+                    case "OriginalTitle":
+                    case "SortTitle":
+                    case "Type":
+                    case "Goofs":
+                    case "Trivia":
+                    case "ReleaseYear":
+                    case "ReleaseDate":
+                    case "Edithion":
+                    case "DvdRegion":
+                    case "LastPlayed":
+                    case "Premiered":
+                    case "Aired":
+                    case "Trailer":
+                    case "Top250":
+                    case "Runtime":
+                    case "Watched":
+                    case "PlayCount":
+                    case "RatingAverage":
+                    case "ImdbID":
+                    case "TmdbID":
+                    case "ReleaseGroup":
+                    case "IsMultipart":
+                    case "PartTypes":
+                    case "DirectoryPath":
+                    case "NumberOfAudioChannels":
+                    case "AudioCodec":
+                    case "VideoResolution":
+                    case "VideoCodec":
+                    case "Countries":
+                    case "Studios":
+                    case "Videos":
+                    case "Audios":
+                    case "Ratings":
+                    case "Plots":
+                    case "Art":
+                    case "Certifications":
+                    case "Writers":
+                    case "Directors":
+                    case "Actors":
+                    case "Specials":
+                    case "Genres":
+                    case "Awards":
+                    case "PromotionalVideos":
+                    case "HasTrailer":
+                    case "HasSubtitles":
+                    case "HasArt":
+                    case "HasNfo":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
         }
 
         /// <summary>Gets or sets the title of the movie in the local language.</summary>

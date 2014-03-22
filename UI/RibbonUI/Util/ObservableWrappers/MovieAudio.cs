@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Forms.VisualStyles;
 using Frost.Common;
 using Frost.Common.Models;
 using Frost.DetectFeatures;

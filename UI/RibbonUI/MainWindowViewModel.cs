@@ -8,8 +8,9 @@ namespace RibbonUI {
     class MainWindowViewModel {
         private readonly IMoviesDataService _service;
 
-        public MainWindowViewModel(IMoviesDataService service) {
-            _service = service;
+        public MainWindowViewModel() {
+            _service = LightInjectContainer.GetInstance<IMoviesDataService>();
+
             OnCloseCommand = new RelayCommand(OnWindowClose);
         }
 

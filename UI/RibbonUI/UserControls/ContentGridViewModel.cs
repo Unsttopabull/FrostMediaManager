@@ -13,6 +13,7 @@ using Frost.Common.Models;
 using Frost.XamlControls.Commands;
 using GalaSoft.MvvmLight;
 using RibbonUI.Annotations;
+using RibbonUI.Design;
 using RibbonUI.Messages;
 using RibbonUI.Messages.Country;
 using RibbonUI.Messages.Genre;
@@ -20,12 +21,12 @@ using RibbonUI.Messages.People;
 using RibbonUI.Messages.Plot;
 using RibbonUI.Messages.Studio;
 using RibbonUI.Messages.Subtitles;
+using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls {
 
     public class ContentGridViewModel : ViewModelBase, IDisposable {
-        private readonly IMoviesDataService _service;
         private readonly IDisposable _searchObservable;
         private ICollectionView _collectionView;
         private string _movieSearchFilter;
@@ -38,8 +39,13 @@ namespace RibbonUI.UserControls {
         private DateTime _lastChangedMovie;
         private ObservableCollection<MovieCertification> _certifications;
 
-        public ContentGridViewModel(IMoviesDataService service) {
-            _service = service;
+        public ContentGridViewModel() {
+            if (IsInDesignMode) {
+                LightInjectContainer.Register<IMoviesDataService, DesignMoviesDataService>();
+            }
+
+            IMoviesDataService service = LightInjectContainer.GetInstance<IMoviesDataService>();
+
             _lastChangedMovie = DateTime.Now;
 
             Movies = new ObservableCollection<ObservableMovie>(service.Movies.Select(m => new ObservableMovie(m)));

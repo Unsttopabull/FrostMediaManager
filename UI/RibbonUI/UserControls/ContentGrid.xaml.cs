@@ -12,9 +12,7 @@ using System.Windows.Shell;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;
-using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
-using Color = System.Windows.Media.Color;
 
 namespace RibbonUI.UserControls {
 
@@ -23,6 +21,12 @@ namespace RibbonUI.UserControls {
         public static readonly DependencyProperty MinRequiredWidthProperty = DependencyProperty.Register("MinRequiredWidth", typeof(double), typeof(ContentGrid), new FrameworkPropertyMetadata(default(double), FrameworkPropertyMetadataOptions.AffectsRender));
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public ContentGrid() {
+            InitializeComponent();
+
+            MinRequiredWidth = MovieList.RenderSize.Width + MovieFlags.RenderSize.Width;
+        }
+
         public double MinRequiredWidth {
             get { return (double) GetValue(MinRequiredWidthProperty); }
             set { SetValue(MinRequiredWidthProperty, value); }
@@ -30,13 +34,6 @@ namespace RibbonUI.UserControls {
         
         public ObservableMovie SelectedMovie {
             get { return MovieList.SelectedItem as ObservableMovie; }
-        }
-
-        public ContentGrid() {
-            InitializeComponent();
-            DataContext = LightInjectContainer.GetInstance<ContentGridViewModel>();
-
-            MinRequiredWidth = MovieList.RenderSize.Width + MovieFlags.RenderSize.Width;
         }
 
         private void OnWindowLoaded(object sender, EventArgs args) {
@@ -88,8 +85,12 @@ namespace RibbonUI.UserControls {
         }
 
         private void MovieListOnSelectionChanged(object sender, SelectionChangedEventArgs e) {
-            if (EditMovie.MoviePlotCombo.HasItems) {
+            if (EditMovie != null && EditMovie.MoviePlotCombo.HasItems) {
                 EditMovie.MoviePlotCombo.SelectedIndex = 0;
+            }
+
+            if (MovieList == null || MovieFlags == null) {
+                return;
             }
 
             MinRequiredWidth = MovieList.RenderSize.Width + MovieFlags.MinRequiredWidth;

@@ -4,7 +4,6 @@ using System.Windows.Controls;
 using Frost.Common;
 using Frost.Common.Models;
 using Frost.GettextMarkupExtension;
-using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls {
@@ -15,8 +14,6 @@ namespace RibbonUI.UserControls {
 
         public EditMovie() {
             InitializeComponent();
-
-            DataContext = LightInjectContainer.GetInstance<EditMovieViewModel>();
         }
 
         public ObservableMovie SelectedMovie {

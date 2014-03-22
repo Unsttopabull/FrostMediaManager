@@ -1,58 +1,111 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.IO;
-using System.Linq;
 using Frost.Common;
 using Frost.Common.Models;
-using Frost.Providers.Frost.DB.Files;
-using Frost.Providers.Frost.DB.People;
-using Frost.Providers.Frost.Proxies;
 
-namespace Frost.Providers.Frost.DB {
+namespace RibbonUI.Design.Classes {
+    public class DesignMovie : IMovie {
+        private List<ISubtitle> _subtitles;
+        private List<ICountry> _countries;
+        private List<IStudio> _studios;
+        private List<IVideo> _videos;
+        private List<IAudio> _audios;
+        private List<IRating> _ratings;
+        private List<IPlot> _plots;
+        private List<IArt> _art;
+        private List<ICertification> _certifications;
+        private List<IPerson> _writers;
+        private List<IPerson> _directors;
+        private List<IActor> _actors;
+        private List<ISpecial> _specials;
+        private List<IGenre> _genres;
+        private List<IAward> _awards;
+        private List<IPromotionalVideo> _promotionalVideos;
 
-    /// <summary>Represents an information about a movie in the library.</summary>
-    public partial class Movie {
-        /// <summary>Separator between multiple genres, certifications, person names ...</summary>
-        private const string SEPARATOR = " / ";
-
-        /// <summary>Initializes a new instance of the <see cref="Movie"/> class.</summary>
-        public Movie() {
-            // ReSharper disable DoNotCallOverridableMethodsInConstructor
-            Audios = new HashSet<Audio>();
-            Ratings = new HashSet<Rating>();
-            Plots = new HashSet<Plot>();
-            Art = new HashSet<Art>();
-            Certifications = new HashSet<Certification>();
-            Genres = new HashSet<Genre>();
-            Awards = new HashSet<Award>();
-            Videos = new HashSet<Video>();
-            Subtitles = new HashSet<Subtitle>();
-            Countries = new HashSet<Country>();
-            Studios = new HashSet<Studio>();
-            Specials = new HashSet<Special>();
-
-            Directors = new HashSet<Person>();
-            Writers = new HashSet<Person>();
-            Actors = new HashSet<Actor>();
-            PromotionalVideos = new HashSet<PromotionalVideo>();
-
-            // ReSharper restore DoNotCallOverridableMethodsInConstructor
+        public DesignMovie() {
+            _subtitles = new List<ISubtitle>();
+            _countries = new List<ICountry>();
+            _studios = new List<IStudio>();
+            _videos = new List<IVideo>();
+            _audios = new List<IAudio>();
+            _ratings = new List<IRating>();
+            _plots = new List<IPlot>();
+            _art = new List<IArt>();
+            _certifications = new List<ICertification>();
+            _writers = new List<IPerson>();
+            _directors = new List<IPerson>();
+            _actors = new List<IActor>();
+            _specials = new List<ISpecial>();
+            _genres = new List<IGenre>();
+            _awards = new List<IAward>();
+            _promotionalVideos = new List<IPromotionalVideo>();
         }
 
-        #region Properties/Columns
+        #region Properties
 
-        /// <summary>Gets or sets the database movie Id.</summary>
-        /// <value>The database movie Id</value>
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
+
+        public bool this[string propertyName] {
+            get {
+                switch (propertyName) {
+                    case "Title":
+                    case "OriginalTitle":
+                    case "SortTitle":
+                    case "Type":
+                    case "Goofs":
+                    case "Trivia":
+                    case "ReleaseYear":
+                    case "ReleaseDate":
+                    case "Edithion":
+                    case "DvdRegion":
+                    case "LastPlayed":
+                    case "Premiered":
+                    case "Aired":
+                    case "Trailer":
+                    case "Top250":
+                    case "Runtime":
+                    case "Watched":
+                    case "PlayCount":
+                    case "RatingAverage":
+                    case "ImdbID":
+                    case "TmdbID":
+                    case "ReleaseGroup":
+                    case "IsMultipart":
+                    case "PartTypes":
+                    case "DirectoryPath":
+                    case "NumberOfAudioChannels":
+                    case "AudioCodec":
+                    case "VideoResolution":
+                    case "VideoCodec":
+                    case "Countries":
+                    case "Studios":
+                    case "Videos":
+                    case "Audios":
+                    case "Ratings":
+                    case "Plots":
+                    case "Art":
+                    case "Certifications":
+                    case "Writers":
+                    case "Directors":
+                    case "Actors":
+                    case "Specials":
+                    case "Genres":
+                    case "Awards":
+                    case "PromotionalVideos":
+                    case "HasTrailer":
+                    case "HasSubtitles":
+                    case "HasArt":
+                    case "HasNfo":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        }
 
         /// <summary>Gets or sets the title of the movie in the local language.</summary>
         /// <value>The title of the movie in the local language.</value>
         /// <example>\eg{ ''<c>Downfall</c>''}</example>
-        [Required]
         public string Title { get; set; }
 
         /// <summary>Gets or sets the title in the original language.</summary>
@@ -171,135 +224,213 @@ namespace Frost.Providers.Frost.DB {
         /// <value>The video codec used most frequently in associated audios</value>
         public string VideoCodec { get; set; }
 
-        #endregion
-
-        #region Foreign Keys
-
-        /// <summary>Gets or sets the Set foreign key.</summary>
-        /// <value>The Set foreign key.</value>
-        public long? SetId { get; set; }
-
-        #endregion
-
-        #region Relation tables
-
         /// <summary>Gets or sets the set this movie is a part of.</summary>
         /// <value>The set this movie is a part of.</value>
-        public virtual Set Set { get; set; }
+        public IMovieSet Set { get; set; }
+
+        #endregion
 
         /// <summary>Gets or sets the movie subtitles.</summary>
         /// <value>The movie subtitles.</value>
-        public virtual HashSet<Subtitle> Subtitles { get; set; }
+        public IEnumerable<ISubtitle> Subtitles {
+            get { return _subtitles; }
+            set { _subtitles = new List<ISubtitle>(value); }
+        }
 
         /// <summary>Gets or sets the countries that this movie was shot or/and produced in.</summary>
         /// <summary>The countries that this movie was shot or/and produced in.</summary>
-        public virtual HashSet<Country> Countries { get; set; }
+        public IEnumerable<ICountry> Countries {
+            get { return _countries; }
+            set { _countries = new List<ICountry>(value); }
+        }
 
         /// <summary>Gets or sets the studio(s) that produced the movie.</summary>
         /// <value>The studio(s) that produced the movie.</value>
-        public virtual HashSet<Studio> Studios { get; set; }
+        public IEnumerable<IStudio> Studios {
+            get { return _studios; }
+            set { _studios = new List<IStudio>(value); }
+        }
 
         /// <summary>Gets or sets the information about video streams of this movie.</summary>
         /// <value>The information about video streams of this movie</value>
-        public virtual HashSet<Video> Videos { get; set; }
+        public IEnumerable<IVideo> Videos {
+            get { return _videos; }
+            set { _videos = new List<IVideo>(value); }
+        }
 
         /// <summary>Gets or sets the information about audio streams of this movie.</summary>
         /// <value>The information about audio streams of this movie</value>
-        public virtual HashSet<Audio> Audios { get; set; }
+        public IEnumerable<IAudio> Audios {
+            get { return _audios; }
+            set { _audios = new List<IAudio>(value); }
+        }
 
         /// <summary>Gets or sets the information about this movie's critics and their ratings</summary>
         /// <value>The information about this movie's critics and their ratings</value>
-        public virtual HashSet<Rating> Ratings { get; set; }
+        public IEnumerable<IRating> Ratings {
+            get { return _ratings; }
+            set { _ratings = new List<IRating>(value); }
+        }
 
         /// <summary>Gets or sets this movie's story and plot with summary and a tagline.</summary>
         /// <value>This movie's story and plot with summary and a tagline</value>
-        public virtual HashSet<Plot> Plots { get; set; }
+        public IEnumerable<IPlot> Plots {
+            get { return _plots; }
+            set { _plots = new List<IPlot>(value); }
+        }
 
         /// <summary>Gets or sets the movie promotional images.</summary>
         /// <value>The movie promotional images</value>
-        public virtual HashSet<Art> Art { get; set; }
-        
+        public IEnumerable<IArt> Art {
+            get { return _art; }
+            set { _art = new List<IArt>(value); }
+        }
+
         /// <summary>Gets or sets the information about this movie's certification ratings/restrictions in certain countries.</summary>
         /// <value>The information about this movie's certification ratings/restrictions in certain countries.</value>
-        public virtual HashSet<Certification> Certifications { get; set; }
+        public IEnumerable<ICertification> Certifications {
+            get { return _certifications; }
+            set { _certifications = new List<ICertification>(value); }
+        }
 
         /// <summary>Gets or sets the name of the credited writer(s).</summary>
         /// <value>The names of the credited script writer(s)</value>
-        public virtual HashSet<Person> Writers { get; set; }
+        public IEnumerable<IPerson> Writers {
+            get { return _writers; }
+            set { _writers = new List<IPerson>(value); }
+        }
 
         /// <summary>Gets or sets the movie directors.</summary>
         /// <value>People that directed this movie.</value>
-        public virtual HashSet<Person> Directors { get; set; }
+        public IEnumerable<IPerson> Directors {
+            get { return _directors; }
+            set { _directors = new List<IPerson>(value); }
+        }
 
         /// <summary>Gets or sets the Person to Movie link with payload as in character name the person is protraying.</summary>
         /// <value>The Person to Movie link with payload as in character name the person is protraying.</value>
-        public virtual HashSet<Actor> Actors { get; set; }
-        
+        public IEnumerable<IActor> Actors {
+            get { return _actors; }
+            set { _actors = new List<IActor>(value); }
+        }
+
         /// <summary>Gets or sets the special information about this movie release.</summary>
         /// <value>The special information about this movie release</value>
-        public virtual HashSet<Special> Specials { get; set; }
+        public IEnumerable<ISpecial> Specials {
+            get { return _specials; }
+            set { _specials = new List<ISpecial>(value); }
+        }
 
         /// <summary>Gets or sets the movie genres.</summary>
         /// <value>The movie genres.</value>
-        public virtual HashSet<Genre> Genres { get; set; }
-        
-        public virtual HashSet<Award> Awards { get; set; }
+        public IEnumerable<IGenre> Genres {
+            get { return _genres; }
+            set { _genres = new List<IGenre>(value); }
+        }
 
-        public virtual HashSet<PromotionalVideo> PromotionalVideos { get; set; }
+        public IEnumerable<IAward> Awards {
+            get { return _awards; }
+            set { _awards = new List<IAward>(value); }
+        }
 
-        #endregion
-
-        #region Utility Functions / Properties
+        public IEnumerable<IPromotionalVideo> PromotionalVideos {
+            get { return _promotionalVideos; }
+            set { _promotionalVideos = new List<IPromotionalVideo>(value); }
+        }
 
         /// <summary>Gets a value indicating whether this movie has a trailer video availale.</summary>
         /// <value>Is <c>true</c> if the movie has a trailer video available; otherwise, <c>false</c>.</value>
-        public bool HasTrailer {
-            get { return !string.IsNullOrEmpty(Trailer); }
-        }
+        public bool HasTrailer { get; set; }
 
         /// <summary>Gets a value indicating whether this movie has available subtitles.</summary>
         /// <value>Is <c>true</c> if the movie has available subtitles; otherwise, <c>false</c>.</value>
-        public bool HasSubtitles {
-            get { return Subtitles.Count != 0; }
-        }
+        public bool HasSubtitles { get; set; }
 
         /// <summary>Gets a value indicating whether this movie has available fanart.</summary>
         /// <value>Is <c>true</c> if the movie has available fanart; otherwise, <c>false</c>.</value
-        public bool HasArt {
-            get { return Art.Count != 0; }
+        public bool HasArt { get; set; }
+        public bool HasNfo { get; set; }
+
+        public IActor AddActor(IActor actor) {
+            _actors.Add(actor);
+            return actor;
         }
 
-        public bool HasNfo {
-            get {
-                if (DirectoryPath == null) {
-                    return false;
-                }
-                return Directory.EnumerateFiles(DirectoryPath, "*.nfo").Any();
-            }
+        public void RemoveActor(IActor actor) {
+            _actors.Remove(actor);
         }
 
-        /// <summary>Gets the file size summed from all the movie files.</summary>
-        /// <returns>The movie file size in bytes summed from all its files</returns>
-        private long GetFileSizeSum() {
-            long sumA = Audios.Where(f => f.File != null && f.File.Size.HasValue).Sum(f => f.File.Size.Value);
-            long sumV = Videos.Where(f => f.File != null && f.File.Size.HasValue).Sum(f => f.File.Size.Value);
-            long sumS = Subtitles.Where(f => f.File != null && f.File.Size.HasValue).Sum(f => f.File.Size.Value);
-
-            return sumA + sumV + sumS;
+        public IPerson AddDirector(IPerson director) {
+            _directors.Add(director);
+            return director;
         }
 
-        /// <summary>Gets the file size in pretty printed format formatted.</summary>
-        /// <returns>A string with pretty printed movie file size</returns>
-        /// <example>\eg{ <c>1024</c> is <c>1 Kb</c>}</example>
-        public string GetFileSizeFormatted() {
-            return GetFileSizeSum().FormatFileSizeAsString();
+        public void RemoveDirector(IPerson director) {
+            _directors.Remove(director);
         }
 
-        #endregion
+        public ISpecial AddSpecial(ISpecial special) {
+            _specials.Add(special);
+            return special;
+        }
 
-        public override string ToString() {
-            return String.Format("{0} ({1})", Title, ReleaseYear);
+        public void RemoveSpecial(ISpecial special) {
+            _specials.Remove(special);
+        }
+
+        public IGenre AddGenre(IGenre genre) {
+            _genres.Add(genre);
+            return genre;
+        }
+
+        public void RemoveGenre(IGenre genre) {
+            _genres.Remove(genre);
+        }
+
+        public IPlot AddPlot(IPlot plot) {
+            _plots.Add(plot);
+            return plot;
+        }
+
+        public void RemovePlot(IPlot plot) {
+            _plots.Remove(plot);
+        }
+
+        public IStudio AddStudio(IStudio studio) {
+            _studios.Add(studio);
+            return studio;
+        }
+
+        public void RemoveStudio(IStudio studio) {
+            _studios.Remove(studio);
+        }
+
+        public ICountry AddCountry(ICountry country) {
+            _countries.Add(country);
+            return country;
+        }
+
+        public void RemoveCountry(ICountry country) {
+            _countries.Remove(country);
+        }
+
+        public ISubtitle AddSubtitle(ISubtitle subtitle) {
+            _subtitles.Add(subtitle);
+            return subtitle;
+        }
+
+        public void RemoveSubtitle(ISubtitle subtitle) {
+            _subtitles.Remove(subtitle);
+        }
+
+        public IVideo AddVideo(IVideo video) {
+            _videos.Add(video);
+            return video;
+        }
+
+        public IAudio AddAudio(IAudio audio) {
+            _audios.Add(audio);
+            return audio;
         }
     }
-
 }

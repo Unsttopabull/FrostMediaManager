@@ -13,6 +13,7 @@ using Frost.DetectFeatures;
 using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
 using Frost.GettextMarkupExtension;
+using RibbonUI.Design;
 using RibbonUI.Properties;
 using RibbonUI.UserControls;
 using RibbonUI.UserControls.List;
@@ -22,13 +23,9 @@ namespace RibbonUI {
 
     /// <summary>Interaction logic for App.xaml</summary>
     public partial class App : Application {
-        public static string SystemType { get; internal set; }
-
         internal static List<Provider> Systems { get; private set; }
 
         static App() {
-            SystemType = "FMM";
-            //SystemType = "XJB";
             Systems = new List<Provider>();
         }
 
@@ -81,6 +78,10 @@ namespace RibbonUI {
         }
 
         private void RegisterViewModels() {
+            if (TranslationManager.IsInDesignMode) {
+                LightInjectContainer.RegisterFrom<DesignCompositionRoot>();
+            }
+
             LightInjectContainer.Register<ContentGridViewModel>();
             LightInjectContainer.Register<MainWindowViewModel>();
             LightInjectContainer.Register<EditMovieViewModel>();

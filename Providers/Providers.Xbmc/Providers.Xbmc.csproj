@@ -157,6 +157,9 @@
       <Name>Common</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Proxies\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(TargetPath)" "E:\Workspace\Ostalo\Repos\Git\FrostMediaManager2\UI\RibbonUI\bin\Debug\plugins" /Y</PostBuildEvent>

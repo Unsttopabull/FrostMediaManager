@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -11,6 +10,7 @@ using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 using GalaSoft.MvvmLight;
 using RibbonUI.Messages.Subtitles;
+using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Windows;
 
@@ -21,9 +21,10 @@ namespace RibbonUI.UserControls.List {
         private ObservableCollection<MovieSubtitle> _subtitles;
         private ICollectionView _collectionView;
 
-        public ListSubtitlesViewModel(IMoviesDataService service) {
-            _service = service;
-            IEnumerable<ILanguage> enumerable = _service.Languages;
+        public ListSubtitlesViewModel() {
+            _service = LightInjectContainer.GetInstance<IMoviesDataService>();
+
+            //IEnumerable<ILanguage> enumerable = _service.Languages;
 
             SubtitleFormats = new ObservableCollection<string> {
                 "Adobe encore DVD",

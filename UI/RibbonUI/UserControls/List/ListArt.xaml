@@ -6,9 +6,11 @@
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
              xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
-             xmlns:list="clr-namespace:RibbonUI.UserControls.List"
-             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="622"
-             d:DataContext="{d:DesignInstance list:ListArtViewModel}">
+             xmlns:vm="clr-namespace:RibbonUI.UserControls.List"
+             mc:Ignorable="d" d:DesignHeight="300" d:DesignWidth="622">
+    <UserControl.DataContext>
+        <vm:ListArtViewModel/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="{Binding ElementName=ArtList, Path=ColumnHeaderHeight}" />

@@ -6,10 +6,13 @@
              xmlns:l="http://www.frostmediamanager.com/xaml/translation"
              xmlns:sys="clr-namespace:System.Text;assembly=mscorlib"
              xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
-             xmlns:list="clr-namespace:RibbonUI.UserControls.List"
+             xmlns:vm="clr-namespace:RibbonUI.UserControls.List"
              xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
-             mc:Ignorable="d" Name="ListSubtitlesControl" d:DataContext="{d:DesignInstance list:ListSubtitlesViewModel}"
+             mc:Ignorable="d" Name="ListSubtitlesControl"
              d:DesignHeight="300" d:DesignWidth="602" Loaded="ListSubtitlesOnLoaded">
+    <UserControl.DataContext>
+        <vm:ListSubtitlesViewModel/>
+    </UserControl.DataContext>    
     <UserControl.Resources>
         <ObjectDataProvider x:Key="Encodings" ObjectType="{x:Type sys:Encoding}" MethodName="GetEncodings"/>
     </UserControl.Resources>

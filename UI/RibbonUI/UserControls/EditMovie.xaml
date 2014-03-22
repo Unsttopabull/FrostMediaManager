@@ -14,8 +14,11 @@
              xmlns:common="clr-namespace:Frost.Common;assembly=Frost.Common"
              xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
              xmlns:userControls="clr-namespace:RibbonUI.UserControls"
-             mc:Ignorable="d" Loaded="OnControlLoaded" d:DataContext="{d:DesignInstance userControls:EditMovieViewModel}"
+             mc:Ignorable="d" Loaded="OnControlLoaded"
              d:DesignHeight="725" d:DesignWidth="1071">
+    <UserControl.DataContext>
+        <userControls:EditMovieViewModel/>
+    </UserControl.DataContext>
     <UserControl.Resources>
         <!--<converters:MilisecondsToTimeSpanConverter x:Key="MsToTimeSpanConverter" />-->
         <ObjectDataProvider x:Key="MovieTypes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">

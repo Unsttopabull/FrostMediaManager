@@ -6,10 +6,13 @@
              xmlns:l="http://www.frostmediamanager.com/xaml/translation"             
              xmlns:converters="clr-namespace:RibbonUI.Converters"
              xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
-             xmlns:list="clr-namespace:RibbonUI.UserControls.List"
+             xmlns:vm="clr-namespace:RibbonUI.UserControls.List"
              xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
              mc:Ignorable="d" Loaded="OnWindowLoaded" Name="ListVideosControl"
-             d:DesignHeight="300" d:DesignWidth="580" d:DataContext="{d:DesignInstance list:ListVideosViewModel}">
+             d:DesignHeight="300" d:DesignWidth="580">
+    <UserControl.DataContext>
+        <vm:ListVideosViewModel/>
+    </UserControl.DataContext>    
     <UserControl.Resources>
         <converters:TranslateEnumConverter x:Key="TranslateEnumConverter"/>
     </UserControl.Resources>

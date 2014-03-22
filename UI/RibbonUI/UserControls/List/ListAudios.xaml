@@ -7,9 +7,12 @@
              xmlns:converters="clr-namespace:RibbonUI.Converters"
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
              xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
-             xmlns:list="clr-namespace:RibbonUI.UserControls.List"
+             xmlns:vm="clr-namespace:RibbonUI.UserControls.List"
              mc:Ignorable="d" Loaded="ListAudiosOnLoaded" Name="ListAudiosControl"
-             d:DesignHeight="300" d:DesignWidth="582" d:DataContext="{d:DesignInstance list:ListAudiosViewModel}">
+             d:DesignHeight="300" d:DesignWidth="582">
+    <UserControl.DataContext>
+        <vm:ListAudiosViewModel/>
+    </UserControl.DataContext>    
     <UserControl.Resources>
         <converters:TranslateEnumConverter x:Key="TranslateEnumConverter" />
     </UserControl.Resources>

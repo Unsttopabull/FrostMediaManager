@@ -1,11 +1,15 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
 using Frost.Common;
 using Frost.Common.Properties;
+using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
+using RibbonUI.Design;
+using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Windows;
 
@@ -16,8 +20,16 @@ namespace RibbonUI.UserControls.List {
         private ICollectionView _collectionView;
         private readonly IMoviesDataService _service;
 
-        public ListAudiosViewModel(IMoviesDataService service) {
-            _service = service;
+        public ListAudiosViewModel() {
+            if (TranslationManager.IsInDesignMode) {
+                LightInjectContainer.Register<IMoviesDataService, DesignMoviesDataService>();
+            }
+
+            _service = LightInjectContainer.GetInstance<IMoviesDataService>();
+
+            if (TranslationManager.IsInDesignMode) {
+                Audios = new ObservableCollection<MovieAudio>(_service.Audios.Select(a => new MovieAudio(a)));
+            }
 
             EditCommand = new RelayCommand<MovieAudio>(OnEditClicked, a => a != null);
             RemoveCommand = new RelayCommand<MovieAudio>(OnRemoveClicked, a => a != null);

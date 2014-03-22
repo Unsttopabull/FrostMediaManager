@@ -7,8 +7,10 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Frost.Common;
 using Frost.Common.Models;
+using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;
+using RibbonUI.Design.Fakes;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls {
@@ -20,6 +22,10 @@ namespace RibbonUI.UserControls {
         private ObservableMovie _selectedMovie;
 
         public ArtAndPlotViewModel() {
+            if (TranslationManager.IsInDesignMode) {
+                SelectedMovie = new ObservableMovie(new FakeMovie());
+            }
+
             GoToImdbCommand = new RelayCommand<string>(GoToIMDB);
 
             ActorImdbClickedCommand = new RelayCommand<string>(

@@ -14,6 +14,8 @@ using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using GalaSoft.MvvmLight;
 using Microsoft.Win32;
+using RibbonUI.Design;
+using RibbonUI.Design.Fakes;
 using RibbonUI.Messages.Country;
 using RibbonUI.Messages.Genre;
 using RibbonUI.Messages.People;
@@ -35,8 +37,17 @@ namespace RibbonUI.UserControls {
         private ObservableCollection<MoviePerson> _directors;
         private ObservableCollection<IMovieSet> _sets;
 
-        public EditMovieViewModel(IMoviesDataService service) {
-            _service = service;
+        public EditMovieViewModel() {
+            if (IsInDesignMode) {
+                LightInjectContainer.Register<IMoviesDataService, DesignMoviesDataService>();
+            }
+
+            _service = LightInjectContainer.GetInstance<IMoviesDataService>();
+
+            if (IsInDesignMode) {
+                SelectedMovie = new ObservableMovie(new FakeMovie());
+            }
+
             MoviePlots = new ObservableCollection<MoviePlot>();
 
             IEnumerable<IMovieSet> sets = _service.Sets;
@@ -298,7 +309,7 @@ namespace RibbonUI.UserControls {
 
             IPerson director;
             if (addPerson.PersonName.Text != ((IPerson) addPerson.PeopleList.SelectedItem).Name) {
-                director = LightInjectContainer.GetInstance<IPerson>(App.SystemType);
+                director = LightInjectContainer.GetInstance<IPerson>();
                 director.Name = addPerson.PersonName.Text;
                 director.Thumb = addPerson.PersonThumb.Text;
             }
@@ -331,7 +342,7 @@ namespace RibbonUI.UserControls {
             else {
                 IGenre genre = _service.Genres.FirstOrDefault(g => g.Name.Equals(ag.NewGenre.Text, StringComparison.CurrentCultureIgnoreCase));
                 if (genre == null) {
-                    genre = LightInjectContainer.GetInstance<IGenre>(App.SystemType);
+                    genre = LightInjectContainer.GetInstance<IGenre>();
                     genre.Name = ag.NewGenre.Text;
                 }
                 AddGenre(genre);
@@ -396,7 +407,7 @@ namespace RibbonUI.UserControls {
         }
 
         private void AddPlot() {
-            IPlot plot = LightInjectContainer.GetInstance<IPlot>(App.SystemType);
+            IPlot plot = LightInjectContainer.GetInstance<IPlot>();
             plot.Full = TranslationManager.T("Enter full description");
 
             MoviePlots.Add(new MoviePlot(plot));
@@ -421,7 +432,7 @@ namespace RibbonUI.UserControls {
             if (person == null || addPerson.PersonName.Text != person.Name) {
                 //the person/actor is not in the database yet
 
-                movieActor = LightInjectContainer.GetInstance<IActor>(App.SystemType);
+                movieActor = LightInjectContainer.GetInstance<IActor>();
                 movieActor.Name = addPerson.PersonName.Text;
                 movieActor.Thumb = addPerson.PersonThumb.Text;
             }
@@ -437,7 +448,7 @@ namespace RibbonUI.UserControls {
                     }
 
                     //else add it as actor with unspecified character
-                    movieActor = LightInjectContainer.GetInstance<IActor>(App.SystemType);
+                    movieActor = LightInjectContainer.GetInstance<IActor>();
                     movieActor.Name = person.Name;
                     movieActor.Thumb = person.Thumb;
                     movieActor.ImdbID = person.ImdbID;
@@ -451,7 +462,7 @@ namespace RibbonUI.UserControls {
                     }
 
                     //else add them as an actor with the specified character
-                    movieActor = LightInjectContainer.GetInstance<IActor>(App.SystemType);
+                    movieActor = LightInjectContainer.GetInstance<IActor>();
                     movieActor.Name = person.Name;
                     movieActor.Thumb = person.Thumb;
                     movieActor.ImdbID = person.ImdbID;
@@ -480,7 +491,7 @@ namespace RibbonUI.UserControls {
             }
 
             if (addStudios.StudiosList.SelectedIndex == -1 && !string.IsNullOrEmpty(addStudios.NewStudioName.Text)) {
-                IStudio studio = LightInjectContainer.GetInstance<IStudio>(App.SystemType);
+                IStudio studio = LightInjectContainer.GetInstance<IStudio>();
                 studio.Name = addStudios.NewStudioName.Text;
 
                 Studios.Add(new MovieStudio(studio));
