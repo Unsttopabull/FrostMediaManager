@@ -6,7 +6,7 @@ using Frost.Providers.Frost.DB;
 using Frost.Providers.Xbmc.DB;
 
 namespace Frost.ProcessDatabase {
-    public class XbmcParser : MediaManager<XbmcMovie> {
+    public class XbmcParser : MediaManager<XbmcDbMovie> {
 
         public XbmcParser() : base(DBSystem.XBMC) {
         }
@@ -14,7 +14,7 @@ namespace Frost.ProcessDatabase {
         public XbmcParser(string dbLocation) : base(DBSystem.XBMC, dbLocation) {
         }
 
-        public override IEnumerable<XbmcMovie> RawMovies {
+        public override IEnumerable<XbmcDbMovie> RawMovies {
             get { throw new NotImplementedException(); }
         }
 

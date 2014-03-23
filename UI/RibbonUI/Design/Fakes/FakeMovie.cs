@@ -430,6 +430,7 @@ namespace RibbonUI.Design.Fakes {
         /// <value>The set this movie is a part of.</value>
         public IMovieSet Set {
             get { return new DesignSet { Name = "G.I. Joe (Live-Action Series)" }; }
+            set { }
         }
 
         /// <summary>Gets or sets the special information about this movie release.</summary>

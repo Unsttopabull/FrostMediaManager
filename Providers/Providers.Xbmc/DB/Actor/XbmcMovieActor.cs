@@ -18,7 +18,7 @@ namespace Frost.Providers.Xbmc.DB.Actor {
         /// <param name="movieId">The movie identifier.</param>
         /// <param name="role"></param>
         public XbmcMovieActor(XbmcPerson actor, string role, long order, long movieId) {
-            Movie = new XbmcMovie();
+            Movie = new XbmcDbMovie();
             MovieId = movieId;
 
             Person = actor;
@@ -48,7 +48,7 @@ namespace Frost.Providers.Xbmc.DB.Actor {
 
         /// <summary>Gets or sets the movie where the linked person is portraying that character.</summary>
         /// <value>The movie where the linked person is portraying that character.</value>
-        public virtual XbmcMovie Movie { get; set; }
+        public virtual XbmcDbMovie Movie { get; set; }
 
         /// <summary>Gets or sets the person that is portraying that character in the linked movie</summary>
         /// <value>The person that is portraying that character in the linked movie</value>

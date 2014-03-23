@@ -12,7 +12,7 @@ namespace Frost.Providers.Xbmc.DB {
 
         /// <summary>Initializes a new instance of the <see cref="XbmcGenre"/> class.</summary>
         public XbmcGenre() {
-            Movies = new HashSet<XbmcMovie>();
+            Movies = new HashSet<XbmcDbMovie>();
         }
 
         /// <summary>Gets or sets the database Genre Id.</summary>
@@ -28,7 +28,7 @@ namespace Frost.Providers.Xbmc.DB {
 
         /// <summary>Gets or sets the movies of this genre.</summary>
         /// <value>The movies of this genre.</value>
-        public HashSet<XbmcMovie> Movies { get; set; }
+        public HashSet<XbmcDbMovie> Movies { get; set; }
 
         #region IGenre
 

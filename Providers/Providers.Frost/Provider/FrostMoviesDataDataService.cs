@@ -357,6 +357,8 @@ namespace Frost.Providers.Frost.Provider {
 
         #endregion
 
+        #region Language
+
         public IEnumerable<ILanguage> Languages {
             get {
                 if (_languages != null) {
@@ -369,7 +371,7 @@ namespace Frost.Providers.Frost.Provider {
             }
         }
 
-        internal Language FindOrCreate(ILanguage language, bool createIfNotFound) {
+        internal Language FindLanguage(ILanguage language, bool createIfNotFound) {
             Language c;
             if (language.Id > 0) {
                 c = _mvc.Languages.Find(language.Id);
@@ -390,7 +392,8 @@ namespace Frost.Providers.Frost.Provider {
             }
             return _mvc.Languages.Add(new Language(language));
         }
-        #region Specials
+
+        #endregion
 
         public IEnumerable<ISpecial> Specials {
             get {
@@ -403,9 +406,6 @@ namespace Frost.Providers.Frost.Provider {
                 return _specials;
             }
         }
-
-
-        #endregion
 
         #region People
 
@@ -547,5 +547,6 @@ namespace Frost.Providers.Frost.Provider {
         }
 
         #endregion
+
     }
 }

@@ -11,7 +11,7 @@ namespace Frost.Providers.Xbmc.DB {
 
         /// <summary>Initializes a new instance of the <see cref="XbmcPath"/> class.</summary>
         public XbmcPath() {
-            Movies = new HashSet<XbmcMovie>();
+            Movies = new HashSet<XbmcDbMovie>();
             Files = new HashSet<XbmcFile>();
         }
 
@@ -92,7 +92,7 @@ namespace Frost.Providers.Xbmc.DB {
 
         /// <summary>Gets or sets the movies on this path.</summary>
         /// <value>The movies on this path.</value>
-        public virtual HashSet<XbmcMovie> Movies { get; set; }
+        public virtual HashSet<XbmcDbMovie> Movies { get; set; }
 
         #endregion
 

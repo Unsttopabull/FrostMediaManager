@@ -12,7 +12,7 @@ namespace Frost.Providers.Xbmc.DB {
 
         /// <summary>Initializes a new instance of the <see cref="XbmcSet"/> class.</summary>
         public XbmcSet() {
-            Movies = new HashSet<XbmcMovie>();
+            Movies = new HashSet<XbmcDbMovie>();
         }
 
         /// <summary>Initializes a new instance of the <see cref="XbmcSet"/> class.</summary>
@@ -38,7 +38,7 @@ namespace Frost.Providers.Xbmc.DB {
 
         /// <summary>Gets or sets the movies contained in this set or collection.</summary>
         /// <value>The movies contained in this set or collection</value>
-        public virtual HashSet<XbmcMovie> Movies { get; set; }
+        public virtual HashSet<XbmcDbMovie> Movies { get; set; }
 
         public bool this[string propertyName] {
             get { return true; }

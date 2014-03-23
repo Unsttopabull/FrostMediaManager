@@ -123,7 +123,7 @@ namespace Frost.Providers.Frost.Proxies {
 
         public ILanguage Language {
             get { return Entity.Language; }
-            set { Entity.Language = Service.FindOrCreate(value, true); }
+            set { Entity.Language = Service.FindLanguage(value, true); }
         }
     }
 }

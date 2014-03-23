@@ -6,6 +6,7 @@ using Frost.Providers.Xbmc.DB.Art;
 using Frost.Providers.Xbmc.DB.Proxy;
 using Frost.Providers.Xbmc.DB.StreamDetails;
 using Frost.Providers.Xbmc.Provider;
+using Frost.Providers.Xbmc.Proxies;
 using LightInject;
 
 [assembly: CompositionRootType(typeof(XbmcCompositionRoot))]

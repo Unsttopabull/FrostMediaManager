@@ -463,8 +463,8 @@ namespace Frost.Providers.Xbmc.NFO {
         /// <summary>Converts an instance of <see cref="XbmcXmlMovie"/> to <see cref="Common.Models.DB.XBMC.XbmcMovie">XbmcMovie</see> by explicit casting</summary>
         /// <param name="xm">The <see cref="XbmcXmlMovie"/> to convert.</param>
         /// <returns><see cref="XbmcXmlMovie"/> converted to an instance of <see cref="Common.Models.DB.XBMC.XbmcMovie">XbmcMovie</see></returns>
-        public static explicit operator XbmcMovie(XbmcXmlMovie xm) {
-            XbmcMovie mv = new XbmcMovie {
+        public static explicit operator XbmcDbMovie(XbmcXmlMovie xm) {
+            XbmcDbMovie mv = new XbmcDbMovie {
                 //WARNING: ToArray() call copying
                 CountryNames = xm.Countries.ToArray(),
                 DirectorNames = xm.Directors.ToArray(),

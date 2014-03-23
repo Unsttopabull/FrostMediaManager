@@ -128,7 +128,7 @@ namespace Frost.Common.Models {
 
         /// <summary>Gets or sets the set this movie is a part of.</summary>
         /// <value>The set this movie is a part of.</value>
-        IMovieSet Set { get; }
+        IMovieSet Set { get; set;  }
 
         /// <summary>Gets or sets the movie subtitles.</summary>
         /// <value>The movie subtitles.</value>

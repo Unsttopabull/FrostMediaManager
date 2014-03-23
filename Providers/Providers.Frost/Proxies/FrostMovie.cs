@@ -289,6 +289,7 @@ namespace Frost.Providers.Frost.Proxies {
         /// <value>The set this movie is a part of.</value>
         public IMovieSet Set {
             get { return Entity.Set; }
+            set { Entity.Set = Service.FindHasName<IMovieSet, Set>(value, true); }
         }
 
         /// <summary>Gets or sets the movie subtitles.</summary>

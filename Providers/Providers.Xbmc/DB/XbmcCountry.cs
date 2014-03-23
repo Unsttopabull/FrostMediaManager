@@ -16,7 +16,7 @@ namespace Frost.Providers.Xbmc.DB {
 
         /// <summary>Initializes a new instance of the <see cref="XbmcCountry"/> class.</summary>
         public XbmcCountry() {
-            Movies = new HashSet<XbmcMovie>();
+            Movies = new HashSet<XbmcDbMovie>();
         }
 
         public XbmcCountry(ISOCountryCode isoCode) {
@@ -49,7 +49,7 @@ namespace Frost.Providers.Xbmc.DB {
 
         /// <summary>Gets or sets the movies that were shor and/or produced in this country.</summary>
         /// <value>The movies that were shor and/or produced in this country.</value>
-        public HashSet<XbmcMovie> Movies { get; set; }
+        public HashSet<XbmcDbMovie> Movies { get; set; }
 
         #region ICountry
 

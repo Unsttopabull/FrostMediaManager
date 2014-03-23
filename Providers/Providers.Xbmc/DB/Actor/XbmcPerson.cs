@@ -12,9 +12,9 @@ namespace Frost.Providers.Xbmc.DB.Actor {
     public class XbmcPerson : IPerson {
 
         public XbmcPerson() {
-            MoviesAsDirector = new HashSet<XbmcMovie>();
+            MoviesAsDirector = new HashSet<XbmcDbMovie>();
             MoviesAsActor = new HashSet<XbmcMovieActor>();
-            MoviesAsWriter = new HashSet<XbmcMovie>();
+            MoviesAsWriter = new HashSet<XbmcDbMovie>();
         }
 
         public XbmcPerson(string name, string thumbXml) : this() {
@@ -56,7 +56,7 @@ namespace Frost.Providers.Xbmc.DB.Actor {
 
         /// <summary>Gets or sets movies where this person was a director.</summary>
         /// <value>The movies where this person was a director.</value>
-        public virtual HashSet<XbmcMovie> MoviesAsDirector { get; set; }
+        public virtual HashSet<XbmcDbMovie> MoviesAsDirector { get; set; }
 
         /// <summary>Gets or sets movies where this person was an actor.</summary>
         /// <value>The movies where this person was an actor.</value>
@@ -64,7 +64,7 @@ namespace Frost.Providers.Xbmc.DB.Actor {
 
         /// <summary>Gets or sets movies where this person was a writer.</summary>
         /// <value>The movies where this person was a writer.</value>
-        public virtual HashSet<XbmcMovie> MoviesAsWriter { get; set; }
+        public virtual HashSet<XbmcDbMovie> MoviesAsWriter { get; set; }
 
         #region IPerson
 

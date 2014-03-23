@@ -5,6 +5,9 @@ using System.Linq;
 using Frost.Common;
 using Frost.Common.Models;
 using Frost.Providers.Xbmc.DB;
+using Frost.Providers.Xbmc.DB.Actor;
+using Frost.Providers.Xbmc.DB.StreamDetails;
+using Frost.Providers.Xbmc.Proxies;
 
 namespace Frost.Providers.Xbmc.Provider {
     public class XbmcMoviesDataService : IMoviesDataService {
@@ -35,7 +38,7 @@ namespace Frost.Providers.Xbmc.Provider {
                          .Include("Countries")
                          .Include("Studios")
                          .Load();
-                    _movies = _xbmc.Movies.Local;
+                    _movies = _xbmc.Movies.Local.Select(m => new XbmcMovie(m, this));
                 }
                 return _movies;
             }
@@ -45,7 +48,15 @@ namespace Frost.Providers.Xbmc.Provider {
         public IEnumerable<IVideo> Videos { get; private set; }
         public IEnumerable<IAudio> Audios { get; private set; }
 
+        #region Subtitles
+
         public IEnumerable<ISubtitle> Subtitles { get; private set; }
+
+        public XbmcSubtitleDetails FindSubtitle(ISubtitle subtitle, bool createIfNotFound) {
+            throw new NotImplementedException();
+        }
+
+        #endregion
 
         public IEnumerable<IArt> Art {
             get {
@@ -57,6 +68,8 @@ namespace Frost.Providers.Xbmc.Provider {
             }
         }
 
+        #region Countries
+
         public IEnumerable<ICountry> Countries {
             get {
                 if (_countries == null) {
@@ -66,6 +79,14 @@ namespace Frost.Providers.Xbmc.Provider {
                 return _countries;
             }
         }
+
+        public XbmcCountry FindCountry(ICountry country, bool createIfNotFound) {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Studios
 
         public IEnumerable<IStudio> Studios {
             get {
@@ -77,11 +98,19 @@ namespace Frost.Providers.Xbmc.Provider {
             }
         }
 
+        public XbmcStudio FindStudio(IStudio studio, bool createIfNotFound) {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
         public IEnumerable<IRating> Ratings { get { return null; } }
 
         public IEnumerable<IPlot> Plots {
             get { return _plots ?? (_plots = Movies.SelectMany(m => m.Plots)); }
         }
+
+        #region Genres
 
         public IEnumerable<IGenre> Genres {
             get {
@@ -93,9 +122,17 @@ namespace Frost.Providers.Xbmc.Provider {
             }
         }
 
+        public XbmcGenre FindGenre(IGenre genre, bool createIfNotFound) {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
         public IEnumerable<IAward> Awards { get; private set; }
         public IEnumerable<IPromotionalVideo> PromotionalVideos { get; private set; }
         public IEnumerable<ICertification> Certifications { get; private set; }
+
+        #region Sets
 
         public IEnumerable<IMovieSet> Sets {
             get {
@@ -107,9 +144,17 @@ namespace Frost.Providers.Xbmc.Provider {
             }
         }
 
+        internal XbmcSet FindSet(IMovieSet set, bool createIfNotFound) {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
         public IEnumerable<ILanguage> Languages { get; private set; }
 
         public IEnumerable<ISpecial> Specials { get; private set; }
+
+        #region People
 
         public IEnumerable<IPerson> People {
             get {
@@ -121,7 +166,21 @@ namespace Frost.Providers.Xbmc.Provider {
             }
         }
 
+        internal XbmcPerson FindPerson(IPerson actor, bool createIfNotFound) {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Actors
+
         public IEnumerable<IActor> Actors { get; private set; }
+
+        internal XbmcMovieActor FindActor(IActor actor, bool createIfNotFound) {
+            throw new NotImplementedException();
+        }
+
+        #endregion
 
         public bool HasUnsavedChanges() {
             return false;
@@ -158,5 +217,6 @@ namespace Frost.Providers.Xbmc.Provider {
         }
 
         #endregion
+
     }
 }

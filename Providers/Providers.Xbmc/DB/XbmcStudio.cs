@@ -12,7 +12,7 @@ namespace Frost.Providers.Xbmc.DB {
 
         /// <summary>Initializes a new instance of the <see cref="XbmcStudio"/> class.</summary>
         public XbmcStudio() {
-            Movies = new HashSet<XbmcMovie>();
+            Movies = new HashSet<XbmcDbMovie>();
         }
 
         /// <summary>Initializes a new instance of the <see cref="XbmcStudio"/> class.</summary>
@@ -34,7 +34,7 @@ namespace Frost.Providers.Xbmc.DB {
 
         /// <summary>Gets or sets the movies this studio has produced.</summary>
         /// <value>The movies this studio has produced.</value>
-        public HashSet<XbmcMovie> Movies { get; set; }
+        public HashSet<XbmcDbMovie> Movies { get; set; }
 
         public bool this[string propertyName] {
             get { return true; }

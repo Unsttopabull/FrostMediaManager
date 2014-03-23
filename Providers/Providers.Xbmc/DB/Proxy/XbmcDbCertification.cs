@@ -3,10 +3,10 @@ using Frost.Common.Util.ISO;
 
 namespace Frost.Providers.Xbmc.DB.Proxy {
     public class XbmcCertification : ICertification {
-        private readonly XbmcMovie _movie;
+        private readonly XbmcDbMovie _movie;
         private readonly ICountry _country;
 
-        public XbmcCertification(XbmcMovie movie) {
+        public XbmcCertification(XbmcDbMovie movie) {
             _movie = movie;
             _country = new XbmcCountry(ISOCountryCodes.Instance.GetByISOCode("USA"));
         }

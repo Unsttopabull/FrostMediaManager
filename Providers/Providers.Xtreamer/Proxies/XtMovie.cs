@@ -310,6 +310,7 @@ namespace Frost.Providers.Xtreamer.Proxies {
         /// <value>The set this movie is a part of.</value>
         public IMovieSet Set {
             get { return null; }
+            set { }
         }
 
         /// <summary>Gets or sets the movie subtitles.</summary>

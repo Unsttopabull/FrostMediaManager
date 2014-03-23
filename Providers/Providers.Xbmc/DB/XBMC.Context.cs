@@ -22,7 +22,7 @@ namespace Frost.Providers.Xbmc.DB {
 
         /// <summary>Gets or sets the information about the movies in the XBMC library.</summary>
         /// <value>The information about the movies in XBMC library.</value>
-        public DbSet<XbmcMovie> Movies { get; set; }
+        public DbSet<XbmcDbMovie> Movies { get; set; }
 
         /// <summary>Gets or sets the information about people that participated in the movies in the XBMC library.</summary>
         /// <value>The information about people that participated in the movies in the XBMC library</value>
@@ -82,7 +82,7 @@ namespace Frost.Providers.Xbmc.DB {
             modelBuilder.Configurations.Add(new XbmcArt.Configuration());
             modelBuilder.Configurations.Add(new XbmcBookmark.Configuration());
             modelBuilder.Configurations.Add(new XbmcFile.Configuration());
-            modelBuilder.Configurations.Add(new XbmcMovie.Configuration());
+            modelBuilder.Configurations.Add(new XbmcDbMovie.Configuration());
             modelBuilder.Configurations.Add(new XbmcDbStreamDetails.Configuration());
             modelBuilder.Configurations.Add(new XbmcSet.Configuration());
             modelBuilder.Configurations.Add(new XbmcPath.Configuration());

@@ -3,14 +3,14 @@
 namespace Frost.Providers.Xbmc.DB.Proxy {
 
     public class XbmcPlot : IPlot {
-        private readonly XbmcMovie _movie;
+        private readonly XbmcDbMovie _movie;
 
-        public XbmcPlot(XbmcMovie movie) {
+        public XbmcPlot(XbmcDbMovie movie) {
             _movie = movie;
         }
 
         /// <summary>Initializes a new instance of the <see cref="T:System.Object"/> class.</summary>
-        public XbmcPlot(string tagline, string summary, string full, string language, XbmcMovie movie) {
+        public XbmcPlot(string tagline, string summary, string full, string language, XbmcDbMovie movie) {
             Tagline = tagline;
             Summary = summary;
             Full = full;

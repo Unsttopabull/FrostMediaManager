@@ -129,6 +129,38 @@ namespace Frost.Providers.Xbmc.DB.StreamDetails {
             set { Codec = value; }
         }
 
+        /// <summary>Gets or sets the file this video is contained in.</summary>
+        /// <value>The file this video is contained in.</value>
+        IFile IVideo.File {
+            get { return File; }
+            //set { File = new XbmcFile(value); }
+        }
+
+        /// <summary>Resolution and format of the video</summary>
+        /// <example>\eg{ <c>720p, 1080p, 720i, 1080i, PAL, HDTV, NTSC</c>}</example>
+        int? IVideo.Resolution {
+            get {
+                long h = Height ?? 0;
+                long w = Width ?? 0;
+
+                int resolution = 0;
+                if (h == 1080 && w == 1920) {
+                    resolution = 1080;
+                }
+                if (h == 720 && w == 1280) {
+                    resolution = 720;
+                }
+
+                if (resolution == 0) {
+                    return null;
+                }
+                return resolution;
+            }
+            set { }
+        }
+
+        #region Not Implemented
+
         ILanguage IHasLanguage.Language {
             get { return default(ILanguage); }
             set { }
@@ -176,13 +208,6 @@ namespace Frost.Providers.Xbmc.DB.StreamDetails {
             set { }
         }
 
-        /// <summary>Gets or sets the file this video is contained in.</summary>
-        /// <value>The file this video is contained in.</value>
-        IFile IVideo.File {
-            get { return File; }
-            //set { File = new XbmcFile(value); }
-        }
-
         string IVideo.Format {
             get { return default(string); }
             set { }
@@ -197,29 +222,6 @@ namespace Frost.Providers.Xbmc.DB.StreamDetails {
 
         string IVideo.MovieHash {
             get { return default(string); }
-            set { }
-        }
-
-        /// <summary>Resolution and format of the video</summary>
-        /// <example>\eg{ <c>720p, 1080p, 720i, 1080i, PAL, HDTV, NTSC</c>}</example>
-        int? IVideo.Resolution {
-            get {
-                long h = Height ?? 0;
-                long w = Width ?? 0;
-
-                int resolution = 0;
-                if (h == 1080 && w == 1920) {
-                    resolution = 1080;
-                }
-                if (h == 720 && w == 1280) {
-                    resolution = 720;
-                }
-
-                if (resolution == 0) {
-                    return null;
-                }
-                return resolution;
-            }
             set { }
         }
 
@@ -255,6 +257,8 @@ namespace Frost.Providers.Xbmc.DB.StreamDetails {
             get { return default(string); }
             set { }
         }
+
+        #endregion
 
         #endregion
     }

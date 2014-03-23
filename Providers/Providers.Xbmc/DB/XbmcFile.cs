@@ -188,7 +188,7 @@ namespace Frost.Providers.Xbmc.DB {
         /// <summary>Gets or sets the movie this file is from.</summary>
         /// <value>The movie this file is from.</value>
         [InverseProperty("File")]
-        public virtual XbmcMovie Movie { get; set; }
+        public virtual XbmcDbMovie Movie { get; set; }
 
         /// <summary>Gets or sets the info about folder path and folder settings of this file</summary>
         /// <value>The info about folder path and folder settings of this file</value>
