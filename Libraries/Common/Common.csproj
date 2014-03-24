@@ -81,77 +81,87 @@
   <ItemGroup>
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Models\FeatureDetector\ActorInfo.cs" />
+    <Compile Include="Models\FeatureDetector\ArtInfo.cs" />
+    <Compile Include="Models\FeatureDetector\AudioDetectionInfo.cs" />
+    <Compile Include="Models\FeatureDetector\CertificationInfo.cs" />
+    <Compile Include="Models\FeatureDetector\FileDetectionInfo.cs" />
+    <Compile Include="Models\FeatureDetector\MovieInfo.cs" />
+    <Compile Include="Models\FeatureDetector\PersonInfo.cs" />
+    <Compile Include="Models\FeatureDetector\PlotInfo.cs" />
+    <Compile Include="Models\FeatureDetector\SubtitleDetectionInfo.cs" />
+    <Compile Include="Models\FeatureDetector\VideoDetectionInfo.cs" />
     <Compile Include="IMovieSaver.cs" />
     <Compile Include="IMoviesDataService.cs" />
     <Compile Include="IsPluginAttribute.cs" />
-    <Compile Include="Models\CertificationBase.cs" />
-    <Compile Include="Models\IActor.cs" />
-    <Compile Include="Models\IArt.cs">
+    <Compile Include="Models\Provider\CertificationBase.cs" />
+    <Compile Include="Models\Provider\IActor.cs" />
+    <Compile Include="Models\Provider\IArt.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\IAudio.cs">
+    <Compile Include="Models\Provider\IAudio.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\IAward.cs">
+    <Compile Include="Models\Provider\IAward.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\ICertification.cs">
+    <Compile Include="Models\Provider\ICertification.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\ICountry.cs">
+    <Compile Include="Models\Provider\ICountry.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\IFile.cs">
+    <Compile Include="Models\Provider\IFile.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\IGenre.cs">
+    <Compile Include="Models\Provider\IGenre.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\IHasLanguage.cs">
+    <Compile Include="Models\Provider\IHasLanguage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\IHasName.cs">
+    <Compile Include="Models\Provider\IHasName.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\ILanguage.cs">
+    <Compile Include="Models\Provider\ILanguage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\IMovie.cs">
+    <Compile Include="Models\Provider\IMovie.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\IMovieEntity.cs">
+    <Compile Include="Models\Provider\IMovieEntity.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\IMovieSet.cs">
+    <Compile Include="Models\Provider\IMovieSet.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\IPerson.cs">
+    <Compile Include="Models\Provider\IPerson.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\IPlot.cs">
+    <Compile Include="Models\Provider\IPlot.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\IPromotionalVideo.cs">
+    <Compile Include="Models\Provider\IPromotionalVideo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\IRating.cs">
+    <Compile Include="Models\Provider\IRating.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\ISO\ISO3166.cs" />
-    <Compile Include="Models\ISO\ISO639.cs" />
-    <Compile Include="Models\ISpecial.cs">
+    <Compile Include="Models\Provider\ISO\ISO3166.cs" />
+    <Compile Include="Models\Provider\ISO\ISO639.cs" />
+    <Compile Include="Models\Provider\ISpecial.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\IStudio.cs">
+    <Compile Include="Models\Provider\IStudio.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\ISubtitle.cs">
+    <Compile Include="Models\Provider\ISubtitle.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\IVideo.cs">
+    <Compile Include="Models\Provider\IVideo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\XmlActor.cs" />
+    <Compile Include="Models\Provider\XmlActor.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\IsoImageMount.cs" />

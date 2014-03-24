@@ -4,7 +4,8 @@ using System.Linq;
 using System.Windows.Documents;
 using Frost.Common;
 using Frost.Common.Models;
-using Frost.Common.Models.ISO;
+using Frost.Common.Models.Provider;
+using Frost.Common.Models.Provider.ISO;
 using RibbonUI.Design.Classes;
 using RibbonUI.Design.Models;
 

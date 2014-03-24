@@ -7,6 +7,7 @@ namespace RibbonUI.Windows {
     /// <summary>Interaction logic for ProviderSelect.xaml</summary>
     public partial class ProviderSelect : Window {
         public ProviderSelect() {
+            Tag = false;
             InitializeComponent();
         }
 

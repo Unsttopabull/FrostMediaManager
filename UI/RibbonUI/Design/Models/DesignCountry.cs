@@ -1,5 +1,6 @@
 ﻿using Frost.Common.Models;
-using Frost.Common.Models.ISO;
+using Frost.Common.Models.Provider;
+using Frost.Common.Models.Provider.ISO;
 
 namespace RibbonUI.Design.Classes {
     public class DesignCountry : ICountry {

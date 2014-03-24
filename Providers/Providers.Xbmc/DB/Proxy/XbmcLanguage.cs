@@ -1,6 +1,7 @@
 ﻿using System;
 using Frost.Common.Models;
-using Frost.Common.Models.ISO;
+using Frost.Common.Models.Provider;
+using Frost.Common.Models.Provider.ISO;
 using Frost.Common.Util.ISO;
 
 namespace Frost.Providers.Xbmc.DB.Proxy {

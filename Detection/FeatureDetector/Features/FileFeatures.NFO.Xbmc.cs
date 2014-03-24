@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Frost.Common;
+using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Util.ISO;
-using Frost.DetectFeatures.Models;
 using Frost.Providers.Xbmc.NFO;
 using Frost.Providers.Xbmc.NFO.Art;
 
@@ -185,7 +185,7 @@ namespace Frost.DetectFeatures {
                 }
             }
 
-            if (xbmcMovie.Plot != null) {
+            if (!string.IsNullOrEmpty(xbmcMovie.Plot)) {
                 Movie.Plots.Add(new PlotInfo(xbmcMovie.Plot, xbmcMovie.Outline, xbmcMovie.Tagline, null));
             }
         }

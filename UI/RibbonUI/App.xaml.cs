@@ -30,10 +30,6 @@ namespace RibbonUI {
         }
 
         public App() {
-            FileStream debugLog = File.Create("debug.txt");
-            Debug.Listeners.Add(new TextWriterTraceListener(debugLog));
-            Debug.AutoFlush = true;
-
             LoadPlugins();
             RegisterViewModels();
 
@@ -78,9 +74,6 @@ namespace RibbonUI {
         }
 
         private void RegisterViewModels() {
-            if (TranslationManager.IsInDesignMode) {
-                LightInjectContainer.RegisterFrom<DesignCompositionRoot>();
-            }
 
             LightInjectContainer.Register<ContentGridViewModel>();
             LightInjectContainer.Register<MainWindowViewModel>();

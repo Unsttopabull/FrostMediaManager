@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;
 

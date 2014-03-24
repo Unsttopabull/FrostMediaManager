@@ -2,9 +2,9 @@
 using System.IO;
 using System.Linq;
 using Frost.Common;
+using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Util;
 using Frost.DetectFeatures.FileName;
-using Frost.DetectFeatures.Models;
 using Frost.DetectFeatures.Util;
 using Frost.DetectFeatures.Util.AspectRatio;
 using Frost.SharpMediaInfo;

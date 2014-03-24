@@ -1,6 +1,7 @@
 ﻿using System;
 using Frost.Common;
 using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 using Frost.DetectFeatures;
 
 namespace RibbonUI.Util.ObservableWrappers {

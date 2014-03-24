@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Frost.Common.Models;
+using Frost.Common.Models.FeatureDetector;
+using Frost.Common.Models.Provider;
 
 namespace Frost.Common {
     public interface IMoviesDataService : IDisposable {
@@ -32,10 +34,10 @@ namespace Frost.Common {
 
         IEnumerable<IPerson> People { get; }
 
-        IEnumerable<IActor> Actors { get; }
-
         bool HasUnsavedChanges();
         void SaveChanges();
+
+        void SaveDetected(IEnumerable<MovieInfo> movieInfos);
 
     }
 }

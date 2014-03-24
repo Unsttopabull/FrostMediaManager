@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 
 namespace Frost.Providers.Xbmc.DB.Actor {
 
@@ -24,6 +25,11 @@ namespace Frost.Providers.Xbmc.DB.Actor {
 
         internal XbmcPerson(long id, string name, string thumbXml) : this(name, thumbXml) {
             Id = id;
+        }
+
+        internal XbmcPerson(IPerson person) {
+            Name = person.Name;
+            ThumbURL = person.Thumb;
         }
 
         /// <summary>Gets or sets the database person Id.</summary>

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 
 namespace Frost.Providers.Xbmc.DB {
 
@@ -13,6 +13,10 @@ namespace Frost.Providers.Xbmc.DB {
         /// <summary>Initializes a new instance of the <see cref="XbmcGenre"/> class.</summary>
         public XbmcGenre() {
             Movies = new HashSet<XbmcDbMovie>();
+        }
+
+        internal XbmcGenre(IGenre genre) {
+            Name = genre.Name;
         }
 
         /// <summary>Gets or sets the database Genre Id.</summary>

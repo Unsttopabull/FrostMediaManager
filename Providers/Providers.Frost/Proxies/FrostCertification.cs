@@ -1,4 +1,4 @@
-﻿using Frost.Common.Models;
+﻿using Frost.Common.Models.Provider;
 using Frost.Providers.Frost.DB;
 using Frost.Providers.Frost.Provider;
 
@@ -36,7 +36,7 @@ namespace Frost.Providers.Frost.Proxies {
         /// <value>The coutry this certification applies to.</value>
         public ICountry Country {
             get { return Entity.Country; }
-            set { Entity.Country = Service.FindOrCreateCountry(value, true); }
+            set { Entity.Country = Service.FindCountry(value, true); }
         }
     }
 }

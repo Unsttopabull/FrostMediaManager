@@ -1,5 +1,6 @@
 ﻿using Frost.Common;
 using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 using Frost.Providers.Xtreamer.PHP;
 
 namespace Frost.Providers.Xtreamer.Proxies {

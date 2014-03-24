@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Text;
-using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 
 namespace Frost.Providers.Frost.DB.Files {
 

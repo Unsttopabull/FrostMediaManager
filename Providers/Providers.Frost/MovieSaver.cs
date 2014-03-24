@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Frost.Common;
-using Frost.Common.Models;
+using Frost.Common.Models.FeatureDetector;
+using Frost.Common.Models.Provider;
 using Frost.Common.Util.ISO;
-using Frost.DetectFeatures.Models;
 using Frost.Providers.Frost.DB;
 using Frost.Providers.Frost.DB.Files;
 using Frost.Providers.Frost.DB.People;
@@ -25,7 +25,7 @@ namespace Frost.Providers.Frost {
 
         private readonly FrostDbContainer _mvc;
 
-        public MovieSaver(IEnumerable<MovieInfo> movies) {
+        public MovieSaver(IEnumerable<MovieInfo> movies, FrostDbContainer db = null) {
             _infos = movies;
 
             _countries = new Dictionary<ISOCountryCode, Country>();
@@ -37,7 +37,7 @@ namespace Frost.Providers.Frost {
             _people = new Dictionary<string, Person>(StringComparer.InvariantCultureIgnoreCase);
 
             //_mvc = new MovieVoContainer(true, "movieVo.db3");
-            _mvc = new FrostDbContainer(true);
+            _mvc = db ?? new FrostDbContainer(true);
         }
 
         public void Save() {
@@ -76,9 +76,6 @@ namespace Frost.Providers.Frost {
             mv.Writers = new HashSet<Person>(movie.Writers.ConvertAll(GetPerson));
             mv.Directors = new HashSet<Person>(movie.Directors.ConvertAll(GetPerson));
             mv.Actors = new HashSet<Actor>(movie.Actors.ConvertAll(actorInfo => new Actor(GetPerson(actorInfo), actorInfo.Character)));
-
-            int videos = movie.FileInfos.Count(f => f.Videos.Count == 0 && !f.Extension.Equals("iso", StringComparison.OrdinalIgnoreCase));
-            int audios = movie.FileInfos.Count(f => f.Audios.Count == 0 && !f.Extension.Equals("iso", StringComparison.OrdinalIgnoreCase));
 
             mv.Videos = new HashSet<Video>();
             mv.Audios = new HashSet<Audio>();

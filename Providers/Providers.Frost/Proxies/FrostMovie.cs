@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Frost.Common;
-using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 using Frost.Providers.Frost.DB;
 using Frost.Providers.Frost.DB.Files;
 using Frost.Providers.Frost.DB.People;
@@ -289,7 +289,11 @@ namespace Frost.Providers.Frost.Proxies {
         /// <value>The set this movie is a part of.</value>
         public IMovieSet Set {
             get { return Entity.Set; }
-            set { Entity.Set = Service.FindHasName<IMovieSet, Set>(value, true); }
+            set {
+                Entity.Set = value != null
+                    ? Service.FindHasName<IMovieSet, Set>(value, true)
+                    : null;
+            }
         }
 
         /// <summary>Gets or sets the movie subtitles.</summary>
@@ -411,28 +415,40 @@ namespace Frost.Providers.Frost.Proxies {
         #region Actors
 
         public IActor AddActor(IActor actor) {
-            Actor a = Service.FindOrCreateActor(actor, true);
-            Entity.Actors.Add(a);
+            Person p = Service.FindPerson(actor, false);
+            if (p == null) {
+                return null;
+            }
 
-            return a;
+            //if the movie does not yet contain this actor add it to the collection
+            Actor act = Entity.Actors.FirstOrDefault(a => a.Person == p && a.Character == actor.Character);
+            if (act == null) {
+                act = new Actor(p, actor.Character);
+                Entity.Actors.Add(act);
+            }
+            return act;
         }
 
         public void RemoveActor(IActor actor) {
-            Actor a = Service.FindOrCreateActor(actor, false);
-            Entity.Actors.Remove(a);
+            Person p = Service.FindPerson(actor, false);
+            if (p == null) {
+                return;
+            }
+
+            Entity.Actors.RemoveWhere(a => a.Person == p && a.Character == actor.Character);
         }
 
         #endregion
 
         #region Person
         public IPerson AddDirector(IPerson director) {
-            Person p = Service.FindOrCreatePerson(director, true);
+            Person p = Service.FindPerson(director, true);
             Entity.Directors.Add(p);
             return p;
         }
 
         public void RemoveDirector(IPerson director) {
-            Person p = Service.FindOrCreatePerson(director, false);
+            Person p = Service.FindPerson(director, false);
             Entity.Directors.Remove(p);
         }
 
@@ -483,7 +499,11 @@ namespace Frost.Providers.Frost.Proxies {
 
         public void RemovePlot(IPlot plot) {
             Plot p = Service.FindOrCreatePlot(plot, false);
-            Entity.Plots.Remove(p);
+
+            if (p != null) {
+                Entity.Plots.Remove(p);
+                Service.SetAsDeleted(p);
+            }
         }
 
         #endregion
@@ -506,14 +526,14 @@ namespace Frost.Providers.Frost.Proxies {
         #region Countries
 
         public ICountry AddCountry(ICountry country) {
-            Country c = Service.FindOrCreateCountry(country, true);
+            Country c = Service.FindCountry(country, true);
             Entity.Countries.Add(c);
 
             return c;
         }
 
         public void RemoveCountry(ICountry country) {
-            Country c = Service.FindOrCreateCountry(country, false);
+            Country c = Service.FindCountry(country, false);
             Entity.Countries.Remove(c);
         }
 

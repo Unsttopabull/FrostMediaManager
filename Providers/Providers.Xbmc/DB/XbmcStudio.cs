@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 
 namespace Frost.Providers.Xbmc.DB {
 
@@ -19,6 +19,10 @@ namespace Frost.Providers.Xbmc.DB {
         /// <param name="name">The name of this studio</param>
         public XbmcStudio(string name) {
             Name = name;
+        }
+
+        internal XbmcStudio(IStudio studio) {
+            Name = studio.Name;
         }
 
         /// <summary>Gets or sets the Id of this studio in the database.</summary>

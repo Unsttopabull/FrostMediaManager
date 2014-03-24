@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Frost.Common;
-using Frost.DetectFeatures.Models;
+using Frost.Common.Models.FeatureDetector;
 
 namespace Frost.DetectFeatures {
 

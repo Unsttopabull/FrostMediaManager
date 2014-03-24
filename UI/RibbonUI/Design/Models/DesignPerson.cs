@@ -1,4 +1,5 @@
 ﻿using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 
 namespace RibbonUI.Design.Classes {
     public class DesignPerson : IPerson {

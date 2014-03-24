@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using System.Linq;
-using Frost.Common.Models;
-using Frost.Common.Models.ISO;
+using Frost.Common.Models.Provider;
+using Frost.Common.Models.Provider.ISO;
 using Frost.Common.Util.ISO;
 
 namespace Frost.Providers.Frost.DB {

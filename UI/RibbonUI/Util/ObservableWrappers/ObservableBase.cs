@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 using RibbonUI.Annotations;
 
 namespace RibbonUI.Util.ObservableWrappers {

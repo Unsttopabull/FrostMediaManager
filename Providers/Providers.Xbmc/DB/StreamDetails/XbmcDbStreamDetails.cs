@@ -22,8 +22,12 @@ namespace Frost.Providers.Xbmc.DB.StreamDetails {
         [Column("idStream")]
         public long Id { get; set; }
 
+        [Column("idFile")]
+        public long? FileId { get; set; }
+
         /// <summary>Gets or sets the file this stream is contained in.</summary>
         /// <value>The file this stream is contained in.</value>
+        [ForeignKey("FileId")]
         public virtual XbmcFile File { get; set; }
 
         internal class Configuration : EntityTypeConfiguration<XbmcDbStreamDetails> {
@@ -34,8 +38,8 @@ namespace Frost.Providers.Xbmc.DB.StreamDetails {
                     .Map<XbmcAudioDetails>(s => s.Requires("iStreamType").HasValue(1))
                     .Map<XbmcSubtitleDetails>(s => s.Requires("iStreamType").HasValue(2))
                     .HasRequired(sd => sd.File)
-                    .WithMany(f => f.StreamDetails)
-                    .Map(m => m.MapKey("idFile"));
+                    .WithMany(f => f.StreamDetails);
+                //.Map(m => m.MapKey("idFile"));
             }
 
         }

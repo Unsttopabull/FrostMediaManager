@@ -1,5 +1,6 @@
 ﻿using Frost.Common;
 using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 using Frost.Providers.Xbmc.DB;
 using Frost.Providers.Xbmc.DB.Actor;
 using Frost.Providers.Xbmc.DB.Art;

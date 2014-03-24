@@ -1,4 +1,5 @@
 ﻿using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 using Frost.Common.Util.ISO;
 
 namespace Frost.Providers.Xtreamer {

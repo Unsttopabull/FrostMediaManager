@@ -3,13 +3,16 @@ using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 using System.Data.SQLite;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using Frost.Common.Models.ISO;
+using Frost.Common.Models.Provider.ISO;
 using Frost.Providers.Frost.DB.Files;
 using Frost.Providers.Frost.DB.People;
 using Frost.Providers.Frost.Properties;
+using File = Frost.Providers.Frost.DB.Files.File;
 
 namespace Frost.Providers.Frost.DB {
 
@@ -103,12 +106,11 @@ namespace Frost.Providers.Frost.DB {
         /// <value>The information about people that participated in the movies in the library</value>
         public DbSet<Person> People { get; set; }
 
-        public DbSet<Actor> Actors { get; set; }
-
         /// <summary>Checks if the context has unsaved changed (added, modified or deleted entites)</summary>
         /// <returns>Returns <c>true</c> if unsaved changes exist; otherwise <c>false</c>.</returns>
         public bool HasUnsavedChanges() {
             ChangeTracker.DetectChanges();
+
             return ChangeTracker.Entries().Any(e => e.State == EntityState.Added
                                                     || e.State == EntityState.Modified
                                                     || e.State == EntityState.Deleted);
@@ -145,6 +147,7 @@ namespace Frost.Providers.Frost.DB {
             modelBuilder.Entity<Actor>()
                         .ToTable("Actors");
 
+            modelBuilder.Configurations.Add(new Plot.Configuration());
             modelBuilder.Configurations.Add(new File.Configuration());
             modelBuilder.Configurations.Add(new Language.Configuration());
             modelBuilder.Configurations.Add(new Audio.Configuration());
@@ -173,33 +176,42 @@ namespace Frost.Providers.Frost.DB {
                                                              .GetObjectStateEntries(EntityState.Added | EntityState.Modified | EntityState.Deleted)
                                                              .ToList();
 
-            foreach (ObjectStateEntry entry in objectStateEntryList) {
-                if (entry.IsRelationship || entry.State != EntityState.Modified) {
-                    continue;
-                }
-
-                foreach (string propertyName in entry.GetModifiedProperties()) {
-                    DbDataRecord original = entry.OriginalValues;
-                    string oldValue = original.GetValue(original.GetOrdinal(propertyName)).ToString();
-
-                    CurrentValueRecord current = entry.CurrentValues;
-                    string newValue = current.GetValue(current.GetOrdinal(propertyName)).ToString();
-
-                    // probably not necessary 
-                    if (oldValue == newValue) {
+            using (StreamWriter sw = new StreamWriter(System.IO.File.Create("save.log"))) {
+                foreach (ObjectStateEntry entry in objectStateEntryList) {
+                    if (entry.IsRelationship || entry.State != EntityState.Modified) {
                         continue;
                     }
 
-                    if (oldValue == "") {
-                        oldValue = "<empty string>";
+                    foreach (string propertyName in entry.GetModifiedProperties()) {
+                        DbDataRecord original = entry.OriginalValues;
+                        string oldValue = original.GetValue(original.GetOrdinal(propertyName)).ToString();
+
+                        CurrentValueRecord current = entry.CurrentValues;
+                        string newValue = current.GetValue(current.GetOrdinal(propertyName)).ToString();
+
+                        // probably not necessary 
+                        if (oldValue == newValue) {
+                            continue;
+                        }
+
+                        if (oldValue == "") {
+                            oldValue = "<empty string>";
+                        }
+                        if (newValue == "") {
+                            newValue = "<empty string>";
+                        }
+                        sw.WriteLine("Entry: {0} Original: {1} New: {2}", entry.Entity.GetType().Name, oldValue, newValue);
                     }
-                    if (newValue == "") {
-                        newValue = "<empty string>";
-                    }
-                    Debug.WriteLine("Entry: {0} Original: {1} New: {2}", entry.Entity.GetType().Name, oldValue, newValue);
                 }
             }
-            return base.SaveChanges();
+
+            try {
+                return base.SaveChanges();
+            }
+            catch (DbEntityValidationException e) {
+                
+            }
+            return 0;
         }
     }
 

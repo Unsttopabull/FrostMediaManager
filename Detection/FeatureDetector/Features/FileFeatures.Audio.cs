@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Linq;
+using Frost.Common;
+using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.FileName;
-using Frost.DetectFeatures.Models;
 using Frost.DetectFeatures.Util;
 using Frost.SharpMediaInfo;
 using Frost.SharpMediaInfo.Output;

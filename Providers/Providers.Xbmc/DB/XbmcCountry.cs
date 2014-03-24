@@ -3,7 +3,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Frost.Common.Models;
-using Frost.Common.Models.ISO;
+using Frost.Common.Models.Provider;
+using Frost.Common.Models.Provider.ISO;
 using Frost.Common.Util.ISO;
 
 namespace Frost.Providers.Xbmc.DB {
@@ -22,6 +23,13 @@ namespace Frost.Providers.Xbmc.DB {
         public XbmcCountry(ISOCountryCode isoCode) {
             Name = isoCode.EnglishName;
             ISO3166 = new ISO3166(isoCode.Alpha2, isoCode.Alpha3);
+        }
+
+        internal XbmcCountry(ICountry country) {
+            if (country.ISO3166 != null) {
+                Name = country.ISO3166.Alpha3;
+            }
+            ISO3166 = country.ISO3166;
         }
 
         /// <summary>Gets or sets the Id of the country in the database.</summary>

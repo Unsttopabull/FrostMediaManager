@@ -2,6 +2,7 @@
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 
 namespace Frost.Providers.Xbmc.NFO {
 

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using Frost.Common;
-using Frost.Common.Models;
+using Frost.Common.Models.FeatureDetector;
+using Frost.Common.Models.Provider;
 using Frost.Providers.Xbmc.DB;
 using Frost.Providers.Xbmc.DB.Actor;
 using Frost.Providers.Xbmc.DB.StreamDetails;
@@ -53,7 +54,51 @@ namespace Frost.Providers.Xbmc.Provider {
         public IEnumerable<ISubtitle> Subtitles { get; private set; }
 
         public XbmcSubtitleDetails FindSubtitle(ISubtitle subtitle, bool createIfNotFound) {
-            throw new NotImplementedException();
+            XbmcSubtitleDetails p;
+            if (subtitle.Id > 0) {
+                p = (XbmcSubtitleDetails) _xbmc.StreamDetails.Find(subtitle.Id);
+                if (p != null) {
+                    return p;
+                }
+
+                if (createIfNotFound) {
+                    return (XbmcSubtitleDetails) _xbmc.StreamDetails.Add(new XbmcSubtitleDetails(subtitle, FindFile(subtitle.File, true)));
+                }
+                return null;
+            }
+
+            if (subtitle.Language != null && subtitle.Language.ISO639 != null) {
+                p = _xbmc.StreamDetails
+                         .OfType<XbmcSubtitleDetails>()
+                         .FirstOrDefault(pr => pr.Language == subtitle.Language.ISO639.Alpha3 &&
+                                               pr.FileId == subtitle.File.Id);
+            }
+            else {
+                p = _xbmc.StreamDetails
+                         .OfType<XbmcSubtitleDetails>()
+                         .FirstOrDefault(pr => pr.File.Id == subtitle.File.Id);
+            }
+
+            if (p == null && createIfNotFound) {
+                p = (XbmcSubtitleDetails) _xbmc.StreamDetails.Add(new XbmcSubtitleDetails(subtitle, FindFile(subtitle.File, true)));
+            }
+            return p;      
+        }
+
+        private XbmcFile FindFile(IFile file, bool createIfNotFound) {
+            XbmcFile f;
+            if (file.Id > 0) {
+                f = _xbmc.Files.Find(file.Id);
+                return f ?? _xbmc.Files.Add(new XbmcFile(file));
+            }
+
+            string fileNameString = XbmcFile.GetFileNamesString(new[] { file.Name });
+
+            f = _xbmc.Files.FirstOrDefault(xf => fileNameString == xf.FileNameString);
+            if (f == null && createIfNotFound) {
+                return _xbmc.Files.Add(new XbmcFile(file));
+            }
+            return f;
         }
 
         #endregion
@@ -81,7 +126,23 @@ namespace Frost.Providers.Xbmc.Provider {
         }
 
         public XbmcCountry FindCountry(ICountry country, bool createIfNotFound) {
-            throw new NotImplementedException();
+            XbmcCountry c;
+            if (country.Id > 0) {
+                c = _xbmc.Countries.Find(country.Id);
+                if (c != null && (c.Name == country.Name)) {
+                    return c;
+                }
+
+                return createIfNotFound
+                    ? _xbmc.Countries.Add(new XbmcCountry(country))
+                    : null;
+            }
+
+            c = _xbmc.Countries.FirstOrDefault(pr => (country.ISO3166 != null && pr.ISO3166.Alpha3 == country.ISO3166.Alpha3) || pr.Name == country.Name);
+            if (c == null && createIfNotFound) {
+                _xbmc.Countries.Add(new XbmcCountry(country));
+            }
+            return c;
         }
 
         #endregion
@@ -98,8 +159,8 @@ namespace Frost.Providers.Xbmc.Provider {
             }
         }
 
-        public XbmcStudio FindStudio(IStudio studio, bool createIfNotFound) {
-            throw new NotImplementedException();
+        public XbmcStudio FindStudio(IStudio studio, bool createNotFound) {
+            return FindHasName<IStudio, XbmcStudio>(studio, createNotFound);
         }
 
         #endregion
@@ -123,7 +184,7 @@ namespace Frost.Providers.Xbmc.Provider {
         }
 
         public XbmcGenre FindGenre(IGenre genre, bool createIfNotFound) {
-            throw new NotImplementedException();
+            return FindHasName<IGenre, XbmcGenre>(genre, createIfNotFound);
         }
 
         #endregion
@@ -145,7 +206,7 @@ namespace Frost.Providers.Xbmc.Provider {
         }
 
         internal XbmcSet FindSet(IMovieSet set, bool createIfNotFound) {
-            throw new NotImplementedException();
+            return FindHasName<IMovieSet, XbmcSet>(set, createIfNotFound);
         }
 
         #endregion
@@ -166,28 +227,71 @@ namespace Frost.Providers.Xbmc.Provider {
             }
         }
 
-        internal XbmcPerson FindPerson(IPerson actor, bool createIfNotFound) {
-            throw new NotImplementedException();
+        internal XbmcPerson FindPerson(IPerson person, bool createIfNotFound) {
+            if (person == null) {
+                return null;
+            }
+
+            XbmcPerson p;
+            if (person.Id > 0) {
+                p = _xbmc.People.Find(person.Id);
+                if (p != null && p.Name == person.Name) {
+                    return p;
+                }
+
+                return createIfNotFound
+                    ? _xbmc.People.Add(new XbmcPerson(person))
+                    : null;
+            }
+
+            p = _xbmc.People.FirstOrDefault(pr => pr.Name == person.Name);
+            if (p == null && createIfNotFound) {
+                p = _xbmc.People.Add(new XbmcPerson(person));
+            }
+            return p;
         }
 
         #endregion
 
-        #region Actors
+        private TSet FindHasName<TEntity, TSet>(TEntity hasName, bool createIfNotFound) where TEntity : class, IHasName, IMovieEntity
+                                                                                        where TSet : class, IHasName, IMovieEntity {
+            DbSet<TSet> set = _xbmc.Set<TSet>();
+            if (hasName.Id > 0) {
+                TSet find = set.Find(hasName.Id);
+                if ((find == null || find.Name != hasName.Name)) {
+                    if (createIfNotFound) {
+                        find = set.Create();
+                        find.Name = hasName.Name;
 
-        public IEnumerable<IActor> Actors { get; private set; }
+                        find = set.Add(find);
+                    }
+                    else {
+                        return null;
+                    }
+                }
+                return find;
+            }
 
-        internal XbmcMovieActor FindActor(IActor actor, bool createIfNotFound) {
-            throw new NotImplementedException();
+            TSet hn = set.FirstOrDefault(n => n.Name == hasName.Name);
+            if (hn == null && createIfNotFound) {
+                hn = set.Create();
+                hn.Name = hasName.Name;
+
+                hn = set.Add(hn);
+            }
+            return hn;            
         }
 
-        #endregion
+        public void SaveDetected(IEnumerable<MovieInfo> movieInfos) {
+            
+        }
 
         public bool HasUnsavedChanges() {
-            return false;
+            return true;
         }
 
         public void SaveChanges() {
-            
+            _xbmc.SaveChanges();
         }
 
         #region IDisposable

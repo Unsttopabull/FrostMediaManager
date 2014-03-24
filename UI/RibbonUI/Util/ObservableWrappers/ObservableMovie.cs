@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using Frost.Common;
 using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 using Frost.DetectFeatures;
+using LightInject;
 
 namespace RibbonUI.Util.ObservableWrappers {
 
@@ -327,10 +329,10 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <value>The set this movie is a part of.</value>
         public IMovieSet Set {
             get { return _observedEntity.Set; }
-            //set {
-            //    _observedEntity.Set = value;
-            //    OnPropertyChanged();
-            //}
+            set {
+                _observedEntity.Set = value;
+                OnPropertyChanged();
+            }
         }
 
         #endregion
@@ -495,7 +497,8 @@ namespace RibbonUI.Util.ObservableWrappers {
         }
 
         public IStudio AddStudio(IStudio studio) {
-            return _observedEntity.AddStudio(studio);
+            IStudio stud = _observedEntity.AddStudio(studio);
+            return stud;
         }
 
         public void RemoveStudio(IStudio studio) {

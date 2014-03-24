@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:l="http://www.frostmediamanager.com/xaml/translation"
              xmlns:sys="clr-namespace:System.Text;assembly=mscorlib"
-             xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
              xmlns:vm="clr-namespace:RibbonUI.UserControls.List"
              xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
+             xmlns:models="clr-namespace:Frost.Common.Models.Provider;assembly=Frost.Common"
              mc:Ignorable="d" Name="ListSubtitlesControl"
              d:DesignHeight="300" d:DesignWidth="602" Loaded="ListSubtitlesOnLoaded">
     <UserControl.DataContext>

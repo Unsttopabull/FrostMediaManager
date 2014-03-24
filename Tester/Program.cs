@@ -7,9 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Frost.Common;
+using Frost.Common.Models.FeatureDetector;
 using Frost.DetectFeatures;
 using System.Diagnostics;
-using Frost.DetectFeatures.Models;
 using Frost.ProcessDatabase;
 using Frost.Providers.Frost;
 using Frost.Providers.Frost.DB;
@@ -40,10 +40,10 @@ namespace Frost.Tester {
             //TestPHPDeserialize2();
 
             //TestXjbDbParser();
-            //TestMediaSearcher();
+            TestMediaSearcher();
             //TestPhpDeserializeAttribute();
             //TestXjbDB();
-            WriteOutMovies();
+            //WriteOutMovies();
             //TestDbCheck();
             //TestDataService();
             //TestXbmcContext();

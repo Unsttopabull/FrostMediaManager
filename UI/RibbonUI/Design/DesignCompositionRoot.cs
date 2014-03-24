@@ -1,5 +1,6 @@
 ﻿using Frost.Common;
 using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 using LightInject;
 using RibbonUI.Design.Classes;
 

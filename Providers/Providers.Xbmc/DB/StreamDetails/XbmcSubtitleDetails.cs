@@ -1,6 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 using Frost.Common.Util.ISO;
 using Frost.Providers.Xbmc.DB.Proxy;
 
@@ -28,11 +28,12 @@ namespace Frost.Providers.Xbmc.DB.StreamDetails {
             Language = language;
         }
 
-        internal XbmcSubtitleDetails(ISubtitle subtitle) {
+        internal XbmcSubtitleDetails(ISubtitle subtitle, XbmcFile file) {
             Id = subtitle.Id;
             if (subtitle.Language != null) {
                 Language = subtitle.Language.ISO639.Alpha3;
             }
+            File = file;
         }
 
         /// <summary>Gets or sets the language of this subtitle.</summary>

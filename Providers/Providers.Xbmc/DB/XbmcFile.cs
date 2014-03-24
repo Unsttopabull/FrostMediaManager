@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using Frost.Common;
 using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 using Frost.Providers.Xbmc.DB.StreamDetails;
 
 namespace Frost.Providers.Xbmc.DB {
@@ -135,27 +136,31 @@ namespace Frost.Providers.Xbmc.DB {
                 return new[] {FileNameString};
             }
             set {
-                StringBuilder sb = new StringBuilder();
-                int numFiles = value.Length;
+                FileNameString = GetFileNamesString(value);
+            }
+        }
 
-                //join all filePaths with SEPARATOR and prefix with STACK_PREFIX
-                for (int i = 0; i < numFiles; i++) {
-                    string fn = value[i];
+        internal static string GetFileNamesString(string[] value) {
+            StringBuilder sb = new StringBuilder();
+            int numFiles = value.Length;
 
-                    //if the path is not empty or null join to stacked filename
-                    if (!string.IsNullOrEmpty(fn)) {
-                        //if the path is on the network and in Windows style
-                        //convert to SAMBA
-                        sb.Append(ToSmbPath(fn));
+            //join all filePaths with SEPARATOR and prefix with STACK_PREFIX
+            for (int i = 0; i < numFiles; i++) {
+                string fn = value[i];
 
-                        //don't append separator to the end of the string
-                        if (i < numFiles - 1) {
-                            sb.Append(STACK_FILE_SEPARATOR);
-                        }
+                //if the path is not empty or null join to stacked filename
+                if (!string.IsNullOrEmpty(fn)) {
+                    //if the path is on the network and in Windows style
+                    //convert to SAMBA
+                    sb.Append(ToSmbPath(fn));
+
+                    //don't append separator to the end of the string
+                    if (i < numFiles - 1) {
+                        sb.Append(STACK_FILE_SEPARATOR);
                     }
                 }
-                FileNameString = sb.ToString();
             }
+            return sb.ToString();
         }
 
         /// <summary>Gets or sets the number of times the file has been played.</summary>

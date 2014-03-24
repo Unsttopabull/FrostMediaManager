@@ -5,10 +5,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
 using Frost.Common;
-using Frost.Common.Models;
 using Frost.Providers.Frost.DB.Files;
 using Frost.Providers.Frost.DB.People;
-using Frost.Providers.Frost.Proxies;
 
 namespace Frost.Providers.Frost.DB {
 

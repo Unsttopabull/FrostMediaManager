@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Documents;
 using Frost.Common;
 using Frost.Common.Models;
-using Frost.Common.Models.ISO;
+using Frost.Common.Models.FeatureDetector;
+using Frost.Common.Models.Provider;
+using Frost.Common.Models.Provider.ISO;
 using RibbonUI.Design.Classes;
 using RibbonUI.Design.Models;
 
@@ -876,6 +877,10 @@ namespace RibbonUI.Design {
 
                 return _actors;
             }
+        }
+
+        public void SaveDetected(IEnumerable<MovieInfo> movieInfos) {
+            
         }
 
         public bool HasUnsavedChanges() {

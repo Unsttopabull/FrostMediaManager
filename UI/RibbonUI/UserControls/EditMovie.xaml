@@ -10,7 +10,7 @@
              xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
-             xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
+             xmlns:models="clr-namespace:Frost.Common.Models.Provider;assembly=Frost.Common"             
              xmlns:common="clr-namespace:Frost.Common;assembly=Frost.Common"
              xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
              xmlns:userControls="clr-namespace:RibbonUI.UserControls"
@@ -259,14 +259,14 @@
                         <DockPanel Grid.Column="0" Grid.Row="0" LastChildFill="False">
                             <Label DockPanel.Dock="Left" Content="{l:T Plot, Postfix=:}"/>
                             <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}"
-                                    ToolTip="{l:T Remove current plot}"
-                                    Command="{Binding RemovePlotCommand}" CommandParameter="{Binding ElementName=MoviePlotCombo, Path=SelectedItem}"/>
+                                             ToolTip="{l:T Remove current plot}" Command="{Binding RemovePlotCommand}"
+                                             CommandParameter="{Binding ElementName=MoviePlotCombo, Path=SelectedItem}"/>
                             <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}"
-                                    Command="{Binding AddPlotCommand}" Height="26" VerticalAlignment="Bottom"
-                                    ToolTip="{l:T Add new plot}"/>
+                                             Command="{Binding AddPlotCommand}" Height="26" VerticalAlignment="Bottom"
+                                             ToolTip="{l:T Add new plot}"/>
                         </DockPanel>
 
-                        <ComboBox Grid.Column="0" Grid.Row="1" x:Name="MoviePlotCombo" ItemsSource="{Binding MoviePlots}"
+                        <ComboBox Grid.Column="0" Grid.Row="1" x:Name="MoviePlotCombo" ItemsSource="{Binding Plots}"
                                   SelectedIndex="0" IsSynchronizedWithCurrentItem="True">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type o:MoviePlot}">
@@ -287,7 +287,7 @@
                             </ComboBox.Style>
                         </ComboBox>
                         <Button Grid.Row="1" Grid.Column="1" Margin="5,0,0,0"
-                                IsEnabled="{Binding ElementName=MoviePlotCombo, Path=IsEnabled}"
+                                IsEnabled="{Binding ElementName=MoviePlotCombo, Path=SelectedItem[Language], FallbackValue=False, TargetNullValue=False}"
                                 ToolTip="{l:T Set plot language}" Content="{l:T Set language}"
                                 Command="{Binding SetPlotLanguageCommand}"
                                 CommandParameter="{Binding ElementName=MoviePlotCombo, Path=SelectedItem}">
@@ -357,7 +357,7 @@
                         <DockPanel Grid.Row="0" LastChildFill="False">
                             <Label DockPanel.Dock="Left" Content="{l:T Genres, Postfix=:}"/>
                             <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected genre}"
-                                             Command="{Binding RemoveGenreCommand}" CommandParameter="{Binding SelectedItem, ElementName=MovieGenres}"/>
+                                             Command="{Binding RemoveMovieGenreCommand}" CommandParameter="{Binding SelectedItem, ElementName=MovieGenres}"/>
                             <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource AddButton}" ToolTip="{l:T Add new genre}" Height="26" VerticalAlignment="Bottom"
                                              Command="{Binding AddGenreCommand}"/>
                             <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource EditButton}" ToolTip="{l:T Edit selected genre}"

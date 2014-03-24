@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Frost.Common;
 using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 using Frost.GettextMarkupExtension;
 using RibbonUI.Util.ObservableWrappers;
 

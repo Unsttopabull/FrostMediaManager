@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 
 namespace Frost.Providers.Frost.DB.People {
 
@@ -39,7 +39,7 @@ namespace Frost.Providers.Frost.DB.People {
         /// <param name="name">The full name of the actor.</param>
         /// <param name="thumb">The thumbnail image.</param>
         internal Person(long id, string name, string thumb) : this(name, thumb) {
-            PersonId = id;
+            Id = id;
         }
 
         internal Person(IPerson person) {
@@ -52,7 +52,7 @@ namespace Frost.Providers.Frost.DB.People {
 
         /// <summary>Gets or sets the database person Id.</summary>
         /// <value>The database person Id</value>
-        public long PersonId { get; set; }
+        public long Id { get; set; }
 
         /// <summary>Gets or sets the full name of the person.</summary>
         /// <value>The full name of the person.</value>
@@ -88,7 +88,7 @@ namespace Frost.Providers.Frost.DB.People {
 
         #region IPerson
 
-        long IMovieEntity.Id {get { return PersonId; }}
+        long IMovieEntity.Id {get { return Id; }}
 
         public bool this[string propertyName] {
             get {
@@ -117,7 +117,7 @@ namespace Frost.Providers.Frost.DB.People {
             public Configuration() {
                 ToTable("People");
 
-                HasKey(p => p.PersonId);
+                HasKey(p => p.Id);
 
                 // Movie <--> Director link
                 HasMany(p => p.MoviesAsDirector)

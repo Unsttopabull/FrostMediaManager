@@ -6,7 +6,7 @@
              xmlns:l="http://www.frostmediamanager.com/xaml/translation"             
              xmlns:vm="clr-namespace:RibbonUI.UserControls.List"
              xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
-             xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
+             xmlns:models="clr-namespace:Frost.Common.Models.Provider;assembly=Frost.Common"
              mc:Ignorable="d" Name="ListCertificationsControl"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.DataContext>

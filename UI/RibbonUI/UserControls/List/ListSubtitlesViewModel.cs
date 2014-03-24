@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Data;
 using Frost.Common;
 using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 using GalaSoft.MvvmLight;

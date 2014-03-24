@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;
 using RibbonUI.Util.ObservableWrappers;

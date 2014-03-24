@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 
 namespace Frost.Providers.Xbmc.DB.Actor {
 
@@ -24,6 +25,11 @@ namespace Frost.Providers.Xbmc.DB.Actor {
             Person = actor;
             Role = role;
             Order = order;
+        }
+
+        public XbmcMovieActor(XbmcPerson actor, string character) {
+            Person = actor;
+            Role = character;
         }
 
         /// <summary>Gets or sets the foreign key to the person.</summary>

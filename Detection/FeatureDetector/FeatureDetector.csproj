@@ -85,16 +85,6 @@
   <ItemGroup>
     <Compile Include="FeatureDetector.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Models\ActorInfo.cs" />
-    <Compile Include="Models\ArtInfo.cs" />
-    <Compile Include="Models\AudioDetectionInfo.cs" />
-    <Compile Include="Models\CertificationInfo.cs" />
-    <Compile Include="Models\FileDetectionInfo.cs" />
-    <Compile Include="Models\MovieInfo.cs" />
-    <Compile Include="Models\PersonInfo.cs" />
-    <Compile Include="Models\PlotInfo.cs" />
-    <Compile Include="Models\SubtitleDetectionInfo.cs" />
-    <Compile Include="Models\VideoDetectionInfo.cs" />
     <Compile Include="Util\LanguageMappingCollection.cs" />
     <Compile Include="Util\LanguageMapping.cs" />
     <Compile Include="Util\SegmentCollection.cs" />

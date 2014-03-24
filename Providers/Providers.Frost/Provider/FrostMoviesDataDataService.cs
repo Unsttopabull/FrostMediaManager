@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using Frost.Common;
-using Frost.Common.Models;
+using Frost.Common.Models.FeatureDetector;
+using Frost.Common.Models.Provider;
 using Frost.Providers.Frost.DB;
 using Frost.Providers.Frost.DB.Files;
 using Frost.Providers.Frost.DB.People;
@@ -30,7 +32,6 @@ namespace Frost.Providers.Frost.Provider {
         private IEnumerable<ILanguage> _languages;
         private IEnumerable<ISpecial> _specials;
         private IEnumerable<IPerson> _people;
-        private IEnumerable<IActor> _actors;
 
         public FrostMoviesDataDataService() {
             _mvc = new FrostDbContainer();
@@ -181,7 +182,7 @@ namespace Frost.Providers.Frost.Provider {
             }
         }
 
-        internal Country FindOrCreateCountry(ICountry country, bool createIfNotFound) {
+        internal Country FindCountry(ICountry country, bool createIfNotFound) {
             Country c;
             if (country.Id > 0) {
                 c = _mvc.Countries.Find(country.Id);
@@ -285,6 +286,9 @@ namespace Frost.Providers.Frost.Provider {
             return p; 
         }
 
+        internal void SetAsDeletedPlot(Plot plot) {
+            _mvc.Plots.Remove(plot);
+        }
         #endregion
 
         #region Genres
@@ -421,19 +425,21 @@ namespace Frost.Providers.Frost.Provider {
             }
         }
 
-        internal Person FindOrCreatePerson(IPerson person, bool createIfNotFound) {
+        internal Person FindPerson(IPerson person, bool createIfNotFound) {
+            if (person == null) {
+                return null;
+            }
+
             Person p;
             if (person.Id > 0) {
                 p = _mvc.People.Find(person.Id);
-                if (p == null || p.Name != person.Name) {
-                    if (createIfNotFound) {
-                        p = _mvc.People.Add(new Person(person));
-                    }
-                    else {
-                        return null;
-                    }
+                if (p != null && p.Name == person.Name) {
+                    return p;
                 }
-                return p;
+
+                return createIfNotFound
+                    ? _mvc.People.Add(new Person(person))
+                    : null;
             }
 
             p = _mvc.People.FirstOrDefault(pr => (person.ImdbID != null && pr.ImdbID == person.ImdbID) || pr.Name == person.Name);
@@ -441,44 +447,6 @@ namespace Frost.Providers.Frost.Provider {
                 p = _mvc.People.Add(new Person(person));
             }
             return p;
-        }
-
-        #endregion
-
-        #region Actors
-
-        public IEnumerable<IActor> Actors {
-            get {
-                if (_actors != null) {
-                    return _actors;
-                }
-
-                _mvc.Actors.Load();
-                _actors = _mvc.Actors.Local;
-                return _actors;
-            }
-        }
-
-        internal Actor FindOrCreateActor(IActor actor, bool createIfNotFound) {
-            Actor p;
-            if (actor.Id > 0) {
-                p = _mvc.Actors.Find(actor.Id);
-                if (p == null || p.Name != actor.Name) {
-                    if (createIfNotFound) {
-                        p = _mvc.Actors.Add(new Actor(actor));
-                    }
-                    else {
-                        return null;
-                    }
-                }
-                return p;
-            }
-
-            p = _mvc.Actors.FirstOrDefault(pr => (actor.ImdbID != null && pr.ImdbID == actor.ImdbID) || (pr.Name == actor.Name && pr.Character == actor.Character));
-            if (p == null && createIfNotFound) {
-                p = _mvc.Actors.Add(new Actor(actor));
-            }
-            return p;               
         }
 
         #endregion
@@ -512,8 +480,22 @@ namespace Frost.Providers.Frost.Provider {
             return hn;            
         }
 
+        public void SetAsDeleted(object plot) {
+            DbEntityEntry entry = _mvc.Entry(plot);
+            if (entry != null) {
+                entry.State = EntityState.Deleted;
+            }
+        }
+
+        public void SaveDetected(IEnumerable<MovieInfo> movieInfos) {
+            using (MovieSaver ms = new MovieSaver(movieInfos, _mvc)) {
+                ms.Save();
+            }
+        }
+
         public bool HasUnsavedChanges() {
-            return _mvc.HasUnsavedChanges();
+            //return _mvc.HasUnsavedChanges();
+            return true;
         }
 
         public void SaveChanges() {
@@ -547,6 +529,5 @@ namespace Frost.Providers.Frost.Provider {
         }
 
         #endregion
-
     }
 }

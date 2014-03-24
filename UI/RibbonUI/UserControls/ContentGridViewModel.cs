@@ -58,26 +58,6 @@ namespace RibbonUI.UserControls {
 
             SubtitlesOnFocusCommand = new RelayCommand(MovieSubtitlesGotFocus);
             SubtitlesLostFocusCommand = new RelayCommand(MovieSubtitlesOnLostFocus);
-
-            MessengerInstance.Register<RemoveSubtitleMessage>(this, msg => RemoveSubtitle(msg.Subtitle));
-
-            MessengerInstance.Register<AddStudioMessage>(this, s => AddStudio(s.Studio));
-            MessengerInstance.Register<RemoveStudioMessage>(this, s => RemoveStudio(s.Studio));
-
-            MessengerInstance.Register<AddPlotMessage>(this, s => AddPlot(s.Plot));
-            MessengerInstance.Register<RemovePlotMessage>(this, s => RemovePlot(s.Plot));
-
-            MessengerInstance.Register<AddActorMessage>(this, s => AddActor(s.Actor));
-            MessengerInstance.Register<RemoveActorMessage>(this, s => RemoveActor(s.Actor));
-
-            MessengerInstance.Register<AddDirectorMessage>(this, s => AddDirector(s.Director));
-            MessengerInstance.Register<RemoveDirectorMessage>(this, s => RemoveDirector(s.Director));
-
-            MessengerInstance.Register<AddGenreMessage>(this, s => AddGenre(s.Genre));
-            MessengerInstance.Register<RemoveGenreMessage>(this, s => RemoveGenre(s.Genre));
-
-            MessengerInstance.Register<AddCountryMessage>(this, s => AddCountry(s.Country));
-            MessengerInstance.Register<RemoveCountryMessage>(this, s => RemoveCountry(s.Country));
         }
 
         public ObservableCollection<ObservableMovie> Movies {
@@ -107,7 +87,7 @@ namespace RibbonUI.UserControls {
                 }
 
                 DateTime now = DateTime.Now;
-                if ((now - _lastChangedMovie).TotalSeconds < 0.5) {
+                if ((now - _lastChangedMovie).TotalSeconds < 0.3) {
                     _lastChangedMovie = now;
                     return;
                 }
@@ -232,68 +212,6 @@ namespace RibbonUI.UserControls {
         private void MovieSubtitlesOnLostFocus() {
             MessengerInstance.Send(new SelectRibbonMessage(RibbonTabs.Subtitles));
         }
-
-        #region Message Handlers
-
-        private void AddSubtitle(MovieSubtitle subtitle) {
-            ISubtitle sub = SelectedMovie.AddSubtitle(subtitle.ObservedEntity);
-            Subtitles.Add(new MovieSubtitle(sub));
-        }
-
-        private void RemoveSubtitle(MovieSubtitle subtitle) {
-            SelectedMovie.RemoveSubtitle(subtitle.ObservedEntity);
-            Subtitles.Remove(subtitle);
-        }
-
-        private void RemovePlot(IPlot plot) {
-            SelectedMovie.RemovePlot(plot);
-        }
-
-        private void AddPlot(IPlot plot) {
-            SelectedMovie.AddPlot(plot);
-        }
-
-        private void AddStudio(IStudio studio) {
-            SelectedMovie.AddStudio(studio);
-        }
-
-        private void RemoveStudio(IStudio studio) {
-            SelectedMovie.RemoveStudio(studio);
-        }
-
-        private void AddActor(IActor actor) {
-            SelectedMovie.AddActor(actor);
-        }
-
-        private void RemoveActor(IActor actor) {
-            SelectedMovie.RemoveActor(actor);
-        }
-
-        private void AddDirector(IPerson director) {
-            SelectedMovie.AddDirector(director);
-        }
-
-        private void RemoveDirector(IPerson director) {
-            SelectedMovie.RemoveDirector(director);
-        }
-
-        private void AddGenre(IGenre genre) {
-            SelectedMovie.AddGenre(genre);
-        }
-
-        private void RemoveGenre(IGenre genre) {
-            SelectedMovie.RemoveGenre(genre);
-        }
-
-        private void AddCountry(ICountry country) {
-            SelectedMovie.AddCountry(country);
-        }
-
-        private void RemoveCountry(ICountry country) {
-            SelectedMovie.RemoveCountry(country);
-        }
-
-        #endregion
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {

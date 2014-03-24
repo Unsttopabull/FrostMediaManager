@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using Frost.Common;
 using Frost.Common.Models;
+using Frost.Common.Models.FeatureDetector;
+using Frost.Common.Models.Provider;
 using Frost.PHPtoNET;
 using Frost.Providers.Xtreamer.DB;
 using Frost.Providers.Xtreamer.PHP;
@@ -94,7 +96,9 @@ namespace Frost.Providers.Xtreamer.Provider {
             }
         }
 
-        public IEnumerable<IActor> Actors { get; private set; }
+        public void SaveDetected(IEnumerable<MovieInfo> movieInfos) {
+            
+        }
 
         public bool HasUnsavedChanges() {
             return false;

@@ -10,7 +10,7 @@
     xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:userControls="clr-namespace:RibbonUI.UserControls"
-    xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
+    xmlns:models="clr-namespace:Frost.Common.Models.Provider;assembly=Frost.Common"
     x:Class="RibbonUI.UserControls.ArtAndPlot"
     mc:Ignorable="d"
     d:DesignHeight="625" d:DesignWidth="1071">

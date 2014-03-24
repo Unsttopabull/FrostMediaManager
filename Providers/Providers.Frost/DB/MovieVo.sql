@@ -193,7 +193,7 @@ CREATE TABLE "MovieDirectors" (
 	"DirectorId"  integer NOT NULL,
 	PRIMARY KEY ("MovieId" ASC, "DirectorId" ASC),
 	CONSTRAINT "FK_MovieDirector_Movie" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT "FK_MovieDirector_Genre" FOREIGN KEY ("DirectorId") REFERENCES "People" ("PersonId") ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT "FK_MovieDirector_Genre" FOREIGN KEY ("DirectorId") REFERENCES "People" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- ----------------------------
@@ -295,7 +295,7 @@ CREATE TABLE "MovieWriters" (
 	"WriterId"  integer NOT NULL,
 	PRIMARY KEY ("MovieId" ASC, "WriterId" ASC),
 	CONSTRAINT "FK_MovieWriter_Movie" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT "FK_MovieWriter_Genre" FOREIGN KEY ("WriterId") REFERENCES "People" ("PersonId") ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT "FK_MovieWriter_Genre" FOREIGN KEY ("WriterId") REFERENCES "People" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- ----------------------------
@@ -303,13 +303,13 @@ CREATE TABLE "MovieWriters" (
 -- ----------------------------
 DROP TABLE IF EXISTS "People";
 CREATE TABLE People (
-    PersonId integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
+    Id integer PRIMARY KEY AUTOINCREMENT  NOT NULL ,
     Name TEXT   NOT NULL  COLLATE NOCASE,
     Thumb TEXT NULL,
 	ImdbID TEXT NULL COLLATE NOCASE
 );
 
-CREATE UNIQUE INDEX "Person_Id" on "People" ("PersonId" ASC);
+CREATE UNIQUE INDEX "Person_Id" on "People" ("Id" ASC);
 CREATE INDEX "Person_Name"      on "People" ("Name" ASC);
 
 -- ----------------------------
@@ -317,15 +317,17 @@ CREATE INDEX "Person_Name"      on "People" ("Name" ASC);
 -- ----------------------------
 DROP TABLE IF EXISTS "Actors";
 CREATE TABLE Actors (
-	PersonId integer PRIMARY KEY NOT NULL ,
+	Id integer PRIMARY KEY NOT NULL ,
+	PersonId integer NOT NULL,
 	MovieId integer NOT NULL,
 	Character TEXT COLLATE NOCASE,
-	CONSTRAINT "FK_ActorsPerson" FOREIGN KEY ("PersonId") REFERENCES "People" ("PersonId")  ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT "FK_ActorsPerson" FOREIGN KEY ("PersonId") REFERENCES "People" ("Id")  ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT "FK_ActorsMovie" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id")  ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE UNIQUE INDEX "Actors_Id" on "Actors" ("PersonId" ASC);
+CREATE UNIQUE INDEX "Actors_Id" on "Actors" ("Id" ASC);
 CREATE INDEX "Actor_MovieId"    on "Actors" ("MovieId" ASC);
+CREATE INDEX "Actor_PersonId"   on "Actors" ("PersonId" ASC);
 
 -- ----------------------------
 -- Table structure for "Plots"
@@ -335,7 +337,7 @@ CREATE TABLE "Plots" (
 	"Id"  integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	"Tagline"  TEXT,
 	"Summary"  TEXT,
-	"Full"  TEXT NOT NULL,
+	"Full"  TEXT,
 	"Language"  TEXT NULL,
 	"MovieId"  integer NOT NULL,
 	CONSTRAINT "FK_MoviePlot" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
@@ -534,9 +536,9 @@ having count(*) > 1;
 -- ----------------------------
 DROP VIEW IF EXISTS "MovieActorsCharacters";
 CREATE VIEW "MovieActorsCharacters" AS 
-Select Actors.PersonId, Movies.Title, People.Name, Actors.Character from Actors
+Select Actors.Id, Movies.Title, People.Name, Actors.Character from Actors
 join Movies on Actors.MovieId = Movies.Id
-join People on Actors.PersonId = People.PersonId
+join People on Actors.Id = People.Id
 where Character is not null;
 
 -- ----------------------------

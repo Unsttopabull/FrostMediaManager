@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Frost.Common.Models;
+using System.Data.Entity.ModelConfiguration;
+using Frost.Common.Models.Provider;
 
 namespace Frost.Providers.Frost.DB {
 
@@ -68,7 +69,6 @@ namespace Frost.Providers.Frost.DB {
 
         /// <summary>Gets or sets the full plot.</summary>
         /// <value>The full plot.</value>
-        [Required]
         public string Full { get; set; }
 
         /// <summary>Gets or sets the language of this plot.</summary>
@@ -105,6 +105,15 @@ namespace Frost.Providers.Frost.DB {
                 return Language;
             }
             return Id+" Unknown language";
+        }
+
+        internal class Configuration : EntityTypeConfiguration<Plot> {
+            public Configuration() {
+                HasRequired(p => p.Movie)
+                    .WithMany(m => m.Plots)
+                    .HasForeignKey(p => p.MovieId)
+                    .WillCascadeOnDelete();
+            }
         }
     }
 

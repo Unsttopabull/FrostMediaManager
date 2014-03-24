@@ -1,4 +1,4 @@
-﻿using Frost.Common.Models;
+﻿using Frost.Common.Models.Provider;
 using Frost.Providers.Frost.DB.Files;
 using Frost.Providers.Frost.Provider;
 

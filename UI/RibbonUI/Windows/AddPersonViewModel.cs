@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 using Microsoft.Win32;
