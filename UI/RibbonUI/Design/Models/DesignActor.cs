@@ -1,7 +1,6 @@
-﻿using Frost.Common.Models;
-using Frost.Common.Models.Provider;
+﻿using Frost.Common.Models.Provider;
 
-namespace RibbonUI.Design.Classes {
+namespace RibbonUI.Design.Models {
     class DesignActor : DesignPerson, IActor {
 
         public string Character { get; set; }

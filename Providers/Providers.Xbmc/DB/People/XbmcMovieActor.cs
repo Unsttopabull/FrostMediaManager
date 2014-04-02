@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 
-namespace Frost.Providers.Xbmc.DB.Actor {
+namespace Frost.Providers.Xbmc.DB.People {
 
     /// <summary>Represents a link table in XBMC database between a movie and a person containing the name of the persons charater.</summary>
     [Table("actorlinkmovie")]
@@ -27,9 +26,10 @@ namespace Frost.Providers.Xbmc.DB.Actor {
             Order = order;
         }
 
-        public XbmcMovieActor(XbmcPerson actor, string character) {
+        public XbmcMovieActor(XbmcPerson actor, string character, long order) {
             Person = actor;
             Role = character;
+            Order = order;
         }
 
         /// <summary>Gets or sets the foreign key to the person.</summary>
@@ -82,18 +82,39 @@ namespace Frost.Providers.Xbmc.DB.Actor {
         /// <summary>Gets or sets the full name of the person.</summary>
         /// <value>The full name of the person.</value>
         string IPerson.Name {
-            get { return Person.Name; }
-            set { Person.Name = value; }
+            get {
+                if (Person == null) {
+                    Person = new XbmcPerson();
+                }
+
+                return Person.Name;
+            }
+            set {
+                if (Person == null) {
+                    Person = new XbmcPerson();
+                }
+                Person.Name = value;
+            }
         }
 
         /// <summary>Gets or sets the persons thumbnail image.</summary>
         /// <value>The thumbnail image.</value>
         string IPerson.Thumb {
             get {
+                if (Person == null) {
+                    Person = new XbmcPerson();
+                }
+
                 string t = Person.ThumbURL;
                 return !string.IsNullOrEmpty(t) ? t : null;
             }
-            set { Person.ThumbURL = value; }
+            set {
+                if (Person == null) {
+                    Person = new XbmcPerson();
+                }
+
+                Person.ThumbURL = value;
+            }
         }
 
         /// <summary>Gets or sets the Persons imdb identifier.</summary>

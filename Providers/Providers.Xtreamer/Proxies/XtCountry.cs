@@ -1,14 +1,20 @@
-﻿using System.Xml.Schema;
-using Frost.Common.Models;
+﻿using System;
+using System.Collections.Generic;
+using Frost.Common.Comparers;
 using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
 using Frost.Common.Util.ISO;
 
 namespace Frost.Providers.Xtreamer.Proxies {
 
-    public class XtCountry : ICountry {
+    public class XtCountry : ICountry, IEquatable<XtCountry>{
+        private readonly IEqualityComparer<ICountry> _comparer;
 
-        public XtCountry(string name) {
+        public XtCountry() {
+            _comparer = new CountryEqualityComparer();
+        }
+
+        public XtCountry(string name) : this() {
             ISOCountryCode isoCode = ISOCountryCodes.Instance.GetByISOCode(name);
             if (isoCode != null) {
                 ISO3166 = new ISO3166(isoCode.Alpha2, isoCode.Alpha3);
@@ -16,11 +22,11 @@ namespace Frost.Providers.Xtreamer.Proxies {
             }
         }
 
-        public XtCountry(ISOCountryCode iso) {
+        public XtCountry(ISOCountryCode iso) : this() {
             if (iso != null) {
                 ISO3166 = new ISO3166(iso.Alpha2, iso.Alpha3);
                 Name = iso.EnglishName;
-            }            
+            }
         }
 
         public long Id {
@@ -53,6 +59,27 @@ namespace Frost.Providers.Xtreamer.Proxies {
                 return new XtCountry(isoCode);
             }            
             return null;
+        }
+
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(XtCountry other) {
+            return _comparer.Equals(this, other);
+        }
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public override bool Equals(object other) {
+            return Equals(other as XtCountry);
+        }
+
+        /// <summary>Serves as a hash function for a particular type.</summary>
+        /// <returns>A hash code for the current <see cref="T:System.Object"/>.</returns>
+        public override int GetHashCode() {
+            return _comparer.GetHashCode(this);
         }
     }
 }

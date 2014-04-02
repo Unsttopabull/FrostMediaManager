@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Frost.Common;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 
-namespace RibbonUI.Design.Classes {
+namespace RibbonUI.Design.Models {
     public class DesignMovie : IMovie {
         private List<ISubtitle> _subtitles;
         private List<ICountry> _countries;
@@ -231,6 +230,8 @@ namespace RibbonUI.Design.Classes {
 
         #endregion
 
+        #region 1 to M
+
         /// <summary>Gets or sets the movie subtitles.</summary>
         /// <value>The movie subtitles.</value>
         public IEnumerable<ISubtitle> Subtitles {
@@ -339,6 +340,10 @@ namespace RibbonUI.Design.Classes {
             set { _promotionalVideos = new List<IPromotionalVideo>(value); }
         }
 
+        #endregion
+
+        #region Utility
+
         /// <summary>Gets a value indicating whether this movie has a trailer video availale.</summary>
         /// <value>Is <c>true</c> if the movie has a trailer video available; otherwise, <c>false</c>.</value>
         public bool HasTrailer { get; set; }
@@ -350,15 +355,20 @@ namespace RibbonUI.Design.Classes {
         /// <summary>Gets a value indicating whether this movie has available fanart.</summary>
         /// <value>Is <c>true</c> if the movie has available fanart; otherwise, <c>false</c>.</value
         public bool HasArt { get; set; }
+
         public bool HasNfo { get; set; }
+
+        #endregion
+
+        #region Add/Remove
 
         public IActor AddActor(IActor actor) {
             _actors.Add(actor);
             return actor;
         }
 
-        public void RemoveActor(IActor actor) {
-            _actors.Remove(actor);
+        public bool RemoveActor(IActor actor) {
+            return _actors.Remove(actor);
         }
 
         public IPerson AddDirector(IPerson director) {
@@ -366,8 +376,8 @@ namespace RibbonUI.Design.Classes {
             return director;
         }
 
-        public void RemoveDirector(IPerson director) {
-            _directors.Remove(director);
+        public bool RemoveDirector(IPerson director) {
+            return _directors.Remove(director);
         }
 
         public ISpecial AddSpecial(ISpecial special) {
@@ -375,8 +385,8 @@ namespace RibbonUI.Design.Classes {
             return special;
         }
 
-        public void RemoveSpecial(ISpecial special) {
-            _specials.Remove(special);
+        public bool RemoveSpecial(ISpecial special) {
+            return _specials.Remove(special);
         }
 
         public IGenre AddGenre(IGenre genre) {
@@ -384,8 +394,8 @@ namespace RibbonUI.Design.Classes {
             return genre;
         }
 
-        public void RemoveGenre(IGenre genre) {
-            _genres.Remove(genre);
+        public bool RemoveGenre(IGenre genre) {
+            return _genres.Remove(genre);
         }
 
         public IPlot AddPlot(IPlot plot) {
@@ -393,8 +403,8 @@ namespace RibbonUI.Design.Classes {
             return plot;
         }
 
-        public void RemovePlot(IPlot plot) {
-            _plots.Remove(plot);
+        public bool RemovePlot(IPlot plot) {
+            return _plots.Remove(plot);
         }
 
         public IStudio AddStudio(IStudio studio) {
@@ -402,8 +412,8 @@ namespace RibbonUI.Design.Classes {
             return studio;
         }
 
-        public void RemoveStudio(IStudio studio) {
-            _studios.Remove(studio);
+        public bool RemoveStudio(IStudio studio) {
+            return _studios.Remove(studio);
         }
 
         public ICountry AddCountry(ICountry country) {
@@ -411,8 +421,8 @@ namespace RibbonUI.Design.Classes {
             return country;
         }
 
-        public void RemoveCountry(ICountry country) {
-            _countries.Remove(country);
+        public bool RemoveCountry(ICountry country) {
+            return _countries.Remove(country);
         }
 
         public ISubtitle AddSubtitle(ISubtitle subtitle) {
@@ -420,8 +430,8 @@ namespace RibbonUI.Design.Classes {
             return subtitle;
         }
 
-        public void RemoveSubtitle(ISubtitle subtitle) {
-            _subtitles.Remove(subtitle);
+        public bool RemoveSubtitle(ISubtitle subtitle) {
+            return _subtitles.Remove(subtitle);
         }
 
         public IVideo AddVideo(IVideo video) {
@@ -433,5 +443,8 @@ namespace RibbonUI.Design.Classes {
             _audios.Add(audio);
             return audio;
         }
+
+        #endregion
+
     }
 }

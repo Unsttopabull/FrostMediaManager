@@ -6,12 +6,13 @@ using System.Linq;
 using Frost.Common;
 using Frost.Common.Models.Provider;
 using Frost.Providers.Xbmc.DB;
-using Frost.Providers.Xbmc.DB.Actor;
+using Frost.Providers.Xbmc.DB.People;
 using Frost.Providers.Xbmc.DB.Proxy;
 using Frost.Providers.Xbmc.DB.StreamDetails;
 using Frost.Providers.Xbmc.Provider;
 
 namespace Frost.Providers.Xbmc.Proxies {
+
     public class XbmcMovie : IMovie {
         private const string YT_SITE_URL = "www.youtube.com/watch?v=";
 
@@ -36,7 +37,10 @@ namespace Frost.Providers.Xbmc.Proxies {
 
             _plots = new[] { new XbmcPlot(_movie) };
             _numChannels = -1;
-            _certifications = new[] { new XbmcCertification(_movie) };
+
+            if (!string.IsNullOrEmpty(_movie.MpaaRating)) {
+                _certifications = new[] { new XbmcCertification(_movie) };
+            }
         }
 
         public bool this[string propertyName] {
@@ -57,7 +61,6 @@ namespace Frost.Providers.Xbmc.Proxies {
                     case "Studios":
                     case "Videos":
                     case "Audios":
-                    case "Plots":
                     case "Art":
                     case "ReleaseYear":
                     case "Trailer":
@@ -68,7 +71,7 @@ namespace Frost.Providers.Xbmc.Proxies {
                     case "Title":
                     case "RatingAverage":
                     case "SortTitle":
-                    case "ImdbId":
+                    case "ImdbID":
                     case "FolderPath":
                     case "OriginalTitle":
                         return true;
@@ -164,7 +167,6 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <value>This movie's story and plot with summary and a tagline</value>
         public IEnumerable<IPlot> Plots {
             get { return _plots; }
-
         }
 
         /// <summary>Gets or sets the movie promotional images.</summary>
@@ -211,7 +213,12 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <value>The title in the original language.</value>
         /// <example>\eg{ ''<c>Der Untergang</c>''}</example>
         public string OriginalTitle {
-            get { return _movie.OriginalTitle; }
+            get {
+                string originalTitle = _movie.OriginalTitle;
+                return !string.IsNullOrEmpty(originalTitle)
+                           ? originalTitle
+                           : null;
+            }
             set { _movie.OriginalTitle = value; }
         }
 
@@ -219,7 +226,12 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <value>The title used for sorting</value>
         /// <example>\eg{ ''<c>Pirates of the Caribbean: The Curse of the Black Pearl</c>'' becomes ''<c>Pirates of the Caribbean 1</c>''}</example>
         public string SortTitle {
-            get { return _movie.SortTitle; }
+            get {
+                string sortTitle = _movie.SortTitle;
+                return !string.IsNullOrEmpty(sortTitle)
+                           ? sortTitle
+                           : null;
+            }
             set { _movie.SortTitle = value; }
         }
 
@@ -638,39 +650,43 @@ namespace Frost.Providers.Xbmc.Proxies {
         #region Actors
 
         public IActor AddActor(IActor actor) {
-            XbmcPerson p = _service.FindPerson(actor, false);
-            if (p == null) {
-                return null;
-            }
+            XbmcPerson p = _service.FindPerson(actor, true);
 
             //if the movie does not yet contain this actor add it to the collection
             XbmcMovieActor act = _movie.Actors.FirstOrDefault(a => a.Person == p && a.Role == actor.Character);
             if (act == null) {
-                act = new XbmcMovieActor(p, actor.Character);
+                act = new XbmcMovieActor(p, actor.Character, _movie.Actors.Count);
                 _movie.Actors.Add(act);
             }
             return act;
         }
 
-        public void RemoveActor(IActor actor) {
+        public bool RemoveActor(IActor actor) {
             XbmcMovieActor act = _movie.Actors.FirstOrDefault(a => a.Person.Name == actor.Name && a.Role == actor.Character);
             if (act != null) {
                 _movie.Actors.Remove(act);
+
+                int idx = 0;
+                foreach (XbmcMovieActor a in _movie.Actors) {
+                    a.Order = idx++;
+                }
             }
+            return false;
         }
 
         #endregion
 
         #region Person
+
         public IPerson AddDirector(IPerson director) {
             XbmcPerson p = _service.FindPerson(director, true);
             _movie.Directors.Add(p);
             return p;
         }
 
-        public void RemoveDirector(IPerson director) {
+        public bool RemoveDirector(IPerson director) {
             XbmcPerson p = _service.FindPerson(director, false);
-            _movie.Directors.Remove(p);
+            return _movie.Directors.Remove(p);
         }
 
         #endregion
@@ -678,10 +694,11 @@ namespace Frost.Providers.Xbmc.Proxies {
         #region Specials
 
         public ISpecial AddSpecial(ISpecial special) {
-            return null;
+            throw new NotSupportedException();
         }
 
-        public void RemoveSpecial(ISpecial special) {
+        public bool RemoveSpecial(ISpecial special) {
+            throw new NotSupportedException();
         }
 
         #endregion
@@ -694,11 +711,12 @@ namespace Frost.Providers.Xbmc.Proxies {
             return g;
         }
 
-        public void RemoveGenre(IGenre genre) {
+        public bool RemoveGenre(IGenre genre) {
             XbmcGenre g = _service.FindGenre(genre, true);
             if (g != null) {
-                _movie.Genres.Remove(g);
+                return _movie.Genres.Remove(g);
             }
+            return false;
         }
 
         #endregion
@@ -706,10 +724,11 @@ namespace Frost.Providers.Xbmc.Proxies {
         #region Plots
 
         public IPlot AddPlot(IPlot plot) {
-            return null;
+            throw new NotSupportedException();
         }
 
-        public void RemovePlot(IPlot plot) {
+        public bool RemovePlot(IPlot plot) {
+            throw new NotSupportedException();
         }
 
         #endregion
@@ -722,9 +741,9 @@ namespace Frost.Providers.Xbmc.Proxies {
             return s;
         }
 
-        public void RemoveStudio(IStudio studio) {
+        public bool RemoveStudio(IStudio studio) {
             XbmcStudio s = _service.FindStudio(studio, false);
-            _movie.Studios.Remove(s);
+            return _movie.Studios.Remove(s);
         }
 
         #endregion
@@ -738,9 +757,9 @@ namespace Frost.Providers.Xbmc.Proxies {
             return c;
         }
 
-        public void RemoveCountry(ICountry country) {
+        public bool RemoveCountry(ICountry country) {
             XbmcCountry c = _service.FindCountry(country, false);
-            _movie.Countries.Remove(c);
+            return _movie.Countries.Remove(c);
         }
 
         #endregion
@@ -758,18 +777,18 @@ namespace Frost.Providers.Xbmc.Proxies {
             return sub;
         }
 
-        public void RemoveSubtitle(ISubtitle subtitle) {
+        public bool RemoveSubtitle(ISubtitle subtitle) {
             if (_movie.File == null || _movie.File.StreamDetails == null) {
-                return;
+                return false;
             }
 
             XbmcSubtitleDetails sub = _service.FindSubtitle(subtitle, false);
-            _movie.File.StreamDetails.Remove(sub);
+            return _movie.File.StreamDetails.Remove(sub);
         }
 
         #endregion
 
         #endregion
-
     }
+
 }

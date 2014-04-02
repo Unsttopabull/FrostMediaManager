@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Frost.Common;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 using Frost.DetectFeatures;
-using LightInject;
 
 namespace RibbonUI.Util.ObservableWrappers {
 
@@ -182,6 +182,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 _observedEntity.Runtime = value;
 
                 OnPropertyChanged("RuntimeTimeSpan");
+                OnPropertyChanged("DurationFormatted");
                 OnPropertyChanged();
             }
         }
@@ -345,7 +346,6 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _observedEntity.Subtitles; }
         }
 
-
         /// <summary>Gets or sets the countries that this movie was shot or/and produced in.</summary>
         /// <summary>The countries that this movie was shot or/and produced in.</summary>
         public IEnumerable<ICountry> Countries {
@@ -434,6 +434,8 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         #endregion
 
+        #region Has X
+
         /// <summary>Gets a value indicating whether this movie has a trailer video availale.</summary>
         /// <value>Is <c>true</c> if the movie has a trailer video available; otherwise, <c>false</c>.</value>
         public bool HasTrailer {
@@ -456,70 +458,173 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _observedEntity.HasNfo; }
         }
 
-        public IActor AddActor(IActor actor) {
-            return _observedEntity.AddActor(actor);
+        #endregion
+
+        #region Utlity
+
+        public string DurationFormatted {
+            get {
+                long? sum = Runtime ?? GetVideoRuntimeSum();
+
+                return sum.HasValue && sum.Value > 0
+                           ? TimeSpan.FromMilliseconds(Convert.ToDouble(sum)).ToString("h'h 'm'm'")
+                           : null;
+            }
         }
 
-        public void RemoveActor(IActor actor) {
-            _observedEntity.AddActor(actor);
+        public string FirstStudioName {
+            get {
+                if (Studios == null) {
+                    return null;
+                }
+
+                try {
+                    if (Studios.Any()) {
+                        IStudio studio = Studios.FirstOrDefault();
+                        if (studio != null) {
+                            return studio.Name;
+                        }
+                    }
+                }
+                catch {
+                    return null;
+                }
+                return null;
+            }
+        }
+
+        public string FirstStudioLogo {
+            get {
+                if (string.IsNullOrEmpty(FirstStudioName)) {
+                    return null;
+                }
+
+                var studio = Path.Combine(Directory.GetCurrentDirectory(), "Images/StudiosE/" + FirstStudioName + ".png");
+                return File.Exists(studio)
+                    ? studio
+                    : null;
+            }
+        }
+
+        public IPlot FirstPlot {
+            get {
+                if (Plots == null) {
+                    return null;
+                }
+
+                return Plots.Any()
+                           ? Plots.FirstOrDefault()
+                           : null;
+            }
+        }
+
+        private long? GetVideoRuntimeSum() {
+            long l = Videos.Where(v => v.Duration.HasValue).Sum(v => v.Duration.Value);
+
+            if (!Runtime.HasValue && l > 0) {
+                Runtime = l;
+            }
+
+            return (l > 0)
+                ? (long?) l
+                : null;
+        }
+
+        #endregion
+
+        #region Add/Remove
+
+        public IActor AddActor(IActor actor) {
+            return Add(_observedEntity.AddActor, actor);
+        }
+
+        public bool RemoveActor(IActor actor) {
+            return Remove(_observedEntity.RemoveActor, actor);
         }
 
         public IPerson AddDirector(IPerson director) {
-            return _observedEntity.AddDirector(director);
+            return Add(_observedEntity.AddDirector, director);
         }
 
-        public void RemoveDirector(IPerson director) {
-            _observedEntity.RemoveDirector(director);
+        public bool RemoveDirector(IPerson director) {
+            return Remove(_observedEntity.RemoveDirector, director);
         }
 
         public ISpecial AddSpecial(ISpecial special) {
-            return _observedEntity.AddSpecial(special);
+            return Add(_observedEntity.AddSpecial, special);
         }
 
-        public void RemoveSpecial(ISpecial special) {
-            _observedEntity.RemoveSpecial(special);   
+        public bool RemoveSpecial(ISpecial special) {
+            return Remove(_observedEntity.RemoveSpecial, special);
         }
 
         public IGenre AddGenre(IGenre genre) {
-            return _observedEntity.AddGenre(genre);
+            return Add(_observedEntity.AddGenre, genre);
         }
 
-        public void RemoveGenre(IGenre genre) {
-            _observedEntity.RemoveGenre(genre);
+        public bool RemoveGenre(IGenre genre) {
+            return Remove(_observedEntity.RemoveGenre, genre);
         }
 
         public IPlot AddPlot(IPlot plot) {
-            return _observedEntity.AddPlot(plot);
+            return Add(_observedEntity.AddPlot, plot);
         }
 
-        public void RemovePlot(IPlot plot) {
-            _observedEntity.RemovePlot(plot);
+        public bool RemovePlot(IPlot plot) {
+            return Remove(_observedEntity.RemovePlot, plot);
         }
 
         public IStudio AddStudio(IStudio studio) {
-            IStudio stud = _observedEntity.AddStudio(studio);
-            return stud;
+            return Add(_observedEntity.AddStudio, studio);
         }
 
-        public void RemoveStudio(IStudio studio) {
-            _observedEntity.RemoveStudio(studio);
+        public bool RemoveStudio(IStudio studio) {
+            return Remove(_observedEntity.RemoveStudio, studio);
         }
 
         public ICountry AddCountry(ICountry country) {
-            return _observedEntity.AddCountry(country);
+            return Add(_observedEntity.AddCountry, country);
         }
 
-        public void RemoveCountry(ICountry country) {
-            _observedEntity.RemoveCountry(country);
+        public bool RemoveCountry(ICountry country) {
+            return Remove(_observedEntity.RemoveCountry, country);
         }
 
         public ISubtitle AddSubtitle(ISubtitle subtitle) {
-            return _observedEntity.AddSubtitle(subtitle);
+            return Add(_observedEntity.AddSubtitle, subtitle);
         }
 
-        public void RemoveSubtitle(ISubtitle subtitle) {
-            _observedEntity.RemoveSubtitle(subtitle);
+        public bool RemoveSubtitle(ISubtitle subtitle) {
+            return Remove(_observedEntity.RemoveSubtitle, subtitle);
         }
+
+        private bool Remove<T>(Func<T, bool> removeItem, T item) where T : IMovieEntity{
+            try {
+                if (removeItem(item)) {
+                    return true;
+                }
+                UIHelper.ProviderCouldNotRemove();
+            }
+            catch (Exception e) {
+                UIHelper.HandleProviderException(e);
+            }
+            return false;            
+        }
+
+        private T Add<T>(Func<T, T> addItem, T item) where T : class, IMovieEntity {
+            T addedItem = null;
+            try {
+                addedItem = addItem(item);
+                if (addedItem == null) {
+                    UIHelper.ProviderCouldNotAdd();
+                }
+            }
+            catch (Exception e) {
+                UIHelper.HandleProviderException(e);
+            }
+            return addedItem;
+        }
+        #endregion
 
         #region Images
 

@@ -183,14 +183,25 @@
         <StackPanel Grid.Row="0" Grid.Column="4">
             <StackPanel Orientation="Horizontal">
                 <Label VerticalAlignment="Center" Content="{l:T Duration, Postfix=:}"/>
-                <a:TimePicker x:Name="MovieDuration" HorizontalAlignment="Left" MinTime="{x:Static sys:TimeSpan.Zero}" IsEnabled="{Binding SelectedAudio[Duration]}"
-                              SelectedTime="{Binding SelectedAudio.DurationTimeSpan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                    <in:Interaction.Triggers>
-                        <i:DataTrigger Binding="{Binding ElementName=MovieDuration, Path=SelectedTime}" Value="{x:Static sys:TimeSpan.Zero}">
-                            <i:ChangePropertyAction PropertyName="SelectedTime" Value="{x:Null}"/>
-                        </i:DataTrigger>
-                    </in:Interaction.Triggers>
-                </a:TimePicker>
+                <Border>
+                    <Border.Style>
+                        <Style TargetType="{x:Type Border}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=MovieDuration, Path=IsEnabled}" Value="False">
+                                    <Setter Property="Opacity" Value="0.5"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+                    <a:TimePicker x:Name="MovieDuration" HorizontalAlignment="Left" MinTime="{x:Static sys:TimeSpan.Zero}" IsEnabled="{Binding SelectedAudio[Duration]}"
+                                  SelectedTime="{Binding SelectedAudio.DurationTimeSpan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <in:Interaction.Triggers>
+                            <i:DataTrigger Binding="{Binding ElementName=MovieDuration, Path=SelectedTime}" Value="{x:Static sys:TimeSpan.Zero}">
+                                <i:ChangePropertyAction PropertyName="SelectedTime" Value="{x:Null}"/>
+                            </i:DataTrigger>
+                        </in:Interaction.Triggers>
+                    </a:TimePicker>
+                </Border>
                 <fmm:ImageButton ToolTip="Clear value" EnabledSource="../Images/clear.ico"
                                  DisabledSource="../Images/clear_disabled.png" Width="20" Height="20"
                                  IsEnabled="{Binding ElementName=MovieDuration, Path=IsEnabled}">

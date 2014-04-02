@@ -1,23 +1,25 @@
 ﻿using System;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 using Frost.Providers.Xtreamer.PHP;
 
 namespace Frost.Providers.Xtreamer.Proxies {
-    class XtGenre : IGenre, IEquatable<IGenre> {
-        private readonly XjbPhpGenre _genre;
+    class XtGenre : Proxy<XjbPhpGenre>, IGenre, IEquatable<XtGenre> {
 
-        public XtGenre(XjbPhpGenre genre) {
-            _genre = genre;
+        public XtGenre() : base(new XjbPhpGenre()) {
+        }
+
+        public XtGenre(XjbPhpGenre genre) : base(genre) {
         }
 
         public long Id {
-            get { return _genre.Id; }
+            get { return Entity.Id; }
         }
 
         public string Name {
-            get { return _genre.Name; }
-            set { _genre.Name = value; }
+            get { return Entity.Name; }
+            set {
+                Entity.Name = value;
+            }
         }
 
         public bool this[string propertyName] {
@@ -33,45 +35,18 @@ namespace Frost.Providers.Xtreamer.Proxies {
         }
 
         /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
-        /// <returns> true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
         /// <param name="other">An object to compare with this object.</param>
-        public bool Equals(IGenre other) {
-            if (ReferenceEquals(null, other)) {
-                return false;
-            }
-            if (ReferenceEquals(this, other)) {
-                return true;
-            }
-            return other.Name == Name;
+        public bool Equals(XtGenre other) {
+            return Entity != null && Entity.Equals(other.ObservedEntity);
         }
 
-        /// <summary>
-        /// Determines whether the specified <see cref="T:System.Object"/> is equal to the current <see cref="T:System.Object"/>.
-        /// </summary>
-        /// <returns>
-        /// true if the specified object  is equal to the current object; otherwise, false.
-        /// </returns>
-        /// <param name="obj">The object to compare with the current object. </param>
-        public override bool Equals(object obj) {
-            if (ReferenceEquals(null, obj)) {
-                return false;
-            }
-            if (ReferenceEquals(this, obj)) {
-                return true;
-            }
-
-            IGenre genre = obj as IGenre;
-            return genre != null && Equals(genre);
-        }
-
-        /// <summary>
-        /// Serves as a hash function for a particular type. 
-        /// </summary>
-        /// <returns>
-        /// A hash code for the current <see cref="T:System.Object"/>.
-        /// </returns>
-        public override int GetHashCode() {
-            return (_genre != null ? _genre.GetHashCode() : 0);
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString() {
+            return Entity != null
+                ? Entity.Name
+                : base.ToString();
         }
     }
 }

@@ -29,14 +29,18 @@
             <Label Grid.Row="0" Grid.Column="0" Margin="0,0,0,-5" Content="{l:T Search}"/>
             <TextBox Grid.Column="0" Grid.Row="1" Margin="5,5,5,0" x:Name="SearchBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
-        <ListBox x:Name="PeopleList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding People}" Margin="5,5,5,0" SelectedItem="{Binding SelectedPerson}" SelectionChanged="PeopleList_OnSelectionChanged">
+        <ListBox x:Name="PeopleList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding People}" ScrollViewer.IsDeferredScrollingEnabled="True"
+                 Margin="5,5,5,0" SelectedItem="{Binding SelectedPerson}" SelectionChanged="PeopleList_OnSelectionChanged">
             <ListBox.Resources>
                 <BitmapImage x:Key="DefaultPerson" UriSource="../Images/person.png"/>
             </ListBox.Resources>
+            <ListBox.GroupStyle>
+                <GroupStyle ContainerStyle="{StaticResource ExpanderGroup}" />
+            </ListBox.GroupStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type models:IPerson}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="{Binding (models:IPerson.Thumb), TargetNullValue={StaticResource DefaultPerson}, FallbackValue={StaticResource DefaultPerson}}"
+                        <Image Source="{Binding (models:IPerson.Thumb), IsAsync=True, TargetNullValue={StaticResource DefaultPerson}, FallbackValue={StaticResource DefaultPerson}}"
                                MaxWidth="100" />
                         <TextBlock Text="{Binding (models:IPerson.Name), TargetNullValue=Unknown, FallbackValue=Unknown}"
                                    Margin="5,0,0,0" VerticalAlignment="Center" />

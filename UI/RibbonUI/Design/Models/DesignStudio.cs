@@ -1,8 +1,15 @@
-﻿using Frost.Common.Models;
+﻿using System.IO;
 using Frost.Common.Models.Provider;
 
-namespace RibbonUI.Design.Classes {
+namespace RibbonUI.Design.Models {
     public class DesignStudio : IStudio {
+
+        public DesignStudio() {
+        }
+
+        public DesignStudio(string filePath) {
+            Name = Path.GetFileNameWithoutExtension(filePath);
+        }
 
         public string Name { get; set; }
         public long Id { get; private set; }

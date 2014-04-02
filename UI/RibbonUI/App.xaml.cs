@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -13,7 +12,6 @@ using Frost.DetectFeatures;
 using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
 using Frost.GettextMarkupExtension;
-using RibbonUI.Design;
 using RibbonUI.Properties;
 using RibbonUI.UserControls;
 using RibbonUI.UserControls.List;

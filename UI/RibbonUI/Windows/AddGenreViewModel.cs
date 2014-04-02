@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using Frost.Common.Models;
+using System.Windows.Data;
 using Frost.Common.Models.Provider;
 using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;
@@ -28,6 +28,12 @@ namespace RibbonUI.Windows {
                     return;
                 }
                 _genres = value;
+
+                if (_genres != null) {
+                    ICollectionView collectionView = CollectionViewSource.GetDefaultView(_genres);
+                    collectionView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+                }
+
                 OnPropertyChanged();
             }
         }

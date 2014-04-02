@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 
-namespace Frost.Providers.Xbmc.DB.Actor {
+namespace Frost.Providers.Xbmc.DB.People {
 
     /// <summary>Represents a person that worked on a movie.</summary>
     [Table("actors")]
@@ -57,7 +55,13 @@ namespace Frost.Providers.Xbmc.DB.Actor {
                     ? ThumbXml.Replace("<thumb>", "").Replace("</thumb>", "")
                     : null;
             }
-            set { ThumbXml = "<thumb>" + value + "</thumb>"; }
+            set {
+                if (string.IsNullOrEmpty(value)) {
+                    ThumbXml = null;
+                }
+
+                ThumbXml = "<thumb>" + value + "</thumb>";
+            }
         }
 
         /// <summary>Gets or sets movies where this person was a director.</summary>

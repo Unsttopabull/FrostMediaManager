@@ -158,15 +158,27 @@
                     </in:Interaction.Triggers>
                 </fmm:ImageButton>
             </StackPanel>
-            <a:TimePicker x:Name="VideoDuration" Margin="0,-7,0,0" HorizontalAlignment="Left" MinTime="{x:Static sys:TimeSpan.Zero}"
-                          SelectedTime="{Binding SelectedVideo.DurationTimeSpan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SelectedVideo[Duration]}">
-                <in:Interaction.Triggers>
-                    <i:DataTrigger Binding="{Binding ElementName=VideoDuration, Path=SelectedTime}"
-                                   Value="{x:Static sys:TimeSpan.Zero}">
-                        <i:ChangePropertyAction PropertyName="SelectedTime" Value="{x:Null}" />
-                    </i:DataTrigger>
-                </in:Interaction.Triggers>
-            </a:TimePicker>
+            <Border>
+                <Border.Style>
+                    <Style TargetType="{x:Type Border}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=VideoDuration, Path=IsEnabled}" Value="False">
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <a:TimePicker x:Name="VideoDuration" Margin="0,-7,0,0" HorizontalAlignment="Left" MinTime="{x:Static sys:TimeSpan.Zero}"
+                              SelectedTime="{Binding SelectedVideo.DurationTimeSpan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              IsEnabled="{Binding SelectedVideo[Duration]}">
+                    <in:Interaction.Triggers>
+                        <i:DataTrigger Binding="{Binding ElementName=VideoDuration, Path=SelectedTime}"
+                                       Value="{x:Static sys:TimeSpan.Zero}">
+                            <i:ChangePropertyAction PropertyName="SelectedTime" Value="{x:Null}" />
+                        </i:DataTrigger>
+                    </in:Interaction.Triggers>
+                </a:TimePicker>
+            </Border>
 
 
             <Label Margin="-5,0,0,0" Content="{l:T Color space, Postfix=:}"/>

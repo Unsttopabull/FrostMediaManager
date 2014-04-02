@@ -104,11 +104,19 @@ namespace RibbonUI.Windows {
         }
 
         private void AddOnClick(Window w) {
+            if (w == null) {
+                return;
+            }
+
             w.DialogResult = true;
             w.Close();
         }
 
         private void CancelOnClick(Window w) {
+            if (w == null) {
+                return;
+            }
+
             w.DialogResult = false;
             w.Close();
         }

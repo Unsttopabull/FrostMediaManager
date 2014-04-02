@@ -51,11 +51,11 @@
                 <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding SelectedMovie.ReleaseYear, StringFormat=({0}), TargetNullValue=(?), FallbackValue=(?)}"/>
                 <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding OriginalTitle, StringFormat=aka {0}, TargetNullValue={}, FallbackValue={}}"/>
             </StackPanel>
-            <TextBlock Grid.Row="1" FontSize="14" Text="{Binding FirstPlot.(models:IPlot.Tagline), TargetNullValue={l:T No tagline}, FallbackValue={l:T No tagline}}"/>
+            <TextBlock Grid.Row="1" FontSize="14" Text="{Binding SelectedMovie.FirstPlot.(models:IPlot.Tagline), TargetNullValue={l:T No tagline}, FallbackValue={l:T No tagline}}"/>
             <StackPanel Grid.Row="3" Orientation="Horizontal">
-                <fmm:StarRating Rating="{Binding SelectedMovie.RatingAverage}"/>
+                <fmm:StarRating Rating="{Binding SelectedMovie.RatingAverage, Mode=TwoWay}"/>
                 <TextBlock FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding SelectedMovie.Top250, StringFormat=Top 250: {0}, TargetNullValue={x:Null}}"/>
-                <TextBlock FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding DurationFormatted, StringFormat={}Runtime: {0}, FallbackValue={x:Null}, TargetNullValue={x:Null}}"/>
+                <TextBlock FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding SelectedMovie.DurationFormatted, StringFormat={}Runtime: {0}, FallbackValue={x:Null}, TargetNullValue={x:Null}}"/>
             </StackPanel>
         </Grid>
         <StackPanel x:Name="MovieFlags" DockPanel.Dock="Right" Orientation="Horizontal" FlowDirection="RightToLeft">
@@ -64,8 +64,8 @@
                     <i:InvokeCommandAction Command="{Binding OnSizeChangedCommand}" CommandParameter="{Binding ElementName=FlagsInfo}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-            <Image DockPanel.Dock="Right" Source="{Binding FirstStudioLogo, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}}"
-                   ToolTip="{Binding FirstStudioName, IsAsync=True, TargetNullValue=Unknown Studio, FallbackValue=Unknown Studio}" MaxWidth="150" MaxHeight="55">
+            <Image DockPanel.Dock="Right" Source="{Binding SelectedMovie.FirstStudioLogo, FallbackValue={StaticResource DefaultLogo}, TargetNullValue={StaticResource DefaultLogo}}"
+                   ToolTip="{Binding SelectedMovie.FirstStudioName, IsAsync=True, TargetNullValue=Unknown Studio, FallbackValue=Unknown Studio}" MaxWidth="150" MaxHeight="55">
                 <Image.CacheMode>
                     <BitmapCache/>
                 </Image.CacheMode>

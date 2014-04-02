@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 
 namespace RibbonUI.Windows {

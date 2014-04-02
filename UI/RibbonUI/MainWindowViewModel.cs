@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using Frost.Common;
 using Frost.XamlControls.Commands;
@@ -26,7 +27,12 @@ namespace RibbonUI {
             }
 
             if (MessageBox.Show("There are unsaved changes, save?", "Unsaved changes", MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
-                _service.SaveChanges();
+                try {
+                    _service.SaveChanges();
+                }
+                catch (Exception e) {
+                    UIHelper.HandleProviderException(e);
+                }
             }  
 
             LightInjectContainer.Dispose();

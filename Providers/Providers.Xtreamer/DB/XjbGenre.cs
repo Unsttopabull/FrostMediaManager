@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 
 namespace Frost.Providers.Xtreamer.DB {
@@ -14,6 +12,7 @@ namespace Frost.Providers.Xtreamer.DB {
         private static readonly Dictionary<string, string> GenreAbbreviations;
         private static readonly Dictionary<string, string> GenreTags;
 
+        #region Static constructor
         static XjbGenre() {
             GenreAbbreviations = new Dictionary<string, string>(27){
                 {"acti", "action"},
@@ -182,6 +181,7 @@ namespace Frost.Providers.Xtreamer.DB {
                 {"guerra", "war"}
             };
         }
+        #endregion
 
         public XjbGenre() {
             

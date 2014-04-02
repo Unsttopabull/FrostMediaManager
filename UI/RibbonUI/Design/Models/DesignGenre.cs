@@ -1,7 +1,6 @@
-﻿using Frost.Common.Models;
-using Frost.Common.Models.Provider;
+﻿using Frost.Common.Models.Provider;
 
-namespace RibbonUI.Design.Classes {
+namespace RibbonUI.Design.Models {
     public class DesignGenre : IGenre {
 
         public string Name { get; set; }

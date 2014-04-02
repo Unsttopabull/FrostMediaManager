@@ -1,17 +1,20 @@
+using System;
 using System.Collections;
 using System.Xml.Serialization;
+using Frost.Common.Models.Provider;
 using Frost.PHPtoNET.Attributes;
 
 namespace Frost.Providers.Xtreamer.PHP {
 
     [PHPName("Coretis_VO_Person")]
-    public class XjbPhpPerson {
+    public class XjbPhpPerson : IEquatable<XjbPhpPerson> {
 
         public const string JOB_DIRECTOR = "director";
         public const string JOB_PRODUCER = "producer";
         public const string JOB_EXECUTIVE_PRODUCER = "executive producer";
         public const string JOB_SCREENPLAY = "screenplay";
         public const string JOB_ACTOR = "actor";
+        public const string JOB_WRITER = "writer";
         public const string JOB_AUTHOR = "author";
         public const string JOB_ORIGINAL_MUSIC_COMPOSER = "original music composer";
         public const string JOB_DIRECTOR_OF_PHOTOGRAPHY = "director of photography";
@@ -31,14 +34,25 @@ namespace Frost.Providers.Xtreamer.PHP {
             Job = job;
         }
 
+        public XjbPhpPerson(IActor actor) {
+            Name = actor.Name;
+            Job = JOB_ACTOR;
+            Character = actor.Character;
+        }
+
+        public XjbPhpPerson(IPerson person, string job) {
+            Name = person.Name;
+            Job = job;
+        }
+
         ///<summary>The id for this row in DB</summary>
         [PHPName("id")]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         ///<summary>Name of the Character</summary>
         ///<example>eg{''<c>Sarah Connor</c>''}</example>
         [PHPName("character")]
-        public string Character;
+        public string Character { get; set; }
 
         ///<summary>Type of job</summary>
         ///<example>
@@ -48,12 +62,12 @@ namespace Frost.Providers.Xtreamer.PHP {
         ///Produzent, Screenplay, Set Decoration, Set Designer, Sound Designer, Sound Editor, Visual Effects, Writer, ...</c>''}
         ///</example>
         [PHPName("job")]
-        public string Job;
+        public string Job { get; set; }
 
         ///<summary>string	Name of the Person in format "Firstname Surname"</summary>
         ///<example>eg{''<c>Teddy Chan</c>''}</example>
         [PHPName("name")]
-        public string Name;
+        public string Name { get; set; }
 
         ///<summary>The person id at a online sources</summary>
         ///<example>\eg{ <code>array ( "imdb" => "nm0269463", "tmbd => "70703")</code>}</example>
@@ -62,6 +76,29 @@ namespace Frost.Providers.Xtreamer.PHP {
         [PHPName("personOnlineIdArr")]
         public Hashtable PersonOnlineIds;
 
+        #region Equality Comparers
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(XjbPhpPerson other) {
+            if (ReferenceEquals(null, other)) {
+                return false;
+            }
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            if (Id != 0  && other.Id != 0) {
+                return Id == other.Id;
+            }
+
+            return string.Equals(Character, other.Character) &&
+                   string.Equals(Job, other.Job) &&
+                   string.Equals(Name, other.Name);
+        }
+
+        #endregion
     }
 
 }

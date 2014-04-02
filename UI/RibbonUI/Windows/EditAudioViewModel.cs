@@ -4,18 +4,17 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 using Frost.Common.Properties;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
+using RibbonUI.Design.Fakes;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.Windows {
     class EditAudioViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
-        private string _codecId;
         private MovieAudio _selectedAudio;
         private Codec _selectedCodec;
 
@@ -50,6 +49,10 @@ namespace RibbonUI.Windows {
             SelectedLanguageChanged = new RelayCommand<ILanguage>(language => {
                 SelectedAudio.Language = language;
             });
+
+            if (TranslationManager.IsInDesignMode) {
+                SelectedAudio = new MovieAudio(new FakeAudio());
+            }
         }
 
         public bool ChannelInfoEditable { get; private set; }

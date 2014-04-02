@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Data;
 using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 using RibbonUI.Util.ObservableWrappers;
@@ -33,6 +34,11 @@ namespace RibbonUI.Windows {
                     return;
                 }
                 _countries = value;
+                if (_countries != null) {
+                    ICollectionView collectionView = CollectionViewSource.GetDefaultView(_countries);
+                    collectionView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+                }
+
                 OnPropertyChanged();
             }
         }

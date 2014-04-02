@@ -9,17 +9,11 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Frost.Common;
-using Frost.Common.Models;
 using Frost.XamlControls.Commands;
 using GalaSoft.MvvmLight;
 using RibbonUI.Annotations;
 using RibbonUI.Design;
 using RibbonUI.Messages;
-using RibbonUI.Messages.Country;
-using RibbonUI.Messages.Genre;
-using RibbonUI.Messages.People;
-using RibbonUI.Messages.Plot;
-using RibbonUI.Messages.Studio;
 using RibbonUI.Messages.Subtitles;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
@@ -58,6 +52,8 @@ namespace RibbonUI.UserControls {
 
             SubtitlesOnFocusCommand = new RelayCommand(MovieSubtitlesGotFocus);
             SubtitlesLostFocusCommand = new RelayCommand(MovieSubtitlesOnLostFocus);
+
+            RegisterReceiveMessages();
         }
 
         public ObservableCollection<ObservableMovie> Movies {
@@ -202,6 +198,23 @@ namespace RibbonUI.UserControls {
             }
             catch (Exception e) {
                 return false;
+            }
+        }
+
+        private void RegisterReceiveMessages() {
+            MessengerInstance.Register<AddSubtitleMessage>(this, HandleAddSubtitleMessage);
+        }
+
+        private void HandleAddSubtitleMessage(AddSubtitleMessage msg) {
+            if (SelectedMovie == null) {
+                return;
+            }
+
+            try {
+                SelectedMovie.AddSubtitle(msg.Subtitle.ObservedEntity);
+            }
+            catch (Exception e) {
+                UIHelper.HandleProviderException(e);
             }
         }
 

@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 
 namespace RibbonUI.Util.ObservableWrappers {

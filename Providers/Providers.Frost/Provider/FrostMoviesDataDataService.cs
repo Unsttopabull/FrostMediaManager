@@ -58,6 +58,8 @@ namespace Frost.Providers.Frost.Provider {
                     //.Include("Videos")
                     .Load();
 
+                _mvc.Languages.Load();
+
                 _movies = _mvc.Movies.Local.Select(m => new FrostMovie(m, this));
                 return _movies;
             }
@@ -455,6 +457,7 @@ namespace Frost.Providers.Frost.Provider {
                                                                                          where TSet : class, IHasName, IMovieEntity {
             DbSet<TSet> set = _mvc.Set<TSet>();
             if (hasName.Id > 0) {
+                //check if the entity is already in the context otherwise retreive it
                 TSet find = set.Find(hasName.Id);
                 if ((find == null || find.Name != hasName.Name)) {
                     if (createIfNotFound) {
@@ -470,6 +473,7 @@ namespace Frost.Providers.Frost.Provider {
                 return find;
             }
 
+            //primary key not available so search in the DB by Name
             TSet hn = set.FirstOrDefault(n => n.Name == hasName.Name);
             if (hn == null && createIfNotFound) {
                 hn = set.Create();
@@ -480,8 +484,15 @@ namespace Frost.Providers.Frost.Provider {
             return hn;            
         }
 
-        public void SetAsDeleted(object plot) {
-            DbEntityEntry entry = _mvc.Entry(plot);
+        internal void ReactivateIfDeleted(object entity) {
+            DbEntityEntry entry = _mvc.Entry(entity);
+            if (entry.State == EntityState.Deleted) {
+                entry.State = EntityState.Modified;
+            }
+        }
+
+        internal  void MarkAsDeleted(object entity) {
+            DbEntityEntry entry = _mvc.Entry(entity);
             if (entry != null) {
                 entry.State = EntityState.Deleted;
             }
@@ -494,8 +505,7 @@ namespace Frost.Providers.Frost.Provider {
         }
 
         public bool HasUnsavedChanges() {
-            //return _mvc.HasUnsavedChanges();
-            return true;
+            return _mvc.ChangeTracker.HasChanges();
         }
 
         public void SaveChanges() {

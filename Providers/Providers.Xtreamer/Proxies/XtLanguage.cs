@@ -1,5 +1,4 @@
-﻿using Frost.Common.Models;
-using Frost.Common.Models.Provider;
+﻿using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
 using Frost.Common.Util.ISO;
 
@@ -37,18 +36,16 @@ namespace Frost.Providers.Xtreamer.Proxies {
 
         public static XtLanguage FromIsoCode(string iso) {
             ISOLanguageCode isoCode = ISOLanguageCodes.Instance.GetByISOCode(iso);
-            if (isoCode != null) {
-                return new XtLanguage(isoCode);
-            }            
-            return null;            
+            return isoCode != null
+                ? new XtLanguage(isoCode)
+                : null;
         }
 
-        public static XtLanguage FromEnglishNameCode(string name) {
+        public static XtLanguage FromEnglishName(string name) {
             ISOLanguageCode isoCode = ISOLanguageCodes.Instance.GetByEnglishName(name);
-            if (isoCode != null) {
-                return new XtLanguage(isoCode);
-            }            
-            return null;            
+            return isoCode != null
+                ? new XtLanguage(isoCode)
+                : null;
         }
     }
 }

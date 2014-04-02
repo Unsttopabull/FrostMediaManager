@@ -1,14 +1,26 @@
-﻿using System;
-using Frost.Common.Models;
-using Frost.Common.Models.Provider;
+﻿using Frost.Common.Models.Provider;
 
-namespace RibbonUI.Design.Classes {
+namespace RibbonUI.Design.Models {
     class DesignSubtitle : ISubtitle {
         public ILanguage Language { get; set; }
         public long Id { get; private set; }
 
         public bool this[string propertyName] {
-            get { throw new NotImplementedException(); }
+            get {
+                switch (propertyName) {
+                    case "PodnapisiId":
+                    case "OpenSubtitlesId":
+                    case "MD5":
+                    case "Format":
+                    case "Encoding":
+                    case "EmbededInVideo":
+                    case "ForHearingImpaired":
+                    case "File":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
         }
 
         public long? PodnapisiId { get; set; }
@@ -30,6 +42,6 @@ namespace RibbonUI.Design.Classes {
         /// <summary>Gets or sets a value indicating whether this subtitle is for people that are hearing impaired.</summary>
         /// <value>Is <c>true</c> if this subtitle is for people that are hearing impaired; otherwise, <c>false</c>.</value>
         public bool ForHearingImpaired { get; set; }
-        public IFile File { get; private set; }
+        public IFile File { get; set; }
     }
 }

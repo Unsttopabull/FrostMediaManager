@@ -1,8 +1,7 @@
-﻿using Frost.Common.Models;
-using Frost.Common.Models.Provider;
+﻿using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
 
-namespace RibbonUI.Design.Classes {
+namespace RibbonUI.Design.Models {
     public class DesignCountry : ICountry {
         public long Id { get; private set; }
 

@@ -45,13 +45,17 @@ namespace RibbonUI.UserControls {
         private void SetTaskBarInfo() {
             Window window = Window.GetWindow(this);
 
+            if (window == null) {
+                return;
+            }
+
             BitmapImage overlay = new BitmapImage();
             using (Bitmap bm = new Bitmap("Images/overlay.png")) {
                 using (Graphics g = Graphics.FromImage(bm)) {
                     g.DrawString(
                         MovieList.Items.Count.ToString(CultureInfo.InvariantCulture),
                         new Font("Arial", 16, System.Drawing.FontStyle.Bold),
-                        new SolidBrush(System.Drawing.Color.Red),
+                        new SolidBrush(Color.Red),
                         0,
                         7
                         );
@@ -81,6 +85,7 @@ namespace RibbonUI.UserControls {
                     }
                 }
             };
+
             window.TaskbarItemInfo = taskbarItemInfo;
         }
 

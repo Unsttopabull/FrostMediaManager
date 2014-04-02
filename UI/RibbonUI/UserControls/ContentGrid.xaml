@@ -198,7 +198,7 @@
                 <TabItem Header="{l:T Trivia and goofs}">
                 </TabItem>
                 <TabItem x:Name="MovieEditTab" x:FieldModifier="private" Header="{l:T Edit Movie info}">
-                    <controls:EditMovie x:Name="EditMovie" SelectedMovie="{Binding ElementName=ContentGridControl, Path=DataContext.SelectedMovie}" />
+                    <controls:EditMovie x:Name="EditMovie" SelectedMovie="{Binding IsAsync=True, ElementName=ContentGridControl, Path=DataContext.SelectedMovie}" />
                 </TabItem>
                 <TabItem Header="{l:T Subtitles}" x:Name="MovieSubtitles">
                     <i:Interaction.Triggers>
@@ -209,22 +209,22 @@
                             <i:InvokeCommandAction Command="{Binding SubtitlesLostFocusCommand}"/>
                         </i:EventTrigger>                        
                     </i:Interaction.Triggers>
-                    <list:ListSubtitles Subtitles="{Binding ElementName=ContentGridControl, Path=DataContext.Subtitles}"/>
+                    <list:ListSubtitles Subtitles="{Binding IsAsync=True, ElementName=ContentGridControl, Path=DataContext.Subtitles}"/>
                 </TabItem>
                 <TabItem Header="{l:T Videos}">
-                    <list:ListVideos Videos="{Binding ElementName=ContentGridControl, Path=DataContext.Videos}"/>
+                    <list:ListVideos Videos="{Binding IsAsync=True, ElementName=ContentGridControl, Path=DataContext.Videos}"/>
                 </TabItem>
                 <TabItem Header="{l:T Audios}">
-                    <list:ListAudios Audios="{Binding ElementName=ContentGridControl, Path=DataContext.Audios}"/>
+                    <list:ListAudios Audios="{Binding IsAsync=True, ElementName=ContentGridControl, Path=DataContext.Audios}"/>
                 </TabItem>
                 <TabItem Header="Certifications">
-                    <list:ListCertifications Certifications="{Binding ElementName=ContentGridControl, Path=DataContext.Certifications}"/>
+                    <list:ListCertifications Certifications="{Binding IsAsync=True, ElementName=ContentGridControl, Path=DataContext.Certifications}"/>
                 </TabItem>
                 <TabItem Header="{l:T Promotional videos}" >
                     
                 </TabItem>
                 <TabItem Header="{l:T Art}">
-                    <list:ListArt Art="{Binding ElementName=ContentGridControl, Path=DataContext.Art}"/>
+                    <list:ListArt Art="{Binding IsAsync=True, ElementName=ContentGridControl, Path=DataContext.Art}"/>
                 </TabItem>
             </TabControl>
         </Grid>

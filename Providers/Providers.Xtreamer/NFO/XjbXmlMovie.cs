@@ -8,7 +8,6 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Frost.Common;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 
 namespace Frost.Providers.Xtreamer.NFO {

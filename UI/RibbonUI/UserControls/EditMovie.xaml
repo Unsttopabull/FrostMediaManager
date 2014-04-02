@@ -117,42 +117,41 @@
                         </ComboBox>
 
                         <Label Grid.Row="2" Grid.Column="2" Content="{l:T ImdbID}"/>
-                        <TextBox Grid.Row="3" Grid.Column="2"
-                                 Text="{Binding SelectedMovie.ImdbID}" />
+                        <TextBox Grid.Row="3" Grid.Column="2" Text="{Binding SelectedMovie.ImdbID}" IsEnabled="{Binding SelectedMovie[ImdbID], TargetNullValue=False, FallbackValue=False}"/>
 
                         <Label Grid.Row="2" Grid.Column="0" Content="{l:T TmdbID}"/>
-                        <TextBox Grid.Row="3" Grid.Column="0"
-                                 Text="{Binding SelectedMovie.TmdbID}" />
+                        <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding SelectedMovie.TmdbID}" IsEnabled="{Binding SelectedMovie[TmdbId], TargetNullValue=False, FallbackValue=False}"/>
 
                         <StackPanel Grid.Column="0" Grid.Row="4">
                             <Label Target="{Binding ElementName=MovieReleaseYear}" Content="{l:T Release year, Postfix=:}"/>
-                            <e:IntegerUpDown x:Name="MovieReleaseYear" Minimum="1900" Maximum="2100"
+                            <e:IntegerUpDown x:Name="MovieReleaseYear" Minimum="1900" Maximum="2100" IsEnabled="{Binding SelectedMovie[ReleaseYear], TargetNullValue=False, FallbackValue=False}"
                                              Value="{Binding SelectedMovie.ReleaseYear, TargetNullValue={x:Null}, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel Grid.Column="2" Grid.Row="4">
                             <Label Target="{Binding ElementName=MovieRating}" Content="{l:T Rating}"/>
                             <fmm:StarRating Height="{Binding ElementName=MovieReleaseYear, Path=ActualHeight}" x:Name="MovieRating"
-                                                     Rating="{Binding SelectedMovie.RatingAverage, UpdateSourceTrigger=PropertyChanged}" />
+                                            Rating="{Binding SelectedMovie.RatingAverage, Mode=TwoWay}" IsEnabled="{Binding SelectedMovie[RatingAverage], TargetNullValue=False, FallbackValue=False}"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="5">
                             <Label Content="{l:T Release group, Postfix=:}"/>
-                            <TextBox Text="{Binding SelectedMovie.ReleaseGroup}"
-                                     MinHeight="20" />
+                            <TextBox Text="{Binding SelectedMovie.ReleaseGroup}" MinHeight="20" IsEnabled="{Binding SelectedMovie[ReleaseGroup], TargetNullValue=False, FallbackValue=False}"/>
                         </StackPanel>
                         <StackPanel Grid.Column="2" Grid.Row="5">
                             <Label Target="{Binding ElementName=MoviePlayCount}" Content="{l:T Play count, Postfix=:}"/>
                             <e:IntegerUpDown x:Name="MoviePlayCount" Minimum="0" Value="{Binding SelectedMovie.PlayCount, TargetNullValue={x:Null}}"
-                                             MinWidth="26" />
+                                             MinWidth="26" IsEnabled="{Binding SelectedMovie[PlayCount], TargetNullValue=False, FallbackValue=False}"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="0" Grid.Row="6">
                             <Label Target="{Binding ElementName=MovieDuration}" Content="{l:T Duration, Postfix=:}"/>
-                            <a:TimePicker x:Name="MovieDuration" SelectedTime="{Binding SelectedMovie.RuntimeTimeSpan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <a:TimePicker x:Name="MovieDuration" SelectedTime="{Binding SelectedMovie.RuntimeTimeSpan, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          IsEnabled="{Binding SelectedMovie[Runtime], TargetNullValue=False, FallbackValue=False}"/>
                         </StackPanel>
                         <StackPanel Grid.Column="2" Grid.Row="6">
                             <Label Target="{Binding ElementName=MovieDuration}" Content="{l:T Top 250, Postfix=:}"/>
-                            <e:IntegerUpDown Minimum="0" Maximum="250" Value="{Binding SelectedMovie.Top250, TargetNullValue={x:Null}, UpdateSourceTrigger=PropertyChanged}" MinHeight="30" VerticalContentAlignment="Center" />
+                            <e:IntegerUpDown Minimum="0" Maximum="250" Value="{Binding SelectedMovie.Top250, TargetNullValue={x:Null}, UpdateSourceTrigger=PropertyChanged}"
+                                             MinHeight="30" VerticalContentAlignment="Center" IsEnabled="{Binding SelectedMovie[Top250], TargetNullValue=False, FallbackValue=False}"/>
                         </StackPanel>
                     </Grid>
                     <Label Grid.Row="11" Content="{l:T Trailer, Postfix=:}"/>
@@ -161,7 +160,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBox x:Name="MovieTrailer" Grid.Column="0" Text="{Binding SelectedMovie.Trailer}"/>
+                        <TextBox x:Name="MovieTrailer" Grid.Column="0" Text="{Binding SelectedMovie.Trailer}" IsEnabled="{Binding SelectedMovie[Trailer], TargetNullValue=False, FallbackValue=False}"/>
                         <Button Grid.Column="1" Height="{Binding ElementName=MovieTitle, Path=ActualHeight}" Command="{Binding TrailerSearchCommand}"
                                 ToolTip="{l:T Open file search dialog}" Margin="2,0,0,0" Style="{StaticResource TransparentBorderlessButton}">
                             <Image Source="../Images/folder.ico" />
@@ -243,8 +242,8 @@
                     <Label Grid.Row="0" Grid.Column="2" Content="{l:T Tagline, Postfix=:}"/>
                     <TextBox x:Name="MoviePlotTagline" Height="{Binding ElementName=MoviePlotCombo, Path=ActualHeight}"
                              Grid.Column="2" Grid.Row="1"
-                             Text="{Binding ElementName=MoviePlotCombo, Path=SelectedItem.Tagline, UpdateSourceTrigger=PropertyChanged}"
-                             IsEnabled="{Binding ElementName=MoviePlotCombo, Path=HasItems}" />
+                             Text="{Binding SelectedPlot.Tagline, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsPlotTaglineEditable}" />
 
                     <Grid x:Name="PlotSelectGrid" x:FieldModifier="private" Grid.Column="0" Grid.Row="0"
                           Grid.RowSpan="2" Height="50">
@@ -266,8 +265,8 @@
                                              ToolTip="{l:T Add new plot}"/>
                         </DockPanel>
 
-                        <ComboBox Grid.Column="0" Grid.Row="1" x:Name="MoviePlotCombo" ItemsSource="{Binding Plots}"
-                                  SelectedIndex="0" IsSynchronizedWithCurrentItem="True">
+                        <ComboBox Grid.Column="0" Grid.Row="1" x:Name="MoviePlotCombo" ItemsSource="{Binding Plots}" IsEnabled="{Binding SelectedMovie[Plots], TargetNullValue=False, FallbackValue=False}"
+                                  SelectedIndex="0" IsSynchronizedWithCurrentItem="True" SelectedItem="{Binding SelectedPlot}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type o:MoviePlot}">
                                     <TextBlock Text="{Binding Language, TargetNullValue={l:T Unknown language}, FallbackValue={l:T Unknown language}, UpdateSourceTrigger=PropertyChanged}"/>
@@ -296,13 +295,13 @@
 
                     <Label Grid.Column="0" Grid.Row="2" Content="{l:T Plot summary, Postfix=:}"/>
                     <TextBox Grid.Column="0" Grid.Row="3" x:Name="MoviePlotSummary"
-                             Text="{Binding ElementName=MoviePlotCombo, Path=SelectedItem.Summary, UpdateSourceTrigger=PropertyChanged}"
-                             IsEnabled="{Binding ElementName=MoviePlotCombo, Path=HasItems}" TextWrapping="Wrap"
+                             Text="{Binding SelectedPlot.Summary, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="{Binding IsPlotSummaryEditable}" TextWrapping="Wrap"
                              MinHeight="150" />
                     <Label Grid.Row="2" Grid.Column="2" Content="{l:T Plot full, Postfix=:}"/>
                     <TextBox Grid.Row="3" Grid.Column="2" x:Name="MoviePlotFull"
-                             Text="{Binding ElementName=MoviePlotCombo, Path=SelectedItem.Full}"
-                             IsEnabled="{Binding ElementName=MoviePlotCombo, Path=HasItems}" TextWrapping="Wrap"
+                             Text="{Binding SelectedPlot.Full}"
+                             IsEnabled="{Binding IsPlotFullEditable}" TextWrapping="Wrap"
                              MinHeight="150" />
                 </Grid>
                 <Grid x:Name="ActorsStudios" x:FieldModifier="private" Grid.Row="1" Grid.Column="0">
@@ -343,7 +342,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn Binding="{Binding Name}" Header="{l:T Actor}" IsReadOnly="True" />
+                            <DataGridTextColumn Binding="{Binding Name}" Header="{l:T Actor}" IsReadOnly="True" Width="Auto"/>
                             <DataGridTextColumn Binding="{Binding Character, TargetNullValue=Unknown}" Header="{l:T Character}" Width="*" />
                         </DataGrid.Columns>
                     </DataGrid>

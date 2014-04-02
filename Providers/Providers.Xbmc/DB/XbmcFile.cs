@@ -220,7 +220,6 @@ namespace Frost.Providers.Xbmc.DB {
                     case "DateAdded":
                     case "FolderPath":
                     case "FullPath":
-                    case "Name":
                     case "NameWithExtension":
                         return true;
                     default:
@@ -251,10 +250,6 @@ namespace Frost.Providers.Xbmc.DB {
         /// <value>The date and time the file was added.</value>
         DateTime IFile.DateAdded {
             get { return _dateAdded; }
-            set {
-                _dateAdded = value;
-                DateAdded = value.ToString("yyyy-mm-dd hh:ii:ss");
-            }
         }
 
         /// <summary>Gets or sets the path to the folder that contains this file</summary>
@@ -267,7 +262,6 @@ namespace Frost.Providers.Xbmc.DB {
         /// </example>
         string IFile.FolderPath {
             get { return Path.FolderPath; }
-            set { Path.FolderPath = value; }
         }
 
         /// <summary>Gets the full path to the file.</summary>
@@ -289,7 +283,6 @@ namespace Frost.Providers.Xbmc.DB {
             get {
                 return System.IO.Path.GetFileNameWithoutExtension(FileNames[0]);
             }
-            set { }
         }
 
         /// <summary>Gets the name with extension.</summary>
@@ -302,7 +295,6 @@ namespace Frost.Providers.Xbmc.DB {
         /// <value>The file size in bytes.</value>
         long? IFile.Size {
             get { return default(long?); }
-            set { }
         }
 
         ///<summary>The File Extension without beginning point</summary>
@@ -310,7 +302,6 @@ namespace Frost.Providers.Xbmc.DB {
         ///<example>\eg{ ''<c>mp4</c>''}</example>
         string IFile.Extension {
             get { return default(string); }
-            set { }
         }
 
         #endregion

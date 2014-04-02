@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.ModelConfiguration;
+using Frost.Providers.Xtreamer.PHP;
 
 namespace Frost.Providers.Xtreamer.DB {
 
@@ -11,6 +13,11 @@ namespace Frost.Providers.Xtreamer.DB {
     public class XjbMoviePerson {
 
         public XjbMoviePerson() {
+            
+        }
+
+        public XjbMoviePerson(XjbPerson person) {
+            Person = person;
         }
 
         #region Properties/Columns
@@ -21,15 +28,10 @@ namespace Frost.Providers.Xtreamer.DB {
         [Column("id")]
         public long Id { get; set; }
 
-        /// <summary>Gets or sets the character the person is portraying in this movie.</summary>
-        /// <value>The character the person is portraying in this movie.</value>
-        [Column("character")]
-        public string Character { get; set; }
-
-        /// <summary>Gets or sets the person's job in this movie.</summary>
-        /// <value>The person's job in this movie</value>
-        [Column("job")]
-        public string Job { get; set; }
+        ///// <summary>Gets or sets the person's job in this movie.</summary>
+        ///// <value>The person's job in this movie</value>
+        //[Column("job")]
+        //public string Job { get; set; }
 
         #endregion
 
@@ -56,6 +58,14 @@ namespace Frost.Providers.Xtreamer.DB {
         /// <value>The movie that this link refers to.</value>
         [ForeignKey("MovieId")]
         public virtual XjbMovie Movie { get; set; }
+
+        internal class Configuration : EntityTypeConfiguration<XjbMoviePerson> {
+            public Configuration() {
+                Map<XjbActor>(p => p.Requires("job").HasValue(XjbPhpPerson.JOB_ACTOR));
+                Map<XjbDirector>(p => p.Requires("job").HasValue(XjbPhpPerson.JOB_DIRECTOR));
+                Map<XjbWriter>(p => p.Requires("job").HasValue(XjbPhpPerson.JOB_WRITER));
+            }
+        }
     }
 
 }

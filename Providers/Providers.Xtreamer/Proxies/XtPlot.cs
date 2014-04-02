@@ -1,13 +1,16 @@
-﻿using Frost.Common.Models;
+﻿using System.Collections.Generic;
 using Frost.Common.Models.Provider;
 using Frost.Providers.Xtreamer.PHP;
+using Frost.Providers.Xtreamer.Proxies.ChangeTrackers;
 
 namespace Frost.Providers.Xtreamer.Proxies {
-    public class XtPlot : IPlot {
-        private readonly XjbPhpMovie _movie;
 
-        public XtPlot(XjbPhpMovie movie) {
-            _movie = movie;
+    public class XtPlot : ChangeTrackingProxy<XjbPhpMovie>, IPlot {
+        public XtPlot(XjbPhpMovie movie) : base(movie) {
+            OriginalValues = new Dictionary<string, object> {
+                { "Summary", movie.PlotSummary },
+                { "Full", movie.PlotFull }
+            };
         }
 
         public long Id {
@@ -18,21 +21,27 @@ namespace Frost.Providers.Xtreamer.Proxies {
         /// <value>The tagline (short promotional slogan / one-liner / clarification).</value>
         public string Tagline {
             get { return null; }
-            set { } 
+            set { }
         }
 
         /// <summary>Gets or sets the story summary.</summary>
         /// <value>A short story summary, the plot outline</value>
         public string Summary {
-            get { return _movie.PlotSummary; }
-            set { _movie.PlotSummary = value; }
+            get { return Entity.PlotSummary; }
+            set {
+                Entity.PlotSummary = value;
+                TrackChanges(value);
+            }
         }
 
         /// <summary>Gets or sets the full plot.</summary>
         /// <value>The full plot.</value>
         public string Full {
-            get { return _movie.PlotFull; }
-            set { _movie.PlotFull = value; } 
+            get { return Entity.PlotFull; }
+            set {
+                Entity.PlotFull = value;
+                TrackChanges(value);
+            }
         }
 
         /// <summary>Gets or sets the language of this plot.</summary>
@@ -54,4 +63,5 @@ namespace Frost.Providers.Xtreamer.Proxies {
             }
         }
     }
+
 }

@@ -12,13 +12,13 @@ namespace RibbonUI.Windows {
             InitializeComponent();
         }
 
-        private static void LanguagesOnChanged(DependencyObject d, DependencyPropertyChangedEventArgs args) {
-            ((SelectLanguageViewModel) (((SelectLanguage) d).DataContext)).Languages = (IEnumerable<MovieLanguage>) args.NewValue;
-        }
-
         public IEnumerable<MovieLanguage> Languages {
             get { return (IEnumerable<MovieLanguage>) GetValue(LanguagesProperty); }
             set { SetValue(LanguagesProperty, value); }
+        }
+
+        private static void LanguagesOnChanged(DependencyObject d, DependencyPropertyChangedEventArgs args) {
+            ((SelectLanguageViewModel) (((SelectLanguage) d).DataContext)).Languages = (IEnumerable<MovieLanguage>) args.NewValue;
         }
     }
 }

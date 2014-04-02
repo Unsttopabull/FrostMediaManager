@@ -86,8 +86,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DB\Actor\XbmcMovieActor.cs" />
-    <Compile Include="DB\Actor\XbmcPerson.cs" />
+    <Compile Include="DB\People\XbmcMovieActor.cs" />
+    <Compile Include="DB\People\XbmcPerson.cs" />
     <Compile Include="DB\Art\XbmcActorArt.cs" />
     <Compile Include="DB\Art\XbmcArt.cs">
       <SubType>Code</SubType>
@@ -106,10 +106,13 @@
     <Compile Include="DB\Tag\XbmcTagLink.cs" />
     <Compile Include="DB\XBMC.Context.cs" />
     <Compile Include="DB\XbmcBookmark.cs" />
+    <Compile Include="DB\XbmcContainer.Views.cs" />
     <Compile Include="DB\XbmcCountry.cs" />
+    <Compile Include="DB\XbmcDbMovie.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DB\XbmcFile.cs" />
     <Compile Include="DB\XbmcGenre.cs" />
-    <Compile Include="DB\XbmcDbMovie.cs" />
     <Compile Include="DB\XbmcPath.cs" />
     <Compile Include="DB\XbmcSet.cs" />
     <Compile Include="DB\XbmcSettings.cs" />

@@ -6,10 +6,11 @@
               xmlns:userControls="clr-namespace:RibbonUI.UserControls"
               xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
               xmlns:ribbonUi="clr-namespace:RibbonUI"
-              Title="MainWindow" Icon="logo3.ico" x:Name="RibbonWindow"
-              MinWidth="{Binding ElementName=ContentGrid, Path=MinRequiredWidth}"
+              Title="Frost Media Manager" Icon="logo3.ico" x:Name="RibbonWindow"
               mc:Ignorable="d" Width="1386" Height="794"
-              d:DataContext="{d:DesignInstance ribbonUi:MainWindowViewModel}">
+              d:DataContext="{d:DesignInstance ribbonUi:MainWindowViewModel}"
+              WindowStartupLocation="CenterScreen"
+              WindowState="Maximized">
               <!--
               MinWidth="{Binding ElementName=ContentGrid, Path=MinRequiredWidth}" Loaded="RibbonWindowLoaded">-->  
     <i:Interaction.Triggers>

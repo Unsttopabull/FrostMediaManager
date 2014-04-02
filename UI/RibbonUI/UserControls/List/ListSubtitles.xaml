@@ -14,6 +14,7 @@
         <vm:ListSubtitlesViewModel/>
     </UserControl.DataContext>    
     <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <ObjectDataProvider x:Key="Encodings" ObjectType="{x:Type sys:Encoding}" MethodName="GetEncodings"/>
     </UserControl.Resources>
     <ListView x:Name="SubtitlesList" SelectionMode="Single" ItemsSource="{Binding Subtitles}" ClipToBounds="True">
@@ -29,8 +30,8 @@
             <DataTemplate DataType="o:MovieSubtitle">
                 <DockPanel LastChildFill="False">
                     <StackPanel DockPanel.Dock="Left">
-                        <Button Style="{StaticResource TransparentBorderlessButton}" Command="{Binding ElementName=ListSubtitlesControl, Path=DataContext.ChangeLanguageCommand}"
-                                CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}">
+                        <Button Style="{StaticResource TransparentBorderlessButton}" CommandParameter="{Binding}" IsEnabled="{Binding [Language]}"
+                                Command="{Binding ElementName=ListSubtitlesControl, Path=DataContext.ChangeLanguageCommand}" Name="ChangeLanguageButton">
                             <Image Source="{Binding LanguageImage, FallbackValue={StaticResource UnknownLanguageLarge}, TargetNullValue={StaticResource UnknownLanguageLarge}}"
                                    MinHeight="48" MaxHeight="100">
                                 <Image.CacheMode>
@@ -38,35 +39,39 @@
                                 </Image.CacheMode>
                             </Image>
                         </Button>
-                        <TextBlock TextAlignment="Center" Text="{l:T Click to set language}"/>
+                        <TextBlock Visibility="{Binding ElementName=ChangeLanguageButton, Path=IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                   TextAlignment="Center" Text="{l:T Click to set language}" />
                     </StackPanel>
                     <StackPanel Margin="15,0,0,0" MinWidth="200" x:Name="DetailsHolder">
                         <StackPanel Orientation="Horizontal">
                             <Label Content="{l:T Language, Postfix=:}"/>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding Language.(models:ILanguage.Name)}" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Language.(models:ILanguage.Name), TargetNullValue={l:T Unknown}, FallbackValue={l:T Unknown}}" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal" Visibility="{Binding ElementName=FormatSelect, Path=IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Label Content="{l:T Format, Postfix=:}"/>
-                            <ComboBox VerticalAlignment="Center" Margin="11,0,0,0" MinWidth="100" IsEditable="True" ItemsSource="{Binding ElementName=ListSubtitlesControl, Path=DataContext.SubtitleFormats}" SelectedItem="{Binding Format}" />
+                            <ComboBox VerticalAlignment="Center" Margin="11,0,0,0" MinWidth="100" IsEditable="True" SelectedItem="{Binding Format}" Name="FormatSelect"
+                                      ItemsSource="{Binding ElementName=ListSubtitlesControl, Path=DataContext.SubtitleFormats}" IsEnabled="{Binding [Format]}"/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal" Visibility="{Binding ElementName=EncodingsSelect, Path=IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Label Content="{l:T Encoding, Postfix=:}"/>
-                            <ComboBox VerticalAlignment="Center" MinWidth="100" SelectedValue="{Binding Encoding}" ItemsSource="{Binding Source={StaticResource Encodings}}" SelectedValuePath="Name" DisplayMemberPath="DisplayName"/>
-                        </StackPanel>                        
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="{l:T Is embeded in the video:, Postfix=:}"/>
-                            <CheckBox VerticalAlignment="Center" IsChecked="{Binding EmbededInVideo}" />
+                            <ComboBox VerticalAlignment="Center" MinWidth="100" SelectedValue="{Binding Encoding}" DisplayMemberPath="DisplayName"
+                                      Name="EncodingsSelect" ItemsSource="{Binding Source={StaticResource Encodings}}" SelectedValuePath="Name"
+                                      IsEnabled="{Binding [Encoding], FallbackValue=False, TargetNullValue=False}"/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal" Visibility="{Binding ElementName=EmbededCheck, Path=IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Label Content="{l:T Is embeded in the video:, Postfix=:}"/>
+                            <CheckBox VerticalAlignment="Center" IsChecked="{Binding EmbededInVideo}" Name="EmbededCheck" IsEnabled="{Binding [EmbededInVideo]}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Visibility="{Binding ElementName=EmbededCheck, Path=IsEnabled, Converter={StaticResource BooleanToVisibilityConverter}}">
                             <Label Content="{l:T Is for hearing impaired:, Postfix=:}"/>
-                            <CheckBox VerticalAlignment="Center" Margin="7,0,0,0" IsChecked="{Binding ForHearingImpaired}" />
+                            <CheckBox VerticalAlignment="Center" Margin="7,0,0,0" IsChecked="{Binding ForHearingImpaired}" IsEnabled="{Binding [ForHearingImpaired]}" />
                         </StackPanel>
                     </StackPanel>
 
                     <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
-                        <Button Command="{Binding ElementName=ListSubtitlesControl, Path=DataContext.RemoveCommand}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}" Style="{StaticResource TransparentBorderlessButton}">
+                        <Button Command="{Binding ElementName=ListSubtitlesControl, Path=DataContext.RemoveCommand}" CommandParameter="{Binding}" Style="{StaticResource TransparentBorderlessButton}">
                             <Image Source="../../Images/remove.png" MaxHeight="32" />
-                        </Button>
+                        </Button>                      
                     </StackPanel>
                 </DockPanel>
             </DataTemplate>

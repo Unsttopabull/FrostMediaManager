@@ -1,5 +1,4 @@
-﻿using Frost.Common.Models;
-using Frost.Common.Models.Provider;
+﻿using Frost.Common.Models.Provider;
 
 namespace RibbonUI.Util.ObservableWrappers {
 
@@ -85,6 +84,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             set {
                 _observedEntity.Language = value;
                 OnPropertyChanged();
+                OnPropertyChanged("LanguageImage");
             }
         }
     }

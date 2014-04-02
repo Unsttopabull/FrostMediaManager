@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Data;
+using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;
+using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.Windows {
@@ -12,6 +16,10 @@ namespace RibbonUI.Windows {
         public event PropertyChangedEventHandler PropertyChanged;
 
         public SelectLanguageViewModel() {
+            if (TranslationManager.IsInDesignMode) {
+                Languages = UIHelper.GetLanguages().Select(l => new MovieLanguage(l));
+            }
+
             AddCommand = new RelayCommand<Window>(w => {
                 w.DialogResult = true;
                 w.Close();
@@ -33,6 +41,11 @@ namespace RibbonUI.Windows {
                     return;
                 }
                 _languages = value;
+
+                if (_languages != null) {
+                    ICollectionView collectionView = CollectionViewSource.GetDefaultView(_languages);
+                    collectionView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+                }
                 OnPropertyChanged();
             }
         }

@@ -19,7 +19,8 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <ComboBox x:Name="SelectedLanguage" Grid.Row="0" Grid.ColumnSpan="2" ItemsSource="{Binding Languages}" Margin="5,5,5,0">
+        <ComboBox x:Name="SelectedLanguage" Grid.Row="0" Grid.ColumnSpan="2" ItemsSource="{Binding Languages}" Margin="5,5,5,0"
+                  TextSearch.TextPath="Name" IsTextSearchEnabled="True">
             <ComboBox.ItemTemplate>
                 <DataTemplate DataType="{x:Type o:MovieLanguage}">
                     <StackPanel Orientation="Horizontal">

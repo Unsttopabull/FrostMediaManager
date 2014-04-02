@@ -1,9 +1,7 @@
-﻿using System;
-using Frost.Common;
-using Frost.Common.Models;
+﻿using Frost.Common;
 using Frost.Common.Models.Provider;
 
-namespace RibbonUI.Design.Classes {
+namespace RibbonUI.Design.Models {
     class DesignAudio : IAudio {
         public long Id { get; private set; }
 
@@ -71,7 +69,7 @@ namespace RibbonUI.Design.Classes {
         public IFile File { get; private set; }
 
         public bool this[string propertyName] {
-            get { throw new NotImplementedException(); }
+            get { return true; }
         }
 
         public ILanguage Language { get; set; }

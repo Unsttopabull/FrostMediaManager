@@ -86,6 +86,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DB\XjbActor.cs" />
+    <Compile Include="DB\XjbDirector.cs" />
     <Compile Include="DB\XjbDrive.cs" />
     <Compile Include="DB\XjbEntities.Context.cs" />
     <Compile Include="DB\XjbGenre.cs" />
@@ -93,6 +95,7 @@
     <Compile Include="DB\XjbMoviePerson.cs" />
     <Compile Include="DB\XjbOption.cs" />
     <Compile Include="DB\XjbPerson.cs" />
+    <Compile Include="DB\XjbWriter.cs" />
     <Compile Include="PHP\XjbPhpGenre.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -110,7 +113,13 @@
     <Compile Include="Provider\FindDb.cs" />
     <Compile Include="Provider\XtreamerCompositionRoot.cs" />
     <Compile Include="Provider\XjbMoviesDataService.cs" />
+    <Compile Include="Proxies\ChangeTrackers\ChangeTrackingCollection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxies\ChangeTrackers\ChangeTrackingProxy.cs" />
+    <Compile Include="Proxies\Proxy.cs" />
     <Compile Include="Proxies\XtActor.cs" />
+    <Compile Include="Proxies\XtArt.cs" />
     <Compile Include="Proxies\XtFanart.cs" />
     <Compile Include="Proxies\XtAudio.cs" />
     <Compile Include="Proxies\XtCertification.cs" />
@@ -119,7 +128,9 @@
     <Compile Include="Proxies\XtFile.cs" />
     <Compile Include="Proxies\XtGenre.cs" />
     <Compile Include="Proxies\XtLanguage.cs" />
-    <Compile Include="Proxies\XtMovie.cs" />
+    <Compile Include="Proxies\XtMovie.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Proxies\XtPerson.cs" />
     <Compile Include="Proxies\XtPlot.cs" />
     <Compile Include="Proxies\XtRating.cs" />
@@ -129,8 +140,7 @@
     <Compile Include="Proxies\XtSubtitleFile.cs" />
     <Compile Include="Proxies\XtVideo.cs" />
     <Compile Include="SQLiteInitializer.cs" />
-    <Compile Include="XbmcXmlResumeInfo.cs" />
-    <Compile Include="XjbCertification.cs" />
+    <Compile Include="NFO\XjbCertification.cs" />
     <Compile Include="XmlIndentedTextWriter.cs" />
   </ItemGroup>
   <ItemGroup>

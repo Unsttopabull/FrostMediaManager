@@ -622,6 +622,27 @@ namespace RibbonUI.Util {
         }
 
         /// <summary>
+        /// Returns <b>true</b> if the container can create the requested service, otherwise <b>false</b>.
+        /// </summary>
+        /// <param name="serviceName">The name of the service.</param>
+        /// <returns>
+        /// <b>true</b> if the container can create the requested service, otherwise <b>false</b>.
+        /// </returns>
+        public static bool CanGetInstance<TService>(string serviceName) {
+            return Container.CanGetInstance(typeof(TService), serviceName);
+        }
+
+        /// <summary>
+        /// Returns <b>true</b> if the container can create the requested service, otherwise <b>false</b>.
+        /// </summary>
+        /// <returns>
+        /// <b>true</b> if the container can create the requested service, otherwise <b>false</b>.
+        /// </returns>
+        public static bool CanGetInstance<TService>() {
+            return Container.CanGetInstance(typeof(TService), "");
+        }
+
+        /// <summary>
         /// Starts a new <see cref="T:LightInject.Scope"/>.
         /// </summary>
         /// <returns>

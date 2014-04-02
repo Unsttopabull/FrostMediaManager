@@ -8,11 +8,10 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
-using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 using Microsoft.Win32;
+using RibbonUI.Annotations;
 
 namespace RibbonUI.Windows {
     class AddPersonViewModel : INotifyPropertyChanged, IDisposable {
@@ -27,7 +26,6 @@ namespace RibbonUI.Windows {
         private string _personCharacter;
 
         public AddPersonViewModel() {
-            //_selectedPerson = LightInjectContainer.GetInstance<IPerson>(App.SystemType);
             _people = new List<IPerson>();
             _searchText = "";
 
@@ -63,6 +61,7 @@ namespace RibbonUI.Windows {
                 
                 if (_people != null) {
                     _collectionView = CollectionViewSource.GetDefaultView(_people);
+                    _collectionView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
 
                     if (_collectionView != null) {
                         _collectionView.Filter = Filter;
@@ -82,7 +81,7 @@ namespace RibbonUI.Windows {
                 _selectedPerson = value;
                 if (_selectedPerson != null) {
                     IsThumbEditable = _selectedPerson["Thumb"];
-                    IsThumbEditable = _selectedPerson["Character"];
+                    OnPropertyChanged("IsThumbEditable");
 
                     PersonName = _selectedPerson.Name;
                     PersonThumb = _selectedPerson.Thumb;

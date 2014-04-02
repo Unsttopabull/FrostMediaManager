@@ -14,10 +14,6 @@ namespace Frost.Providers.Frost.Proxies {
             get { return Entity.Id; }
         }
 
-        public bool this[string propertyName] {
-            get { throw new NotImplementedException(); }
-        }
-
         public string MovieHash {
             get { return Entity.MovieHash; }
             set { Entity.MovieHash = value; }
@@ -170,6 +166,8 @@ namespace Frost.Providers.Frost.Proxies {
             set { Entity.Height = value; }
         }
 
+        #region M to 1
+
         /// <summary>Gets or sets the file this video is contained in.</summary>
         /// <value>The file this video is contained in.</value>
         public IFile File {
@@ -179,6 +177,43 @@ namespace Frost.Providers.Frost.Proxies {
         public ILanguage Language {
             get { return Entity.Language; }
             set { Entity.Language = Service.FindLanguage(value, true); }
+        }
+
+        #endregion
+
+        public bool this[string propertyName] {
+            get {
+                switch (propertyName) {
+                    case "Id":
+                    case "MovieHash":
+                    case "Source":
+                    case "Type":
+                    case "Resolution":
+                    case "ResolutionName":
+                    case "Standard":
+                    case "FPS":
+                    case "BitRate":
+                    case "BitRateMode":
+                    case "BitDepth":
+                    case "CompressionMode":
+                    case "Duration":
+                    case "ScanType":
+                    case "ColorSpace":
+                    case "ChromaSubsampling":
+                    case "Format":
+                    case "Codec":
+                    case "CodecId":
+                    case "Aspect":
+                    case "AspectCommercialName":
+                    case "Width":
+                    case "Height":
+                    case "File":
+                    case "Language":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
         }
     }
 }

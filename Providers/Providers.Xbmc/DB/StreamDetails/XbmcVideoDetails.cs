@@ -152,6 +152,14 @@ namespace Frost.Providers.Xbmc.DB.StreamDetails {
                     resolution = 720;
                 }
 
+                if (h == 480 && w == 720) {
+                    resolution = 480;
+                }
+
+                if (h == 576 && w == 720) {
+                    resolution = 576;
+                }
+
                 if (resolution == 0) {
                     return null;
                 }
@@ -161,6 +169,13 @@ namespace Frost.Providers.Xbmc.DB.StreamDetails {
         }
 
         #region Not Implemented
+
+        /// <summary>Gets or sets the name of the resolution.</summary>
+        /// <value>The name of the resolution.</value>
+        string IVideo.ResolutionName {
+            get { return default(string); }
+            set { }
+        }
 
         ILanguage IHasLanguage.Language {
             get { return default(ILanguage); }
@@ -222,13 +237,6 @@ namespace Frost.Providers.Xbmc.DB.StreamDetails {
         }
 
         string IVideo.MovieHash {
-            get { return default(string); }
-            set { }
-        }
-
-        /// <summary>Gets or sets the name of the resolution.</summary>
-        /// <value>The name of the resolution.</value>
-        string IVideo.ResolutionName {
             get { return default(string); }
             set { }
         }

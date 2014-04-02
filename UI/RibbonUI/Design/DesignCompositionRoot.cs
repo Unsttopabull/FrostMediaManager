@@ -1,8 +1,7 @@
 ﻿using Frost.Common;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 using LightInject;
-using RibbonUI.Design.Classes;
+using RibbonUI.Design.Models;
 
 namespace RibbonUI.Design {
     public class DesignCompositionRoot : ICompositionRoot {

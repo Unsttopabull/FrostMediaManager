@@ -116,7 +116,7 @@ namespace Frost.PHPtoNET {
 
             int value;
             string strValue = new string(chars.ToArray());
-            if (!int.TryParse(strValue, out value)) {
+            if (!int.TryParse(strValue, NumberStyles.Integer, CultureInfo.InvariantCulture, out value)) {
                 throw new ParsingException("an integer value", strValue, _ms.Position);
             }
             return value;
@@ -143,7 +143,7 @@ namespace Frost.PHPtoNET {
 
             double value;
             string strValue = new string(chars.ToArray());
-            if (!double.TryParse(strValue, out value)) {
+            if (!double.TryParse(strValue, NumberStyles.Float, CultureInfo.InvariantCulture ,out value)) {
                 throw new ParsingException("an integer value", strValue, _ms.Position);
             }
             return value;
@@ -469,18 +469,29 @@ namespace Frost.PHPtoNET {
                 return (T) obj;
             }
 
-            MethodInfo mi = t.GetMethod("TryParse", new[] { StringType, t.MakeByRefType() });
+            MethodInfo mi = t.GetMethod("TryParse", new[] { StringType, typeof(NumberStyles), typeof(IFormatProvider), t.MakeByRefType() });
             if (mi != null) {
-                T tValue = default(T);
+                object[] args = { str, NumberStyles.Any, CultureInfo.InvariantCulture, null };
+                if ((bool) mi.Invoke(null, args)) {
+                    return (T) args[3];
+                }
+                throw new ParsingException(string.Format("The TryParse(string, NumberStyles, IFormatProvider, out T) method failed when deserializing type: '{0}'", t.FullName));
+            }
 
-                if ((bool) mi.Invoke(null, new object[] { str, tValue })) {
-                    return tValue;
+            mi = t.GetMethod("TryParse", new[] { StringType, t.MakeByRefType() });
+            if (mi != null) {
+                object[] args = { str, null };
+
+                if ((bool) mi.Invoke(null, args)) {
+                    return (T) args[1];
                 }
                 throw new ParsingException(string.Format("The TryParse(string, out T) method failed when deserializing type: '{0}'", t.FullName));
             }
 
-            throw new ParsingException(t, "the type that does not implement 'IPHPSerializable' or has a static method 'TryParse(string, out T)' that returns bool.",
-                _ms.Position);
+            throw new ParsingException(t, 
+                "the type that does not implement 'IPHPSerializable' or has a static method 'TryParse(string, NumberStyles, IFormatProvider, out T)' that returns bool.",
+                _ms.Position
+            );
         }
 
         private T DeserializeObject<T>(Type type) {

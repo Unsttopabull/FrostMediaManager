@@ -1,8 +1,9 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.SQLite;
-using Frost.Providers.Xbmc.DB.Actor;
+using Frost.Common.Util;
 using Frost.Providers.Xbmc.DB.Art;
+using Frost.Providers.Xbmc.DB.People;
 using Frost.Providers.Xbmc.DB.StreamDetails;
 using Frost.Providers.Xbmc.DB.Tag;
 
@@ -10,14 +11,13 @@ namespace Frost.Providers.Xbmc.DB {
 
     /// <summary>Represents a context used for manipulation of the XBMC database.</summary>
     public class XbmcContainer : DbContext {
-
         /// <summary>Initializes a new instance of the <see cref="XbmcContainer"/> class.</summary>
         public XbmcContainer() : base("name=XbmcEntities") {
         }
 
         /// <summary>Initializes a new instance of the <see cref="XbmcContainer"/> class.</summary>
         /// <param name="filePath">The path to the SQLite database file.</param>
-        public XbmcContainer(string filePath) : base(new SQLiteConnection("data source="+filePath), true) {
+        public XbmcContainer(string filePath) : base(new SQLiteConnection("data source=" + filePath), true) {
         }
 
         /// <summary>Gets or sets the information about the movies in the XBMC library.</summary>
@@ -95,6 +95,11 @@ namespace Frost.Providers.Xbmc.DB {
             base.OnModelCreating(modelBuilder);
         }
 
+        public override int SaveChanges() {
+            EfLogger.LogChanges(this, "xbmc.log");
+
+            return base.SaveChanges();
+        }
     }
 
 }

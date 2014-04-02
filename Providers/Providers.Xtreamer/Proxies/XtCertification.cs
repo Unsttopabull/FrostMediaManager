@@ -1,19 +1,21 @@
-﻿using System;
-using Frost.Common.Models;
+﻿using System.Collections.Generic;
 using Frost.Common.Models.Provider;
 using Frost.Providers.Xtreamer.PHP;
+using Frost.Providers.Xtreamer.Proxies.ChangeTrackers;
 
 namespace Frost.Providers.Xtreamer.Proxies {
-    public class XtCertification : ICertification {
-        private readonly XjbPhpMovie _movie;
+    public class XtCertification : ChangeTrackingProxy<XjbPhpMovie>, ICertification {
         private string _countryName;
         private ICountry _country;
 
-        public XtCertification(XjbPhpMovie movie, string country) {
-            _movie = movie;
+        public XtCertification(XjbPhpMovie movie, string country) : base(movie) {
             _countryName = country;
-
             _country = XtCountry.FromIsoCode(_countryName);
+
+            OriginalValues = new Dictionary<string, object> {
+                {"Rating", Entity.Certifications[_countryName]},
+                {"Country", country}
+            };
         }
 
         public long Id { get { return 0; } }
@@ -21,8 +23,11 @@ namespace Frost.Providers.Xtreamer.Proxies {
         /// <summary>Gets or sets the rating in the specified county.</summary>
         /// <value>The rating in the specified country.</value>
         public string Rating {
-            get { return _movie.Certifications[_countryName]; }
-            set { _movie.Certifications[_countryName] = value; }
+            get { return Entity.Certifications[_countryName]; }
+            set {
+                TrackChanges(value);
+                Entity.Certifications[_countryName] = value;
+            }
         }
 
         /// <summary>Gets or sets the coutry this certification applies to.</summary>
@@ -34,10 +39,11 @@ namespace Frost.Providers.Xtreamer.Proxies {
                 if (value != null) {
                     iso = value.ISO3166.Alpha3;
                 }
+                TrackChanges(iso);
 
-                string rating = _movie.Certifications[_countryName];
-                _movie.Certifications.Remove(_countryName);
-                _movie.Certifications.Add(iso, rating);
+                string rating = Entity.Certifications[_countryName];
+                Entity.Certifications.Remove(_countryName);
+                Entity.Certifications.Add(iso, rating);
                 _countryName = iso;
 
                 _country = value;
@@ -45,7 +51,7 @@ namespace Frost.Providers.Xtreamer.Proxies {
         }
 
         public bool this[string propertyName] {
-            get { throw new NotImplementedException(); }
+            get { return propertyName == "Rating" || propertyName == "Country"; }
         }
     }
 }

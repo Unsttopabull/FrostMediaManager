@@ -43,12 +43,12 @@
             <TextBox x:Name="NameBox" x:FieldModifier="private" Grid.Row="1" Text="{Binding SelectedPerson.Name, UpdateSourceTrigger=PropertyChanged}"/>
 
             <Label Grid.Row="2" Margin="-5,0,0,0" Content="{l:T ImdbID, Postfix=:}"/>
-            <TextBox Grid.Row="3" Text="{Binding SelectedPerson.ImdbID}"/>
+            <TextBox Grid.Row="3" Text="{Binding SelectedPerson.ImdbID}" IsEnabled="{Binding SelectedPerson[ImdbID]}"/>
 
             <Label Grid.Row="4" Margin="-5,0,0,0" Content="{l:T Thumb, Postfix=:}"/>
-            <TextBox Grid.Row="5" Text="{Binding ThumbnailPath, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Row="5" Text="{Binding ThumbnailPath, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SelectedPerson[Thumb], FallbackValue=False}"/>
             <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="5" Margin="0,0,5,0" ToolTip="Open file search dialog">
-                <Button Height="16" Style="{StaticResource TransparentBorderlessButton}" Command="{Binding ThumbnailSearchCommand}">
+                <Button Height="16" Style="{StaticResource TransparentBorderlessButton}" Command="{Binding ThumbnailSearchCommand}" IsEnabled="{Binding SelectedPerson[Thumb]}">
                     <Image Source="../Images/folder.ico"/>
                 </Button>
             </StackPanel>

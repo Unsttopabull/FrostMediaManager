@@ -15,6 +15,7 @@ namespace Frost.PHPtoNET {
         private bool _static;
         private const BindingFlags PUBLIC_FLAGS = BindingFlags.GetField | BindingFlags.GetProperty | BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy;
         private BindingFlags _usedFlags;
+        private static readonly Type PHPNameType = typeof(PHPNameAttribute);
 
         /// <summary>Initializes a new instance of the <see cref="PHPSerializer"/> class.</summary>
         public PHPSerializer() {
@@ -78,7 +79,14 @@ namespace Frost.PHPtoNET {
                                            .ToArray();
 
             StringBuilder sb = new StringBuilder();
-            sb.Append(string.Format("O:{0}:\"{1}\":{2}:{{", Encoding.UTF8.GetByteCount(type.Name), type.Name, memberInfos.Length));
+
+            string typeName = type.Name;
+            PHPNameAttribute[] customAttributes = (PHPNameAttribute[]) type.GetCustomAttributes(PHPNameType, false);
+            if (customAttributes.Length == 1) {
+                typeName = customAttributes[0].PHPName;
+            }
+
+            sb.Append(string.Format("O:{0}:\"{1}\":{2}:{{", Encoding.UTF8.GetByteCount(typeName), typeName, memberInfos.Length));
 
             foreach (MemberInfo member in memberInfos) {
                 sb.Append(SerializeMember(obj, member));
@@ -93,8 +101,8 @@ namespace Frost.PHPtoNET {
             object value = memberInfo.MemberType == MemberTypes.Property ? ((PropertyInfo) memberInfo).GetValue(obj, new object[] { }) : ((FieldInfo) memberInfo).GetValue(obj);
 
             //bool debug = memberType.Name != "String" && !memberType.IsPrimitive && !memberType.IsValueType && !memberType.IsArray;
-            string memberName = memberInfo.IsDefined(typeof(PHPNameAttribute), false)
-                                    ? ((PHPNameAttribute) memberInfo.GetCustomAttributes(typeof(PHPNameAttribute), false)[0]).PHPName
+            string memberName = memberInfo.IsDefined(PHPNameType, false)
+                                    ? ((PHPNameAttribute) memberInfo.GetCustomAttributes(PHPNameType, false)[0]).PHPName
                                     : memberInfo.Name;
 
             string prefix = string.Format("s:{0}:\"{1}\";", Encoding.UTF8.GetByteCount(memberName), memberName);

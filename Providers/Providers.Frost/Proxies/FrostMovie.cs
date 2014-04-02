@@ -15,6 +15,8 @@ namespace Frost.Providers.Frost.Proxies {
         public FrostMovie(Movie movie, FrostMoviesDataDataService service) : base(movie, service) {
         }
 
+        #region Columns
+
         public long Id {
             get { return Entity.Id; }
         }
@@ -285,16 +287,24 @@ namespace Frost.Providers.Frost.Proxies {
             set { Entity.VideoCodec = value; }
         }
 
+        #endregion
+
+        #region 1 to 1
+
         /// <summary>Gets or sets the set this movie is a part of.</summary>
         /// <value>The set this movie is a part of.</value>
         public IMovieSet Set {
             get { return Entity.Set; }
             set {
                 Entity.Set = value != null
-                    ? Service.FindHasName<IMovieSet, Set>(value, true)
-                    : null;
+                                 ? Service.FindHasName<IMovieSet, Set>(value, true)
+                                 : null;
             }
         }
+
+        #endregion
+
+        #region 1 to M
 
         /// <summary>Gets or sets the movie subtitles.</summary>
         /// <value>The movie subtitles.</value>
@@ -388,6 +398,10 @@ namespace Frost.Providers.Frost.Proxies {
             get { return Entity.PromotionalVideos; }
         }
 
+        #endregion
+
+        #region Utility
+
         /// <summary>Gets a value indicating whether this movie has a trailer video availale.</summary>
         /// <value>Is <c>true</c> if the movie has a trailer video available; otherwise, <c>false</c>.</value>
         public bool HasTrailer {
@@ -410,15 +424,14 @@ namespace Frost.Providers.Frost.Proxies {
             get { return Entity.HasNfo; }
         }
 
+        #endregion
+
         #region Add/Remove methods
 
         #region Actors
 
         public IActor AddActor(IActor actor) {
-            Person p = Service.FindPerson(actor, false);
-            if (p == null) {
-                return null;
-            }
+            Person p = Service.FindPerson(actor, true);
 
             //if the movie does not yet contain this actor add it to the collection
             Actor act = Entity.Actors.FirstOrDefault(a => a.Person == p && a.Character == actor.Character);
@@ -429,13 +442,13 @@ namespace Frost.Providers.Frost.Proxies {
             return act;
         }
 
-        public void RemoveActor(IActor actor) {
+        public bool RemoveActor(IActor actor) {
             Person p = Service.FindPerson(actor, false);
             if (p == null) {
-                return;
+                return false;
             }
 
-            Entity.Actors.RemoveWhere(a => a.Person == p && a.Character == actor.Character);
+            return Entity.Actors.RemoveWhere(a => a.Person == p && a.Character == actor.Character) > 0;
         }
 
         #endregion
@@ -447,9 +460,9 @@ namespace Frost.Providers.Frost.Proxies {
             return p;
         }
 
-        public void RemoveDirector(IPerson director) {
+        public bool RemoveDirector(IPerson director) {
             Person p = Service.FindPerson(director, false);
-            Entity.Directors.Remove(p);
+            return Entity.Directors.Remove(p);
         }
 
         #endregion
@@ -463,11 +476,12 @@ namespace Frost.Providers.Frost.Proxies {
             return s;
         }
 
-        public void RemoveSpecial(ISpecial special) {
+        public bool RemoveSpecial(ISpecial special) {
             Special s = Service.FindHasName<ISpecial, Special>(special, true);
             if (s != null) {
-                Entity.Specials.Remove(s);
+                return Entity.Specials.Remove(s);
             }
+            return false;
         }
 
         #endregion
@@ -475,16 +489,17 @@ namespace Frost.Providers.Frost.Proxies {
         #region Genres
 
         public IGenre AddGenre(IGenre genre) {
-            Genre g = Service.FindHasName<IGenre, Genre>(genre, false);
+            Genre g = Service.FindHasName<IGenre, Genre>(genre, true);
+
             Entity.Genres.Add(g);
             return g;
         }
 
-        public void RemoveGenre(IGenre genre) {
-            Genre g = Service.FindHasName<IGenre, Genre>(genre, true);
-            if (g != null) {
-                Entity.Genres.Remove(g);
+        public bool RemoveGenre(IGenre genre) {
+            if (genre != null && !string.IsNullOrEmpty(genre.Name)) {
+                return Entity.Genres.RemoveWhere(g => g.Name == genre.Name) > 0;
             }
+            return false;
         }
 
         #endregion
@@ -497,13 +512,15 @@ namespace Frost.Providers.Frost.Proxies {
             return p;
         }
 
-        public void RemovePlot(IPlot plot) {
+        public bool RemovePlot(IPlot plot) {
             Plot p = Service.FindOrCreatePlot(plot, false);
 
             if (p != null) {
-                Entity.Plots.Remove(p);
-                Service.SetAsDeleted(p);
+                bool removed = Entity.Plots.Remove(p);
+                Service.MarkAsDeleted(p);
+                return removed;
             }
+            return false;
         }
 
         #endregion
@@ -516,9 +533,9 @@ namespace Frost.Providers.Frost.Proxies {
             return s;
         }
 
-        public void RemoveStudio(IStudio studio) {
+        public bool RemoveStudio(IStudio studio) {
             Studio s = Service.FindStudio(studio, false);
-            Entity.Studios.Remove(s);
+            return Entity.Studios.Remove(s);
         }
 
         #endregion
@@ -532,9 +549,9 @@ namespace Frost.Providers.Frost.Proxies {
             return c;
         }
 
-        public void RemoveCountry(ICountry country) {
+        public bool RemoveCountry(ICountry country) {
             Country c = Service.FindCountry(country, false);
-            Entity.Countries.Remove(c);
+            return Entity.Countries.Remove(c);
         }
 
         #endregion
@@ -548,9 +565,9 @@ namespace Frost.Providers.Frost.Proxies {
             return new FrostSubtitle(sub, Service);
         }
 
-        public void RemoveSubtitle(ISubtitle subtitle) {
+        public bool RemoveSubtitle(ISubtitle subtitle) {
             Subtitle sub = Service.FindOrCreateSubtitle(subtitle, false);
-            Entity.Subtitles.Remove(sub);
+            return Entity.Subtitles.Remove(sub);
         }
 
         #endregion

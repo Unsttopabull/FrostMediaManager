@@ -1,5 +1,4 @@
-﻿using Frost.Common.Models;
-using Frost.Common.Models.Provider;
+﻿using Frost.Common.Models.Provider;
 
 namespace RibbonUI.Messages.Plot {
     public class RemovePlotMessage {

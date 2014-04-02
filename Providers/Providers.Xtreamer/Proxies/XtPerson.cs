@@ -1,34 +1,31 @@
-﻿using Frost.Common.Models;
+﻿using System;
+using System.Collections.Generic;
 using Frost.Common.Models.Provider;
 using Frost.Providers.Xtreamer.PHP;
+using Frost.Providers.Xtreamer.Proxies.ChangeTrackers;
 
 namespace Frost.Providers.Xtreamer.Proxies {
 
-    public class XtPerson : IPerson {
-        protected readonly XjbPhpPerson Person;
-        private int _id = -1;
+    public class XtPerson : ChangeTrackingProxy<XjbPhpPerson>, IPerson, IEquatable<XtPerson> {
 
-
-        public XtPerson(XjbPhpPerson person) {
-            Person = person;
+        public XtPerson(XjbPhpPerson person) : base(person) {
+            OriginalValues = new Dictionary<string, object> {
+                {"Name", Entity.Name}
+            };
         }
 
         public long Id {
-            get {
-                if (_id == -1) {
-                    return int.TryParse(Person.Id, out _id)
-                        ? _id
-                        : 0;
-                }
-                return _id;
-            }
+            get { return Entity.Id; }
         }
 
         /// <summary>Gets or sets the full name of the person.</summary>
         /// <value>The full name of the person.</value>
         public string Name {
-            get { return Person.Name; }
-            set { Person.Name = value; } 
+            get { return Entity.Name; }
+            set {
+                Entity.Name = value;
+                TrackChanges(value);
+            } 
         }
 
         /// <summary>Gets or sets the persons thumbnail image.</summary>
@@ -56,5 +53,24 @@ namespace Frost.Providers.Xtreamer.Proxies {
                 }
             }
         }
+
+        #region Equality comparers
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(XtPerson other) {
+            if (ReferenceEquals(null, other)) {
+                return false;
+            }
+
+            if (Entity == null && other.Entity == null) {
+                return true;
+            }
+
+            return Entity != null && Entity.Equals(other.Entity);
+        }
+
+        #endregion
     }
 }

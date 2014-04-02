@@ -13,10 +13,6 @@ namespace Frost.Providers.Frost.Proxies {
             get { return Entity.Id; }
         }
 
-        public bool this[string propertyName] {
-            get { throw new System.NotImplementedException(); }
-        }
-
         public long? PodnapisiId {
             get { return Entity.PodnapisiId; }
             set { Entity.PodnapisiId = value; }
@@ -60,6 +56,8 @@ namespace Frost.Providers.Frost.Proxies {
             set { Entity.ForHearingImpaired = value; }
         }
 
+        #region M to 1
+
         public IFile File {
             get { return Entity.File; }
         }
@@ -67,6 +65,28 @@ namespace Frost.Providers.Frost.Proxies {
         public ILanguage Language {
             get { return Entity.Language; }
             set { Entity.Language = Service.FindLanguage(value, true); }
+        }
+
+        #endregion
+
+        public bool this[string propertyName] {
+            get {
+                switch (propertyName) {
+                    case "Id":
+                    case "PodnapisiId":
+                    case "OpenSubtitlesId":
+                    case "MD5":
+                    case "Format":
+                    case "Encoding":
+                    case "EmbededInVideo":
+                    case "ForHearingImpaired":
+                    case "Language":
+                    case "File":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
         }
     }
 }

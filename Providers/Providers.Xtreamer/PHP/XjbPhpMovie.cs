@@ -24,7 +24,7 @@ namespace Frost.Providers.Xtreamer.PHP {
         /// <summary>Languages available</summary>
         /// <example>\eg{ <c>GERMAN/DE</c> <c>ENGLISH/EN</c>}</example>
         [PHPName("languageArr")]
-        public string[] AvailableLanguage;
+        public List<string> AvailableLanguage;
 
         /// <summary>Defines the unix timestamp of last scraper run on this object</summary>
         /// <remarks>array( 'Scraper_Name' => 'unixtimestamp')</remarks>
@@ -137,7 +137,7 @@ namespace Frost.Providers.Xtreamer.PHP {
 
         /// <example>\eg{ <code>array ( 'de' => '/movies/Kill Bill/Kill Bill.srt')</code>}</example>
         [PHPName("pathSubtitlesArr")]
-        public string[] Subtitles;
+        public List<string> Subtitles;
 
         #endregion
 
@@ -183,19 +183,19 @@ namespace Frost.Providers.Xtreamer.PHP {
         ///<remarks>In ISO 3166-1</remarks>
         /// <example>\eg{ <code>array('de', 'us', 'uk')</code>}</example>
         [PHPName("countryArr")]
-        public string[] Countries;
+        public List<string> Countries;
 
         /// <example>\eg{ <code>array( Coretis_VO_Genre object1, Coretis_VO_Genre object2 )</code>}</example>
         [PHPName("genreArr")]
-        public XjbPhpGenre[] Genres;
+        public List<XjbPhpGenre> Genres;
 
         /// <example>\eg{ <code>array( Coretis_VO_Person object1, Coretis_VO_Person object2 )</code>}</example>
         [PHPName("personArr")]
-        public XjbPhpPerson[] Cast;
+        public List<XjbPhpPerson> Cast;
 
         /// <example>\eg{ <code>array( Coretis_VO_Picture object1, Coretis_VO_Picture object2 )</code>}</example>
         [PHPName("pictureArr")]
-        public XjbPhpPicture[] Art;
+        public List<XjbPhpPicture> Art;
 
         /// <summary>full description</summary>
         [PHPName("plotFull")]
@@ -217,7 +217,7 @@ namespace Frost.Providers.Xtreamer.PHP {
 
         /// <summary>alternate movie titles</summary>
         [PHPName("titleAlternateArr")]
-        public string[] AlternateTitles;
+        public List<string> AlternateTitles;
 
         /// <summary>the original title of the movie</summary>
         [PHPName("titleOrg")]

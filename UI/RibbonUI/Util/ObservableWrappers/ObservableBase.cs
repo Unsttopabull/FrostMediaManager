@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 using RibbonUI.Annotations;
 
@@ -18,20 +17,24 @@ namespace RibbonUI.Util.ObservableWrappers {
             get { return _observedEntity[propertyName]; }
         }
 
-        public bool IsImplemented([CallerMemberName] string propertyName = null) {
-            return _observedEntity[propertyName];
-        }
-
         public T ObservedEntity {
             get { return _observedEntity; }
         }
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null) {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) {
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString() {
+            return _observedEntity != null
+                ? _observedEntity.ToString()
+                : base.ToString();
         }
     }
 

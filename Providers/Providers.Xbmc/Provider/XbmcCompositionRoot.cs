@@ -2,8 +2,8 @@
 using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 using Frost.Providers.Xbmc.DB;
-using Frost.Providers.Xbmc.DB.Actor;
 using Frost.Providers.Xbmc.DB.Art;
+using Frost.Providers.Xbmc.DB.People;
 using Frost.Providers.Xbmc.DB.Proxy;
 using Frost.Providers.Xbmc.DB.StreamDetails;
 using Frost.Providers.Xbmc.Provider;

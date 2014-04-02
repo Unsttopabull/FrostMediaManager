@@ -91,6 +91,7 @@
     <Compile Include="DB\Files\File.cs" />
     <Compile Include="DB\Files\Subtitle.cs" />
     <Compile Include="DB\Files\Video.cs" />
+    <Compile Include="DB\FrostDbContainer.Views.cs" />
     <Compile Include="DB\Genre.cs" />
     <Compile Include="DB\Language.cs" />
     <Compile Include="DB\Movie.Configuration.cs">
@@ -156,10 +157,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Detection\FeatureDetector\FeatureDetector.csproj">
-      <Project>{8542c013-aa9a-4852-98fa-6f05cc037a91}</Project>
-      <Name>FeatureDetector</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Common\Common.csproj">
       <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>

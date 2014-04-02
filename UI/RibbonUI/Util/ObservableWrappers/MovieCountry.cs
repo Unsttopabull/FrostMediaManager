@@ -1,10 +1,15 @@
-﻿using Frost.Common.Models;
+﻿using System;
+using System.Collections.Generic;
+using Frost.Common.Comparers;
 using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
 
 namespace RibbonUI.Util.ObservableWrappers {
-    public class MovieCountry : MovieItemBase<ICountry>{
+    public class MovieCountry : MovieItemBase<ICountry>, IEquatable<MovieCountry> {
+        private readonly IEqualityComparer<ICountry> _comparer;
+
         public MovieCountry(ICountry country) : base(country) {
+            _comparer = new CountryEqualityComparer();
         }
 
         /// <summary>Gets or sets the country name.</summary>
@@ -35,6 +40,14 @@ namespace RibbonUI.Util.ObservableWrappers {
 
                 return GetImageSourceFromPath("Images/Countries/" + ISO3166.Alpha3 + ".png");
             }
+        }
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(MovieCountry other) {
+            return !ReferenceEquals(null, other) &&
+                   _comparer.Equals(_observedEntity, other.ObservedEntity);
         }
     }
 }

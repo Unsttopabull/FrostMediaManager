@@ -1,6 +1,5 @@
 ﻿using System;
 using Frost.Common;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 using Frost.DetectFeatures;
 
@@ -17,6 +16,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             set {
                 _observedEntity.Language = value;
                 OnPropertyChanged();
+                OnPropertyChanged("LanguageImage");
             }
         }
 
@@ -176,10 +176,6 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <value>The file this audio is contained in.</value>
         public IFile File {
             get { return _observedEntity.File; }
-            //set {
-            //    _audio.File = value;
-            //    OnPropertyChanged();
-            //}
         }
 
         #region Images

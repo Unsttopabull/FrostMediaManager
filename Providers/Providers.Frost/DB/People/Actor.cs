@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.ModelConfiguration;
 using Frost.Common.Models.Provider;
 
 namespace Frost.Providers.Frost.DB.People {
@@ -110,5 +111,21 @@ namespace Frost.Providers.Frost.DB.People {
 
         #endregion
 
+        internal class Configuration : EntityTypeConfiguration<Actor> {
+            public Configuration() {
+                ToTable("Actors");
+                HasKey(a => a.Id);
+
+                //1:M with Person
+                HasRequired(a => a.Person)
+                    .WithMany(p => p.MoviesAsActor)
+                    .HasForeignKey(a => a.PersonId);
+            
+                //1:M with Movie
+                HasRequired(a => a.Movie)
+                    .WithMany(m => m.Actors)
+                    .HasForeignKey(a => a.MovieId);
+            }
+        }
     }
 }

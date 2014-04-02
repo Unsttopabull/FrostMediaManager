@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 using Frost.Providers.Xbmc.DB;
-using Frost.Providers.Xbmc.DB.Actor;
+using Frost.Providers.Xbmc.DB.People;
 using Frost.Providers.Xbmc.DB.StreamDetails;
 using Frost.Providers.Xbmc.Proxies;
 
@@ -281,13 +282,13 @@ namespace Frost.Providers.Xbmc.Provider {
             }
             return hn;            
         }
-
+        
         public void SaveDetected(IEnumerable<MovieInfo> movieInfos) {
             
         }
 
         public bool HasUnsavedChanges() {
-            return true;
+            return _xbmc.ChangeTracker.HasChanges();
         }
 
         public void SaveChanges() {

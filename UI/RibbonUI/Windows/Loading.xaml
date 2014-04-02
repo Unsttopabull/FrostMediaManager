@@ -4,8 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" x:Class="RibbonUI.Windows.Loading" 
         Title="Loading" x:Name="LoadingWindow"
-        WindowStartupLocation="CenterScreen"
-        Topmost="True" WindowStyle="None" Icon="..\logo3.ico"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" Icon="..\logo3.ico"
         AllowsTransparency="True" Height="580" Width="500">
     <Grid Background="Transparent">
         <Grid.RowDefinitions>

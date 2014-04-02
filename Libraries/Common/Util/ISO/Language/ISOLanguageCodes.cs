@@ -536,6 +536,10 @@ namespace Frost.Common.Util.ISO {
         /// <param name="name">The english name.</param>
         /// <returns>An instance of <see cref="ISOCode"/> if found; otherwise <c>null</c>.</returns>
         public override ISOLanguageCode GetByEnglishName(string name) {
+            if (string.IsNullOrEmpty(name)) {
+                return null;
+            }
+
             string langCode;
             return LanguageNames.TryGetValue(name, out langCode) ? Codes[langCode] : null;
         }

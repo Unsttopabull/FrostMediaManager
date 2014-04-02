@@ -4,17 +4,13 @@ using Frost.Providers.Frost.DB.Files;
 using Frost.Providers.Frost.Provider;
 
 namespace Frost.Providers.Frost.Proxies {
-    class FrostAudio : ProxyBase<Audio>, IAudio {
+    public class FrostAudio : ProxyBase<Audio>, IAudio {
 
         public FrostAudio(Audio audio, FrostMoviesDataDataService service) : base(audio, service) {
         }
 
         public long Id {
             get { return Entity.Id; }
-        }
-
-        public bool this[string propertyName] {
-            get { throw new System.NotImplementedException(); }
         }
 
         /// <summary>Gets or sets the source of the audio</summary>
@@ -115,6 +111,8 @@ namespace Frost.Providers.Frost.Proxies {
             set { Entity.Duration = value; }
         }
 
+        #region M to 1
+
         /// <summary>Gets or sets the file this audio is contained in.</summary>
         /// <value>The file this audio is contained in.</value>
         public IFile File {
@@ -124,6 +122,34 @@ namespace Frost.Providers.Frost.Proxies {
         public ILanguage Language {
             get { return Entity.Language; }
             set { Entity.Language = Service.FindLanguage(value, true); }
+        }
+
+        #endregion
+
+        public bool this[string propertyName] {
+            get {
+                switch (propertyName) {
+                    case "Id":
+                    case "Source":
+                    case "Type":
+                    case "ChannelSetup":
+                    case "NumberOfChannels":
+                    case "ChannelPositions":
+                    case "Codec":
+                    case "CodecId":
+                    case "BitRate":
+                    case "BitRateMode":
+                    case "SamplingRate":
+                    case "BitDepth":
+                    case "CompressionMode":
+                    case "Duration":
+                    case "File":
+                    case "Language":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
         }
     }
 }

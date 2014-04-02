@@ -45,7 +45,7 @@ namespace Frost.Providers.Frost.DB.People {
         internal Person(IPerson person) {
             Name = person.Name;
             Thumb = person.Thumb;
-            ImdbID = person.Name;
+            ImdbID = person.ImdbID;
         }
 
         #region Properties/Columns
@@ -85,6 +85,10 @@ namespace Frost.Providers.Frost.DB.People {
         /// <value>The movies where this person was a writer.</value>
         [InverseProperty("Writers")]
         public virtual HashSet<Movie> MoviesAsWriter { get; set; }
+
+        /// <summary>Gets or sets movies where this person was a writer.</summary>
+        /// <value>The movies where this person was a writer.</value>
+        public virtual HashSet<Actor> MoviesAsActor { get; set; }
 
         #region IPerson
 

@@ -1,5 +1,5 @@
 ﻿using Frost.Common;
-using Frost.Common.Models;
+using Frost.Common.Models.Provider;
 using Frost.Providers.Xtreamer.Provider;
 using Frost.Providers.Xtreamer.Proxies;
 using LightInject;
@@ -24,7 +24,7 @@ namespace Frost.Providers.Xtreamer.Provider {
             //serviceRegistry.Register<ICertification>(f => new Certification(), SYSTEM_NAME, new PerRequestLifeTime());
             //serviceRegistry.Register<ICountry>(f => new Country(), SYSTEM_NAME, new PerRequestLifeTime());
             //serviceRegistry.Register<IFile>(f => new File(), SYSTEM_NAME, new PerRequestLifeTime());
-            //serviceRegistry.Register<IGenre>(f => new Genre(), SYSTEM_NAME, new PerRequestLifeTime());
+            serviceRegistry.Register<IGenre, XtGenre>(SYSTEM_NAME, new PerRequestLifeTime());
             //serviceRegistry.Register<ILanguage>(f => new Language(), SYSTEM_NAME, new PerRequestLifeTime());
             //serviceRegistry.Register<IMovie>(f => new Movie(), SYSTEM_NAME, new PerRequestLifeTime());
             //serviceRegistry.Register<IMovieSet>(f => new Set(), SYSTEM_NAME, new PerRequestLifeTime());

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 
 namespace Frost.Providers.Xtreamer.DB {

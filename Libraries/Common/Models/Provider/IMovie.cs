@@ -5,6 +5,8 @@ namespace Frost.Common.Models.Provider {
 
     public interface IMovie : IMovieEntity {
 
+        #region Columns
+
         /// <summary>Gets or sets the title of the movie in the local language.</summary>
         /// <value>The title of the movie in the local language.</value>
         /// <example>\eg{ ''<c>Downfall</c>''}</example>
@@ -126,9 +128,17 @@ namespace Frost.Common.Models.Provider {
         /// <value>The video codec used most frequently in associated audios</value>
         string VideoCodec { get; set; }
 
+        #endregion
+
+        #region M to 1
+
         /// <summary>Gets or sets the set this movie is a part of.</summary>
         /// <value>The set this movie is a part of.</value>
-        IMovieSet Set { get; set;  }
+        IMovieSet Set { get; set; }
+
+        #endregion
+
+        #region 1 to M
 
         /// <summary>Gets or sets the movie subtitles.</summary>
         /// <value>The movie subtitles.</value>
@@ -190,13 +200,17 @@ namespace Frost.Common.Models.Provider {
 
         IEnumerable<IPromotionalVideo> PromotionalVideos { get; }
 
+        #endregion
+
+        #region Utility
+
         /// <summary>Gets a value indicating whether this movie has a trailer video availale.</summary>
         /// <value>Is <c>true</c> if the movie has a trailer video available; otherwise, <c>false</c>.</value>
-        bool HasTrailer  { get; }
+        bool HasTrailer { get; }
 
         /// <summary>Gets a value indicating whether this movie has available subtitles.</summary>
         /// <value>Is <c>true</c> if the movie has available subtitles; otherwise, <c>false</c>.</value>
-        bool HasSubtitles  { get; }
+        bool HasSubtitles { get; }
 
         /// <summary>Gets a value indicating whether this movie has available fanart.</summary>
         /// <value>Is <c>true</c> if the movie has available fanart; otherwise, <c>false</c>.</value
@@ -204,22 +218,124 @@ namespace Frost.Common.Models.Provider {
 
         bool HasNfo { get; }
 
+        #endregion
+
+        #region Add / Remove
+
+        /// <summary>Adds the specified actor to the provider data store.</summary>
+        /// <param name="actor">The actor to add.</param>
+        /// <returns>Returns the added actor. If the <paramref name="actor"/> is a duplicate it returns the existing instance in the provider store. Otherwise returns <c>null</c>.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding actors or the actor does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding actors.</exception>
         IActor AddActor(IActor actor);
-        void RemoveActor(IActor actor);
+
+        /// <summary>Removes the specified actor from the provider data store.</summary>
+        /// <param name="actor">The actor to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing actors in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing actors.</exception>
+        bool RemoveActor(IActor actor);
+
+        /// <summary>Adds the specified director to the provider data store.</summary>
+        /// <param name="director">The director to add.</param>
+        /// <returns>Returns the added director. If the <paramref name="director"/> is a duplicate it returns the existing instance in the provider store. Otherwise returns <c>null</c>.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding directors or the director does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding directors.</exception>
         IPerson AddDirector(IPerson director);
-        void RemoveDirector(IPerson director);
+
+        /// <summary>Removes the specified director from the provider data store.</summary>
+        /// <param name="director">The director to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing directors in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing directors.</exception>
+        bool RemoveDirector(IPerson director);
+
+        /// <summary>Adds the specified special to the provider data store.</summary>
+        /// <param name="special">The special to add.</param>
+        /// <returns>Returns the added director. If the <paramref name="special"/> is a duplicate it returns the existing instance in the provider store. Otherwise returns <c>null</c>.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding specials or the special does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding specials.</exception>
         ISpecial AddSpecial(ISpecial special);
-        void RemoveSpecial(ISpecial special);
+
+        /// <summary>Removes the specified special from the provider data store.</summary>
+        /// <param name="special">The special to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing specials in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing specials.</exception>
+        bool RemoveSpecial(ISpecial special);
+
+        /// <summary>Adds the specified genre to the provider data store.</summary>
+        /// <param name="genre">The genre to add.</param>
+        /// <returns>Returns the added genre. If the <paramref name="genre"/> is a duplicate it returns the existing instance in the provider store. Otherwise returns <c>null</c>.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding genres or the genre does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding genres.</exception>
         IGenre AddGenre(IGenre genre);
-        void RemoveGenre(IGenre genre);
+
+        /// <summary>Removes the specified genre from the provider data store.</summary>
+        /// <param name="genre">The genre to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing genres in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing genres.</exception>
+        bool RemoveGenre(IGenre genre);
+
+        /// <summary>Adds the specified plot to the provider data store.</summary>
+        /// <param name="plot">The plot to add.</param>
+        /// <returns>Returns the added plot. If the <paramref name="plot"/> is a duplicate it returns the existing instance in the provider store. Otherwise returns <c>null</c></returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding plots or the plot does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding plots.</exception>
         IPlot AddPlot(IPlot plot);
-        void RemovePlot(IPlot plot);
+
+        /// <summary>Removes the specified genre from the provider data store.</summary>
+        /// <param name="plot">The plot to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing plots in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing plots.</exception>
+        bool RemovePlot(IPlot plot);
+
+        /// <summary>Adds the specified studio to the provider data store.</summary>
+        /// <param name="studio">The studio to add.</param>
+        /// <returns>Returns the added studio. If the <paramref name="studio"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding studios or the studio does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding studios.</exception>
         IStudio AddStudio(IStudio studio);
-        void RemoveStudio(IStudio studio);
+
+        /// <summary>Removes the specified genre from the provider data store.</summary>
+        /// <param name="studio">The studio to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing studio in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing studio.</exception>
+        bool RemoveStudio(IStudio studio);
+
+        /// <summary>Adds the specified country to the provider data store.</summary>
+        /// <param name="country">The country to add.</param>
+        /// <returns>Returns the added country. If the <paramref name="country"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding countries or the country does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding countries.</exception>
         ICountry AddCountry(ICountry country);
-        void RemoveCountry(ICountry country);
+
+        /// <summary>Removes the specified genre from the provider data store.</summary>
+        /// <param name="country">The country to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing countries in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing countries.</exception>
+        bool RemoveCountry(ICountry country);
+
+        /// <summary>Adds the specified subtitle to the provider data store.</summary>
+        /// <param name="subtitle">The subtitle to add.</param>
+        /// <returns>Returns the added subtitle. If the <paramref name="subtitle"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding subtitles or the subtitle does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding subtitles.</exception>
         ISubtitle AddSubtitle(ISubtitle subtitle);
-        void RemoveSubtitle(ISubtitle subtitle);
+
+        /// <summary>Removes the specified genre from the provider data store.</summary>
+        /// <param name="subtitle">The country to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing countries in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing countries.</exception>
+        bool RemoveSubtitle(ISubtitle subtitle);
+
+        #endregion
+
     }
 
 }

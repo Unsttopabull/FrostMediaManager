@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Documents;
 using Frost.Common;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
-using RibbonUI.Design.Classes;
 using RibbonUI.Design.Models;
 
 namespace RibbonUI.Design.Fakes {
@@ -533,7 +530,7 @@ namespace RibbonUI.Design.Fakes {
             throw new NotImplementedException();
         }
 
-        public void RemoveActor(IActor actor) {
+        public bool RemoveActor(IActor actor) {
             throw new NotImplementedException();
         }
 
@@ -541,7 +538,7 @@ namespace RibbonUI.Design.Fakes {
             throw new NotImplementedException();
         }
 
-        public void RemoveDirector(IPerson director) {
+        public bool RemoveDirector(IPerson director) {
             throw new NotImplementedException();
         }
 
@@ -549,7 +546,7 @@ namespace RibbonUI.Design.Fakes {
             throw new NotImplementedException();
         }
 
-        public void RemoveSpecial(ISpecial special) {
+        public bool RemoveSpecial(ISpecial special) {
             throw new NotImplementedException();
         }
 
@@ -557,7 +554,7 @@ namespace RibbonUI.Design.Fakes {
             throw new NotImplementedException();
         }
 
-        public void RemoveGenre(IGenre genre) {
+        public bool RemoveGenre(IGenre genre) {
             throw new NotImplementedException();
         }
 
@@ -565,7 +562,7 @@ namespace RibbonUI.Design.Fakes {
             throw new NotImplementedException();
         }
 
-        public void RemovePlot(IPlot plot) {
+        public bool RemovePlot(IPlot plot) {
             throw new NotImplementedException();
         }
 
@@ -573,7 +570,7 @@ namespace RibbonUI.Design.Fakes {
             throw new NotImplementedException();
         }
 
-        public void RemoveStudio(IStudio studio) {
+        public bool RemoveStudio(IStudio studio) {
             throw new NotImplementedException();
         }
 
@@ -581,7 +578,7 @@ namespace RibbonUI.Design.Fakes {
             throw new NotImplementedException();
         }
 
-        public void RemoveCountry(ICountry country) {
+        public bool RemoveCountry(ICountry country) {
             throw new NotImplementedException();
         }
 
@@ -589,7 +586,7 @@ namespace RibbonUI.Design.Fakes {
             throw new NotImplementedException();
         }
 
-        public void RemoveSubtitle(ISubtitle subtitle) {
+        public bool RemoveSubtitle(ISubtitle subtitle) {
             throw new NotImplementedException();
         }
 

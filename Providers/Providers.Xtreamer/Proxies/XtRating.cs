@@ -1,15 +1,19 @@
-﻿using Frost.Common.Models;
+﻿using System.Collections.Generic;
 using Frost.Common.Models.Provider;
 using Frost.Providers.Xtreamer.PHP;
+using Frost.Providers.Xtreamer.Proxies.ChangeTrackers;
 
 namespace Frost.Providers.Xtreamer.Proxies {
-    public class XtRating : IRating {
-        private readonly XjbPhpMovie _movie;
+    public class XtRating : ChangeTrackingProxy<XjbPhpMovie>, IRating {
         private string _ratingKey;
 
-        public XtRating(XjbPhpMovie movie, string ratingKey) {
-            _movie = movie;
+        public XtRating(XjbPhpMovie movie, string ratingKey) : base(movie){
             _ratingKey = ratingKey;
+
+            OriginalValues = new Dictionary<string, object> {
+                { "Critic", ratingKey },
+                { "Value", Entity.Ratings[ratingKey] }
+            };
         }
 
         public long Id { get { return 0; } }
@@ -19,19 +23,23 @@ namespace Frost.Providers.Xtreamer.Proxies {
         public string Critic {
             get { return _ratingKey; }
             set {
-                double ratingValue = _movie.Ratings[_ratingKey];
-                _movie.Ratings.Remove(_ratingKey);
+                double ratingValue = Entity.Ratings[_ratingKey];
+                Entity.Ratings.Remove(_ratingKey);
 
                 _ratingKey = value;
-                _movie.Ratings.Add(_ratingKey, ratingValue);
+                Entity.Ratings.Add(_ratingKey, ratingValue);
+                TrackChanges(value);
             }
         }
 
         /// <summary>Gets or sets the value of the rating.</summary>
         /// <value>The rating value</value>
         public double Value {
-            get { return _movie.Ratings[_ratingKey]; }
-            set { _movie.Ratings[_ratingKey] = value; }
+            get { return Entity.Ratings[_ratingKey]; }
+            set {
+                Entity.Ratings[_ratingKey] = value;
+                TrackChanges(value);
+            }
         }
 
         public bool this[string propertyName] {
