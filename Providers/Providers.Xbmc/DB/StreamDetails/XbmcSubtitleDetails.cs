@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using Frost.Common.Models.Provider;
 using Frost.Common.Util.ISO;

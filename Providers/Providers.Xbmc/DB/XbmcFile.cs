@@ -8,7 +8,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Frost.Common;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 using Frost.Providers.Xbmc.DB.StreamDetails;
 

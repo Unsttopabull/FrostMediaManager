@@ -5,9 +5,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using Frost.Common.Models.Provider;
-using Frost.Common.Properties;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
+using RibbonUI.Annotations;
 using RibbonUI.Design.Fakes;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
@@ -67,6 +67,7 @@ namespace RibbonUI.Windows {
 
                 if (_selectedAudio != null) {
                     ChannelInfoEditable = _selectedAudio["ChannelSetup"] || _selectedAudio["NumberOfChannels"];
+                    OnPropertyChanged("ChannelInfoEditable");
 
                     if (_selectedAudio.CodecId != null) {
                         Codec audioCodec = Codecs.FirstOrDefault(c => c.Id.Equals(_selectedAudio.CodecId, StringComparison.InvariantCultureIgnoreCase));

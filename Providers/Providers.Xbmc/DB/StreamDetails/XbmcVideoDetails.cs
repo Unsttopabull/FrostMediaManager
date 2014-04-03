@@ -1,7 +1,5 @@
-using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using Frost.Common;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 
 namespace Frost.Providers.Xbmc.DB.StreamDetails {

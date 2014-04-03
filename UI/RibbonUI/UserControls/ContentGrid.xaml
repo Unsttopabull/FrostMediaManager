@@ -101,7 +101,7 @@
                 <DataGridTextColumn Header="{l:T Release year}" IsReadOnly="True"
                                     Binding="{Binding ReleaseYear, TargetNullValue={}, FallbackValue={}}" />
                 <DataGridCheckBoxColumn Header="{l:T Fanart}" IsReadOnly="True" CanUserReorder="False"
-                                        Binding="{Binding HasArt, Mode=OneWay}"
+                                        Binding="{Binding HasArt, IsAsync=True, Mode=OneWay}"
                                         ElementStyle="{StaticResource ImageCheckBoxColumn}">
                     <DataGridCheckBoxColumn.HeaderTemplate>
                         <DataTemplate>
@@ -115,7 +115,7 @@
                     </DataGridCheckBoxColumn.HeaderTemplate>
                 </DataGridCheckBoxColumn>
                 <DataGridCheckBoxColumn Header="NFO" IsReadOnly="True" CanUserSort="True"
-                                        Binding="{Binding HasNfo, Mode=OneWay}"
+                                        Binding="{Binding HasNfo, IsAsync=True, Mode=OneWay}"
                                         ElementStyle="{StaticResource ImageCheckBoxColumn}">
                     <DataGridCheckBoxColumn.HeaderTemplate>
                         <DataTemplate>
@@ -129,7 +129,7 @@
                     </DataGridCheckBoxColumn.HeaderTemplate>
                 </DataGridCheckBoxColumn>
                 <DataGridCheckBoxColumn Header="Trailer" IsReadOnly="True" CanUserSort="True"
-                                        Binding="{Binding HasTrailer, Mode=OneWay}"
+                                        Binding="{Binding HasTrailer, IsAsync=True, Mode=OneWay}"
                                         ElementStyle="{StaticResource ImageCheckBoxColumn}">
                     <DataGridCheckBoxColumn.HeaderTemplate>
                         <DataTemplate>
@@ -143,7 +143,7 @@
                     </DataGridCheckBoxColumn.HeaderTemplate>
                 </DataGridCheckBoxColumn>
                 <DataGridCheckBoxColumn Header="Subtitles" IsReadOnly="True" CanUserSort="True"
-                                        Binding="{Binding HasSubtitles, Mode=OneWay}"
+                                        Binding="{Binding HasSubtitles, IsAsync=True, Mode=OneWay}"
                                         ElementStyle="{StaticResource ImageCheckBoxColumn}">
                     <DataGridCheckBoxColumn.HeaderTemplate>
                         <DataTemplate>
@@ -158,7 +158,7 @@
                 </DataGridCheckBoxColumn>
                 <DataGridCheckBoxColumn Header="Watched" CanUserSort="True"
                                         ElementStyle="{StaticResource ImageCheckBoxColumn}"
-                                        Binding="{Binding Watched}"
+                                        Binding="{Binding Watched, IsAsync=True}"
                                         EditingElementStyle="{StaticResource ImageCheckBoxColumnEdit}">
                     <DataGridCheckBoxColumn.HeaderTemplate>
                         <DataTemplate>

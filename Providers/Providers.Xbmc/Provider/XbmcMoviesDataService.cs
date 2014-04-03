@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
@@ -24,7 +23,10 @@ namespace Frost.Providers.Xbmc.Provider {
         private IEnumerable<IGenre> _genres;
 
         public XbmcMoviesDataService() {
-            _xbmc = new XbmcContainer();
+            string dbLoc = XbmcContainer.FindXbmcDB();
+            _xbmc = !string.IsNullOrEmpty(dbLoc)
+                ? new XbmcContainer(dbLoc) 
+                : new XbmcContainer();
 
             //_xbmc.Database.Log = Console.WriteLine;
         }
@@ -39,6 +41,7 @@ namespace Frost.Providers.Xbmc.Provider {
                          .Include("Genres")
                          .Include("Countries")
                          .Include("Studios")
+                         .Include("File")
                          .Load();
                     _movies = _xbmc.Movies.Local.Select(m => new XbmcMovie(m, this));
                 }

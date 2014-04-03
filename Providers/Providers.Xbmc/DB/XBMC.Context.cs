@@ -1,6 +1,10 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.SQLite;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Frost.Common.Util;
 using Frost.Providers.Xbmc.DB.Art;
 using Frost.Providers.Xbmc.DB.People;
@@ -11,6 +15,8 @@ namespace Frost.Providers.Xbmc.DB {
 
     /// <summary>Represents a context used for manipulation of the XBMC database.</summary>
     public class XbmcContainer : DbContext {
+        private const string WIN_XBMC_DB_LOC = @"XBMC\userdata\Database\";
+
         /// <summary>Initializes a new instance of the <see cref="XbmcContainer"/> class.</summary>
         public XbmcContainer() : base("name=XbmcEntities") {
         }
@@ -99,6 +105,17 @@ namespace Frost.Providers.Xbmc.DB {
             EfLogger.LogChanges(this, "xbmc.log");
 
             return base.SaveChanges();
+        }
+
+        public static string FindXbmcDB() {
+            string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string fn = Path.Combine(appData, WIN_XBMC_DB_LOC);
+
+            string[] di = Directory.GetFiles(fn);
+
+            //escapamo separatorje med mapami da regex ne pomotoma proba narobe razumeti vzorca
+            fn = fn.Replace(@"\", @"\\");
+            return di.FirstOrDefault(file => Regex.IsMatch(file, fn + @"MyVideos\d+\.db"));
         }
     }
 

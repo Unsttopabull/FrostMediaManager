@@ -586,8 +586,8 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\go-next.png" />
     <Resource Include="Images\go-previous.png" />
+    <Resource Include="Images\go-next.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\remove_disabled.png" />

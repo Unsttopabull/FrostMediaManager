@@ -1,6 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Frost.Common;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 using Frost.Common.Util.ISO;
 using Frost.Providers.Xbmc.DB.Proxy;

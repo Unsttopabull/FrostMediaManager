@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 
 namespace Frost.Providers.Xbmc.DB {
