@@ -1,10 +1,12 @@
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Frost.Common.Properties;
+using Frost.Common.Util;
 
 namespace Frost.DetectFeatures.Util {
 
-    public class CodecIdBinding : INotifyPropertyChanged {
+    public class CodecIdBinding : INotifyPropertyChanged, IEquatable<CodecIdBinding>, IKeyValue {
         private string _codecId;
         private string _mapping;
 
@@ -43,6 +45,32 @@ namespace Frost.DetectFeatures.Util {
             }
         }
 
+        #region IKeyValue
+
+        string IKeyValue.Key {
+            get { return CodecId; }
+        }
+
+        string IKeyValue.Value {
+            get { return Mapping; }
+        }
+
+        #endregion
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(CodecIdBinding other) {
+            if (ReferenceEquals(null, other)) {
+                return false;
+            }
+            if (ReferenceEquals(this, other)) {
+                return true;
+            }
+
+            return string.Equals(CodecId, other.CodecId);
+        }
+
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
             PropertyChangedEventHandler handler = PropertyChanged;
@@ -50,6 +78,7 @@ namespace Frost.DetectFeatures.Util {
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
     }
 
 }

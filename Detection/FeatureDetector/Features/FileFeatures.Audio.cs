@@ -15,7 +15,7 @@ namespace Frost.DetectFeatures {
     public partial class FileFeatures : IDisposable {
         /// <summary>The audio codec identifier mappings</summary>
         /// <example>MPA2L3 => MP3, 116 => WMA</example>
-        public static CodecIdMappingCollection AudioCodecIdMappings;
+        public static readonly CodecIdMappingCollection AudioCodecIdMappings;
 
         private void GetISOAudioInfo() {
         }

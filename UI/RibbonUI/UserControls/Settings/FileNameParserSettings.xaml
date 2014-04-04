@@ -74,7 +74,7 @@
             <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected known segment}" Command="{Binding RemoveKnownSegmentCommand}" CommandParameter="{Binding SelectedItem, ElementName=KnownSegments}"/>
         </DockPanel>
         <DataGrid x:Name="KnownSegments" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" MinHeight="100"
-                  ItemsSource="{x:Static fileName:FileNameParser.KnownSegments}" CanUserResizeRows="False"
+                  ItemsSource="{Binding KnownSegments}" CanUserResizeRows="False"
                   AutoGenerateColumns="False" CellStyle="{StaticResource NoBorderCell}" GridLinesVisibility="None"
                   SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="0" CanUserAddRows="False">
             <DataGrid.Columns>
@@ -113,20 +113,20 @@
             <Label Content="{l:T Excluded segments, Postfix=:}"/>
             <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove segment from exclusion}" Command="{Binding RemoveExcludedSegmentCommand}" CommandParameter="{Binding SelectedItem, ElementName=ExcludedSegmentsList}"/>
         </DockPanel>
-        <ListBox x:Name="ExcludedSegmentsList" Grid.Row="4" Grid.Column="0" MinHeight="100" ItemsSource="{x:Static fileName:FileNameParser.ExcludedSegments}" />
+        <ListBox x:Name="ExcludedSegmentsList" Grid.Row="4" Grid.Column="0" MinHeight="100" ItemsSource="{Binding ExcludedSegments}" />
 
         <DockPanel Grid.Row="3" Grid.Column="2" LastChildFill="False">
             <Label Content="{l:T Release groups, Postfix=:}"/>
             <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected release group}" Command="{Binding RemoveReleaseGroupCommand}" CommandParameter="{Binding SelectedItem, ElementName=ReleaseGroups}"/>
         </DockPanel>
-        <ListBox x:Name="ReleaseGroups" Grid.Row="4" Grid.Column="2" MinHeight="100" ItemsSource="{x:Static fileName:FileNameParser.ReleaseGroups}" />
+        <ListBox x:Name="ReleaseGroups" Grid.Row="4" Grid.Column="2" MinHeight="100" ItemsSource="{Binding ReleaseGroups}" />
 
         <DockPanel Grid.Row="3" Grid.Column="4" LastChildFill="False">
             <Label Content="{l:T Custom language mappings, Postfix=:}"/>
             <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource RemoveButton}" ToolTip="{l:T Remove selected language mapping}" Command="{Binding RemoveLanguageMappingCommand}" CommandParameter="{Binding ElementName=CustomLanguageMappingsList, Path=SelectedItem}"/>
         </DockPanel>
         <DataGrid x:Name="CustomLanguageMappingsList" Grid.Row="4" Grid.Column="4" MinHeight="100"
-                  ItemsSource="{x:Static fileName:FileNameParser.CustomLanguageMappings}" CanUserResizeRows="False"
+                  ItemsSource="{Binding CustomLanguageMappings}" CanUserResizeRows="False"
                   AutoGenerateColumns="False" CellStyle="{StaticResource NoBorderCell}" GridLinesVisibility="None"
                   SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="0" CanUserAddRows="False">
             <DataGrid.Columns>

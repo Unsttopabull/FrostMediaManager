@@ -3,12 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:settings="clr-namespace:RibbonUI.UserControls.Settings"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
-        xmlns:windows="clr-namespace:RibbonUI.Windows"
         Loaded="WindowLoaded" Name="SettingssWindow"
         Title="Settings" Height="635" Width="800" Background="#BCD6F5">
-    <Window.DataContext>
-        <windows:SettingsWindowViewModel/>
-    </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" MaxWidth="315" />
@@ -50,7 +46,7 @@
                         </Style.Triggers>
                     </Style>
                 </TabItem.Style>
-                <settings:GeneralSettings />
+                <settings:GeneralSettings x:Name="GeneralSettings"/>
             </TabItem>
             <TabItem Header="2">
                 <TabItem.Style>
@@ -62,7 +58,7 @@
                         </Style.Triggers>
                     </Style>
                 </TabItem.Style>
-                <settings:FeatureDetectorSettings/>
+                <settings:FeatureDetectorSettings x:Name="FeatureDetector"/>
             </TabItem>
             <TabItem Header="3">
                 <TabItem.Style>
@@ -74,7 +70,7 @@
                         </Style.Triggers>
                     </Style>
                 </TabItem.Style>
-                <settings:FileNameParserSettings/>
+                <settings:FileNameParserSettings x:Name="FileParser"/>
             </TabItem>
         </TabControl>
         <GridSplitter HorizontalAlignment="Right" Margin="0,5,0,5"
@@ -83,8 +79,8 @@
                       Width="2" Background="#FFBCBCBC" />
 
         <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,5,5" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button MinWidth="100" Margin="0,0,10,0" Command="{Binding CloseCommand}" CommandParameter="{Binding ElementName=SettingssWindow}" Content="{l:T Cancel}"/>
-            <Button MinWidth="100" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=SettingssWindow}" Content="{l:T Save}"/>
+            <Button MinWidth="100" Margin="0,0,10,0" Click="CancelClick" Content="{l:T Cancel}"/>
+            <Button MinWidth="100" Click="SaveClick" Content="{l:T Save}"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -5,10 +5,10 @@ using Frost.Common.Properties;
 
 namespace RibbonUI.Util {
     public class KnownCodec : INotifyPropertyChanged {
+        public event PropertyChangedEventHandler PropertyChanged;
         private string _codecId;
         private string _imagePath;
         private string _mapping;
-        public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>Initializes a new instance of the <see cref="T:System.Object"/> class.</summary>
         public KnownCodec(string codecId, string imagePath) {

@@ -1,13 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using Frost.Common.Util;
 using Frost.DetectFeatures;
 using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
@@ -72,7 +70,6 @@ namespace RibbonUI {
         }
 
         private void RegisterViewModels() {
-
             LightInjectContainer.Register<ContentGridViewModel>();
             LightInjectContainer.Register<MainWindowViewModel>();
             LightInjectContainer.Register<EditMovieViewModel>();
@@ -86,80 +83,125 @@ namespace RibbonUI {
             Task[] settings = new Task[8];
 
             settings[0] = Task.Run(() => {
-                if (Settings.Default.KnownSubtitleExtensions == null) {
-                    SaveKnownSubtitleExtensionSetting();
+                if (Settings.Default.KnownSubtitleFormatsAdded != null) {
+                    foreach (string format in Settings.Default.KnownSubtitleFormatsAdded) {
+                        FileFeatures.KnownSubtitleFormats.Add(format);
+                    }
                 }
-                else {
-                    FileFeatures.KnownSubtitleExtensions = new List<string>(Settings.Default.KnownSubtitleExtensions.Cast<string>());
+
+                if (Settings.Default.KnownSubtitleFormatsRemoved != null) {
+                    foreach (string format in Settings.Default.KnownSubtitleFormatsRemoved) {
+                        FileFeatures.KnownSubtitleFormats.Remove(format);
+                    }
                 }
             });
 
             settings[1] = Task.Run(() => {
-                if (Settings.Default.KnownSubtitleFormats == null) {
-                    SaveKnownSubtitleFormatsSetting();
+                if (Settings.Default.KnownSubtitleExtensionsAdded != null) {
+                    foreach (string extension in Settings.Default.KnownSubtitleExtensionsAdded) {
+                        FileFeatures.KnownSubtitleExtensions.Add(extension);
+                    }
                 }
-                else {
-                    FileFeatures.KnownSubtitleFormats = new List<string>(Settings.Default.KnownSubtitleFormats.Cast<string>());
+
+                if (Settings.Default.KnownSubtitleExtensionsRemoved != null) {
+                    foreach (string extension in Settings.Default.KnownSubtitleExtensionsRemoved) {
+                        FileFeatures.KnownSubtitleExtensions.Remove(extension);
+                    }
+                }
+
+                if (Settings.Default.KnownVideoExtensionsAdded != null) {
+                    foreach (string format in Settings.Default.KnownVideoExtensionsAdded) {
+                        FeatureDetector.VideoExtensions.Add(format);
+                    }
+                }
+
+                if (Settings.Default.KnownVideoExtensionsRemoved != null) {
+                    foreach (string format in Settings.Default.KnownVideoExtensionsRemoved) {
+                        FeatureDetector.VideoExtensions.Remove(format);
+                    }
                 }
             });
 
             settings[2] = Task.Run(() => {
-                if (Settings.Default.AudioCodecIdBindings == null) {
-                    SaveAudioCodecIdSettiing();
+                if (Settings.Default.AudioCodecIdBindingsAdded != null) {
+                    foreach (DictionaryEntry binding in Settings.Default.AudioCodecIdBindingsAdded) {
+                        FileFeatures.AudioCodecIdMappings.Add(new CodecIdBinding((string) binding.Key, (string) binding.Value));
+                    }
                 }
-                else {
-                    FileFeatures.AudioCodecIdMappings = new CodecIdMappingCollection(Settings.Default.AudioCodecIdBindings);
+
+                if (Settings.Default.AudioCodecIdBindingsRemoved != null) {
+                    foreach (DictionaryEntry binding in Settings.Default.AudioCodecIdBindingsRemoved) {
+                        FileFeatures.AudioCodecIdMappings.Remove((string) binding.Key);
+                    }
                 }
             });
 
             settings[3] = Task.Run(() => {
-                if (Settings.Default.VideoCodecIdBindings == null) {
-                    SaveVideoCodecIdBindingsSetting();
+                if (Settings.Default.VideoCodecIdBindingsAdded != null) {
+                    foreach (DictionaryEntry binding in Settings.Default.VideoCodecIdBindingsAdded) {
+                        FileFeatures.VideoCodecIdMappings.Add(new CodecIdBinding((string) binding.Key, (string) binding.Value));
+                    }
                 }
-                else {
-                    FileFeatures.VideoCodecIdMappings = new CodecIdMappingCollection(Settings.Default.VideoCodecIdBindings);
+
+                if (Settings.Default.VideoCodecIdBindingsRemoved != null) {
+                    foreach (DictionaryEntry binding in Settings.Default.VideoCodecIdBindingsRemoved) {
+                        FileFeatures.VideoCodecIdMappings.Remove((string) binding.Key);
+                    }
                 }
             });
 
             settings[4] = Task.Run(() => {
-                if (Settings.Default.KnownSegments == null) {
-                    SaveKnownSegmentsSetting();
+                if (Settings.Default.KnownSegmentsAdded != null) {
+                    foreach (DictionaryEntry segment in Settings.Default.KnownSegmentsAdded) {
+                        FileNameParser.KnownSegments.Add((string) segment.Key, (SegmentType) segment.Value);
+                    }
                 }
-                else {
-                    FileNameParser.KnownSegments = new SegmentCollection(Settings.Default.KnownSegments);
+
+                if (Settings.Default.KnownSegmentsRemoved != null) {
+                    foreach (DictionaryEntry segment in Settings.Default.KnownSegmentsRemoved) {
+                        FileNameParser.KnownSegments.Remove((string) segment.Key);
+                    }
                 }
             });
 
             settings[5] = Task.Run(() => {
-                if (Settings.Default.CustomLanguageMappings == null) {
-                    SaveCustomLanguageMappingsSetting();
+                if (Settings.Default.CustomLanguageBindingsAdded != null) {
+                    foreach (DictionaryEntry binding in Settings.Default.CustomLanguageBindingsAdded) {
+                        FileNameParser.CustomLanguageMappings.Add((string) binding.Key, (string) binding.Value);
+                    }
                 }
-                else {
-                    FileNameParser.CustomLanguageMappings = new LanguageMappingCollection(Settings.Default.CustomLanguageMappings);
+
+                if (Settings.Default.CustomLanguageBindingsRemoved != null) {
+                    foreach (DictionaryEntry binding in Settings.Default.CustomLanguageBindingsRemoved) {
+                        FileNameParser.CustomLanguageMappings.Remove((string) binding.Key);
+                    }
                 }
             });
 
 
             settings[6] = Task.Run(() => {
-                if (Settings.Default.ExcludedSegments == null) {
-                    SaveExcludedSegmentsSetting();
-                }
-                else {
-                    FileNameParser.ExcludedSegments = new ObservableHashSet<string>(StringComparer.OrdinalIgnoreCase);
-                    foreach (string segment in Settings.Default.ExcludedSegments) {
+                if (Settings.Default.ExcludedSegmentsAdded != null) {
+                    foreach (string segment in Settings.Default.ExcludedSegmentsAdded) {
                         FileNameParser.ExcludedSegments.Add(segment);
+                    }
+                }
+
+                if (Settings.Default.ExcludedSegmentsRemoved != null) {
+                    foreach (string segment in Settings.Default.ExcludedSegmentsRemoved) {
+                        FileNameParser.ExcludedSegments.Remove(segment);
                     }
                 }
             });
 
             settings[7] = Task.Run(() => {
-                if (Settings.Default.ReleaseGroups == null) {
-                    SaveReleaseGroupsSetting();
+                if (Settings.Default.ReleaseGroupsAdded != null) {
+                    foreach (string group in Settings.Default.ReleaseGroupsAdded) {
+                        FileNameParser.ReleaseGroups.Add(group);
+                    }
                 }
-                else {
-                    FileNameParser.ReleaseGroups = new ObservableHashSet<string>(StringComparer.OrdinalIgnoreCase);
-                    foreach (string releaseGroup in Settings.Default.ReleaseGroups) {
-                        FileNameParser.ReleaseGroups.Add(releaseGroup);
+                if (Settings.Default.ReleaseGroupsRemoved != null) {
+                    foreach (string group in Settings.Default.ReleaseGroupsRemoved) {
+                        FileNameParser.ReleaseGroups.Remove(group);
                     }
                 }
             });
@@ -168,71 +210,6 @@ namespace RibbonUI {
 
             Settings.Default.Save();
         }
-
-        internal static void SaveSettings() {
-            SaveKnownSubtitleExtensionSetting();
-            SaveKnownSubtitleFormatsSetting();
-            SaveAudioCodecIdSettiing();
-            SaveVideoCodecIdBindingsSetting();
-            SaveKnownSegmentsSetting();
-            SaveCustomLanguageMappingsSetting();
-            SaveExcludedSegmentsSetting();
-            SaveReleaseGroupsSetting();
-
-            Settings.Default.Save();
-        }
-
-        #region Save settings
-
-        private static void SaveKnownSubtitleExtensionSetting() {
-            Settings.Default.KnownSubtitleExtensions = new StringCollection();
-            Settings.Default.KnownSubtitleExtensions.AddRange(FileFeatures.KnownSubtitleExtensions.ToArray());
-        }
-
-        private static void SaveKnownSubtitleFormatsSetting() {
-            Settings.Default.KnownSubtitleFormats = new StringCollection();
-            Settings.Default.KnownSubtitleFormats.AddRange(FileFeatures.KnownSubtitleFormats.ToArray());
-        }
-
-        private static void SaveAudioCodecIdSettiing() {
-            Settings.Default.AudioCodecIdBindings = new StringDictionary();
-            foreach (KeyValuePair<string, string> pair in FileFeatures.AudioCodecIdMappings) {
-                Settings.Default.AudioCodecIdBindings.Add(pair.Key, pair.Value);
-            }
-        }
-
-        private static void SaveVideoCodecIdBindingsSetting() {
-            Settings.Default.VideoCodecIdBindings = new StringDictionary();
-            foreach (KeyValuePair<string, string> pair in FileFeatures.VideoCodecIdMappings) {
-                Settings.Default.VideoCodecIdBindings.Add(pair.Key, pair.Value);
-            }
-        }
-
-        private static void SaveKnownSegmentsSetting() {
-            Settings.Default.KnownSegments = new StringDictionary();
-            foreach (SegmentMapping mapping in FileNameParser.KnownSegments) {
-                Settings.Default.KnownSegments.Add(mapping.Segment, mapping.SegmentType.ToString());
-            }
-        }
-
-        private static void SaveCustomLanguageMappingsSetting() {
-            Settings.Default.CustomLanguageMappings = new StringDictionary();
-            foreach (LanguageMapping mapping in FileNameParser.CustomLanguageMappings) {
-                Settings.Default.CustomLanguageMappings.Add(mapping.Mapping, mapping.ISO639Alpha3);
-            }
-        }
-
-        private static void SaveExcludedSegmentsSetting() {
-            Settings.Default.ExcludedSegments = new StringCollection();
-            Settings.Default.ExcludedSegments.AddRange(FileNameParser.ExcludedSegments.ToArray());
-        }
-
-        private static void SaveReleaseGroupsSetting() {
-            Settings.Default.ReleaseGroups = new StringCollection();
-            Settings.Default.ReleaseGroups.AddRange(FileNameParser.ReleaseGroups.ToArray());
-        }
-
-        #endregion
 
         private void UnhandledExeption(object sender, DispatcherUnhandledExceptionEventArgs e) {
             MessageBox.Show(e.Exception.Message);

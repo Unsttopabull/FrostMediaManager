@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Frost.Common.Properties;
+using Frost.Common.Proxies.ChangeTrackers;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
@@ -13,8 +14,12 @@ using Frost.XamlControls.Commands;
 namespace RibbonUI.UserControls.Settings {
 
     internal class FileNameParserSettingsViewModel : INotifyPropertyChanged, IDataErrorInfo {
-        private string _releaseGroupError;
         public event PropertyChangedEventHandler PropertyChanged;
+        private ObservableChangeTrackingCollection<LanguageMapping> _languageMappings;
+        private ObservableChangeTrackingCollection<SegmentMapping> _knownSegments;
+        private ObservableChangeTrackingCollection<string> _excludedSegments;
+        private ObservableChangeTrackingCollection<string> _releaseGroups;
+        private string _releaseGroupError;
 
         public FileNameParserSettingsViewModel() {
             if (Directory.Exists("Images/Languages")) {
@@ -25,12 +30,22 @@ namespace RibbonUI.UserControls.Settings {
             }
 
             RemoveLanguageMappingCommand = new RelayCommand<LanguageMapping>(
-                mapping => FileNameParser.CustomLanguageMappings.Remove(mapping),
+                mapping => CustomLanguageMappings.Remove(mapping),
                 mapping => mapping != null
                 );
 
+            AddNewLanguageMappingCommand = new RelayCommand<object>(
+                o => CustomLanguageMappings.Add(new LanguageMapping(Mapping, Language.Alpha3)),
+                o => ValidateLanguageMapping()
+                );
+
+            AddNewExcludedSegmentCommand = new RelayCommand<object>(
+                o => ExcludedSegments.Add(ExcludedSegment),
+                o => ValidateExculdedSegment()
+                );
+
             RemoveExcludedSegmentCommand = new RelayCommand<string>(
-                segment => FileNameParser.ExcludedSegments.Remove(segment),
+                segment => ExcludedSegments.Remove(segment),
                 segment => !string.IsNullOrEmpty(segment)
                 );
 
@@ -39,33 +54,65 @@ namespace RibbonUI.UserControls.Settings {
                 releaseGrp => !string.IsNullOrEmpty(releaseGrp)
                 );
 
-            RemoveKnownSegmentCommand = new RelayCommand<SegmentMapping>(
-                mapping => FileNameParser.KnownSegments.Remove(mapping),
-                mapping => mapping != null
-                );
-
-            AddNewLanguageMappingCommand = new RelayCommand<object>(
-                o => FileNameParser.CustomLanguageMappings.Add(new LanguageMapping(Mapping, Language.Alpha3)),
-                o => ValidateLanguageMapping()
-                );
-
             AddNewReleaseGroupCommand = new RelayCommand<object>(
                 o => FileNameParser.ReleaseGroups.Add(ReleaseGroup),
                 o => ValidateReleaseGroup()
                 );
 
-            AddNewExcludedSegmentCommand = new RelayCommand<object>(
-                o => FileNameParser.ExcludedSegments.Add(ExcludedSegment),
-                o => ValidateExculdedSegment()
+            AddNewKnownSegmentCommand = new RelayCommand<object>(
+                o => KnownSegments.Add(new SegmentMapping(Segment, SegmentType)),
+                o => ValidateKnownSegment()
                 );
 
-            AddNewKnownSegmentCommand = new RelayCommand<object>(
-                o => FileNameParser.KnownSegments.Add(Segment, SegmentType),
-                o => ValidateKnownSegment()
+            RemoveKnownSegmentCommand = new RelayCommand<SegmentMapping>(
+                mapping => KnownSegments.Remove(mapping),
+                mapping => mapping != null
                 );
         }
 
         public List<ISOLanguageCode> Languages { get; set; }
+
+        public ObservableChangeTrackingCollection<LanguageMapping> CustomLanguageMappings {
+            get {
+                if (_languageMappings == null) {
+                    _languageMappings = new ObservableChangeTrackingCollection<LanguageMapping>(FileNameParser.CustomLanguageMappings);
+                }
+                return _languageMappings;
+            }
+            set { _languageMappings = value; }
+        }
+
+        public ObservableChangeTrackingCollection<SegmentMapping> KnownSegments {
+            get {
+                if (_knownSegments == null) {
+                    _knownSegments = new ObservableChangeTrackingCollection<SegmentMapping>(FileNameParser.KnownSegments);
+                }
+                return _knownSegments;
+            }
+            set { _knownSegments = value; }
+        }
+
+        public ObservableChangeTrackingCollection<string> ExcludedSegments {
+            get {
+                if (_excludedSegments == null) {
+                    _excludedSegments = new ObservableChangeTrackingCollection<string>(FileNameParser.ExcludedSegments);
+                }
+                return _excludedSegments;
+            }
+            set { _excludedSegments = value; }
+        }
+
+        public ObservableChangeTrackingCollection<string> ReleaseGroups {
+            get {
+                if (_releaseGroups == null) {
+                    _releaseGroups = new ObservableChangeTrackingCollection<string>(FileNameParser.ReleaseGroups);
+                }
+                return _releaseGroups;
+            }
+            set { _releaseGroups = value; }
+        }
+
+        #region Utility
 
         public string Segment { get; set; }
         public SegmentType SegmentType { get; set; }
@@ -87,6 +134,8 @@ namespace RibbonUI.UserControls.Settings {
 
         public string Mapping { get; set; }
         public ISOLanguageCode Language { get; set; }
+
+        #endregion
 
         #region Commands
 
@@ -140,12 +189,13 @@ namespace RibbonUI.UserControls.Settings {
 
         #endregion
 
+        #region Validation Methods
         private bool ValidateLanguageMapping() {
             string str;
             return ValidateLanguageMapping(out str);
         }
 
-        private bool ValidateLanguageMapping(out string error){
+        private bool ValidateLanguageMapping(out string error) {
             if (string.IsNullOrEmpty(Mapping)) {
                 error = "Language mapping must not be empty";
                 return false;
@@ -224,6 +274,8 @@ namespace RibbonUI.UserControls.Settings {
             error = null;
             return true;
         }
+
+        #endregion
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {

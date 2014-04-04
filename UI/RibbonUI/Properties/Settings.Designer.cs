@@ -60,89 +60,199 @@ namespace RibbonUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringCollection KnownSubtitleFormats {
+        public global::System.Collections.Specialized.StringCollection KnownSubtitleFormatsAdded {
             get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["KnownSubtitleFormats"]));
+                return ((global::System.Collections.Specialized.StringCollection)(this["KnownSubtitleFormatsAdded"]));
             }
             set {
-                this["KnownSubtitleFormats"] = value;
+                this["KnownSubtitleFormatsAdded"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringCollection KnownSubtitleExtensions {
+        public global::System.Collections.Specialized.StringCollection KnownSubtitleFormatsRemoved {
             get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["KnownSubtitleExtensions"]));
+                return ((global::System.Collections.Specialized.StringCollection)(this["KnownSubtitleFormatsRemoved"]));
             }
             set {
-                this["KnownSubtitleExtensions"] = value;
+                this["KnownSubtitleFormatsRemoved"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringDictionary AudioCodecIdBindings {
+        public global::System.Collections.Specialized.StringDictionary AudioCodecIdBindingsAdded {
             get {
-                return ((global::System.Collections.Specialized.StringDictionary)(this["AudioCodecIdBindings"]));
+                return ((global::System.Collections.Specialized.StringDictionary)(this["AudioCodecIdBindingsAdded"]));
             }
             set {
-                this["AudioCodecIdBindings"] = value;
+                this["AudioCodecIdBindingsAdded"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringDictionary VideoCodecIdBindings {
+        public global::System.Collections.Specialized.StringDictionary AudioCodecIdBindingsRemoved {
             get {
-                return ((global::System.Collections.Specialized.StringDictionary)(this["VideoCodecIdBindings"]));
+                return ((global::System.Collections.Specialized.StringDictionary)(this["AudioCodecIdBindingsRemoved"]));
             }
             set {
-                this["VideoCodecIdBindings"] = value;
+                this["AudioCodecIdBindingsRemoved"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringDictionary KnownSegments {
+        public global::System.Collections.Specialized.StringDictionary VideoCodecIdBindingsAdded {
             get {
-                return ((global::System.Collections.Specialized.StringDictionary)(this["KnownSegments"]));
+                return ((global::System.Collections.Specialized.StringDictionary)(this["VideoCodecIdBindingsAdded"]));
             }
             set {
-                this["KnownSegments"] = value;
+                this["VideoCodecIdBindingsAdded"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringDictionary CustomLanguageMappings {
+        public global::System.Collections.Specialized.StringDictionary VideoCodecIdBindingsRemoved {
             get {
-                return ((global::System.Collections.Specialized.StringDictionary)(this["CustomLanguageMappings"]));
+                return ((global::System.Collections.Specialized.StringDictionary)(this["VideoCodecIdBindingsRemoved"]));
             }
             set {
-                this["CustomLanguageMappings"] = value;
+                this["VideoCodecIdBindingsRemoved"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringCollection ExcludedSegments {
+        public global::System.Collections.Specialized.StringDictionary KnownSegmentsAdded {
             get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ExcludedSegments"]));
+                return ((global::System.Collections.Specialized.StringDictionary)(this["KnownSegmentsAdded"]));
             }
             set {
-                this["ExcludedSegments"] = value;
+                this["KnownSegmentsAdded"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringCollection ReleaseGroups {
+        public global::System.Collections.Specialized.StringDictionary KnownSegmentsRemoved {
             get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["ReleaseGroups"]));
+                return ((global::System.Collections.Specialized.StringDictionary)(this["KnownSegmentsRemoved"]));
             }
             set {
-                this["ReleaseGroups"] = value;
+                this["KnownSegmentsRemoved"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringDictionary CustomLanguageBindingsAdded {
+            get {
+                return ((global::System.Collections.Specialized.StringDictionary)(this["CustomLanguageBindingsAdded"]));
+            }
+            set {
+                this["CustomLanguageBindingsAdded"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringDictionary CustomLanguageBindingsRemoved {
+            get {
+                return ((global::System.Collections.Specialized.StringDictionary)(this["CustomLanguageBindingsRemoved"]));
+            }
+            set {
+                this["CustomLanguageBindingsRemoved"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection ExcludedSegmentsAdded {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ExcludedSegmentsAdded"]));
+            }
+            set {
+                this["ExcludedSegmentsAdded"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection ExcludedSegmentsRemoved {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ExcludedSegmentsRemoved"]));
+            }
+            set {
+                this["ExcludedSegmentsRemoved"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection ReleaseGroupsAdded {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ReleaseGroupsAdded"]));
+            }
+            set {
+                this["ReleaseGroupsAdded"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection ReleaseGroupsRemoved {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["ReleaseGroupsRemoved"]));
+            }
+            set {
+                this["ReleaseGroupsRemoved"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection KnownSubtitleExtensionsAdded {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["KnownSubtitleExtensionsAdded"]));
+            }
+            set {
+                this["KnownSubtitleExtensionsAdded"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection KnownSubtitleExtensionsRemoved {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["KnownSubtitleExtensionsRemoved"]));
+            }
+            set {
+                this["KnownSubtitleExtensionsRemoved"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection KnownVideoExtensionsAdded {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["KnownVideoExtensionsAdded"]));
+            }
+            set {
+                this["KnownVideoExtensionsAdded"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection KnownVideoExtensionsRemoved {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["KnownVideoExtensionsRemoved"]));
+            }
+            set {
+                this["KnownVideoExtensionsRemoved"] = value;
             }
         }
     }

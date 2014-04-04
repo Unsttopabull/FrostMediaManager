@@ -40,7 +40,7 @@
                              Style="{StaticResource TransparentBorderlessButton}"/>
         </DockPanel>
         <ListBox x:Name="VideoExtensionList" Grid.Row="1" Grid.Column="0" MinHeight="100"
-                 ItemsSource="{x:Static detectFeatures:FeatureDetector.VideoExtensions}" />
+                 ItemsSource="{Binding KnownVideoExtensions}" />
 
         <DockPanel Grid.Row="0" Grid.Column="2" LastChildFill="False">
             <Label Content="{l:T Subtitle extensions to search for, Postfix=:}"/>
@@ -49,7 +49,7 @@
             <fmm:ImageButton DockPanel.Dock="Right" Command="{Binding AddSubtitleFileExtensionCommand}" Style="{StaticResource AddButton}"/>
         </DockPanel>
         <ListBox x:Name="SubtitleExtensionList" Grid.Row="1" Grid.Column="2" MinHeight="100"
-                 ItemsSource="{x:Static detectFeatures:FileFeatures.KnownSubtitleExtensions}" />
+                 ItemsSource="{Binding KnownSubtitleExtensions}" />
 
         <DockPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" LastChildFill="False">
             <Label DockPanel.Dock="Left" Content="{l:T Custom audio codec mappings, Postfix=:}"/>
@@ -58,7 +58,7 @@
             <fmm:ImageButton DockPanel.Dock="Right" Command="{Binding AddAudioCodecMappingCommand}" Style="{StaticResource AddButton}"/>
         </DockPanel>
         <DataGrid x:Name="AudioCodecBindings" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" MinHeight="100"
-                  ItemsSource="{x:Static detectFeatures:FileFeatures.AudioCodecIdMappings}" CanUserResizeRows="False"
+                  ItemsSource="{Binding AudioCodecBindings}" CanUserResizeRows="False"
                   AutoGenerateColumns="False" CellStyle="{StaticResource NoBorderCell}" GridLinesVisibility="None"
                   SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="0">
             <DataGrid.Columns>
@@ -73,7 +73,7 @@
             <fmm:ImageButton DockPanel.Dock="Right" Command="{Binding AddVideoCodecMappingCommand}" Style="{StaticResource AddButton}"/>
         </DockPanel>
         <DataGrid x:Name="VideoCodecBindings" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" MinHeight="100"
-                  ItemsSource="{x:Static detectFeatures:FileFeatures.VideoCodecIdMappings}" CanUserResizeRows="False"
+                  ItemsSource="{Binding VideoCodecBindings}" CanUserResizeRows="False"
                   AutoGenerateColumns="False" CellStyle="{StaticResource NoBorderCell}" GridLinesVisibility="None"
                   SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="0">
             <DataGrid.Columns>

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using Frost.Common.Proxies.ChangeTrackers;
 using Frost.DetectFeatures;
 using Frost.DetectFeatures.Util;
 using Frost.GettextMarkupExtension;
@@ -11,6 +12,10 @@ using RibbonUI.Windows;
 
 namespace RibbonUI.UserControls.Settings {
     public class FeatureDetectorSettingsViewModel {
+        private ObservableChangeTrackingCollection<CodecIdBinding> _audioBindings;
+        private ObservableChangeTrackingCollection<CodecIdBinding> _videoBindings;
+        private ObservableChangeTrackingCollection<string> _knownSubtiteExtensions;
+        private ObservableChangeTrackingCollection<string> _knownVideoExtensions;
 
         public FeatureDetectorSettingsViewModel() {
             RemoveFileExtensionCommand = new RelayCommand<string>(
@@ -19,24 +24,65 @@ namespace RibbonUI.UserControls.Settings {
             );
             AddFileExtensionCommand = new RelayCommand(AddFileExtension);
 
+            AddAudioCodecMappingCommand = new RelayCommand(AddAudioCodecMapping);
             RemoveAudioCodecMappingCommand = new RelayCommand<CodecIdBinding>(
                 cb => FileFeatures.AudioCodecIdMappings.Remove(cb),
                 cb => cb != null
             );
-            AddAudioCodecMappingCommand = new RelayCommand(AddAudioCodecMapping);
+            
 
+            AddVideoCodecMappingCommand = new RelayCommand(AddVideoCodecMapping);
             RemoveAudioCodecMappingCommand = new RelayCommand<CodecIdBinding>(
                 cb => FileFeatures.VideoCodecIdMappings.Remove(cb),
                 cb => cb != null
             );
-            AddVideoCodecMappingCommand = new RelayCommand(AddVideoCodecMapping);
+           
 
+            AddSubtitleFileExtensionCommand = new RelayCommand(AddSubtitleFileExtension);
             RemoveSubtitleFileExtensionCommand = new RelayCommand<string>(
                 ext => FileFeatures.KnownSubtitleExtensions.Remove(ext),
                 ext => !string.IsNullOrEmpty(ext)
             );
+        }
 
-            AddSubtitleFileExtensionCommand = new RelayCommand(AddSubtitleFileExtension);
+        public ObservableChangeTrackingCollection<CodecIdBinding> AudioCodecBindings {
+            get {
+                if (_audioBindings == null) {
+                    _audioBindings = new ObservableChangeTrackingCollection<CodecIdBinding>(FileFeatures.AudioCodecIdMappings);
+                }
+                return _audioBindings;
+            }
+            set { _audioBindings = value; }
+        }
+
+        public ObservableChangeTrackingCollection<CodecIdBinding> VideoCodecBindings {
+            get {
+                if (_videoBindings == null) {
+                    _videoBindings = new ObservableChangeTrackingCollection<CodecIdBinding>(FileFeatures.VideoCodecIdMappings);
+                }
+                return _videoBindings;
+            }
+            set { _videoBindings = value; }            
+        }
+
+        public ObservableChangeTrackingCollection<string> KnownSubtitleExtensions {
+            get {
+                if (_knownSubtiteExtensions == null) {
+                    _knownSubtiteExtensions = new ObservableChangeTrackingCollection<string>(FileFeatures.KnownSubtitleExtensions);
+                }
+                return _knownSubtiteExtensions;
+            }
+            set { _knownSubtiteExtensions = value; }
+        }
+
+        public ObservableChangeTrackingCollection<string> KnownVideoExtensions {
+            get {
+                if (_knownVideoExtensions == null) {
+                    _knownVideoExtensions = new ObservableChangeTrackingCollection<string>(FeatureDetector.VideoExtensions);
+                }
+                return _knownVideoExtensions;
+            }
+            set { _knownVideoExtensions = value; }
         }
 
         public Window ParentWindow { get; set; }

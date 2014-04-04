@@ -19,7 +19,6 @@
     </UserControl.DataContext>
     <Grid>
         <Grid.Resources>
-            <converters:EmtpyOrNullToFalseConverter x:Key="EmtpyOrNullToFalseConverter"/>
             <BitmapImage x:Key="DefaultCover" UriSource="../Images/default/cover.png"/>
             <BitmapImage x:Key="DefaultFanart"  UriSource="../Images/default/fanart.jpg" />
             <BitmapImage x:Key="DefaultMpaa"    UriSource="../Images/default/mpaaur.png"/>

@@ -11,28 +11,58 @@
     <Setting Name="UICulture" Type="System.Globalization.CultureInfo" Scope="User">
       <Value Profile="(Default)">(Default)</Value>
     </Setting>
-    <Setting Name="KnownSubtitleFormats" Type="System.Collections.Specialized.StringCollection" Scope="User">
+    <Setting Name="KnownSubtitleFormatsAdded" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="KnownSubtitleExtensions" Type="System.Collections.Specialized.StringCollection" Scope="User">
+    <Setting Name="KnownSubtitleFormatsRemoved" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="AudioCodecIdBindings" Type="System.Collections.Specialized.StringDictionary" Scope="User">
+    <Setting Name="AudioCodecIdBindingsAdded" Type="System.Collections.Specialized.StringDictionary" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="VideoCodecIdBindings" Type="System.Collections.Specialized.StringDictionary" Scope="User">
+    <Setting Name="AudioCodecIdBindingsRemoved" Type="System.Collections.Specialized.StringDictionary" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="KnownSegments" Type="System.Collections.Specialized.StringDictionary" Scope="User">
+    <Setting Name="VideoCodecIdBindingsAdded" Type="System.Collections.Specialized.StringDictionary" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="CustomLanguageMappings" Type="System.Collections.Specialized.StringDictionary" Scope="User">
+    <Setting Name="VideoCodecIdBindingsRemoved" Type="System.Collections.Specialized.StringDictionary" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ExcludedSegments" Type="System.Collections.Specialized.StringCollection" Scope="User">
+    <Setting Name="KnownSegmentsAdded" Type="System.Collections.Specialized.StringDictionary" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="ReleaseGroups" Type="System.Collections.Specialized.StringCollection" Scope="User">
+    <Setting Name="KnownSegmentsRemoved" Type="System.Collections.Specialized.StringDictionary" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="CustomLanguageBindingsAdded" Type="System.Collections.Specialized.StringDictionary" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="CustomLanguageBindingsRemoved" Type="System.Collections.Specialized.StringDictionary" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ExcludedSegmentsAdded" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ExcludedSegmentsRemoved" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ReleaseGroupsAdded" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ReleaseGroupsRemoved" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="KnownSubtitleExtensionsAdded" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="KnownSubtitleExtensionsRemoved" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="KnownVideoExtensionsAdded" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="KnownVideoExtensionsRemoved" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

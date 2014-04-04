@@ -1,24 +1,32 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Frost.Common.Proxies.ChangeTrackers;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using RibbonUI.Annotations;
 using ComboBox = System.Windows.Controls.ComboBox;
 
 namespace RibbonUI.UserControls.Settings {
 
-    public class GeneralSettingsViewModel {
+    public class GeneralSettingsViewModel : INotifyPropertyChanged {
+        private ObservableCollection<string> _searchFolders;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public GeneralSettingsViewModel() {
             LangSelectLoadedCommand = new RelayCommand<ComboBox>(LangSelectOnLoaded);
             LangSelectionChangedCommand = new RelayCommand<CultureInfo>(LangSelectionChanged, ci => ci != null);
 
-            RemoveMovieFolderCommand = new RelayCommand<string>(RemoveMovieFolderClicked, folder => !string.IsNullOrEmpty(folder));
+            RemoveMovieFolderCommand = new RelayCommand<string>(movieFolder => SearchFolders.Remove(movieFolder), folder => !string.IsNullOrEmpty(folder));
             AddMovieFolderCommand = new RelayCommand(AddMovieFolderClicked);
         }
 
@@ -30,13 +38,21 @@ namespace RibbonUI.UserControls.Settings {
         public ICommand<string> RemoveMovieFolderCommand { get; private set; }
         public ICommand AddMovieFolderCommand { get; private set; }
 
-        public StringCollection SearchFolders {
-            get { return Properties.Settings.Default.SearchFolders; }
-            set { Properties.Settings.Default.SearchFolders = value; }
-        }
+        public ObservableCollection<string> SearchFolders {
+            get {
+                if (_searchFolders == null) {
+                    if (Properties.Settings.Default.SearchFolders == null) {
+                        Properties.Settings.Default.SearchFolders = new StringCollection();
+                    }
 
-        private void RemoveMovieFolderClicked(string movieFolder) {
-            Properties.Settings.Default.SearchFolders.Remove(movieFolder);
+                    _searchFolders = new ObservableCollection<string>(Properties.Settings.Default.SearchFolders.Cast<string>());
+                }
+                return _searchFolders;
+            }
+            set {
+                _searchFolders = value;
+                OnPropertyChanged();
+            }
         }
 
         private void AddMovieFolderClicked() {
@@ -69,7 +85,7 @@ namespace RibbonUI.UserControls.Settings {
                 Properties.Settings.Default.SearchFolders = new StringCollection();
             }
 
-            Properties.Settings.Default.SearchFolders.Add(folderPath);
+            SearchFolders.Add(folderPath);
         }
 
         private void LangSelectionChanged(CultureInfo selectedCulture) {
@@ -92,6 +108,13 @@ namespace RibbonUI.UserControls.Settings {
             }
         }
 
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
 
 }
