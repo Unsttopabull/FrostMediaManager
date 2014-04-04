@@ -14,5 +14,11 @@
         public string Mapping { get; set; }
 
         public string ISO639Alpha3 { get; set; }
+
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString() {
+            return string.Format("{0} => {1}", Mapping, ISO639Alpha3);
+        }
     }
 }

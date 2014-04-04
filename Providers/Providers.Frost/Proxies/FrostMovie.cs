@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Frost.Common;
 using Frost.Common.Models.Provider;
+using Frost.Common.Proxies;
 using Frost.Providers.Frost.DB;
 using Frost.Providers.Frost.DB.Files;
 using Frost.Providers.Frost.DB.People;
@@ -10,7 +11,7 @@ using Frost.Providers.Frost.Provider;
 
 namespace Frost.Providers.Frost.Proxies {
 
-    public class FrostMovie : ProxyBase<Movie>, IMovie {
+    public class FrostMovie : ProxyWithService<Movie, FrostMoviesDataDataService>, IMovie {
 
         public FrostMovie(Movie movie, FrostMoviesDataDataService service) : base(movie, service) {
         }

@@ -1,10 +1,11 @@
 ﻿using Frost.Common.Models.Provider;
+using Frost.Common.Proxies;
 using Frost.Providers.Frost.DB.Files;
 using Frost.Providers.Frost.Provider;
 
 namespace Frost.Providers.Frost.Proxies {
 
-    public class FrostSubtitle : ProxyBase<Subtitle>, ISubtitle {
+    public class FrostSubtitle : ProxyWithService<Subtitle, FrostMoviesDataDataService>, ISubtitle {
 
         public FrostSubtitle(Subtitle subtitle, FrostMoviesDataDataService service) : base(subtitle, service) {
         }

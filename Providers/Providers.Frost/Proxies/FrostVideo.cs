@@ -1,11 +1,12 @@
 ﻿using System;
 using Frost.Common;
 using Frost.Common.Models.Provider;
+using Frost.Common.Proxies;
 using Frost.Providers.Frost.DB.Files;
 using Frost.Providers.Frost.Provider;
 
 namespace Frost.Providers.Frost.Proxies {
-    public class FrostVideo : ProxyBase<Video>, IVideo {
+    public class FrostVideo : ProxyWithService<Video, FrostMoviesDataDataService>, IVideo {
 
         public FrostVideo(Video video, FrostMoviesDataDataService service) : base(video, service) {
         }

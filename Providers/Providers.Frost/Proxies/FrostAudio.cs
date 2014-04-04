@@ -1,10 +1,11 @@
 ﻿using Frost.Common;
 using Frost.Common.Models.Provider;
+using Frost.Common.Proxies;
 using Frost.Providers.Frost.DB.Files;
 using Frost.Providers.Frost.Provider;
 
 namespace Frost.Providers.Frost.Proxies {
-    public class FrostAudio : ProxyBase<Audio>, IAudio {
+    public class FrostAudio : ProxyWithService<Audio, FrostMoviesDataDataService>, IAudio {
 
         public FrostAudio(Audio audio, FrostMoviesDataDataService service) : base(audio, service) {
         }

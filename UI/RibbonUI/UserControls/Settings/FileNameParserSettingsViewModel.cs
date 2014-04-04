@@ -45,7 +45,7 @@ namespace RibbonUI.UserControls.Settings {
                 );
 
             AddNewLanguageMappingCommand = new RelayCommand<object>(
-                o => FileNameParser.CustomLanguageMappings.Add(Mapping, Language.Alpha3),
+                o => FileNameParser.CustomLanguageMappings.Add(new LanguageMapping(Mapping, Language.Alpha3)),
                 o => ValidateLanguageMapping()
                 );
 

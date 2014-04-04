@@ -1,5 +1,6 @@
 ﻿using System;
 using Frost.Common.Models.Provider;
+using Frost.Common.Proxies;
 using Frost.Providers.Xtreamer.PHP;
 
 namespace Frost.Providers.Xtreamer.Proxies {
@@ -38,7 +39,7 @@ namespace Frost.Providers.Xtreamer.Proxies {
         /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
         /// <param name="other">An object to compare with this object.</param>
         public bool Equals(XtGenre other) {
-            return Entity != null && Entity.Equals(other.ObservedEntity);
+            return Entity != null && Entity.Equals(other.ProxiedEntity);
         }
 
         /// <summary>Returns a string that represents the current object.</summary>

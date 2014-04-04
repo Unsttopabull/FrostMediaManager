@@ -86,13 +86,9 @@
       <Project>{4661DD6C-BE69-4BCB-A835-53D192DE841C}</Project>
       <Name>PHPtoNET</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NotUsed\NetworkShares\NetworkShares.csproj">
+    <ProjectReference Include="..\Libraries\NetworkShares\NetworkShares.csproj">
       <Project>{a85f5e2b-149a-4fb5-a749-056ae20ab72f}</Project>
       <Name>NetworkShares</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NotUsed\ObdelajProdatke\ProcessDatabase.csproj">
-      <Project>{deaba63d-465e-4ab2-a643-d7fbe7ac3181}</Project>
-      <Name>ProcessDatabase</Name>
     </ProjectReference>
     <ProjectReference Include="..\Providers\Providers.Frost\Providers.Frost.csproj">
       <Project>{b404da8f-fbf4-4ccc-be01-22c488863ec2}</Project>

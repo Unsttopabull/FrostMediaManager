@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Frost.Common.Models.Provider;
+using Frost.Common.Proxies.ChangeTrackers;
 using Frost.Providers.Xtreamer.PHP;
-using Frost.Providers.Xtreamer.Proxies.ChangeTrackers;
 
 namespace Frost.Providers.Xtreamer.Proxies {
 

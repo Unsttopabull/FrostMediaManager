@@ -10,7 +10,6 @@ using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.DetectFeatures;
 using System.Diagnostics;
-using Frost.ProcessDatabase;
 using Frost.Providers.Frost;
 using Frost.Providers.Frost.DB;
 using Frost.Providers.Xtreamer.DB;
@@ -157,14 +156,6 @@ namespace Frost.Tester {
                 xjb.Genres.Load();
             }
         }
-
-        public static void TestDbCheck() {
-            //Shares.LDAP();
-
-            string xjb = DBCheck.FindDB(DBSystem.Xtreamer);
-            string findXjbDriveLocation = DBCheck.FindXjbDriveLocation(xjb);
-        }
-
 
         private static TimeSpan TestMediaSearcher() {
             Stopwatch sw = Stopwatch.StartNew();

@@ -111,7 +111,6 @@
     <Compile Include="Proxies\FrostMovie.cs" />
     <Compile Include="Proxies\FrostSubtitle.cs" />
     <Compile Include="Proxies\FrostVideo.cs" />
-    <Compile Include="Proxies\ProxyBase.cs" />
     <Compile Include="SQLiteInitializer.cs" />
     <Compile Include="DB\Studio.cs" />
     <Compile Include="Provider\FrostCompositionRoot.cs" />

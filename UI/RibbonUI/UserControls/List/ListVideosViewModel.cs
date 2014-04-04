@@ -4,7 +4,9 @@ using System.Windows;
 using System.Windows.Data;
 using Frost.Common;
 using Frost.Common.Properties;
+using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
+using RibbonUI.Design;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Windows;
@@ -18,7 +20,9 @@ namespace RibbonUI.UserControls.List {
         private ObservableCollection<MovieVideo> _videos;
 
         public ListVideosViewModel() {
-            _service = LightInjectContainer.GetInstance<IMoviesDataService>();
+            _service = TranslationManager.IsInDesignMode
+                ? new DesignMoviesDataService()
+                : LightInjectContainer.GetInstance<IMoviesDataService>();
 
 
             EditVideoCommand = new RelayCommand<MovieVideo>(OnEditClicked); //, v => v != null);

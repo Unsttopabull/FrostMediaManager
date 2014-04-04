@@ -1,7 +1,7 @@
 ﻿using Frost.Providers.Frost.Provider;
 
 namespace Frost.Providers.Frost.Proxies {
-    public abstract class ProxyBase<TEntity> where TEntity : class, new() {
+    public abstract class ProxyBase<TEntity> where TEntity : class {
         protected readonly TEntity Entity;
         protected readonly FrostMoviesDataDataService Service;
 

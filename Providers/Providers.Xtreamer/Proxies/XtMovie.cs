@@ -6,9 +6,9 @@ using System.Linq;
 using Frost.Common;
 using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
+using Frost.Common.Proxies.ChangeTrackers;
 using Frost.Common.Util.ISO;
 using Frost.Providers.Xtreamer.PHP;
-using Frost.Providers.Xtreamer.Proxies.ChangeTrackers;
 
 namespace Frost.Providers.Xtreamer.Proxies {
 
@@ -488,8 +488,8 @@ namespace Frost.Providers.Xtreamer.Proxies {
                 if (_writers == null) {
                     _writers = new ChangeTrackingCollection<XtPerson>(
                         Entity.Cast.Where(person => person.Job == XjbPhpPerson.JOB_WRITER).Select(person => new XtPerson(person)).ToList(),
-                        p => Entity.Cast.Add(p.ObservedEntity),
-                        p => Entity.Cast.Remove(p.ObservedEntity)
+                        p => Entity.Cast.Add(p.ProxiedEntity),
+                        p => Entity.Cast.Remove(p.ProxiedEntity)
                         );
                 }
                 return _writers;
@@ -507,8 +507,8 @@ namespace Frost.Providers.Xtreamer.Proxies {
                 if (_directors == null) {
                     _directors = new ChangeTrackingCollection<XtPerson>(
                         Entity.Cast.Where(person => person.Job == XjbPhpPerson.JOB_DIRECTOR).Select(person => new XtPerson(person)).ToList(),
-                        p => Entity.Cast.Add(p.ObservedEntity),
-                        p => Entity.Cast.Remove(p.ObservedEntity)
+                        p => Entity.Cast.Add(p.ProxiedEntity),
+                        p => Entity.Cast.Remove(p.ProxiedEntity)
                         );
                 }
                 return _directors;
@@ -525,8 +525,8 @@ namespace Frost.Providers.Xtreamer.Proxies {
                 if (_actors == null) {
                     _actors = new ChangeTrackingCollection<XtActor>(
                         Entity.Cast.Where(person => person.Job == XjbPhpPerson.JOB_ACTOR && !string.IsNullOrEmpty(person.Name)).Select(person => new XtActor(person)).ToList(),
-                        a => Entity.Cast.Add(a.ObservedEntity),
-                        a => Entity.Cast.Remove(a.ObservedEntity)
+                        a => Entity.Cast.Add(a.ProxiedEntity),
+                        a => Entity.Cast.Remove(a.ProxiedEntity)
                         );
                 }
                 return _actors;
@@ -559,8 +559,8 @@ namespace Frost.Providers.Xtreamer.Proxies {
                 if (_genres != null) {
                     _genres = new ChangeTrackingCollection<XtGenre>(
                         Entity.Genres.Select(g => new XtGenre(g)).ToList(),
-                        g => Entity.Genres.Add(g.ObservedEntity),
-                        g => Entity.Genres.Remove(g.ObservedEntity)
+                        g => Entity.Genres.Add(g.ProxiedEntity),
+                        g => Entity.Genres.Remove(g.ProxiedEntity)
                         );
                 }
                 return _genres;

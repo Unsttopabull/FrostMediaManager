@@ -2,8 +2,8 @@
 using System.Globalization;
 using Frost.Common;
 using Frost.Common.Models.Provider;
+using Frost.Common.Proxies.ChangeTrackers;
 using Frost.Providers.Xtreamer.PHP;
-using Frost.Providers.Xtreamer.Proxies.ChangeTrackers;
 
 namespace Frost.Providers.Xtreamer.Proxies {
     public class XtAudio : ChangeTrackingProxy<XjbPhpMovie>, IAudio {

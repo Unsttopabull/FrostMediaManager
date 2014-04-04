@@ -113,11 +113,6 @@
     <Compile Include="Provider\FindDb.cs" />
     <Compile Include="Provider\XtreamerCompositionRoot.cs" />
     <Compile Include="Provider\XjbMoviesDataService.cs" />
-    <Compile Include="Proxies\ChangeTrackers\ChangeTrackingCollection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Proxies\ChangeTrackers\ChangeTrackingProxy.cs" />
-    <Compile Include="Proxies\Proxy.cs" />
     <Compile Include="Proxies\XtActor.cs" />
     <Compile Include="Proxies\XtArt.cs" />
     <Compile Include="Proxies\XtFanart.cs" />
@@ -160,13 +155,13 @@
       <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\NetworkShares\NetworkShares.csproj">
+      <Project>{a85f5e2b-149a-4fb5-a749-056ae20ab72f}</Project>
+      <Name>NetworkShares</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\PHPtoNet\PHPtoNET.csproj">
       <Project>{4661DD6C-BE69-4BCB-A835-53D192DE841C}</Project>
       <Name>PHPtoNET</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\NotUsed\NetworkShares\NetworkShares.csproj">
-      <Project>{A85F5E2B-149A-4FB5-A749-056AE20AB72F}</Project>
-      <Name>NetworkShares</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

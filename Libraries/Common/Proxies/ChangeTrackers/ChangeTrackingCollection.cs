@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Frost.Providers.Xtreamer.Proxies.ChangeTrackers {
+namespace Frost.Common.Proxies.ChangeTrackers {
 
     public class ChangeTrackingCollection<TItem> : ICollection<TItem> where TItem : IEquatable<TItem> {
         private readonly ICollection<TItem> _collection;

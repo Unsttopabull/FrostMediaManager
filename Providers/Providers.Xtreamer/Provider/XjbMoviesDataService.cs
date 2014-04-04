@@ -8,11 +8,11 @@ using Frost.Common;
 using Frost.Common.Comparers;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
+using Frost.Common.Proxies.ChangeTrackers;
 using Frost.PHPtoNET;
 using Frost.Providers.Xtreamer.DB;
 using Frost.Providers.Xtreamer.PHP;
 using Frost.Providers.Xtreamer.Proxies;
-using Frost.Providers.Xtreamer.Proxies.ChangeTrackers;
 
 namespace Frost.Providers.Xtreamer.Provider {
 
@@ -176,7 +176,7 @@ namespace Frost.Providers.Xtreamer.Provider {
             XjbMovie m = _xjb.Movies.Find(changedMovie.Id);
 
             try {
-                m.MovieVo = phpSerializer.Serialize(changedMovie.ObservedEntity);
+                m.MovieVo = phpSerializer.Serialize(changedMovie.ProxiedEntity);
             }
             catch {
                 return;
@@ -222,10 +222,10 @@ namespace Frost.Providers.Xtreamer.Provider {
                         }
                         break;
                     case "Art":
-                        if (!string.IsNullOrEmpty(changedMovie.ObservedEntity.CoverPath)) {
+                        if (!string.IsNullOrEmpty(changedMovie.ProxiedEntity.CoverPath)) {
                             m.HasCover = true;
                         }
-                        if (changedMovie.ObservedEntity.Fanart.Length > 0) {
+                        if (changedMovie.ProxiedEntity.Fanart.Length > 0) {
                             m.HasFanart = true;
                         }
                         break;

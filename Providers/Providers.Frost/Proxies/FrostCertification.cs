@@ -1,9 +1,10 @@
 ﻿using Frost.Common.Models.Provider;
+using Frost.Common.Proxies;
 using Frost.Providers.Frost.DB;
 using Frost.Providers.Frost.Provider;
 
 namespace Frost.Providers.Frost.Proxies {
-    public class FrostCertification : ProxyBase<Certification>, ICertification {
+    public class FrostCertification : ProxyWithService<Certification, FrostMoviesDataDataService>, ICertification {
 
         public FrostCertification(Certification art, FrostMoviesDataDataService service) : base(art, service) {
         }

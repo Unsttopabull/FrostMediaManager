@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
-namespace Frost.Providers.Xtreamer.Proxies.ChangeTrackers {
+namespace Frost.Common.Proxies.ChangeTrackers {
     public abstract class ChangeTrackingProxy<T> : Proxy<T> where T : class {
         protected IDictionary<string, object> OriginalValues;
         private readonly HashSet<string> _changedProperties;

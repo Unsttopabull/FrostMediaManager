@@ -36,7 +36,7 @@ namespace RibbonUI.UserControls.Settings {
         }
 
         private void RemoveMovieFolderClicked(string movieFolder) {
-                Properties.Settings.Default.SearchFolders.Remove(movieFolder);
+            Properties.Settings.Default.SearchFolders.Remove(movieFolder);
         }
 
         private void AddMovieFolderClicked() {
