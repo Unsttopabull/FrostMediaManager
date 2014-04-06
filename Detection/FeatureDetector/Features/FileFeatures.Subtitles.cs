@@ -62,6 +62,10 @@ namespace Frost.DetectFeatures {
             }
 
             MediaListFile mFile = _mf.GetOrOpen(file.FullPath);
+            if (mFile == null) {
+                return;
+            }
+
             foreach (MediaText text in mFile.Text) {
                 SubtitleDetectionInfo sub;
                 ISOLanguageCode lang = GetLanguage(true, text.Language, null, subLang, audiolang);

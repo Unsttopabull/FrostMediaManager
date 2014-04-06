@@ -875,7 +875,7 @@ namespace RibbonUI.Design {
             }
         }
 
-        public void SaveDetected(IEnumerable<MovieInfo> movieInfos) {
+        public void SaveDetected(MovieInfo movieInfo) {
             
         }
 

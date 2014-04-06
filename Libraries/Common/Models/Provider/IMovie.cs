@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Frost.Common.Models.FeatureDetector;
 
 namespace Frost.Common.Models.Provider {
 
@@ -336,6 +337,9 @@ namespace Frost.Common.Models.Provider {
 
         #endregion
 
+        /// <summary>Updates the movie with detected information.</summary>
+        /// <param name="movieInfo">The detected movie information.</param>
+        void Update(MovieInfo movieInfo);
     }
 
 }

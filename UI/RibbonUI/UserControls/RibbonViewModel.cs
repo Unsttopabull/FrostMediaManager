@@ -1,17 +1,22 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Shell;
+using Frost.Common;
 using Frost.Common.Properties;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using GalaSoft.MvvmLight;
 using RibbonUI.Messages;
+using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Windows;
+using SettingsEx = RibbonUI.Properties.Settings;
 
 namespace RibbonUI.UserControls {
 
@@ -151,17 +156,32 @@ namespace RibbonUI.UserControls {
         }
 
         private void SearchClick() {
-            //using (MovieVoContainer mvc = new MovieVoContainer(true, "movieVo.db3")) {
-            //    int count = mvc.Movies.Count();
-            //}
+            if (SettingsEx.Default.SearchFolders == null) {
+                SettingsEx.Default.SearchFolders = new StringCollection();
+            }
 
-            //TestWindow tw = new TestWindow();
-            //Debug.Listeners.Add(tw.Listener);
+            if (SettingsEx.Default.SearchFolders.Count > 0) {
+                SearchMovies sm = new SearchMovies { 
+                    Owner = ParentWindow,
+                    TaskbarItemInfo =  new TaskbarItemInfo {
+                        ProgressState = TaskbarItemProgressState.Indeterminate
+                    }
+                };
 
-            //tw.Owner = Window.GetWindow(this);
-            //tw.ShowDialog();
+                if (sm.ShowDialog() == true) {
+                    
+                }
+                GC.Collect();
+            }
+            else {
+                MessageBoxResult result = MessageBox.Show(ParentWindow, "No folders to search have been added yet. Please add them in the options menu.\nWould you like to open the options now?", "No folders to search.", MessageBoxButton.YesNo);
+                if (result != MessageBoxResult.Yes) {
+                    return;
+                }
 
-            //((MainWindow)((Grid)Parent).Parent).ContentGrid.;
+                SettingsWindow sw = new SettingsWindow { Owner = ParentWindow };
+                sw.ShowDialog();
+            }
         }
 
         private void MenuItemOptionsOnClick() {

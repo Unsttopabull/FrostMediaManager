@@ -286,7 +286,7 @@ namespace Frost.Providers.Xbmc.Provider {
             return hn;            
         }
         
-        public void SaveDetected(IEnumerable<MovieInfo> movieInfos) {
+        public void SaveDetected(MovieInfo movieInfos) {
             
         }
 

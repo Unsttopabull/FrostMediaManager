@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Frost.Common;
+using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 
 namespace RibbonUI.Design.Models {
@@ -445,6 +446,10 @@ namespace RibbonUI.Design.Models {
         }
 
         #endregion
+
+        public void Update(MovieInfo movieInfo) {
+            
+        }
 
     }
 }

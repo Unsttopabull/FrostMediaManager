@@ -1,5 +1,7 @@
 ﻿using System.Threading;
 using System.Windows;
+using System.Windows.Media.Media3D;
+using Frost.Common;
 using RibbonUI.Properties;
 using RibbonUI.Util;
 using RibbonUI.Windows;
@@ -25,7 +27,7 @@ namespace RibbonUI {
             t.Start();
 
             while (_loading == null) {
-                
+                //spinloop wait to create loading splash
             }
 
             _loading.LabelText = "Loading settings ...";
@@ -37,6 +39,11 @@ namespace RibbonUI {
             _loading.LabelText = "Registering provider models ...";
 
             LightInjectContainer.RegisterAssembly(assemblyPath);
+
+            if (!LightInjectContainer.CanGetInstance<IMoviesDataService>()) {
+                MessageBox.Show("Provider did not register a service, the program can not continue", "No service registered", MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+            }
 
             _loading.ProgressMax = 95;
             _loading.ProgressValue = 40;

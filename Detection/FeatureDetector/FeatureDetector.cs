@@ -71,6 +71,10 @@ namespace Frost.DetectFeatures {
             _filePaths = filePaths;
         }
 
+        public FeatureDetector(IEnumerable<string> filePaths) {
+            _filePaths = filePaths.ToArray();
+        }
+
         public IEnumerable<MovieInfo> Search() {
             Count = 0;
             Task<IEnumerable<MovieInfo>>[] arr = new Task<IEnumerable<MovieInfo>>[_filePaths.Length];
@@ -82,7 +86,15 @@ namespace Frost.DetectFeatures {
                 }
             }
 
-            Task.WaitAll(arr);
+            try {
+                Task.WaitAll(arr);
+            }
+            catch (AggregateException e) {
+
+            }
+            catch {
+                
+            }
 
             List<MovieInfo> files = new List<MovieInfo>();
             foreach (Task<IEnumerable<MovieInfo>> task in arr) {
@@ -229,34 +241,6 @@ namespace Frost.DetectFeatures {
                 return file.Detect() ? file.Movie : null;
             }
         }
-
-        ///// <param name="filePath">The filepath of the file to check for features.</param>
-        ///// <param name="nfoPriority">How to handle information in a NFO file if found.</param>
-        //public Movie Detect(string filePath, NFOPriority nfoPriority = NFOPriority.OnlyNotDetected) {
-        //    if (string.IsNullOrEmpty(filePath)) {
-        //        throw new ArgumentNullException("filePath");
-        //    }
-
-        //    Debug.WriteLine(++_count + ": " + filePath, "MOVIE");
-
-        //    using (FileFeatures file = new FileFeatures(nfoPriority, filePath)) {
-        //        return file.Detect() ? file.Movie : null;
-        //    }
-        //}
-
-        ///// <param name="filePaths">The filepaths of the files to check for features.</param>
-        ///// <param name="nfoPriority">How to handle information in a NFO file if found.</param>
-        //public Movie Detect(string[] filePaths, NFOPriority nfoPriority = NFOPriority.OnlyNotDetected) {
-        //    if (filePaths == null || (filePaths != null && filePaths.Any(fnInfo => fnInfo == null))) {
-        //        throw new ArgumentNullException("filePaths");
-        //    }
-
-        //    Debug.WriteLine(++_count + ": " + filePaths[0], "MOVIE");
-
-        //    using (FileFeatures file = new FileFeatures(nfoPriority, filePaths)) {
-        //        return file.Detect() ? file.Movie : null;
-        //    }
-        //}
         #endregion
 
         [NotifyPropertyChangedInvocator]

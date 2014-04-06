@@ -99,7 +99,6 @@
     <Compile Include="Models\FeatureDetector\PlotInfo.cs" />
     <Compile Include="Models\FeatureDetector\SubtitleDetectionInfo.cs" />
     <Compile Include="Models\FeatureDetector\VideoDetectionInfo.cs" />
-    <Compile Include="IMovieSaver.cs" />
     <Compile Include="IMoviesDataService.cs" />
     <Compile Include="IsPluginAttribute.cs" />
     <Compile Include="Models\Provider\CertificationBase.cs" />

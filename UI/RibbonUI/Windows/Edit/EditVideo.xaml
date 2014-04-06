@@ -100,7 +100,7 @@
                             <i:ChangePropertyAction TargetName="Fps" PropertyName="Value" Value="{x:Null}" />
                         </in:EventTrigger>
                     </in:Interaction.Triggers>
-                    <Image Source="../Images/clear.ico" Width="14" Height="14" />
+                    <Image Source="../../Images/clear.ico" Width="14" Height="14" />
                 </Button>
             </StackPanel>
             <e:DoubleUpDown Minimum="0" Watermark="{l:T Frame rate in frames/s}" VerticalAlignment="Center" CultureInfo="{x:Static glob:CultureInfo.CurrentCulture}"
@@ -121,7 +121,7 @@
                             <i:ChangePropertyAction TargetName="BitRate" PropertyName="Value" Value="{x:Null}" />
                         </in:EventTrigger>
                     </in:Interaction.Triggers>
-                    <Image Source="../Images/clear.ico" Width="14" Height="14" />
+                    <Image Source="../../Images/clear.ico" Width="14" Height="14" />
                 </Button>
             </StackPanel>
             <e:DoubleUpDown Minimum="0" Watermark="{l:T Bit rate in kbps}" VerticalAlignment="Center" MinHeight="22" FormatString="F3" IsEnabled="{Binding SelectedVideo[BitRate]}"
@@ -141,7 +141,7 @@
         <StackPanel Grid.Row="0" Grid.Column="4">
             <StackPanel Orientation="Horizontal">
                 <Label VerticalAlignment="Center" Content="{l:T Duration, Postfix=:}"/>
-                <fmm:ImageButton Name="ClearDuration" ToolTip="{l:T Clear value}" IsEnabled="{Binding ElementName=VideoDuration, Path=IsEnabled}" Width="20" Height="20" EnabledSource="../Images/clear.ico" DisabledSource="../Images/clear_disabled.png">
+                <fmm:ImageButton Name="ClearDuration" ToolTip="{l:T Clear value}" IsEnabled="{Binding ElementName=VideoDuration, Path=IsEnabled}" Width="20" Height="20" EnabledSource="../../Images/clear.ico" DisabledSource="../../Images/clear_disabled.png">
                     <fmm:ImageButton.Style>
                         <Style TargetType="{x:Type fmm:ImageButton}">
                             <Style.Triggers>
@@ -194,7 +194,7 @@
                             <i:ChangePropertyAction TargetName="Aspect" PropertyName="Value" Value="{x:Null}" />
                         </in:EventTrigger>
                     </in:Interaction.Triggers>
-                    <Image Source="../Images/clear.ico" Width="14" Height="14" />
+                    <Image Source="../../Images/clear.ico" Width="14" Height="14" />
                 </Button>
             </StackPanel>
             <e:DoubleUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding SelectedVideo.Aspect, UpdateSourceTrigger=PropertyChanged}" MinHeight="22" FormatString="F3"
@@ -215,7 +215,7 @@
                             <i:ChangePropertyAction TargetName="WidthSelector" PropertyName="Value" Value="{x:Null}" />
                         </in:EventTrigger>
                     </in:Interaction.Triggers>
-                    <Image Source="../Images/clear.ico" Width="14" Height="14" />
+                    <Image Source="../../Images/clear.ico" Width="14" Height="14" />
                 </Button>
             </StackPanel>
             <e:IntegerUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding SelectedVideo.Width, UpdateSourceTrigger=PropertyChanged}" MinHeight="22"
@@ -236,7 +236,7 @@
                             <i:ChangePropertyAction TargetName="VideoHeight" PropertyName="Value" Value="{x:Null}" />
                         </in:EventTrigger>
                     </in:Interaction.Triggers>
-                    <Image Source="../Images/clear.ico" Width="14" Height="14" />
+                    <Image Source="../../Images/clear.ico" Width="14" Height="14" />
                 </Button>
             </StackPanel>
             <e:IntegerUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding SelectedVideo.Height, UpdateSourceTrigger=PropertyChanged}" x:Name="VideoHeight"
@@ -260,7 +260,7 @@
                             <i:ChangePropertyAction TargetName="SelectedLanguage" PropertyName="SelectedIndex" Value="-1"/>
                         </in:EventTrigger>
                     </in:Interaction.Triggers>
-                    <Image Source="../Images/clear.ico" Width="14" Height="14"/>
+                    <Image Source="../../Images/clear.ico" Width="14" Height="14"/>
                 </Button>
             </StackPanel>
             <ComboBox x:Name="SelectedLanguage" SelectedItem="{Binding SelectedVideo.Language, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding SelectedVideo[Language]}">

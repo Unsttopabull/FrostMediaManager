@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Frost.Common;
+using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
 using RibbonUI.Design.Models;
@@ -648,6 +649,10 @@ namespace RibbonUI.Design.Fakes {
                         return false;
                 }
             }
+        }
+
+        public void Update(MovieInfo movieInfo) {
+            
         }
     }
 

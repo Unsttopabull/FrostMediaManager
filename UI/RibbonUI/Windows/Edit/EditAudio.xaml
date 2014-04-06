@@ -90,7 +90,7 @@
                             <i:ChangePropertyAction TargetName="BitRate" PropertyName="Value" Value="{x:Null}"/>
                         </in:EventTrigger>
                     </in:Interaction.Triggers>                    
-                    <Image Source="../Images/clear.ico" Width="14" Height="14"/>
+                    <Image Source="../../Images/clear.ico" Width="14" Height="14"/>
                 </Button>
             </StackPanel>
             <e:DoubleUpDown Minimum="0" Watermark="{l:T Bit rate in kbps}" VerticalAlignment="Center" Value="{Binding SelectedAudio.BitRate, TargetNullValue={x:Null}}"
@@ -114,7 +114,7 @@
                             <i:ChangePropertyAction TargetName="SamplingRate" PropertyName="Value" Value="{x:Null}"/>
                         </in:EventTrigger>
                     </in:Interaction.Triggers>
-                    <Image Source="../Images/clear.ico" Width="14" Height="14"/>
+                    <Image Source="../../Images/clear.ico" Width="14" Height="14"/>
                 </Button>
             </StackPanel>
             <e:IntegerUpDown Minimum="0" Watermark="{l:T Sampling rate in kHz}" VerticalAlignment="Center" Value="{Binding SelectedAudio.SamplingRate, TargetNullValue={x:Null}}"
@@ -134,7 +134,7 @@
                             <i:ChangePropertyAction TargetName="BitDepth" PropertyName="Value" Value="{x:Null}"/>
                         </in:EventTrigger>
                     </in:Interaction.Triggers>                    
-                    <Image Source="../Images/clear.ico" Width="14" Height="14"/>
+                    <Image Source="../../Images/clear.ico" Width="14" Height="14"/>
                 </Button>
             </StackPanel>
             <e:IntegerUpDown Minimum="0" VerticalAlignment="Center" Value="{Binding SelectedAudio.BitDepth, TargetNullValue={x:Null}}" Watermark="{l:T Bit depth in bits}"
@@ -158,7 +158,7 @@
                             <i:ChangePropertyAction TargetName="SelectedLanguage" PropertyName="SelectedIndex" Value="-1"/>
                         </in:EventTrigger>
                     </in:Interaction.Triggers>
-                    <Image Source="../Images/clear.ico" Width="14" Height="14"/>
+                    <Image Source="../../Images/clear.ico" Width="14" Height="14"/>
                 </Button>
             </StackPanel>
 
@@ -202,8 +202,8 @@
                         </in:Interaction.Triggers>
                     </a:TimePicker>
                 </Border>
-                <fmm:ImageButton ToolTip="Clear value" EnabledSource="../Images/clear.ico"
-                                 DisabledSource="../Images/clear_disabled.png" Width="20" Height="20"
+                <fmm:ImageButton ToolTip="Clear value" EnabledSource="../../Images/clear.ico"
+                                 DisabledSource="../../Images/clear_disabled.png" Width="20" Height="20"
                                  IsEnabled="{Binding ElementName=MovieDuration, Path=IsEnabled}">
                     <fmm:ImageButton.Style>
                         <Style TargetType="{x:Type fmm:ImageButton}">

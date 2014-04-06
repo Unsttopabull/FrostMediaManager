@@ -8,7 +8,7 @@
         Name="AddCountriesControl"
         Title="{l:T SelectCountry}" Height="212" Width="350" WindowStartupLocation="CenterOwner">
     <Window.Resources>
-        <BitmapImage x:Key="UnknownCountry" UriSource="..\Images\unknown.png" />
+        <BitmapImage x:Key="UnknownCountry" UriSource="..\..\Images\unknown.png" />
     </Window.Resources>
     <Window.DataContext>
         <windows:AddCountriesViewModel/>

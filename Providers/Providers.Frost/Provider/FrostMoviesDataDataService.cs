@@ -498,10 +498,9 @@ namespace Frost.Providers.Frost.Provider {
             }
         }
 
-        public void SaveDetected(IEnumerable<MovieInfo> movieInfos) {
-            using (MovieSaver ms = new MovieSaver(movieInfos, _mvc)) {
-                ms.Save();
-            }
+        public void SaveDetected(MovieInfo movieInfo) {
+            MovieSaver ms = new MovieSaver(new[] { movieInfo }, _mvc);
+            ms.Save(false);
         }
 
         public bool HasUnsavedChanges() {

@@ -85,7 +85,6 @@ namespace RibbonUI.UserControls {
                     }
                 }
             };
-
             window.TaskbarItemInfo = taskbarItemInfo;
         }
 

@@ -197,30 +197,30 @@
     <Compile Include="Util\Provider.cs" />
     <Compile Include="Properties\SettingsEx.cs" />
     <Compile Include="Util\UIHelper.cs" />
-    <Compile Include="Windows\AddCountriesViewModel.cs">
+    <Compile Include="Windows\Add\AddCountriesViewModel.cs">
       <DependentUpon>AddCountries.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\AddGenre.xaml.cs">
+    <Compile Include="Windows\Add\AddGenre.xaml.cs">
       <DependentUpon>AddGenre.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\AddGenreViewModel.cs">
+    <Compile Include="Windows\Add\AddGenreViewModel.cs">
       <Generator>MSBuild:Compile</Generator>
       <DependentUpon>AddGenre.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\AddPersonViewModel.cs">
+    <Compile Include="Windows\Add\AddPersonViewModel.cs">
       <DependentUpon>AddPerson.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\AddStudiosViewModel.cs">
+    <Compile Include="Windows\Add\AddStudiosViewModel.cs">
       <DependentUpon>AddStudios.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\EditAudioViewModel.cs">
+    <Compile Include="Windows\Edit\EditAudioViewModel.cs">
       <DependentUpon>EditAudio.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\EditPersonViewModel.cs">
+    <Compile Include="Windows\Edit\EditPersonViewModel.cs">
       <SubType>Code</SubType>
       <DependentUpon>EditPerson.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\EditVideoViewModel.cs">
+    <Compile Include="Windows\Edit\EditVideoViewModel.cs">
       <SubType>Code</SubType>
       <DependentUpon>EditVideo.xaml</DependentUpon>
     </Compile>
@@ -233,40 +233,46 @@
     <Compile Include="Windows\ProviderSelectViewModel.cs">
       <DependentUpon>ProviderSelect.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\SelectLanguageViewModel.cs">
+    <Compile Include="Windows\SearchMovies.xaml.cs">
+      <DependentUpon>SearchMovies.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Add\SelectLanguageViewModel.cs">
       <DependentUpon>SelectLanguage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\AddCodecMapping.xaml.cs">
+    <Compile Include="Windows\Add\AddCodecMapping.xaml.cs">
       <DependentUpon>AddCodecMapping.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\AddStudios.xaml.cs">
+    <Compile Include="Windows\Add\AddStudios.xaml.cs">
       <DependentUpon>AddStudios.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\AddPerson.xaml.cs">
+    <Compile Include="Windows\Add\AddPerson.xaml.cs">
       <DependentUpon>AddPerson.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\EditVideo.xaml.cs">
+    <Compile Include="Windows\Edit\EditVideo.xaml.cs">
       <DependentUpon>EditVideo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\EditAudio.xaml.cs">
+    <Compile Include="Windows\Edit\EditAudio.xaml.cs">
       <DependentUpon>EditAudio.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\EditPerson.xaml.cs">
+    <Compile Include="Windows\Edit\EditPerson.xaml.cs">
       <DependentUpon>EditPerson.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\InputBox.xaml.cs">
       <DependentUpon>InputBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\SelectLanguage.xaml.cs">
+    <Compile Include="Windows\Add\SelectLanguage.xaml.cs">
       <DependentUpon>SelectLanguage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\AddCountries.xaml.cs">
+    <Compile Include="Windows\Add\AddCountries.xaml.cs">
       <DependentUpon>AddCountries.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\SearchMoviesViewModel.cs">
+      <DependentUpon>SearchMovies.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\AddCodecMappingViewModel.cs">
+    <Compile Include="Windows\Add\AddCodecMappingViewModel.cs">
       <DependentUpon>AddCodecMapping.xaml</DependentUpon>
     </Compile>
     <Page Include="UserControls\ArtAndPlot.xaml">
@@ -333,31 +339,31 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\AddCodecMapping.xaml">
+    <Page Include="Windows\Add\AddCodecMapping.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\AddGenre.xaml">
+    <Page Include="Windows\Add\AddGenre.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\AddStudios.xaml">
+    <Page Include="Windows\Add\AddStudios.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\AddPerson.xaml">
+    <Page Include="Windows\Add\AddPerson.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\EditVideo.xaml">
+    <Page Include="Windows\Edit\EditVideo.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\EditAudio.xaml">
+    <Page Include="Windows\Edit\EditAudio.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\EditPerson.xaml">
+    <Page Include="Windows\Edit\EditPerson.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -373,11 +379,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\SelectLanguage.xaml">
+    <Page Include="Windows\SearchMovies.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\Add\SelectLanguage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Windows\AddCountries.xaml">
+    <Page Include="Windows\Add\AddCountries.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -663,6 +673,7 @@
       <HintPath>..\..\packages\MvvmLightLibs.4.2.30.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
     <Reference Include="Xceed.Wpf.Toolkit, Version=2.0.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

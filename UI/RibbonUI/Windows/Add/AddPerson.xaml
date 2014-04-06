@@ -32,7 +32,7 @@
         <ListBox x:Name="PeopleList" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding People}" ScrollViewer.IsDeferredScrollingEnabled="True"
                  Margin="5,5,5,0" SelectedItem="{Binding SelectedPerson}" SelectionChanged="PeopleList_OnSelectionChanged">
             <ListBox.Resources>
-                <BitmapImage x:Key="DefaultPerson" UriSource="../Images/person.png"/>
+                <BitmapImage x:Key="DefaultPerson" UriSource="../../Images/person.png"/>
             </ListBox.Resources>
             <ListBox.GroupStyle>
                 <GroupStyle ContainerStyle="{StaticResource ExpanderGroup}" />
@@ -66,7 +66,7 @@
                 <TextBox Grid.Row="1" Grid.Column="2" x:Name="PersonThumb" Text="{Binding PersonThumb}" IsEnabled="{Binding IsThumbEditable}"/>
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="1" Grid.Column="2" Margin="0,0,5,0" ToolTip="{l:T Open file search dialog}">
                     <Button Height="16" Style="{StaticResource TransparentBorderlessButton}" Command="{Binding ThumbSearchCommand}" IsEnabled="{Binding ElementName=PersonThumb, Path=IsEnabled}">
-                        <Image Source="../Images/folder.ico"/>
+                        <Image Source="../../Images/folder.ico"/>
                     </Button>
                 </StackPanel>
             </Grid>

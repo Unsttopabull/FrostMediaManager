@@ -171,7 +171,7 @@ namespace Frost.Tester {
             Console.WriteLine("Detection took: " + sw.Elapsed);
 
             using (MovieSaver sv = new MovieSaver(movies)) {
-                sv.Save();
+                sv.Save(true);
             }
 
             return sw.Elapsed;

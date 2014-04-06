@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Frost.Common;
+using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 using Frost.Providers.Xbmc.DB;
 using Frost.Providers.Xbmc.DB.People;
@@ -789,6 +790,10 @@ namespace Frost.Providers.Xbmc.Proxies {
         #endregion
 
         #endregion
+
+        public void Update(MovieInfo movieInfo) {
+            
+        }
     }
 
 }

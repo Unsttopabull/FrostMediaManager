@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Frost.Common;
+using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
 using Frost.Common.Proxies.ChangeTrackers;
@@ -839,23 +840,32 @@ namespace Frost.Providers.Xtreamer.Proxies {
             }
         }
 
+        public void Update(MovieInfo movieInfo) {
+            
+        }
+
+        #region Change Tracking
+
         internal IEnumerable<XtPerson> GetChangedWriters() {
             return _writers != null
-                ? _writers.Where(w => w.Id > 0 && w.IsDirty)
-                : Enumerable.Empty<XtPerson>();
+                       ? _writers.Where(w => w.Id > 0 && w.IsDirty)
+                       : Enumerable.Empty<XtPerson>();
         }
 
         internal IEnumerable<XtPerson> GetChangedDirectors() {
             return _directors != null
-                ? _directors.Where(w => w.Id > 0 && w.IsDirty)
-                : Enumerable.Empty<XtPerson>();
+                       ? _directors.Where(w => w.Id > 0 && w.IsDirty)
+                       : Enumerable.Empty<XtPerson>();
         }
 
         internal IEnumerable<XtActor> GetChangedActors() {
             return _actors != null
-                ? _actors.Where(w => w.Id > 0 && w.IsDirty)
-                : Enumerable.Empty<XtActor>();
+                       ? _actors.Where(w => w.Id > 0 && w.IsDirty)
+                       : Enumerable.Empty<XtActor>();
         }
+
+        #endregion
+
     }
 
 }

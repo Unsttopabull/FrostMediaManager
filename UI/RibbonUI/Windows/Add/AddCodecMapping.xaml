@@ -6,7 +6,7 @@
         xmlns:in="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"        
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
+        xmlns:l="http://www.frostmediamanager.com/xaml/translation"
         xmlns:util="clr-namespace:RibbonUI.Util"
         xmlns:windows="clr-namespace:RibbonUI.Windows"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance windows:AddCodecMappingViewModel}"

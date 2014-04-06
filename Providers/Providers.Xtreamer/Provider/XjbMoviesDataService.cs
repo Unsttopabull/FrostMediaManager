@@ -109,7 +109,7 @@ namespace Frost.Providers.Xtreamer.Provider {
 
         #region Saving
 
-        public void SaveDetected(IEnumerable<MovieInfo> movieInfos) {
+        public void SaveDetected(MovieInfo movieInfo) {
         }
 
         public bool HasUnsavedChanges() {

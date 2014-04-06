@@ -33,9 +33,9 @@
         </Ribbon.QuickAccessToolBar>-->
         <!-- Application Menu, located at the left-hand side (down arrow) -->
         <Ribbon.ApplicationMenu>
-            <RibbonApplicationMenu>
-                <!--<RibbonApplicationMenuItem Header="Export" ImageSource="Images\export.png" Height="300">
-                    </RibbonApplicationMenuItem>-->
+            <RibbonApplicationMenu LargeImageSource="../logo3.ico">
+                <!--<RibbonApplicationMenuItem Header="Export" ImageSource="../Images/export.png" Height="300">
+                    </RibbonApplicationMenuItem>
 
                 <RibbonApplicationMenu.FooterPaneContent>
                     <DockPanel LastChildFill="false">
@@ -50,7 +50,7 @@
                 </RibbonApplicationMenu.FooterPaneContent>
                 <RibbonApplicationMenu.AuxiliaryPaneContent>
                     <RibbonGallery />
-                </RibbonApplicationMenu.AuxiliaryPaneContent>
+                </RibbonApplicationMenu.AuxiliaryPaneContent>-->
                 <RibbonApplicationMenuItem Header="Options" ImageSource="../Images/options.png" Command="{Binding OptionsCommand}"/>
             </RibbonApplicationMenu>
         </Ribbon.ApplicationMenu>

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Frost.Common.Models;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 
@@ -37,7 +36,7 @@ namespace Frost.Common {
         bool HasUnsavedChanges();
         void SaveChanges();
 
-        void SaveDetected(IEnumerable<MovieInfo> movieInfos);
+        void SaveDetected(MovieInfo movieInfo);
 
     }
 }

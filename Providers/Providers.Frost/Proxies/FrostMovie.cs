@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Frost.Common;
+using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 using Frost.Common.Proxies;
 using Frost.Providers.Frost.DB;
@@ -574,5 +575,9 @@ namespace Frost.Providers.Frost.Proxies {
         #endregion
 
         #endregion
+
+        public void Update(MovieInfo movieInfo) {
+            
+        }
     }
 }

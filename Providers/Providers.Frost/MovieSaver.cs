@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 using Frost.Common.Util.ISO;
@@ -12,7 +11,7 @@ using Frost.Providers.Frost.DB.People;
 
 namespace Frost.Providers.Frost {
 
-    public class MovieSaver : IMovieSaver {
+    public class MovieSaver : IDisposable {
         private readonly Dictionary<ISOCountryCode, Country> _countries;
         private readonly Dictionary<ISOLanguageCode, Language> _languages;
         private readonly Dictionary<string, Set> _sets;
@@ -24,6 +23,7 @@ namespace Frost.Providers.Frost {
 
 
         private readonly FrostDbContainer _mvc;
+        private bool _disposeContainer;
 
         public MovieSaver(IEnumerable<MovieInfo> movies, FrostDbContainer db = null) {
             _infos = movies;
@@ -37,10 +37,16 @@ namespace Frost.Providers.Frost {
             _people = new Dictionary<string, Person>(StringComparer.InvariantCultureIgnoreCase);
 
             //_mvc = new MovieVoContainer(true, "movieVo.db3");
-            _mvc = db ?? new FrostDbContainer(true);
+            if (db != null) {
+                _mvc = db;
+                _disposeContainer = false;
+            }
+            else {
+                _mvc = new FrostDbContainer(true);
+            }
         }
 
-        public void Save() {
+        public void Save(bool saveChanges) {
             //mvc.Languages.Load();
             //mvc.Specials.Load();
             //mvc.Countries.Load();
@@ -51,18 +57,31 @@ namespace Frost.Providers.Frost {
 
             int i = 0;
             foreach (MovieInfo movie in _infos) {
-                Debug.WriteLine("{0} ({1})", movie.Title, ++i);
-                Debug.Indent();
+                ////Debug.WriteLine("{0} ({1})", movie.Title, ++i);
+                //Debug.Indent();
                 Save(movie);
 
-                Debug.Unindent();
+                //Debug.Unindent();
             }
 
-            _mvc.SaveChanges();
+            if (saveChanges) {
+                _mvc.SaveChanges();
+            }
         }
 
         private void Save(MovieInfo movie) {
             Movie mv = FromMovieInfo(movie);
+
+            if (!string.IsNullOrEmpty(mv.ImdbID)) {
+                if (_mvc.Movies.Any(m => m.ImdbID == mv.ImdbID)) {
+                    return;
+                }
+            }
+
+            if (_mvc.Movies.Any(m => m.Title == mv.Title || !string.IsNullOrEmpty(mv.OriginalTitle) && m.OriginalTitle == mv.OriginalTitle)) {
+                return;
+            }
+
             mv = _mvc.Movies.Add(mv);
 
             mv.Set = GetHasName(movie.Set, _sets);
@@ -81,9 +100,9 @@ namespace Frost.Providers.Frost {
             mv.Audios = new HashSet<Audio>();
             mv.Subtitles = new HashSet<Subtitle>();
             foreach (FileDetectionInfo fileInfo in movie.FileInfos) {
-                Debug.Indent();
+                //Debug.Indent();
                 File file = new File(fileInfo.Name, fileInfo.Extension, fileInfo.FolderPath, fileInfo.Size);
-                Debug.Unindent();
+                //Debug.Unindent();
 
                 AddVideos(fileInfo, mv, file);
                 AddAudios(fileInfo, mv, file);
@@ -158,13 +177,13 @@ namespace Frost.Providers.Frost {
         }
 
         private Person GetPerson(PersonInfo info) {
-            Debug.WriteLine("Looking for person: " + info.Name);
-            Debug.Indent();
+            ////Debug.WriteLine("Looking for person: " + info.Name);
+            //Debug.Indent();
 
             Person p;
             if (_people.TryGetValue(info.Name, out p)) {
-                Debug.WriteLine("Found in dict");
-                Debug.Unindent();
+                ////Debug.WriteLine("Found in dict");
+                //Debug.Unindent();
                 return p;
             }
 
@@ -172,16 +191,16 @@ namespace Frost.Providers.Frost {
             if (p != null) {
                 _people.Add(p.Name, p);
 
-                Debug.WriteLine("Found in DB");
-                Debug.Unindent();
+                //Debug.WriteLine("Found in DB");
+                //Debug.Unindent();
                 return p;
             }
 
             p = new Person(info.Name, info.Thumb, info.ImdbID);
             _people.Add(p.Name, p);
 
-            Debug.WriteLine("Created new person");
-            Debug.Unindent();
+            //Debug.WriteLine("Created new person");
+            //Debug.Unindent();
 
             return p;
         }
@@ -191,13 +210,13 @@ namespace Frost.Providers.Frost {
                 return null;
             }
 
-            Debug.WriteLine("Looking for language: " + langCode.EnglishName);
-            Debug.Indent();
+            //Debug.WriteLine("Looking for language: " + langCode.EnglishName);
+            //Debug.Indent();
 
             Language lang;
             if (_languages.TryGetValue(langCode, out lang)) {
-                Debug.WriteLine("Found in dict");
-                Debug.Unindent();
+                //Debug.WriteLine("Found in dict");
+                //Debug.Unindent();
 
                 return lang;
             }
@@ -206,43 +225,43 @@ namespace Frost.Providers.Frost {
             if (lang != null) {
                 _languages.Add(langCode, lang);
 
-                Debug.WriteLine("Found in DB");
-                Debug.Unindent();
+                //Debug.WriteLine("Found in DB");
+                //Debug.Unindent();
                 return lang;
             }
 
             lang = new Language(langCode);
             _languages.Add(langCode, lang);
 
-            Debug.WriteLine("Created new Language");
-            Debug.Unindent();
+            //Debug.WriteLine("Created new Language");
+            //Debug.Unindent();
 
             return lang;
         }
 
         private Country GetCountry(ISOCountryCode countryCode) {
-            Debug.WriteLine("Looking for country: " + countryCode.EnglishName);
-            Debug.Indent();
+            //Debug.WriteLine("Looking for country: " + countryCode.EnglishName);
+            //Debug.Indent();
 
             Country lang;
             if (_countries.TryGetValue(countryCode, out lang)) {
-                Debug.WriteLine("Found in dict");
-                Debug.Unindent();
+                //Debug.WriteLine("Found in dict");
+                //Debug.Unindent();
 
                 return lang;
             }
 
             lang = _mvc.Countries.FirstOrDefault(l => l.ISO3166.Alpha3 == countryCode.Alpha3);
             if (lang != null) {
-                Debug.WriteLine("Found in DB");
-                Debug.Unindent();
+                //Debug.WriteLine("Found in DB");
+                //Debug.Unindent();
 
                 _countries.Add(countryCode, lang);
                 return lang;
             }
 
-            Debug.WriteLine("Created new country");
-            Debug.Unindent();
+            //Debug.WriteLine("Created new country");
+            //Debug.Unindent();
 
             lang = new Country(countryCode);
             _countries.Add(countryCode, lang);
@@ -255,28 +274,28 @@ namespace Frost.Providers.Frost {
                 return null;
             }
 
-            Debug.WriteLine("Looking for: " + typeof(T).Name);
-            Debug.Indent();
+            //Debug.WriteLine("Looking for: " + typeof(T).Name);
+            //Debug.Indent();
 
             T hasName;
             if (dictToSearch.TryGetValue(name, out hasName)) {
-                Debug.WriteLine("Found in dict");
-                Debug.Unindent();
+                //Debug.WriteLine("Found in dict");
+                //Debug.Unindent();
 
                 return hasName;
             }
 
             hasName = _mvc.Set<T>().FirstOrDefault<T>(s => s.Name == name);
             if (hasName != null) {
-                Debug.WriteLine("Found in DB");
-                Debug.Unindent();
+                //Debug.WriteLine("Found in DB");
+                //Debug.Unindent();
 
                 dictToSearch.Add(hasName.Name, hasName);
                 return hasName;
             }
 
-            Debug.WriteLine("Created new one");
-            Debug.Unindent();
+            //Debug.WriteLine("Created new one");
+            //Debug.Unindent();
 
             hasName = new T { Name = name };
             dictToSearch.Add(hasName.Name, hasName);
@@ -285,28 +304,28 @@ namespace Frost.Providers.Frost {
         }
 
         private Special GetSpecial(string special) {
-            Debug.WriteLine("Looking for special: " + special);
-            Debug.Indent();
+            //Debug.WriteLine("Looking for special: " + special);
+            //Debug.Indent();
 
             Special spec;
             if (_specials.TryGetValue(special, out spec)) {
-                Debug.WriteLine("Found in dict");
-                Debug.Unindent();
+                //Debug.WriteLine("Found in dict");
+                //Debug.Unindent();
 
                 return spec;
             }
 
             spec = _mvc.Specials.FirstOrDefault(s => s.Value == special);
             if (spec != null) {
-                Debug.WriteLine("Found in DB");
-                Debug.Unindent();
+                //Debug.WriteLine("Found in DB");
+                //Debug.Unindent();
 
                 _specials.Add(spec.Value, spec);
                 return spec;
             }
 
-            Debug.WriteLine("Created new special");
-            Debug.Unindent();
+            //Debug.WriteLine("Created new special");
+            //Debug.Unindent();
 
             spec = new Special(special);
             _specials.Add(spec.Value, spec);
@@ -371,7 +390,7 @@ namespace Frost.Providers.Frost {
                 return;
             }
 
-            if (_mvc != null) {
+            if (_mvc != null && _disposeContainer) {
                 _mvc.Dispose();
             }
 
