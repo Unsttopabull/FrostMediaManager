@@ -68,7 +68,7 @@ namespace Frost.DetectFeatures.Util {
                 return true;
             }
 
-            return string.Equals(CodecId, other.CodecId);
+            return string.Equals(CodecId, other.CodecId, StringComparison.OrdinalIgnoreCase);
         }
 
         [NotifyPropertyChangedInvocator]
@@ -79,6 +79,11 @@ namespace Frost.DetectFeatures.Util {
             }
         }
 
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString() {
+            return string.Format("{0} => {1}", CodecId, Mapping);
+        }
     }
 
 }

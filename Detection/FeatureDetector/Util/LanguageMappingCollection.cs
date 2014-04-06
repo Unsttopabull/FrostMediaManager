@@ -31,6 +31,16 @@ namespace Frost.DetectFeatures.Util {
 
         public new string this[string mapping] {
             get { return base[mapping].ISO639Alpha3; }
+            set {
+                if (Dictionary == null) {
+                    return;
+                }
+
+                LanguageMapping lang;
+                if (Dictionary.TryGetValue(value, out lang)) {
+                    lang.ISO639Alpha3 = value;
+                }
+            }
         }
     }
 

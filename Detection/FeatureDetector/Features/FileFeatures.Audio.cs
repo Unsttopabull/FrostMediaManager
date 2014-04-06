@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.FileName;

@@ -18,7 +18,7 @@ namespace Frost.DetectFeatures {
 
         /// <summary>The video codec identifier mappings</summary>
         /// <example>dx50 => mpeg-4</example>
-        public static CodecIdMappingCollection VideoCodecIdMappings;
+        public static readonly CodecIdMappingCollection VideoCodecIdMappings;
 
         private void GetISOVideoInfo() {
         }

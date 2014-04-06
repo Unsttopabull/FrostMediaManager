@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Windows;
+using RibbonUI.Properties;
 using RibbonUI.Util;
 using RibbonUI.Windows;
 
@@ -14,7 +15,7 @@ namespace RibbonUI {
             Closed += (sender, args) => Application.Current.Shutdown();
 
             Thread t = new Thread(() => {
-                _loading = new Loading(40);
+                _loading = new Loading(10);
                 _loading.Show();
 
                 _loading.Closed += (sender, args) => _loading.Dispatcher.InvokeShutdown();
@@ -29,19 +30,19 @@ namespace RibbonUI {
 
             _loading.LabelText = "Loading settings ...";
 
-            App.LoadSettings();
+            Settings.Load();
 
-            _loading.ProgressMax = 60;
-            _loading.ProgressValue = 40;
+            _loading.ProgressMax = 30;
+            _loading.ProgressValue = 10;
             _loading.LabelText = "Registering provider models ...";
 
             LightInjectContainer.RegisterAssembly(assemblyPath);
 
             _loading.ProgressMax = 95;
-            _loading.ProgressValue = 60;
+            _loading.ProgressValue = 40;
             _loading.LabelText = "Loading provider database ...";
 
-            DataContext = LightInjectContainer.GetInstance<MainWindowViewModel>();
+            DataContext = new MainWindowViewModel();
 
             InitializeComponent();
 

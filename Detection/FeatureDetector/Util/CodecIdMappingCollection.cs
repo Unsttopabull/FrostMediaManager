@@ -33,6 +33,16 @@ namespace Frost.DetectFeatures.Util {
 
         public new string this[string codecId] {
             get { return base[codecId].Mapping; }
+            set {
+                if (Dictionary == null) {
+                    return;
+                }
+
+                CodecIdBinding cb;
+                if (Dictionary.TryGetValue(value, out cb)) {
+                    cb.Mapping = value;
+                }
+            }
         }
 
         public bool TryGetValue(string key, out string binding) {

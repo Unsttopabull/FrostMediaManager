@@ -4,8 +4,7 @@
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" ShutdownMode="OnExplicitShutdown"
-             StartupUri="Windows/ProviderSelect.xaml">
+             mc:Ignorable="d" StartupUri="Windows/ProviderSelect.xaml">
              <!-- StartupUri="MainWindow.xaml"> -->
     <Application.Resources>
         <BitmapImage x:Key="DefaultLogo" UriSource="Images/defaultscreen.png" />

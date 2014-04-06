@@ -130,7 +130,7 @@
                   AutoGenerateColumns="False" CellStyle="{StaticResource NoBorderCell}" GridLinesVisibility="None"
                   SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="0" CanUserAddRows="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="{l:T Mapping}" Binding="{Binding Mapping}">
+                <DataGridTextColumn Header="{l:T Mapping}" Binding="{Binding Mapping}" IsReadOnly="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="{x:Type TextBlock}">
                             <Setter Property="VerticalAlignment" Value="Center"/>

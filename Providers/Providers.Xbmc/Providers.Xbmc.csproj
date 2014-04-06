@@ -164,7 +164,7 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetPath)" "E:\Workspace\Ostalo\Repos\Git\FrostMediaManager2\UI\RibbonUI\bin\Debug\plugins" /Y</PostBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetPath)" "E:\Workspace\Ostalo\Repos\Git\FrostMediaManager2\UI\RibbonUI\bin\Debug\providers" /Y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets. 

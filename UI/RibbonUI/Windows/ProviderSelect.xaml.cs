@@ -13,6 +13,10 @@ namespace RibbonUI.Windows {
 
 
         private void ProviderSelectOnLoaded(object sender, RoutedEventArgs e) {
+            if (App.IsShutdown) {
+                Close();
+            }
+
             ProviderSelectViewModel vm = (ProviderSelectViewModel) DataContext;
             vm.Window = this;
 

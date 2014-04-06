@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
@@ -19,28 +20,28 @@ namespace RibbonUI.UserControls.Settings {
 
         public FeatureDetectorSettingsViewModel() {
             RemoveFileExtensionCommand = new RelayCommand<string>(
-                ext => FeatureDetector.VideoExtensions.Remove(ext),
+                ext => KnownVideoExtensions.Remove(ext),
                 ext => !string.IsNullOrEmpty(ext)
             );
             AddFileExtensionCommand = new RelayCommand(AddFileExtension);
 
             AddAudioCodecMappingCommand = new RelayCommand(AddAudioCodecMapping);
             RemoveAudioCodecMappingCommand = new RelayCommand<CodecIdBinding>(
-                cb => FileFeatures.AudioCodecIdMappings.Remove(cb),
+                cb => AudioCodecBindings.Remove(cb),
                 cb => cb != null
             );
             
 
             AddVideoCodecMappingCommand = new RelayCommand(AddVideoCodecMapping);
-            RemoveAudioCodecMappingCommand = new RelayCommand<CodecIdBinding>(
-                cb => FileFeatures.VideoCodecIdMappings.Remove(cb),
+            RemoveVideoCodecMappingCommand = new RelayCommand<CodecIdBinding>(
+                cb => VideoCodecBindings.Remove(cb),
                 cb => cb != null
             );
            
 
             AddSubtitleFileExtensionCommand = new RelayCommand(AddSubtitleFileExtension);
             RemoveSubtitleFileExtensionCommand = new RelayCommand<string>(
-                ext => FileFeatures.KnownSubtitleExtensions.Remove(ext),
+                ext => KnownSubtitleExtensions.Remove(ext),
                 ext => !string.IsNullOrEmpty(ext)
             );
         }
@@ -68,7 +69,7 @@ namespace RibbonUI.UserControls.Settings {
         public ObservableChangeTrackingCollection<string> KnownSubtitleExtensions {
             get {
                 if (_knownSubtiteExtensions == null) {
-                    _knownSubtiteExtensions = new ObservableChangeTrackingCollection<string>(FileFeatures.KnownSubtitleExtensions);
+                    _knownSubtiteExtensions = new ObservableChangeTrackingCollection<string>(new ObservableCollection<string>(FileFeatures.KnownSubtitleExtensions));
                 }
                 return _knownSubtiteExtensions;
             }
@@ -78,7 +79,7 @@ namespace RibbonUI.UserControls.Settings {
         public ObservableChangeTrackingCollection<string> KnownVideoExtensions {
             get {
                 if (_knownVideoExtensions == null) {
-                    _knownVideoExtensions = new ObservableChangeTrackingCollection<string>(FeatureDetector.VideoExtensions);
+                    _knownVideoExtensions = new ObservableChangeTrackingCollection<string>(new ObservableCollection<string>(FeatureDetector.VideoExtensions));
                 }
                 return _knownVideoExtensions;
             }

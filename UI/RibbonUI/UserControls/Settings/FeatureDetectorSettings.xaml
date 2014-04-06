@@ -37,7 +37,7 @@
                              CommandParameter="{Binding ElementName=VideoExtensionList, Path=SelectedItem}"
                              Style="{StaticResource RemoveButton}"/>
             <fmm:ImageButton DockPanel.Dock="Right" Command="{Binding AddFileExtensionCommand}"
-                             Style="{StaticResource TransparentBorderlessButton}"/>
+                             Style="{StaticResource AddButton}"/>
         </DockPanel>
         <ListBox x:Name="VideoExtensionList" Grid.Row="1" Grid.Column="0" MinHeight="100"
                  ItemsSource="{Binding KnownVideoExtensions}" />
@@ -62,23 +62,26 @@
                   AutoGenerateColumns="False" CellStyle="{StaticResource NoBorderCell}" GridLinesVisibility="None"
                   SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="0">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Codec Id" Binding="{Binding CodecId}" MinWidth="150" />
+                <DataGridTextColumn Header="Codec Id" Binding="{Binding CodecId}" MinWidth="150" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Mapped codec" Binding="{Binding Mapping}" IsReadOnly="True" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
 
         <DockPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" LastChildFill="False">
             <Label Content="{l:T Custom video codec mappings, Postfix=:}"/>
-            <fmm:ImageButton DockPanel.Dock="Right" Command="{Binding RemoveVideoCodecMappingCommand}" Style="{StaticResource RemoveButton}" CommandParameter="{Binding ElementName=VideoCodecBindings, Path=SelectedItem}"/>
+            <fmm:ImageButton DockPanel.Dock="Right" Command="{Binding RemoveVideoCodecMappingCommand}" CommandParameter="{Binding ElementName=VideoCodecBindings, Path=SelectedItem}" Style="{StaticResource RemoveButton}"/>
             <fmm:ImageButton DockPanel.Dock="Right" Command="{Binding AddVideoCodecMappingCommand}" Style="{StaticResource AddButton}"/>
         </DockPanel>
         <DataGrid x:Name="VideoCodecBindings" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" MinHeight="100"
                   ItemsSource="{Binding VideoCodecBindings}" CanUserResizeRows="False"
                   AutoGenerateColumns="False" CellStyle="{StaticResource NoBorderCell}" GridLinesVisibility="None"
                   SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="0">
+            <DataGrid.InputBindings>
+                <KeyBinding Key="Delete" Command="{Binding RemoveVideoCodecMappingCommand}" CommandParameter="{Binding ElementName=VideoCodecBindings, Path=SelectedItem}"/>
+            </DataGrid.InputBindings>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Codec Id" Binding="{Binding CodecId}" MinWidth="150" />
-                <DataGridTextColumn Header="Mapped codec" Binding="{Binding Mapping}" IsReadOnly="True" Width="*" />
+                <DataGridTextColumn Header="Codec Id" Binding="{Binding CodecId}" MinWidth="150" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Mapped codec" Binding="{Binding Mapping}" IsReadOnly="True" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

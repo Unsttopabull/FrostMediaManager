@@ -17,28 +17,28 @@
     <Setting Name="KnownSubtitleFormatsRemoved" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="AudioCodecIdBindingsAdded" Type="System.Collections.Specialized.StringDictionary" Scope="User">
+    <Setting Name="AudioCodecIdBindingsAdded" Type="Frost.Common.Util.SerializableStringDictionary" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="AudioCodecIdBindingsRemoved" Type="System.Collections.Specialized.StringDictionary" Scope="User">
+    <Setting Name="AudioCodecIdBindingsRemoved" Type="Frost.Common.Util.SerializableStringDictionary" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="VideoCodecIdBindingsAdded" Type="System.Collections.Specialized.StringDictionary" Scope="User">
+    <Setting Name="VideoCodecIdBindingsAdded" Type="Frost.Common.Util.SerializableStringDictionary" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="VideoCodecIdBindingsRemoved" Type="System.Collections.Specialized.StringDictionary" Scope="User">
+    <Setting Name="VideoCodecIdBindingsRemoved" Type="Frost.Common.Util.SerializableStringDictionary" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="KnownSegmentsAdded" Type="System.Collections.Specialized.StringDictionary" Scope="User">
+    <Setting Name="KnownSegmentsAdded" Type="Frost.Common.Util.SerializableStringDictionary" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="KnownSegmentsRemoved" Type="System.Collections.Specialized.StringDictionary" Scope="User">
+    <Setting Name="KnownSegmentsRemoved" Type="Frost.Common.Util.SerializableStringDictionary" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="CustomLanguageBindingsAdded" Type="System.Collections.Specialized.StringDictionary" Scope="User">
+    <Setting Name="CustomLanguageMappingsAdded" Type="Frost.Common.Util.SerializableStringDictionary" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="CustomLanguageBindingsRemoved" Type="System.Collections.Specialized.StringDictionary" Scope="User">
+    <Setting Name="CustomLanguageMappingsRemoved" Type="Frost.Common.Util.SerializableStringDictionary" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="ExcludedSegmentsAdded" Type="System.Collections.Specialized.StringCollection" Scope="User">

@@ -37,6 +37,16 @@ namespace Frost.DetectFeatures.Util {
 
         public new SegmentType this[string segment] {
             get { return base[segment].SegmentType; }
+            set {
+                if (Dictionary == null) {
+                    return;
+                }
+
+                SegmentMapping sm;
+                if(Dictionary.TryGetValue(value.ToString(), out sm)) {
+                    sm.SegmentType = value;
+                }
+            }
         }
 
         public bool TryGetValue(string segment, out SegmentType type) {

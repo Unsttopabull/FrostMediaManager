@@ -78,6 +78,8 @@
                       Grid.Column="1" ResizeBehavior="PreviousAndNext"
                       Width="2" Background="#FFBCBCBC" />
 
+        <Button Grid.Row="1" Grid.Column="0" Margin="5,0,5,5" Content="{l:T Reset to factory}" Click="ResetToFactoryClick"/>
+        
         <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,5,5" Orientation="Horizontal" FlowDirection="RightToLeft">
             <Button MinWidth="100" Margin="0,0,10,0" Click="CancelClick" Content="{l:T Cancel}"/>
             <Button MinWidth="100" Click="SaveClick" Content="{l:T Save}"/>

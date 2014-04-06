@@ -17,7 +17,7 @@ namespace RibbonUI.Util {
 
         public string IconImage {
             get {
-                string path = Directory.GetCurrentDirectory() + "\\plugins\\" + IconPath;
+                string path = Directory.GetCurrentDirectory() + "\\providers\\" + IconPath;
                 if (File.Exists(path)) {
                     return path;
                 }

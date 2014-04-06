@@ -74,6 +74,7 @@
     <Compile Include="Messages\SelectRibbonMessage.cs" />
     <Compile Include="Messages\Subtitles\RemoveSubtitleMessage.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="UserControls\ArtAndPlot.xaml.cs">
       <DependentUpon>ArtAndPlot.xaml</DependentUpon>
     </Compile>
@@ -194,6 +195,7 @@
     <Compile Include="Util\ObservableWrappers\ObservableBase.cs" />
     <Compile Include="Util\ObservableWrappers\ObservableMovie.cs" />
     <Compile Include="Util\Provider.cs" />
+    <Compile Include="Properties\SettingsEx.cs" />
     <Compile Include="Util\UIHelper.cs" />
     <Compile Include="Windows\AddCountriesViewModel.cs">
       <DependentUpon>AddCountries.xaml</DependentUpon>

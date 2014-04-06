@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using Frost.Common.Proxies.ChangeTrackers;
 using Frost.Common.Util;
-using Frost.DetectFeatures.Util;
 using RibbonUI.Properties;
 using RibbonUI.UserControls.Settings;
 
@@ -54,7 +52,7 @@ namespace RibbonUI.Windows {
 
         private void CancelClick(object sender, RoutedEventArgs e) {
             Settings.Default.Reload();
-            App.LoadSettings();
+            Settings.Load();
 
             DialogResult = false;
             Close();
@@ -64,11 +62,11 @@ namespace RibbonUI.Windows {
             FeatureDetectorSettingsViewModel vm = (FeatureDetectorSettingsViewModel) FeatureDetector.DataContext;
 
             if (vm.VideoCodecBindings.IsDirty) {
-                AddRemoveDict(vm.VideoCodecBindings, "VideoCodecBindings");
+                AddRemoveDict(vm.VideoCodecBindings, "VideoCodecIdBindings");
             }
 
             if (vm.AudioCodecBindings.IsDirty) {
-                AddRemoveDict(vm.AudioCodecBindings, "AudioCodecBindings");
+                AddRemoveDict(vm.AudioCodecBindings, "AudioCodecIdBindings");
             }
 
             if (vm.KnownSubtitleExtensions.IsDirty) {
@@ -100,8 +98,15 @@ namespace RibbonUI.Windows {
         }
 
         private void AddRemoveStringCollection(ChangeTrackingCollection<string> changeTrackingCollection, string setting) {
-            StringCollection removedSetting = (StringCollection) Settings.Default[setting + "Removed"] ?? new StringCollection();
-            StringCollection addedSetting = (StringCollection) Settings.Default[setting + "Added"] ?? new StringCollection();
+            if (Settings.Default[setting + "Removed"] == null) {
+                Settings.Default[setting + "Removed"] = new StringCollection();
+            }
+            StringCollection removedSetting = (StringCollection) Settings.Default[setting + "Removed"];
+
+            if (Settings.Default[setting + "Added"] == null) {
+                Settings.Default[setting + "Added"] = new StringCollection();
+            }
+            StringCollection addedSetting = (StringCollection) Settings.Default[setting + "Added"];
 
             foreach (string group in changeTrackingCollection.AddedItems) {
                 if (removedSetting.Contains(group)) {
@@ -119,8 +124,15 @@ namespace RibbonUI.Windows {
         }
 
         private void AddRemoveDict<T>(ChangeTrackingCollection<T> changeTrackingCollection, string setting) where T : IKeyValue, IEquatable<T> {
-            StringDictionary removedSetting = (StringDictionary) Settings.Default[setting + "Removed"] ?? new StringDictionary();
-            StringDictionary addedSetting = (StringDictionary) Settings.Default[setting + "Added"] ?? new StringDictionary();
+            if (Settings.Default[setting + "Removed"] == null) {
+                Settings.Default[setting + "Removed"] = new SerializableStringDictionary();
+            }
+            SerializableStringDictionary removedSetting = (SerializableStringDictionary) Settings.Default[setting + "Removed"];
+
+            if (Settings.Default[setting + "Added"] == null) {
+                Settings.Default[setting + "Added"] = new SerializableStringDictionary();
+            }
+            SerializableStringDictionary addedSetting = (SerializableStringDictionary) Settings.Default[setting + "Added"];
 
             foreach (T mapping in changeTrackingCollection.AddedItems) {
                 if (removedSetting.ContainsKey(mapping.Key)) {
@@ -135,6 +147,12 @@ namespace RibbonUI.Windows {
                 }
                 removedSetting.Add(mapping.Key, mapping.Value);
             }
+        }
+
+        private void ResetToFactoryClick(object sender, RoutedEventArgs e) {
+            Settings.ResetToFactory();
+            Settings.Load();
+            Close();
         }
     }
 

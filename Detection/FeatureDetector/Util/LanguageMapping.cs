@@ -28,7 +28,7 @@ namespace Frost.DetectFeatures.Util {
             if (ReferenceEquals(this, other)) {
                 return true;
             }
-            return string.Equals(Mapping, other.Mapping);
+            return string.Equals(Mapping, other.Mapping, StringComparison.InvariantCultureIgnoreCase);
         }
 
         /// <summary>Returns a string that represents the current object.</summary>

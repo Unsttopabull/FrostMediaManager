@@ -26,6 +26,7 @@ namespace RibbonUI.UserControls.Settings {
                 Languages = Directory.EnumerateFiles("Images/Languages", "*.png")
                                      .Select(fileName => ISOLanguageCodes.Instance.GetByISOCode(Path.GetFileNameWithoutExtension(fileName)))
                                      .Where(isoCode => isoCode != null)
+                                     .OrderBy(isoCode => isoCode.EnglishName)
                                      .ToList();
             }
 
