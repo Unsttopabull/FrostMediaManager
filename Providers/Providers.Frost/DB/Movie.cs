@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
 using Frost.Common;
+using Frost.Common.Comparers;
 using Frost.Providers.Frost.DB.Files;
 using Frost.Providers.Frost.DB.People;
 
@@ -23,13 +24,14 @@ namespace Frost.Providers.Frost.DB {
             Plots = new HashSet<Plot>();
             Art = new HashSet<Art>();
             Certifications = new HashSet<Certification>();
-            Genres = new HashSet<Genre>();
             Awards = new HashSet<Award>();
             Videos = new HashSet<Video>();
             Subtitles = new HashSet<Subtitle>();
             Countries = new HashSet<Country>();
-            Studios = new HashSet<Studio>();
-            Specials = new HashSet<Special>();
+            
+            Genres = new HashSet<Genre>(new HasNameEqualityComparer());
+            Studios = new HashSet<Studio>(new HasNameEqualityComparer());
+            Specials = new HashSet<Special>(new HasNameEqualityComparer());
 
             Directors = new HashSet<Person>();
             Writers = new HashSet<Person>();

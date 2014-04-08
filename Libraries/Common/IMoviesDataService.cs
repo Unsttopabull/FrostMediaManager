@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 

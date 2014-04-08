@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.ModelConfiguration;
 using System.Linq;
+using System.Threading.Tasks;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
@@ -37,8 +39,6 @@ namespace Frost.Providers.Frost.Provider {
             _mvc = new FrostDbContainer();
         }
 
-        #region Movies
-
         public IEnumerable<IMovie> Movies {
             get {
                 if (_movies != null) {
@@ -64,8 +64,6 @@ namespace Frost.Providers.Frost.Provider {
                 return _movies;
             }
         }
-
-        #endregion
 
         public IEnumerable<IFile> Files {
             get {
@@ -127,33 +125,7 @@ namespace Frost.Providers.Frost.Provider {
         }
 
         internal Subtitle FindOrCreateSubtitle(ISubtitle subtitle, bool createIfNotFound) {
-            Subtitle p;
-            if (subtitle.Id > 0) {
-                p = _mvc.Subtitles.Find(subtitle.Id);
-                if (p == null || (subtitle.MD5 != null && p.MD5 != subtitle.MD5)) {
-                    if (createIfNotFound) {
-                        p = _mvc.Subtitles.Add(new Subtitle(subtitle));
-                    }
-                    else {
-                        return null;
-                    }
-                }
-                return p;
-            }
-
-            p = _mvc.Subtitles
-                    .FirstOrDefault(pr =>
-                        (subtitle.MD5 != null && pr.MD5 == subtitle.MD5) ||
-                        (subtitle.OpenSubtitlesId != null && pr.OpenSubtitlesId == subtitle.OpenSubtitlesId) ||
-                        (subtitle.PodnapisiId != null && pr.PodnapisiId == subtitle.PodnapisiId) ||
-                        (subtitle.EmbededInVideo == pr.EmbededInVideo &&
-                        subtitle.ForHearingImpaired == pr.ForHearingImpaired &&
-                        subtitle.Encoding == pr.Encoding));
-
-            if (p == null && createIfNotFound) {
-                _mvc.Subtitles.Add(new Subtitle(subtitle));
-            }
-            return p;             
+            return _mvc.FindOrCreateSubtitle(subtitle, createIfNotFound);
         }
 
         #endregion
@@ -185,25 +157,7 @@ namespace Frost.Providers.Frost.Provider {
         }
 
         internal Country FindCountry(ICountry country, bool createIfNotFound) {
-            Country c;
-            if (country.Id > 0) {
-                c = _mvc.Countries.Find(country.Id);
-                if (c == null || (c.Name != country.Name)) {
-                    if (createIfNotFound) {
-                        c = _mvc.Countries.Add(new Country(country));
-                    }
-                    else {
-                        return null;
-                    }
-                }
-                return c;
-            }
-
-            c = _mvc.Countries.FirstOrDefault(pr => (country.ISO3166 != null && pr.ISO3166.Alpha3 == country.ISO3166.Alpha3) || pr.Name == country.Name);
-            if (c == null && createIfNotFound) {
-                _mvc.Countries.Add(new Country(country));
-            }
-            return c;
+            return _mvc.FindCountry(country, createIfNotFound);
         }
 
         #endregion
@@ -223,22 +177,7 @@ namespace Frost.Providers.Frost.Provider {
         }
 
         internal Studio FindStudio(IStudio studio, bool createNotFound) {
-            if (studio.Id > 0) {
-                Studio s = _mvc.Studios.Find(studio.Id);
-                if (s != null && (s.Name == studio.Name)) {
-                    return s;
-                }
-
-                return createNotFound
-                    ? _mvc.Studios.Add(new Studio(studio))
-                    : null;
-            }
-
-            Studio stud = _mvc.Studios.FirstOrDefault(pr => pr.Name == studio.Name);
-            if (stud == null && createNotFound) {
-                _mvc.Studios.Add(new Studio(studio));
-            }
-            return stud;    
+            return _mvc.FindHasName<IStudio, Studio>(studio, createNotFound);
         }
 
         #endregion
@@ -270,30 +209,10 @@ namespace Frost.Providers.Frost.Provider {
         }
 
         internal Plot FindOrCreatePlot(IPlot plot, bool createIfNotFound) {
-            Plot p;
-            if (plot.Id > 0) {
-                p = _mvc.Plots.Find(plot.Id);
-                if (p == null || (p.Full != plot.Full)) {
-                    if (createIfNotFound) {
-                        p = _mvc.Plots.Add(new Plot(plot));
-                    }
-                    else {
-                        return null;
-                    }
-                }
-                return p;
-            }
-
-            p = _mvc.Plots.FirstOrDefault(pr => plot.Full == pr.Full) ?? _mvc.Plots.Add(new Plot(plot));
-            return p; 
+            return _mvc.FindPlot(plot, createIfNotFound);
         }
 
-        internal void SetAsDeletedPlot(Plot plot) {
-            _mvc.Plots.Remove(plot);
-        }
         #endregion
-
-        #region Genres
 
         public IEnumerable<IGenre> Genres {
             get {
@@ -306,7 +225,6 @@ namespace Frost.Providers.Frost.Provider {
                 return _genres;
             }
         }
-        #endregion
 
         public IEnumerable<IAward> Awards {
             get {
@@ -347,8 +265,6 @@ namespace Frost.Providers.Frost.Provider {
             }
         }
 
-        #region Sets
-
         public IEnumerable<IMovieSet> Sets {
             get {
                 if (_sets != null) {
@@ -360,8 +276,6 @@ namespace Frost.Providers.Frost.Provider {
                 return _sets;
             }
         }
-
-        #endregion
 
         #region Language
 
@@ -378,25 +292,7 @@ namespace Frost.Providers.Frost.Provider {
         }
 
         internal Language FindLanguage(ILanguage language, bool createIfNotFound) {
-            Language c;
-            if (language.Id > 0) {
-                c = _mvc.Languages.Find(language.Id);
-                if (c == null || (c.Name != language.Name)) {
-                    if (createIfNotFound) {
-                        c = _mvc.Languages.Add(new Language(language));
-                    }
-                    else {
-                        return null;
-                    }
-                }
-                return c;
-            }
-
-            c = _mvc.Languages.FirstOrDefault(pr => (language.ISO639 != null && pr.ISO639.Alpha3 == language.ISO639.Alpha3) || pr.Name == language.Name);
-            if (c == null) {
-                return null;
-            }
-            return _mvc.Languages.Add(new Language(language));
+            return _mvc.FindLanguage(language, createIfNotFound);
         }
 
         #endregion
@@ -427,61 +323,17 @@ namespace Frost.Providers.Frost.Provider {
             }
         }
 
+        public bool CanSaveDetectedAsync { get { return true; } }
+
         internal Person FindPerson(IPerson person, bool createIfNotFound) {
-            if (person == null) {
-                return null;
-            }
-
-            Person p;
-            if (person.Id > 0) {
-                p = _mvc.People.Find(person.Id);
-                if (p != null && p.Name == person.Name) {
-                    return p;
-                }
-
-                return createIfNotFound
-                    ? _mvc.People.Add(new Person(person))
-                    : null;
-            }
-
-            p = _mvc.People.FirstOrDefault(pr => (person.ImdbID != null && pr.ImdbID == person.ImdbID) || pr.Name == person.Name);
-            if (p == null && createIfNotFound) {
-                p = _mvc.People.Add(new Person(person));
-            }
-            return p;
+            return _mvc.FindPerson(person, createIfNotFound);
         }
 
         #endregion
 
         internal TSet FindHasName<TEntity, TSet>(TEntity hasName, bool createIfNotFound) where TEntity : class, IHasName, IMovieEntity
                                                                                          where TSet : class, IHasName, IMovieEntity {
-            DbSet<TSet> set = _mvc.Set<TSet>();
-            if (hasName.Id > 0) {
-                //check if the entity is already in the context otherwise retreive it
-                TSet find = set.Find(hasName.Id);
-                if ((find == null || find.Name != hasName.Name)) {
-                    if (createIfNotFound) {
-                        find = set.Create();
-                        find.Name = hasName.Name;
-
-                        find = set.Add(find);
-                    }
-                    else {
-                        return null;
-                    }
-                }
-                return find;
-            }
-
-            //primary key not available so search in the DB by Name
-            TSet hn = set.FirstOrDefault(n => n.Name == hasName.Name);
-            if (hn == null && createIfNotFound) {
-                hn = set.Create();
-                hn.Name = hasName.Name;
-
-                hn = set.Add(hn);
-            }
-            return hn;            
+            return _mvc.FindHasName<TEntity, TSet>(hasName, createIfNotFound);
         }
 
         internal void ReactivateIfDeleted(object entity) {
@@ -499,7 +351,7 @@ namespace Frost.Providers.Frost.Provider {
         }
 
         public void SaveDetected(MovieInfo movieInfo) {
-            MovieSaver ms = new MovieSaver(new[] { movieInfo }, _mvc);
+            MovieSaver ms = new MovieSaver(movieInfo, _mvc);
             ms.Save(false);
         }
 
@@ -509,6 +361,7 @@ namespace Frost.Providers.Frost.Provider {
 
         public void SaveChanges() {
             _mvc.SaveChanges();
+            MovieSaver.Reset();
         }
 
         #region IDisposable

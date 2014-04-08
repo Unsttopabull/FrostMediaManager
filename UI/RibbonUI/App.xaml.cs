@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using Frost.DetectFeatures;
-using Frost.DetectFeatures.FileName;
-using Frost.DetectFeatures.Util;
 using Frost.GettextMarkupExtension;
-using RibbonUI.Properties;
 using RibbonUI.Util;
 
 namespace RibbonUI {
@@ -28,7 +22,7 @@ namespace RibbonUI {
             LoadPlugins();
 
             TranslationManager.CurrentTranslationProvider = new SecondLanguageTranslationProvider("Languages");
-            //DispatcherUnhandledException += UnhandledExeption;
+            DispatcherUnhandledException += UnhandledExeption;
         }
 
 

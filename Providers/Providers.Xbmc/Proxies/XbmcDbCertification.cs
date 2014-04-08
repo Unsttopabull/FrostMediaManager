@@ -1,7 +1,8 @@
 ﻿using Frost.Common.Models.Provider;
 using Frost.Common.Util.ISO;
+using Frost.Providers.Xbmc.DB;
 
-namespace Frost.Providers.Xbmc.DB.Proxy {
+namespace Frost.Providers.Xbmc.Proxies {
     public class XbmcCertification : ICertification {
         private readonly XbmcDbMovie _movie;
         private readonly ICountry _country;

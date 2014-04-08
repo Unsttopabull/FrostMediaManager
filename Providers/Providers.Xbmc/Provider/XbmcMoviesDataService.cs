@@ -24,7 +24,7 @@ namespace Frost.Providers.Xbmc.Provider {
 
         public XbmcMoviesDataService() {
             string dbLoc = XbmcContainer.FindXbmcDB();
-            _xbmc = !string.IsNullOrEmpty(dbLoc)
+            _xbmc = !string.IsNullOrEmpty(dbLoc) 
                 ? new XbmcContainer(dbLoc) 
                 : new XbmcContainer();
 
@@ -286,8 +286,9 @@ namespace Frost.Providers.Xbmc.Provider {
             return hn;            
         }
         
-        public void SaveDetected(MovieInfo movieInfos) {
-            
+        public void SaveDetected(MovieInfo movieInfo) {
+            //MovieSaver ms = new MovieSaver(movieInfo, _xbmc);
+            //ms.Save(false);
         }
 
         public bool HasUnsavedChanges() {
@@ -296,6 +297,7 @@ namespace Frost.Providers.Xbmc.Provider {
 
         public void SaveChanges() {
             _xbmc.SaveChanges();
+            MovieSaver.Reset();
         }
 
         #region IDisposable

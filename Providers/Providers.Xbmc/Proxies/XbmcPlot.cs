@@ -1,6 +1,7 @@
 ﻿using Frost.Common.Models.Provider;
+using Frost.Providers.Xbmc.DB;
 
-namespace Frost.Providers.Xbmc.DB.Proxy {
+namespace Frost.Providers.Xbmc.Proxies {
 
     public class XbmcPlot : IPlot {
         private readonly XbmcDbMovie _movie;

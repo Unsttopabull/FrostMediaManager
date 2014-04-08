@@ -3,6 +3,10 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
+using System.Linq;
+using System.Text;
+using System.Xml.Linq;
+using System.Xml.XPath;
 using Frost.Common;
 using Frost.Providers.Xbmc.DB.Art;
 using Frost.Providers.Xbmc.DB.People;
@@ -13,7 +17,7 @@ namespace Frost.Providers.Xbmc.DB {
     [Table("movie")]
     public class XbmcDbMovie {
         /// <summary>Separator between multiple genres, certifications, person names ...</summary>
-        private const string SEPARATOR = " / ";
+        public const string SEPARATOR = " / ";
 
         /// <summary>The XBMC YouTube plugin prefix for a movie trailer</summary>
         internal const string YT_TRAILER_PREFIX = "plugin://plugin.video.youtube/?action=play_video&videoid=";
@@ -34,8 +38,7 @@ namespace Frost.Providers.Xbmc.DB {
 
         /// <summary>Gets or sets the database movie Id.</summary>
         /// <value>The database movie Id</value>
-        [Key]
-        [Column("idMovie")]
+        [Key, Column("idMovie")]
         public long Id { get; set; }
 
         /// <summary>Gets or sets the title of the movie in the local language.</summary>
@@ -86,7 +89,28 @@ namespace Frost.Providers.Xbmc.DB {
         /// <remarks>A one-line string without empty spaces containting multiple ''<c>thumb</c>'' tags with optional "preview" attribute</remarks>
         /// <example>\eg{<code><thumb preview="http://some.img.com/1/preview">http://some.img.com/1/</thumb></code>}</example>
         [Column("c08")]
-        public string Thumbnails { get; set; }
+        public string PostersXml { get; set; }
+
+        [NotMapped]
+        public IEnumerable<string> Posters {
+            get {
+                XDocument xd = XDocument.Parse(PostersXml);
+                var thumbUrls = xd.XPathSelectElements(@"//thumb/text()").Select(x => x.Value).ToArray();
+                return thumbUrls;
+            }
+            set {
+                if (value == null || !value.Any()) {
+                    PostersXml = null;
+                    return;
+                }
+
+                StringBuilder sb = new StringBuilder();
+                foreach (string poster in value.Where(poster => !string.IsNullOrEmpty(poster))) {
+                    sb.Append(string.Format("<thumb>{0}</thumb>", poster));
+                }
+                PostersXml = sb.ToString();
+            }
+        }
 
         /// <summary>Gets or sets the Internet Movie Databse identifier of this movie.</summary>
         /// <value>The Internet Movie Databse identifier of this movie.</value>
@@ -175,6 +199,29 @@ namespace Frost.Providers.Xbmc.DB {
         [Column("c20")]
         public string FanartUrls { get; set; }
 
+        [NotMapped]
+        public IEnumerable<string> Fanart {
+            get {
+                XDocument xd = XDocument.Parse(FanartUrls);
+                var thumbUrls = xd.XPathSelectElements(@"//thumb/text()").Select(x => x.Value).ToArray();
+                return thumbUrls;
+            }
+            set {
+                if (value == null || !value.Any()) {
+                    PostersXml = null;
+                    return;
+                }
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append("<fanart>");
+                foreach (string poster in value.Where(poster => !string.IsNullOrEmpty(poster))) {
+                    sb.Append(string.Format("<thumb preview=\"{0}\">{0}</thumb>", poster));
+                }
+                sb.Append("</fanart>");
+                FanartUrls = sb.ToString();
+            }
+        }
+
         /// <summary>Gets or sets the names of the countries that this movie was shot or/and produced in separated by " / ".</summary>
         /// <value>The names of the countries that this movie was shot or/and produced in separated by " / ".</value>
         /// <example>\eg{ ''<c>United States of America / Mexico</c>''}</example>
@@ -190,8 +237,8 @@ namespace Frost.Providers.Xbmc.DB {
             set { CountryString = string.Join(SEPARATOR, value); }
         }
 
-        /// <summary>Gets or sets the path to the folder containing the files of this movie.</summary>
-        /// <value>The path to the folder containing the files of this movie.</value>
+        /// <summary>Gets or sets the paths to the movie files or folder if DVD.</summary>
+        /// <value>The path to the movie files or folder if dvd.</value>
         /// <example>\egb{
         /// 	<list type="bullet">
         /// 		<item><description>''<c>smb://MYXTREAMER/Xtreamer_PRO/sda1/Movies/Some Movie</c>''</description></item>
@@ -199,7 +246,16 @@ namespace Frost.Providers.Xbmc.DB {
         /// 	</list>}
         /// </example>
         [Column("c22")]
-        public string FolderPath { get; set; }
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public string FilePathsString { get; set; }
+
+        /// <summary>Gets or sets the paths to the movie files or folder if DVD.</summary>
+        /// <value>The path to the movie files or folder if dvd.</value>
+        [NotMapped]
+        public IEnumerable<string> FilePaths {
+            get { return XbmcFile.GetFileNames(FilePathsString); }
+            set { FilePathsString = XbmcFile.GetFileNamesString(value as string[] ?? value.ToArray()); }
+        }
 
         #endregion
 

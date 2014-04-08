@@ -12,29 +12,31 @@ using Frost.Providers.Frost.DB.People;
 namespace Frost.Providers.Frost {
 
     public class MovieSaver : IDisposable {
-        private readonly Dictionary<ISOCountryCode, Country> _countries;
-        private readonly Dictionary<ISOLanguageCode, Language> _languages;
-        private readonly Dictionary<string, Set> _sets;
-        private readonly Dictionary<string, Genre> _genres;
-        private readonly Dictionary<string, Special> _specials;
-        private readonly Dictionary<string, Studio> _studios;
-        private readonly Dictionary<string, Person> _people;
-        private readonly IEnumerable<MovieInfo> _infos;
+        private static readonly Dictionary<ISOCountryCode, Country> Countries;
+        private static readonly Dictionary<ISOLanguageCode, Language> Languages;
+        private static readonly Dictionary<string, Set> Sets;
+        private static readonly Dictionary<string, Genre> Genres;
+        private static readonly Dictionary<string, Special> Specials;
+        private static readonly Dictionary<string, Studio> Studios;
+        private static readonly Dictionary<string, Person> People;
 
-
+        private readonly MovieInfo _info;
         private readonly FrostDbContainer _mvc;
-        private bool _disposeContainer;
+        private readonly bool _disposeContainer;
+        private static int _count;
 
-        public MovieSaver(IEnumerable<MovieInfo> movies, FrostDbContainer db = null) {
-            _infos = movies;
+        static MovieSaver() {
+            Countries = new Dictionary<ISOCountryCode, Country>();
+            Languages = new Dictionary<ISOLanguageCode, Language>();
+            Sets = new Dictionary<string, Set>(StringComparer.InvariantCultureIgnoreCase);
+            Genres = new Dictionary<string, Genre>(StringComparer.InvariantCultureIgnoreCase);
+            Specials = new Dictionary<string, Special>(StringComparer.InvariantCultureIgnoreCase);
+            Studios = new Dictionary<string, Studio>(StringComparer.InvariantCultureIgnoreCase);
+            People = new Dictionary<string, Person>(StringComparer.InvariantCultureIgnoreCase);            
+        }
 
-            _countries = new Dictionary<ISOCountryCode, Country>();
-            _languages = new Dictionary<ISOLanguageCode, Language>();
-            _sets = new Dictionary<string, Set>(StringComparer.InvariantCultureIgnoreCase);
-            _genres = new Dictionary<string, Genre>(StringComparer.InvariantCultureIgnoreCase);
-            _specials = new Dictionary<string, Special>(StringComparer.InvariantCultureIgnoreCase);
-            _studios = new Dictionary<string, Studio>(StringComparer.InvariantCultureIgnoreCase);
-            _people = new Dictionary<string, Person>(StringComparer.InvariantCultureIgnoreCase);
+        public MovieSaver(MovieInfo movie, FrostDbContainer db = null) {
+            _info = movie;
 
             //_mvc = new MovieVoContainer(true, "movieVo.db3");
             if (db != null) {
@@ -55,14 +57,14 @@ namespace Frost.Providers.Frost {
             //mvc.Sets.Load();
             //mvc.People.Load();
 
-            int i = 0;
-            foreach (MovieInfo movie in _infos) {
+            //int i = 0;
+            //foreach (MovieInfo movie in _info) {
                 ////Debug.WriteLine("{0} ({1})", movie.Title, ++i);
                 //Debug.Indent();
-                Save(movie);
+                Save(_info);
 
                 //Debug.Unindent();
-            }
+            //}
 
             if (saveChanges) {
                 _mvc.SaveChanges();
@@ -83,14 +85,15 @@ namespace Frost.Providers.Frost {
             }
 
             mv = _mvc.Movies.Add(mv);
+            _count++;
 
-            mv.Set = GetHasName(movie.Set, _sets);
+            mv.Set = GetHasName(movie.Set, Sets);
             mv.Plots = new HashSet<Plot>(movie.Plots.ConvertAll(GetPlot));
             mv.Art = new HashSet<Art>(movie.Art.ConvertAll(art => new Art(art.Type, art.Path, art.Preview)));
             mv.Certifications = new HashSet<Certification>(movie.Certifications.ConvertAll(GetCertification));
             mv.Specials = new HashSet<Special>(movie.Specials.ConvertAll(GetSpecial));
-            mv.Genres = new HashSet<Genre>(movie.Genres.ConvertAll(g => GetHasName(g, _genres)));
-            mv.Studios = new HashSet<Studio>(movie.Studios.ConvertAll(s => GetHasName(s, _studios)));
+            mv.Genres = new HashSet<Genre>(movie.Genres.ConvertAll(g => GetHasName(g, Genres)));
+            mv.Studios = new HashSet<Studio>(movie.Studios.ConvertAll(s => GetHasName(s, Studios)));
             mv.Countries = new HashSet<Country>(movie.Countries.ConvertAll(GetCountry));
             mv.Writers = new HashSet<Person>(movie.Writers.ConvertAll(GetPerson));
             mv.Directors = new HashSet<Person>(movie.Directors.ConvertAll(GetPerson));
@@ -181,7 +184,7 @@ namespace Frost.Providers.Frost {
             //Debug.Indent();
 
             Person p;
-            if (_people.TryGetValue(info.Name, out p)) {
+            if (People.TryGetValue(info.Name, out p)) {
                 ////Debug.WriteLine("Found in dict");
                 //Debug.Unindent();
                 return p;
@@ -189,7 +192,7 @@ namespace Frost.Providers.Frost {
 
             p = _mvc.People.FirstOrDefault(person => person.Name == info.Name);
             if (p != null) {
-                _people.Add(p.Name, p);
+                People.Add(p.Name, p);
 
                 //Debug.WriteLine("Found in DB");
                 //Debug.Unindent();
@@ -197,7 +200,7 @@ namespace Frost.Providers.Frost {
             }
 
             p = new Person(info.Name, info.Thumb, info.ImdbID);
-            _people.Add(p.Name, p);
+            People.Add(p.Name, p);
 
             //Debug.WriteLine("Created new person");
             //Debug.Unindent();
@@ -214,7 +217,7 @@ namespace Frost.Providers.Frost {
             //Debug.Indent();
 
             Language lang;
-            if (_languages.TryGetValue(langCode, out lang)) {
+            if (Languages.TryGetValue(langCode, out lang)) {
                 //Debug.WriteLine("Found in dict");
                 //Debug.Unindent();
 
@@ -223,7 +226,7 @@ namespace Frost.Providers.Frost {
 
             lang = _mvc.Languages.FirstOrDefault(l => l.ISO639.Alpha3 == langCode.Alpha3);
             if (lang != null) {
-                _languages.Add(langCode, lang);
+                Languages.Add(langCode, lang);
 
                 //Debug.WriteLine("Found in DB");
                 //Debug.Unindent();
@@ -231,7 +234,7 @@ namespace Frost.Providers.Frost {
             }
 
             lang = new Language(langCode);
-            _languages.Add(langCode, lang);
+            Languages.Add(langCode, lang);
 
             //Debug.WriteLine("Created new Language");
             //Debug.Unindent();
@@ -244,7 +247,7 @@ namespace Frost.Providers.Frost {
             //Debug.Indent();
 
             Country lang;
-            if (_countries.TryGetValue(countryCode, out lang)) {
+            if (Countries.TryGetValue(countryCode, out lang)) {
                 //Debug.WriteLine("Found in dict");
                 //Debug.Unindent();
 
@@ -256,7 +259,7 @@ namespace Frost.Providers.Frost {
                 //Debug.WriteLine("Found in DB");
                 //Debug.Unindent();
 
-                _countries.Add(countryCode, lang);
+                Countries.Add(countryCode, lang);
                 return lang;
             }
 
@@ -264,7 +267,7 @@ namespace Frost.Providers.Frost {
             //Debug.Unindent();
 
             lang = new Country(countryCode);
-            _countries.Add(countryCode, lang);
+            Countries.Add(countryCode, lang);
 
             return lang;
         }
@@ -308,7 +311,7 @@ namespace Frost.Providers.Frost {
             //Debug.Indent();
 
             Special spec;
-            if (_specials.TryGetValue(special, out spec)) {
+            if (Specials.TryGetValue(special, out spec)) {
                 //Debug.WriteLine("Found in dict");
                 //Debug.Unindent();
 
@@ -320,7 +323,7 @@ namespace Frost.Providers.Frost {
                 //Debug.WriteLine("Found in DB");
                 //Debug.Unindent();
 
-                _specials.Add(spec.Value, spec);
+                Specials.Add(spec.Value, spec);
                 return spec;
             }
 
@@ -328,7 +331,7 @@ namespace Frost.Providers.Frost {
             //Debug.Unindent();
 
             spec = new Special(special);
-            _specials.Add(spec.Value, spec);
+            Specials.Add(spec.Value, spec);
 
             return spec;
         }
@@ -376,6 +379,38 @@ namespace Frost.Providers.Frost {
             return mv;
         }
 
+        public static void Reset() {
+            _count = 0;
+
+            if (Countries != null) {
+                Countries.Clear();
+            }
+
+            if (Languages != null) {
+                Languages.Clear();
+            }
+
+            if (Sets != null) {
+                Sets.Clear();
+            }
+
+            if (Genres != null) {
+                Genres.Clear();
+            }
+
+            if (Specials != null) {
+                Specials.Clear();
+            }
+
+            if (Studios != null) {
+                Studios.Clear();
+            }
+
+            if (People != null) {
+                People.Clear();
+            }
+        }
+
         #region IDisposable
 
         public bool IsDisposed { get; private set; }
@@ -392,34 +427,6 @@ namespace Frost.Providers.Frost {
 
             if (_mvc != null && _disposeContainer) {
                 _mvc.Dispose();
-            }
-
-            if (_countries != null) {
-                _countries.Clear();
-            }
-
-            if (_languages != null) {
-                _languages.Clear();
-            }
-
-            if (_sets != null) {
-                _sets.Clear();
-            }
-
-            if (_genres != null) {
-                _genres.Clear();
-            }
-
-            if (_specials != null) {
-                _specials.Clear();
-            }
-
-            if (_studios != null) {
-                _studios.Clear();
-            }
-
-            if (_people != null) {
-                _people.Clear();
             }
 
             if (!finializer) {

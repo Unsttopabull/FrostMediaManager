@@ -14,7 +14,8 @@ using RibbonUI.Properties;
 using RibbonUI.Util;
 
 namespace RibbonUI.Windows {
-    public class SearchMoviesViewModel : INotifyPropertyChanged{
+
+    public class SearchMoviesViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private string _logText;
         private readonly FeatureDetector _detector;
@@ -37,7 +38,7 @@ namespace RibbonUI.Windows {
             _detector.PropertyChanged += DetectorPropertyChanged;
 
             Task.Run(() => _detector.Search())
-                .ContinueWith(OnDetectFinished, TaskContinuationOptions.ExecuteSynchronously);
+                .ContinueWith(OnDetectFinished);
         }
 
         public Window ParentWindow { get; set; }
@@ -108,7 +109,11 @@ namespace RibbonUI.Windows {
             }
         }
 
-        private void OnDetectFinished(Task<IEnumerable<MovieInfo>> obj) {
+        private async void OnDetectFinished(Task<IEnumerable<MovieInfo>> obj) {
+            if (obj.Exception != null && obj.Exception.InnerExceptions != null && obj.Exception.InnerExceptions.Count > 0) {
+                
+            }
+
             IsIndeterminate = false;
             _detector.PropertyChanged -= DetectorPropertyChanged;
 
@@ -120,43 +125,49 @@ namespace RibbonUI.Windows {
                 LogText = "Saving movies...";
                 IMoviesDataService service = LightInjectContainer.GetInstance<IMoviesDataService>();
                 List<MovieInfo> movieInfos = obj.Result.ToList();
+                
+                await Task.Run(() => Save(movieInfos, service));
 
-                ProgressMax = movieInfos.Count;
-
-                double taskBarProgressMax = ProgressMax * 100.0;
-
-                for (int i = 0; i < movieInfos.Count; i++) {
-                    MovieInfo movieInfo = movieInfos[i];
-                    ProgressText = movieInfo.Title ?? "Movie " + i;
-
-                    try {
-                        service.SaveDetected(movieInfo);
-                        ProgressValue++;
-
-                        if (ParentWindow != null) {
-                            int iCopy = i;
-                            ParentWindow.Dispatcher.Invoke(() => ParentWindow.TaskbarItemInfo.ProgressValue = (iCopy * 100) / taskBarProgressMax);
-                        }
-                    }
-                    catch (Exception e) {
-                    }
-                }
-
-                try {
-                    service.SaveChanges();
-                }
-                catch (Exception e) {
-                    
-                }
+                service.SaveChanges();
 
                 ProgressText = "Finished!";
             }
-            else {
+            else if (obj.IsFaulted) {
+                const string ERROR_MESSAGE = "Errors occured during detection phase. Search & save can not continue.";
+                if (ParentWindow != null) {
+                    MessageBox.Show(ParentWindow, ERROR_MESSAGE);
+                }
+                else {
+                    MessageBox.Show(ERROR_MESSAGE);
+                }
+            }
+            else if (obj.IsCanceled) {
                 
             }
 
             if (ParentWindow != null) {
                 ParentWindow.Dispatcher.Invoke(() => ParentWindow.Close());
+            }
+        }
+
+        private void Save(IReadOnlyList<MovieInfo> movieInfos, IMoviesDataService service) {
+            ProgressMax = movieInfos.Count;
+            double percent = 1.0 / ProgressMax;
+
+            for (int i = 0; i < movieInfos.Count; i++) {
+                MovieInfo movieInfo = movieInfos[i];
+                ProgressText = movieInfo.Title ?? "Movie " + i;
+
+                try {
+                    service.SaveDetected(movieInfo);
+                    ProgressValue++;
+
+                    if (ParentWindow != null) {
+                        ParentWindow.Dispatcher.Invoke(() => ParentWindow.TaskbarItemInfo.ProgressValue += percent);
+                    }
+                }
+                catch (Exception e) {
+                }
             }
         }
 
@@ -168,4 +179,5 @@ namespace RibbonUI.Windows {
             }
         }
     }
+
 }

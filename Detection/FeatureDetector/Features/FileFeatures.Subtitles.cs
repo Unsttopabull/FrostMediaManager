@@ -5,7 +5,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.FileName;

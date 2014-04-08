@@ -469,7 +469,7 @@ namespace Frost.Providers.Xbmc.NFO {
                 CountryNames = xm.Countries.ToArray(),
                 DirectorNames = xm.Directors.ToArray(),
                 GenreNames = xm.Genres.ToArray(),
-                FolderPath = GetFolderPath(xm.FilenameAndPath),
+                FilePathsString = GetFolderPath(xm.FilenameAndPath),
                 ImdbID = xm.ImdbId,
                 ImdbTop250 = xm.Top250.ToString(CultureInfo.InvariantCulture),
                 MpaaRating = xm.MPAA,
@@ -507,7 +507,7 @@ namespace Frost.Providers.Xbmc.NFO {
                     sb.Append(thumb.SerializeToString());
                 }
 
-                mv.Thumbnails = sb.ToString();
+                mv.PostersXml = sb.ToString();
             }
 
             return mv;

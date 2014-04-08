@@ -3,9 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Entity;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.DetectFeatures;
@@ -96,17 +98,17 @@ namespace Frost.Tester {
             if (prop.PropertyType == typeof(string)) {
                 string stringVal = (string) prop.GetValue(movie);
                 if (stringVal == null) {
-                    sw.WriteLine(FORMAT, string.Join("",Enumerable.Repeat("\t", indent)), prop.Name, "null");
+                    sw.WriteLine(FORMAT, string.Join("", Enumerable.Repeat("\t", indent)), prop.Name, "null");
                     return;
                 }
-                sw.WriteLine("{0}{1} = \"{2}\", ", string.Join("",Enumerable.Repeat("\t", indent)), prop.Name, stringVal);
+                sw.WriteLine("{0}{1} = \"{2}\", ", string.Join("", Enumerable.Repeat("\t", indent)), prop.Name, stringVal);
                 return;
             }
 
             if (prop.PropertyType == typeof(bool)) {
                 bool boolVal = (bool) prop.GetValue(movie);
 
-                sw.WriteLine(FORMAT, string.Join("",Enumerable.Repeat("\t", indent)), prop.Name, boolVal ? "true" : "false");
+                sw.WriteLine(FORMAT, string.Join("", Enumerable.Repeat("\t", indent)), prop.Name, boolVal ? "true" : "false");
                 return;
             }
 
@@ -115,11 +117,11 @@ namespace Frost.Tester {
                 return;
             }
 
-            sw.WriteLine(FORMAT, string.Join("",Enumerable.Repeat("\t", indent)), prop.Name, prop.GetValue(movie) ?? "null");
+            sw.WriteLine(FORMAT, string.Join("", Enumerable.Repeat("\t", indent)), prop.Name, prop.GetValue(movie) ?? "null");
         }
 
         private static void WriteEnumerable(PropertyInfo property, object mov, StreamWriter sw, int indent) {
-            string tabs = string.Join("",Enumerable.Repeat("\t", indent));
+            string tabs = string.Join("", Enumerable.Repeat("\t", indent));
             sw.WriteLine("{0}{1} = {{ ", tabs, property.Name);
 
             foreach (var item in (IEnumerable) property.GetValue(mov)) {
@@ -163,15 +165,22 @@ namespace Frost.Tester {
             FeatureDetector ms = new FeatureDetector(@"E:\Torrenti\FILMI", @"F:\Torrenti\FILMI");
             ms.PropertyChanged += WriteCount;
 
-            IEnumerable<MovieInfo> movies = ms.Search();
+            List<MovieInfo> movies = ms.Search().ToList();
             ms.PropertyChanged -= WriteCount;
 
             sw.Stop();
 
             Console.WriteLine("Detection took: " + sw.Elapsed);
 
-            using (MovieSaver sv = new MovieSaver(movies)) {
-                sv.Save(true);
+            int count = movies.Count;
+
+            using (SQLiteConnection sqliteConn = new SQLiteConnection("data source=" + "movieVo.db3")) {
+                FrostDbContainer container = new FrostDbContainer(sqliteConn);
+                Parallel.ForEach(movies, info => {
+                    Console.WriteLine(info.Title);
+                    MovieSaver sv = new MovieSaver(info, container);
+                    sv.Save(false);
+                });
             }
 
             return sw.Elapsed;

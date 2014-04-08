@@ -12,6 +12,15 @@ namespace Frost.Common {
     /// <summary>Contains extension methods to be used in this assembly.</summary>
     public static class Extensions {
 
+        /// <summary>Gets the culture invariant representation of a nullable <see cref="IConvertible"/> or <c>null</c> if the <see cref="IConvertible"/> has no value.</summary>
+        /// <typeparam name="T">The type of the <see cref="IConvertible"/></typeparam>
+        /// <param name="nullable">The nullable to convert.</param>
+        /// <returns>Returns the culture invariant representation of a nullable <see cref="IConvertible"/> or <c>null</c> if the <see cref="IConvertible"/> has no value.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static string ToInvariantString<T>(this T? nullable) where T : struct, IConvertible {
+            return nullable.HasValue ? nullable.Value.ToString(CultureInfo.InvariantCulture) : null;
+        }
+
         /// <summary>Checks if the file is a SAMBA path and converts it to Windows compatible path.</summary>
         /// <param name="fn">The filename to convert to Windows compatible path.</param>
         /// <returns>SAMBA path converted to Windows compatible path. If it starts with <c>"smb://"</c> otherwise returns the same string.</returns>

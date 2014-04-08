@@ -24,8 +24,8 @@ namespace Frost.Common.Util {
                                                              .ToList();
 
             StreamWriter sw = File.Exists(logFileName)
-                                  ? new StreamWriter(logFileName, true, Encoding.UTF8)
-                                  : new StreamWriter(File.Create(logFileName));
+                ? new StreamWriter(logFileName, true, Encoding.UTF8)
+                : new StreamWriter(File.Create(logFileName));
 
             if (objectStateEntryList.Count > 0) {
                 sw.WriteLine("############################################");

@@ -6,19 +6,16 @@ using System.Linq;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
+using Frost.Common.Proxies;
 using Frost.Providers.Xbmc.DB;
 using Frost.Providers.Xbmc.DB.People;
-using Frost.Providers.Xbmc.DB.Proxy;
 using Frost.Providers.Xbmc.DB.StreamDetails;
 using Frost.Providers.Xbmc.Provider;
 
 namespace Frost.Providers.Xbmc.Proxies {
 
-    public class XbmcMovie : IMovie {
+    public class XbmcMovie : ProxyWithService<XbmcDbMovie, XbmcMoviesDataService>, IMovie {
         private const string YT_SITE_URL = "www.youtube.com/watch?v=";
-
-        private readonly XbmcDbMovie _movie;
-        private readonly XbmcMoviesDataService _service;
         private readonly IEnumerable<IPlot> _plots;
         private readonly IEnumerable<XbmcCertification> _certifications;
 
@@ -31,16 +28,12 @@ namespace Frost.Providers.Xbmc.Proxies {
         private long? _top250;
         private double? _avgRating;
 
-        public XbmcMovie(XbmcDbMovie movie, XbmcMoviesDataService service) {
-            _movie = movie;
-            _service = service;
-
-
-            _plots = new[] { new XbmcPlot(_movie) };
+        public XbmcMovie(XbmcDbMovie movie, XbmcMoviesDataService service) : base(movie, service){
+            _plots = new[] { new XbmcPlot(Entity) };
             _numChannels = -1;
 
-            if (!string.IsNullOrEmpty(_movie.MpaaRating)) {
-                _certifications = new[] { new XbmcCertification(_movie) };
+            if (!string.IsNullOrEmpty(Entity.MpaaRating)) {
+                _certifications = new[] { new XbmcCertification(Entity) };
             }
         }
 
@@ -87,25 +80,25 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <summary>Gets or sets the name of the credited writer(s).</summary>
         /// <value>The names of the credited script writer(s)</value>
         public IEnumerable<IPerson> Writers {
-            get { return _movie.Writers; }
+            get { return Entity.Writers; }
         }
 
         /// <summary>Gets or sets the movie directors.</summary>
         /// <value>People that directed this movie.</value>
         public IEnumerable<IPerson> Directors {
-            get { return _movie.Directors; }
+            get { return Entity.Directors; }
         }
 
         /// <summary>Gets or sets the Person to Movie link with payload as in character name the person is protraying.</summary>
         /// <value>The Person to Movie link with payload as in character name the person is protraying.</value>
         public IEnumerable<IActor> Actors {
-            get { return _movie.Actors; }
+            get { return Entity.Actors; }
         }
 
         /// <summary>Gets or sets the movie genres.</summary>
         /// <value>The movie genres.</value>
         public IEnumerable<IGenre> Genres {
-            get { return _movie.Genres; }
+            get { return Entity.Genres; }
         }
 
         /// <summary>Gets or sets the information about this movie's certification ratings/restrictions in certain countries.</summary>
@@ -131,31 +124,31 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <summary>Gets or sets the movie subtitles.</summary>
         /// <value>The movie subtitles.</value>
         public IEnumerable<ISubtitle> Subtitles {
-            get { return _movie.File.StreamDetails.OfType<XbmcSubtitleDetails>(); }
+            get { return Entity.File.StreamDetails.OfType<XbmcSubtitleDetails>(); }
         }
 
         /// <summary>Gets or sets the countries that this movie was shot or/and produced in.</summary>
         /// <summary>The countries that this movie was shot or/and produced in.</summary>
         public IEnumerable<ICountry> Countries {
-            get { return _movie.Countries; }
+            get { return Entity.Countries; }
         }
 
         /// <summary>Gets or sets the studio(s) that produced the movie.</summary>
         /// <value>The studio(s) that produced the movie.</value>
         public IEnumerable<IStudio> Studios {
-            get { return _movie.Studios; }
+            get { return Entity.Studios; }
         }
 
         /// <summary>Gets or sets the information about video streams of this movie.</summary>
         /// <value>The information about video streams of this movie</value>
         public IEnumerable<IVideo> Videos {
-            get { return _movie.File.StreamDetails.OfType<XbmcVideoDetails>(); }
+            get { return Entity.File.StreamDetails.OfType<XbmcVideoDetails>(); }
         }
 
         /// <summary>Gets or sets the information about audio streams of this movie.</summary>
         /// <value>The information about audio streams of this movie</value>
         public IEnumerable<IAudio> Audios {
-            get { return _movie.File.StreamDetails.OfType<XbmcAudioDetails>(); }
+            get { return Entity.File.StreamDetails.OfType<XbmcAudioDetails>(); }
         }
 
         /// <summary>Gets or sets the information about this movie's critics and their ratings</summary>
@@ -173,7 +166,7 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <summary>Gets or sets the movie promotional images.</summary>
         /// <value>The movie promotional images</value>
         public IEnumerable<IArt> Art {
-            get { return _movie.Art; }
+            get { return Entity.Art; }
         }
 
         #endregion
@@ -183,14 +176,14 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <summary>Gets or sets the set this movie is a part of.</summary>
         /// <value>The set this movie is a part of.</value>
         public IMovieSet Set {
-            get { return _movie.Set; }
+            get { return Entity.Set; }
             set {
                 if (value == null) {
-                    _movie.Set = null;
+                    Entity.Set = null;
                 }
                 else {
-                    XbmcSet set = _service.FindSet(value, true);
-                    _movie.Set = set;
+                    XbmcSet set = Service.FindSet(value, true);
+                    Entity.Set = set;
                 }
             }
         }
@@ -200,14 +193,14 @@ namespace Frost.Providers.Xbmc.Proxies {
         #region Columns
 
         public long Id {
-            get { return _movie.Id; }
+            get { return Entity.Id; }
         }
 
         /// <summary>Gets or sets the Internet Movie Databse identifier of this movie.</summary>
         /// <value>The Internet Movie Databse identifier of this movie.</value>
         public string ImdbID {
-            get { return _movie.ImdbID; }
-            set { _movie.ImdbID = value; }
+            get { return Entity.ImdbID; }
+            set { Entity.ImdbID = value; }
         }
 
         /// <summary>Gets or sets the title in the original language.</summary>
@@ -215,12 +208,12 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <example>\eg{ ''<c>Der Untergang</c>''}</example>
         public string OriginalTitle {
             get {
-                string originalTitle = _movie.OriginalTitle;
+                string originalTitle = Entity.OriginalTitle;
                 return !string.IsNullOrEmpty(originalTitle)
                            ? originalTitle
                            : null;
             }
-            set { _movie.OriginalTitle = value; }
+            set { Entity.OriginalTitle = value; }
         }
 
         /// <summary>Gets or sets the title used for sorting (eg. sequels)..</summary>
@@ -228,47 +221,47 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <example>\eg{ ''<c>Pirates of the Caribbean: The Curse of the Black Pearl</c>'' becomes ''<c>Pirates of the Caribbean 1</c>''}</example>
         public string SortTitle {
             get {
-                string sortTitle = _movie.SortTitle;
+                string sortTitle = Entity.SortTitle;
                 return !string.IsNullOrEmpty(sortTitle)
                            ? sortTitle
                            : null;
             }
-            set { _movie.SortTitle = value; }
+            set { Entity.SortTitle = value; }
         }
 
         /// <summary>Gets or sets the title of the movie in the local language.</summary>
         /// <value>The title of the movie in the local language.</value>
         /// <example>\eg{ ''<c>Downfall</c>''}</example>
         public string Title {
-            get { return _movie.Title; }
-            set { _movie.Title = value; }
+            get { return Entity.Title; }
+            set { Entity.Title = value; }
         }
 
         /// <summary>Gets a value indicating whether this movie has a trailer video availale.</summary>
         /// <value>Is <c>true</c> if the movie has a trailer video available; otherwise, <c>false</c>.</value>
         public bool HasTrailer {
-            get { return !string.IsNullOrEmpty(_movie.TrailerUrl); }
+            get { return !string.IsNullOrEmpty(Entity.TrailerUrl); }
         }
 
         /// <summary>Gets a value indicating whether this movie has available subtitles.</summary>
         /// <value>Is <c>true</c> if the movie has available subtitles; otherwise, <c>false</c>.</value>
         public bool HasSubtitles {
-            get { return _movie.File.StreamDetails.OfType<XbmcSubtitleDetails>().Any(); }
+            get { return Entity.File.StreamDetails.OfType<XbmcSubtitleDetails>().Any(); }
         }
 
         /// <summary>Gets a value indicating whether this movie has available fanart.</summary>
         /// <value>Is <c>true</c> if the movie has available fanart; otherwise, <c>false</c>.</value
         public bool HasArt {
-            get { return _movie.Art.Any(); }
+            get { return Entity.Art.Any(); }
         }
 
         public bool HasNfo {
             get {
-                if (_movie.Path.FolderPath == null) {
+                if (Entity.Path.FolderPath == null) {
                     return false;
                 }
 
-                string folderPath = _movie.Path.FolderPath;
+                string folderPath = Entity.Path.FolderPath;
                 if (Directory.Exists(folderPath)) {
                     return Directory.EnumerateFiles(folderPath, "*.nfo").Any();
                 }
@@ -302,7 +295,7 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <value>The year this movie was released in.</value>
         public long? ReleaseYear {
             get {
-                if (string.IsNullOrEmpty(_movie.ReleaseYear)) {
+                if (string.IsNullOrEmpty(Entity.ReleaseYear)) {
                     return null;
                 }
 
@@ -311,18 +304,18 @@ namespace Frost.Providers.Xbmc.Proxies {
                 }
 
                 int year;
-                if (!int.TryParse(_movie.ReleaseYear, out year)) {
+                if (!int.TryParse(Entity.ReleaseYear, out year)) {
                     _releaseYear = null;
                 }
                 return _releaseYear = year;
             }
             set {
                 if (value.HasValue) {
-                    _movie.ReleaseYear = value.Value.ToString(CultureInfo.InvariantCulture);
+                    Entity.ReleaseYear = value.Value.ToString(CultureInfo.InvariantCulture);
                     _releaseYear = value;
                 }
                 else {
-                    _movie.ReleaseYear = null;
+                    Entity.ReleaseYear = null;
                     _releaseYear = null;
                 }
             }
@@ -377,25 +370,18 @@ namespace Frost.Providers.Xbmc.Proxies {
             get {
                 //if the trailer is not empty or null and starts with the YouTube plugin prefix
                 //we extract the video Id and return the desktop YouTube video URL
-                if (!string.IsNullOrEmpty(_movie.TrailerUrl)) {
-                    if (_movie.TrailerUrl.StartsWith(XbmcDbMovie.YT_TRAILER_PREFIX)) {
-                        string ytId = _movie.TrailerUrl.Replace(XbmcDbMovie.YT_TRAILER_PREFIX, "");
+                if (!string.IsNullOrEmpty(Entity.TrailerUrl)) {
+                    if (Entity.TrailerUrl.StartsWith(XbmcDbMovie.YT_TRAILER_PREFIX)) {
+                        string ytId = Entity.TrailerUrl.Replace(XbmcDbMovie.YT_TRAILER_PREFIX, "");
                         return YT_SITE_URL + ytId;
                     }
                     //otherwise we just return trailer as is
-                    return _movie.TrailerUrl;
+                    return Entity.TrailerUrl;
                 }
                 return null;
             }
             set {
-                int idx = value.IndexOf(YT_SITE_URL, StringComparison.InvariantCultureIgnoreCase);
-                if (idx >= 0) {
-                    string newTrailer = value.Remove(0, YT_SITE_URL.Length + idx);
-                    _movie.TrailerUrl = XbmcDbMovie.YT_TRAILER_PREFIX + newTrailer;
-                }
-                else {
-                    _movie.TrailerUrl = value;
-                }
+                SetTrailer(ProxiedEntity, value);
             }
         }
 
@@ -403,7 +389,7 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <value>The movie ranking on IMDB Top 250 list.</value>
         public long? Top250 {
             get {
-                if (string.IsNullOrEmpty(_movie.ImdbTop250)) {
+                if (string.IsNullOrEmpty(Entity.ImdbTop250)) {
                     return null;
                 }
 
@@ -412,7 +398,7 @@ namespace Frost.Providers.Xbmc.Proxies {
                 }
 
                 long top250;
-                if (long.TryParse(_movie.ImdbTop250, out top250)) {
+                if (long.TryParse(Entity.ImdbTop250, out top250)) {
                     return _top250 = top250;
                 }
 
@@ -420,12 +406,13 @@ namespace Frost.Providers.Xbmc.Proxies {
             }
             set {
                 if (value.HasValue) {
-                    _movie.ImdbTop250 = value.Value.ToString(CultureInfo.InvariantCulture);
+                    Entity.ImdbTop250 = value.Value.ToString(CultureInfo.InvariantCulture);
                     _top250 = value;
                 }
-
-                _top250 = null;
-                _movie.ImdbTop250 = null;
+                else {
+                    _top250 = null;
+                    Entity.ImdbTop250 = null;
+                }
             }
         }
 
@@ -433,7 +420,7 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <value>The runtime of the movie in miliseconds</value>
         public long? Runtime {
             get {
-                if (string.IsNullOrEmpty(_movie.Runtime)) {
+                if (string.IsNullOrEmpty(Entity.Runtime)) {
                     return null;
                 }
 
@@ -442,7 +429,7 @@ namespace Frost.Providers.Xbmc.Proxies {
                 }
 
                 long runtime;
-                if (!long.TryParse(_movie.Runtime, out runtime)) {
+                if (!long.TryParse(Entity.Runtime, out runtime)) {
                     return _runtime = runtime * 1000;
                 }
 
@@ -452,11 +439,11 @@ namespace Frost.Providers.Xbmc.Proxies {
             set {
                 if (value.HasValue) {
                     _runtime = value;
-                    _movie.Runtime = (_runtime.Value / 1000).ToString(CultureInfo.InvariantCulture);
+                    Entity.Runtime = (_runtime.Value / 1000).ToString(CultureInfo.InvariantCulture);
                 }
                 else {
                     _runtime = null;
-                    _movie.Runtime = null;
+                    Entity.Runtime = null;
                 }
             }
         }
@@ -479,7 +466,7 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <value>Average movie rating</value>
         public double? RatingAverage {
             get {
-                if (string.IsNullOrEmpty(_movie.Rating)) {
+                if (string.IsNullOrEmpty(Entity.Rating)) {
                     return null;
                 }
 
@@ -488,7 +475,7 @@ namespace Frost.Providers.Xbmc.Proxies {
                 }
 
                 double avgRating;
-                if (double.TryParse(_movie.Rating, out avgRating)) {
+                if (double.TryParse(Entity.Rating, out avgRating)) {
                     return _avgRating = avgRating;
                 }
                 return _avgRating = null;
@@ -496,11 +483,11 @@ namespace Frost.Providers.Xbmc.Proxies {
             set {
                 if (value.HasValue) {
                     _avgRating = value;
-                    _movie.Rating = value.Value.ToString(CultureInfo.InvariantCulture);
+                    Entity.Rating = value.Value.ToString(CultureInfo.InvariantCulture);
                 }
                 else {
                     _avgRating = null;
-                    _movie.Rating = null;
+                    Entity.Rating = null;
                 }
             }
         }
@@ -536,8 +523,18 @@ namespace Frost.Providers.Xbmc.Proxies {
 
         /// <summary>Gets or sets the directory path to this movie.</summary>
         public string DirectoryPath {
-            get { return _movie.Path.FolderPath; }
-            set { _movie.Path.FolderPath = value; }
+            get {
+                if (Entity.Path.FolderPath.StartsWith(@"smb:")) {
+                    return Entity.Path.FolderPath.Replace(@"smb:", "");
+                }
+                return Entity.Path.FolderPath;
+            }
+            set {
+                if (value.StartsWith(@"\\")) {
+                    value = value.Insert(0, "smb:");
+                }
+                Entity.Path.FolderPath = value;
+            }
         }
 
         /// <summary>Gets or sets the number of audio channels used most frequently in associated audios.</summary>
@@ -646,29 +643,45 @@ namespace Frost.Providers.Xbmc.Proxies {
 
         #endregion
 
+        public static void SetTrailer(XbmcDbMovie xbmcMovie, string value) {
+            if (value == null) {
+                xbmcMovie.TrailerUrl = null;
+                return;
+            }
+
+            int idx = value.IndexOf(YT_SITE_URL, StringComparison.InvariantCultureIgnoreCase);
+            if (idx >= 0) {
+                string newTrailer = value.Remove(0, YT_SITE_URL.Length + idx);
+                xbmcMovie.TrailerUrl = XbmcDbMovie.YT_TRAILER_PREFIX + newTrailer;
+            }
+            else {
+                xbmcMovie.TrailerUrl = value;
+            }
+        }
+
         #region Add/Remove methods
 
         #region Actors
 
         public IActor AddActor(IActor actor) {
-            XbmcPerson p = _service.FindPerson(actor, true);
+            XbmcPerson p = Service.FindPerson(actor, true);
 
             //if the movie does not yet contain this actor add it to the collection
-            XbmcMovieActor act = _movie.Actors.FirstOrDefault(a => a.Person == p && a.Role == actor.Character);
+            XbmcMovieActor act = Entity.Actors.FirstOrDefault(a => a.Person == p && a.Role == actor.Character);
             if (act == null) {
-                act = new XbmcMovieActor(p, actor.Character, _movie.Actors.Count);
-                _movie.Actors.Add(act);
+                act = new XbmcMovieActor(p, actor.Character, Entity.Actors.Count);
+                Entity.Actors.Add(act);
             }
             return act;
         }
 
         public bool RemoveActor(IActor actor) {
-            XbmcMovieActor act = _movie.Actors.FirstOrDefault(a => a.Person.Name == actor.Name && a.Role == actor.Character);
+            XbmcMovieActor act = Entity.Actors.FirstOrDefault(a => a.Person.Name == actor.Name && a.Role == actor.Character);
             if (act != null) {
-                _movie.Actors.Remove(act);
+                Entity.Actors.Remove(act);
 
                 int idx = 0;
-                foreach (XbmcMovieActor a in _movie.Actors) {
+                foreach (XbmcMovieActor a in Entity.Actors) {
                     a.Order = idx++;
                 }
             }
@@ -680,14 +693,14 @@ namespace Frost.Providers.Xbmc.Proxies {
         #region Person
 
         public IPerson AddDirector(IPerson director) {
-            XbmcPerson p = _service.FindPerson(director, true);
-            _movie.Directors.Add(p);
+            XbmcPerson p = Service.FindPerson(director, true);
+            Entity.Directors.Add(p);
             return p;
         }
 
         public bool RemoveDirector(IPerson director) {
-            XbmcPerson p = _service.FindPerson(director, false);
-            return _movie.Directors.Remove(p);
+            XbmcPerson p = Service.FindPerson(director, false);
+            return Entity.Directors.Remove(p);
         }
 
         #endregion
@@ -707,15 +720,15 @@ namespace Frost.Providers.Xbmc.Proxies {
         #region Genres
 
         public IGenre AddGenre(IGenre genre) {
-            XbmcGenre g = _service.FindGenre(genre, false);
-            _movie.Genres.Add(g);
+            XbmcGenre g = Service.FindGenre(genre, false);
+            Entity.Genres.Add(g);
             return g;
         }
 
         public bool RemoveGenre(IGenre genre) {
-            XbmcGenre g = _service.FindGenre(genre, true);
+            XbmcGenre g = Service.FindGenre(genre, true);
             if (g != null) {
-                return _movie.Genres.Remove(g);
+                return Entity.Genres.Remove(g);
             }
             return false;
         }
@@ -737,14 +750,14 @@ namespace Frost.Providers.Xbmc.Proxies {
         #region Studio
 
         public IStudio AddStudio(IStudio studio) {
-            XbmcStudio s = _service.FindStudio(studio, true);
-            _movie.Studios.Add(s);
+            XbmcStudio s = Service.FindStudio(studio, true);
+            Entity.Studios.Add(s);
             return s;
         }
 
         public bool RemoveStudio(IStudio studio) {
-            XbmcStudio s = _service.FindStudio(studio, false);
-            return _movie.Studios.Remove(s);
+            XbmcStudio s = Service.FindStudio(studio, false);
+            return Entity.Studios.Remove(s);
         }
 
         #endregion
@@ -752,15 +765,15 @@ namespace Frost.Providers.Xbmc.Proxies {
         #region Countries
 
         public ICountry AddCountry(ICountry country) {
-            XbmcCountry c = _service.FindCountry(country, true);
-            _movie.Countries.Add(c);
+            XbmcCountry c = Service.FindCountry(country, true);
+            Entity.Countries.Add(c);
 
             return c;
         }
 
         public bool RemoveCountry(ICountry country) {
-            XbmcCountry c = _service.FindCountry(country, false);
-            return _movie.Countries.Remove(c);
+            XbmcCountry c = Service.FindCountry(country, false);
+            return Entity.Countries.Remove(c);
         }
 
         #endregion
@@ -768,23 +781,23 @@ namespace Frost.Providers.Xbmc.Proxies {
         #region Subtitles
 
         public ISubtitle AddSubtitle(ISubtitle subtitle) {
-            if (_movie.File == null || _movie.File.StreamDetails == null) {
+            if (Entity.File == null || Entity.File.StreamDetails == null) {
                 return null;
             }
 
-            XbmcSubtitleDetails sub = _service.FindSubtitle(subtitle, true);
-            _movie.File.StreamDetails.Add(sub);
+            XbmcSubtitleDetails sub = Service.FindSubtitle(subtitle, true);
+            Entity.File.StreamDetails.Add(sub);
 
             return sub;
         }
 
         public bool RemoveSubtitle(ISubtitle subtitle) {
-            if (_movie.File == null || _movie.File.StreamDetails == null) {
+            if (Entity.File == null || Entity.File.StreamDetails == null) {
                 return false;
             }
 
-            XbmcSubtitleDetails sub = _service.FindSubtitle(subtitle, false);
-            return _movie.File.StreamDetails.Remove(sub);
+            XbmcSubtitleDetails sub = Service.FindSubtitle(subtitle, false);
+            return Entity.File.StreamDetails.Remove(sub);
         }
 
         #endregion

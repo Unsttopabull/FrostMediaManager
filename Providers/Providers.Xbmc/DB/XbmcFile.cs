@@ -47,8 +47,8 @@ namespace Frost.Providers.Xbmc.DB {
         /// <param name="lastPlayed">The date and time the file was last played.</param>
         /// <param name="playCount">The number of times the file has been played.</param>
         /// <param name="fileNames">The array of filename(s) in folder.</param>
-        public XbmcFile(string dateAdded, string lastPlayed, long? playCount, string[] fileNames) : this(dateAdded, lastPlayed, playCount) {
-            FileNames = fileNames;
+        public XbmcFile(string dateAdded, string lastPlayed, long? playCount, IEnumerable<string> fileNames) : this(dateAdded, lastPlayed, playCount) {
+            FileNames = fileNames as string[] ?? fileNames.ToArray();
         }
 
         /// <summary>Initializes a new instance of the <see cref="XbmcFile"/> class.</summary>
@@ -57,7 +57,7 @@ namespace Frost.Providers.Xbmc.DB {
         /// <param name="playCount">The number of times the file has been played.</param>
         /// <param name="fileName">The filename in folder.</param>
         public XbmcFile(string dateAdded, string lastPlayed, long? playCount, string fileName) : this(dateAdded, lastPlayed, playCount) {
-            FileNames = new[] {fileName};
+            FileNames = new[] { fileName };
         }
 
         internal XbmcFile(IFile file) : this() {
@@ -114,52 +114,36 @@ namespace Frost.Providers.Xbmc.DB {
         [NotMapped]
         public string[] FileNames {
             get {
-                string fn = FileNameString;
-                if (string.IsNullOrEmpty(FileNameString)) {
-                    return null;
-                }
-
-                //check if there are multiple files
-                if (fn.StartsWith(STACK_PREFIX)) {
-                    fn = fn.Replace(STACK_PREFIX, ""); //remove the stack:// prefix
-
-                    //split the string on SEPARATOR removing whitespace entries
-                    string[] fileNames = fn.SplitWithoutEmptyEntries(STACK_FILE_SEPARATOR);
-                    for (int i = 0; i < fileNames.Length; i++) {
-                        //Convert file paths to Windows compatible ones
-                        fileNames[i] = fileNames[i].ToWinPath();
-                    }
-                    return fileNames;
-                }
-                //else return just an array of the original filename
-                return new[] {FileNameString};
+                return GetFileNames(FileNameString) as string[];
             }
             set {
                 FileNameString = GetFileNamesString(value);
             }
         }
 
-        internal static string GetFileNamesString(string[] value) {
-            StringBuilder sb = new StringBuilder();
-            int numFiles = value.Length;
-
-            //join all filePaths with SEPARATOR and prefix with STACK_PREFIX
-            for (int i = 0; i < numFiles; i++) {
-                string fn = value[i];
-
-                //if the path is not empty or null join to stacked filename
-                if (!string.IsNullOrEmpty(fn)) {
-                    //if the path is on the network and in Windows style
-                    //convert to SAMBA
-                    sb.Append(ToSmbPath(fn));
-
-                    //don't append separator to the end of the string
-                    if (i < numFiles - 1) {
-                        sb.Append(STACK_FILE_SEPARATOR);
-                    }
-                }
+        internal static IEnumerable<string> GetFileNames(string fn) {
+            if (string.IsNullOrEmpty(fn)) {
+                return null;
             }
-            return sb.ToString();
+
+            //check if there are multiple files
+            if (!fn.StartsWith(STACK_PREFIX)) {
+                return new[] { fn };
+            }
+
+            fn = fn.Replace(STACK_PREFIX, ""); //remove the stack:// prefix
+
+            //split the string on SEPARATOR removing whitespace entries
+            string[] fileNames = fn.SplitWithoutEmptyEntries(STACK_FILE_SEPARATOR);
+            for (int i = 0; i < fileNames.Length; i++) {
+                //Convert file paths to Windows compatible ones
+                fileNames[i] = fileNames[i].ToWinPath();
+            }
+            return fileNames;
+        }
+
+        internal static string GetFileNamesString(IEnumerable<string> value) {
+            return STACK_PREFIX + string.Join(STACK_FILE_SEPARATOR, value.Where(v => !string.IsNullOrEmpty(v)).Select(ToSmbPath));
         }
 
         /// <summary>Gets or sets the number of times the file has been played.</summary>
@@ -226,24 +210,6 @@ namespace Frost.Providers.Xbmc.DB {
                 }
             }
         }
-
-        ///// <summary>Gets or sets the details about audio streams in this file</summary>
-        ///// <value>The details about audio streams in this file</value>
-        //IEnumerable<IAudio> IFile.AudioDetails {
-        //    get { return StreamDetails.OfType<XbmcAudioDetails>(); }
-        //}
-
-        ///// <summary>Gets or sets the details about video streams in this file</summary>
-        ///// <value>The details about video streams in this file</value>
-        //IEnumerable<IVideo> IFile.VideoDetails {
-        //    get { return StreamDetails.OfType<XbmcVideoDetails>(); }
-        //}
-
-        ///// <summary>Gets or sets the details about subtitles in this file</summary>
-        ///// <value>The details about subtitles in this file</value>
-        //IEnumerable<ISubtitle> IFile.Subtitles {
-        //    get { return StreamDetails.OfType<XbmcSubtitleDetails>(); }
-        //}
 
         /// <summary>Gets or sets the date and time the file was added.</summary>
         /// <value>The date and time the file was added.</value>

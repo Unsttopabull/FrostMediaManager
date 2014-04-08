@@ -17,6 +17,7 @@ namespace RibbonUI.Windows {
         public event PropertyChangedEventHandler PropertyChanged;
         private MovieAudio _selectedAudio;
         private Codec _selectedCodec;
+        private bool _channelInfoEditable;
 
         public EditAudioViewModel() {
             Codecs = new ObservableCollection<Codec> {
@@ -55,7 +56,16 @@ namespace RibbonUI.Windows {
             }
         }
 
-        public bool ChannelInfoEditable { get; private set; }
+        public bool ChannelInfoEditable {
+            get { return _channelInfoEditable; }
+            private set {
+                if (value.Equals(_channelInfoEditable)) {
+                    return;
+                }
+                _channelInfoEditable = value;
+                OnPropertyChanged();
+            }
+        }
 
         public MovieAudio SelectedAudio {
             get { return _selectedAudio; }
@@ -67,7 +77,6 @@ namespace RibbonUI.Windows {
 
                 if (_selectedAudio != null) {
                     ChannelInfoEditable = _selectedAudio["ChannelSetup"] || _selectedAudio["NumberOfChannels"];
-                    OnPropertyChanged("ChannelInfoEditable");
 
                     if (_selectedAudio.CodecId != null) {
                         Codec audioCodec = Codecs.FirstOrDefault(c => c.Id.Equals(_selectedAudio.CodecId, StringComparison.InvariantCultureIgnoreCase));

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
-using Frost.Providers.Xtreamer;
 using Frost.Providers.Xtreamer.DB;
 using Frost.Providers.Xtreamer.NFO;
 

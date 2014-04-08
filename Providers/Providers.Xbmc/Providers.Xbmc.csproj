@@ -84,6 +84,7 @@
       <HintPath>..\..\ThirdParty\SQLite\EF6\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DB\People\XbmcMovieActor.cs" />
@@ -94,9 +95,10 @@
     </Compile>
     <Compile Include="DB\Art\XbmcMovieArt.cs" />
     <Compile Include="DB\Art\XbmcSetArt.cs" />
-    <Compile Include="DB\Proxy\XbmcDbCertification.cs" />
+    <Compile Include="DB\XbmcContainer.Views.cs" />
+    <Compile Include="Proxies\XbmcDbCertification.cs" />
     <Compile Include="DB\Proxy\XbmcLanguage.cs" />
-    <Compile Include="DB\Proxy\XbmcPlot.cs" />
+    <Compile Include="Proxies\XbmcPlot.cs" />
     <Compile Include="DB\StreamDetails\IXbmcHasLanguage.cs" />
     <Compile Include="DB\StreamDetails\XbmcAudioDetails.cs" />
     <Compile Include="DB\StreamDetails\XbmcDbStreamDetails.cs" />
@@ -106,7 +108,6 @@
     <Compile Include="DB\Tag\XbmcTagLink.cs" />
     <Compile Include="DB\XBMC.Context.cs" />
     <Compile Include="DB\XbmcBookmark.cs" />
-    <Compile Include="DB\XbmcContainer.Views.cs" />
     <Compile Include="DB\XbmcCountry.cs" />
     <Compile Include="DB\XbmcDbMovie.cs">
       <SubType>Code</SubType>
@@ -120,6 +121,7 @@
     <Compile Include="DB\XbmcStudio.cs" />
     <Compile Include="DB\XbmcVersion.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="MovieSaver.cs" />
     <Compile Include="Provider\XbmcCompositionRoot.cs" />
     <Compile Include="Proxies\XbmcMovie.cs" />
     <Compile Include="XmlIndentedTextWriter.cs" />

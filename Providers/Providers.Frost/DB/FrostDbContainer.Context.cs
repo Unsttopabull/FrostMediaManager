@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Data.Entity.Validation;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Linq;
+using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
 using Frost.Common.Util;
 using Frost.Providers.Frost.DB.Files;
@@ -14,6 +17,7 @@ namespace Frost.Providers.Frost.DB {
 
     /// <summary>Represents a context used for manipulation of the database.</summary>
     public class FrostDbContainer : DbContext {
+
         /// <summary>Initializes a new instance of the <see cref="FrostDbContainer"/> class.</summary>
         public FrostDbContainer(bool dropCreate, string filePath) : base(GetSQLiteConnection(filePath), true) {
             Database.SetInitializer(new SQLiteInitializer<FrostDbContainer>(Resources.MovieVoSQL, dropCreate));
@@ -22,6 +26,10 @@ namespace Frost.Providers.Frost.DB {
         /// <summary>Initializes a new instance of the <see cref="FrostDbContainer"/> class.</summary>
         public FrostDbContainer(string connectionString, bool dropCreate = true) : base(connectionString) {
             Database.SetInitializer(new SQLiteInitializer<FrostDbContainer>(Resources.MovieVoSQL, dropCreate));
+        }
+
+        public FrostDbContainer(SQLiteConnection conn) : base(conn, false) {
+            Database.SetInitializer(new SQLiteInitializer<FrostDbContainer>(Resources.MovieVoSQL, true));
         }
 
         /// <summary>Initializes a new instance of the <see cref="FrostDbContainer"/> class.</summary>
@@ -131,6 +139,159 @@ namespace Frost.Providers.Frost.DB {
             Debug.WriteLine(e.Statement, "SQL");
         }
 
+        #region Find methods
+
+        internal Subtitle FindOrCreateSubtitle(ISubtitle subtitle, bool createIfNotFound) {
+            Subtitle p;
+            if (subtitle.Id > 0) {
+                p = Subtitles.Find(subtitle.Id);
+                if (p == null || (subtitle.MD5 != null && p.MD5 != subtitle.MD5)) {
+                    if (createIfNotFound) {
+                        p = Subtitles.Add(new Subtitle(subtitle));
+                    }
+                    else {
+                        return null;
+                    }
+                }
+                return p;
+            }
+
+            p = Subtitles
+                .FirstOrDefault(pr =>
+                                (subtitle.MD5 != null && pr.MD5 == subtitle.MD5) ||
+                                (subtitle.OpenSubtitlesId != null && pr.OpenSubtitlesId == subtitle.OpenSubtitlesId) ||
+                                (subtitle.PodnapisiId != null && pr.PodnapisiId == subtitle.PodnapisiId) ||
+                                (subtitle.EmbededInVideo == pr.EmbededInVideo &&
+                                 subtitle.ForHearingImpaired == pr.ForHearingImpaired &&
+                                 subtitle.Encoding == pr.Encoding));
+
+            if (p == null && createIfNotFound) {
+                Subtitles.Add(new Subtitle(subtitle));
+            }
+            return p;
+        }
+
+
+        internal Plot FindPlot(IPlot plot, bool createIfNotFound) {
+            Plot p;
+            if (plot.Id > 0) {
+                p = Plots.Find(plot.Id);
+                if (p == null || (p.Full != plot.Full)) {
+                    if (createIfNotFound) {
+                        p = Plots.Add(new Plot(plot));
+                    }
+                    else {
+                        return null;
+                    }
+                }
+                return p;
+            }
+
+            p = Plots.FirstOrDefault(pr => plot.Full == pr.Full) ?? Plots.Add(new Plot(plot));
+            return p;
+        }
+
+        internal Person FindPerson(IPerson person, bool createIfNotFound) {
+            if (person == null) {
+                return null;
+            }
+
+            Person p;
+            if (person.Id > 0) {
+                p = People.Find(person.Id);
+                if (p != null && p.Name == person.Name) {
+                    return p;
+                }
+
+                return createIfNotFound
+                           ? People.Add(new Person(person))
+                           : null;
+            }
+
+            p = People.FirstOrDefault(pr => (person.ImdbID != null && pr.ImdbID == person.ImdbID) || pr.Name == person.Name);
+            if (p == null && createIfNotFound) {
+                p = People.Add(new Person(person));
+            }
+            return p;
+        }
+
+        internal Country FindCountry(ICountry country, bool createIfNotFound) {
+            Country c;
+            if (country.Id > 0) {
+                c = Countries.Find(country.Id);
+                if (c == null || (c.Name != country.Name)) {
+                    if (createIfNotFound) {
+                        c = Countries.Add(new Country(country));
+                    }
+                    else {
+                        return null;
+                    }
+                }
+                return c;
+            }
+
+            c = Countries.FirstOrDefault(pr => (country.ISO3166 != null && pr.ISO3166.Alpha3 == country.ISO3166.Alpha3) || pr.Name == country.Name);
+            if (c == null && createIfNotFound) {
+                Countries.Add(new Country(country));
+            }
+            return c;
+        }
+
+        internal Language FindLanguage(ILanguage language, bool createIfNotFound) {
+            Language c;
+            if (language.Id > 0) {
+                c = Languages.Find(language.Id);
+                if (c == null || (c.Name != language.Name)) {
+                    if (createIfNotFound) {
+                        c = Languages.Add(new Language(language));
+                    }
+                    else {
+                        return null;
+                    }
+                }
+                return c;
+            }
+
+            c = Languages.FirstOrDefault(pr => (language.ISO639 != null && pr.ISO639.Alpha3 == language.ISO639.Alpha3) || pr.Name == language.Name);
+            if (c == null) {
+                return null;
+            }
+            return Languages.Add(new Language(language));
+        }
+
+        internal TSet FindHasName<TEntity, TSet>(TEntity hasName, bool createIfNotFound) where TEntity : class, IHasName, IMovieEntity
+            where TSet : class, IHasName, IMovieEntity {
+            DbSet<TSet> set = Set<TSet>();
+            if (hasName.Id > 0) {
+                //check if the entity is already in the context otherwise retreive it
+                TSet find = set.Find(hasName.Id);
+                if ((find == null || find.Name != hasName.Name)) {
+                    if (createIfNotFound) {
+                        find = set.Create();
+                        find.Name = hasName.Name;
+
+                        find = set.Add(find);
+                    }
+                    else {
+                        return null;
+                    }
+                }
+                return find;
+            }
+
+            //primary key not available so search in the DB by Name
+            TSet hn = set.FirstOrDefault(n => n.Name == hasName.Name);
+            if (hn == null && createIfNotFound) {
+                hn = set.Create();
+                hn.Name = hasName.Name;
+
+                hn = set.Add(hn);
+            }
+            return hn;
+        }
+
+        #endregion
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             //modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
@@ -162,7 +323,14 @@ namespace Frost.Providers.Frost.DB {
         }
 
         public override int SaveChanges() {
-            EfLogger.LogChanges(this, "frost.log");
+            try {
+                EfLogger.LogChanges(this, "frost.log");
+            }
+            catch (Exception e) {
+            }
+
+            List<DbEntityValidationResult> errors = GetValidationErrors().ToList();
+
             return base.SaveChanges();
         }
     }
