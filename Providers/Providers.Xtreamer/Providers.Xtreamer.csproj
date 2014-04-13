@@ -96,6 +96,7 @@
     <Compile Include="DB\XjbOption.cs" />
     <Compile Include="DB\XjbPerson.cs" />
     <Compile Include="DB\XjbWriter.cs" />
+    <Compile Include="XtMovieSaver.cs" />
     <Compile Include="PHP\XjbPhpGenre.cs">
       <SubType>Code</SubType>
     </Compile>

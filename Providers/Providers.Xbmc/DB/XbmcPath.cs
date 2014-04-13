@@ -1,18 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
+using System.Globalization;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Frost.Providers.Xbmc.DB {
 
     /// <summary>Table holds information about folder path and folder settings and the type of content inside.</summary>
     [Table("path")]
     public class XbmcPath {
+        private static readonly Regex VideoExtensions =
+            new Regex(
+                @"(\.m4v|\.3g2|\.3gp|\.nsv|\.tp|\.ts|\.ty|\.strm|\.pls|\.rm|\.rmvb|\.m3u|\.m3u8|\.ifo|\.mov|\.qt|\.divx|\.xvid|\.bivx|\.vob|\.nrg|\.img|\.iso|\.pva|\.wmv|\.asf|\.asx|\.ogm|\.m2v|\.avi|\.bin|\.dat|\.mpg|\.mpeg|\.mp4|\.mkv|\.avc|\.vp3|\.svq3|\.nuv|\.viv|\.dv|\.fli|\.flv|\.rar|\.001|\.wpl|\.zip|\.vdr|\.dvr-ms|\.xsp|\.mts|\.m2t|\.m2ts|\.evo|\.ogv|\.sdp|\.avs|\.rec|\.url|\.pxml|\.vc1|\.h264|\.rcv|\.rss|\.mpls|\.webm|\.bdmv|\.wtv|\.pvr)$",
+                RegexOptions.IgnoreCase);
 
         /// <summary>Initializes a new instance of the <see cref="XbmcPath"/> class.</summary>
         public XbmcPath() {
             Movies = new HashSet<XbmcDbMovie>();
             Files = new HashSet<XbmcFile>();
+        }
+
+        public XbmcPath(string path) : this() {
+            FolderPath = path;
+
+            GetHash();
         }
 
         #region Properties / Columns
@@ -96,8 +112,91 @@ namespace Frost.Providers.Xbmc.DB {
 
         #endregion
 
-        internal class Configuration : EntityTypeConfiguration<XbmcPath> {
+        #region Hash
 
+        private void GetHash() {
+            DirectoryInfo di;
+            try {
+                di = new DirectoryInfo(FolderPath);
+            }
+            catch (Exception e) {
+                di = null;
+            }
+
+            if (di != null) {
+                Hash = CanFastHash(di)
+                           ? GetFastHash(di)
+                           : GetPathHash(di);
+            }
+        }
+
+        private static string GetPathHash(DirectoryInfo directory) {
+            List<byte> bytesToHash = new List<byte>();
+
+            DirectoryInfo[] directoryInfos = directory.GetDirectories();
+            List<FileInfo> fileInfos = new List<FileInfo>();
+
+            foreach (FileInfo info in directory.GetFiles()) {
+                if (VideoExtensions.IsMatch(info.Name)) {
+                    fileInfos.Add(info);
+                }
+            }
+
+            List<FileSystemInfo> fsInfos = new List<FileSystemInfo>();
+            fsInfos.AddRange(directoryInfos);
+            fsInfos.AddRange(fileInfos);
+
+            foreach (FileSystemInfo fsInfo in fsInfos) {
+                string fullName = fsInfo.FullName;
+
+                if (fsInfo is DirectoryInfo && !fullName.EndsWith("\\")) {
+                    fullName += "\\";
+                }
+
+                bytesToHash.AddRange(Encoding.UTF8.GetBytes(fullName));
+
+                FileInfo info = fsInfo as FileInfo;
+                bytesToHash.AddRange(info != null ? BitConverter.GetBytes(info.Length) : BitConverter.GetBytes((long) 0));
+
+                long fileTime = NativeMethods.GetLocalLastWriteFileTime(fullName);
+
+                bytesToHash.AddRange(BitConverter.GetBytes(fileTime));
+            }
+
+            byte[] byteHash;
+            using (MD5 md5 = MD5.Create()) {
+                byteHash = md5.ComputeHash(bytesToHash.ToArray());
+            }
+
+            StringBuilder sb = new StringBuilder(byteHash.Length * 2);
+            foreach (byte hashByte in byteHash) {
+                sb.Append(hashByte.ToString("X2"));
+            }
+            return sb.ToString();
+        }
+
+        private bool CanFastHash(DirectoryInfo directory) {
+            return directory.GetDirectories().Length == 0;
+        }
+
+        private static string GetFastHash(DirectoryInfo directory) {
+            DateTime epoch = new DateTime(1970, 1, 1);
+
+            long time;
+            if (directory.LastWriteTime != default(DateTime)) {
+                time = (long) directory.LastWriteTime.Subtract(epoch).TotalSeconds;
+            }
+            else {
+                time = (long) directory.CreationTime.Subtract(epoch).TotalSeconds;
+            }
+
+            return string.Format(CultureInfo.InvariantCulture, "fast{0}", time);
+        }
+
+        #endregion
+
+
+        internal class Configuration : EntityTypeConfiguration<XbmcPath> {
             /// <summary>Initializes a new instance of the <see cref="Configuration"/> class.</summary>
             public Configuration() {
                 //foreign key on "movie" is TEXT but id on "path" is INTEGER
@@ -107,9 +206,7 @@ namespace Frost.Providers.Xbmc.DB {
                     .WithRequired(m => m.Path)
                     .Map(m => m.MapKey("c23"));
             }
-
         }
-
     }
 
 }

@@ -8,6 +8,7 @@ using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 using Frost.Common.Proxies;
 using Frost.Providers.Xbmc.DB;
+using Frost.Providers.Xbmc.DB.Art;
 using Frost.Providers.Xbmc.DB.People;
 using Frost.Providers.Xbmc.DB.StreamDetails;
 using Frost.Providers.Xbmc.Provider;
@@ -124,7 +125,12 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <summary>Gets or sets the movie subtitles.</summary>
         /// <value>The movie subtitles.</value>
         public IEnumerable<ISubtitle> Subtitles {
-            get { return Entity.File.StreamDetails.OfType<XbmcSubtitleDetails>(); }
+            //get { return Entity.File.StreamDetails.OfType<XbmcSubtitleDetails>(); }
+            get {
+                return Entity.File.StreamDetails
+                                  .Where(sd => sd.Type == StreamType.Subtitle)
+                                  .Select(sd => new XbmcSubtitleDetails(sd));
+            }
         }
 
         /// <summary>Gets or sets the countries that this movie was shot or/and produced in.</summary>
@@ -142,13 +148,23 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <summary>Gets or sets the information about video streams of this movie.</summary>
         /// <value>The information about video streams of this movie</value>
         public IEnumerable<IVideo> Videos {
-            get { return Entity.File.StreamDetails.OfType<XbmcVideoDetails>(); }
+            //get { return Entity.File.StreamDetails.OfType<XbmcVideoDetails>(); }
+            get {
+                return Entity.File.StreamDetails
+                                  .Where(sd => sd.Type == StreamType.Video)
+                                  .Select(sd => new XbmcVideoDetails(sd));
+            }
         }
 
         /// <summary>Gets or sets the information about audio streams of this movie.</summary>
         /// <value>The information about audio streams of this movie</value>
         public IEnumerable<IAudio> Audios {
-            get { return Entity.File.StreamDetails.OfType<XbmcAudioDetails>(); }
+            //get { return Entity.File.StreamDetails.OfType<XbmcAudioDetails>(); }
+            get {
+                return Entity.File.StreamDetails
+                                  .Where(sd => sd.Type == StreamType.Audio)
+                                  .Select(sd => new XbmcAudioDetails(sd));
+            }
         }
 
         /// <summary>Gets or sets the information about this movie's critics and their ratings</summary>
@@ -167,6 +183,7 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <value>The movie promotional images</value>
         public IEnumerable<IArt> Art {
             get { return Entity.Art; }
+            //get { return null; }
         }
 
         #endregion
@@ -246,13 +263,18 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <summary>Gets a value indicating whether this movie has available subtitles.</summary>
         /// <value>Is <c>true</c> if the movie has available subtitles; otherwise, <c>false</c>.</value>
         public bool HasSubtitles {
-            get { return Entity.File.StreamDetails.OfType<XbmcSubtitleDetails>().Any(); }
+            //get { return Entity.File.StreamDetails.Any(sd => sd.Type == StreamType.Subtitle); }
+            //get { return Entity.File.AnySubtitles; }
+            get { return Entity.File.StreamDetails.Count(sd => sd.Type == StreamType.Subtitle) > 0; }
+            //get { return false; }
         }
 
         /// <summary>Gets a value indicating whether this movie has available fanart.</summary>
-        /// <value>Is <c>true</c> if the movie has available fanart; otherwise, <c>false</c>.</value
+        /// <value>Is <c>true</c> if the movie has available fanart; otherwise, <c>false</c>.</value>
         public bool HasArt {
             get { return Entity.Art.Any(); }
+            //get { return Entity.Art != null && Entity.Art.Any(); }
+            //get { return false; }
         }
 
         public bool HasNfo {
@@ -439,7 +461,7 @@ namespace Frost.Providers.Xbmc.Proxies {
             set {
                 if (value.HasValue) {
                     _runtime = value;
-                    Entity.Runtime = (_runtime.Value / 1000).ToString(CultureInfo.InvariantCulture);
+                    Entity.Runtime = ((long) Math.Round(_runtime.Value / 1000.0)).ToString(CultureInfo.InvariantCulture);
                 }
                 else {
                     _runtime = null;
@@ -544,6 +566,11 @@ namespace Frost.Providers.Xbmc.Proxies {
                 if (_numChannels != -1) {
                     return _numChannels;
                 }
+
+                if (Audios == null) {
+                    return null;
+                }
+
                 var mostFrequent = ((IMovie) this).Audios.Where(a => a.NumberOfChannels.HasValue)
                                                   .GroupBy(a => a.NumberOfChannels)
                                                   .OrderByDescending(g => g.Count())
@@ -570,6 +597,11 @@ namespace Frost.Providers.Xbmc.Proxies {
                 if (_aCodec != null) {
                     return _aCodec;
                 }
+
+                if (((IMovie) this).Audios == null) {
+                    return null;
+                }
+
                 var mostFrequent = ((IMovie) this).Audios.Where(a => a.CodecId != null)
                                                   .GroupBy(a => a.CodecId)
                                                   .OrderByDescending(g => g.Count())
@@ -596,6 +628,10 @@ namespace Frost.Providers.Xbmc.Proxies {
                 if (_vRes != null) {
                     return _vRes.ToString();
                 }
+                if (((IMovie) this).Videos == null) {
+                    return null;
+                }
+
                 var mostFrequent = ((IMovie) this).Videos.Where(a => a.Resolution.HasValue)
                                                   .GroupBy(a => a.Resolution)
                                                   .OrderByDescending(g => g.Count())
@@ -622,6 +658,11 @@ namespace Frost.Providers.Xbmc.Proxies {
                 if (_vCodec != null) {
                     return _vCodec;
                 }
+
+                if (((IMovie) this).Videos == null) {
+                    return null;
+                }
+
                 var mostFrequent = ((IMovie) this).Videos.Where(a => a.CodecId != null)
                                                   .GroupBy(a => a.CodecId)
                                                   .OrderByDescending(g => g.Count())
@@ -786,7 +827,7 @@ namespace Frost.Providers.Xbmc.Proxies {
             }
 
             XbmcSubtitleDetails sub = Service.FindSubtitle(subtitle, true);
-            Entity.File.StreamDetails.Add(sub);
+            Entity.File.StreamDetails.Add(sub.ProxiedEntity);
 
             return sub;
         }
@@ -797,7 +838,7 @@ namespace Frost.Providers.Xbmc.Proxies {
             }
 
             XbmcSubtitleDetails sub = Service.FindSubtitle(subtitle, false);
-            return Entity.File.StreamDetails.Remove(sub);
+            return Entity.File.StreamDetails.Remove(sub.ProxiedEntity);
         }
 
         #endregion

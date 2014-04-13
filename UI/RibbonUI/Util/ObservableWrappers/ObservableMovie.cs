@@ -519,6 +519,10 @@ namespace RibbonUI.Util.ObservableWrappers {
         }
 
         private long? GetVideoRuntimeSum() {
+            if (Videos == null) {
+                return null;
+            }
+
             long l = Videos.Where(v => v.Duration.HasValue).Sum(v => v.Duration.Value);
 
             if (!Runtime.HasValue && l > 0) {

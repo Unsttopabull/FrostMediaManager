@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Frost.Common;
@@ -6,9 +7,15 @@ using Frost.Common.Models.Provider;
 
 namespace Frost.Providers.Xbmc.DB.Art {
 
+    public enum ArtTarget {
+        Actor,
+        Movie,
+        Set
+    }
+
     /// <summary>This table stores the URLs for movie art metadata.</summary>
     [Table("art")]
-    public abstract class XbmcArt : IArt {
+    public class XbmcArt : IArt {
         #region Constants
 
         /// <summary>The value of the <see cref="XbmcArt.Type"/> when this art is a thumbnail</summary>
@@ -20,16 +27,46 @@ namespace Frost.Providers.Xbmc.DB.Art {
         /// <summary>The value of the <see cref="XbmcArt.Type"/> when this art is a poster</summary>
         public const string POSTER = "poster";
 
-        ///// <summary>The value of the <see cref="XbmcArt.MediaType"/> when this art is for an actor</summary>
-        //public const string ACTOR = "actor";
+        /// <summary>The value of the <see cref="XbmcArt.MediaType"/> when this art is for an actor</summary>
+        public const string ACTOR = "actor";
 
-        ///// <summary>The value of the <see cref="XbmcArt.MediaType"/> when this art is for a movie</summary>
-        //public const string MOVIE = "movie";
+        /// <summary>The value of the <see cref="XbmcArt.MediaType"/> when this art is for a set</summary>
+        public const string SET = "set";
 
-        ///// <summary>The value of the <see cref="XbmcArt.MediaType"/> when this art is for a set</summary>
-        //public const string SET = "set";
+        /// <summary>The value of the <see cref="XbmcArt.MediaType"/> when this art is for a movie</summary>
+        public const string MOVIE = "movie";
 
         #endregion
+
+        public XbmcArt() {
+            
+        }
+
+        public XbmcArt(ArtTarget target, ArtType artType, string url) {
+            switch (target) {
+                case ArtTarget.Actor:
+                    MediaType = ACTOR;
+                    break;
+                case ArtTarget.Movie:
+                    MediaType = MOVIE;
+                    break;
+                case ArtTarget.Set:
+                    MediaType = SET;
+                    break;
+            }
+
+            switch (artType) {
+                case ArtType.Fanart:
+                    Type = FANART;
+                    break;
+                case ArtType.Poster:
+                case ArtType.Cover:
+                    Type = POSTER;
+                    break;
+            }
+
+            Url = url;
+        }
 
         /// <summary>Gets or sets the database Art Id.</summary>
         /// <value>The database Art Id</value>
@@ -45,6 +82,12 @@ namespace Frost.Providers.Xbmc.DB.Art {
         /// <seealso cref="POSTER"/>
         [Column("type")]
         public string Type { get; set; }
+
+        [Column("media_type")]
+        public string MediaType { get; set; }
+
+        [Column("media_id")]
+        public long MediaId { get; set; }
 
         /// <summary>Gets or sets the path to the art (URL or path on drive/network or an image grab from a file)</summary>
         /// <value>Path to the art (URL or path on drive/network or an image grab from a file)</value>
@@ -110,14 +153,14 @@ namespace Frost.Providers.Xbmc.DB.Art {
 
         #endregion
 
-        internal class Configuration : EntityTypeConfiguration<XbmcArt> {
+        //internal class Configuration : EntityTypeConfiguration<XbmcArt> {
 
-            public Configuration() {
-                Map<XbmcActorArt>(m => m.Requires("media_type").HasValue("actor"));
-                Map<XbmcMovieArt>(m => m.Requires("media_type").HasValue("movie"));
-                Map<XbmcSetArt>(m => m.Requires("media_type").HasValue("set"));
-            }
-        }
+        //    public Configuration() {
+        //        Map<XbmcActorArt>(m => m.Requires("media_type").HasValue("actor"));
+        //        Map<XbmcMovieArt>(m => m.Requires("media_type").HasValue("movie"));
+        //        Map<XbmcSetArt>(m => m.Requires("media_type").HasValue("set"));
+        //    }
+        //}
     }
 
 }

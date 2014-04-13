@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -111,6 +112,8 @@ namespace Frost.Providers.Xtreamer.Provider {
         #region Saving
 
         public void SaveDetected(MovieInfo movieInfo) {
+            XtMovieSaver ms = new XtMovieSaver(Path.GetPathRoot(_xtreamerPath), movieInfo, _xjb);
+            ms.Save();
         }
 
         public bool HasUnsavedChanges() {
@@ -128,6 +131,7 @@ namespace Frost.Providers.Xtreamer.Provider {
                 SaveMovie(changedMovie, phpSerializer);
             }
             _xjb.SaveChanges();
+            XtMovieSaver.Reset();
         }
 
         private void SaveChangedPeople(IEnumerable<XtPerson> changedPeople) {

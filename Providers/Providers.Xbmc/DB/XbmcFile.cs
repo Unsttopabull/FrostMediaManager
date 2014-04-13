@@ -66,18 +66,6 @@ namespace Frost.Providers.Xbmc.DB {
 
             Path = new XbmcPath { FolderPath = file.FolderPath };
             FileNames = new[] { file.NameWithExtension };
-
-            //foreach (IAudio audio in file.AudioDetails) {
-            //    StreamDetails.Add(new XbmcAudioDetails(audio));
-            //}
-
-            //foreach (IVideo video in file.VideoDetails) {
-            //    StreamDetails.Add(new XbmcVideoDetails(video));
-            //}
-
-            //foreach (ISubtitle subtitle in file.Subtitles) {
-            //    StreamDetails.Add(new XbmcSubtitleDetails(subtitle));
-            //}
         }
 
         #endregion
@@ -105,7 +93,6 @@ namespace Frost.Providers.Xbmc.DB {
         /// 		<item><description>''<c>smb://MYXTREAMER/Xtreamer_PRO/sda1/Movies/Wall_E.avi</c>''</description></item>
         /// 	</list>}
         /// </example>
-        [EditorBrowsable(EditorBrowsableState.Never)]
         [Column("strFilename")]
         public string FileNameString { get; set; }
 
@@ -117,7 +104,7 @@ namespace Frost.Providers.Xbmc.DB {
                 return GetFileNames(FileNameString) as string[];
             }
             set {
-                FileNameString = GetFileNamesString(value);
+                FileNameString = GetFileNamesString(value, false);
             }
         }
 
@@ -142,8 +129,23 @@ namespace Frost.Providers.Xbmc.DB {
             return fileNames;
         }
 
-        internal static string GetFileNamesString(IEnumerable<string> value) {
-            return STACK_PREFIX + string.Join(STACK_FILE_SEPARATOR, value.Where(v => !string.IsNullOrEmpty(v)).Select(ToSmbPath));
+        internal static string GetFileNamesString(IEnumerable<string> value, bool fullpath = true) {
+            if (value == null) {
+                return null;
+            }
+
+            string[] enumerable = value as string[] ?? value.ToArray();
+            if (enumerable.Length == 0) {
+                return null;
+            }
+
+            if (enumerable.Length == 1) {
+                return !fullpath 
+                    ? enumerable.FirstOrDefault()
+                    : System.IO.Path.GetFileName(enumerable.FirstOrDefault());
+            }
+
+            return STACK_PREFIX + string.Join(STACK_FILE_SEPARATOR, enumerable.Where(v => !string.IsNullOrEmpty(v)).Select(ToSmbPath));
         }
 
         /// <summary>Gets or sets the number of times the file has been played.</summary>
@@ -175,20 +177,43 @@ namespace Frost.Providers.Xbmc.DB {
 
         /// <summary>Gets or sets the movie this file is from.</summary>
         /// <value>The movie this file is from.</value>
-        [InverseProperty("File")]
+        //[InverseProperty("File")]
         public virtual XbmcDbMovie Movie { get; set; }
 
         /// <summary>Gets or sets the info about folder path and folder settings of this file</summary>
         /// <value>The info about folder path and folder settings of this file</value>
         public virtual XbmcPath Path { get; set; }
 
-        /// <summary>Gets or sets the bookmark for this file</summary>
-        /// <value>The bookmark for this file</value>
-        public virtual XbmcBookmark Bookmark { get; set; }
+        ///// <summary>Gets or sets the bookmark for this file</summary>
+        ///// <value>The bookmark for this file</value>
+        //public virtual XbmcBookmark Bookmark { get; set; }
 
         /// <summary>Gets or sets the stream details in this file (Audio/Video/Subtitle)</summary>
         /// <value>The stream details in this file (Audio/Video/Subtitle)</value>
         public virtual HashSet<XbmcDbStreamDetails> StreamDetails { get; set; }
+
+        #endregion
+
+        #region Utlity
+
+        [NotMapped]
+        public bool AnySubtitles {
+            //get { return StreamDetails.OfType<XbmcSubtitleDetails>().Any(); }
+            get { return StreamDetails.Any(sd => sd.Type == StreamType.Subtitle); }
+            //get { return false; }
+        }
+
+        [NotMapped]
+        public bool AnyVideos {
+            //get { return StreamDetails.OfType<XbmcVideoDetails>().Any(); }
+            get { return StreamDetails.Any(sd => sd.Type == StreamType.Video); }
+        }
+
+        [NotMapped]
+        public bool AnyAudios {
+            //get { return StreamDetails.OfType<XbmcAudioDetails>().Any(); }
+            get { return StreamDetails.Any(sd => sd.Type == StreamType.Audio); }
+        }
 
         #endregion
 
@@ -274,7 +299,7 @@ namespace Frost.Providers.Xbmc.DB {
         /// <summary>Converts a Windows network path to SAMBA path.</summary>
         /// <param name="fn">The filename to convert</param>
         /// <returns>A SAMBA path if the original filename starts with "\\" otherwise returns the same string</returns>
-        public static string ToSmbPath(string fn) {
+        private static string ToSmbPath(string fn) {
             if (fn.StartsWith(@"\\")) {
                 //replace starting "\\" with "smb://"
                 return "smb://" + fn.Remove(0, 2);
@@ -285,15 +310,24 @@ namespace Frost.Providers.Xbmc.DB {
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString() {
-            return ((IFile) this).NameWithExtension;
+            return FileNameString;
         }
 
         internal class Configuration : EntityTypeConfiguration<XbmcFile> {
 
             public Configuration() {
+                HasMany(f => f.StreamDetails)
+                    .WithRequired(sd => sd.File)
+                    //.Map(fk => fk.MapKey("idFile"));
+                    .HasForeignKey(sd => sd.FileId);
+
                 HasRequired(m => m.Path)
                     .WithMany(p => p.Files)
                     .HasForeignKey(f => f.PathId);
+
+                HasRequired(f => f.Movie)
+                    .WithRequiredPrincipal(m => m.File)
+                    .Map(fk => fk.MapKey("idFile"));
             }
 
         }

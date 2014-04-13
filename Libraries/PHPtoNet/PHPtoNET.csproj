@@ -65,7 +65,7 @@
     <Compile Include="ParsingException.cs" />
     <Compile Include="IPHPSerializable.cs" />
     <Compile Include="Attributes\PHPNameAttribute.cs" />
-    <Compile Include="Attributes\PHPNonSerializedAttribute.cs" />
+    <Compile Include="Attributes\PHPIgnore.cs" />
     <Compile Include="PHPSerializedStream.cs" />
     <Compile Include="Extend.cs" />
     <Compile Include="PHPDeserializer2.cs" />

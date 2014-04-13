@@ -1,29 +1,73 @@
 ﻿using System;
+using System.Data;
+using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Frost.Common.Util;
 using Frost.Providers.Xbmc.DB.Art;
 using Frost.Providers.Xbmc.DB.People;
 using Frost.Providers.Xbmc.DB.StreamDetails;
-using Frost.Providers.Xbmc.DB.Tag;
+using Frost.Providers.Xbmc.Properties;
 
 namespace Frost.Providers.Xbmc.DB {
 
     /// <summary>Represents a context used for manipulation of the XBMC database.</summary>
     public class XbmcContainer : DbContext {
+        private StreamWriter _sw;
         private const string WIN_XBMC_DB_LOC = @"XBMC\userdata\Database\";
 
         /// <summary>Initializes a new instance of the <see cref="XbmcContainer"/> class.</summary>
         public XbmcContainer() : base("name=XbmcEntities") {
+            FixForEf();
+            SetupLogging();
         }
 
         /// <summary>Initializes a new instance of the <see cref="XbmcContainer"/> class.</summary>
         /// <param name="filePath">The path to the SQLite database file.</param>
         public XbmcContainer(string filePath) : base(new SQLiteConnection("data source=" + filePath), true) {
+            FixForEf();
+            SetupLogging();
+        }
+
+        private void FixForEf() {
+            try {
+                SQLiteConnection dbConnection = (SQLiteConnection) Database.Connection;
+                dbConnection.Open();
+
+                SQLiteCommand cmd = new SQLiteCommand(Resources.addEfTables, dbConnection);
+                cmd.ExecuteNonQuery();
+
+                DataTable cols = dbConnection.GetSchema("Columns");
+                if (cols.Select("COLUMN_NAME='idStream' AND TABLE_NAME='streamdetails'").Length == 0) {
+                    cmd = new SQLiteCommand(Resources.StreamDetailsPK, dbConnection);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (SQLiteException e) {
+
+            }
+            catch (Exception e) {
+                
+            }
+        }
+
+        private void SetupLogging() {
+            // _sw = new StreamWriter(File.Create("xbmc.EF.log"));
+
+            //Database.Log = s => Task.Run(() => {
+            //    lock (_sw) {
+            //        _sw.WriteLine("############################");
+            //        _sw.WriteLine(s);
+            //        _sw.WriteLine("############################");
+            //        _sw.Flush();
+            //    }
+            //});
         }
 
         /// <summary>Gets or sets the information about the movies in the XBMC library.</summary>
@@ -62,16 +106,16 @@ namespace Frost.Providers.Xbmc.DB {
         /// <value>The information about contries the movies in the XBMC library were shot and/or produced in.</value>
         public DbSet<XbmcCountry> Countries { get; set; }
 
-        /// <summary>Gets or sets the information about tags in the XBMC library.</summary>
-        /// <value>The information about tags in the XBMC library.</value>
-        public DbSet<XbmcTag> Tags { get; set; }
+        ///// <summary>Gets or sets the information about tags in the XBMC library.</summary>
+        ///// <value>The information about tags in the XBMC library.</value>
+        //public DbSet<XbmcTag> Tags { get; set; }
 
-        /// <summary>Gets or sets the tag links.</summary>
-        /// <value>The tag links.</value>
-        public DbSet<XbmcTagLink> TagLinks { get; set; }
+        ///// <summary>Gets or sets the tag links.</summary>
+        ///// <value>The tag links.</value>
+        //public DbSet<XbmcTagLink> TagLinks { get; set; }
 
-        /// <summary>Gets or sets the information about promotional images in the XBMC library.</summary>
-        /// <value>The information about promotional images in the XBMC library.</value>
+        ///<summary>Gets or sets the information about promotional images in the XBMC library.</summary>
+        ///<value>The information about promotional images in the XBMC library.</value>
         public DbSet<XbmcArt> Art { get; set; }
 
         /// <summary>Gets or sets the information about XBMC settings about a particular file.</summary>
@@ -85,8 +129,8 @@ namespace Frost.Providers.Xbmc.DB {
         protected override void OnModelCreating(DbModelBuilder modelBuilder) {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
 
-            modelBuilder.Configurations.Add(new XbmcArt.Configuration());
-            modelBuilder.Configurations.Add(new XbmcBookmark.Configuration());
+            //modelBuilder.Configurations.Add(new XbmcArt.Configuration());
+            //modelBuilder.Configurations.Add(new XbmcBookmark.Configuration());
             modelBuilder.Configurations.Add(new XbmcFile.Configuration());
             modelBuilder.Configurations.Add(new XbmcDbMovie.Configuration());
             modelBuilder.Configurations.Add(new XbmcDbStreamDetails.Configuration());
@@ -102,7 +146,12 @@ namespace Frost.Providers.Xbmc.DB {
         }
 
         public override int SaveChanges() {
-            EfLogger.LogChanges(this, "xbmc.log");
+            try {
+                EfLogger.LogChanges(this, "xbmc.log");
+            }
+            catch (Exception e) {
+                
+            }
 
             return base.SaveChanges();
         }
@@ -116,6 +165,19 @@ namespace Frost.Providers.Xbmc.DB {
             //escapamo separatorje med mapami da regex ne pomotoma proba narobe razumeti vzorca
             fn = fn.Replace(@"\", @"\\");
             return di.FirstOrDefault(file => Regex.IsMatch(file, fn + @"MyVideos\d+\.db"));
+        }
+
+        ~XbmcContainer() {
+            if (_sw != null) {
+                try {
+                    lock (_sw) {
+                        _sw.Dispose();
+                    }
+                }
+                catch (Exception e){
+                    
+                }
+            }
         }
     }
 

@@ -11,6 +11,14 @@ namespace Frost.Common {
 
     /// <summary>Contains extension methods to be used in this assembly.</summary>
     public static class Extensions {
+        private static readonly DateTime Epoch = new DateTime(1970, 1, 1);
+
+        /// <summary>Converts the date &amp; time to a UNIX timestamp (number of seconds since 1.1.1970)</summary>
+        /// <param name="dt">The <see cref="DateTime"/> to convert.</param>
+        /// <returns>Returns the number of seconds since 1. 1. 1970. </returns>
+        public static long ToUnixTimestamp(this DateTime dt) {
+            return (long) dt.Subtract(Epoch).TotalSeconds;
+        }
 
         /// <summary>Gets the culture invariant representation of a nullable <see cref="IConvertible"/> or <c>null</c> if the <see cref="IConvertible"/> has no value.</summary>
         /// <typeparam name="T">The type of the <see cref="IConvertible"/></typeparam>
@@ -60,12 +68,12 @@ namespace Frost.Common {
             return sb.ToString();
         }
 
-        /// <summary>To Culture Invariant string.</summary>
+        /// <summary>Converts the argument to a culture invariant string.</summary>
         /// <typeparam name="T">The type of the object from which to get a string represetation from.</typeparam>
         /// <param name="obj">An IConvertible to get a string representation from.</param>
         /// <returns>A string representation of the object in a culture invariant form.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static string ToICString<T>(this T obj) where T : IConvertible {
+        public static string ToInvariantString<T>(this T obj) where T : IConvertible {
             return obj.ToString(CultureInfo.InvariantCulture);
         }
 
@@ -150,7 +158,7 @@ namespace Frost.Common {
         /// <returns>Returns <b>true</b> if strings match, <b>false</b> otherwise.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool OrdinalEquals(this string lhs, string compareTo) {
-            return string.Equals(lhs, compareTo, StringComparison.OrdinalIgnoreCase);
+            return String.Equals(lhs, compareTo, StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>Casts an object to the generic type.</summary>
@@ -178,7 +186,6 @@ namespace Frost.Common {
         public static IEnumerable<TTo> ConvertIEnumerable<TTo, TFrom>(this IEnumerable<TFrom> enumerable) where TTo : class {
             return enumerable.Select(e => e as TTo);
         }
-
     }
 
 }

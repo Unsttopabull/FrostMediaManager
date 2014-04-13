@@ -12,20 +12,6 @@ namespace Frost.Providers.Xbmc.DB.People {
         public XbmcMovieActor() {
         }
 
-        /// <summary>Initializes a new instance of the <see cref="XbmcMovieActor"/> class.</summary>
-        /// <param name="actor">The actor.</param>
-        /// <param name="order"></param>
-        /// <param name="movieId">The movie identifier.</param>
-        /// <param name="role"></param>
-        public XbmcMovieActor(XbmcPerson actor, string role, long order, long movieId) {
-            Movie = new XbmcDbMovie();
-            MovieId = movieId;
-
-            Person = actor;
-            Role = role;
-            Order = order;
-        }
-
         public XbmcMovieActor(XbmcPerson actor, string character, long order) {
             Person = actor;
             Role = character;

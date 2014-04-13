@@ -36,7 +36,6 @@ namespace Frost.Providers.Xbmc.Provider {
                 if (_movies == null) {
                     _xbmc.Movies
                          .Include("Path")
-                         .Include("Art")
                          .Include("Set")
                          .Include("Genres")
                          .Include("Countries")
@@ -58,33 +57,35 @@ namespace Frost.Providers.Xbmc.Provider {
         public IEnumerable<ISubtitle> Subtitles { get; private set; }
 
         public XbmcSubtitleDetails FindSubtitle(ISubtitle subtitle, bool createIfNotFound) {
-            XbmcSubtitleDetails p;
+            XbmcSubtitleDetails p = null;
+
+            XbmcFile file = FindFile(subtitle.File, true);
             if (subtitle.Id > 0) {
-                p = (XbmcSubtitleDetails) _xbmc.StreamDetails.Find(subtitle.Id);
-                if (p != null) {
-                    return p;
+                XbmcDbStreamDetails s = _xbmc.StreamDetails.Find(subtitle.Id);
+                if (s != null) {
+                    return new XbmcSubtitleDetails(s);
                 }
 
-                if (createIfNotFound) {
-                    return (XbmcSubtitleDetails) _xbmc.StreamDetails.Add(new XbmcSubtitleDetails(subtitle, FindFile(subtitle.File, true)));
+                if (!createIfNotFound) {
+                    return null;
                 }
-                return null;
+
+                p = new XbmcSubtitleDetails(subtitle);
+
+                return p;
             }
 
             if (subtitle.Language != null && subtitle.Language.ISO639 != null) {
-                p = _xbmc.StreamDetails
-                         .OfType<XbmcSubtitleDetails>()
-                         .FirstOrDefault(pr => pr.Language == subtitle.Language.ISO639.Alpha3 &&
-                                               pr.FileId == subtitle.File.Id);
-            }
-            else {
-                p = _xbmc.StreamDetails
-                         .OfType<XbmcSubtitleDetails>()
-                         .FirstOrDefault(pr => pr.File.Id == subtitle.File.Id);
+                XbmcDbStreamDetails sd = _xbmc.StreamDetails
+                                              .FirstOrDefault(pr => pr.Type == StreamType.Subtitle &&
+                                                                    pr.SubtitleLanguage == subtitle.Language.ISO639.Alpha3);
+                if (sd != null) {
+                    p = new XbmcSubtitleDetails(sd);
+                }
             }
 
             if (p == null && createIfNotFound) {
-                p = (XbmcSubtitleDetails) _xbmc.StreamDetails.Add(new XbmcSubtitleDetails(subtitle, FindFile(subtitle.File, true)));
+                p = new XbmcSubtitleDetails(subtitle);
             }
             return p;      
         }
@@ -287,8 +288,8 @@ namespace Frost.Providers.Xbmc.Provider {
         }
         
         public void SaveDetected(MovieInfo movieInfo) {
-            //MovieSaver ms = new MovieSaver(movieInfo, _xbmc);
-            //ms.Save(false);
+            XbmcMovieSaver ms = new XbmcMovieSaver(movieInfo, _xbmc);
+            ms.Save(false);
         }
 
         public bool HasUnsavedChanges() {
@@ -297,7 +298,7 @@ namespace Frost.Providers.Xbmc.Provider {
 
         public void SaveChanges() {
             _xbmc.SaveChanges();
-            MovieSaver.Reset();
+            XbmcMovieSaver.Reset();
         }
 
         #region IDisposable

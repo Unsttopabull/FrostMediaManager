@@ -132,10 +132,12 @@ namespace Frost.DetectFeatures {
             if (mediaFiles.Length > 0) {
                 //if files are in DVD format (ifo, vob, bup)
                 if (mediaFiles.Any(f => f.Extension.OrdinalEquals(".vob") || f.Extension.OrdinalEquals(".ifo") || f.Extension.OrdinalEquals(".bup"))) {
-                    mf.Add(await Task.Run(() => DetectDvdMovie(mediaFiles)));
+                    //mf.Add(await Task.Run(() => DetectDvdMovie(mediaFiles)));
+                    mf.Add(DetectDvdMovie(mediaFiles));
                 }
                 else {
-                    mf.AddRange(await Task.Run(() => DetectMultipartMovie(mediaFiles)));
+                    //mf.AddRange(await Task.Run(() => DetectMultipartMovie(mediaFiles)));
+                    mf.AddRange(DetectMultipartMovie(mediaFiles));
                 }
             }
 

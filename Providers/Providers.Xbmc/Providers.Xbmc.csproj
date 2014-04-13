@@ -89,25 +89,25 @@
   <ItemGroup>
     <Compile Include="DB\People\XbmcMovieActor.cs" />
     <Compile Include="DB\People\XbmcPerson.cs" />
-    <Compile Include="DB\Art\XbmcActorArt.cs" />
     <Compile Include="DB\Art\XbmcArt.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DB\Art\XbmcMovieArt.cs" />
-    <Compile Include="DB\Art\XbmcSetArt.cs" />
-    <Compile Include="DB\XbmcContainer.Views.cs" />
+    <Compile Include="DB\StreamDetails\XbmcDbStreamDetails.cs" />
+    <Compile Include="NativeMethods.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Provider\XbmcMoviesDataService.cs" />
+    <Compile Include="Proxies\XbmcAudioDetails.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Proxies\XbmcDbCertification.cs" />
     <Compile Include="DB\Proxy\XbmcLanguage.cs" />
     <Compile Include="Proxies\XbmcPlot.cs" />
     <Compile Include="DB\StreamDetails\IXbmcHasLanguage.cs" />
-    <Compile Include="DB\StreamDetails\XbmcAudioDetails.cs" />
-    <Compile Include="DB\StreamDetails\XbmcDbStreamDetails.cs" />
-    <Compile Include="DB\StreamDetails\XbmcSubtitleDetails.cs" />
-    <Compile Include="DB\StreamDetails\XbmcVideoDetails.cs" />
-    <Compile Include="DB\Tag\XbmcTag.cs" />
-    <Compile Include="DB\Tag\XbmcTagLink.cs" />
     <Compile Include="DB\XBMC.Context.cs" />
-    <Compile Include="DB\XbmcBookmark.cs" />
     <Compile Include="DB\XbmcCountry.cs" />
     <Compile Include="DB\XbmcDbMovie.cs">
       <SubType>Code</SubType>
@@ -117,13 +117,18 @@
     <Compile Include="DB\XbmcPath.cs" />
     <Compile Include="DB\XbmcSet.cs" />
     <Compile Include="DB\XbmcSettings.cs" />
-    <Compile Include="DB\XbmcStackTimes.cs" />
     <Compile Include="DB\XbmcStudio.cs" />
     <Compile Include="DB\XbmcVersion.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="MovieSaver.cs" />
+    <Compile Include="XbmcMovieSaver.cs" />
     <Compile Include="Provider\XbmcCompositionRoot.cs" />
     <Compile Include="Proxies\XbmcMovie.cs" />
+    <Compile Include="Proxies\XbmcSubtitleDetails.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Proxies\XbmcVideoDetails.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="XmlIndentedTextWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="NFO\XbmcStreamDetails.cs" />
@@ -138,7 +143,6 @@
     <Compile Include="NFO\Files\XbmcXmlSubtitleInfo.cs" />
     <Compile Include="NFO\Art\XbmcXmlThumb.cs" />
     <Compile Include="NFO\Files\XbmcXmlVideoInfo.cs" />
-    <Compile Include="Provider\XbmcMoviesDataService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NFO\XSD\xbmcXmlMovie.xsd">
@@ -153,9 +157,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DB\extendSettings.sql" />
-    <Content Include="DB\extendStreamDetails.sql" />
-    <Content Include="DB\addEfTables.sql" />
+    <Resource Include="DB\extendSettings.sql" />
+    <Resource Include="DB\extendStreamDetails.sql" />
+    <Resource Include="DB\addEfTables.sql" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Common\Common.csproj">
@@ -163,7 +167,12 @@
       <Name>Common</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(TargetPath)" "E:\Workspace\Ostalo\Repos\Git\FrostMediaManager2\UI\RibbonUI\bin\Debug\providers" /Y</PostBuildEvent>

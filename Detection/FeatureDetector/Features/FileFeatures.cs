@@ -223,7 +223,16 @@ namespace Frost.DetectFeatures {
                 MediaListFile mFile = _mf.Add(filePath, true, true);
 
                 if (mFile != null && !string.IsNullOrEmpty(mFile.General.FileInfo.FileName)) {
-                    file = new FileDetectionInfo(mFile.General.FileInfo.FileName, mFile.General.FileInfo.Extension, mFile.General.FileInfo.FolderPath + Path.DirectorySeparatorChar, mFile.General.FileInfo.FileSize);
+                    file = new FileDetectionInfo(
+                        mFile.General.FileInfo.FileName,
+                        mFile.General.FileInfo.Extension,
+                        mFile.General.FileInfo.FolderPath + Path.DirectorySeparatorChar,
+                        mFile.General.FileInfo.FileSize
+                        );
+
+                    if (mFile.General.FileInfo.CreatedDate.HasValue) {
+                        file.CreateTime = mFile.General.FileInfo.CreatedDate.Value;
+                    }
                 }
                 else {
                     directoryPath = ParseInfoFromPath(filePath, ref file);
@@ -290,7 +299,12 @@ namespace Frost.DetectFeatures {
                                    ? fi.Name.Substring(0, fi.Name.LastIndexOf('.'))
                                    : withoutExtension;
 
-            return new FileDetectionInfo(withoutExtension, fi.Extension.Substring(1), fi.DirectoryName, fi.Length);
+            FileDetectionInfo fd = new FileDetectionInfo(withoutExtension, fi.Extension.Substring(1), fi.DirectoryName, fi.Length) {
+                LastAccessTime = fi.LastAccessTime,
+                CreateTime = fi.CreationTime
+            };
+
+            return fd;
         }
 
         public MovieInfo Movie { get; private set; }
@@ -323,10 +337,10 @@ namespace Frost.DetectFeatures {
 
         private void GetGeneralVideoInfo() {
             var mostFrequentVres = Movie.FileInfos.SelectMany(f => f.Videos)
-                                                  .Where(v => v.Resolution.HasValue)
-                                                  .GroupBy(v => v.Resolution)
-                                                  .OrderByDescending(g => g.Count())
-                                                  .FirstOrDefault();
+                                        .Where(v => v.Resolution.HasValue)
+                                        .GroupBy(v => v.Resolution)
+                                        .OrderByDescending(g => g.Count())
+                                        .FirstOrDefault();
 
             if (mostFrequentVres != null) {
                 VideoDetectionInfo video = mostFrequentVres.FirstOrDefault();
@@ -346,10 +360,10 @@ namespace Frost.DetectFeatures {
             }
 
             var mostFrequent = Movie.FileInfos.SelectMany(f => f.Videos)
-                                              .Where(v => v.CodecId != null)
-                                              .GroupBy(v => v.CodecId)
-                                              .OrderByDescending(g => g.Count())
-                                              .FirstOrDefault();
+                                    .Where(v => v.CodecId != null)
+                                    .GroupBy(v => v.CodecId)
+                                    .OrderByDescending(g => g.Count())
+                                    .FirstOrDefault();
 
             if (mostFrequent != null) {
                 VideoDetectionInfo video = mostFrequent.FirstOrDefault();
@@ -376,10 +390,10 @@ namespace Frost.DetectFeatures {
             }
 
             var mostFrequentAudioCodec = Movie.FileInfos.SelectMany(f => f.Audios)
-                                                        .Where(v => v.CodecId != null)
-                                                        .GroupBy(v => v.CodecId)
-                                                        .OrderByDescending(g => g.Count())
-                                                        .FirstOrDefault();
+                                              .Where(v => v.CodecId != null)
+                                              .GroupBy(v => v.CodecId)
+                                              .OrderByDescending(g => g.Count())
+                                              .FirstOrDefault();
 
             if (mostFrequentAudioCodec != null) {
                 AudioDetectionInfo audio = mostFrequentAudioCodec.FirstOrDefault();
@@ -395,9 +409,9 @@ namespace Frost.DetectFeatures {
                                          f.Extension.OrdinalEquals("ifo") ||
                                          f.Extension.OrdinalEquals("bup")) ||
                 Movie.FileInfos.SelectMany(f => f.Videos)
-                               .All(v => v.Source.OrdinalEquals("DVD") ||
-                                         v.Source.OrdinalEquals("DVDR") ||
-                                         v.Source.OrdinalEquals("DVD-R"))) {
+                     .All(v => v.Source.OrdinalEquals("DVD") ||
+                               v.Source.OrdinalEquals("DVDR") ||
+                               v.Source.OrdinalEquals("DVD-R"))) {
                 Movie.Type = MovieType.DVD;
             }
 
@@ -433,8 +447,7 @@ namespace Frost.DetectFeatures {
                 }
 
                 if (!Movie.ReleaseYear.HasValue && fnInfo.ReleaseYear.Year > 1800 ||
-                     Movie.ReleaseYear < 1800 && fnInfo.ReleaseYear.Year > 1800) {
-
+                    Movie.ReleaseYear < 1800 && fnInfo.ReleaseYear.Year > 1800) {
                     Movie.ReleaseYear = fnInfo.ReleaseYear.Year;
                 }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -23,6 +24,8 @@ namespace Frost.Common.Models.FeatureDetector {
             Name = Path.GetFileNameWithoutExtension(info.Name);
             FolderPath = info.DirectoryName + Path.DirectorySeparatorChar;
             Size = info.Length;
+            LastAccessTime = info.LastAccessTime;
+            CreateTime = info.CreationTime;
         }
 
         ///<summary>The File Extension without beginning point</summary>
@@ -56,6 +59,9 @@ namespace Frost.Common.Models.FeatureDetector {
         public string FullPath {
             get { return Path.Combine(FolderPath, NameWithExtension); }
         }
+
+        public DateTime CreateTime { get; set; }
+        public DateTime LastAccessTime { get; set; }
 
         public List<SubtitleDetectionInfo> Subtitles { get; set; }
         public List<VideoDetectionInfo> Videos { get; set; }

@@ -23,6 +23,12 @@ namespace Frost.Common.Models.FeatureDetector {
         }
 
         public string Character { get; set; }
+
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString() {
+            return string.Format("{0} as {1}", Name, Character ?? "N/A");
+        }
     }
 
 }

@@ -22,8 +22,13 @@ namespace RibbonUI {
                 return;
             }
 
-            if (!_service.HasUnsavedChanges()) {
-                return;
+            try {
+                if (!_service.HasUnsavedChanges()) {
+                    return;
+                }
+            }
+            catch (Exception e) {
+                UIHelper.HandleProviderException(e);
             }
 
             if (MessageBox.Show("There are unsaved changes, save?", "Unsaved changes", MessageBoxButton.YesNo) == MessageBoxResult.Yes) {

@@ -3,17 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Entity;
-using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.DetectFeatures;
 using System.Diagnostics;
-using Frost.Providers.Frost;
 using Frost.Providers.Frost.DB;
+using Frost.Providers.Xbmc;
+using Frost.Providers.Xbmc.DB;
 using Frost.Providers.Xtreamer.DB;
 
 namespace Frost.Tester {
@@ -41,7 +39,8 @@ namespace Frost.Tester {
             //TestPHPDeserialize2();
 
             //TestXjbDbParser();
-            TestMediaSearcher();
+            //TestMediaSearcher();
+            TestHasher();
             //TestPhpDeserializeAttribute();
             //TestXjbDB();
             //WriteOutMovies();
@@ -63,6 +62,23 @@ namespace Frost.Tester {
             Console.WriteLine("\tFIN: " + sw.Elapsed);
             Console.WriteLine(Filler);
             Console.Read();
+        }
+
+        private static void TestHasher() {
+            //using (XbmcContainer xbmc = new XbmcContainer()) {
+            //    using (StreamWriter sw = File.CreateText("out.txt")) {
+
+            //        xbmc.Paths.Load();
+
+            //        foreach (XbmcPath path in xbmc.Paths) {
+            //            string hash = XbmcHasher.Hash(path.FolderPath);
+
+            //            sw.WriteLine("{0},{1},{2}", path.FolderPath, path.Hash, hash);
+            //        }
+            //    }
+            //}
+
+            //string hash = XbmcHasher.Hash("123456789");
         }
 
         private static void WriteOutMovies() {
@@ -162,7 +178,7 @@ namespace Frost.Tester {
         private static TimeSpan TestMediaSearcher() {
             Stopwatch sw = Stopwatch.StartNew();
 
-            FeatureDetector ms = new FeatureDetector(@"E:\Torrenti\FILMI", @"F:\Torrenti\FILMI");
+            FeatureDetector ms = new FeatureDetector(@"E:\Torrenti\FILMI"); //, @"F:\Torrenti\FILMI");
             ms.PropertyChanged += WriteCount;
 
             List<MovieInfo> movies = ms.Search().ToList();
@@ -173,14 +189,27 @@ namespace Frost.Tester {
             Console.WriteLine("Detection took: " + sw.Elapsed);
 
             int count = movies.Count;
+            XbmcContainer container = new XbmcContainer("xbmc.db3");
+            using (StreamWriter fw = new StreamWriter(File.Create("xbmcSave.log"))) {
 
-            using (SQLiteConnection sqliteConn = new SQLiteConnection("data source=" + "movieVo.db3")) {
-                FrostDbContainer container = new FrostDbContainer(sqliteConn);
-                Parallel.ForEach(movies, info => {
-                    Console.WriteLine(info.Title);
-                    MovieSaver sv = new MovieSaver(info, container);
-                    sv.Save(false);
-                });
+                foreach (MovieInfo movieInfo in movies) {
+                    Console.WriteLine(movieInfo.Title);
+                    XbmcMovieSaver sv = new XbmcMovieSaver(movieInfo, container);
+
+                    XbmcDbMovie xbmcDbMovie;
+                    try {
+                         xbmcDbMovie = sv.Save(true);
+                    }
+                    catch (Exception e) {
+                        fw.WriteLine(movieInfo.Title);
+                        //fw.WriteLine();
+
+                        //JsonSerializer jsonSerializer = JsonSerializer.Create();
+                        //jsonSerializer.Serialize(fw, movieInfo);
+
+                        //fw.WriteLine("#################################");
+                    }
+                }
             }
 
             return sw.Elapsed;

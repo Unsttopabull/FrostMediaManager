@@ -58,6 +58,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\EF6\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ThirdParty\JsonNET\Net35\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -102,6 +106,10 @@
     <ProjectReference Include="..\Detection\FeatureDetector\FeatureDetector.csproj">
       <Project>{8542C013-AA9A-4852-98FA-6F05CC037A91}</Project>
       <Name>FeatureDetector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Providers\Providers.Xbmc\Providers.Xbmc.csproj">
+      <Project>{2E311A90-347B-47E1-8AA7-87A276C88F4E}</Project>
+      <Name>Providers.Xbmc</Name>
     </ProjectReference>
     <ProjectReference Include="..\Providers\Providers.Xtreamer\Providers.Xtreamer.csproj">
       <Project>{8491dccf-354e-4ff6-89d4-88a0bb9cb8af}</Project>

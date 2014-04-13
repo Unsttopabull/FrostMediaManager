@@ -1,10 +1,8 @@
 ﻿using Frost.Common;
 using Frost.Common.Models.Provider;
 using Frost.Providers.Xbmc.DB;
-using Frost.Providers.Xbmc.DB.Art;
 using Frost.Providers.Xbmc.DB.People;
 using Frost.Providers.Xbmc.DB.Proxy;
-using Frost.Providers.Xbmc.DB.StreamDetails;
 using Frost.Providers.Xbmc.Provider;
 using Frost.Providers.Xbmc.Proxies;
 using LightInject;
@@ -21,7 +19,7 @@ namespace Frost.Providers.Xbmc.Provider {
             serviceRegistry.Register<IMoviesDataService, XbmcMoviesDataService>(SYSTEM_NAME, new PerContainerLifetime());
 
             serviceRegistry.Register<IActor, XbmcMovieActor>(SYSTEM_NAME, new PerRequestLifeTime());
-            serviceRegistry.Register<IArt, XbmcMovieArt>(SYSTEM_NAME, new PerRequestLifeTime());
+            //serviceRegistry.Register<IArt, XbmcMovieArt>(SYSTEM_NAME, new PerRequestLifeTime());
             serviceRegistry.Register<IAudio, XbmcAudioDetails>(SYSTEM_NAME, new PerRequestLifeTime());
             //serviceRegistry.Register<IAward>(f => new Award(), SYSTEM_NAME, new PerRequestLifeTime());
             serviceRegistry.Register<ICertification, XbmcCertification>(SYSTEM_NAME, new PerRequestLifeTime());

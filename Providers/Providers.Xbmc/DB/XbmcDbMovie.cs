@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
+using System.Data.Entity.ModelConfiguration.Configuration;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using System.Xml.Schema;
 using System.Xml.XPath;
 using Frost.Common;
 using Frost.Providers.Xbmc.DB.Art;
@@ -30,15 +33,15 @@ namespace Frost.Providers.Xbmc.DB {
             Genres = new HashSet<XbmcGenre>();
             Countries = new HashSet<XbmcCountry>();
             Studios = new HashSet<XbmcStudio>();
-            Art = new HashSet<XbmcMovieArt>();
-
+            Art = new HashSet<XbmcArt>();
         }
 
         #region Properties / Columns
 
         /// <summary>Gets or sets the database movie Id.</summary>
         /// <value>The database movie Id</value>
-        [Key, Column("idMovie")]
+        [Key]
+        [Column("idMovie")]
         public long Id { get; set; }
 
         /// <summary>Gets or sets the title of the movie in the local language.</summary>
@@ -94,9 +97,19 @@ namespace Frost.Providers.Xbmc.DB {
         [NotMapped]
         public IEnumerable<string> Posters {
             get {
-                XDocument xd = XDocument.Parse(PostersXml);
-                var thumbUrls = xd.XPathSelectElements(@"//thumb/text()").Select(x => x.Value).ToArray();
-                return thumbUrls;
+                if (string.IsNullOrEmpty(PostersXml)) {
+                    return null;
+                }
+
+                try {
+                    XDocument xd = XDocument.Parse("<thumbs>" + PostersXml + "</thumbs>");
+                    var thumbUrls = xd.XPathSelectElements(@"//thumb");
+                    IEnumerable<string> enumerable = thumbUrls.Select(x => x.Value);
+                    return enumerable.ToArray();
+                }
+                catch (Exception e) {
+                    return null;
+                }
             }
             set {
                 if (value == null || !value.Any()) {
@@ -174,10 +187,10 @@ namespace Frost.Providers.Xbmc.DB {
         [Column("c16")]
         public string OriginalTitle { get; set; }
 
-        /// <summary>Gets or sets the unknown value (unused).</summary>
-        /// <value>The unknown value (unused).</value>
-        [Column("c17")]
-        public string Unknown { get; set; }
+        ///// <summary>Gets or sets the unknown value (unused).</summary>
+        ///// <value>The unknown value (unused).</value>
+        //[Column("c17")]
+        //public string Unknown { get; set; }
 
         /// <summary>Gets or sets the names of the studios that produced this movie separated by " / ".</summary>
         /// <value>The names of the studios that produced this movie separated by " / ".</value>
@@ -202,9 +215,18 @@ namespace Frost.Providers.Xbmc.DB {
         [NotMapped]
         public IEnumerable<string> Fanart {
             get {
-                XDocument xd = XDocument.Parse(FanartUrls);
-                var thumbUrls = xd.XPathSelectElements(@"//thumb/text()").Select(x => x.Value).ToArray();
-                return thumbUrls;
+                if (string.IsNullOrEmpty(FanartUrls)) {
+                    return null;
+                }
+
+                try {
+                    XDocument xd = XDocument.Parse(FanartUrls);
+                    var thumbUrls = xd.XPathSelectElements(@"//thumb").Select(x => x.Value).ToArray();
+                    return thumbUrls;
+                }
+                catch (Exception e) {
+                    return null;
+                }
             }
             set {
                 if (value == null || !value.Any()) {
@@ -246,7 +268,6 @@ namespace Frost.Providers.Xbmc.DB {
         /// 	</list>}
         /// </example>
         [Column("c22")]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public string FilePathsString { get; set; }
 
         /// <summary>Gets or sets the paths to the movie files or folder if DVD.</summary>
@@ -259,6 +280,9 @@ namespace Frost.Providers.Xbmc.DB {
 
         #endregion
 
+        //[Column("idFile")]
+        //public long FileId { get; set; }
+
         /// <summary>Gets or sets the foreign key to the movie set.</summary>
         /// <value>The foreign key to the movie set.</value>
         [Column("idSet")]
@@ -268,11 +292,12 @@ namespace Frost.Providers.Xbmc.DB {
 
         /// <summary>Gets or sets the information about file(s) that contain this movie.</summary>
         /// <value>The information about file(s) that contain this movie</value>
-        [InverseProperty("Movie")]
+        [Required]
         public virtual XbmcFile File { get; set; }
 
         /// <summary>Gets or sets the info about folder path and folder settings of this file</summary>
         /// <value>The info about folder path and folder settings of this file</value>
+        [Required]
         public XbmcPath Path { get; set; }
 
         /// <summary>Gets or sets the set this movie is a part of.</summary>
@@ -306,27 +331,33 @@ namespace Frost.Providers.Xbmc.DB {
         /// <value>The studios that produced this movie.</value>
         public virtual HashSet<XbmcStudio> Studios { get; set; }
 
-        public virtual HashSet<XbmcMovieArt> Art { get; set; }
+        public virtual HashSet<XbmcArt> Art { get; set; }
 
         #endregion
 
         internal class Configuration : EntityTypeConfiguration<XbmcDbMovie> {
-
             public Configuration() {
-                // Movie <--> File
-                HasRequired(m => m.File)
-                    .WithRequiredDependent(f => f.Movie)
-                    .Map(m => m.MapKey("idFile"));
+                HasKey(m => m.Id);
+
+                HasRequired(m => m.Path).WithRequiredDependent();
+                //.m
+                    //.Map(fk => fk.MapKey("idFile"));
+                    //.WithRequiredDependent(f => f.Movie)
 
                 // Movie <--> Art
                 HasMany(m => m.Art)
                     .WithRequired()
-                    .Map(fk => fk.MapKey("media_id"));
-                    //.HasForeignKey(a => a.MediaID);
+                    .HasForeignKey(a => a.MediaId);
+
+                // Movie <--> Art
+                //HasMany(m => m.Art)
+                //    .WithRequired()
+                //    .Map(fk => fk.MapKey("media_id"));
+
+                //.WithRequired(a => a.Movie)
+                //.Map(fk => fk.MapKey("media_id"));
             }
-
         }
-
     }
 
 }

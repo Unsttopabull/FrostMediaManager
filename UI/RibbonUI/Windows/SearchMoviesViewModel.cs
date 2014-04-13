@@ -128,7 +128,12 @@ namespace RibbonUI.Windows {
                 
                 await Task.Run(() => Save(movieInfos, service));
 
-                service.SaveChanges();
+                try {
+                    service.SaveChanges();
+                }
+                catch (Exception e) {
+                    UIHelper.HandleProviderException(e);
+                }
 
                 ProgressText = "Finished!";
             }
@@ -160,13 +165,15 @@ namespace RibbonUI.Windows {
 
                 try {
                     service.SaveDetected(movieInfo);
+                }
+                catch (Exception e) {
+                }
+                finally {
                     ProgressValue++;
 
                     if (ParentWindow != null) {
                         ParentWindow.Dispatcher.Invoke(() => ParentWindow.TaskbarItemInfo.ProgressValue += percent);
-                    }
-                }
-                catch (Exception e) {
+                    }                    
                 }
             }
         }

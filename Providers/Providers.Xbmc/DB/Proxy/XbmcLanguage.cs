@@ -1,9 +1,12 @@
-﻿using System.Text;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
 using Frost.Common.Util.ISO;
 
 namespace Frost.Providers.Xbmc.DB.Proxy {
+
+    [NotMapped]
     public class XbmcLanguage : ILanguage {
 
         /// <summary>Initializes a new instance of the <see cref="XbmcLanguage"/> class.</summary>
@@ -15,6 +18,11 @@ namespace Frost.Providers.Xbmc.DB.Proxy {
 
             Name = isoCode.EnglishName;
             ISO639 = new ISO639(isoCode.Alpha2, isoCode.Alpha3);
+        }
+
+        internal XbmcLanguage(ILanguage language) {
+            Name = language.Name;
+            ISO639 = language.ISO639;
         }
 
         public long Id {

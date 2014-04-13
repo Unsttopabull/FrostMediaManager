@@ -8,6 +8,14 @@ namespace Frost.Providers.Xtreamer.PHP {
     [PHPName("Coretis_VO_Movie")]
     public class XjbPhpMovie {
 
+        [PHPIgnore]
+        public static readonly string[] ScrapperNames = {
+            "Coretis_Scraper_Filename",
+            "Coretis_Scraper_Filesystem",
+            "Coretis_Scraper_Mplayer",
+            "Coretis_Scraper_Xmlinfo"
+        };
+
         /// <example>\eg{ <c>DOKU MANGA XXX MOVIE SERIE -> (S01E01 S01 staffel1 staffel.12 season folge1 folge.12 complete)</c>}</example>
         [PHPName("art")]
         public string ArtType;
