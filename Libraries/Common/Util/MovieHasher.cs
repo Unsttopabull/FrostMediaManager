@@ -30,6 +30,9 @@ namespace Frost.Common.Util {
 
         #endregion
 
+        /// <summary>Computes the movie hash and converts it as hexadecimal string.</summary>
+        /// <param name="fileName">Name of the file.</param>
+        /// <returns>Returns the hexadecimal representation of the computed hash.</returns>
         public static string ComputeMovieHashAsHexString(string fileName) {
             return ToHexString(ComputeMovieHash(fileName));
         }

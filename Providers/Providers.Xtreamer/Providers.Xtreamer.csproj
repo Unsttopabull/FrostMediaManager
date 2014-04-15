@@ -111,7 +111,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Provider\FindDb.cs" />
+    <Compile Include="Provider\XtFindDb.cs" />
     <Compile Include="Provider\XtreamerCompositionRoot.cs" />
     <Compile Include="Provider\XjbMoviesDataService.cs" />
     <Compile Include="Proxies\XtActor.cs" />

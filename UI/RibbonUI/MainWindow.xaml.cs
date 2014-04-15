@@ -41,8 +41,15 @@ namespace RibbonUI {
             LightInjectContainer.RegisterAssembly(assemblyPath);
 
             if (!LightInjectContainer.CanGetInstance<IMoviesDataService>()) {
+                try {
+                    _loading.Dispatcher.InvokeShutdown();
+                }
+                catch { }
+
                 MessageBox.Show("Provider did not register a service, the program can not continue", "No service registered", MessageBoxButton.OK, MessageBoxImage.Error);
+
                 Application.Current.Shutdown();
+                return;
             }
 
             _loading.ProgressMax = 95;

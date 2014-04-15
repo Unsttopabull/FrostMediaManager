@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using Trinet.Networking;
 
 namespace Frost.Providers.Xtreamer.Provider {
-    class FindDb {
+    public class XtFindDb {
         private const string XJB_DB_LOC = @"\\{0}\{1}\{2}\scripts\Xtreamering\var\db";
         private const string XJB_DB_LOC2 = @"\\{0}\{1}\{2}\scripts\var\db";
 

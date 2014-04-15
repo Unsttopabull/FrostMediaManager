@@ -1,6 +1,7 @@
 using System;
 using Frost.Common.Models.Provider;
 using Frost.PHPtoNET.Attributes;
+using Frost.Providers.Xtreamer.DB;
 
 namespace Frost.Providers.Xtreamer.PHP {
 
@@ -26,6 +27,11 @@ namespace Frost.Providers.Xtreamer.PHP {
 
         public XjbPhpGenre(IGenre genre) {
             Name = genre.Name;
+        }
+
+        public XjbPhpGenre(XjbGenre genre) {
+            Name = genre.Name;
+            Id = (int) genre.Id;
         }
 
         /// <summary>The id for this row in DB</summary>

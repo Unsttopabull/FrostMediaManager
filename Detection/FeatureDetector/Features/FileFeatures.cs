@@ -10,11 +10,14 @@ using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
 using Frost.SharpLanguageDetect;
 using Frost.SharpMediaInfo;
+using log4net;
 using File = System.IO.File;
 
 namespace Frost.DetectFeatures {
 
     public partial class FileFeatures : IDisposable {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(FileFeatures));
+
         private DirectoryInfo _directoryInfo;
         private string _directoryRegex;
         private readonly Dictionary<string, FileNameInfo> _fnInfos;
@@ -281,7 +284,11 @@ namespace Frost.DetectFeatures {
                                     ? _directoryInfo.FullName
                                     : filePath.Substring(0, filePath.LastIndexOfAny(new[] { '\\', '/' }));
             }
-            catch (Exception) {
+            catch (Exception e) {
+                if (Log.IsWarnEnabled) {
+                    Log.Warn(string.Format("Failed to get FileInfo for path: {0}", file), e);
+                }
+
                 directoryPath = filePath.Substring(0, filePath.LastIndexOfAny(new[] { '\\', '/' }));
                 return directoryPath;
             }
@@ -327,9 +334,10 @@ namespace Frost.DetectFeatures {
 
             DetectMovieType();
 
-            bool b = Movie.FileInfos.All(f => f.Audios.Count == 0);
-            bool b2 = Movie.FileInfos.All(f => f.Videos.Count == 0);
             bool iso = Movie.FileInfos.Any(f => f.Extension.Equals("iso", StringComparison.OrdinalIgnoreCase));
+            if (iso) {
+                Movie.Type = MovieType.ISO;
+            }
 
             //return Save();
             return true;
@@ -405,13 +413,15 @@ namespace Frost.DetectFeatures {
         }
 
         private void DetectMovieType() {
+            //bool dvdSource = Movie.FileInfos.SelectMany(f => f.Videos)
+            //                                .All(v => v.Source.OrdinalEquals("DVD") ||
+            //                                          v.Source.OrdinalEquals("DVDR") ||
+            //                                          v.Source.OrdinalEquals("DVD-R")
+            //                                );
+
             if (Movie.FileInfos.All(f => f.Extension.OrdinalEquals("vob") ||
                                          f.Extension.OrdinalEquals("ifo") ||
-                                         f.Extension.OrdinalEquals("bup")) ||
-                Movie.FileInfos.SelectMany(f => f.Videos)
-                     .All(v => v.Source.OrdinalEquals("DVD") ||
-                               v.Source.OrdinalEquals("DVDR") ||
-                               v.Source.OrdinalEquals("DVD-R"))) {
+                                         f.Extension.OrdinalEquals("bup"))) {
                 Movie.Type = MovieType.DVD;
             }
 

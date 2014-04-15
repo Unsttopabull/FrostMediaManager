@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
 using Frost.GettextMarkupExtension;
+using log4net.Config;
 using RibbonUI.Util;
 
 namespace RibbonUI {
@@ -18,6 +19,8 @@ namespace RibbonUI {
         }
 
         public App() {
+            BasicConfigurator.Configure();
+
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
             LoadPlugins();
 

@@ -81,6 +81,7 @@
         DVD,
         BluRay,
         HDDVD,
+        ISO
     }
 
     /// <summary>The way of displaying/drawing video frames on the screen.</summary>

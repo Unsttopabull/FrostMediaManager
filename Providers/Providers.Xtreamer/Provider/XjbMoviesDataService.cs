@@ -33,9 +33,9 @@ namespace Frost.Providers.Xtreamer.Provider {
         public XjbMoviesDataService() {
             _personComparer = new PersonEqualityComparer();
 
-            string xjbDb = FindDb.FindXjbDB();
+            string xjbDb = XtFindDb.FindXjbDB();
             if (xjbDb != null) {
-                _xtreamerPath = FindDb.FindXjbDriveLocation(xjbDb);
+                _xtreamerPath = XtFindDb.FindXjbDriveLocation(xjbDb);
 
                 if (xjbDb.StartsWith("\\\\")) {
                     xjbDb = "\\\\" + xjbDb;
@@ -230,7 +230,7 @@ namespace Frost.Providers.Xtreamer.Provider {
                         if (!string.IsNullOrEmpty(changedMovie.ProxiedEntity.CoverPath)) {
                             m.HasCover = true;
                         }
-                        if (changedMovie.ProxiedEntity.Fanart.Length > 0) {
+                        if (changedMovie.ProxiedEntity.Fanart.Count > 0) {
                             m.HasFanart = true;
                         }
                         break;

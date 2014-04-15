@@ -44,7 +44,7 @@ namespace Frost.Providers.Xtreamer.Proxies {
             List<IArt> arts = new List<IArt> { new XtCover(Entity, _xtreamerPath) };
 
             if (Entity.Fanart != null) {
-                for (int i = 0; i < Entity.Fanart.Length; i++) {
+                for (int i = 0; i < Entity.Fanart.Count; i++) {
                     arts.Add(new XtFanart(Entity, i, _xtreamerPath));
                 }
             }
@@ -475,7 +475,7 @@ namespace Frost.Providers.Xtreamer.Proxies {
         /// <summary>Gets or sets the information about this movie's certification ratings/restrictions in certain countries.</summary>
         /// <value>The information about this movie's certification ratings/restrictions in certain countries.</value>
         public IEnumerable<ICertification> Certifications {
-            get { return Entity.Certifications.Select(kvp => new XtCertification(Entity, kvp.Key)); }
+            get { return Entity.Certifications != null ? Entity.Certifications.Select(kvp => new XtCertification(Entity, kvp.Key)) : null; }
         }
 
         /// <summary>Gets or sets the name of the credited writer(s).</summary>
@@ -598,7 +598,7 @@ namespace Frost.Providers.Xtreamer.Proxies {
             get {
                 return (Entity.Art != null && Entity.Art.Count > 0) ||
                        (!string.IsNullOrEmpty(Entity.CoverPath)) ||
-                       (Entity.Fanart != null && Entity.Fanart.Length > 0) ||
+                       (Entity.Fanart != null && Entity.Fanart.Count > 0) ||
                        (Entity.Screens != null && Entity.Screens.Length > 0);
             }
         }

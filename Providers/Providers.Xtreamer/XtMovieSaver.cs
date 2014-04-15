@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
@@ -19,6 +21,7 @@ namespace Frost.Providers.Xtreamer {
     public class XtMovieSaver : IDisposable {
         private static readonly Dictionary<string, XjbGenre> Genres;
         private static readonly Dictionary<string, XjbPerson> People;
+        private static readonly Dictionary<string, string> DriveIds;
 
         private readonly string _xtPathRoot;
         private readonly MovieInfo _info;
@@ -29,6 +32,7 @@ namespace Frost.Providers.Xtreamer {
         static XtMovieSaver() {
             Genres = new Dictionary<string, XjbGenre>(StringComparer.InvariantCultureIgnoreCase);
             People = new Dictionary<string, XjbPerson>(StringComparer.InvariantCultureIgnoreCase);
+            DriveIds = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
         }
 
         public XtMovieSaver(string xtPathRoot, MovieInfo movie, XjbEntities db = null) {
@@ -51,6 +55,12 @@ namespace Frost.Providers.Xtreamer {
             }
 
             if (_info.IsMultipart) {
+                Debug.WriteLine("Skipping multipart movie: "+ _info.Title);
+                return;
+            }
+
+            if (_info.FileInfos.Count(f => f.Videos.Count > 0) == 0 && _info.Type != MovieType.ISO) {
+                Debug.WriteLine("Skipping movie without video: "+ _info.Title);
                 return;
             }
 
@@ -62,8 +72,66 @@ namespace Frost.Providers.Xtreamer {
 
                 xjbMovie.MovieVo = phpMovie;
 
-                _mvc.SaveChanges();
+                //_mvc.SaveChanges();
             }
+        }
+
+        private string GetPathOnDrive(string fullPath) {
+            string replace = fullPath.Replace(_xtPathRoot, "");
+
+            int indexOfForward = replace.IndexOf("/", 1, StringComparison.Ordinal);
+            if (indexOfForward > 0) {
+                replace = replace.Remove(0, indexOfForward);
+            }
+            else {
+                int indexOfBack = replace.IndexOf("\\", 1, StringComparison.Ordinal);
+                replace = replace.Replace('\\', '/').Remove(0, indexOfBack);
+            }
+            return replace;
+        }
+
+        private string GetFolderOnDrive(string fullPath) {
+            string dir = Path.GetDirectoryName(GetPathOnDrive(fullPath));
+
+            return dir;
+        }
+
+        public string GetDriveId(string fullPath) {
+            string replace = fullPath.Replace(_xtPathRoot, "");
+
+            int indexOfForward = replace.IndexOf("/", 1, StringComparison.Ordinal);
+            if (indexOfForward > 0) {
+                replace = replace.Substring(0, indexOfForward);
+            }
+            else {
+                int indexOfBack = replace.IndexOf("\\", 1, StringComparison.Ordinal);
+                replace = replace.Replace('\\', '/').Substring(0, indexOfBack);
+            }
+
+            string id;
+            if (DriveIds.TryGetValue(replace, out id)) {
+                return id;
+            }
+
+            string driveIdFile = _xtPathRoot + replace+"\\.xjb-drive-id";
+            if (File.Exists(driveIdFile)) {
+                try {
+                    id = File.ReadAllText(driveIdFile);
+                    DriveIds.Add(replace, id);
+
+                    XjbDrive xjbDrive = _mvc.Drives.Find(id);
+                    if (xjbDrive != null) {
+                        return id;
+                    }
+
+                    _mvc.Drives.Add(new XjbDrive { Id = id });
+                    return id;
+                }
+                catch {
+                    return null;
+                }
+            }
+            return null;
         }
 
         private string SavePHP(XjbMovie xjbMovie, MovieInfo info) {
@@ -96,7 +164,7 @@ namespace Frost.Providers.Xtreamer {
             if (file != null) {
                 phpMovie.FileName = file.NameWithExtension;
                 phpMovie.FileExtension = file.Extension;
-                phpMovie.FilePathOnDrive = "TODO";
+                phpMovie.FilePathOnDrive = GetPathOnDrive(file.FullPath);
                 phpMovie.FileSize = file.Size.HasValue ? file.Size.Value : 0;
                 phpMovie.LastAccessTime = file.LastAccessTime.ToUnixTimestamp().ToInvariantString();
                 phpMovie.FileCreateTime = file.CreateTime.ToUnixTimestamp().ToInvariantString();
@@ -133,8 +201,56 @@ namespace Frost.Providers.Xtreamer {
 
             GetMostCommonAudio(phpMovie, audios);
             GetMostCommonVideo(phpMovie, videos);
+            GetArt(phpMovie, info.Art);
+
+            phpMovie.Subtitles = info.FileInfos
+                                     .Where(fd => fd.Subtitles.Count > 0)
+                                     .Select(info1 => GetPathOnDrive(info1.FullPath))
+                                     .Where(pathOnDrive => pathOnDrive != null)
+                                     .ToList();
+
+            phpMovie.Genres = xjbMovie.Genres.Select(g => new XjbPhpGenre(g)).ToList();
+
+            phpMovie.Cast = xjbMovie.Cast.Select(person => {
+                if (person is XjbActor) {
+                    return new XjbPhpPerson(person as XjbActor);
+                }
+                if (person is XjbDirector) {
+                    return new XjbPhpPerson(person as XjbDirector);
+                }
+                if (person is XjbWriter) {
+                    return new XjbPhpPerson(person as XjbWriter);
+                }
+                return new XjbPhpPerson(person);
+            }).ToList();
 
             return PHPSerializer.Serialize(phpMovie);
+        }
+
+        private void GetArt(XjbPhpMovie phpMovie, List<ArtInfo> art) {
+            if (art.Count == 0) {
+                return;
+            }
+
+            ArtInfo cover = art.FirstOrDefault(a => a.Type == ArtType.Cover);
+            if (cover != null) {
+                phpMovie.CoverPath = GetPathOnDrive(cover.Path);
+            }
+            else {
+                ArtInfo poster = art.FirstOrDefault(a => a.Type == ArtType.Poster);
+                if (poster != null) {
+                    phpMovie.CoverPath = GetPathOnDrive(poster.Path);
+                }
+            }
+
+            phpMovie.Fanart = new List<string>();
+
+            foreach (ArtInfo artInfo in art.Where(a => a.Type == ArtType.Fanart)) {
+                string pathOnDrive = GetPathOnDrive(artInfo.Path);
+                if (pathOnDrive != null) {
+                    phpMovie.Fanart.Add(pathOnDrive);
+                }
+            }
         }
 
         private static void GetMostCommonAudio(XjbPhpMovie phpMovie, IEnumerable<AudioDetectionInfo> audios) {
@@ -284,7 +400,7 @@ namespace Frost.Providers.Xtreamer {
         }
 
         private void AddPeople(XjbMovie mv, IEnumerable<PersonInfo> people, PersonType personType) {
-            foreach (PersonInfo personInfo in people) {
+            foreach (PersonInfo personInfo in people.Where(p => !string.IsNullOrEmpty(p.Name))) {
                 XjbPerson p = GetPerson(personInfo);
 
                 XjbMoviePerson mp = null;
@@ -359,13 +475,48 @@ namespace Frost.Providers.Xtreamer {
                 Runtime = movie.Runtime / 1000,
                 ImdbID = movie.ImdbID,
                 Year = movie.ReleaseYear,
-                Rating = movie.RatingAverage.HasValue ? (int) Math.Round(movie.RatingAverage.Value * 10) : 0,
-                //TmdbID = movie.TmdbID,
+                Rating = movie.RatingAverage.HasValue ? (int) Math.Round(movie.RatingAverage.Value * 10) : 0
             };
 
-            FileDetectionInfo fdi = movie.FileInfos.FirstOrDefault(fi => fi.Videos.Count > 0);
-            if (GetFileName(fdi, mv)) {
-                return null;
+            switch (movie.Type) {
+                case MovieType.DVD: {
+                    FileDetectionInfo fdi = movie.FileInfos.FirstOrDefault(fi => string.Equals(fi.NameWithExtension, "VIDEO_TS.IFO", StringComparison.InvariantCultureIgnoreCase));
+                    mv.Filename = "VIDEO_TS.IFO";
+
+                    if (fdi != null) {
+                        mv.FolderPathOnDrive = GetFolderOnDrive(fdi.FullPath);
+                        mv.Filesize = fdi.Size;
+                        mv.DriveId = GetDriveId(fdi.FullPath);
+                    }
+                    break;
+                }
+                case MovieType.ISO: {
+                    FileDetectionInfo fi = movie.FileInfos.FirstOrDefault(fd => string.Equals("iso", fd.Extension, StringComparison.InvariantCultureIgnoreCase));
+
+                    if (fi != null) {
+                        mv.Filename = fi.NameWithExtension;
+                        mv.FolderPathOnDrive = GetFolderOnDrive(fi.FullPath);
+                        mv.Filesize = fi.Size;
+                        mv.DriveId = GetDriveId(fi.FullPath);
+                    }
+                    break;
+                }
+                default: {
+                    FileDetectionInfo fdi = movie.FileInfos.FirstOrDefault(fi => fi.Videos.Count > 0);
+                    if (fdi == null) {
+                        return null;
+                    }
+
+                    if (string.IsNullOrEmpty(fdi.NameWithExtension)) {
+                        return null;
+                    }
+
+                    mv.Filename = fdi.NameWithExtension;
+                    mv.FolderPathOnDrive = GetFolderOnDrive(fdi.FullPath);
+                    mv.Filesize = fdi.Size;
+                    mv.DriveId = GetDriveId(fdi.FullPath);
+                    break;
+                }
             }
 
             PlotInfo plot = movie.Plots.FirstOrDefault();
@@ -374,24 +525,11 @@ namespace Frost.Providers.Xtreamer {
             }
 
             mv.HasFanart = movie.Art.Any(a => a.Type == ArtType.Fanart);
-            mv.HasCover = movie.Art.Any(a => a.Type == ArtType.Cover);
+            mv.HasCover = movie.Art.Any(a => a.Type == ArtType.Cover || a.Type == ArtType.Poster);
 
             mv.FilePathFull = null;
-            mv.FilePathDrive = "TODO";
 
             return mv;
-        }
-
-        private static bool GetFileName(FileDetectionInfo fdi, XjbMovie mv) {
-            if (fdi == null) {
-                return true;
-            }
-            if (string.IsNullOrEmpty(fdi.NameWithExtension)) {
-                return true;
-            }
-
-            mv.Filename = fdi.NameWithExtension;
-            return false;
         }
 
         public static void Reset() {

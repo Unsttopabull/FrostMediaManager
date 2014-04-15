@@ -12,7 +12,7 @@ namespace RibbonUI.Windows {
         public event PropertyChangedEventHandler PropertyChanged;
         private string _labelText;
         private double _progressValue;
-        private DispatcherTimer _timer;
+        private readonly DispatcherTimer _timer;
 
         public Loading(int maxProgress) {
             InitializeComponent();
@@ -21,6 +21,14 @@ namespace RibbonUI.Windows {
             _timer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 1) };
             _timer.Tick += TimerTick;
             _timer.Start();
+
+            Closed += (sender, args) => {
+                if (_timer == null) {
+                    return;
+                }
+                _timer.Stop();
+                _timer.Tick -= TimerTick;
+            };
         }
 
         public double ProgressMax { get; set; }
@@ -53,6 +61,8 @@ namespace RibbonUI.Windows {
                 ProgressValue += 5;
             }
         }
+
+        
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {

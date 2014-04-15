@@ -1,8 +1,11 @@
 using System;
 using System.Collections;
 using System.Xml.Serialization;
+using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
+using Frost.Common.Properties;
 using Frost.PHPtoNET.Attributes;
+using Frost.Providers.Xtreamer.DB;
 
 namespace Frost.Providers.Xtreamer.PHP {
 
@@ -25,13 +28,31 @@ namespace Frost.Providers.Xtreamer.PHP {
         public XjbPhpPerson() {
         }
 
-        public XjbPhpPerson(string name, string character, string job = "actor") : this(name, job) {
+        public XjbPhpPerson(string name, string job, string character = null) {
+            Name = name;
+            Job = job;
             Character = character;
         }
 
-        public XjbPhpPerson(string name, string job) {
-            Name = name;
-            Job = job;
+        public XjbPhpPerson(XjbDirector director) : this(director as XjbMoviePerson){
+            Job = JOB_DIRECTOR;
+        }
+
+        public XjbPhpPerson(XjbWriter writer) : this(writer as XjbMoviePerson){
+            Job = JOB_WRITER;
+        }
+
+        public XjbPhpPerson(XjbActor actor) : this(actor as XjbMoviePerson){
+            Job = JOB_ACTOR;
+            Character = actor.Character;
+        }
+
+        public XjbPhpPerson(XjbMoviePerson moviePerson) {
+            if (moviePerson.PersonId != null) {
+                Id = (int) moviePerson.PersonId;
+            }
+
+            Name = moviePerson.Person.Name;            
         }
 
         public XjbPhpPerson(IActor actor) {

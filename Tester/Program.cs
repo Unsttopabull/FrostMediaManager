@@ -6,30 +6,49 @@ using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using Frost.Common.Models.FeatureDetector;
+using Frost.Common.Util.ISO;
 using Frost.DetectFeatures;
 using System.Diagnostics;
 using Frost.Providers.Frost.DB;
 using Frost.Providers.Xbmc;
 using Frost.Providers.Xbmc.DB;
+using Frost.Providers.Xbmc.NFO;
+using Frost.Providers.Xtreamer;
 using Frost.Providers.Xtreamer.DB;
+using Frost.Providers.Xtreamer.Provider;
+using log4net;
+using log4net.Config;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Frost.Tester {
 
     internal class Program {
         private static readonly string Filler;
+        private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
 
         static Program() {
             Filler = string.Join("", Enumerable.Repeat("_", Console.BufferWidth));
         }
 
         private static void Main() {
+            if (File.Exists("log4Net.config")) {
+                XmlConfigurator.Configure(new FileInfo("log4Net.config"));
+            }
+            else {
+                BasicConfigurator.Configure();
+            }
+            //%timestamp [%thread] %level %logger %ndc - %message%newline
+
             //EntityFrameworkProfiler.Initialize();
 
-            FileStream debugLog = File.Create("debug.txt");
-            Debug.Listeners.Add(new TextWriterTraceListener(debugLog));
-            Debug.Listeners.Add(new ConsoleTraceListener());
-            Debug.AutoFlush = true;
+            //FileStream debugLog = File.Create("debug.txt");
+            //Debug.Listeners.Add(new TextWriterTraceListener(debugLog));
+            //Debug.Listeners.Add(new ConsoleTraceListener());
+            //Debug.AutoFlush = true;
 
             Stopwatch sw = Stopwatch.StartNew();
 
@@ -40,7 +59,9 @@ namespace Frost.Tester {
 
             //TestXjbDbParser();
             //TestMediaSearcher();
-            TestHasher();
+            //TestHasher();
+
+            TestXjbDbSaver();
             //TestPhpDeserializeAttribute();
             //TestXjbDB();
             //WriteOutMovies();
@@ -63,6 +84,61 @@ namespace Frost.Tester {
             Console.WriteLine(Filler);
             Console.Read();
         }
+
+        private static void TestXjbDbSaver() {
+            //FeatureDetector detector = new FeatureDetector(@"\\MYXTREAMER\Xtreamer_PRO\sda1\Filmi");
+            //detector.PropertyChanged += (s, args) => Console.WriteLine(detector.Count);
+
+            //IEnumerable<MovieInfo> movieInfos = detector.Search();
+            //Save(movieInfos.ToList());
+
+            JsonSerializer ser = new JsonSerializer { ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor };
+
+            List<MovieInfo> infos;
+            using (JsonReader jr = new JsonTextReader(File.OpenText("xtDetected.js"))) {
+                infos = ser.Deserialize<List<MovieInfo>>(jr);
+            }
+            Save(infos);
+        }
+
+        private static void Save(List<MovieInfo> movieInfos) {
+            XtFindDb.FindXjbDB();
+
+            using (XjbEntities mvc = new XjbEntities(@"\\\\MYXTREAMER\Xtreamer_PRO\sda1\scripts\Xtreamering\var\db\xjb.db")) {
+                for (int i = 0; i < movieInfos.Count; i++) {
+                    MovieInfo movieInfo = movieInfos[i];
+                    Console.WriteLine(movieInfo.Title ?? "Movie " + i);
+
+                    try {
+                        XtMovieSaver ms = new XtMovieSaver(@"\\MYXTREAMER\Xtreamer_PRO\", movieInfo, mvc);
+                        ms.Save();
+                    }
+                    catch (Exception e) {
+                        if (Log.IsWarnEnabled) {
+                            Log.Warn(string.Format("Failed to save movie {0}.", movieInfo.Title ?? "Movie " + i));
+                        }
+                        //Console.WriteLine(@"Exception: " + e.Message);
+                    }
+                }
+
+                try {
+                    mvc.SaveChanges();
+                }
+                catch (Exception e) {
+                    if (Log.IsErrorEnabled) {
+                        Log.Error("EF Container failed to save detected movies.", e);
+                    }
+                }
+            }
+        }
+
+        //private static void DetectorPropertyChanged(object sender, PropertyChangedEventArgs e) {
+        //    FeatureDetector detector = sender as FeatureDetector;
+
+        //    if (detector != null) {
+        //        Console.WriteLine(detector.Count);
+        //    }
+        //}
 
         private static void TestHasher() {
             //using (XbmcContainer xbmc = new XbmcContainer()) {
@@ -191,14 +267,13 @@ namespace Frost.Tester {
             int count = movies.Count;
             XbmcContainer container = new XbmcContainer("xbmc.db3");
             using (StreamWriter fw = new StreamWriter(File.Create("xbmcSave.log"))) {
-
                 foreach (MovieInfo movieInfo in movies) {
                     Console.WriteLine(movieInfo.Title);
                     XbmcMovieSaver sv = new XbmcMovieSaver(movieInfo, container);
 
                     XbmcDbMovie xbmcDbMovie;
                     try {
-                         xbmcDbMovie = sv.Save(true);
+                        xbmcDbMovie = sv.Save(true);
                     }
                     catch (Exception e) {
                         fw.WriteLine(movieInfo.Title);

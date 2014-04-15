@@ -641,6 +641,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\LightInject.3.0.1.5\lib\net45\LightInject.dll</HintPath>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\ThirdParty\log4net\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

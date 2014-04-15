@@ -129,7 +129,7 @@ namespace Frost.Providers.Xtreamer.PHP {
 
         /// <example>\eg{ <code>array ( '/movies/Kill Bill/Kill Bill-fanart', '...' )</code>}</example>
         [PHPName("pathFanartArr")]
-        public string[] Fanart;
+        public List<string> Fanart;
 
         /// <example>\eg{''<c>/movies/Kill Bill/Kill Bill.xml</c>''}</example>
         [PHPName("pathInfoXml")]

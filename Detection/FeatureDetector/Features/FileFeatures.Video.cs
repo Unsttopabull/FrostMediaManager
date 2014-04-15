@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
@@ -36,7 +35,11 @@ namespace Frost.DetectFeatures {
                 try {
                     movieHash = MovieHasher.ComputeMovieHashAsHexString(file.FullPath);
                 }
-                catch (FileNotFoundException e) {
+                catch (Exception e) {
+                    if (Log.IsWarnEnabled) {
+                        Log.Warn(string.Format("Failed to calculate MovieHash value for file \"{0}\".", file.FullPath), e);
+                    }
+
                     movieHash = null;
                 }
 
@@ -48,7 +51,9 @@ namespace Frost.DetectFeatures {
                 }
             }
             else {
-                Console.Error.WriteLine("Could not process the file as MediaInfo is missing: " + this);
+                if (Log.IsErrorEnabled) {
+                    Log.Error(string.Format("Could not process the file as MediaInfo is missing: \"{0}\".", file.FullPath) + this);
+                }
             }
         }
 

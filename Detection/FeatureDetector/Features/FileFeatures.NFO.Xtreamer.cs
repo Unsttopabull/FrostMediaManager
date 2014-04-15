@@ -13,6 +13,10 @@ namespace Frost.DetectFeatures {
                 xjbMovie = XjbXmlMovie.Load(xtNfo);
             }
             catch (Exception) {
+                if (Log.IsWarnEnabled) {
+                    Log.Warn(string.Format("Failed to load file \"{0}\" as Xtreamer NFO.", xtNfo));
+                }
+
                 //Console.Error.WriteLine(string.Format("File \"{0}\" is not a valid NFO.", xtNfo), "ERROR");
             }
 

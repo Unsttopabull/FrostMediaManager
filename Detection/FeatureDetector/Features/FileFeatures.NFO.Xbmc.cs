@@ -32,7 +32,9 @@ namespace Frost.DetectFeatures {
                 xbmcMovie = XbmcXmlMovie.Load(filePath);
             }
             catch (Exception) {
-                //Console.Error.WriteLine(string.Format("File \"{0}\" is not a valid NFO.", filePath), "ERROR");
+                if (Log.IsWarnEnabled) {
+                    Log.Warn(string.Format("Failed to load file \"{0}\" as Xbmc NFO.", filePath));
+                }
             }
 
             if (xbmcMovie != null) {

@@ -79,6 +79,10 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\ThirdParty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
@@ -99,7 +103,6 @@
     <Compile Include="Features\FileFeatures.Subtitles.cs" />
     <Compile Include="Features\FileFeatures.NFO.cs" />
     <Compile Include="Features\FileFeatures.Video.cs" />
-    <Compile Include="MovieFiles.cs" />
     <Compile Include="Util\AspectRatio\AspectRatioComparer.cs" />
     <Compile Include="Util\AspectRatio\AspectRatioDetector.cs">
       <SubType>Code</SubType>

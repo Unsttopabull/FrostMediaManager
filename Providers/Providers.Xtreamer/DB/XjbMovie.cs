@@ -50,7 +50,7 @@ namespace Frost.Providers.Xtreamer.DB {
         /// <value>The movie's folder path on the drive without trailing <c>"/"</c>.</value>
         /// <example>eg{<c>"/Filmi/300"</c>}</example>
         [Column("filepathdrive")]
-        public string FilePathDrive { get; set; }
+        public string FolderPathOnDrive { get; set; }
 
         /// <summary>Gets or sets the filesize of the movie.</summary>
         /// <value>The filesize of the movie</value>

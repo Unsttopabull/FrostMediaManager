@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
@@ -14,7 +15,7 @@ namespace Frost.Providers.Xtreamer.DB {
 
         #region Static constructor
         static XjbGenre() {
-            GenreAbbreviations = new Dictionary<string, string>(27){
+            GenreAbbreviations = new Dictionary<string, string>(27, StringComparer.InvariantCultureIgnoreCase){
                 {"acti", "action"},
                 {"adve", "adventure"},
                 {"anim", "animation"},
@@ -42,7 +43,7 @@ namespace Frost.Providers.Xtreamer.DB {
                 {"west", "western"},
             }; 
            
-            GenreTags = new Dictionary<string, string>(136) {
+            GenreTags = new Dictionary<string, string>(136, StringComparer.InvariantCultureIgnoreCase) {
                 {"action", "acti"},
                 {"adventure", "adve"},
                 {"animation", "anim"},
@@ -190,7 +191,11 @@ namespace Frost.Providers.Xtreamer.DB {
         /// <summary>Initializes a new instance of the <see cref="XjbGenre"/> class.</summary>
         /// <param name="name">The name of the genre abbreviation.</param>
         public XjbGenre(string name) {
-            Name = name;
+            string abbreviation;
+
+            Name = GenreTags.TryGetValue(name, out abbreviation)
+                ? abbreviation
+                : name;
         }
 
         internal XjbGenre(IGenre genre) {
@@ -227,6 +232,12 @@ namespace Frost.Providers.Xtreamer.DB {
             return !string.IsNullOrEmpty(genreName)
                 ? genreName
                 : null;
+        }
+
+        /// <summary>Converts an Xtreamer Movie Jukebox genre abbreviation to the genre name.</summary>
+        /// <returns>Returns an english genre name from Xtreamer Movie Jukebox genre abbreviation or <c>null</c> if the abbreviation is unknown.</returns>
+        public string GetGenreNameUnabbreviated() {
+            return GenreNameFromAbbreviation(Name);
         }
 
         internal class Configuration : EntityTypeConfiguration<XjbGenre> {

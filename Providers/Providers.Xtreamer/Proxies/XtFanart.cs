@@ -19,13 +19,13 @@ namespace Frost.Providers.Xtreamer.Proxies {
         /// <value>The path to this art (can be local or network or an URI).</value>
         public override string Path {
             get {
-                if (Entity.Fanart != null && Entity.Fanart.Length >= _index) {
+                if (Entity.Fanart != null && Entity.Fanart.Count >= _index) {
                     return XjbPath + Entity.Fanart[_index];
                 }
                 return null;
             }
             set {
-                if (Entity.Fanart != null && Entity.Fanart.Length >= _index) {
+                if (Entity.Fanart != null && Entity.Fanart.Count >= _index) {
                     Entity.Fanart[_index] = value;
                     TrackChanges(value);
                 }

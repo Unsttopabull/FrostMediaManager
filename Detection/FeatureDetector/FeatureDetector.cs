@@ -7,10 +7,12 @@ using System.Runtime.CompilerServices;
 using System.Security;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Properties;
 using Frost.DetectFeatures.FileName;
+using log4net;
 
 namespace Frost.DetectFeatures {
 
@@ -26,6 +28,7 @@ namespace Frost.DetectFeatures {
 
     /// <summary>A class used for detecting file information and features.</summary>
     public class FeatureDetector : INotifyPropertyChanged {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(FeatureDetector));
         public event PropertyChangedEventHandler PropertyChanged;
 
         private int _count;
@@ -90,14 +93,31 @@ namespace Frost.DetectFeatures {
                 Task.WaitAll(arr);
             }
             catch (AggregateException e) {
-
+                if (Log.IsErrorEnabled) {
+                    if (e.InnerExceptions != null && e.InnerExceptions.Count > 0) {
+                        foreach (Exception ex in e.InnerExceptions) {
+                            Log.Error(ex.Message, ex);
+                        }
+                    }
+                }
             }
-            catch {
-                
+            catch(Exception e){
+                if (Log.IsErrorEnabled) {
+                    Log.Error(e.Message, e);
+                }
             }
 
             List<MovieInfo> files = new List<MovieInfo>();
             foreach (Task<IEnumerable<MovieInfo>> task in arr) {
+                if (task.IsFaulted) {
+                    string msg = task.Exception != null 
+                                     ? string.Join("\n", task.Exception.InnerExceptions.Select(e => e.Message))
+                                     : "An error has occured";
+
+                    MessageBox.Show("Error: " + msg);
+                    continue;
+                }
+
                 if (task.IsCompleted) {
                     files.AddRange(task.Result);
                 }
@@ -117,11 +137,27 @@ namespace Frost.DetectFeatures {
                 mediaFiles = directory.EnumerateFilesRegex(_mediaFileRegex, SearchOption.TopDirectoryOnly).ToArray();
             }
             catch (DirectoryNotFoundException e) {
-                OutputDirError(e);
+                if (Log.IsWarnEnabled) {
+                    Log.Warn("Directory was not found", e);
+                }
+
+                //OutputDirError(e);
+                //Debug.IndentLevel = ident;
                 return null;
             }
             catch (SecurityException e) {
-                OutputDirError(e);
+                if (Log.IsWarnEnabled) {
+                    Log.Warn("Don't have permission to access the file or folder", e);
+                }
+
+                //OutputDirError(e);
+                //Debug.IndentLevel = ident;
+                return null;
+            }
+            catch (Exception e) {
+                if (Log.IsErrorEnabled) {
+                    Log.Error("Unknown error occured while searching subfolders", e);
+                } 
                 return null;
             }
 
@@ -132,12 +168,26 @@ namespace Frost.DetectFeatures {
             if (mediaFiles.Length > 0) {
                 //if files are in DVD format (ifo, vob, bup)
                 if (mediaFiles.Any(f => f.Extension.OrdinalEquals(".vob") || f.Extension.OrdinalEquals(".ifo") || f.Extension.OrdinalEquals(".bup"))) {
-                    //mf.Add(await Task.Run(() => DetectDvdMovie(mediaFiles)));
-                    mf.Add(DetectDvdMovie(mediaFiles));
+                    try {
+                        mf.Add(await Task.Run(() => DetectDvdMovie(mediaFiles)));
+                    }
+                    catch (Exception e) {
+                        if (Log.IsErrorEnabled) {
+                            Log.Error("Unknown error while detecting movie as DVD.", e);
+                        }
+                    }
+                    //mf.Add(DetectDvdMovie(mediaFiles));
                 }
                 else {
-                    //mf.AddRange(await Task.Run(() => DetectMultipartMovie(mediaFiles)));
-                    mf.AddRange(DetectMultipartMovie(mediaFiles));
+                    try {
+                        mf.AddRange(await Task.Run(() => DetectMultipartMovie(mediaFiles)));
+                    }
+                    catch (Exception e) {
+                        if (Log.IsErrorEnabled) {
+                            Log.Error("Unknown error while detecting multi-part movie.", e);
+                        }                        
+                    }
+                    //mf.AddRange(DetectMultipartMovie(mediaFiles));
                 }
             }
 
@@ -149,14 +199,27 @@ namespace Frost.DetectFeatures {
                     }
                 }
                 catch (DirectoryNotFoundException e) {
-                    OutputDirError(e);
+                    if (Log.IsWarnEnabled) {
+                        Log.Warn("Directory was not found", e);
+                    }
+
+                    //OutputDirError(e);
                     //Debug.IndentLevel = ident;
                     return null;
                 }
                 catch (SecurityException e) {
-                    OutputDirError(e);
+                    if (Log.IsWarnEnabled) {
+                        Log.Warn("Don't have permission to access the file or folder", e);
+                    }
+
+                    //OutputDirError(e);
                     //Debug.IndentLevel = ident;
                     return null;
+                }
+                catch (Exception e) {
+                    if (Log.IsErrorEnabled) {
+                        Log.Error("Unknown error occured while searching subfolders", e);
+                    }                    
                 }
             }
             //Debug.Unindent();
@@ -176,12 +239,6 @@ namespace Frost.DetectFeatures {
 
             Count++;
             return Detect(fnInfos);
-        }
-
-        private static void OutputDirError(Exception e) {
-            Console.Error.WriteLine("Directory not found or inaccessible.");
-            //Debug.WriteLine(string.Format("Directory '{0}' not found or inaccessible.", "PATH"), "ERROR");
-            //Debug.Unindent();
         }
 
         private MovieInfo[] DetectMultipartMovie(FileInfo[] mediaFiles) {

@@ -192,14 +192,18 @@ namespace Frost.DetectFeatures {
                 maxTextLength = 1024;
             }
 
-            int numRead;
-            string md5;
+            int numRead = 0;
+            string md5 = null;
             byte[] data = new byte[maxTextLength];
             using (FileStream fs = File.OpenRead(path)) {
-                numRead = fs.Read(data, 0, maxTextLength);
+                try {
+                    numRead = fs.Read(data, 0, maxTextLength);
 
-                fs.Seek(0, SeekOrigin.Begin);
-                md5 = _md5.ComputeHash(fs).Aggregate("", (str, b) => str + b.ToString("x2"));
+                    fs.Seek(0, SeekOrigin.Begin);
+                    md5 = _md5.ComputeHash(fs).Aggregate("", (str, b) => str + b.ToString("x2"));
+                }
+                catch {
+                }
             }
 
             Encoding enc = DetectEncoding(data, numRead) ?? Encoding.UTF8;
@@ -209,7 +213,10 @@ namespace Frost.DetectFeatures {
             try {
                 detectedLang = detector.Detect();
             }
-            catch (LangDetectException) {
+            catch (LangDetectException e) {
+                if (Log.IsWarnEnabled) {
+                    Log.Warn("Failed at detecting subtitle language.", e);
+                }
             }
 
             return new SubtitleLanguage(enc, detectedLang, md5);
@@ -220,12 +227,18 @@ namespace Frost.DetectFeatures {
             int numBytes = (count < 1024) ? count : 1024;
 
             UniversalDetector ud = new UniversalDetector();
-            ud.Feed(data, 0, numBytes);
-            ud.DataEnd();
 
-            return ud.IsSupportedEncoding
-                       ? ud.DetectedEncoding
-                       : null;
+            try {
+                ud.Feed(data, 0, numBytes);
+                ud.DataEnd();
+
+                return ud.IsSupportedEncoding
+                           ? ud.DetectedEncoding
+                           : null;
+            }
+            catch {
+                return null;
+            }
         }
     }
 
