@@ -68,6 +68,23 @@ namespace Frost.Providers.Xbmc.DB.Art {
             Url = url;
         }
 
+        internal XbmcArt(IArt art) {
+            if (art == null) {
+                return;
+            }
+
+            switch (art.Type) {
+                case ArtType.Fanart:
+                    Type = FANART;
+                    break;
+                case ArtType.Poster:
+                case ArtType.Cover:
+                    Type = POSTER;
+                    break;
+            }
+            Url = art.Path;
+        }
+
         /// <summary>Gets or sets the database Art Id.</summary>
         /// <value>The database Art Id</value>
         [Key]
@@ -152,15 +169,6 @@ namespace Frost.Providers.Xbmc.DB.Art {
         }
 
         #endregion
-
-        //internal class Configuration : EntityTypeConfiguration<XbmcArt> {
-
-        //    public Configuration() {
-        //        Map<XbmcActorArt>(m => m.Requires("media_type").HasValue("actor"));
-        //        Map<XbmcMovieArt>(m => m.Requires("media_type").HasValue("movie"));
-        //        Map<XbmcSetArt>(m => m.Requires("media_type").HasValue("set"));
-        //    }
-        //}
     }
 
 }

@@ -9,7 +9,6 @@ using Frost.DetectFeatures;
 namespace RibbonUI.Util.ObservableWrappers {
 
     public class ObservableMovie : MovieItemBase<IMovie> {
-
         public ObservableMovie(IMovie movie) : base(movie) {
         }
 
@@ -336,6 +335,41 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
         }
 
+        public IArt DefaultFanart {
+            get {
+                if (ObservedEntity.DefaultFanart != null) {
+                    return ObservedEntity.DefaultFanart;
+                }
+                IArt art = Art.FirstOrDefault(a => a.Type == ArtType.Fanart && !string.IsNullOrEmpty(a.PreviewOrPath));
+                return art;
+            }
+            set { ObservedEntity.DefaultFanart = value; }
+        }
+
+        public IArt DefaultCover {
+            get {
+                if (ObservedEntity.DefaultCover != null) {
+                    return ObservedEntity.DefaultCover;
+                }
+
+                IArt art = Art.FirstOrDefault(a => (a.Type == ArtType.Cover || a.Type == ArtType.Poster) && !String.IsNullOrEmpty(a.PreviewOrPath));
+                return art;
+            }
+            set { ObservedEntity.DefaultCover = value; }
+        }
+
+        public IPlot MainPlot {
+            get {
+                if (ObservedEntity.MainPlot != null) {
+                    return ObservedEntity.MainPlot;
+                }
+
+                return Plots.Any()
+                    ? Plots.FirstOrDefault()
+                    : null;
+            }
+            set { ObservedEntity.MainPlot = value; }
+        }
         #endregion
 
         #region Relation properties
@@ -501,15 +535,15 @@ namespace RibbonUI.Util.ObservableWrappers {
 
                 var studio = Path.Combine(Directory.GetCurrentDirectory(), "Images/StudiosE/" + FirstStudioName + ".png");
                 return File.Exists(studio)
-                    ? studio
-                    : null;
+                           ? studio
+                           : null;
             }
         }
 
         public IPlot FirstPlot {
             get {
-                if (Plots == null) {
-                    return null;
+                if (ObservedEntity.MainPlot != null) {
+                    return ObservedEntity.MainPlot;
                 }
 
                 return Plots.Any()
@@ -530,8 +564,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
 
             return (l > 0)
-                ? (long?) l
-                : null;
+                       ? (long?) l
+                       : null;
         }
 
         #endregion
@@ -602,7 +636,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             return Remove(_observedEntity.RemoveSubtitle, subtitle);
         }
 
-        private bool Remove<T>(Func<T, bool> removeItem, T item) where T : IMovieEntity{
+        private bool Remove<T>(Func<T, bool> removeItem, T item) where T : IMovieEntity {
             try {
                 if (removeItem(item)) {
                     return true;
@@ -612,7 +646,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             catch (Exception e) {
                 UIHelper.HandleProviderException(e);
             }
-            return false;            
+            return false;
         }
 
         private T Add<T>(Func<T, T> addItem, T item) where T : class, IMovieEntity {
@@ -628,6 +662,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
             return addedItem;
         }
+
         #endregion
 
         #region Images
@@ -676,6 +711,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
         }
 
-        #endregion 
+        #endregion
     }
+
 }

@@ -1,7 +1,9 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Media.Media3D;
 using Frost.Common;
+using log4net;
 using RibbonUI.Properties;
 using RibbonUI.Util;
 using RibbonUI.Windows;
@@ -10,6 +12,7 @@ namespace RibbonUI {
 
     /// <summary>Interaction logic for MainWindow.xaml</summary>
     public partial class MainWindow {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(MainWindow));
         private Loading _loading;
 
         public MainWindow(string assemblyPath) {
@@ -38,7 +41,16 @@ namespace RibbonUI {
             _loading.ProgressValue = 10;
             _loading.LabelText = "Registering provider models ...";
 
-            LightInjectContainer.RegisterAssembly(assemblyPath);
+            try {
+                LightInjectContainer.RegisterAssembly(assemblyPath);
+            }
+            catch (Exception e) {
+                MessageBox.Show("There was an error loading the provider, see log for more info. Program will now exit.");
+                Log.Fatal(string.Format("There was an error loading the provider assembly file \"{0}\"", assemblyPath), e);
+
+                Application.Current.Shutdown();
+                return;
+            }
 
             if (!LightInjectContainer.CanGetInstance<IMoviesDataService>()) {
                 try {

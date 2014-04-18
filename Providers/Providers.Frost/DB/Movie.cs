@@ -6,8 +6,6 @@ using System.IO;
 using System.Linq;
 using Frost.Common;
 using Frost.Common.Comparers;
-using Frost.Providers.Frost.DB.Files;
-using Frost.Providers.Frost.DB.People;
 
 namespace Frost.Providers.Frost.DB {
 
@@ -187,6 +185,18 @@ namespace Frost.Providers.Frost.DB {
         /// <value>The set this movie is a part of.</value>
         public virtual Set Set { get; set; }
 
+        //public long? PlotId { get; set; }
+        
+        public virtual Plot MainPlot { get; set; }
+
+        //public long? CoverId { get; set; }
+
+        public virtual Art DefaultCover { get; set; }
+
+        //public long? FanartId { get; set; }
+
+        public virtual Art DefaultFanart { get; set; }
+
         /// <summary>Gets or sets the movie subtitles.</summary>
         /// <value>The movie subtitles.</value>
         public virtual HashSet<Subtitle> Subtitles { get; set; }
@@ -213,10 +223,12 @@ namespace Frost.Providers.Frost.DB {
 
         /// <summary>Gets or sets this movie's story and plot with summary and a tagline.</summary>
         /// <value>This movie's story and plot with summary and a tagline</value>
+        [InverseProperty("Movie")]
         public virtual HashSet<Plot> Plots { get; set; }
 
         /// <summary>Gets or sets the movie promotional images.</summary>
         /// <value>The movie promotional images</value>
+        [InverseProperty("Movie")]
         public virtual HashSet<Art> Art { get; set; }
         
         /// <summary>Gets or sets the information about this movie's certification ratings/restrictions in certain countries.</summary>

@@ -99,6 +99,13 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="CollapseOnTextNull" TargetType="{x:Type TextBlock}">
+            <Style.Triggers>
+                <Trigger Property="Text" Value="{x:Null}">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>        
         <Style x:Key="TransparentBorderlessButtonCollapseOnTagNull" BasedOn="{StaticResource CollapseOnTagNull}"
                TargetType="{x:Type ButtonBase}">
             <Setter Property="Background" Value="Transparent" />
@@ -284,7 +291,13 @@
                 <Setter.Value>
                     <ControlTemplate>
                         <Border BorderThickness="0,1,0,0" BorderBrush="SteelBlue">
-                            <Expander Header="{Binding Name}" IsExpanded="True">
+                            <Expander IsExpanded="True">
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Name}"/>
+                                        <TextBlock Text="{Binding ItemCount, StringFormat={} ({0})}"/>
+                                    </StackPanel>
+                                </Expander.Header>
                                 <ItemsPresenter />
                             </Expander>
                         </Border>

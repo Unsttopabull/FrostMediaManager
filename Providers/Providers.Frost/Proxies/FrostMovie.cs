@@ -6,8 +6,6 @@ using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 using Frost.Common.Proxies;
 using Frost.Providers.Frost.DB;
-using Frost.Providers.Frost.DB.Files;
-using Frost.Providers.Frost.DB.People;
 using Frost.Providers.Frost.Provider;
 
 namespace Frost.Providers.Frost.Proxies {
@@ -304,6 +302,39 @@ namespace Frost.Providers.Frost.Proxies {
             }
         }
 
+        /// <summary>Gets or sets the default cover.</summary>
+        /// <value>The default cover.</value>
+        public IArt DefaultCover {
+            get { return Entity.DefaultCover; }
+            set {
+                Entity.DefaultCover = value != null
+                    ? Service.FindArt(value, true)
+                    : null;   
+            }
+        }
+
+        /// <summary>Gets or sets the default fanart to be displayed.</summary>
+        /// <value>The default fanart.</value>
+        public IArt DefaultFanart {
+            get { return Entity.DefaultFanart; }
+            set {
+                Entity.DefaultFanart = value != null
+                    ? Service.FindArt(value, true)
+                    : null;   
+            }
+        }
+
+        /// <summary>Gets or sets the main plot.</summary>
+        /// <value>The main plot.</value>
+        public IPlot MainPlot {
+            get { return Entity.MainPlot; }
+            set {
+                Entity.MainPlot = value != null
+                    ? Service.FindPlot(value, true)
+                    : null;                
+            }
+        }
+
         #endregion
 
         #region 1 to M
@@ -509,13 +540,13 @@ namespace Frost.Providers.Frost.Proxies {
         #region Plots
 
         public IPlot AddPlot(IPlot plot) {
-            Plot p = Service.FindOrCreatePlot(plot, true);
+            Plot p = Service.FindPlot(plot, true);
             Entity.Plots.Add(p);
             return p;
         }
 
         public bool RemovePlot(IPlot plot) {
-            Plot p = Service.FindOrCreatePlot(plot, false);
+            Plot p = Service.FindPlot(plot, false);
 
             if (p != null) {
                 bool removed = Entity.Plots.Remove(p);

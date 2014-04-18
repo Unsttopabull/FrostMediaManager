@@ -223,7 +223,7 @@ namespace RibbonUI.UserControls {
         }
 
         private void MovieSubtitlesOnLostFocus() {
-            MessengerInstance.Send(new SelectRibbonMessage(RibbonTabs.Subtitles));
+            MessengerInstance.Send(new SelectRibbonMessage(RibbonTabs.Search));
         }
 
         [NotifyPropertyChangedInvocator]

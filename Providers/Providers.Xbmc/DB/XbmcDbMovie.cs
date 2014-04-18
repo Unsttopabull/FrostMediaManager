@@ -210,17 +210,17 @@ namespace Frost.Providers.Xbmc.DB {
         /// <remarks>A one-line string without empty spaces with parent tag <c>"fanart"</c> containting multiple <c>"thumb"</c> tags with optional <c>"preview"</c> attribute</remarks>
         /// <example>\eg{<code><fanart><thumb preview="http://some.img.com/preview">http://some.img.com</thumb></fanart></code>}</example>
         [Column("c20")]
-        public string FanartUrls { get; set; }
+        public string FanartXml { get; set; }
 
         [NotMapped]
         public IEnumerable<string> Fanart {
             get {
-                if (string.IsNullOrEmpty(FanartUrls)) {
+                if (string.IsNullOrEmpty(FanartXml)) {
                     return null;
                 }
 
                 try {
-                    XDocument xd = XDocument.Parse(FanartUrls);
+                    XDocument xd = XDocument.Parse(FanartXml);
                     var thumbUrls = xd.XPathSelectElements(@"//thumb").Select(x => x.Value).ToArray();
                     return thumbUrls;
                 }
@@ -240,7 +240,7 @@ namespace Frost.Providers.Xbmc.DB {
                     sb.Append(string.Format("<thumb preview=\"{0}\">{0}</thumb>", poster));
                 }
                 sb.Append("</fanart>");
-                FanartUrls = sb.ToString();
+                FanartXml = sb.ToString();
             }
         }
 

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
 using Frost.GettextMarkupExtension;
+using log4net;
 using log4net.Config;
 using RibbonUI.Util;
 
@@ -12,6 +14,7 @@ namespace RibbonUI {
 
     /// <summary>Interaction logic for App.xaml</summary>
     public partial class App : Application {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(App));
         internal static List<Provider> Systems { get; private set; }
 
         static App() {
@@ -19,7 +22,12 @@ namespace RibbonUI {
         }
 
         public App() {
-            BasicConfigurator.Configure();
+            if (File.Exists("log4Net.config")) {
+                XmlConfigurator.Configure(new FileInfo("log4Net.config"));
+            }
+            else {
+                BasicConfigurator.Configure();
+            }
 
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
             LoadPlugins();
@@ -71,6 +79,13 @@ namespace RibbonUI {
         }
 
         private void UnhandledExeption(object sender, DispatcherUnhandledExceptionEventArgs e) {
+            if (e.Exception is DbException) {
+                if (Log.IsErrorEnabled && e.Exception != null) {
+                    Log.Error("There was an error working with the database.", e.Exception);
+                }
+                return;
+            }
+
             MessageBox.Show(e.Exception.Message);
             e.Handled = true;
         }

@@ -6,6 +6,7 @@ using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 using Frost.Providers.Xbmc.DB;
+using Frost.Providers.Xbmc.DB.Art;
 using Frost.Providers.Xbmc.DB.People;
 using Frost.Providers.Xbmc.DB.StreamDetails;
 using Frost.Providers.Xbmc.Proxies;
@@ -41,6 +42,7 @@ namespace Frost.Providers.Xbmc.Provider {
                          .Include("Countries")
                          .Include("Studios")
                          .Include("File")
+                         .Include("Actors")
                          .Load();
                     _movies = _xbmc.Movies.Local.Select(m => new XbmcMovie(m, this));
                 }
@@ -116,6 +118,22 @@ namespace Frost.Providers.Xbmc.Provider {
                 }
                 return _art;
             }
+        }
+
+        internal XbmcArt FindArt(IArt art, bool createNotFound) {
+            if (art.Id > 0) {
+                XbmcArt xbmcArt = _xbmc.Art.Find(art.Id);
+                if (xbmcArt == null && createNotFound) {
+                    return new XbmcArt(art);
+                }
+                return xbmcArt;
+            }
+
+            XbmcArt dbArt = _xbmc.Art.FirstOrDefault(a => a.Url == art.Path);
+            if (dbArt == null && createNotFound) {
+                return new XbmcArt(art);
+            }
+            return dbArt;
         }
 
         #region Countries
@@ -328,6 +346,5 @@ namespace Frost.Providers.Xbmc.Provider {
         }
 
         #endregion
-
     }
 }

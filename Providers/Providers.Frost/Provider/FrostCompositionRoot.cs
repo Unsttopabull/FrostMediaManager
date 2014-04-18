@@ -1,8 +1,6 @@
 ﻿using Frost.Common;
 using Frost.Common.Models.Provider;
 using Frost.Providers.Frost.DB;
-using Frost.Providers.Frost.DB.Files;
-using Frost.Providers.Frost.DB.People;
 using Frost.Providers.Frost.Provider;
 using Frost.Providers.Frost.Proxies;
 using LightInject;

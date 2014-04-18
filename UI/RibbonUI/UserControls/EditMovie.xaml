@@ -264,6 +264,7 @@
                                              Command="{Binding AddPlotCommand}" Height="26" VerticalAlignment="Bottom"
                                              ToolTip="{l:T Add new plot}"/>
                         </DockPanel>
+                        <Button Grid.Column="1" Grid.Row="0" Margin="5,5,0,2" Content="{l:T Set as default}" Command="{Binding SetPlotAsDefault}" CommandParameter="{Binding ElementName=MoviePlotCombo, Path=SelectedItem}"/>
 
                         <ComboBox Grid.Column="0" Grid.Row="1" x:Name="MoviePlotCombo" ItemsSource="{Binding Plots}" IsEnabled="{Binding SelectedMovie[Plots], TargetNullValue=False, FallbackValue=False}"
                                   SelectedIndex="0" IsSynchronizedWithCurrentItem="True" SelectedItem="{Binding SelectedPlot}">
@@ -337,8 +338,10 @@
                             <DataGridTemplateColumn Header="{l:T Image}" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate DataType="models:IActor">
-                                        <Image Source="{Binding Thumb, TargetNullValue={StaticResource Person}, FallbackValue={StaticResource Person}}"
-                                               Stretch="Uniform" MaxWidth="100" />
+                                        <!--<Image Source="{Binding Thumb, TargetNullValue={StaticResource Person}, FallbackValue={StaticResource Person}}"
+                                               Stretch="Uniform" MaxWidth="100" />-->
+                                        <fmm:LoadingImage Source="{Binding Thumb, IsAsync=True, TargetNullValue={StaticResource Person}, FallbackValue={StaticResource Person}}"
+                                               Stretch="Uniform" ImageMaxWidth="100" FallbackImage="{StaticResource Person}" LoadingText="Nalagam..."/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

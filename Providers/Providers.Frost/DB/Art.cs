@@ -57,7 +57,8 @@ namespace Frost.Providers.Frost.DB {
 
         /// <summary>Gets or sets the movie this art is for.</summary>
         /// <value>The movie this art is for</value>
-        [ForeignKey("MovieId")]
+        //[ForeignKey("MovieId")]
+        [InverseProperty("Art")]
         public virtual Movie Movie { get; set; }
 
         [NotMapped]
@@ -79,9 +80,9 @@ namespace Frost.Providers.Frost.DB {
             public Configuration() {
                 ToTable("Art");
 
-                HasRequired(a => a.Movie)
+                HasRequired(p => p.Movie)
                     .WithMany(m => m.Art)
-                    .HasForeignKey(a => a.MovieId)
+                    .HasForeignKey(p => p.MovieId)
                     .WillCascadeOnDelete();
             }
 

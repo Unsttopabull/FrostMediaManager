@@ -28,9 +28,11 @@ namespace Frost.Providers.Xbmc.Proxies {
         private long? _runtime;
         private long? _top250;
         private double? _avgRating;
+        private readonly XbmcPlot _xbmcPlot;
 
         public XbmcMovie(XbmcDbMovie movie, XbmcMoviesDataService service) : base(movie, service){
-            _plots = new[] { new XbmcPlot(Entity) };
+            _xbmcPlot = new XbmcPlot(Entity);
+            _plots = new[] { _xbmcPlot };
             _numChannels = -1;
 
             if (!string.IsNullOrEmpty(Entity.MpaaRating)) {
@@ -182,7 +184,7 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <summary>Gets or sets the movie promotional images.</summary>
         /// <value>The movie promotional images</value>
         public IEnumerable<IArt> Art {
-            get { return Entity.Art; }
+            get { return Entity.Art.Where(a => (a.Type == XbmcArt.FANART || a.Type == XbmcArt.POSTER) && a.MediaType == XbmcArt.MOVIE); }
             //get { return null; }
         }
 
@@ -202,6 +204,73 @@ namespace Frost.Providers.Xbmc.Proxies {
                     XbmcSet set = Service.FindSet(value, true);
                     Entity.Set = set;
                 }
+            }
+        }
+
+        /// <summary>Gets or sets the default cover.</summary>
+        /// <value>The default cover.</value>
+        public IArt DefaultCover {
+            get {
+                return Entity.Art.FirstOrDefault(a => a.Type == XbmcArt.POSTER);
+            }
+            set {
+                if (value == null) {
+                    Entity.Art.RemoveWhere(a => a.Type == XbmcArt.POSTER);
+                    Entity.PostersXml = null;
+                }
+                else {
+                    var dc = DefaultCover;
+                    if (dc == null) {
+                        XbmcArt art = Service.FindArt(value, true);
+                        art.Type = XbmcArt.POSTER;
+
+                        Entity.Art.Add(art);
+                    }
+                    else {
+                        dc.Path = value.Path;
+                    }
+                }                
+            } 
+        }
+
+        /// <summary>Gets or sets the default fanart to be displayed.</summary>
+        /// <value>The default fanart.</value>
+        public IArt DefaultFanart {
+            get {
+                return Entity.Art.FirstOrDefault(a => a.Type == XbmcArt.FANART);
+            }
+            set {
+                if (value == null) {
+                    Entity.Art.RemoveWhere(a => a.Type == XbmcArt.FANART);
+                    Entity.FanartXml = null;
+                }
+                else {
+                    var dc = DefaultFanart;
+                    if (dc == null) {
+                        XbmcArt art = Service.FindArt(value, true);
+                        art.Type = XbmcArt.FANART;
+
+                        Entity.Art.Add(art);
+                    }
+                    else {
+                        dc.Path = value.Path;
+                    }
+                }                
+            } 
+        }
+
+        /// <summary>Gets or sets the main plot.</summary>
+        /// <value>The main plot.</value>
+        public IPlot MainPlot {
+            get { return _xbmcPlot; }
+            set {
+                if (value == null) {
+                    return;
+                }
+
+                _xbmcPlot.Full = value.Full;
+                _xbmcPlot.Tagline = value.Tagline;
+                _xbmcPlot.Summary = value.Summary;
             }
         }
 

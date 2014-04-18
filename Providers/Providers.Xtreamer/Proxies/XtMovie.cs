@@ -19,7 +19,7 @@ namespace Frost.Providers.Xtreamer.Proxies {
         private readonly IList<IAudio> _audios;
         private readonly IList<IVideo> _videos;
         private readonly IList<IPlot> _plots;
-        private readonly IEnumerable<IArt> _arts;
+        private readonly List<IArt> _arts;
         private readonly string _xtPathRoot;
         private ChangeTrackingCollection<XtSubtitle> _subtitles;
         private ChangeTrackingCollection<XtActor> _actors;
@@ -29,6 +29,8 @@ namespace Frost.Providers.Xtreamer.Proxies {
         private ChangeTrackingCollection<XtPerson> _writers;
         private ChangeTrackingCollection<XtCountry> _countries;
         private bool? _hasNfo;
+        private readonly XtCover _xtCover;
+        private readonly XtPlot _xtPlot;
 
         public XtMovie(XjbPhpMovie movie, string xtPath) : base(movie) {
             _xtreamerPath = xtPath;
@@ -40,8 +42,11 @@ namespace Frost.Providers.Xtreamer.Proxies {
 
             _audios = new List<IAudio> { new XtAudio(Entity, _xtreamerPath) };
             _videos = new List<IVideo> { new XtVideo(Entity, _xtreamerPath) };
-            _plots = new List<IPlot> { new XtPlot(Entity) };
-            List<IArt> arts = new List<IArt> { new XtCover(Entity, _xtreamerPath) };
+            _xtPlot = new XtPlot(Entity);
+            _plots = new List<IPlot> { _xtPlot };
+
+            _xtCover = new XtCover(Entity, _xtreamerPath);
+            List<IArt> arts = new List<IArt> { _xtCover };
 
             if (Entity.Fanart != null) {
                 for (int i = 0; i < Entity.Fanart.Count; i++) {
@@ -392,6 +397,42 @@ namespace Frost.Providers.Xtreamer.Proxies {
         public IMovieSet Set {
             get { return null; }
             set { }
+        }
+
+        /// <summary>Gets or sets the default cover.</summary>
+        /// <value>The default cover.</value>
+        public IArt DefaultCover {
+            get { return _xtCover; }
+            set {
+                _xtCover.Path = value != null
+                    ? value.Path
+                    : null;
+            }
+        }
+
+        /// <summary>Gets or sets the default fanart to be displayed.</summary>
+        /// <value>The default fanart.</value>
+        public IArt DefaultFanart {
+            get { return Art.FirstOrDefault(a => a.Type == ArtType.Fanart); }
+            set {
+                
+            }
+        }
+
+        /// <summary>Gets or sets the main plot.</summary>
+        /// <value>The main plot.</value>
+        public IPlot MainPlot {
+            get { return _xtPlot; }
+            set {
+                if (value == null) {
+                    _xtPlot.Full = null;
+                    _xtPlot.Summary = null;
+                }
+                else {
+                    _xtPlot.Full = value.Full;
+                    _xtPlot.Summary = value.Summary;                    
+                }
+            } 
         }
 
         #endregion

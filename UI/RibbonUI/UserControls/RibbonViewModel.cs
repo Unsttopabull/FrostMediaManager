@@ -7,11 +7,10 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Shell;
-using Frost.Common;
-using Frost.Common.Properties;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using GalaSoft.MvvmLight;
+using RibbonUI.Annotations;
 using RibbonUI.Messages;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
@@ -34,6 +33,8 @@ namespace RibbonUI.UserControls {
         private bool _isSubtitlesTabSelected;
         private bool _isExportTabSelected;
         private bool _isDetectTabSelected;
+        private bool _isSubtitlesTabEnabled;
+        private Visibility _subtitlesContextVisible;
 
         public RibbonViewModel() {
             OpenMovieInFolderCommand = new RelayCommand(OpenInFolder);
@@ -41,6 +42,7 @@ namespace RibbonUI.UserControls {
             OptionsCommand = new RelayCommand(MenuItemOptionsOnClick);
             SearchCommand = new RelayCommand(SearchClick);
 
+            SubtitlesContextVisible = Visibility.Collapsed;
             MessengerInstance.Register<SelectRibbonMessage>(this, rts => OnRibbonTabSelect(rts.RibbonTab));
         }
 
@@ -112,6 +114,16 @@ namespace RibbonUI.UserControls {
             }
         }
 
+        public Visibility SubtitlesContextVisible {
+            get { return _subtitlesContextVisible; }
+            set {
+                if (value == _subtitlesContextVisible) {
+                    return;
+                }
+                _subtitlesContextVisible = value;
+                OnPropertyChanged();
+            }
+        }
 
         #endregion
 
@@ -134,11 +146,19 @@ namespace RibbonUI.UserControls {
         }
 
         private void OnRibbonTabSelect(RibbonTabs tab) {
+            IsSearchTabSelected = false;
+            IsSubtitlesTabSelected = false;
+            IsSearchTabSelected = false;
+            IsDetectTabSelected = false;
+            IsExportTabSelected = false;
+            SubtitlesContextVisible = Visibility.Collapsed;
+
             switch (tab) {
                 case RibbonTabs.None:
                     IsSearchTabSelected = true;
                     break;
                 case RibbonTabs.Subtitles:
+                    SubtitlesContextVisible = Visibility.Visible;
                     IsSubtitlesTabSelected = true;
                     break;
                 case RibbonTabs.Search:

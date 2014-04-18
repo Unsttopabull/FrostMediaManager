@@ -109,6 +109,10 @@ namespace Frost.DetectFeatures {
 
             List<MovieInfo> files = new List<MovieInfo>();
             foreach (Task<IEnumerable<MovieInfo>> task in arr) {
+                if (task == null) {
+                    continue;
+                }
+
                 if (task.IsFaulted) {
                     string msg = task.Exception != null 
                                      ? string.Join("\n", task.Exception.InnerExceptions.Select(e => e.Message))

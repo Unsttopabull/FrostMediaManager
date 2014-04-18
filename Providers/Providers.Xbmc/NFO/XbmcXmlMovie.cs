@@ -497,7 +497,7 @@ namespace Frost.Providers.Xbmc.NFO {
 
             //xm.FanartUrls //XML
             if (xm.Fanart != null) {
-                mv.FanartUrls = xm.Fanart.SerializeToXml();
+                mv.FanartXml = xm.Fanart.SerializeToXml();
             }
 
             //xm.Thumbnails //XML

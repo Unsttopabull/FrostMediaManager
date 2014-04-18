@@ -257,10 +257,18 @@ DROP TABLE IF EXISTS "Movies";
 	"AudioCodec" TEXT,
 	"NumberOfAudioChannels" INTEGER,
 	"SetId"  integer,
-	CONSTRAINT "FK_MovieSet" FOREIGN KEY ("SetId") REFERENCES "Sets" ("Id")
+	"PlotId"  integer,
+	"CoverId"  integer,
+	"FanartId"  integer,
+	CONSTRAINT "FK_MovieSet" FOREIGN KEY ("SetId") REFERENCES "Sets" ("Id"),
+	CONSTRAINT "FK_MoviePlot" FOREIGN KEY ("PlotId") REFERENCES "Plots" ("Id"),
+	CONSTRAINT "FK_MovieCover" FOREIGN KEY ("CoverId") REFERENCES "Art" ("Id"),
+	CONSTRAINT "FK_MovieFanart" FOREIGN KEY ("FanartId") REFERENCES "Art" ("Id")
 );
 
 CREATE UNIQUE INDEX "Movie_Id" on "Movies" ("Id" ASC);
+CREATE INDEX "Movie_Title" on "Movies" ("Title" ASC);
+CREATE INDEX "Movie_Imdb" on "Movies" ("ImdbID" ASC);
 
 -- ----------------------------
 -- Table structure for "MovieSpecials"

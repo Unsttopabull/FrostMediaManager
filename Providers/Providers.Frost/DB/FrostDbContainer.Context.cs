@@ -9,8 +9,6 @@ using System.Linq;
 using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
 using Frost.Common.Util;
-using Frost.Providers.Frost.DB.Files;
-using Frost.Providers.Frost.DB.People;
 using Frost.Providers.Frost.Properties;
 
 namespace Frost.Providers.Frost.DB {
@@ -301,7 +299,8 @@ namespace Frost.Providers.Frost.DB {
             modelBuilder.ComplexType<ISO639>()
                         .Ignore(iso => iso.EnglishName);
 
-            modelBuilder.Configurations.Add(new Plot.Configuration());
+            modelBuilder.Configurations.Add(new Art.Configuration());
+            //modelBuilder.Configurations.Add(new Plot.Configuration());
             modelBuilder.Configurations.Add(new Actor.Configuration());
             modelBuilder.Configurations.Add(new File.Configuration());
             modelBuilder.Configurations.Add(new Language.Configuration());
@@ -309,7 +308,6 @@ namespace Frost.Providers.Frost.DB {
             modelBuilder.Configurations.Add(new Video.Configuration());
             modelBuilder.Configurations.Add(new Certification.Configuration());
             modelBuilder.Configurations.Add(new Movie.Configuration());
-            modelBuilder.Configurations.Add(new Art.Configuration());
             modelBuilder.Configurations.Add(new Special.Configuration());
             modelBuilder.Configurations.Add(new Person.Configuration());
             modelBuilder.Configurations.Add(new Country.CountryConfiguration());

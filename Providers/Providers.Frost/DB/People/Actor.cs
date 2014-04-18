@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
 using Frost.Common.Models.Provider;
 
-namespace Frost.Providers.Frost.DB.People {
+namespace Frost.Providers.Frost.DB {
 
     public class Actor : IActor {
         /// <summary>Initializes a new instance of the <see cref="Person"/> class.</summary>

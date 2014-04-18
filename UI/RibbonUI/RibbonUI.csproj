@@ -550,12 +550,6 @@
     <Resource Include="Images\search_subs.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\podnapisiNet.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\opensubtitles.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\remove.png" />
   </ItemGroup>
   <ItemGroup>
@@ -657,6 +651,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Reactive.Core, Version=2.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -692,7 +687,35 @@
   <ItemGroup>
     <Resource Include="Images\clear_disabled.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\remove2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\update.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Sites\opensubtitles.ico" />
+    <Resource Include="Images\Sites\podnapisiNet.ico" />
+    <Resource Include="Images\Sites\tus.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Sites\kolosej.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\clear.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\art.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Sites\fanart.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Sites\tmdb.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

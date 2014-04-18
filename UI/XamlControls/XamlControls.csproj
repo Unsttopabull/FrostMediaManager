@@ -51,8 +51,16 @@
     <Compile Include="Actions\EventToCommand.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="LoadingImage.xaml.cs">
+      <DependentUpon>LoadingImage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="StarRating.cs" />
     <Compile Include="ToggleImageButton.cs" />
+    <Page Include="LoadingImage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -121,6 +129,10 @@
     <ProjectReference Include="..\GettextTranslationExtension\GettextMarkupExtension.csproj">
       <Project>{a3ce8f2a-9950-409c-aa35-74cd1d1d6d87}</Project>
       <Name>GettextMarkupExtension</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LoadingControl\LoadingControl.csproj">
+      <Project>{91f93d52-9f43-4931-ba8d-c2a926393ea9}</Project>
+      <Name>LoadingControl</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

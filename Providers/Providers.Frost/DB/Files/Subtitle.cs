@@ -4,7 +4,7 @@ using System.Data.Entity.ModelConfiguration;
 using System.Text;
 using Frost.Common.Models.Provider;
 
-namespace Frost.Providers.Frost.DB.Files {
+namespace Frost.Providers.Frost.DB {
 
     /// <summary>Represents information about a subtitle stream in a file.</summary>
     public class Subtitle {

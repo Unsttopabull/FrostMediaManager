@@ -137,6 +137,18 @@ namespace Frost.Common.Models.Provider {
         /// <value>The set this movie is a part of.</value>
         IMovieSet Set { get; set; }
 
+        /// <summary>Gets or sets the main plot.</summary>
+        /// <value>The main plot.</value>
+        IPlot MainPlot { get; set; }
+
+        /// <summary>Gets or sets the default fanart to be displayed.</summary>
+        /// <value>The default fanart.</value>
+        IArt DefaultFanart { get; set; }
+
+        /// <summary>Gets or sets the default cover.</summary>
+        /// <value>The default cover.</value>
+        IArt DefaultCover { get; set; }
+
         #endregion
 
         #region 1 to M

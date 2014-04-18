@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.ModelConfiguration;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 using Frost.Providers.Frost.DB;
-using Frost.Providers.Frost.DB.Files;
-using Frost.Providers.Frost.DB.People;
 using Frost.Providers.Frost.Proxies;
+using IOFile = System.IO.File;
 
 namespace Frost.Providers.Frost.Provider {
     public class FrostMoviesDataDataService : IMoviesDataService {
@@ -37,6 +37,13 @@ namespace Frost.Providers.Frost.Provider {
 
         public FrostMoviesDataDataService() {
             _mvc = new FrostDbContainer();
+
+            StreamWriter sw = new StreamWriter(IOFile.Create("frost.sql"));
+            _mvc.Database.Log = s => {
+                lock (sw) {
+                    sw.WriteLine(s);
+                }
+            };
         }
 
         public IEnumerable<IMovie> Movies {
@@ -142,6 +149,23 @@ namespace Frost.Providers.Frost.Provider {
             }
         }
 
+        public Art FindArt(IArt art, bool createIfNotFound) {
+            Art a;
+            if (art.Id > 0) {
+                a = _mvc.Art.Find(art.Id);
+                if (a == null && createIfNotFound) {
+                    return new Art(art);
+                }
+                return a;
+            }
+
+            a = _mvc.Art.FirstOrDefault(ar => ar.Path == art.Path);
+            if (a == null && createIfNotFound) {
+                return new Art(art);
+            }
+            return a;
+        }
+
         #region Countries
 
         public IEnumerable<ICountry> Countries {
@@ -208,7 +232,7 @@ namespace Frost.Providers.Frost.Provider {
             }
         }
 
-        internal Plot FindOrCreatePlot(IPlot plot, bool createIfNotFound) {
+        internal Plot FindPlot(IPlot plot, bool createIfNotFound) {
             return _mvc.FindPlot(plot, createIfNotFound);
         }
 
@@ -361,6 +385,22 @@ namespace Frost.Providers.Frost.Provider {
 
         public void SaveChanges() {
             _mvc.SaveChanges();
+
+            foreach (Movie mov in _mvc.Movies.Where(m => m.MainPlot == null || m.DefaultFanart == null || m.DefaultCover == null)) {
+                if (mov.MainPlot == null) {
+                    mov.MainPlot = mov.Plots.FirstOrDefault();
+                }
+
+                if (mov.DefaultFanart == null) {
+                    mov.DefaultFanart = mov.Art.FirstOrDefault(a => a.Type == ArtType.Fanart);
+                }
+
+                if (mov.DefaultCover == null) {
+                    mov.DefaultCover = mov.Art.FirstOrDefault(a => a.Type == ArtType.Poster || a.Type == ArtType.Cover);
+                }
+            }
+            _mvc.SaveChanges();
+
             MovieSaver.Reset();
         }
 

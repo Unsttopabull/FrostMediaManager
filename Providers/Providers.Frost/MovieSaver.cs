@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 using Frost.Common.Util.ISO;
 using Frost.Providers.Frost.DB;
-using Frost.Providers.Frost.DB.Files;
-using Frost.Providers.Frost.DB.People;
 
 namespace Frost.Providers.Frost {
 
@@ -23,7 +22,6 @@ namespace Frost.Providers.Frost {
         private readonly MovieInfo _info;
         private readonly FrostDbContainer _mvc;
         private readonly bool _disposeContainer;
-        private static int _count;
 
         static MovieSaver() {
             Countries = new Dictionary<ISOCountryCode, Country>();
@@ -32,7 +30,7 @@ namespace Frost.Providers.Frost {
             Genres = new Dictionary<string, Genre>(StringComparer.InvariantCultureIgnoreCase);
             Specials = new Dictionary<string, Special>(StringComparer.InvariantCultureIgnoreCase);
             Studios = new Dictionary<string, Studio>(StringComparer.InvariantCultureIgnoreCase);
-            People = new Dictionary<string, Person>(StringComparer.InvariantCultureIgnoreCase);            
+            People = new Dictionary<string, Person>(StringComparer.InvariantCultureIgnoreCase);
         }
 
         public MovieSaver(MovieInfo movie, FrostDbContainer db = null) {
@@ -49,47 +47,36 @@ namespace Frost.Providers.Frost {
         }
 
         public void Save(bool saveChanges) {
-            //mvc.Languages.Load();
-            //mvc.Specials.Load();
-            //mvc.Countries.Load();
-            //mvc.Awards.Load();
-            //mvc.Studios.Load();
-            //mvc.Sets.Load();
-            //mvc.People.Load();
+            Movie mv = Save(_info);
 
-            //int i = 0;
-            //foreach (MovieInfo movie in _info) {
-                ////Debug.WriteLine("{0} ({1})", movie.Title, ++i);
-                //Debug.Indent();
-                Save(_info);
-
-                //Debug.Unindent();
-            //}
+            if (mv == null) {
+                return;
+            }
 
             if (saveChanges) {
                 _mvc.SaveChanges();
             }
         }
 
-        private void Save(MovieInfo movie) {
+        private Movie Save(MovieInfo movie) {
             Movie mv = FromMovieInfo(movie);
 
             if (!string.IsNullOrEmpty(mv.ImdbID)) {
                 if (_mvc.Movies.Any(m => m.ImdbID == mv.ImdbID)) {
-                    return;
+                    return null;
                 }
             }
 
             if (_mvc.Movies.Any(m => m.Title == mv.Title || !string.IsNullOrEmpty(mv.OriginalTitle) && m.OriginalTitle == mv.OriginalTitle)) {
-                return;
+                return null;
             }
 
             mv = _mvc.Movies.Add(mv);
-            _count++;
 
             mv.Set = GetHasName(movie.Set, Sets);
             mv.Plots = new HashSet<Plot>(movie.Plots.ConvertAll(GetPlot));
             mv.Art = new HashSet<Art>(movie.Art.ConvertAll(art => new Art(art.Type, art.Path, art.Preview)));
+
             mv.Certifications = new HashSet<Certification>(movie.Certifications.ConvertAll(GetCertification));
             mv.Specials = new HashSet<Special>(movie.Specials.ConvertAll(GetSpecial));
             mv.Genres = new HashSet<Genre>(movie.Genres.ConvertAll(g => GetHasName(g, Genres)));
@@ -111,7 +98,8 @@ namespace Frost.Providers.Frost {
                 AddAudios(fileInfo, mv, file);
                 AddSubtitles(fileInfo, mv, file);
             }
-            int ab = 5;
+
+            return mv;
         }
 
         private void AddSubtitles(FileDetectionInfo fileInfo, Movie mv, File file) {
@@ -121,7 +109,7 @@ namespace Frost.Providers.Frost {
                     Format = s.Format,
                     EmbededInVideo = s.EmbededInVideo,
                     ForHearingImpaired = s.ForHearingImpaired,
-                    Encoding =  s.Encoding
+                    Encoding = s.Encoding
                 });
             }
         }
@@ -380,7 +368,6 @@ namespace Frost.Providers.Frost {
         }
 
         public static void Reset() {
-            _count = 0;
 
             if (Countries != null) {
                 Countries.Clear();

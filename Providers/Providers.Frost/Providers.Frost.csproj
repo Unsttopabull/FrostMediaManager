@@ -91,7 +91,6 @@
     <Compile Include="DB\Files\File.cs" />
     <Compile Include="DB\Files\Subtitle.cs" />
     <Compile Include="DB\Files\Video.cs" />
-    <Compile Include="DB\FrostDbContainer.Views.cs" />
     <Compile Include="DB\Genre.cs" />
     <Compile Include="DB\Language.cs" />
     <Compile Include="DB\Movie.Configuration.cs">

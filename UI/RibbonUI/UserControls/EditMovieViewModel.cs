@@ -235,7 +235,27 @@ namespace RibbonUI.UserControls {
 
         public ICommand TrailerSearchCommand { get; private set; }
 
+        public ICommand SetPlotAsDefault { get; private set; }
+
         private void RegisterCommands() {
+            SetPlotAsDefault = new RelayCommand<MoviePlot>(
+                p => { SelectedMovie.MainPlot = p.ObservedEntity; },
+                p => {
+                    if (p == null || SelectedMovie == null) {
+                        return false;
+                    }
+
+                    IPlot plot = SelectedMovie.ObservedEntity.MainPlot;
+                    if (plot == null) {
+                        return true;
+                    }
+
+                    if (plot.Id != p.ObservedEntity.Id) {
+                        return true;
+                    }
+                    return false;
+                });
+
             AddStudioCommand = new RelayCommand(AddStudioOnClick);
             RemoveStudioCommand = new RelayCommand<MovieStudio>(
                 studio => {

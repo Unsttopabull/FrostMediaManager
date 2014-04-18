@@ -425,6 +425,18 @@ namespace RibbonUI.Design.Fakes {
             set {  }
         }
 
+        /// <summary>Gets or sets the default cover.</summary>
+        /// <value>The default cover.</value>
+        public IArt DefaultCover { get; set; }
+
+        /// <summary>Gets or sets the default fanart to be displayed.</summary>
+        /// <value>The default fanart.</value>
+        public IArt DefaultFanart { get; set; }
+
+        /// <summary>Gets or sets the main plot.</summary>
+        /// <value>The main plot.</value>
+        public IPlot MainPlot { get; set; }
+
         /// <summary>Gets or sets the set this movie is a part of.</summary>
         /// <value>The set this movie is a part of.</value>
         public IMovieSet Set {

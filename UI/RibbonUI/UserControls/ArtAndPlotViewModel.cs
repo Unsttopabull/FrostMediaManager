@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -7,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Frost.Common;
 using Frost.Common.Models.Provider;
+using Frost.DetectFeatures;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;
@@ -29,8 +31,8 @@ namespace RibbonUI.UserControls {
             GoToImdbCommand = new RelayCommand<string>(GoToIMDB);
 
             ActorImdbClickedCommand = new RelayCommand<string>(
-                imdbId => Process.Start(string.Format(IMDB_PERSON_URI, imdbId)),
-                s => !string.IsNullOrEmpty(s)
+                imdbId => Process.Start(String.Format(IMDB_PERSON_URI, imdbId)),
+                s => !String.IsNullOrEmpty(s)
                 );
 
             GoToTrailerCommand = new RelayCommand<string>(GoToTrailer);
@@ -44,10 +46,14 @@ namespace RibbonUI.UserControls {
                 }
                 _selectedMovie = value;
 
-                //if (_selectedMovie != null) {
-                //    Actors = _selectedMovie.Actors;
-                //}
+                if (_selectedMovie != null && _selectedMovie.Countries != null) {
+                    Countries = _selectedMovie.Countries.Select(c => new MovieCountry(c)).ToList();
+                }
+                else {
+                    Countries = new List<MovieCountry>();
+                }
 
+                OnPropertyChanged("Countries");
                 OnPropertyChanged("NumberOfOscarsWon");
                 OnPropertyChanged("NumberOfOscarNominations");
                 OnPropertyChanged("NumberOfCannesAwards");
@@ -59,6 +65,7 @@ namespace RibbonUI.UserControls {
                 OnPropertyChanged("FirstCoverOrPoster");
                 OnPropertyChanged("FirstPlot");
                 OnPropertyChanged("BoxImage");
+                OnPropertyChanged("GenreNames");
 
                 OnPropertyChanged();
             }
@@ -68,6 +75,8 @@ namespace RibbonUI.UserControls {
 
         //public IEnumerable<IActor> Actors { get; set; }
 
+        public List<MovieCountry> Countries { get; set; }
+
         public string BoxImage {
             get {
                 string path;
@@ -75,10 +84,14 @@ namespace RibbonUI.UserControls {
                     path = "Images/Boxes/generic.png";
                 }
                 else {
-                    path = "Images/Boxes/" + SelectedMovie.Type + ".png";
+                    MovieType movieType = SelectedMovie.Type;
+                    if (movieType == MovieType.ISO) {
+                        movieType = MovieType.DVD;
+                    }
+
+                    path = "Images/Boxes/" + movieType + ".png";
                 }
                 return Path.Combine(Directory.GetCurrentDirectory(), path);
-                ;
             }
         }
 
@@ -162,7 +175,7 @@ namespace RibbonUI.UserControls {
                 }
 
                 string rating = MPAARating;
-                if (!string.IsNullOrEmpty(rating)) {
+                if (!String.IsNullOrEmpty(rating)) {
                     rating = rating.Replace("Rated ", "").ToUpper();
                     string mpaa = null;
                     switch (rating) {
@@ -184,7 +197,7 @@ namespace RibbonUI.UserControls {
                         default:
                             return null;
                     }
-                    return string.Format("file://{0}/{1}", Directory.GetCurrentDirectory(), mpaa);
+                    return String.Format("file://{0}/{1}", Directory.GetCurrentDirectory(), mpaa);
                 }
                 return null;
             }
@@ -192,56 +205,50 @@ namespace RibbonUI.UserControls {
 
         public string FirstFanart {
             get {
-                if (SelectedMovie == null || SelectedMovie.Art == null) {
+                if (SelectedMovie == null) {
                     return null;
                 }
 
-                if (SelectedMovie.Art.Any(a => a.Type == ArtType.Fanart)) {
-                    IArt v = SelectedMovie.Art.FirstOrDefault(a => a.Type == ArtType.Fanart && !string.IsNullOrEmpty(a.PreviewOrPath));
-                    if (v != null) {
-                        return CheckIfValid(v);
-                    }
-                }
-
-                return null;
+                return CheckArtIfValid(SelectedMovie.DefaultFanart);
             }
         }
 
+        //public IArt FirstFanart {
+        //    get {
+        //        if (SelectedMovie == null) {
+        //            return null;
+        //        }
+
+        //        return CheckArtIfValid2(SelectedMovie.DefaultFanart);
+        //    }
+        //}
+
         public string FirstCoverOrPoster {
             get {
-                if (SelectedMovie == null || SelectedMovie.Art == null) {
+                if (SelectedMovie == null) {
                     return null;
                 }
-
-                IArt art;
-                if (SelectedMovie.Art.Any(a => a.Type == ArtType.Cover)) {
-                    art = SelectedMovie.Art.FirstOrDefault(a => a.Type == ArtType.Cover && !string.IsNullOrEmpty(a.PreviewOrPath));
-                    if (art != null) {
-                        return CheckIfValid(art);
-                    }
-                }
-
-                if (SelectedMovie.Art.All(a => a.Type != ArtType.Poster)) {
-                    return null;
-                }
-
-                art = SelectedMovie.Art.FirstOrDefault(a => a.Type == ArtType.Poster);
-                if (art != null) {
-                    return CheckIfValid(art);
-                }
-                return null;
+                return CheckArtIfValid(SelectedMovie.DefaultCover);
             }
         }
 
         public IPlot FirstPlot {
             get {
-                if (SelectedMovie == null || SelectedMovie.Plots == null) {
+                if (SelectedMovie == null) {
                     return null;
                 }
 
-                return SelectedMovie.Plots.Any()
-                           ? SelectedMovie.Plots.FirstOrDefault()
-                           : null;
+                return SelectedMovie.MainPlot;
+            }
+        }
+
+        public string GenreNames {
+            get {
+                if (SelectedMovie == null || SelectedMovie.Genres == null) {
+                    return null;
+                }
+
+                return string.Join(", ", SelectedMovie.Genres.Select(g => g.Name));
             }
         }
 
@@ -256,18 +263,53 @@ namespace RibbonUI.UserControls {
         #endregion
 
         private void GoToIMDB(string imdbId) {
-            if (!string.IsNullOrEmpty(imdbId)) {
-                Process.Start(string.Format(IMDB_TITLE_URI, imdbId));
+            if (!String.IsNullOrEmpty(imdbId)) {
+                Process.Start(String.Format(IMDB_TITLE_URI, imdbId));
             }
         }
 
         private void GoToTrailer(string trailer) {
-            if (!string.IsNullOrEmpty(trailer)) {
-                Process.Start(trailer);
+            if (String.IsNullOrEmpty(trailer)) {
+                return;
             }
+
+            if (trailer.StartsWith("http") || trailer.StartsWith("www")) {
+                if (Path.HasExtension(trailer)) {
+                    string extension = Path.GetExtension(trailer).Trim('.');
+                    if (FeatureDetector.VideoExtensions.Contains(extension)) {
+                        try {
+                            Process.Start("wmplayer", String.Format("\"{0}\"", trailer));
+                            return;
+                        }
+                        catch {
+                        }
+                    }
+                }
+            }
+            Process.Start(trailer);
         }
 
-        private static string CheckIfValid(IArt art) {
+        //private static IArt CheckArtIfValid2(IArt art) {
+        //    if (art == null) {
+        //        return null;
+        //    }
+
+        //    string path = art.PreviewOrPath;
+        //    if (Uri.IsWellFormedUriString(path, UriKind.RelativeOrAbsolute)) {
+        //        return art;
+        //    }
+
+        //    if (!File.Exists(path)) {
+        //        return null;
+        //    }
+        //    return art;
+        //}
+
+        private static string CheckArtIfValid(IArt art) {
+            if (art == null) {
+                return null;
+            }
+
             string path = art.PreviewOrPath;
             if (Uri.IsWellFormedUriString(path, UriKind.RelativeOrAbsolute)) {
                 return art.PreviewOrPath;
@@ -276,9 +318,7 @@ namespace RibbonUI.UserControls {
             if (!File.Exists(path)) {
                 return null;
             }
-            else {
-                return art.PreviewOrPath;
-            }
+            return art.PreviewOrPath;
         }
 
         [NotifyPropertyChangedInvocator]

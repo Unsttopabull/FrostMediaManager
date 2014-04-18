@@ -17,8 +17,7 @@
     </i:Interaction.Triggers>
     <Ribbon x:Name="RibbonHeader" Title="Frost Media Manager" Background="#FFDFE9F5">
         <Ribbon.ContextualTabGroups>
-            <RibbonContextualTabGroup Visibility="Collapsed" Background="Red" x:Name="ContextSubtitle"
-                                      Header="Download &amp; Update" />
+            <RibbonContextualTabGroup Background="Red" x:Name="ContextSubtitle" Visibility="{Binding SubtitlesContextVisible}" Header="Subtitles" />
         </Ribbon.ContextualTabGroups>
 
         <!-- Help Pane, located at the right-hand side -->
@@ -58,42 +57,49 @@
         <!-- Ribbon Tab #2: -->
 
         <!-- Ribbon Tab #1: Home -->
-        <RibbonTab x:Name="Search" IsSelected="{Binding IsSearchTabSelected}" Header="Search" Margin="0,1,0,-1">
-            <!-- Home  group-->
-            <RibbonGroup x:Name="ClipboardGroup" Header="Home">
-                <RibbonButton LargeImageSource="../Images/search.ico" Label="Search" Command="{Binding SearchCommand}" />
-                <RibbonButton SmallImageSource="../Images/cut.png" Label="Cut" />
-                <RibbonButton SmallImageSource="../Images/copy.png" Label="Copy" />
-                <RibbonButton SmallImageSource="../Images/format_painter.png" Label="Format Painter" />
+        <RibbonTab IsSelected="{Binding IsSearchTabSelected}" Header="Search" Margin="0,1,0,-1">
+            <RibbonGroup Header="Searching &amp; Detection">
+                <RibbonButton LargeImageSource="../Images/search.ico" Label="Search for new movies" Command="{Binding SearchCommand}" />
+                <RibbonButton SmallImageSource="../Images/refresh.png" Label="Update all" />
+                <RibbonButton SmallImageSource="../Images/export.png" Label="Export movies" />
+                <RibbonButton SmallImageSource="../Images/clear.png" Label="Clean database" />
             </RibbonGroup>
-            <RibbonGroup x:Name="Employee" Header="Employee And Payroll">
+            <RibbonGroup Header="Current movie">
                 <RibbonButton x:Name="OpenInFolder" x:FieldModifier="private"
                               LargeImageSource="../Images/movieFolder.ico" Label="Open movie folder"
                               ToolTip="{Binding SelectedMovie.DirectoryPath}"
                               Command="{Binding OpenMovieInFolderCommand}" />
-                <RibbonButton SmallImageSource="../Images/save.png" Label="Save" />
-                <RibbonButton SmallImageSource="../Images/add.png" Label="Add" />
+                <RibbonButton SmallImageSource="../Images/save.png" Label="Play movie" />
+                <RibbonButton SmallImageSource="../Images/refresh.png" Label="Refresh detection" />
+                <RibbonButton SmallImageSource="../Images/remove2.png" Label="Remove movie" />
             </RibbonGroup>
         </RibbonTab>
 
         <!-- Ribbon Tab #3: -->
-        <RibbonTab x:Name="Detect" IsSelected="{Binding IsDetectTabSelected}" Header="Insert">
-            <RibbonGroup x:Name="Clippy" Header="Home" Background="#00000000" Height="86" Margin="0">
-                <RibbonMenuButton LargeImageSource="../Images/paste.png" Label="Paste">
-                    <RibbonMenuItem ImageSource="../Images/paste.png" Header="Keep Text Only" />
-                    <RibbonMenuItem ImageSource="../Images/paste.png" Header="Paste Special..." />
+        <RibbonTab IsSelected="{Binding IsDetectTabSelected}" Header="Web update">
+            <RibbonGroup x:Name="Clippy" Header="Movie info" Background="#00000000" Height="86" Margin="0">
+                <RibbonMenuButton LargeImageSource="../Images/update.png" Label="Update movie information">
+                    <RibbonMenuItem ImageSource="../Images/Sites/kolosej.png" Header="Kolosej.si" />
+                    <RibbonMenuItem ImageSource="../Images/Sites/tus.ico" Header="Planet-Tus.si" />
+                    <RibbonMenuItem ImageSource="../Images/sites/opensubtitles.ico" Header="OpenSubtitles.org" />
                 </RibbonMenuButton>
                 <RibbonButton SmallImageSource="../Images/cut.png" Label="Cut" />
                 <RibbonButton SmallImageSource="../Images/copy.png" Label="Copy" />
                 <RibbonButton SmallImageSource="../Images/format_painter.png" Label="Format Painter" />
             </RibbonGroup>
+            <RibbonGroup>
+                <RibbonMenuButton LargeImageSource="../Images/art.png" Label="Download art">
+                    <RibbonMenuItem ImageSource="../Images/Sites/fanart.ico" Header="Fanart.tv" />
+                    <RibbonMenuItem ImageSource="../Images/sites/tmdb.ico" Header="Tmdb.org" />                    
+                </RibbonMenuButton>
+            </RibbonGroup>
         </RibbonTab>
-        <RibbonTab x:Name="Export" IsSelected="{Binding IsExportTabSelected}" Header="PageLayout" />
-        <RibbonTab x:Name="SubtitlesTab" IsSelected="{Binding IsSubtitlesTabSelected}" Header="Subtitles" ContextualTabGroupHeader="Download &amp; Update">
-            <RibbonGroup Header="Update &amp; Download">
+
+        <RibbonTab x:Name="SubtitlesTab" IsSelected="{Binding IsSubtitlesTabSelected}" ContextualTabGroupHeader="Subtitles">
+            <RibbonGroup Header="Subtitles" IsEnabled="True">
                 <RibbonMenuButton Label="Download" LargeImageSource="../Images/add.png">
-                    <RibbonMenuItem ImageSource="../Images/podnapisiNet.ico" Header="Download from Podnapisi.NET" />
-                    <RibbonMenuItem ImageSource="../Images/opensubtitles.ico" Header="Download from OpenSubtitles.org" />
+                    <RibbonMenuItem ImageSource="../Images/sites/podnapisiNet.ico" Header="Download from Podnapisi.NET" />
+                    <RibbonMenuItem ImageSource="../Images/sites/opensubtitles.ico" Header="Download from OpenSubtitles.org" />
                 </RibbonMenuButton>
                 <RibbonButton Label="Detect Language" LargeImageSource="../Images/search_subs.ico" />
             </RibbonGroup>

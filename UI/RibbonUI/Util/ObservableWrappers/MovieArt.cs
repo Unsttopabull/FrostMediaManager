@@ -5,6 +5,10 @@ namespace RibbonUI.Util.ObservableWrappers {
 
     public class MovieArt : ObservableBase<IArt> {
 
+        internal MovieArt() : base(null){
+            
+        }
+
         public MovieArt(IArt art) : base(art) {
         }
 

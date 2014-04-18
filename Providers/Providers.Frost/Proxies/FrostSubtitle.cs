@@ -1,6 +1,6 @@
 ﻿using Frost.Common.Models.Provider;
 using Frost.Common.Proxies;
-using Frost.Providers.Frost.DB.Files;
+using Frost.Providers.Frost.DB;
 using Frost.Providers.Frost.Provider;
 
 namespace Frost.Providers.Frost.Proxies {

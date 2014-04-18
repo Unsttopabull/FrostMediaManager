@@ -69,17 +69,20 @@ namespace Frost.Providers.Xbmc.DB.People {
         /// <value>The full name of the person.</value>
         string IPerson.Name {
             get {
-                if (Person == null) {
-                    Person = new XbmcPerson();
+                try {
+                    return Person.Name;
                 }
-
-                return Person.Name;
+                catch {
+                    return null;
+                }
             }
             set {
-                if (Person == null) {
-                    Person = new XbmcPerson();
+                try {
+                    Person.Name = value;
                 }
-                Person.Name = value;
+                catch {
+                    return;
+                }
             }
         }
 
@@ -87,19 +90,22 @@ namespace Frost.Providers.Xbmc.DB.People {
         /// <value>The thumbnail image.</value>
         string IPerson.Thumb {
             get {
-                if (Person == null) {
-                    Person = new XbmcPerson();
+                string t;
+                try {
+                    t = Person.ThumbURL;
                 }
-
-                string t = Person.ThumbURL;
+                catch {
+                    return null;
+                }
                 return !string.IsNullOrEmpty(t) ? t : null;
             }
             set {
-                if (Person == null) {
-                    Person = new XbmcPerson();
+                try {
+                    Person.ThumbURL = value;
                 }
-
-                Person.ThumbURL = value;
+                catch {
+                    return;
+                }
             }
         }
 

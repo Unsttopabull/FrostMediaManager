@@ -6,7 +6,7 @@ using System.Data.Entity.ModelConfiguration;
 using System.IO;
 using Frost.Common.Models.Provider;
 
-namespace Frost.Providers.Frost.DB.Files {
+namespace Frost.Providers.Frost.DB {
 
     /// <summary>Represents an information about a file.</summary>
     public class File : IFile {

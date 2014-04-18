@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tester", "Tester\Tester.csproj", "{05F98D48-B9A3-4B2B-8648-498FAA41B7EB}"
 EndProject
@@ -40,6 +40,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PHPtoNET", "Libraries\PHPtoNet\PHPtoNET.csproj", "{4661DD6C-BE69-4BCB-A835-53D192DE841C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkShares", "Libraries\NetworkShares\NetworkShares.csproj", "{A85F5E2B-149A-4FB5-A749-056AE20AB72F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadingControl", "UI\LoadingControl\LoadingControl.csproj", "{91F93D52-9F43-4931-BA8D-C2A926393EA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -330,6 +332,24 @@ Global
 		{A85F5E2B-149A-4FB5-A749-056AE20AB72F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A85F5E2B-149A-4FB5-A749-056AE20AB72F}.Release|Win32.ActiveCfg = Release|Any CPU
 		{A85F5E2B-149A-4FB5-A749-056AE20AB72F}.Release|x86.ActiveCfg = Release|Any CPU
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9}.Release No Installer|Any CPU.ActiveCfg = Release|Any CPU
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9}.Release No Installer|Any CPU.Build.0 = Release|Any CPU
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9}.Release No Installer|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9}.Release No Installer|Mixed Platforms.Build.0 = Release|Any CPU
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9}.Release No Installer|Win32.ActiveCfg = Release|Any CPU
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9}.Release No Installer|x86.ActiveCfg = Release|Any CPU
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9}.Release|Win32.ActiveCfg = Release|Any CPU
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -346,6 +366,7 @@ Global
 		{A3CE8F2A-9950-409C-AA35-74CD1D1D6D87} = {AD8B4AC3-5A0D-4363-8A79-3767012A1998}
 		{39D8B812-D2B3-476E-BA81-10BEEA1D5EEE} = {AD8B4AC3-5A0D-4363-8A79-3767012A1998}
 		{FD95157C-7CDE-4E94-AAF7-259BABD583A6} = {AD8B4AC3-5A0D-4363-8A79-3767012A1998}
+		{91F93D52-9F43-4931-BA8D-C2A926393EA9} = {AD8B4AC3-5A0D-4363-8A79-3767012A1998}
 		{8491DCCF-354E-4FF6-89D4-88A0BB9CB8AF} = {ED24ACDC-DD9F-4ED8-A66E-7491E829A14E}
 		{2E311A90-347B-47E1-8AA7-87A276C88F4E} = {ED24ACDC-DD9F-4ED8-A66E-7491E829A14E}
 		{B404DA8F-FBF4-4CCC-BE01-22C488863EC2} = {ED24ACDC-DD9F-4ED8-A66E-7491E829A14E}
