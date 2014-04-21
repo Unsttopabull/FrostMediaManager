@@ -4,11 +4,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:userControls="clr-namespace:RibbonUI.UserControls"
+    xmlns:uc="clr-namespace:RibbonUI.UserControls"
     x:Name="RibbonControl" x:Class="RibbonUI.UserControls.Ribbon"
     mc:Ignorable="d" d:DesignHeight="140" d:DesignWidth="500">
     <UserControl.DataContext>
-        <userControls:RibbonViewModel/>
+        <uc:RibbonViewModel/>
     </UserControl.DataContext>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -80,15 +80,15 @@
 
         <!-- Ribbon Tab #3: -->
         <RibbonTab IsSelected="{Binding IsDetectTabSelected}" Header="Web update">
-            <RibbonGroup x:Name="Clippy" Header="Movie info" Background="#00000000" Height="86" Margin="0">
+            <RibbonGroup Header="Movie info" Background="#00000000" Height="86" Margin="0">
                 <RibbonMenuButton LargeImageSource="../Images/update.png" Label="Update movie information">
-                    <RibbonMenuItem ImageSource="../Images/Sites/kolosej.png" Header="Kolosej.si" />
-                    <RibbonMenuItem ImageSource="../Images/Sites/tus.ico" Header="Planet-Tus.si" />
-                    <RibbonMenuItem ImageSource="../Images/sites/opensubtitles.ico" Header="OpenSubtitles.org" />
+                    <RibbonMenuItem ImageSource="../Images/Sites/kolosej.png" Header="Kolosej.si" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.Kolosej}"/>
+                    <RibbonMenuItem ImageSource="../Images/Sites/tus.ico" Header="Planet-Tus.si" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.PlanetTus}"/>
+                    <RibbonMenuItem ImageSource="../Images/sites/opensubtitles.ico" Header="OpenSubtitles.org" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.OpenSubtitles}"/>
                 </RibbonMenuButton>
-                <RibbonButton SmallImageSource="../Images/cut.png" Label="Cut" />
+                <!--<RibbonButton SmallImageSource="../Images/cut.png" Label="Cut" />
                 <RibbonButton SmallImageSource="../Images/copy.png" Label="Copy" />
-                <RibbonButton SmallImageSource="../Images/format_painter.png" Label="Format Painter" />
+                <RibbonButton SmallImageSource="../Images/format_painter.png" Label="Format Painter" />-->
             </RibbonGroup>
             <RibbonGroup>
                 <RibbonMenuButton LargeImageSource="../Images/art.png" Label="Download art">

@@ -260,6 +260,9 @@
     <Compile Include="Windows\Add\AddCodecMappingViewModel.cs">
       <DependentUpon>AddCodecMapping.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\WebUpdater.xaml.cs">
+      <DependentUpon>WebUpdater.xaml</DependentUpon>
+    </Compile>
     <Page Include="UserControls\ArtAndPlot.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -377,6 +380,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\WebUpdater.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

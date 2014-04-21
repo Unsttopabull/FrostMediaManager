@@ -24,7 +24,7 @@ namespace Frost.MovieInfoParsers.PlanetTus {
 
         public override List<TusMovie> Parse() {
             List<TusMovie> list = new List<TusMovie>();
-            foreach (string subList in PlanetTusClient.SubLists) {
+            foreach (string subList in SubLists) {
                 list.AddRange(ParsePage(subList));
             }
 
@@ -83,8 +83,13 @@ namespace Frost.MovieInfoParsers.PlanetTus {
 
         /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         public void Dispose() {
-            AvailableMovies.Clear();
-            _webCl.Dispose();
+            if (AvailableMovies != null) {
+                AvailableMovies.Clear();
+            }
+
+            if (_webCl != null) {
+                _webCl.Dispose();
+            }
         }
     }
 

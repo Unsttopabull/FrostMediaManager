@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Frost.MovieInfoParsers.Kolosej;
 
 namespace Frost.MovieInfoParsers.GremoVKino {
 

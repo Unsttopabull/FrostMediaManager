@@ -860,7 +860,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             IPerson p = Add(_observedEntity.AddDirector, director);
 
             if (p == null) {
-                return p;
+                return null;
             }
 
             if (!Directors.Any(d => d.Equals(p))) {
@@ -989,8 +989,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
         }
 
-        public bool RemoveAudio(MovieAudio audio) {
-            throw new NotImplementedException();
+        public void RemoveAudio(MovieAudio audio) {
+            
         }
 
         private bool Remove<T>(Func<T, bool> removeItem, T item) where T : IMovieEntity {

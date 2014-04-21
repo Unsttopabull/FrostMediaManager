@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -27,6 +28,12 @@ namespace RibbonUI.UserControls {
         Export
     }
 
+    public enum WebUpdateSite {
+        Kolosej,
+        PlanetTus,
+        OpenSubtitles,
+    }
+
     class RibbonViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private ObservableMovie _selectedMovie;
@@ -37,6 +44,7 @@ namespace RibbonUI.UserControls {
         private Visibility _subtitlesContextVisible;
         private readonly IMoviesDataService _service;
         private ICommand _saveChangesCommand;
+        private ICommand<WebUpdateSite> _updateMovieCommand;
 
         public RibbonViewModel() {
             _service = TranslationManager.IsInDesignMode 
@@ -56,6 +64,17 @@ namespace RibbonUI.UserControls {
         public ICommand OpenMovieInFolderCommand { get; private set; }
         public ICommand SearchCommand { get; private set; }
         public ICommand OptionsCommand { get; private set; }
+
+        public ICommand<WebUpdateSite> UpdateMovieCommand {
+            get {
+                if (_updateMovieCommand == null) {
+                    _updateMovieCommand = new RelayCommand<WebUpdateSite>(UpdateMovie);
+                }
+                return _updateMovieCommand;
+            }
+            private set { _updateMovieCommand = value; }
+        }
+
         public ICommand<DependencyObject> OnRibbonLoadedCommand { get; private set; }
 
         #endregion
@@ -225,6 +244,10 @@ namespace RibbonUI.UserControls {
                 SettingsWindow sw = new SettingsWindow { Owner = ParentWindow };
                 sw.ShowDialog();
             }
+        }
+
+        private void UpdateMovie(WebUpdateSite site) {
+            WebUpdater wu = new WebUpdater(site, SelectedMovie);
         }
 
         private void MenuItemOptionsOnClick() {

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Shell;
 using System.Windows.Threading;
 using RibbonUI.Annotations;
 
@@ -29,6 +30,11 @@ namespace RibbonUI.Windows {
                 _timer.Stop();
                 _timer.Tick -= TimerTick;
             };
+
+            TaskbarItemInfo = new TaskbarItemInfo {
+                ProgressState = TaskbarItemProgressState.Normal,
+                ProgressValue = 0
+            };
         }
 
         public double ProgressMax { get; set; }
@@ -52,6 +58,9 @@ namespace RibbonUI.Windows {
                     return;
                 }
                 _progressValue = value;
+
+                Dispatcher.Invoke(() => TaskbarItemInfo.ProgressValue = value / 100.0);
+
                 OnPropertyChanged();
             }
         }
@@ -61,8 +70,6 @@ namespace RibbonUI.Windows {
                 ProgressValue += 5;
             }
         }
-
-        
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
