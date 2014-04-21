@@ -10,10 +10,8 @@ using System.Windows.Shell;
 using Frost.Common;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
-using GalaSoft.MvvmLight;
 using RibbonUI.Annotations;
 using RibbonUI.Design;
-using RibbonUI.Messages;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Windows;
@@ -29,18 +27,19 @@ namespace RibbonUI.UserControls {
         Export
     }
 
-    class RibbonViewModel : ViewModelBase {
+    class RibbonViewModel : INotifyPropertyChanged {
+        public event PropertyChangedEventHandler PropertyChanged;
         private ObservableMovie _selectedMovie;
         private bool _isSearchTabSelected;
         private bool _isSubtitlesTabSelected;
         private bool _isExportTabSelected;
         private bool _isDetectTabSelected;
         private Visibility _subtitlesContextVisible;
-        private IMoviesDataService _service;
+        private readonly IMoviesDataService _service;
         private ICommand _saveChangesCommand;
 
         public RibbonViewModel() {
-            _service = IsInDesignMode 
+            _service = TranslationManager.IsInDesignMode 
                 ? new DesignMoviesDataService()
                 : LightInjectContainer.GetInstance<IMoviesDataService>();
 
@@ -50,7 +49,6 @@ namespace RibbonUI.UserControls {
             SearchCommand = new RelayCommand(SearchClick);
 
             SubtitlesContextVisible = Visibility.Collapsed;
-            MessengerInstance.Register<SelectRibbonMessage>(this, rts => OnRibbonTabSelect(rts.RibbonTab));
         }
 
         #region ICommands
@@ -170,7 +168,7 @@ namespace RibbonUI.UserControls {
             }
         }
 
-        private void OnRibbonTabSelect(RibbonTabs tab) {
+        public void OnRibbonTabSelect(RibbonTabs tab) {
             IsSearchTabSelected = false;
             IsSubtitlesTabSelected = false;
             IsSearchTabSelected = false;
@@ -236,8 +234,9 @@ namespace RibbonUI.UserControls {
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            if (PropertyChangedHandler != null) {
-                PropertyChangedHandler(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) {
+                handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

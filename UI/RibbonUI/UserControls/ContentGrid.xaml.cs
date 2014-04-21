@@ -20,6 +20,7 @@ namespace RibbonUI.UserControls {
     public partial class ContentGrid : UserControl, INotifyPropertyChanged {
         public static readonly DependencyProperty MinRequiredWidthProperty = DependencyProperty.Register("MinRequiredWidth", typeof(double), typeof(ContentGrid), new FrameworkPropertyMetadata(default(double), FrameworkPropertyMetadataOptions.AffectsRender));
         public event PropertyChangedEventHandler PropertyChanged;
+        private ObservableMovie _selectedMovie;
 
         public ContentGrid() {
             InitializeComponent();
@@ -31,9 +32,22 @@ namespace RibbonUI.UserControls {
             get { return (double) GetValue(MinRequiredWidthProperty); }
             set { SetValue(MinRequiredWidthProperty, value); }
         }
-        
+
         public ObservableMovie SelectedMovie {
-            get { return MovieList.SelectedItem as ObservableMovie; }
+            get { return _selectedMovie; }
+            set {
+                if (Equals(value, _selectedMovie)) {
+                    return;
+                }
+                _selectedMovie = value;
+
+                ContentGridViewModel viewModel = DataContext as ContentGridViewModel;
+                if (viewModel != null) {
+                    viewModel.SelectedMovie = value;
+                }
+
+                OnPropertyChanged();
+            }
         }
 
         private void OnWindowLoaded(object sender, EventArgs args) {

@@ -91,7 +91,7 @@
         </Grid>
 
         <DataGrid Grid.Column="0" Grid.Row="1" x:Name="MovieList" AutoGenerateColumns="False" SelectionChanged="MovieListOnSelectionChanged"
-                  SelectedCellsChanged="MovieListSelectedChanged" CellStyle="{StaticResource NoBorderCell}" SelectedItem="{Binding SelectedMovie}"
+                  SelectedCellsChanged="MovieListSelectedChanged" CellStyle="{StaticResource NoBorderCell}" SelectedItem="{Binding ElementName=ContentGridControl, Path=SelectedMovie}"
                   CanUserAddRows="False" ItemsSource="{Binding Movies}" CanUserResizeRows="False"
                   AlternatingRowBackground="{StaticResource {x:Static SystemColors.GradientInactiveCaptionBrushKey}}"
                   GridLinesVisibility="None" RowHeight="20" CanUserResizeColumns="False" SelectionMode="Single"

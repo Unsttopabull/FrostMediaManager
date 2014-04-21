@@ -831,7 +831,7 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         #region Add/Remove
 
-        public void RemoveArt(IArt art) {
+        public void RemoveArt(MovieArt art) {
         }
 
         public void AddActor(IActor actor) {
@@ -975,12 +975,18 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
         }
 
-        public ISubtitle AddSubtitle(ISubtitle subtitle) {
-            return Add(_observedEntity.AddSubtitle, subtitle);
+        public void AddSubtitle(ISubtitle subtitle) {
+            ISubtitle sub = Add(_observedEntity.AddSubtitle, subtitle);
+            if (sub != null) {
+                Subtitles.Add(new MovieSubtitle(sub));
+            }
         }
 
-        public bool RemoveSubtitle(ISubtitle subtitle) {
-            return Remove(_observedEntity.RemoveSubtitle, subtitle);
+        public void RemoveSubtitle(MovieSubtitle subtitle) {
+            bool success = Remove(_observedEntity.RemoveSubtitle, subtitle.ObservedEntity);
+            if (success) {
+                Subtitles.Remove(subtitle);
+            }
         }
 
         public bool RemoveAudio(MovieAudio audio) {

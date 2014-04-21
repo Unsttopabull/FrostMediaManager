@@ -64,7 +64,7 @@ namespace RibbonUI.UserControls.List {
         }
 
         private void RemoveOnClick(MovieArt art) {
-            SelectedMovie.RemoveArt(art.ObservedEntity);
+            SelectedMovie.RemoveArt(art);
         }
 
         private void SetAsDefaultOnClick(MovieArt art) {

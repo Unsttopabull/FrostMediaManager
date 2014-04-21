@@ -9,18 +9,17 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Frost.Common;
+using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
-using GalaSoft.MvvmLight;
 using RibbonUI.Annotations;
 using RibbonUI.Design;
-using RibbonUI.Messages;
-using RibbonUI.Messages.Subtitles;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls {
 
-    public class ContentGridViewModel : ViewModelBase, IDisposable {
+    public class ContentGridViewModel : INotifyPropertyChanged, IDisposable {
+        public event PropertyChangedEventHandler PropertyChanged;
         private readonly IDisposable _searchObservable;
         private ICollectionView _collectionView;
         private string _movieSearchFilter;
@@ -28,9 +27,10 @@ namespace RibbonUI.UserControls {
         private ObservableCollection<ObservableMovie> _movies;
         private DateTime _lastChangedMovie;
         private ObservableCollection<MovieCertification> _certifications;
+        private RibbonTabs _tab;
 
         public ContentGridViewModel() {
-            if (IsInDesignMode) {
+            if (TranslationManager.IsInDesignMode) {
                 LightInjectContainer.Register<IMoviesDataService, DesignMoviesDataService>();
             }
 
@@ -46,10 +46,8 @@ namespace RibbonUI.UserControls {
                                           .ObserveOn(SynchronizationContext.Current)
                                           .Subscribe(obj => _collectionView.Refresh());
 
-            SubtitlesOnFocusCommand = new RelayCommand(MovieSubtitlesGotFocus);
-            SubtitlesLostFocusCommand = new RelayCommand(MovieSubtitlesOnLostFocus);
-
-            RegisterReceiveMessages();
+            SubtitlesOnFocusCommand = new RelayCommand(() => Tab = RibbonTabs.Subtitles);
+            SubtitlesLostFocusCommand = new RelayCommand(() => Tab = RibbonTabs.Search);
         }
 
         public ObservableCollection<ObservableMovie> Movies {
@@ -110,6 +108,17 @@ namespace RibbonUI.UserControls {
             }
         }
 
+        public RibbonTabs Tab {
+            get { return _tab; }
+            set {
+                if (value == _tab) {
+                    return;
+                }
+                _tab = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ObservableCollection<MovieCertification> Certifications {
             get { return _certifications; }
             set {
@@ -135,35 +144,11 @@ namespace RibbonUI.UserControls {
             }
         }
 
-        private void RegisterReceiveMessages() {
-            MessengerInstance.Register<AddSubtitleMessage>(this, HandleAddSubtitleMessage);
-        }
-
-        private void HandleAddSubtitleMessage(AddSubtitleMessage msg) {
-            if (SelectedMovie == null) {
-                return;
-            }
-
-            try {
-                SelectedMovie.AddSubtitle(msg.Subtitle.ObservedEntity);
-            }
-            catch (Exception e) {
-                UIHelper.HandleProviderException(e);
-            }
-        }
-
-        private void MovieSubtitlesGotFocus() {
-            MessengerInstance.Send(new SelectRibbonMessage(RibbonTabs.Subtitles));
-        }
-
-        private void MovieSubtitlesOnLostFocus() {
-            MessengerInstance.Send(new SelectRibbonMessage(RibbonTabs.Search));
-        }
-
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            if (PropertyChangedHandler != null) {
-                PropertyChangedHandler(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) {
+                handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
 

@@ -7,25 +7,24 @@ using System.Windows;
 using System.Windows.Data;
 using Frost.Common;
 using Frost.Common.Models.Provider;
+using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
-using GalaSoft.MvvmLight;
 using RibbonUI.Annotations;
 using RibbonUI.Design;
-using RibbonUI.Design.Models;
-using RibbonUI.Messages.Subtitles;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Windows;
 
 namespace RibbonUI.UserControls.List {
 
-    public class ListSubtitlesViewModel : ViewModelBase {
+    public class ListSubtitlesViewModel : INotifyPropertyChanged {
+        public event PropertyChangedEventHandler PropertyChanged;
         private readonly IMoviesDataService _service;
         private ICollectionView _collectionView;
         private ObservableMovie _selectedMovie;
 
         public ListSubtitlesViewModel() {
-            _service = IsInDesignMode
+            _service = TranslationManager.IsInDesignMode
                 ? new DesignMoviesDataService()
                 : LightInjectContainer.GetInstance<IMoviesDataService>();
 
@@ -52,7 +51,7 @@ namespace RibbonUI.UserControls.List {
             };
 
             ChangeLanguageCommand = new RelayCommand<MovieSubtitle>(LangEdit);
-            RemoveCommand = new RelayCommand<MovieSubtitle>(OnRemoveClicked, s => s != null);
+            RemoveCommand = new RelayCommand<MovieSubtitle>(subtitle => SelectedMovie.RemoveSubtitle(subtitle), s => s != null);
         }
 
         public ObservableMovie SelectedMovie {
@@ -82,11 +81,6 @@ namespace RibbonUI.UserControls.List {
         public RelayCommand<MovieSubtitle> ChangeLanguageCommand { get; private set; }
         public RelayCommand<MovieSubtitle> RemoveCommand { get; private set; }
 
-        private void OnRemoveClicked(MovieSubtitle subtitle) {
-            RemoveSubtitleMessage msg = new RemoveSubtitleMessage(subtitle);
-            MessengerInstance.Send(msg);
-        }
-
         private void LangEdit(MovieSubtitle subtitle) {
             IEnumerable<ILanguage> languages = _service.Languages ?? UIHelper.GetLanguages();
 
@@ -104,8 +98,9 @@ namespace RibbonUI.UserControls.List {
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
-            if (PropertyChangedHandler != null) {
-                PropertyChangedHandler(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) {
+                handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

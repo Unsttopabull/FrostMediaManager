@@ -138,7 +138,7 @@
                 <ScrollViewer Grid.Row="0">
                     <ScrollViewer.Resources>
                     </ScrollViewer.Resources>
-                    <TextBlock Text="{Binding SelectedMovie.FirstPlot.(models:IPlot.Full), FallbackValue={l:T No plot available}, TargetNullValue={l:T No plot available}}"
+                    <TextBlock Text="{Binding SelectedMovie.FirstPlot.Full, FallbackValue={l:T No plot available}, TargetNullValue={l:T No plot available}}"
                                Foreground="White" Margin="10,10,0,0" TextWrapping="Wrap" FontSize="20" ScrollViewer.CanContentScroll="True" />
                 </ScrollViewer>
                 <!--<ListView Grid.Row="1" Background="Transparent" ItemsSource="{Binding SelectedMovie.Awards, UpdateSourceTrigger=PropertyChanged}"
@@ -221,8 +221,6 @@
                     </DataTemplate>
                 </DataGrid.RowDetailsTemplate>
                 <DataGrid.Columns>
-                    <!--<DataGridTextColumn Binding="{Binding (models:IPerson.Name)}" Header="{l:T Actor}" IsReadOnly="True"/>
-                    <DataGridTextColumn Binding="{Binding (models:IActor.Character), TargetNullValue={l:T Unknown}}" Header="{l:T Character}" IsReadOnly="True"/>-->
                     <DataGridTextColumn Binding="{Binding Name, FallbackValue={l:T Unknown}}" Header="{l:T Actor}" IsReadOnly="True"/>
                     <DataGridTextColumn Binding="{Binding Character, FallbackValue={l:T Unknown}, TargetNullValue={l:T Unknown}}" Header="{l:T Character}" IsReadOnly="True"/>                    
                 </DataGrid.Columns>
