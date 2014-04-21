@@ -7,19 +7,19 @@ namespace RibbonUI.UserControls.List {
 
     /// <summary>Interaction logic for EditVideos.xaml</summary>
     public partial class ListVideos : UserControl {
-        public static readonly DependencyProperty VideosProperty = DependencyProperty.Register("Videos", typeof(ObservableCollection<MovieVideo>), typeof(ListVideos), new PropertyMetadata(default(ObservableCollection<MovieVideo>), OnVideoListChanged));
+        public static readonly DependencyProperty MovieProperty = DependencyProperty.Register("Movie", typeof(ObservableMovie), typeof(ListVideos), new PropertyMetadata(default(ObservableMovie), OnMovieChanged));
 
         public ListVideos() {
             InitializeComponent();
         }
 
-        private static void OnVideoListChanged(DependencyObject d, DependencyPropertyChangedEventArgs args) {
-            ((ListVideosViewModel) (((ListVideos) d).DataContext)).Videos = (ObservableCollection<MovieVideo>) args.NewValue;
+        public ObservableMovie Movie {
+            get { return (ObservableMovie) GetValue(MovieProperty); }
+            set { SetValue(MovieProperty, value); }
         }
 
-        public ObservableCollection<MovieVideo> Videos {
-            get { return (ObservableCollection<MovieVideo>) GetValue(VideosProperty); }
-            set { SetValue(VideosProperty, value); }
+        private static void OnMovieChanged(DependencyObject d, DependencyPropertyChangedEventArgs args) {
+            ((ListVideosViewModel) (((ListVideos) d).DataContext)).SelectedMovie = (ObservableMovie) args.NewValue;
         }
 
         private void OnWindowLoaded(object sender, RoutedEventArgs e) {

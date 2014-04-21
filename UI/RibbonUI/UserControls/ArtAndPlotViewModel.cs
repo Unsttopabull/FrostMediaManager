@@ -7,7 +7,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Frost.Common;
-using Frost.Common.Models.Provider;
 using Frost.DetectFeatures;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
@@ -31,8 +30,8 @@ namespace RibbonUI.UserControls {
             GoToImdbCommand = new RelayCommand<string>(GoToIMDB);
 
             ActorImdbClickedCommand = new RelayCommand<string>(
-                imdbId => Process.Start(String.Format(IMDB_PERSON_URI, imdbId)),
-                s => !String.IsNullOrEmpty(s)
+                imdbId => Process.Start(string.Format(IMDB_PERSON_URI, imdbId)),
+                s => !string.IsNullOrEmpty(s)
                 );
 
             GoToTrailerCommand = new RelayCommand<string>(GoToTrailer);
@@ -46,34 +45,23 @@ namespace RibbonUI.UserControls {
                 }
                 _selectedMovie = value;
 
-                if (_selectedMovie != null && _selectedMovie.Countries != null) {
-                    Countries = _selectedMovie.Countries.Select(c => new MovieCountry(c)).ToList();
-                }
-                else {
-                    Countries = new List<MovieCountry>();
-                }
+                //if (_selectedMovie != null && _selectedMovie.Countries != null) {
+                //    Countries = _selectedMovie.Countries.Select(c => new MovieCountry(c)).ToList();
+                //}
+                //else {
+                //    Countries = new List<MovieCountry>();
+                //}
+                Countries = new List<MovieCountry>();
 
                 OnPropertyChanged("Countries");
-                OnPropertyChanged("NumberOfOscarsWon");
-                OnPropertyChanged("NumberOfOscarNominations");
-                OnPropertyChanged("NumberOfCannesAwards");
-                OnPropertyChanged("NumberOfCannesNominations");
-                OnPropertyChanged("NumberOfGoldenGlobeNominations");
-                OnPropertyChanged("NumberOfGoldenGlobesWon");
                 OnPropertyChanged("MPAARatingImage");
-                OnPropertyChanged("FirstFanart");
-                OnPropertyChanged("FirstCoverOrPoster");
-                OnPropertyChanged("FirstPlot");
                 OnPropertyChanged("BoxImage");
-                OnPropertyChanged("GenreNames");
 
                 OnPropertyChanged();
             }
         }
 
         #region Utility properties
-
-        //public IEnumerable<IActor> Actors { get; set; }
 
         public List<MovieCountry> Countries { get; set; }
 
@@ -95,78 +83,7 @@ namespace RibbonUI.UserControls {
             }
         }
 
-        #region Awards
 
-        public int NumberOfOscarsWon {
-            get {
-                return SelectedMovie != null && SelectedMovie.Awards != null
-                           ? SelectedMovie.Awards.Count(a => a.Organization == "Oscar" && !a.IsNomination)
-                           : 0;
-            }
-        }
-
-        public int NumberOfGoldenGlobesWon {
-            get {
-                return SelectedMovie != null && SelectedMovie.Awards != null
-                           ? SelectedMovie.Awards.Count(a => a.Organization == "Golden Globe" && !a.IsNomination)
-                           : 0;
-            }
-        }
-
-        public int NumberOfGoldenGlobeNominations {
-            get {
-                return SelectedMovie != null && SelectedMovie.Awards != null
-                           ? SelectedMovie.Awards.Count(a => a.Organization == "Golden Globe" && a.IsNomination)
-                           : 0;
-            }
-        }
-
-        public int NumberOfCannesAwards {
-            get {
-                return SelectedMovie != null && SelectedMovie.Awards != null
-                           ? SelectedMovie.Awards.Count(a => a.Organization == "Cannes" && !a.IsNomination)
-                           : 0;
-            }
-        }
-
-        public int NumberOfCannesNominations {
-            get {
-                return SelectedMovie != null && SelectedMovie.Awards != null
-                           ? SelectedMovie.Awards.Count(a => a.Organization == "Cannes" && a.IsNomination)
-                           : 0;
-            }
-        }
-
-        public int NumberOfOscarNominations {
-            get {
-                return SelectedMovie != null && SelectedMovie.Awards != null
-                           ? SelectedMovie.Awards.Count(a => a.Organization == "Oscar" && a.IsNomination)
-                           : 0;
-            }
-        }
-
-        #endregion
-
-        /// <summary>Gets the US MPAA movie rating.</summary>
-        /// <value>A string with the MPAA movie rating</value>
-        public string MPAARating {
-            get {
-                ICertification mpaa = null;
-
-                if (SelectedMovie != null && SelectedMovie.Certifications != null) {
-                    try {
-                        mpaa = SelectedMovie.Certifications.FirstOrDefault(c => c.Country.ISO3166.Alpha3.Equals("usa", StringComparison.OrdinalIgnoreCase));
-                    }
-                    catch (Exception e) {
-                        Console.WriteLine(e);
-                    }
-                }
-
-                return mpaa != null
-                           ? mpaa.Rating
-                           : null;
-            }
-        }
 
         public string MPAARatingImage {
             get {
@@ -174,7 +91,7 @@ namespace RibbonUI.UserControls {
                     return null;
                 }
 
-                string rating = MPAARating;
+                string rating = SelectedMovie.MPAARating;
                 if (!String.IsNullOrEmpty(rating)) {
                     rating = rating.Replace("Rated ", "").ToUpper();
                     string mpaa = null;
@@ -200,55 +117,6 @@ namespace RibbonUI.UserControls {
                     return String.Format("file://{0}/{1}", Directory.GetCurrentDirectory(), mpaa);
                 }
                 return null;
-            }
-        }
-
-        public string FirstFanart {
-            get {
-                if (SelectedMovie == null) {
-                    return null;
-                }
-
-                return CheckArtIfValid(SelectedMovie.DefaultFanart);
-            }
-        }
-
-        //public IArt FirstFanart {
-        //    get {
-        //        if (SelectedMovie == null) {
-        //            return null;
-        //        }
-
-        //        return CheckArtIfValid2(SelectedMovie.DefaultFanart);
-        //    }
-        //}
-
-        public string FirstCoverOrPoster {
-            get {
-                if (SelectedMovie == null) {
-                    return null;
-                }
-                return CheckArtIfValid(SelectedMovie.DefaultCover);
-            }
-        }
-
-        public IPlot FirstPlot {
-            get {
-                if (SelectedMovie == null) {
-                    return null;
-                }
-
-                return SelectedMovie.MainPlot;
-            }
-        }
-
-        public string GenreNames {
-            get {
-                if (SelectedMovie == null || SelectedMovie.Genres == null) {
-                    return null;
-                }
-
-                return string.Join(", ", SelectedMovie.Genres.Select(g => g.Name));
             }
         }
 
@@ -287,38 +155,6 @@ namespace RibbonUI.UserControls {
                 }
             }
             Process.Start(trailer);
-        }
-
-        //private static IArt CheckArtIfValid2(IArt art) {
-        //    if (art == null) {
-        //        return null;
-        //    }
-
-        //    string path = art.PreviewOrPath;
-        //    if (Uri.IsWellFormedUriString(path, UriKind.RelativeOrAbsolute)) {
-        //        return art;
-        //    }
-
-        //    if (!File.Exists(path)) {
-        //        return null;
-        //    }
-        //    return art;
-        //}
-
-        private static string CheckArtIfValid(IArt art) {
-            if (art == null) {
-                return null;
-            }
-
-            string path = art.PreviewOrPath;
-            if (Uri.IsWellFormedUriString(path, UriKind.RelativeOrAbsolute)) {
-                return art.PreviewOrPath;
-            }
-
-            if (!File.Exists(path)) {
-                return null;
-            }
-            return art.PreviewOrPath;
         }
 
         [NotifyPropertyChangedInvocator]

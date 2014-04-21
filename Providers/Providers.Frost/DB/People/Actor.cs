@@ -25,7 +25,6 @@ namespace Frost.Providers.Frost.DB {
         [ForeignKey("Movie")]
         public long MovieId { get; set; }
 
-
         [Required]
         public virtual Person Person { get; set; }
 
@@ -50,11 +49,12 @@ namespace Frost.Providers.Frost.DB {
 
         long IMovieEntity.Id {
             get {
-                if (Person == null) {
-                    Person = new Person();
+                try {
+                    return Person.Id;
                 }
-
-                return Person.Id;
+                catch {
+                    return 0;
+                }
             }
         }
 
@@ -62,18 +62,19 @@ namespace Frost.Providers.Frost.DB {
         /// <value>The full name of the person.</value>
         string IPerson.Name {
             get {
-                if (Person == null) {
-                    Person = new Person();
+                try {
+                    return Person.Name;
                 }
-
-                return Person.Name;
+                catch {
+                    return null;
+                }
             }
             set {
-                if (Person == null) {
-                    Person = new Person();
+                try {
+                    Person.Name = value;
                 }
-
-                Person.Name = value;
+                catch {
+                }
             }
         }
 
@@ -81,31 +82,37 @@ namespace Frost.Providers.Frost.DB {
         /// <value>The thumbnail image.</value>
         string IPerson.Thumb {
             get {
-                if (Person == null) {
-                    Person = new Person();
+                try {
+                    return Person.Thumb;
                 }
-                return Person.Thumb;
+                catch {
+                    return null;
+                }
             }
             set {
-                if (Person == null) {
-                    Person = new Person();
+                try {
+                    Person.Thumb = value;
                 }
-                Person.Thumb = value;
+                catch {
+                }
             }
         }
 
         string IPerson.ImdbID {
             get {
-                if (Person == null) {
-                    Person = new Person();
+                try {
+                    return Person.ImdbID;
                 }
-                return Person.ImdbID;
+                catch {
+                    return null;
+                }
             }
             set {
-                if (Person == null) {
-                    Person = new Person();
+                try {
+                    Person.ImdbID = value;
                 }
-                Person.ImdbID = value;
+                catch {
+                }
             }
         }
 

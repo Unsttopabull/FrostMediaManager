@@ -12,9 +12,9 @@
     <UserControl.DataContext>
         <vm:ListArtViewModel />
     </UserControl.DataContext>
-    <ListView SelectionMode="Single" ItemsSource="{Binding Art}">
+    <ListView SelectionMode="Single" ItemsSource="{Binding SelectedMovie.Art, FallbackValue={x:Null}, TargetNullValue={x:Null}}">
         <ListView.GroupStyle>
-            <GroupStyle ContainerStyle="{StaticResource ExpanderGroup}" />
+            <GroupStyle ContainerStyle="{StaticResource ExpanderGroupCollapsed}"/>
         </ListView.GroupStyle>
         <ListView.Resources>
             <Style TargetType="ListViewItem">

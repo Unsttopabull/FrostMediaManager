@@ -26,12 +26,6 @@ namespace RibbonUI.UserControls {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IMoviesDataService _service;
         private ObservableMovie _selectedMovie;
-        private ObservableCollection<MoviePlot> _plots;
-        private ObservableCollection<MovieActor> _actors;
-        private ObservableCollection<MovieCountry> _countries;
-        private ObservableCollection<MovieStudio> _studios;
-        private ObservableCollection<IGenre> _genres;
-        private ObservableCollection<MoviePerson> _directors;
         private ObservableCollection<IMovieSet> _sets;
         private MoviePlot _selectedPlot;
 
@@ -43,8 +37,6 @@ namespace RibbonUI.UserControls {
             if (TranslationManager.IsInDesignMode) {
                 SelectedMovie = new ObservableMovie(new FakeMovie());
             }
-
-            Plots = new ObservableCollection<MoviePlot>();
 
             IEnumerable<IMovieSet> sets = _service.Sets;
             Sets = sets != null
@@ -63,27 +55,6 @@ namespace RibbonUI.UserControls {
                     return;
                 }
                 _selectedMovie = value;
-
-                if (_selectedMovie != null) {
-                    Plots = _selectedMovie.Plots == null
-                                ? new ObservableCollection<MoviePlot>()
-                                : new ObservableCollection<MoviePlot>(_selectedMovie.Plots.Select(p => new MoviePlot(p)));
-                    Actors = _selectedMovie.Actors == null
-                                 ? new ObservableCollection<MovieActor>()
-                                 : new ObservableCollection<MovieActor>(_selectedMovie.Actors.Select(a => new MovieActor(a)));
-                    Countries = _selectedMovie.Countries == null
-                                    ? new ObservableCollection<MovieCountry>()
-                                    : new ObservableCollection<MovieCountry>(_selectedMovie.Countries.Select(c => new MovieCountry(c)));
-                    Studios = _selectedMovie.Studios == null
-                                  ? new ObservableCollection<MovieStudio>()
-                                  : new ObservableCollection<MovieStudio>(_selectedMovie.Studios.Select(s => new MovieStudio(s)));
-                    Genres = _selectedMovie.Genres == null
-                                 ? new ObservableCollection<IGenre>()
-                                 : new ObservableCollection<IGenre>(_selectedMovie.Genres);
-                    Directors = _selectedMovie.Directors == null
-                                    ? new ObservableCollection<MoviePerson>()
-                                    : new ObservableCollection<MoviePerson>(_selectedMovie.Directors.Select(p => new MoviePerson(p)));
-                }
 
                 OnPropertyChanged();
             }
@@ -107,23 +78,10 @@ namespace RibbonUI.UserControls {
                 }
                 _selectedPlot = value;
                 OnPropertyChanged();
-                OnPropertyChanged("IsPlotFullEditable");
-                OnPropertyChanged("IsPlotSummaryEditable");
-                OnPropertyChanged("IsPlotTaglineEditable");
             }
         }
 
-        public bool IsPlotTaglineEditable {
-            get { return SelectedPlot != null && SelectedPlot["Tagline"]; }
-        }
-
-        public bool IsPlotSummaryEditable {
-            get { return SelectedPlot != null && SelectedPlot["Summary"]; }
-        }
-
-        public bool IsPlotFullEditable {
-            get { return SelectedPlot != null && SelectedPlot["Full"]; }
-        }
+        public bool IsAddingPlot { get; set; }
 
         #region Collections
 
@@ -134,72 +92,6 @@ namespace RibbonUI.UserControls {
                     return;
                 }
                 _sets = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollection<MoviePlot> Plots {
-            get { return _plots; }
-            private set {
-                if (Equals(value, _plots)) {
-                    return;
-                }
-                _plots = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollection<MovieActor> Actors {
-            get { return _actors; }
-            set {
-                if (Equals(value, _actors)) {
-                    return;
-                }
-                _actors = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollection<MovieCountry> Countries {
-            get { return _countries; }
-            set {
-                if (Equals(value, _countries)) {
-                    return;
-                }
-                _countries = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollection<MovieStudio> Studios {
-            get { return _studios; }
-            set {
-                if (Equals(value, _studios)) {
-                    return;
-                }
-                _studios = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollection<IGenre> Genres {
-            get { return _genres; }
-            set {
-                if (Equals(value, _genres)) {
-                    return;
-                }
-                _genres = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollection<MoviePerson> Directors {
-            get { return _directors; }
-            set {
-                if (Equals(value, _directors)) {
-                    return;
-                }
-                _directors = value;
                 OnPropertyChanged();
             }
         }
@@ -239,7 +131,7 @@ namespace RibbonUI.UserControls {
 
         private void RegisterCommands() {
             SetPlotAsDefault = new RelayCommand<MoviePlot>(
-                p => { SelectedMovie.MainPlot = p.ObservedEntity; },
+                p => { SelectedMovie.MainPlot = p; },
                 p => {
                     if (p == null || SelectedMovie == null) {
                         return false;
@@ -258,23 +150,19 @@ namespace RibbonUI.UserControls {
 
             AddStudioCommand = new RelayCommand(AddStudioOnClick);
             RemoveStudioCommand = new RelayCommand<MovieStudio>(
-                studio => {
-                    if (SelectedMovie.RemoveStudio(studio.ObservedEntity)) {
-                        Studios.Remove(studio);
-                    }
-                },
+                studio => SelectedMovie.RemoveStudio(studio),
                 studio => studio != null
             );
 
             EditStudioCommand = new RelayCommand<MovieStudio>(EditStudioOnClick, studio => studio != null);
 
             AddMovieGenreCommand = new RelayCommand<IGenre>(
-                AddGenre,
+                genre => SelectedMovie.AddGenre(genre),
                 genre => genre != null
             );
 
             RemoveMovieGenreCommand = new RelayCommand<IGenre>(
-                RemoveGenre,
+                genre => SelectedMovie.RemoveGenre(genre),
                 genre => genre != null
             );
 
@@ -283,11 +171,7 @@ namespace RibbonUI.UserControls {
 
             AddActorCommand = new RelayCommand(AddActorOnClick);
             RemoveActorCommand = new RelayCommand<MovieActor>(
-                actor => {
-                    if (SelectedMovie.RemoveActor(actor.ObservedEntity as IActor)) {
-                        Actors.Remove(actor);
-                    }
-                },
+                actor => SelectedMovie.RemoveActor(actor),
                 actor => actor != null
             );
             EditActorCommand = new RelayCommand<MovieActor>(
@@ -301,21 +185,13 @@ namespace RibbonUI.UserControls {
 
             AddCountryCommand = new RelayCommand(AddCountryOnClick);
             RemoveCountryCommand = new RelayCommand<MovieCountry>(
-                country => {
-                    if (SelectedMovie.RemoveCountry(country.ObservedEntity)) {
-                        Countries.Remove(country);
-                    }
-                },
+                country => SelectedMovie.RemoveCountry(country),
                 country => country != null
             );
 
             AddDirectorCommand = new RelayCommand(AddDirectorOnClick);
             RemoveDirectorCommand = new RelayCommand<MoviePerson>(
-                director => {
-                    if (SelectedMovie.RemoveDirector(director.ObservedEntity)) {
-                        Directors.Remove(director);
-                    }
-                },
+                director => SelectedMovie.RemoveDirector(director),
                 director => director != null
             );
 
@@ -345,12 +221,7 @@ namespace RibbonUI.UserControls {
             }
 
             foreach (MovieCountry country in sc.SelectedCountry.SelectedItems) {
-                if (!Countries.Contains(country)) {
-                    ICountry addCountry = SelectedMovie.AddCountry(country.ObservedEntity);
-                    if (addCountry != null) {
-                        Countries.Add(new MovieCountry(addCountry));
-                    }
-                }
+                SelectedMovie.AddCountry(country.ObservedEntity);
             }
         }
 
@@ -378,15 +249,6 @@ namespace RibbonUI.UserControls {
             IPerson addDirector = SelectedMovie.AddDirector(director);
             if (addDirector == null) {
                 UIHelper.ProviderCouldNotAdd();
-                return;
-            }
-
-            MoviePerson moviePerson = new MoviePerson(addDirector);
-            if (!Directors.Contains(moviePerson)) {
-                Directors.Add(moviePerson);
-            }
-            else {
-                MessageBox.Show(TranslationManager.T("This person has already been added to this movie as a Director."));
             }
         }
 
@@ -400,7 +262,7 @@ namespace RibbonUI.UserControls {
 
             if (string.IsNullOrEmpty(ag.NewGenre.Text)) {
                 foreach (IGenre genre in ag.GenreList.SelectedItems) {
-                    AddGenre(genre);
+                    SelectedMovie.AddGenre(genre);
                 }
             }
             else {
@@ -412,7 +274,7 @@ namespace RibbonUI.UserControls {
 
                     genre.Name = ag.NewGenre.Text;
                 }
-                AddGenre(genre);
+                SelectedMovie.AddGenre(genre);
             }
         }
 
@@ -433,30 +295,6 @@ namespace RibbonUI.UserControls {
             }
         }
 
-        private void RemoveGenre(IGenre genre) {
-            if (SelectedMovie.RemoveGenre(genre)) {
-                Genres.Remove(genre);
-            }
-            else {
-                UIHelper.ProviderCouldNotRemove();
-            }
-        }
-
-        private void AddGenre(IGenre genre) {
-            IGenre addGenre = SelectedMovie.AddGenre(genre);
-            if (addGenre != null) {
-                if (!Genres.Contains<IGenre>(addGenre, new HasNameEqualityComparer())) {
-                    Genres.Add(addGenre);
-                }
-                else {
-                    MessageBox.Show(TranslationManager.T("This genre has already been added to this movie."));
-                }
-            }
-            else {
-                UIHelper.ProviderCouldNotAdd();
-            }
-        }
-
         #endregion
 
         #region Plot Handlers
@@ -474,13 +312,13 @@ namespace RibbonUI.UserControls {
             if (MessageBox.Show(ParentWindow,
                 TranslationManager.T("Do you really want to remove plot: \"{0}\"?", moviePlot),
                 TranslationManager.T("Confrim remove"), MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
-                if (SelectedMovie.RemovePlot(moviePlot.ObservedEntity)) {
-                    Plots.Remove(moviePlot);
-                }
+                SelectedMovie.RemovePlot(moviePlot);
             }
         }
 
         private void AddPlot() {
+            IsAddingPlot = true;
+
             if (SelectedMovie == null) {
                 return;
             }
@@ -491,10 +329,9 @@ namespace RibbonUI.UserControls {
 
             plot.Full = TranslationManager.T("Enter full description");
 
-            plot = SelectedMovie.AddPlot(plot);
-            if (plot != null) {
-                Plots.Add(new MoviePlot(plot));
-            }
+            SelectedMovie.AddPlot(plot);
+
+            IsAddingPlot = false;
         }
 
         #endregion
@@ -531,7 +368,7 @@ namespace RibbonUI.UserControls {
 
                 if (string.IsNullOrEmpty(addActorCharacter)) {
                     //check if they have already been added as an actor without a character
-                    MovieActor ma = Actors.FirstOrDefault(a => a.Name == person.Name && a.Character == null);
+                    MovieActor ma = SelectedMovie.Actors.FirstOrDefault(a => a.Name == person.Name && a.Character == null);
                     if (ma != null) {
                         MessageBox.Show(ParentWindow, TranslationManager.T("This actor with unspecified character already exists in the list. To add another role specify a character."));
                         return;
@@ -548,7 +385,7 @@ namespace RibbonUI.UserControls {
                 }
                 else {
                     //check if they have already been added as an actor with this character
-                    MovieActor ma = Actors.FirstOrDefault(a => a.Name == person.Name && a.Character == addActorCharacter);
+                    MovieActor ma = SelectedMovie.Actors.FirstOrDefault(a => a.Name == person.Name && a.Character == addActorCharacter);
                     if (ma != null) {
                         MessageBox.Show(ParentWindow, TranslationManager.T("This actor already exists in the list. To add another actor's role specify a diffrent character."));
                         return;
@@ -566,10 +403,7 @@ namespace RibbonUI.UserControls {
                 }
             }
 
-            IActor addActor = SelectedMovie.AddActor(movieActor);
-            if (addActor != null) {
-                Actors.Add(new MovieActor(addActor));
-            }
+            SelectedMovie.AddActor(movieActor);
         }
 
         #endregion
@@ -596,24 +430,12 @@ namespace RibbonUI.UserControls {
 
                 studio.Name = addStudios.NewStudioName.Text;
 
-                AddStudio(studio);
+                SelectedMovie.AddStudio(studio);
                 return;
             }
 
             foreach (MovieStudio studio in addStudios.StudiosList.SelectedItems) {
-                AddStudio(studio.ObservedEntity);
-            }
-        }
-
-        private void AddStudio(IStudio studio) {
-            IStudio addStudio = SelectedMovie.AddStudio(studio);
-            if (addStudio == null) {
-                return;
-            }
-
-            MovieStudio ms = new MovieStudio(addStudio);
-            if (Studios.Contains(ms)) {
-                Studios.Add(ms);
+                SelectedMovie.AddStudio(studio.ObservedEntity);
             }
         }
 

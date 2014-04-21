@@ -5,6 +5,7 @@ using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Data.SQLite;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
@@ -35,6 +36,16 @@ namespace Frost.Providers.Frost.DB {
         }
 
         public FrostDbContainer() : this("name=MovieVoContainer", false) {
+
+            //StreamWriter sw = new StreamWriter(System.IO.File.Create("frost.sql")) { AutoFlush = true };
+            //Database.Log = s => {
+            //    lock (sw) {
+            //        sw.WriteLine(DateTime.Now);
+            //        sw.WriteLine("----------------------");
+            //        sw.WriteLine(s);
+            //        sw.WriteLine();
+            //    }
+            //};
         }
 
         /// <summary>Gets or sets the information about the movies in the library.</summary>
@@ -170,13 +181,13 @@ namespace Frost.Providers.Frost.DB {
         }
 
 
-        internal Plot FindPlot(IPlot plot, bool createIfNotFound) {
+        internal Plot FindPlot(IPlot plot, bool createIfNotFound, long movieId) {
             Plot p;
             if (plot.Id > 0) {
                 p = Plots.Find(plot.Id);
                 if (p == null || (p.Full != plot.Full)) {
                     if (createIfNotFound) {
-                        p = Plots.Add(new Plot(plot));
+                        p = new Plot(plot);
                     }
                     else {
                         return null;
@@ -185,7 +196,14 @@ namespace Frost.Providers.Frost.DB {
                 return p;
             }
 
-            p = Plots.FirstOrDefault(pr => plot.Full == pr.Full) ?? Plots.Add(new Plot(plot));
+            p = movieId > 0 
+                ? Plots.FirstOrDefault(pr => plot.Full == pr.Full && pr.MovieId == movieId)
+                : Plots.FirstOrDefault(pr => plot.Full == pr.Full);
+            
+            if (p == null || Entry(p).State == EntityState.Deleted) {
+                p = new Plot(plot);
+            }
+
             return p;
         }
 

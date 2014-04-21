@@ -1,67 +1,67 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
 using Frost.Common;
-using Frost.Common.Properties;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
+using RibbonUI.Annotations;
 using RibbonUI.Design;
+using RibbonUI.Design.Fakes;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Windows;
 
 namespace RibbonUI.UserControls.List {
-    class ListAudiosViewModel : INotifyPropertyChanged {
-        private ObservableCollection<MovieAudio> _audios;
+
+    internal class ListAudiosViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private ICollectionView _collectionView;
         private readonly IMoviesDataService _service;
+        private ObservableMovie _selectedMovie;
 
         public ListAudiosViewModel() {
             if (TranslationManager.IsInDesignMode) {
-                LightInjectContainer.Register<IMoviesDataService, DesignMoviesDataService>();
+                _service = new DesignMoviesDataService();
+                SelectedMovie = new ObservableMovie(new FakeMovie());
             }
-
-            _service = LightInjectContainer.GetInstance<IMoviesDataService>();
-
-            if (TranslationManager.IsInDesignMode) {
-                Audios = new ObservableCollection<MovieAudio>(_service.Audios.Select(a => new MovieAudio(a)));
+            else {
+                _service = LightInjectContainer.GetInstance<IMoviesDataService>();
             }
 
             EditCommand = new RelayCommand<MovieAudio>(OnEditClicked, a => a != null);
             RemoveCommand = new RelayCommand<MovieAudio>(OnRemoveClicked, a => a != null);
         }
 
-        public ObservableCollection<MovieAudio> Audios {
-            get { return _audios; }
-            set {
-                if (Equals(value, _audios)) {
-                    return;
-                }
-                _audios = value;
-
-                _collectionView = CollectionViewSource.GetDefaultView(_audios);
-                if (_collectionView == null) {
-                    OnPropertyChanged();
-                    return;
-                }
-
-                PropertyGroupDescription groupDescription = new PropertyGroupDescription("File");
-                if (_collectionView.GroupDescriptions != null) {
-                    _collectionView.GroupDescriptions.Add(groupDescription);
-                }
-
-                OnPropertyChanged();
-            }
-        }
-
         public Window ParentWindow { get; set; }
 
         public ICommand<MovieAudio> EditCommand { get; private set; }
         public ICommand<MovieAudio> RemoveCommand { get; private set; }
+
+        public ObservableMovie SelectedMovie {
+            get { return _selectedMovie; }
+            set {
+                if (Equals(value, _selectedMovie)) {
+                    return;
+                }
+
+                _selectedMovie = value;
+
+                if (_selectedMovie != null) {
+                    _collectionView = CollectionViewSource.GetDefaultView(_selectedMovie.Audios);
+                    if (_collectionView == null) {
+                        OnPropertyChanged();
+                        return;
+                    }
+
+                    PropertyGroupDescription groupDescription = new PropertyGroupDescription("File");
+                    if (_collectionView.GroupDescriptions != null) {
+                        _collectionView.GroupDescriptions.Add(groupDescription);
+                    }
+                }
+                OnPropertyChanged();
+            }
+        }
 
 
         private void OnEditClicked(MovieAudio audio) {
@@ -79,7 +79,7 @@ namespace RibbonUI.UserControls.List {
         }
 
         private void OnRemoveClicked(MovieAudio audio) {
-            
+            SelectedMovie.RemoveAudio(audio);
         }
 
         [NotifyPropertyChangedInvocator]
@@ -90,4 +90,5 @@ namespace RibbonUI.UserControls.List {
             }
         }
     }
+
 }

@@ -43,6 +43,7 @@ namespace Frost.Providers.Xbmc.Provider {
                          .Include("Studios")
                          .Include("File")
                          .Include("Actors")
+                         .Include("Actors.Person")
                          .Load();
                     _movies = _xbmc.Movies.Local.Select(m => new XbmcMovie(m, this));
                 }

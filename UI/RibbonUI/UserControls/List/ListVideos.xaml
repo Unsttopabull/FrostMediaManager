@@ -16,7 +16,7 @@
     <UserControl.Resources>
         <converters:TranslateEnumConverter x:Key="TranslateEnumConverter"/>
     </UserControl.Resources>
-    <ListView x:Name="VideosList" SelectionMode="Single" ItemsSource="{Binding Videos}" ClipToBounds="True">
+    <ListView x:Name="VideosList" SelectionMode="Single" ItemsSource="{Binding SelectedMovie.Videos}" ClipToBounds="True">
         <ListView.GroupStyle>
             <GroupStyle ContainerStyle="{StaticResource ExpanderGroup}"/>
         </ListView.GroupStyle>

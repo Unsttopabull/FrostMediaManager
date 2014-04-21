@@ -5,7 +5,7 @@ using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
 
 namespace RibbonUI.Util.ObservableWrappers {
-    public class MovieCountry : MovieItemBase<ICountry>, IEquatable<MovieCountry> {
+    public class MovieCountry : MovieItemBase<ICountry>, IEquatable<MovieCountry>, IEquatable<ICountry> {
         private readonly IEqualityComparer<ICountry> _comparer;
 
         public MovieCountry(ICountry country) : base(country) {
@@ -48,6 +48,14 @@ namespace RibbonUI.Util.ObservableWrappers {
         public bool Equals(MovieCountry other) {
             return !ReferenceEquals(null, other) &&
                    _comparer.Equals(_observedEntity, other.ObservedEntity);
+        }
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(ICountry other) {
+            return !ReferenceEquals(null, other) &&
+                   _comparer.Equals(_observedEntity, other);
         }
     }
 }

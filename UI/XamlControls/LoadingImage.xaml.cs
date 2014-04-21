@@ -11,7 +11,7 @@ namespace Frost.XamlControls {
 
     /// <summary>Interaction logic for LoadingImage.xaml</summary>
     public partial class LoadingImage : UserControl, INotifyPropertyChanged {
-        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(string), typeof(LoadingImage), new PropertyMetadata(default(string), OnSourceChanged));
+        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(string), typeof(LoadingImage), new PropertyMetadata("", OnSourceChanged));
         public static readonly DependencyProperty ImageWidthProperty = DependencyProperty.Register("ImageWidth", typeof(double), typeof(LoadingImage), new PropertyMetadata(double.PositiveInfinity));
         public static readonly DependencyProperty ImageHeightProperty = DependencyProperty.Register("ImageHeight", typeof(double), typeof(LoadingImage), new PropertyMetadata(double.PositiveInfinity));
         public static readonly DependencyProperty ImageMaxWidthProperty = DependencyProperty.Register("ImageMaxWidth", typeof(double), typeof(LoadingImage), new PropertyMetadata(double.PositiveInfinity));
@@ -117,11 +117,19 @@ namespace Frost.XamlControls {
             }
 
             string source = e.NewValue as string;
-            if (source == null) {
+            if (string.IsNullOrEmpty(source)) {
+                li.ImageFailed(null, null);
                 return;
             }
 
-            li.ImageSource = new BitmapImage(new Uri(source));
+            try {
+                li.ImageSource = new BitmapImage(new Uri(source));
+            }
+            catch {
+                li.ImageFailed(null, null);
+                return;
+            }
+
             li.ImageSource.DownloadCompleted += li._downloadCompleted;
             li.ImageSource.DownloadFailed += li._imageFailed;
             li.ImageSource.DecodeFailed += li._imageFailed;

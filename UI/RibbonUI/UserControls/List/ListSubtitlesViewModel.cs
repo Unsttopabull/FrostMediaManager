@@ -7,9 +7,9 @@ using System.Windows;
 using System.Windows.Data;
 using Frost.Common;
 using Frost.Common.Models.Provider;
-using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 using GalaSoft.MvvmLight;
+using RibbonUI.Annotations;
 using RibbonUI.Design;
 using RibbonUI.Design.Models;
 using RibbonUI.Messages.Subtitles;
@@ -21,8 +21,8 @@ namespace RibbonUI.UserControls.List {
 
     public class ListSubtitlesViewModel : ViewModelBase {
         private readonly IMoviesDataService _service;
-        private ObservableCollection<MovieSubtitle> _subtitles;
         private ICollectionView _collectionView;
+        private ObservableMovie _selectedMovie;
 
         public ListSubtitlesViewModel() {
             _service = IsInDesignMode
@@ -55,20 +55,20 @@ namespace RibbonUI.UserControls.List {
             RemoveCommand = new RelayCommand<MovieSubtitle>(OnRemoveClicked, s => s != null);
         }
 
-        public ObservableCollection<MovieSubtitle> Subtitles {
-            get { return _subtitles; }
+        public ObservableMovie SelectedMovie {
+            get { return _selectedMovie; }
             set {
-                if (Equals(value, _subtitles)) {
+                if (Equals(value, _selectedMovie)) {
                     return;
                 }
-                _subtitles = value;
+                _selectedMovie = value;
 
-                if (_subtitles != null) {
-                    _collectionView = CollectionViewSource.GetDefaultView(_subtitles);
+                if (_selectedMovie != null) {
+                    _collectionView = CollectionViewSource.GetDefaultView(_selectedMovie.Subtitles);
                     PropertyGroupDescription groupDescription = new PropertyGroupDescription("File");
                     if (_collectionView.GroupDescriptions != null) {
                         _collectionView.GroupDescriptions.Add(groupDescription);
-                    }
+                    }                    
                 }
 
                 OnPropertyChanged();

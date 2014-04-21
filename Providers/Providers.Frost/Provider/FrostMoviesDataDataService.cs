@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
-using System.Data.Entity.ModelConfiguration;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
@@ -37,13 +34,6 @@ namespace Frost.Providers.Frost.Provider {
 
         public FrostMoviesDataDataService() {
             _mvc = new FrostDbContainer();
-
-            StreamWriter sw = new StreamWriter(IOFile.Create("frost.sql"));
-            _mvc.Database.Log = s => {
-                lock (sw) {
-                    sw.WriteLine(s);
-                }
-            };
         }
 
         public IEnumerable<IMovie> Movies {
@@ -58,6 +48,7 @@ namespace Frost.Providers.Frost.Provider {
                     //.Include("Genres")
                     //.Include("Awards")
                     .Include("Actors")
+                    .Include("Actors.Person")
                     .Include("Plots")
                     //.Include("Directors")
                     //.Include("Countries")
@@ -232,8 +223,8 @@ namespace Frost.Providers.Frost.Provider {
             }
         }
 
-        internal Plot FindPlot(IPlot plot, bool createIfNotFound) {
-            return _mvc.FindPlot(plot, createIfNotFound);
+        internal Plot FindPlot(IPlot plot, bool createIfNotFound, long movieId) {
+            return _mvc.FindPlot(plot, createIfNotFound, movieId);
         }
 
         #endregion
@@ -372,6 +363,22 @@ namespace Frost.Providers.Frost.Provider {
             if (entry != null) {
                 entry.State = EntityState.Deleted;
             }
+        }
+
+        internal T FindById<T>(long id) where T : class {
+            DbSet<T> dbSet;
+
+            try {
+                dbSet = _mvc.Set<T>();
+            }
+            catch {
+                return null;
+            }
+
+            if (dbSet != null) {
+                return dbSet.Find(id);
+            }
+            return null;
         }
 
         public void SaveDetected(MovieInfo movieInfo) {

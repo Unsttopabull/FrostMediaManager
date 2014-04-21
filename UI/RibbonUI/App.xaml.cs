@@ -80,10 +80,11 @@ namespace RibbonUI {
 
         private void UnhandledExeption(object sender, DispatcherUnhandledExceptionEventArgs e) {
             if (e.Exception is DbException) {
-                if (Log.IsErrorEnabled && e.Exception != null) {
-                    Log.Error("There was an error working with the database.", e.Exception);
-                }
                 return;
+            }
+
+            if (Log.IsErrorEnabled && e.Exception != null) {
+                Log.Error("There was an error working with the database.", e.Exception);
             }
 
             MessageBox.Show(e.Exception.Message);

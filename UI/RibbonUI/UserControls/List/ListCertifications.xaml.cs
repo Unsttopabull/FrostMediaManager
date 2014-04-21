@@ -7,19 +7,19 @@ namespace RibbonUI.UserControls.List {
 
     /// <summary>Interaction logic for ListCertifications.xaml</summary>
     public partial class ListCertifications : UserControl {
-        public static readonly DependencyProperty CertificationsProperty = DependencyProperty.Register("Certifications", typeof(ObservableCollection<MovieCertification>), typeof(ListCertifications), new PropertyMetadata(default(ObservableCollection<MovieCertification>), OnCertificationsChanged));
+        public static readonly DependencyProperty MovieProperty = DependencyProperty.Register("Movie", typeof(ObservableMovie), typeof(ListCertifications), new PropertyMetadata(default(ObservableMovie), OnCertificationsChanged));
 
         public ListCertifications() {
             InitializeComponent();
         }
 
-        public ObservableCollection<MovieCertification> Certifications {
-            get { return (ObservableCollection<MovieCertification>) GetValue(CertificationsProperty); }
-            set { SetValue(CertificationsProperty, value); }
+        public ObservableMovie Movie {
+            get { return (ObservableMovie) GetValue(MovieProperty); }
+            set { SetValue(MovieProperty, value); }
         }
 
         private static void OnCertificationsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            ((ListCertificationsViewModel) ((ListCertifications) d).DataContext).Certifications = (ObservableCollection<MovieCertification>) e.NewValue;
+            ((ListCertificationsViewModel) ((ListCertifications) d).DataContext).SelectedMovie = (ObservableMovie) e.NewValue;
         }
     }
 }

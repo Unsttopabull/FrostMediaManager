@@ -77,7 +77,7 @@ namespace Frost.Providers.Frost.DB {
 
         /// <summary>Gets or sets the movie foreign key.</summary>
         /// <value>The movie foreign key.</value>
-        public long? MovieId { get; set; }
+        public long MovieId { get; set; }
 
         /// <summary>Gets or sets the movie this plot belongs to.</summary>
         /// <value>Gets or sets the movie this plot belongs to.</value>

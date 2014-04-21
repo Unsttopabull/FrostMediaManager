@@ -73,6 +73,9 @@
                 <RibbonButton SmallImageSource="../Images/refresh.png" Label="Refresh detection" />
                 <RibbonButton SmallImageSource="../Images/remove2.png" Label="Remove movie" />
             </RibbonGroup>
+            <RibbonGroup>
+                <RibbonButton LargeImageSource="../Images/save.png" Label="Save changes" Command="{Binding SaveChangesCommand}"/>
+            </RibbonGroup>
         </RibbonTab>
 
         <!-- Ribbon Tab #3: -->

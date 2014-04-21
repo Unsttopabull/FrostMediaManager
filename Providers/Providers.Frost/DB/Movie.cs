@@ -185,8 +185,6 @@ namespace Frost.Providers.Frost.DB {
         /// <value>The set this movie is a part of.</value>
         public virtual Set Set { get; set; }
 
-        //public long? PlotId { get; set; }
-        
         public virtual Plot MainPlot { get; set; }
 
         //public long? CoverId { get; set; }

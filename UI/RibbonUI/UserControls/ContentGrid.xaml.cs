@@ -89,9 +89,9 @@ namespace RibbonUI.UserControls {
         }
 
         private void MovieListOnSelectionChanged(object sender, SelectionChangedEventArgs e) {
-            if (EditMovie != null && EditMovie.MoviePlotCombo.HasItems) {
-                EditMovie.MoviePlotCombo.SelectedIndex = 0;
-            }
+            //if (EditMovie != null && EditMovie.MoviePlotCombo.HasItems) {
+            //    EditMovie.MoviePlotCombo.SelectedIndex = 0;
+            //}
 
             if (MovieList == null || MovieFlags == null) {
                 return;

@@ -329,9 +329,40 @@ namespace Frost.Providers.Frost.Proxies {
         public IPlot MainPlot {
             get { return Entity.MainPlot; }
             set {
-                Entity.MainPlot = value != null
-                    ? Service.FindPlot(value, true)
-                    : null;                
+                if (value == null) {
+                    Entity.MainPlot = null;
+                }
+                else {
+                    Plot p = Service.FindPlot(value, true, Id);
+
+                    if (p.MovieId == null || p.MovieId <= 0) {
+                        long? id;
+                        using (FrostDbContainer fdc = new FrostDbContainer()) {
+                            Movie movie = fdc.Movies.Find(Id);
+                            if (movie == null) {
+                                return;
+                            }
+
+                            Plot item = new Plot(value);
+                            movie.Plots.Add(item);
+                            try {
+                                fdc.SaveChanges();
+                            }
+                            catch {
+                                return;
+                            }
+                            id = item.MovieId;
+                        }
+
+                        if (id.HasValue) {
+                            p = Service.FindById<Plot>(id.Value);
+                        }
+                    }
+ 
+                    if (p != null) {
+                        Entity.MainPlot = p;
+                    }
+                }
             }
         }
 
@@ -494,6 +525,10 @@ namespace Frost.Providers.Frost.Proxies {
         }
 
         public bool RemoveDirector(IPerson director) {
+            if (director is Person) {
+                return Entity.Directors.Remove(director as Person);
+            }
+
             Person p = Service.FindPerson(director, false);
             return Entity.Directors.Remove(p);
         }
@@ -540,19 +575,24 @@ namespace Frost.Providers.Frost.Proxies {
         #region Plots
 
         public IPlot AddPlot(IPlot plot) {
-            Plot p = Service.FindPlot(plot, true);
-            Entity.Plots.Add(p);
-            return p;
+            Plot p = new Plot(plot);
+            return Entity.Plots.Add(p)
+                ? p 
+                : null;
         }
 
         public bool RemovePlot(IPlot plot) {
-            Plot p = Service.FindPlot(plot, false);
+            if (plot is Plot) {
+                return Entity.Plots.Remove(plot as Plot);
+            }
 
+            Plot p = Service.FindPlot(plot, false, Id);
             if (p != null) {
                 bool removed = Entity.Plots.Remove(p);
                 Service.MarkAsDeleted(p);
                 return removed;
             }
+
             return false;
         }
 

@@ -13,10 +13,11 @@ namespace Frost.Common.Comparers {
         /// <param name="rhs">The second object of type <paramref name="T"/> to compare.</param>
         public bool Equals(ICountry lhs, ICountry rhs) {
             if (ReferenceEquals(lhs, rhs)) {
-                return false;
-            }
-            if (ReferenceEquals(lhs, rhs)) {
                 return true;
+            }
+
+            if (lhs == null || rhs == null) {
+                return false;
             }
 
             if (lhs.Id > 0 && rhs.Id > 0) {

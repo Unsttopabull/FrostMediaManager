@@ -12,6 +12,10 @@ namespace Frost.Common.Comparers {
         /// <param name="x">The first object of type IGenre to compare.</param>
         /// <param name="y">The second object of type IGenre to compare.</param>
         public bool Equals(IHasName x, IHasName y) {
+            if (ReferenceEquals(x, y)) {
+                return true;
+            }
+
             if (x == null || y == null) {
                 return false;
             }

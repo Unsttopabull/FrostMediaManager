@@ -17,7 +17,7 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <ObjectDataProvider x:Key="Encodings" ObjectType="{x:Type sys:Encoding}" MethodName="GetEncodings"/>
     </UserControl.Resources>
-    <ListView x:Name="SubtitlesList" SelectionMode="Single" ItemsSource="{Binding Subtitles}" ClipToBounds="True">
+    <ListView x:Name="SubtitlesList" SelectionMode="Single" ItemsSource="{Binding SelectedMovie.Subtitles}" ClipToBounds="True">
         <ListView.GroupStyle>
             <GroupStyle ContainerStyle="{StaticResource ExpanderGroup}" />
         </ListView.GroupStyle>

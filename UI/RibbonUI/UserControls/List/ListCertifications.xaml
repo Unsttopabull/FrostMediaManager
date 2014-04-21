@@ -12,7 +12,7 @@
     <UserControl.DataContext>
         <vm:ListCertificationsViewModel/>
     </UserControl.DataContext>
-    <ListView x:Name="CertificationsList" SelectionMode="Single" ItemsSource="{Binding Certifications}" ClipToBounds="True">
+    <ListView x:Name="CertificationsList" SelectionMode="Single" ItemsSource="{Binding SelectedMovie.Certifications}" ClipToBounds="True">
         <ListView.Resources>
             <Style TargetType="ListViewItem">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />

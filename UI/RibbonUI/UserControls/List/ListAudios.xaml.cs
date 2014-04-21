@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using RibbonUI.Util.ObservableWrappers;
 
@@ -7,19 +6,19 @@ namespace RibbonUI.UserControls.List {
 
     /// <summary>Interaction logic for EditAudios.xaml</summary>
     public partial class ListAudios : UserControl {
-        public static readonly DependencyProperty AudiosProperty = DependencyProperty.Register("Audios", typeof(ObservableCollection<MovieAudio>), typeof(ListAudios), new PropertyMetadata(default(ObservableCollection<MovieAudio>), AudiosChanged));
+        public static readonly DependencyProperty MovieProperty = DependencyProperty.Register("Movie", typeof(ObservableMovie), typeof(ListAudios), new PropertyMetadata(default(ObservableMovie), MovieChanged));
 
         public ListAudios() {
             InitializeComponent();
         }
 
-        public ObservableCollection<MovieAudio> Audios {
-            get { return (ObservableCollection<MovieAudio>) GetValue(AudiosProperty); }
-            set { SetValue(AudiosProperty, value); }
+        public ObservableMovie Movie {
+            get { return (ObservableMovie) GetValue(MovieProperty); }
+            set { SetValue(MovieProperty, value); }
         }
 
-        private static void AudiosChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            ((ListAudiosViewModel) ((ListAudios) d).DataContext).Audios = (ObservableCollection<MovieAudio>) e.NewValue;
+        private static void MovieChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            ((ListAudiosViewModel) ((ListAudios) d).DataContext).SelectedMovie = (ObservableMovie) e.NewValue;
         }
 
         private void ListAudiosOnLoaded(object sender, RoutedEventArgs e) {

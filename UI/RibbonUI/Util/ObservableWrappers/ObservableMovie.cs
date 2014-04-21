@@ -1,14 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using Frost.Common;
 using Frost.Common.Models.Provider;
 using Frost.DetectFeatures;
+using Frost.GettextMarkupExtension;
+using log4net;
 
 namespace RibbonUI.Util.ObservableWrappers {
 
     public class ObservableMovie : MovieItemBase<IMovie> {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(ObservableMovie));
+        private ObservableCollection<MovieSubtitle> _subtitles;
+        private ObservableCollection<MovieCountry> _countries;
+        private ObservableCollection<MovieStudio> _studios;
+        private ObservableCollection<MovieVideo> _videos;
+        private ObservableCollection<MovieAudio> _audios;
+        private ObservableCollection<IPromotionalVideo> _promotionalVideos;
+        private ObservableCollection<IRating> _ratings;
+        private ObservableCollection<MoviePlot> _plots;
+        private ObservableCollection<MovieArt> _art;
+        private ObservableCollection<MovieCertification> _certifications;
+        private ObservableCollection<IPerson> _writers;
+        private ObservableCollection<MoviePerson> _directors;
+        private ObservableCollection<MovieActor> _actors;
+        private ObservableCollection<ISpecial> _specials;
+        private ObservableCollection<IGenre> _genres;
+        private ObservableCollection<IAward> _awards;
+
         public ObservableMovie(IMovie movie) : base(movie) {
         }
 
@@ -335,135 +356,281 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
         }
 
-        public IArt DefaultFanart {
+        public MovieArt DefaultFanart {
             get {
                 if (ObservedEntity.DefaultFanart != null) {
-                    return ObservedEntity.DefaultFanart;
+                    return new MovieArt(ObservedEntity.DefaultFanart);
                 }
-                IArt art = Art.FirstOrDefault(a => a.Type == ArtType.Fanart && !string.IsNullOrEmpty(a.PreviewOrPath));
+                MovieArt art = Art.FirstOrDefault(a => a.Type == ArtType.Fanart && !string.IsNullOrEmpty(a.PreviewOrPath));
                 return art;
             }
-            set { ObservedEntity.DefaultFanart = value; }
+            set {
+                ObservedEntity.DefaultFanart = value != null
+                    ? value.ObservedEntity
+                    : null;
+
+                OnPropertyChanged();
+            }
         }
 
-        public IArt DefaultCover {
+        public MovieArt DefaultCover {
             get {
                 if (ObservedEntity.DefaultCover != null) {
-                    return ObservedEntity.DefaultCover;
+                    return new MovieArt(ObservedEntity.DefaultCover);
                 }
 
-                IArt art = Art.FirstOrDefault(a => (a.Type == ArtType.Cover || a.Type == ArtType.Poster) && !String.IsNullOrEmpty(a.PreviewOrPath));
+                MovieArt art = Art.FirstOrDefault(a => (a.Type == ArtType.Cover || a.Type == ArtType.Poster) && !String.IsNullOrEmpty(a.PreviewOrPath));
                 return art;
             }
-            set { ObservedEntity.DefaultCover = value; }
+            set {
+                ObservedEntity.DefaultCover = value != null
+                    ? value.ObservedEntity
+                    : null;
+
+                OnPropertyChanged();
+            }
         }
 
-        public IPlot MainPlot {
+        public MoviePlot MainPlot {
             get {
                 if (ObservedEntity.MainPlot != null) {
-                    return ObservedEntity.MainPlot;
+                    return new MoviePlot(ObservedEntity.MainPlot);
                 }
 
                 return Plots.Any()
-                    ? Plots.FirstOrDefault()
-                    : null;
+                           ? Plots.FirstOrDefault()
+                           : null;
             }
-            set { ObservedEntity.MainPlot = value; }
+            set {
+                ObservedEntity.MainPlot = value != null 
+                    ? value.ObservedEntity
+                    : null;
+
+                OnPropertyChanged();
+                OnPropertyChanged("FirstPlot");
+            }
         }
+
         #endregion
 
         #region Relation properties
 
         /// <summary>Gets or sets the movie subtitles.</summary>
         /// <value>The movie subtitles.</value>
-        public IEnumerable<ISubtitle> Subtitles {
-            get { return _observedEntity.Subtitles; }
+        public ObservableCollection<MovieSubtitle> Subtitles {
+            get {
+                if (_subtitles == null) {
+                    _subtitles = _observedEntity.Subtitles == null
+                        ? new ObservableCollection<MovieSubtitle>()
+                        : new ObservableCollection<MovieSubtitle>(_observedEntity.Subtitles.Select(s => new MovieSubtitle(s)));
+                }
+                return _subtitles;
+            }
         }
 
         /// <summary>Gets or sets the countries that this movie was shot or/and produced in.</summary>
         /// <summary>The countries that this movie was shot or/and produced in.</summary>
-        public IEnumerable<ICountry> Countries {
-            get { return _observedEntity.Countries; }
+        public ObservableCollection<MovieCountry> Countries {
+            get {
+                if (_countries == null) {
+                    _countries = _observedEntity.Countries == null 
+                        ? new ObservableCollection<MovieCountry>() 
+                        : new ObservableCollection<MovieCountry>(_observedEntity.Countries.Select(c => new MovieCountry(c)));
+                }
+                return _countries;
+            }
         }
 
         /// <summary>Gets or sets the studio(s) that produced the movie.</summary>
         /// <value>The studio(s) that produced the movie.</value>
-        public IEnumerable<IStudio> Studios {
-            get { return _observedEntity.Studios; }
+        public ObservableCollection<MovieStudio> Studios {
+            get {
+                if (_studios == null) {
+                    _studios = _observedEntity.Studios == null 
+                        ? new ObservableCollection<MovieStudio>() 
+                        : new ObservableCollection<MovieStudio>(_observedEntity.Studios.Select(s => new MovieStudio(s)));
+                }
+                return _studios;
+            }
         }
 
         /// <summary>Gets or sets the information about video streams of this movie.</summary>
         /// <value>The information about video streams of this movie</value>
-        public IEnumerable<IVideo> Videos {
-            get { return _observedEntity.Videos; }
+        public ObservableCollection<MovieVideo> Videos {
+            get {
+                if (_videos == null) {
+                    _videos = _observedEntity.Videos == null 
+                        ? new ObservableCollection<MovieVideo>() 
+                        : new ObservableCollection<MovieVideo>(_observedEntity.Videos.Select(v => new MovieVideo(v)));
+                }
+                return _videos;
+            }
         }
 
         /// <summary>Gets or sets the information about audio streams of this movie.</summary>
         /// <value>The information about audio streams of this movie</value>
-        public IEnumerable<IAudio> Audios {
-            get { return _observedEntity.Audios; }
+        public ObservableCollection<MovieAudio> Audios {
+            get {
+                if (_audios == null) {
+                    _audios = _observedEntity.Audios == null
+                        ? new ObservableCollection<MovieAudio>()
+                        : new ObservableCollection<MovieAudio>(_observedEntity.Audios.Select(a => new MovieAudio(a)));
+                }
+                return _audios;
+            }
         }
 
         /// <summary>Gets or sets the information about this movie's critics and their ratings</summary>
         /// <value>The information about this movie's critics and their ratings</value>
-        public IEnumerable<IRating> Ratings {
-            get { return _observedEntity.Ratings; }
+        public ObservableCollection<IRating> Ratings {
+            get {
+                if (_ratings == null) {
+                    _ratings = _observedEntity.Ratings == null 
+                        ? new ObservableCollection<IRating>() 
+                        : new ObservableCollection<IRating>(_observedEntity.Ratings);
+                }
+
+                return _ratings;
+            }
         }
 
         /// <summary>Gets or sets this movie's story and plot with summary and a tagline.</summary>
         /// <value>This movie's story and plot with summary and a tagline</value>
-        public IEnumerable<IPlot> Plots {
-            get { return _observedEntity.Plots; }
+        public ObservableCollection<MoviePlot> Plots {
+            get {
+                if (_plots == null) {
+                    _plots = _observedEntity.Plots == null 
+                        ? new ObservableCollection<MoviePlot>() 
+                        : new ObservableCollection<MoviePlot>(_observedEntity.Plots.Select(p => new MoviePlot(p)));
+                }
+
+                return _plots;
+            }
         }
 
         /// <summary>Gets or sets the movie promotional images.</summary>
         /// <value>The movie promotional images</value>
-        public IEnumerable<IArt> Art {
-            get { return _observedEntity.Art; }
+        public ObservableCollection<MovieArt> Art {
+            get {
+                if (_art == null) {
+                    _art = _observedEntity.Art == null
+                        ? new ObservableCollection<MovieArt>()
+                        : new ObservableCollection<MovieArt>(_observedEntity.Art.Select(a => new MovieArt(a)));
+                }
+
+                return _art;
+            }
         }
 
         /// <summary>Gets or sets the information about this movie's certification ratings/restrictions in certain countries.</summary>
         /// <value>The information about this movie's certification ratings/restrictions in certain countries.</value>
-        public IEnumerable<ICertification> Certifications {
-            get { return _observedEntity.Certifications; }
+        public ObservableCollection<MovieCertification> Certifications {
+            get {
+                if (_certifications == null) {
+                    _certifications = _observedEntity.Certifications == null
+                        ? new ObservableCollection<MovieCertification>()
+                        : new ObservableCollection<MovieCertification>(_observedEntity.Certifications.Select(c => new MovieCertification(c)));
+                }
+
+                return _certifications;
+            }
         }
 
         /// <summary>Gets or sets the name of the credited writer(s).</summary>
         /// <value>The names of the credited script writer(s)</value>
-        public IEnumerable<IPerson> Writers {
-            get { return _observedEntity.Writers; }
+        public ObservableCollection<IPerson> Writers {
+            get {
+                if (_writers == null) {
+                    _writers = _observedEntity.Writers == null 
+                        ? new ObservableCollection<IPerson>() 
+                        : new ObservableCollection<IPerson>(_observedEntity.Writers);
+                }
+
+                return _writers;
+            }
         }
 
         /// <summary>Gets or sets the movie directors.</summary>
         /// <value>People that directed this movie.</value>
-        public IEnumerable<IPerson> Directors {
-            get { return _observedEntity.Directors; }
+        public ObservableCollection<MoviePerson> Directors {
+            get {
+                if (_directors == null) {
+                    _directors = _observedEntity.Directors == null 
+                        ? new ObservableCollection<MoviePerson>() 
+                        : new ObservableCollection<MoviePerson>(_observedEntity.Directors.Select(p => new MoviePerson(p)));
+                }
+
+                return _directors;
+            }
         }
 
         /// <summary>Gets or sets the Person to Movie link with payload as in character name the person is protraying.</summary>
         /// <value>The Person to Movie link with payload as in character name the person is protraying.</value>
-        public IEnumerable<IActor> Actors {
-            get { return _observedEntity.Actors; }
+        public ObservableCollection<MovieActor> Actors {
+            get {
+                if (_actors == null) {
+                    if (_observedEntity.Actors == null) {
+                        _actors = new ObservableCollection<MovieActor>();
+                    }
+                    else {
+                        _actors = new ObservableCollection<MovieActor>(_observedEntity.Actors.Select(a => new MovieActor(a)));
+                    }
+                }
+
+                return _actors;
+            }
         }
 
         /// <summary>Gets or sets the special information about this movie release.</summary>
         /// <value>The special information about this movie release</value>
-        public IEnumerable<ISpecial> Specials {
-            get { return _observedEntity.Specials; }
+        public ObservableCollection<ISpecial> Specials {
+            get {
+                if (_specials == null) {
+                    _specials = _observedEntity.Specials == null 
+                        ? new ObservableCollection<ISpecial>() 
+                        : new ObservableCollection<ISpecial>(_observedEntity.Specials);
+                }
+
+                return _specials;
+            }
         }
 
         /// <summary>Gets or sets the movie genres.</summary>
         /// <value>The movie genres.</value>
-        public IEnumerable<IGenre> Genres {
-            get { return _observedEntity.Genres; }
+        public ObservableCollection<IGenre> Genres {
+            get {
+                if (_genres == null) {
+                    _genres = _observedEntity.Genres == null 
+                        ? new ObservableCollection<IGenre>() 
+                        : new ObservableCollection<IGenre>(_observedEntity.Genres);
+                }
+
+                return _genres;
+            }
         }
 
-        public IEnumerable<IAward> Awards {
-            get { return _observedEntity.Awards; }
+        public ObservableCollection<IAward> Awards {
+            get {
+                if (_awards == null) {
+                    _awards = _observedEntity.Awards == null
+                        ? new ObservableCollection<IAward>()
+                        : new ObservableCollection<IAward>(_observedEntity.Awards);
+                }
+
+                return _awards;
+            }
         }
 
-        public IEnumerable<IPromotionalVideo> PromotionalVideos {
-            get { return _observedEntity.PromotionalVideos; }
+        public ObservableCollection<IPromotionalVideo> PromotionalVideos {
+            get {
+                if (_promotionalVideos == null) {
+                    _promotionalVideos = _observedEntity.PromotionalVideos == null 
+                        ? new ObservableCollection<IPromotionalVideo>()
+                        : new ObservableCollection<IPromotionalVideo>(_observedEntity.PromotionalVideos);
+                }
+
+                return _promotionalVideos;
+            }
         }
 
         #endregion
@@ -496,6 +663,82 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         #region Utlity
 
+        #region Awards
+
+        public int NumberOfOscarsWon {
+            get {
+                return Awards != null
+                    ? Awards.Count(a => a.Organization == "Oscar" && !a.IsNomination)
+                    : 0;
+            }
+        }
+
+        public int NumberOfGoldenGlobesWon {
+            get {
+                return Awards != null
+                    ? Awards.Count(a => a.Organization == "Golden Globe" && !a.IsNomination)
+                    : 0;
+            }
+        }
+
+        public int NumberOfGoldenGlobeNominations {
+            get {
+                return Awards != null
+                    ? Awards.Count(a => a.Organization == "Golden Globe" && a.IsNomination)
+                    : 0;
+            }
+        }
+
+        public int NumberOfCannesAwards {
+            get {
+                return Awards != null
+                    ? Awards.Count(a => a.Organization == "Cannes" && !a.IsNomination)
+                    : 0;
+            }
+        }
+
+        public int NumberOfCannesNominations {
+            get {
+                return Awards != null
+                    ? Awards.Count(a => a.Organization == "Cannes" && a.IsNomination)
+                    : 0;
+            }
+        }
+
+        public int NumberOfOscarNominations {
+            get {
+                return Awards != null
+                    ? Awards.Count(a => a.Organization == "Oscar" && a.IsNomination)
+                    : 0;
+            }
+        }
+
+        #endregion
+
+        /// <summary>Gets the US MPAA movie rating.</summary>
+        /// <value>A string with the MPAA movie rating</value>
+        public string MPAARating {
+            get {
+                if (Certifications == null) {
+                    return null;
+                }
+
+                ICertification mpaa = null;
+                try {
+                    mpaa = Certifications.FirstOrDefault(c => c.Country.ISO3166.Alpha3.Equals("usa", StringComparison.OrdinalIgnoreCase));
+                }
+                catch (Exception e) {
+                    if (Log.IsErrorEnabled) {
+                        Log.Error(string.Format("Error while trying to retreive MPAA rating for movie \"{0}\".", Title), e);
+                    }
+                }
+
+                return mpaa != null
+                           ? mpaa.Rating
+                           : null;
+            }
+        }
+
         public string DurationFormatted {
             get {
                 long? sum = Runtime ?? GetVideoRuntimeSum();
@@ -514,7 +757,7 @@ namespace RibbonUI.Util.ObservableWrappers {
 
                 try {
                     if (Studios.Any()) {
-                        IStudio studio = Studios.FirstOrDefault();
+                        MovieStudio studio = Studios.FirstOrDefault();
                         if (studio != null) {
                             return studio.Name;
                         }
@@ -540,15 +783,31 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
         }
 
-        public IPlot FirstPlot {
+        public MoviePlot FirstPlot {
             get {
                 if (ObservedEntity.MainPlot != null) {
-                    return ObservedEntity.MainPlot;
+                    return new MoviePlot(ObservedEntity.MainPlot);
                 }
 
                 return Plots.Any()
-                           ? Plots.FirstOrDefault()
-                           : null;
+                    ? Plots.FirstOrDefault()
+                    : null;
+            }
+        }
+
+        public string GenreNames {
+            get {
+                return Genres != null
+                    ? string.Join(", ", Genres.Select(g => g.Name)) 
+                    : null;
+            }
+        }
+
+        public string DirectorNames {
+            get {
+                return Directors != null
+                    ? string.Join(", ", Directors.Select(g => g.Name)) 
+                    : null;
             }
         }
 
@@ -572,20 +831,55 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         #region Add/Remove
 
-        public IActor AddActor(IActor actor) {
-            return Add(_observedEntity.AddActor, actor);
+        public void RemoveArt(IArt art) {
         }
 
-        public bool RemoveActor(IActor actor) {
-            return Remove(_observedEntity.RemoveActor, actor);
+        public void AddActor(IActor actor) {
+            IActor a = Add(_observedEntity.AddActor, actor);
+            if (a == null) {
+                return;
+            }
+
+            if (!Actors.Any(act => act.Equals(a))) {
+                Actors.Add(new MovieActor(a));
+            }
+            else {
+                MessageBox.Show(TranslationManager.T("This person has already been added to this movie as {0}.", "an actor"));
+            }
+        }
+
+        public bool RemoveActor(MovieActor actor) {
+            bool success = Remove(_observedEntity.RemoveActor, actor.ObservedEntity as IActor);
+            if (success) {
+                Actors.Remove(actor);
+            }
+            return success;
         }
 
         public IPerson AddDirector(IPerson director) {
-            return Add(_observedEntity.AddDirector, director);
+            IPerson p = Add(_observedEntity.AddDirector, director);
+
+            if (p == null) {
+                return p;
+            }
+
+            if (!Directors.Any(d => d.Equals(p))) {
+                Directors.Add(new MoviePerson(p));
+                OnPropertyChanged("DirectorNames");
+            }
+            else {
+                MessageBox.Show(TranslationManager.T("This person has already been added to this movie as {0}.", "a director"));
+            }
+            return p;
         }
 
-        public bool RemoveDirector(IPerson director) {
-            return Remove(_observedEntity.RemoveDirector, director);
+        public bool RemoveDirector(MoviePerson director) {
+            bool removed = Remove(_observedEntity.RemoveDirector, director.ObservedEntity);
+            if (removed) {
+                Directors.Remove(director);
+                OnPropertyChanged("DirectorNames");
+            }
+            return removed;
         }
 
         public ISpecial AddSpecial(ISpecial special) {
@@ -596,36 +890,89 @@ namespace RibbonUI.Util.ObservableWrappers {
             return Remove(_observedEntity.RemoveSpecial, special);
         }
 
-        public IGenre AddGenre(IGenre genre) {
-            return Add(_observedEntity.AddGenre, genre);
+        public void AddGenre(IGenre genre) {
+            IGenre g = Add(_observedEntity.AddGenre, genre);
+            if (g == null) {
+                return;
+            }
+
+            if (!Genres.Contains(g)) {
+                Genres.Add(g);
+                OnPropertyChanged("GenreNames");
+            }
+            else {
+                MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "genre"));
+            }
         }
 
-        public bool RemoveGenre(IGenre genre) {
-            return Remove(_observedEntity.RemoveGenre, genre);
+        public void RemoveGenre(IGenre genre) {
+            bool success = Remove(_observedEntity.RemoveGenre, genre);
+            if (success) {
+                Genres.Remove(genre);
+                OnPropertyChanged("GenreNames");
+            }
         }
 
-        public IPlot AddPlot(IPlot plot) {
-            return Add(_observedEntity.AddPlot, plot);
+        public void AddPlot(IPlot plot) {
+            IPlot p = Add(_observedEntity.AddPlot, plot);
+
+            if (p != null) {
+                Plots.Add(new MoviePlot(p));
+                OnPropertyChanged("FirstPlot");
+            }
         }
 
-        public bool RemovePlot(IPlot plot) {
-            return Remove(_observedEntity.RemovePlot, plot);
+        public bool RemovePlot(MoviePlot plot) {
+            bool success = Remove(_observedEntity.RemovePlot, plot.ObservedEntity);
+
+            if (success) {
+                Plots.Remove(plot);
+                OnPropertyChanged("FirstPlot");
+            }
+           
+            return success;
         }
 
-        public IStudio AddStudio(IStudio studio) {
-            return Add(_observedEntity.AddStudio, studio);
+        public void AddStudio(IStudio studio) {
+            IStudio stud = Add(_observedEntity.AddStudio, studio);
+            if (stud == null) {
+                return;
+            }
+
+            if (!Studios.Any(s => s.Equals(stud))) {
+                Studios.Add(new MovieStudio(stud));
+            }
+            else {
+                MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "genre"));
+            }
         }
 
-        public bool RemoveStudio(IStudio studio) {
-            return Remove(_observedEntity.RemoveStudio, studio);
+        public void RemoveStudio(MovieStudio studio) {
+            bool success = Remove(_observedEntity.RemoveStudio, studio.ObservedEntity);
+            if (success) {
+                Studios.Remove(studio);
+            }
         }
 
-        public ICountry AddCountry(ICountry country) {
-            return Add(_observedEntity.AddCountry, country);
+        public void AddCountry(ICountry country) {
+            ICountry c = Add(_observedEntity.AddCountry, country);
+            if (c == null) {
+                return;
+            }
+
+            if (!Countries.Any(cntry => cntry.Equals(c))) {
+                Countries.Add(new MovieCountry(c));
+            }
+            else {
+                MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "country"));
+            }
         }
 
-        public bool RemoveCountry(ICountry country) {
-            return Remove(_observedEntity.RemoveCountry, country);
+        public void RemoveCountry(MovieCountry country) {
+            bool success = Remove(_observedEntity.RemoveCountry, country.ObservedEntity);
+            if (success) {
+                Countries.Remove(country);
+            }
         }
 
         public ISubtitle AddSubtitle(ISubtitle subtitle) {
@@ -634,6 +981,10 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         public bool RemoveSubtitle(ISubtitle subtitle) {
             return Remove(_observedEntity.RemoveSubtitle, subtitle);
+        }
+
+        public bool RemoveAudio(MovieAudio audio) {
+            throw new NotImplementedException();
         }
 
         private bool Remove<T>(Func<T, bool> removeItem, T item) where T : IMovieEntity {

@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using RibbonUI.Util.ObservableWrappers;
 
@@ -7,19 +6,19 @@ namespace RibbonUI.UserControls.List {
 
     /// <summary>Interaction logic for EditArt.xaml</summary>
     public partial class ListArt : UserControl {
-        public static readonly DependencyProperty ArtProperty = DependencyProperty.Register("Art", typeof(ObservableCollection<MovieArt>), typeof(ListArt), new PropertyMetadata(default(ObservableCollection<MovieArt>), ArtChanged));
+        public static readonly DependencyProperty MovieProperty = DependencyProperty.Register("Movie", typeof(ObservableMovie), typeof(ListArt), new PropertyMetadata(default(ObservableMovie), MovieChanged));
 
         public ListArt() {
             InitializeComponent();
         }
 
-        public ObservableCollection<MovieArt> Art {
-            get { return (ObservableCollection<MovieArt>) GetValue(ArtProperty); }
-            set { SetValue(ArtProperty, value); }
+        public ObservableMovie Movie {
+            get { return (ObservableMovie) GetValue(MovieProperty); }
+            set { SetValue(MovieProperty, value); }
         }
 
-        private static void ArtChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-            ((ListArtViewModel) ((ListArt) d).DataContext).Art = (ObservableCollection<MovieArt>) e.NewValue;
+        private static void MovieChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+            ((ListArtViewModel) ((ListArt) d).DataContext).SelectedMovie = (ObservableMovie) e.NewValue;
         }
 
     }

@@ -26,10 +26,6 @@ namespace RibbonUI.UserControls {
         private string _movieSearchFilter;
         private ObservableMovie _selectedMovie;
         private ObservableCollection<ObservableMovie> _movies;
-        private ObservableCollection<MovieVideo> _videos;
-        private ObservableCollection<MovieAudio> _audios;
-        private ObservableCollection<MovieSubtitle> _subtitles;
-        private ObservableCollection<MovieArt> _art;
         private DateTime _lastChangedMovie;
         private ObservableCollection<MovieCertification> _certifications;
 
@@ -92,28 +88,7 @@ namespace RibbonUI.UserControls {
                 _selectedMovie = value;
 
                 if (_selectedMovie != null) {
-                    var videos = _selectedMovie.Videos;
-                    var audios = _selectedMovie.Audios;
-                    var subs = _selectedMovie.Subtitles;
-                    var art = _selectedMovie.Art;
                     var certs = _selectedMovie.Certifications;
-
-                    Videos = videos == null
-                        ? new ObservableCollection<MovieVideo>()
-                        : new ObservableCollection<MovieVideo>(videos.Select(v => new MovieVideo(v)));
-
-                    Audios = audios == null
-                        ? new ObservableCollection<MovieAudio>()
-                        : new ObservableCollection<MovieAudio>(audios.Select(a => new MovieAudio(a)));
-
-                    Subtitles = subs == null
-                        ? new ObservableCollection<MovieSubtitle>()
-                        : new ObservableCollection<MovieSubtitle>(subs.Select(s => new MovieSubtitle(s)));
-
-
-                    Art = art == null
-                        ? new ObservableCollection<MovieArt>()
-                        : new ObservableCollection<MovieArt>(art.Select(a => new MovieArt(a)));
 
                     Certifications = certs == null
                         ? new ObservableCollection<MovieCertification>()
@@ -142,47 +117,6 @@ namespace RibbonUI.UserControls {
                     return;
                 }
                 _certifications = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollection<MovieVideo> Videos {
-            get { return _videos; }
-            set {
-                if (Equals(value, _videos)) {
-                    return;
-                }
-                _videos = value;
-                OnPropertyChanged();
-            }
-        }
-        public ObservableCollection<MovieAudio> Audios {
-            get { return _audios; }
-            set {
-                if (Equals(value, _audios)) {
-                    return;
-                }
-                _audios = value;
-                OnPropertyChanged();
-            }
-        }
-        public ObservableCollection<MovieSubtitle> Subtitles {
-            get { return _subtitles; }
-            set {
-                if (Equals(value, _subtitles)) {
-                    return;
-                }
-                _subtitles = value;
-                OnPropertyChanged();
-            }
-        }
-        public ObservableCollection<MovieArt> Art {
-            get { return _art; }
-            set {
-                if (Equals(value, _art)) {
-                    return;
-                }
-                _art = value;
                 OnPropertyChanged();
             }
         }

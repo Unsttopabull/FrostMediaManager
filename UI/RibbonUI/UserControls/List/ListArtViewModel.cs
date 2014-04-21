@@ -1,39 +1,39 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Data;
-using Frost.Common.Properties;
+using Frost.Common;
 using Frost.XamlControls.Commands;
+using RibbonUI.Annotations;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls.List {
+
     public class ListArtViewModel : INotifyPropertyChanged {
-        private ObservableCollection<MovieArt> _art;
-        private ICollectionView _collectionView;
         public event PropertyChangedEventHandler PropertyChanged;
+        private ICollectionView _collectionView;
+        private ObservableMovie _selectedMovie;
 
         public ListArtViewModel() {
             RemoveCommand = new RelayCommand<MovieArt>(RemoveOnClick, art => art != null);
-            SetAsDefaultCommand = new RelayCommand<MovieArt>(SetAsDefaultOnClick, art => art != null);
+            SetAsDefaultCommand = new RelayCommand<MovieArt>(SetAsDefaultOnClick, CheckArt);
         }
 
-        public ObservableCollection<MovieArt> Art {
-            get { return _art; }
+        public ObservableMovie SelectedMovie {
+            get { return _selectedMovie; }
             set {
-                if (Equals(value, _art)) {
+                if (Equals(value, _selectedMovie)) {
                     return;
                 }
-                _art = value;
+                _selectedMovie = value;
 
-                _collectionView = CollectionViewSource.GetDefaultView(_art);
-                if (_collectionView == null) {
-                    OnPropertyChanged();
-                    return;
-                }
-
-                PropertyGroupDescription groupDescription = new PropertyGroupDescription("Type");
-                if (_collectionView.GroupDescriptions != null) {
-                    _collectionView.GroupDescriptions.Add(groupDescription);
+                if (_selectedMovie != null) {
+                    _collectionView = CollectionViewSource.GetDefaultView(_selectedMovie.Art);
+                    if (_collectionView != null) {
+                        PropertyGroupDescription groupDescription = new PropertyGroupDescription("Type");
+                        if (_collectionView.GroupDescriptions != null) {
+                            _collectionView.GroupDescriptions.Add(groupDescription);
+                        }
+                    }
                 }
 
                 OnPropertyChanged();
@@ -44,12 +44,39 @@ namespace RibbonUI.UserControls.List {
 
         public ICommand<MovieArt> SetAsDefaultCommand { get; private set; }
 
+
+        private bool CheckArt(MovieArt art) {
+            bool b = SelectedMovie != null && art != null;
+
+            if (!b || art.ObservedEntity.Id <= 0) {
+                return b;
+            }
+
+            switch (art.Type) {
+                case ArtType.Fanart:
+                    return art.ObservedEntity.Id != SelectedMovie.DefaultFanart.ObservedEntity.Id;
+                case ArtType.Cover:
+                case ArtType.Poster:
+                    return art.ObservedEntity.Id != SelectedMovie.DefaultCover.ObservedEntity.Id;
+                default:
+                    return true;
+            }
+        }
+
         private void RemoveOnClick(MovieArt art) {
-            
+            SelectedMovie.RemoveArt(art.ObservedEntity);
         }
 
         private void SetAsDefaultOnClick(MovieArt art) {
-            
+            switch (art.Type) {
+                case ArtType.Fanart:
+                    SelectedMovie.DefaultFanart = art;
+                    break;
+                case ArtType.Poster:
+                case ArtType.Cover:
+                    SelectedMovie.DefaultCover = art;
+                    break;
+            }
         }
 
         [NotifyPropertyChangedInvocator]
@@ -60,4 +87,5 @@ namespace RibbonUI.UserControls.List {
             }
         }
     }
+
 }

@@ -7,10 +7,12 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Shell;
+using Frost.Common;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using GalaSoft.MvvmLight;
 using RibbonUI.Annotations;
+using RibbonUI.Design;
 using RibbonUI.Messages;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
@@ -33,10 +35,15 @@ namespace RibbonUI.UserControls {
         private bool _isSubtitlesTabSelected;
         private bool _isExportTabSelected;
         private bool _isDetectTabSelected;
-        private bool _isSubtitlesTabEnabled;
         private Visibility _subtitlesContextVisible;
+        private IMoviesDataService _service;
+        private ICommand _saveChangesCommand;
 
         public RibbonViewModel() {
+            _service = IsInDesignMode 
+                ? new DesignMoviesDataService()
+                : LightInjectContainer.GetInstance<IMoviesDataService>();
+
             OpenMovieInFolderCommand = new RelayCommand(OpenInFolder);
             OnRibbonLoadedCommand = new RelayCommand<DependencyObject>(OnRibbonLoaded);
             OptionsCommand = new RelayCommand(MenuItemOptionsOnClick);
@@ -123,6 +130,24 @@ namespace RibbonUI.UserControls {
                 _subtitlesContextVisible = value;
                 OnPropertyChanged();
             }
+        }
+
+        public ICommand SaveChangesCommand {
+            get {
+                if (_saveChangesCommand != null) {
+                    return _saveChangesCommand;
+                }
+
+                return _saveChangesCommand = new RelayCommand(() => {
+                    try {
+                        _service.SaveChanges();
+                    }
+                    catch (Exception e) {
+                        UIHelper.HandleProviderException(e);
+                    }
+                });
+            }
+            set { _saveChangesCommand = value; }
         }
 
         #endregion

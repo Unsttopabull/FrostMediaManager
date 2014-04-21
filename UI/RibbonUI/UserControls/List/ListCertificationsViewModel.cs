@@ -7,25 +7,25 @@ using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls.List {
     public class ListCertificationsViewModel : INotifyPropertyChanged {
-        private ObservableCollection<MovieCertification> _certifications;
         public event PropertyChangedEventHandler PropertyChanged;
+        private ObservableMovie _selectedMovie;
 
         public ListCertificationsViewModel() {
             RemoveCommand = new RelayCommand<MovieCertification>(OnCertificationRemove, cert => cert != null);
         }
 
-        public ObservableCollection<MovieCertification> Certifications {
-            get { return _certifications; }
+        public ICommand<MovieCertification> RemoveCommand { get; private set; }
+
+        public ObservableMovie SelectedMovie {
+            get { return _selectedMovie; }
             set {
-                if (Equals(value, _certifications)) {
+                if (Equals(value, _selectedMovie)) {
                     return;
                 }
-                _certifications = value;
+                _selectedMovie = value;
                 OnPropertyChanged();
             }
         }
-
-        public ICommand<MovieCertification> RemoveCommand { get; private set; }
 
         private void OnCertificationRemove(MovieCertification obj) {
             

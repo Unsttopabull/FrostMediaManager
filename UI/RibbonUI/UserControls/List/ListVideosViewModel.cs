@@ -3,9 +3,9 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using Frost.Common;
-using Frost.Common.Properties;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
+using RibbonUI.Annotations;
 using RibbonUI.Design;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
@@ -17,7 +17,7 @@ namespace RibbonUI.UserControls.List {
         private readonly IMoviesDataService _service;
 
         private ICollectionView _collectionView;
-        private ObservableCollection<MovieVideo> _videos;
+        private ObservableMovie _selectedMovie;
 
         public ListVideosViewModel() {
             _service = TranslationManager.IsInDesignMode
@@ -31,22 +31,23 @@ namespace RibbonUI.UserControls.List {
 
         public Window ParentWindow { get; set; }
 
-        public ObservableCollection<MovieVideo> Videos {
-            get { return _videos; }
+        public ObservableMovie SelectedMovie {
+            get { return _selectedMovie; }
             set {
-                _videos = value;
-
-                if (_videos == null) {
-                    OnPropertyChanged("Videos");
+                if (Equals(value, _selectedMovie)) {
                     return;
                 }
+                _selectedMovie = value;
 
-                _collectionView = CollectionViewSource.GetDefaultView(_videos);
-                PropertyGroupDescription groupDescription = new PropertyGroupDescription("File");
-                if (_collectionView.GroupDescriptions != null) {
-                    _collectionView.GroupDescriptions.Add(groupDescription);
+                if (_selectedMovie != null) {
+                    _collectionView = CollectionViewSource.GetDefaultView(_selectedMovie.Videos);
+                    PropertyGroupDescription groupDescription = new PropertyGroupDescription("File");
+                    if (_collectionView.GroupDescriptions != null) {
+                        _collectionView.GroupDescriptions.Add(groupDescription);
+                    }
                 }
-                OnPropertyChanged("Videos");
+
+                OnPropertyChanged("SelectedMovie");
             }
         }
 

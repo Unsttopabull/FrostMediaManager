@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" StartupUri="Windows/ProviderSelect.xaml">
-             <!-- StartupUri="MainWindow.xaml"> -->
     <Application.Resources>
         <BitmapImage x:Key="DefaultLogo" UriSource="Images/defaultscreen.png" />
         <BitmapImage x:Key="DefaultSoundLogo" UriSource="Images/defaultsound.png" />
@@ -17,6 +16,14 @@
         <BitmapImage x:Key="RemoveDisabled" UriSource="Images/remove_disabled.png" />
         <BitmapImage x:Key="Edit" UriSource="Images/edit.ico" />
         <BitmapImage x:Key="EditDisabled" UriSource="Images/edit_disabled.ico" />
+        <Style x:Key="CollapseOnDisabled" TargetType="{x:Type FrameworkElement}">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
         <!-- BUTTON BASE STYLE AERO NORMAL !-->
         <Style x:Key="ButtonFocusVisual">
             <Setter Property="Control.Template">
@@ -305,6 +312,25 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="ExpanderGroupCollapsed" TargetType="{x:Type GroupItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border BorderThickness="0,1,0,0" BorderBrush="SteelBlue">
+                            <Expander IsExpanded="False">
+                                <Expander.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Name}"/>
+                                        <TextBlock Text="{Binding ItemCount, StringFormat={} ({0})}"/>
+                                    </StackPanel>
+                                </Expander.Header>
+                                <ItemsPresenter />
+                            </Expander>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>        
         <!--<vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:RibbonUI.ViewModel" />-->
     </Application.Resources>
 </Application>
