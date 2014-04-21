@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Frost.InfoParsers;
+using Frost.InfoParsers.Models;
 using HtmlAgilityPack;
 
 namespace Frost.MovieInfoParsers.GremoVKino {
@@ -11,8 +13,8 @@ namespace Frost.MovieInfoParsers.GremoVKino {
         private const string YOUTUBE = "http://www.youtube.com/";
         private const string YOUTUBE_VIDEO_URL = "http://www.youtube.com/watch?v={0}";
 
-        public Task<GremoVKinoMovieInfo> ParseMoviePage(string url) {
-            GremoVKinoMovieInfo info = this;
+        public Task<IParsedMovieInfo> ParseMoviePage(string url) {
+            IParsedMovieInfo info = this;
 
             return Task.Run(() => {
                 IsFinished = false;

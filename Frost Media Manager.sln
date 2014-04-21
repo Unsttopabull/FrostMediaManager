@@ -45,7 +45,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadingControl", "UI\Loadin
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scrappers", "Scrappers", "{0AF1E06E-462A-44CC-B1AF-5BEF69DFDD4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieInfoParsersCommon", "Scrappers\CinemaInfoParsers\MovieInfoParsersCommon.csproj", "{005F252B-C8AD-49E0-9A88-47BC289F00D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfoParsersCommon", "Scrappers\CinemaInfoParsers\InfoParsersCommon.csproj", "{005F252B-C8AD-49E0-9A88-47BC289F00D0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Subtitle downloaders", "Subtitle downloaders", "{6290B5D2-4C3A-4339-8B41-7653D464765E}"
 EndProject

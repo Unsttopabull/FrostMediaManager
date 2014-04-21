@@ -4,14 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Frost.InfoParsers.Models;
 using Newtonsoft.Json;
 
-namespace Frost.MovieInfoParsers {
+namespace Frost.InfoParsers {
 
-    public abstract class ParsingClient<T, T2> where T : IParsedMovie<T2> {
-        public List<T> AvailableMovies { get; protected set; }
+    public abstract class ParsingClient {
+        public List<IParsedMovie> AvailableMovies { get; protected set; }
 
-        public abstract List<T> Parse();
+        public abstract List<IParsedMovie> Parse();
 
         public void Serialize(string fileName) {
             JsonSerializer jser = new JsonSerializer();

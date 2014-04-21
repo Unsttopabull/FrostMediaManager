@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Frost.InfoParsers.Models;
 
 namespace Frost.MovieInfoParsers.GremoVKino {
 
     [Serializable]
-    public class GremoVKinoMovie : IParsedMovie<GremoVKinoMovieInfo> {
+    public class GremoVKinoMovie : IParsedMovie {
 
         public GremoVKinoMovie() {
             
         }
 
-        /// <summary>Initializes a new instance of the <see cref="KolosejMovie"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="GremoVKinoMovie"/> class.</summary>
         public GremoVKinoMovie(string originalName, string sloveneName, string url) {
             OriginalName = originalName;
             SloveneName = sloveneName;
@@ -19,11 +20,10 @@ namespace Frost.MovieInfoParsers.GremoVKino {
             MovieInfo = new GremoVKinoMovieInfo();
         }
 
-        public Task<GremoVKinoMovieInfo> ParseMovieInfo() {
-            if (!string.IsNullOrEmpty(Url)) {
-                return MovieInfo.ParseMoviePage(Url);
-            }
-            return Task.FromResult<GremoVKinoMovieInfo>(null);
+        public Task<IParsedMovieInfo> ParseMovieInfo() {
+            return !string.IsNullOrEmpty(Url) 
+                ? ((GremoVKinoMovieInfo)MovieInfo).ParseMoviePage(Url) 
+                : null;
         }
 
         public bool MovieInfoAvailable { get { return MovieInfo.IsFinished; } }
@@ -34,7 +34,7 @@ namespace Frost.MovieInfoParsers.GremoVKino {
 
         public string Url { get; private set; }
 
-        public GremoVKinoMovieInfo MovieInfo { get; private set; }
+        public IParsedMovieInfo MovieInfo { get; private set; }
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>

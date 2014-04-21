@@ -4,11 +4,13 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Frost.InfoParsers;
+using Frost.InfoParsers.Models;
 using HtmlAgilityPack;
 
 namespace Frost.MovieInfoParsers.PlanetTus {
 
-    public class PlanetTusClient : ParsingClient<TusMovie, TusMovieInfo>, IDisposable {
+    public class PlanetTusClient : ParsingClient, IDisposable {
         private const string URL = "http://maribor.planet-tus.si/sl/kino?l={0}&page={1}";
         private const string MOVIE_URL = "http://maribor.planet-tus.si{0}";
         private static readonly string[] SubLists = {
@@ -22,8 +24,8 @@ namespace Frost.MovieInfoParsers.PlanetTus {
             _webCl = new WebClient { Encoding = Encoding.UTF8 };
         }
 
-        public override List<TusMovie> Parse() {
-            List<TusMovie> list = new List<TusMovie>();
+        public override List<IParsedMovie> Parse() {
+            List<IParsedMovie> list = new List<IParsedMovie>();
             foreach (string subList in SubLists) {
                 list.AddRange(ParsePage(subList));
             }

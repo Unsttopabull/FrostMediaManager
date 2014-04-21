@@ -2,7 +2,7 @@
 using System.Linq;
 using HtmlAgilityPack;
 
-namespace Frost.MovieInfoParsers {
+namespace Frost.InfoParsers {
 
     public static class HtmlParsingExtensions {
         public static string InnerTextOrNull(this HtmlNode node) {

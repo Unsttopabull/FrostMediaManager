@@ -7,8 +7,8 @@
     <ProjectGuid>{14CEAEB8-B79E-4E1E-8C39-4E3470818AB4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GremoVKinoInfoParser</RootNamespace>
-    <AssemblyName>GremoVKinoInfoParser</AssemblyName>
+    <RootNamespace>Frost.MovieInfoParsers.GremoVKino</RootNamespace>
+    <AssemblyName>Frost.MovieInfoParsers.GremoVKino</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,9 +44,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CinemaInfoParsers\MovieInfoParsersCommon.csproj">
+    <ProjectReference Include="..\CinemaInfoParsers\InfoParsersCommon.csproj">
       <Project>{005f252b-c8ad-49e0-9a88-47bc289f00d0}</Project>
-      <Name>MovieInfoParsersCommon</Name>
+      <Name>InfoParsersCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

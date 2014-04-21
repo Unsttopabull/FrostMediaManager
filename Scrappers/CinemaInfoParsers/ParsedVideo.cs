@@ -1,4 +1,6 @@
-namespace Frost.MovieInfoParsers {
+using Frost.InfoParsers.Models;
+
+namespace Frost.InfoParsers {
 
     public enum VideoType {
         Unknown,
@@ -11,7 +13,7 @@ namespace Frost.MovieInfoParsers {
         Clip
     }
 
-    public class ParsedVideo {
+    public class ParsedVideo : IParsedVideo {
 
         public VideoType Type { get; set; }
         public string Title { get; set; }

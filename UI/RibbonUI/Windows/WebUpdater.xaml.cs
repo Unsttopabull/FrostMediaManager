@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
+using Frost.MovieInfoParsers.Kolosej;
 using RibbonUI.UserControls;
 using RibbonUI.Util.ObservableWrappers;
 
@@ -8,6 +10,11 @@ namespace RibbonUI.Windows {
     /// <summary>Interaction logic for WebUpdater.xaml</summary>
     public partial class WebUpdater : Window {
         private readonly ObservableMovie _movie;
+        private static readonly Dictionary<string, MovieInfos> _movieInfos;
+
+        static WebUpdater() {
+            _movieInfos = new Dictionary<string, MovieInfos>();
+        }
 
         public WebUpdater(WebUpdateSite site, ObservableMovie movie) {
             InitializeComponent();
@@ -41,7 +48,14 @@ namespace RibbonUI.Windows {
         }
 
         private void UpdateFromKolosej() {
-            
+
+
+            KolosejMovie km = new KolosejMovie();
+        }
+
+        private class MovieInfos {
+            public DateTime ParsedTime { get; set; }
+            public ICollection<KolosejMovie> Movies { get; set; }
         }
     }
 }

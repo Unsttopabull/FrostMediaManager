@@ -44,9 +44,9 @@
     <Compile Include="TusMovieInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CinemaInfoParsers\MovieInfoParsersCommon.csproj">
+    <ProjectReference Include="..\CinemaInfoParsers\InfoParsersCommon.csproj">
       <Project>{005f252b-c8ad-49e0-9a88-47bc289f00d0}</Project>
-      <Name>MovieInfoParsersCommon</Name>
+      <Name>InfoParsersCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

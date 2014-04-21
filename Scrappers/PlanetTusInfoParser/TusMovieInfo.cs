@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
+using Frost.InfoParsers;
+using Frost.InfoParsers.Models;
 using HtmlAgilityPack;
 
 namespace Frost.MovieInfoParsers.PlanetTus {
@@ -8,8 +10,8 @@ namespace Frost.MovieInfoParsers.PlanetTus {
     [Serializable]
     public class TusMovieInfo : ParsedMovieInfo {
 
-        public Task<TusMovieInfo> ParseMoviePage(string url) {
-            TusMovieInfo info = this;
+        public Task<IParsedMovieInfo> ParseMoviePage(string url) {
+            IParsedMovieInfo info = this;
             return Task.Run(() => {
                 IsFinished = false;
 

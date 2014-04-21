@@ -605,6 +605,14 @@
       <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Scrappers\CinemaInfoParsers\InfoParsersCommon.csproj">
+      <Project>{005F252B-C8AD-49E0-9A88-47BC289F00D0}</Project>
+      <Name>InfoParsersCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Scrappers\KolosejInfoParser\KolosejInfoParser.csproj">
+      <Project>{9f5b1086-cd30-4a6a-a54c-ce78172b358d}</Project>
+      <Name>KolosejInfoParser</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GettextTranslationExtension\GettextMarkupExtension.csproj">
       <Project>{a3ce8f2a-9950-409c-aa35-74cd1d1d6d87}</Project>
       <Name>GettextMarkupExtension</Name>

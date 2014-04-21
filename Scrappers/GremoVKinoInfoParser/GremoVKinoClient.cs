@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using Frost.InfoParsers;
+using Frost.InfoParsers.Models;
 using HtmlAgilityPack;
 
 namespace Frost.MovieInfoParsers.GremoVKino {
 
-    public class GremoVKinoClient : ParsingClient<GremoVKinoMovie, GremoVKinoMovieInfo> {
+    public class GremoVKinoClient : ParsingClient {
         private const string URL = "http://www.kolosej.si{0}";
 
-        public override List<GremoVKinoMovie> Parse() {
+        public override List<IParsedMovie> Parse() {
             throw new NotImplementedException();
         }
 
-        public List<GremoVKinoMovie> Parse(string movieTitle) {
+        public List<IParsedMovie> Parse(string movieTitle) {
             string list;
             using (WebClient webCl = new WebClient { Encoding = Encoding.UTF8 }) {
                 webCl.Headers.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded");
@@ -31,7 +33,7 @@ namespace Frost.MovieInfoParsers.GremoVKino {
             HtmlDocument hd = new HtmlDocument();
             hd.Load(new StringReader(list));
 
-            List<GremoVKinoMovie> movies = new List<GremoVKinoMovie>();
+            List<IParsedMovie> movies = new List<IParsedMovie>();
 
             HtmlNode searchResults = hd.GetElementbyId("trailers_list");
             searchResults = searchResults.SelectSingleNode("ul[1]");

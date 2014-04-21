@@ -7,8 +7,8 @@
     <ProjectGuid>{005F252B-C8AD-49E0-9A88-47BC289F00D0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Frost.MovieInfoParsers</RootNamespace>
-    <AssemblyName>Frost.MovieInfoParsers</AssemblyName>
+    <RootNamespace>Frost.InfoParsers</RootNamespace>
+    <AssemblyName>Frost.InfoParsers</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -43,13 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\IParsedAward.cs" />
+    <Compile Include="Util\AsyncInline.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="HtmlParsingExtensions.cs" />
+    <Compile Include="Models\IParsedMovieInfo.cs" />
+    <Compile Include="Models\IParsedVideo.cs" />
     <Compile Include="ParsedAward.cs" />
     <Compile Include="ParsedMovieInfo.cs" />
     <Compile Include="ParsedVideo.cs" />
     <Compile Include="ParsingClient.cs" />
-    <Compile Include="IParsedMovie.cs" />
+    <Compile Include="Models\IParsedMovie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

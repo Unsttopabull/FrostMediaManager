@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Frost.InfoParsers.Models;
 
 namespace Frost.MovieInfoParsers.PlanetTus {
 
     [Serializable]
-    public class TusMovie : IParsedMovie<TusMovieInfo> {
+    public class TusMovie : IParsedMovie {
 
         public TusMovie() {
             
@@ -19,10 +20,10 @@ namespace Frost.MovieInfoParsers.PlanetTus {
             MovieInfo = new TusMovieInfo();
         }
 
-        public Task<TusMovieInfo> ParseMovieInfo() {
-            return !string.IsNullOrEmpty(Url)
-                ? MovieInfo.ParseMoviePage(Url)
-                : Task.FromResult<TusMovieInfo>(null);
+        public Task<IParsedMovieInfo> ParseMovieInfo() {
+            return !string.IsNullOrEmpty(Url) 
+                ? ((TusMovieInfo)MovieInfo).ParseMoviePage(Url) 
+                : null;
         }
 
         public bool MovieInfoAvailable { get { return MovieInfo.IsFinished; } }
@@ -33,7 +34,7 @@ namespace Frost.MovieInfoParsers.PlanetTus {
 
         public string Url { get; private set; }
 
-        public TusMovieInfo MovieInfo { get; private set; }
+        public IParsedMovieInfo MovieInfo { get; private set; }
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>

@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using Frost.InfoParsers.Models;
 using HtmlAgilityPack;
 
-namespace Frost.MovieInfoParsers {
-    
+namespace Frost.InfoParsers {
+
     [Serializable]
-    public abstract class ParsedMovieInfo {
+    public abstract class ParsedMovieInfo : IParsedMovieInfo {
 
         public ParsedMovieInfo() {
-            Videos = new List<ParsedVideo>();
+            Videos = new List<IParsedVideo>();
         }
 
         public bool IsFinished { get; protected set; }
@@ -20,17 +21,17 @@ namespace Frost.MovieInfoParsers {
         public string ReleaseYear { get; protected set; }
         public string Country { get; protected set; }
         public string Language { get; protected set; }
-        public string[] Writers { get; protected set; }
-        public string[] Directors { get; protected set; }
-        public string[] Actors { get; protected set; }
+        public IEnumerable<string> Writers { get; protected set; }
+        public IEnumerable<string> Directors { get; protected set; }
+        public IEnumerable<string> Actors { get; protected set; }
         public string OfficialSite { get; protected set; }
         public string ImdbLink { get; protected set; }
         public string ImdbRating { get; protected set; }
         public string Summary { get; protected set; }
         public string TrailerUrl { get; protected set; }
-        public List<ParsedVideo> Videos { get; protected set; }
+        public ICollection<IParsedVideo> Videos { get; protected set; }
         public ParsedAward Awards { get; protected set; }
-        public string[] Genres { get; protected set; }
+        public IEnumerable<string> Genres { get; protected set; }
 
         protected HtmlDocument DownloadWebPage(string url, Encoding enc = null) {
             string html;

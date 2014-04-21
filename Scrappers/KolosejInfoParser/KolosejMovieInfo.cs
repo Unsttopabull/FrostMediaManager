@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Frost.InfoParsers;
+using Frost.InfoParsers.Models;
 using HtmlAgilityPack;
 
 namespace Frost.MovieInfoParsers.Kolosej {
@@ -7,8 +9,8 @@ namespace Frost.MovieInfoParsers.Kolosej {
     [Serializable]
     public class KolosejMovieInfo : ParsedMovieInfo {
 
-        public Task<KolosejMovieInfo> ParseMoviePage(string url) {
-            KolosejMovieInfo info = this;
+        public Task<IParsedMovieInfo> ParseMoviePage(string url) {
+            IParsedMovieInfo info = this;
             return Task.Run(() => {
                 IsFinished = false;
 

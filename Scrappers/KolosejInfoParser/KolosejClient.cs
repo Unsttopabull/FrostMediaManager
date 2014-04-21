@@ -4,14 +4,16 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Xml.XPath;
+using Frost.InfoParsers;
+using Frost.InfoParsers.Models;
 using HtmlAgilityPack;
 
 namespace Frost.MovieInfoParsers.Kolosej {
 
-    public class KolosejClient : ParsingClient<KolosejMovie, KolosejMovieInfo> {
+    public class KolosejClient : ParsingClient {
         private const string URL = "http://www.kolosej.si{0}";
 
-        public override List<KolosejMovie> Parse() {
+        public override List<IParsedMovie> Parse() {
 
             string list;
             using (WebClient webCl = new WebClient { Encoding = Encoding.UTF8 }) {
@@ -21,7 +23,7 @@ namespace Frost.MovieInfoParsers.Kolosej {
             HtmlDocument hd = new HtmlDocument();
             hd.Load(new StringReader(list));
 
-            List<KolosejMovie> movies = new List<KolosejMovie>();
+            List<IParsedMovie> movies = new List<IParsedMovie>();
 
             HtmlNode mainContent = hd.GetElementbyId("main-content-one-column");
             XPathNavigator xPathNavigator = mainContent.CreateNavigator();

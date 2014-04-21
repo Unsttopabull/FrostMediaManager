@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Frost.MovieInfoParsers {
+namespace Frost.InfoParsers {
     public static class Extensions {
 
         public static bool ContainsIgnoreCase(this string s, string value) {
