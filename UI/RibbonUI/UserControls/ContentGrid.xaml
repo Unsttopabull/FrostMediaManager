@@ -220,8 +220,8 @@
                 <TabItem Header="Certifications">
                     <list:ListCertifications Movie="{Binding IsAsync=True, ElementName=ContentGridControl, Path=DataContext.SelectedMovie}"/>
                 </TabItem>
-                <TabItem Header="{l:T Promotional videos}" >
-                    
+                <TabItem Header="{l:T Promotional videos}" IsEnabled="{Binding SelectedMovie[PromotionalVideos]}">
+                    <list:ListPromotionalVideos SelectedMovie="{Binding IsAsync=True, ElementName=ContentGridControl, Path=DataContext.SelectedMovie}"/>
                 </TabItem>
                 <TabItem Header="{l:T Art}">
                     <list:ListArt Movie="{Binding IsAsync=True, ElementName=ContentGridControl, Path=DataContext.SelectedMovie}"/>

@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers;
+using Frost.InfoParsers.Models;
+using Frost.MovieInfoParsers.GremoVKino;
 using Frost.MovieInfoParsers.Kolosej;
 using FuzzySearch;
 using Newtonsoft.Json;
@@ -28,7 +30,7 @@ namespace RibbonUI.Windows {
 
     /// <summary>Interaction logic for WebUpdater.xaml</summary>
     public partial class WebUpdater : Window, INotifyPropertyChanged {
-        private static readonly TimeSpan StaleTime = new TimeSpan(5, 0, 0);
+        private static readonly TimeSpan StaleTime = new TimeSpan(30, 0, 0);
         private static readonly Regex IMDBIdExtract = new Regex(@"(tt[0-9]+)", RegexOptions.IgnoreCase);
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly Dictionary<string, ParsedMovieInfos> _movieInfos;
@@ -139,6 +141,12 @@ namespace RibbonUI.Windows {
                     }
                     SearchMovieInfo(_movieInfos["Tus"], _site);
                     break;
+                case WebUpdateSite.GremoVKino:
+                    if (!_movieInfos.ContainsKey("GremoVKino")) {
+                        _movieInfos.Add("GremoVKino", new ParsedMovieInfos());
+                    }
+                    SearchMovieInfo(_movieInfos["GremoVKino"], _site);
+                    break;
                 case WebUpdateSite.OpenSubtitles:
                     if (!_movieInfos.ContainsKey("OSub")) {
                         _movieInfos.Add("OSub", new ParsedMovieInfos());
@@ -156,7 +164,7 @@ namespace RibbonUI.Windows {
             LabelText = "Searching for available movie information.";
             ProgressText = "Searching for movie in index.";
 
-            if (info.Movies == null || info.Movies.Count == 0) {
+            if (info.Movies == null || !info.Movies.Any()) {
                 MessageBox.Show("An error has occured updating available movie information.");
                 Close();
                 return;
@@ -205,6 +213,9 @@ namespace RibbonUI.Windows {
                     break;
                 case WebUpdateSite.OpenSubtitles:
                     break;
+                case WebUpdateSite.GremoVKino:
+                    cli = new GremoVKinoClient();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException("site");
             }
@@ -244,6 +255,9 @@ namespace RibbonUI.Windows {
                     cli = new KolosejClient();
                     break;
                 case WebUpdateSite.OpenSubtitles:
+                    break;
+                case WebUpdateSite.GremoVKino:
+                    cli = new GremoVKinoClient();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("site");
@@ -381,6 +395,21 @@ namespace RibbonUI.Windows {
                         Dispatcher.Invoke(() => Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message)));
                     }
                 }
+
+                if (_movie["PromotionalVideos"] && movie.Videos != null) {
+                    foreach (IParsedVideo video in movie.Videos) {
+                        IParsedVideo v = video;
+                        Dispatcher.Invoke(() => _movie.AddPromotionalVideo(new DesignPromotionalVideo(v)));
+                    }
+                }
+
+                if (_movie["Awards"] && movie.Awards != null) {
+                    foreach (ParsedAward award in movie.Awards) {
+                        ParsedAward aw = award;
+                        Dispatcher.Invoke(() => _movie.AddAward(new DesignAward(aw)));
+                    }
+                }
+
             }).ContinueWith(t => Dispatcher.Invoke(() => {
                 if (Errors.Count > 0) {
                     LabelText = "Finished with warnings...";
@@ -423,7 +452,7 @@ namespace RibbonUI.Windows {
             [JsonIgnore]
             public FuzzySearchService FuzzySearch { get; set; }
 
-            public ICollection<ParsedMovie> Movies { get; set; }
+            public IEnumerable<ParsedMovie> Movies { get; set; }
         }
 
         public class ErrorInfo {

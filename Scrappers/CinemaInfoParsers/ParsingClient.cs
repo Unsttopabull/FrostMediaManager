@@ -1,4 +1,9 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Text;
+using HtmlAgilityPack;
 
 namespace Frost.InfoParsers {
 
@@ -10,10 +15,27 @@ namespace Frost.InfoParsers {
 
         public string Name { get; set; }
 
-        public IList<ParsedMovie> AvailableMovies { get; protected set; }
+        public IEnumerable<ParsedMovie> AvailableMovies { get; protected set; }
 
-        public abstract List<ParsedMovie> Parse();
+        public abstract void Parse();
         public abstract ParsedMovieInfo ParseMovieInfo(ParsedMovie movie);
+
+        public static HtmlDocument DownloadWebPage(string url, Encoding enc = null) {
+            string html;
+            using (WebClient webCl = new WebClient { Encoding = enc ?? Encoding.UTF8 }) {
+                try {
+                    html = webCl.DownloadString(url);
+                }
+                catch (WebException e) {
+                    Console.Error.WriteLine(e.Message);
+                    return null;
+                }
+            }
+
+            HtmlDocument hd = new HtmlDocument();
+            hd.Load(new StringReader(html));
+            return hd;
+        }
 
         //public void PullAllMovieInfo() {
         //    Task[] tsk = new Task[AvailableMovies.Count];

@@ -11,14 +11,13 @@ namespace Frost.Providers.Frost.DB {
         }
 
         internal PromotionalVideo(IPromotionalVideo promotionalVideo) {
-            //Contract.Requires<ArgumentNullException>(promotionalVideo != null);
 
             Type = promotionalVideo.Type;
             Title = promotionalVideo.Title;
             Url = promotionalVideo.Url;
             Duration = promotionalVideo.Duration;
             Language = promotionalVideo.Language;
-            SubtitleLanguage = promotionalVideo.Language;
+            SubtitleLanguage = promotionalVideo.SubtitleLanguage;
         }
 
         public long Id { get; set; }

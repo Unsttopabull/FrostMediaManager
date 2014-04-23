@@ -1,7 +1,17 @@
 ﻿using Frost.Common.Models.Provider;
+using Frost.InfoParsers.Models;
 
 namespace RibbonUI.Design.Models {
     class DesignAward : IAward {
+
+        public DesignAward() {
+            
+        }
+        public DesignAward(IParsedAward award) {
+            AwardType = award.Award;
+            Organization = award.Organization;
+            IsNomination = award.IsNomination;
+        }
 
         public long Id { get; private set; }
 

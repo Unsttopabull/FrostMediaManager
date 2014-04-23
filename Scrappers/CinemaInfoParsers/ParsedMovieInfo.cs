@@ -1,10 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
-using System.Text;
 using Frost.InfoParsers.Models;
-using HtmlAgilityPack;
 
 namespace Frost.InfoParsers {
 
@@ -29,25 +25,8 @@ namespace Frost.InfoParsers {
         public string Summary { get; set; }
         public string TrailerUrl { get; set; }
         public ICollection<IParsedVideo> Videos { get; set; }
-        public ParsedAward Awards { get; set; }
+        public IEnumerable<ParsedAward> Awards { get; set; }
         public IEnumerable<string> Genres { get; set; }
-
-        public static HtmlDocument DownloadWebPage(string url, Encoding enc = null) {
-            string html;
-            using (WebClient webCl = new WebClient { Encoding = enc ?? Encoding.UTF8 }) {
-                try {
-                    html = webCl.DownloadString(url);
-                }
-                catch (WebException e) {
-                    Console.Error.WriteLine(e.Message);
-                    return null;
-                }
-            }
-
-            HtmlDocument hd = new HtmlDocument();
-            hd.Load(new StringReader(html));
-            return hd;
-        }
     }
 
 }

@@ -832,6 +832,24 @@ namespace Frost.Providers.Xtreamer.Proxies {
             throw new NotSupportedException();
         }
 
+        /// <summary>Adds the specified award to the provider data store.</summary>
+        /// <param name="award">The award to add.</param>
+        /// <returns>Returns the added award. If the <paramref name="award"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding awards or the award does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding awards.</exception>
+        public IAward AddAward(IAward award) {
+            throw new NotSupportedException("The provider does not support promotional videos.");
+        }
+
+        /// <summary>Removes the specified award from the provider data store.</summary>
+        /// <param name="award">The award to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing awards in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing awards.</exception>
+        public bool RemoveAward(IAward award) {
+            throw new NotSupportedException("The provider does not support promotional videos.");
+        }
+
         public ISubtitle AddSubtitle(ISubtitle subtitle) {
             string sub = GetSubtitlePath(subtitle);
             if (string.IsNullOrEmpty(sub)) {
@@ -907,6 +925,24 @@ namespace Frost.Providers.Xtreamer.Proxies {
         /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing video.</exception>
         public bool RemoveVideo(IVideo video) {
             throw new NotSupportedException("Removing is not supported.");
+        }
+
+        /// <summary>Adds the specified promotional video to the provider data store.</summary>
+        /// <param name="video">The promotional video to add.</param>
+        /// <returns>Returns the added promotional video. If the <paramref name="video"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding promotional videos or the promotional video does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding promotional videos.</exception>
+        public IPromotionalVideo AddPromotionalVideo(IPromotionalVideo video) {
+            throw new NotSupportedException("The provider does not support promotional videos.");
+        }
+
+        /// <summary>Removes the specified promotional video from the provider data store.</summary>
+        /// <param name="video">The promotional video to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing promotional videos in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing promotional videos.</exception>
+        public bool RemovePromotionalVideo(IPromotionalVideo video) {
+            throw new NotSupportedException("The provider does not support promotional videos.");
         }
 
         #endregion

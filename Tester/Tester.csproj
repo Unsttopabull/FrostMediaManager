@@ -58,6 +58,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\EF6\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.4.6.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ThirdParty\HtmlAgilityPack\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\ThirdParty\log4net\log4net.dll</HintPath>
     </Reference>
@@ -122,6 +126,10 @@
     <ProjectReference Include="..\Scrappers\CinemaInfoParsers\InfoParsersCommon.csproj">
       <Project>{005F252B-C8AD-49E0-9A88-47BC289F00D0}</Project>
       <Name>InfoParsersCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Scrappers\GremoVKinoInfoParser\GremoVKinoInfoParser.csproj">
+      <Project>{14ceaeb8-b79e-4e1e-8c39-4e3470818ab4}</Project>
+      <Name>GremoVKinoInfoParser</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

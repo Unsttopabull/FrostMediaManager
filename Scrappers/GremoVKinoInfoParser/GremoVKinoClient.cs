@@ -1,55 +1,154 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Frost.InfoParsers;
+using Frost.InfoParsers.Models;
 using HtmlAgilityPack;
 
 namespace Frost.MovieInfoParsers.GremoVKino {
 
     public class GremoVKinoClient : ParsingClient {
-        private const string URL = "http://www.kolosej.si{0}";
+        private const int MAX = 9744;
+        private const string URI = @"http://www.gremovkino.si/filmi/iskanje/seznam-filmi/";
         private const string TRAILER_URL = "http://www.gremovkino.si/trailer_single/show/{0}/576/344/1";
         private const string XPATH = "table/tr/td[@class='trailer_leftCell' and text()='{0} ']/following-sibling::td[@class='trailer_rightCell']";
         private const string YOUTUBE = "http://www.youtube.com/";
         private const string YOUTUBE_VIDEO_URL = "http://www.youtube.com/watch?v={0}";
+        private int _numFailed;
 
-        public GremoVKinoClient() : base("gremovkino") {
+        public GremoVKinoClient() : base("GremoVKino") {
         }
 
-        public override List<ParsedMovie> Parse() {
-            throw new NotImplementedException();
-        }
+        public override void Parse() {
+            string maxUri = @"http://www.gremovkino.si/filmi/iskanje/seznam-filmi/" + MAX;
 
-        public List<ParsedMovie> Parse(string movieTitle) {
-            string list;
-            using (WebClient webCl = new WebClient { Encoding = Encoding.UTF8 }) {
-                webCl.Headers.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded");
-                webCl.Headers.Add(HttpRequestHeader.Referer, "http://www.gremovkino.si/filmi/iskanje/seznam-filmi");
-                webCl.Headers.Add("Origin", "http://www.gremovkino.si");
-                webCl.Headers.Add("Host", "www.gremovkino.si");
-                webCl.Headers.Add(HttpRequestHeader.UserAgent,
-                    "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36 OPR/18.0.1284.68");
-
-                byte[] uploadData = Encoding.UTF8.GetBytes(string.Format("mainsearch={0}", movieTitle));
-                byte[] response = webCl.UploadData("http://www.gremovkino.si/filmi/iskanje/seznam-filmi", uploadData);
-                list = Encoding.UTF8.GetString(response);
+            List<string> uris = new List<string>{ "http://www.gremovkino.si/filmi/iskanje/seznam-filmi/"};
+            for (int i = 24; i <= MAX; i+=24) {
+                uris.Add(URI + i);
             }
 
-            HtmlDocument hd = new HtmlDocument();
-            hd.Load(new StringReader(list));
+            string more = null;
 
+            List<List<ParsedMovie>> parsedMovieLists = new List<List<ParsedMovie>>();
+            Parallel.ForEach(uris, new ParallelOptions { MaxDegreeOfParallelism = 5 }, uri => {
+                List<ParsedMovie> movieinfos = new List<ParsedMovie>();
+
+                HtmlDocument hd = DownloadWebPage(uri);
+                if (hd == null) {
+                    return;
+                }
+
+                if (uri == maxUri) {
+                    more = ParsePage(hd, movieinfos);
+                }
+                else {
+                    ParsePage(hd, movieinfos);
+                }
+
+                lock (parsedMovieLists) {
+                    parsedMovieLists.Add(movieinfos);
+                }
+            });
+
+            if (!string.IsNullOrEmpty(more)) {
+                HtmlDocument hd = DownloadWebPage(more);
+                if (hd != null) {
+                    parsedMovieLists.Add(IndexMovies(hd));
+                }
+            }
+
+            AvailableMovies = parsedMovieLists.SelectMany(m => m);
+        }
+
+        //public List<ParsedMovie> Parse(string movieTitle) {
+        //    string list;
+        //    using (WebClient webCl = new WebClient { Encoding = Encoding.UTF8 }) {
+        //        webCl.Headers.Add(HttpRequestHeader.ContentType, "application/x-www-form-urlencoded");
+        //        webCl.Headers.Add(HttpRequestHeader.Referer, "http://www.gremovkino.si/filmi/iskanje/seznam-filmi");
+        //        webCl.Headers.Add("Origin", "http://www.gremovkino.si");
+        //        webCl.Headers.Add("Host", "www.gremovkino.si");
+        //        webCl.Headers.Add(HttpRequestHeader.UserAgent,
+        //            "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36 OPR/18.0.1284.68");
+
+        //        byte[] uploadData = Encoding.UTF8.GetBytes(string.Format("mainsearch={0}", movieTitle));
+        //        byte[] response = webCl.UploadData("http://www.gremovkino.si/filmi/iskanje/seznam-filmi", uploadData);
+        //        list = Encoding.UTF8.GetString(response);
+        //    }
+
+        //    HtmlDocument hd = new HtmlDocument();
+        //    hd.Load(new StringReader(list));
+
+        //    List<ParsedMovie> movies = new List<ParsedMovie>();
+
+        //    HtmlNode searchResults = hd.GetElementbyId("trailers_list");
+        //    searchResults = searchResults.SelectSingleNode("ul[1]");
+
+        //    foreach (HtmlNode movie in searchResults.SelectNodes("li[@title]")) {
+        //        string sloName = null;
+        //        string url = null;
+        //        string origName = movie.Attributes["title"].Value;
+
+        //        HtmlNode movieLink = movie.SelectSingleNode("a[@href]");
+        //        if (movieLink != null) {
+        //            url = movieLink.Attributes["href"].Value;
+
+        //            HtmlNode sloNameNode = movieLink.SelectSingleNode("img[@alt]");
+        //            if (sloNameNode != null) {
+        //                sloName = sloNameNode.Attributes["alt"].Value;
+
+        //                if (origName != sloName) {
+        //                    origName = origName.Replace(sloName, "").Trim(' ', '(', ')');
+        //                }
+        //            }
+        //        }
+        //        movies.Add(new ParsedMovie(origName, sloName, url));
+        //    }
+
+        //    AvailableMovies = movies;
+        //    return movies;
+        //}
+
+        #region Movie Indexing
+
+        private List<ParsedMovie> IndexMovies(HtmlDocument hd) {
             List<ParsedMovie> movies = new List<ParsedMovie>();
+
+            while (true) {
+                string nextPageUrl = ParsePage(hd, movies);
+                if (string.IsNullOrEmpty(nextPageUrl)) {
+                    return movies;
+                }
+
+                hd = DownloadWebPage(nextPageUrl);
+                if (hd == null) {
+                    Thread.Sleep(2000);
+                    if (_numFailed++ >= 5) {
+                        _numFailed = 0;
+                        return movies;
+                    }
+
+                    hd = DownloadWebPage(nextPageUrl);
+                }
+            }
+        }
+
+        private static string ParsePage(HtmlDocument hd, ICollection<ParsedMovie> movies) {
 
             HtmlNode searchResults = hd.GetElementbyId("trailers_list");
             searchResults = searchResults.SelectSingleNode("ul[1]");
+            if (searchResults.ChildNodes.Count == 0) {
+                return null;
+            }
 
             foreach (HtmlNode movie in searchResults.SelectNodes("li[@title]")) {
                 string sloName = null;
                 string url = null;
-                string origName = movie.Attributes["title"].Value;
+                string origName = WebUtility.HtmlDecode(movie.Attributes["title"].Value);
 
                 HtmlNode movieLink = movie.SelectSingleNode("a[@href]");
                 if (movieLink != null) {
@@ -57,9 +156,9 @@ namespace Frost.MovieInfoParsers.GremoVKino {
 
                     HtmlNode sloNameNode = movieLink.SelectSingleNode("img[@alt]");
                     if (sloNameNode != null) {
-                        sloName = sloNameNode.Attributes["alt"].Value;
+                        sloName = WebUtility.HtmlDecode(sloNameNode.Attributes["alt"].Value);
 
-                        if (origName != sloName) {
+                        if (!string.IsNullOrEmpty(sloName) && origName != sloName) {
                             origName = origName.Replace(sloName, "").Trim(' ', '(', ')');
                         }
                     }
@@ -67,21 +166,28 @@ namespace Frost.MovieInfoParsers.GremoVKino {
                 movies.Add(new ParsedMovie(origName, sloName, url));
             }
 
-            AvailableMovies = movies;
-            return movies;
+            HtmlNode pagination = searchResults.SelectSingleNode("//div[@class='pagination']");
+
+            if (pagination != null) {
+                HtmlNode forward = pagination.SelectSingleNode("a[@href and text() = '&rsaquo;']");
+
+                if (forward != null) {
+                    return forward.Attributes["href"].Value;
+                }
+            }
+            return null;
         }
 
+        #endregion
 
         #region Movie information parsing
 
         public override ParsedMovieInfo ParseMovieInfo(ParsedMovie movie) {
-            HtmlDocument hd = ParsedMovieInfo.DownloadWebPage(movie.Url);
+            HtmlDocument hd = DownloadWebPage(movie.Url);
 
-            if (hd == null) {
-                return null;
-            }
-
-            return ParseMovieInfo(hd.GetElementbyId("trailer_info"));
+            return hd != null
+                ? ParseMovieInfo(hd.GetElementbyId("trailer_info"))
+                : null;
         }
 
         private ParsedMovieInfo ParseMovieInfo(HtmlNode movieInfo) {
@@ -118,6 +224,17 @@ namespace Frost.MovieInfoParsers.GremoVKino {
                 }
 
                 Task.WaitAll(arr);
+
+                IParsedVideo video = mi.Videos.FirstOrDefault(v => v.Type == VideoType.Trailer);
+                if (video != null) {
+                    mi.TrailerUrl = video.Url;
+                }
+            }
+            else {
+                HtmlNode trailer = movieInfo.SelectSingleNode("//div[@id='trailer_video_main']/iframe[@src]");
+                if (trailer != null) {
+                    mi.TrailerUrl = trailer.Attributes["src"].Value;
+                }
             }
 
             return mi;
@@ -197,7 +314,7 @@ namespace Frost.MovieInfoParsers.GremoVKino {
 
             videoId = videoId.Substring(++idxStart, idxEnd - idxStart);
 
-            HtmlDocument hd = ParsedMovieInfo.DownloadWebPage(string.Format(TRAILER_URL, videoId));
+            HtmlDocument hd = DownloadWebPage(string.Format(TRAILER_URL, videoId));
             HtmlNode urlNode = hd.DocumentNode.SelectSingleNode("//embed[@src and @type='application/x-shockwave-flash']");
             if (urlNode == null) {
                 return null;

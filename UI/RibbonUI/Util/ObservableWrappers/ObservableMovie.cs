@@ -8,6 +8,7 @@ using Frost.Common.Models.Provider;
 using Frost.DetectFeatures;
 using Frost.GettextMarkupExtension;
 using log4net;
+using RibbonUI.Design.Models;
 
 namespace RibbonUI.Util.ObservableWrappers {
 
@@ -977,6 +978,27 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
         }
 
+        public void AddAward(IAward award, bool silent = false) {
+            IAward a = Add(_observedEntity.AddAward, award, silent);
+            if (a == null) {
+                return;
+            }
+
+            if (!Awards.Any(aw => string.Equals(aw.AwardType, award.AwardType) && string.Equals(aw.Organization, award.Organization) && award.IsNomination == aw.IsNomination)) {
+                Awards.Add(a);
+            }
+            else if(!silent){
+                MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "award"));
+            }
+        }
+
+        public void RemoveAward(IAward award, bool silent = false) {
+            bool success = Remove(_observedEntity.RemoveAward, award, silent);
+            if (success) {
+                Awards.Remove(award);
+            }            
+        }
+
         public void AddCountry(ICountry country, bool silent = false) {
             ICountry c = Add(_observedEntity.AddCountry, country, silent);
             if (c == null) {
@@ -1038,6 +1060,30 @@ namespace RibbonUI.Util.ObservableWrappers {
             if (success) {
                 Videos.Remove(video);
             }                
+        }
+
+        public void AddPromotionalVideo(IPromotionalVideo promotionalVideo, bool silent = false) {
+            IPromotionalVideo v = Add(_observedEntity.AddPromotionalVideo, promotionalVideo, silent);
+            if (v == null) {
+                if (!silent) {
+                    MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "promotional video"));
+                }
+                return;
+            }
+
+            if (!PromotionalVideos.Any(pv => pv.Type == promotionalVideo.Type && string.Equals(pv.Title, promotionalVideo.Title, StringComparison.CurrentCultureIgnoreCase))) {
+                PromotionalVideos.Add(v);
+            }
+            else if(!silent){
+                MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "country"));
+            }
+        }
+
+        public void RemovePromotionalVideo(IPromotionalVideo promotionalVideo, bool silent = false) {
+            bool success = Remove(_observedEntity.RemovePromotionalVideo, promotionalVideo, silent);
+            if (success) {
+                PromotionalVideos.Remove(promotionalVideo);
+            }                 
         }
 
         private bool Remove<T>(Func<T, bool> removeItem, T item, bool silent) where T : IMovieEntity {

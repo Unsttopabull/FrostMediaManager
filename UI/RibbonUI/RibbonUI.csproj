@@ -61,6 +61,7 @@
     <Compile Include="Design\Models\DesignMovie.cs" />
     <Compile Include="Design\Models\DesignPerson.cs" />
     <Compile Include="Design\Models\DesignPlot.cs" />
+    <Compile Include="Design\Models\DesignPromotionalVideo.cs" />
     <Compile Include="Design\Models\DesignSet.cs" />
     <Compile Include="Design\Models\DesignSpecial.cs" />
     <Compile Include="Design\Models\DesignStudio.cs" />
@@ -87,6 +88,12 @@
     </Compile>
     <Compile Include="UserControls\List\ListCertificationsViewModel.cs">
       <DependentUpon>ListCertifications.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\List\ListPromotionalVideos.xaml.cs">
+      <DependentUpon>ListPromotionalVideos.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\List\ListPromotionalVideosViewModel.cs">
+      <DependentUpon>ListPromotionalVideos.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Settings\FeatureDetectorSettings.xaml.cs">
       <DependentUpon>FeatureDetectorSettings.xaml</DependentUpon>
@@ -272,6 +279,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\List\ListCertifications.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\List\ListPromotionalVideos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -609,6 +620,10 @@
       <Project>{005F252B-C8AD-49E0-9A88-47BC289F00D0}</Project>
       <Name>InfoParsersCommon</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Scrappers\GremoVKinoInfoParser\GremoVKinoInfoParser.csproj">
+      <Project>{14ceaeb8-b79e-4e1e-8c39-4e3470818ab4}</Project>
+      <Name>GremoVKinoInfoParser</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Scrappers\KolosejInfoParser\KolosejInfoParser.csproj">
       <Project>{9f5b1086-cd30-4a6a-a54c-ce78172b358d}</Project>
       <Name>KolosejInfoParser</Name>
@@ -728,6 +743,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Sites\gremovkino.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\play_video.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

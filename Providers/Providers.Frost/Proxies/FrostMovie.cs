@@ -645,6 +645,39 @@ namespace Frost.Providers.Frost.Proxies {
 
         #endregion
 
+        #region Awards
+
+        /// <summary>Adds the specified award to the provider data store.</summary>
+        /// <param name="award">The award to add.</param>
+        /// <returns>Returns the added award. If the <paramref name="award"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding awards or the award does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding awards.</exception>
+        public IAward AddAward(IAward award) {
+            Award aw = Service.FindAward(award, true);
+            Entity.Awards.Add(aw);
+
+            return aw;
+        }
+
+        /// <summary>Removes the specified award from the provider data store.</summary>
+        /// <param name="award">The award to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing awards in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing awards.</exception>
+        public bool RemoveAward(IAward award) {
+            if (award is Award) {
+                Entity.Awards.Remove(award as Award);
+            }
+
+            Award a = Service.FindAward(award, false);
+            if (a == null) {
+                return false;
+            }
+            return Entity.Awards.Remove(a);
+        }
+
+        #endregion
+
         #region Countries
 
         public ICountry AddCountry(ICountry country) {
@@ -737,6 +770,40 @@ namespace Frost.Providers.Frost.Proxies {
 
             if (video.Id > 0) {
                 return Entity.Videos.RemoveWhere(v => v.Id == video.Id) > 0;
+            }
+            return false;
+        }
+
+        /// <summary>Adds the specified promotional video to the provider data store.</summary>
+        /// <param name="video">The promotional video to add.</param>
+        /// <returns>Returns the added promotional video. If the <paramref name="video"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding promotional videos or the promotional video does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding promotional videos.</exception>
+        public IPromotionalVideo AddPromotionalVideo(IPromotionalVideo video) {
+            if (video is PromotionalVideo) {
+                Entity.PromotionalVideos.Add(video as PromotionalVideo);
+                return video;
+            }
+
+            PromotionalVideo promotionalVideo = Service.FindPromotionalVideo(video, true);
+            Entity.PromotionalVideos.Add(promotionalVideo);
+
+            return promotionalVideo;
+        }
+
+        /// <summary>Removes the specified promotional video from the provider data store.</summary>
+        /// <param name="video">The promotional video to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing promotional videos in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing promotional videos.</exception>
+        public bool RemovePromotionalVideo(IPromotionalVideo video) {
+            if (video is PromotionalVideo) {
+                return Entity.PromotionalVideos.Remove(video as PromotionalVideo);
+            }
+
+            PromotionalVideo promotionalVideo = Service.FindPromotionalVideo(video, false);
+            if (promotionalVideo != null) {
+                return Entity.PromotionalVideos.Remove(promotionalVideo);
             }
             return false;
         }

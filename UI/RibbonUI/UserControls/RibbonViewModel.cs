@@ -32,6 +32,7 @@ namespace RibbonUI.UserControls {
         Kolosej,
         PlanetTus,
         OpenSubtitles,
+        GremoVKino,
     }
 
     class RibbonViewModel : INotifyPropertyChanged {

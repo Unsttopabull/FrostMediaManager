@@ -5,12 +5,17 @@ using System.ComponentModel;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.DetectFeatures;
 using System.Diagnostics;
 using Frost.InfoParsers;
+using Frost.MovieInfoParsers.GremoVKino;
 using Frost.Providers.Frost;
 using Frost.Providers.Frost.DB;
 using Frost.Providers.Xbmc;
@@ -18,6 +23,7 @@ using Frost.Providers.Xbmc.DB;
 using Frost.Providers.Xtreamer;
 using Frost.Providers.Xtreamer.DB;
 using Frost.Providers.Xtreamer.Provider;
+using HtmlAgilityPack;
 using log4net;
 using log4net.Config;
 using Newtonsoft.Json;
@@ -27,6 +33,8 @@ namespace Frost.Tester {
     internal class Program {
         private static readonly string Filler;
         private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
+        private static int _numFailed;
+        private static int _page;
 
         static Program() {
             Filler = string.Join("", Enumerable.Repeat("_", Console.BufferWidth));
@@ -43,10 +51,6 @@ namespace Frost.Tester {
             Stopwatch sw = Stopwatch.StartNew();
 
             TimeSpan time = default(TimeSpan);
-
-
-            TestTusParser();
-
             sw.Stop();
 
             Console.WriteLine(Filler);
@@ -55,8 +59,21 @@ namespace Frost.Tester {
             Console.Read();
         }
 
-        private static void TestTusParser() {
+        public static HtmlDocument DownloadWebPage(string url, Encoding enc = null) {
+            string html;
+            using (WebClient webCl = new WebClient { Encoding = enc ?? Encoding.UTF8 }) {
+                try {
+                    html = webCl.DownloadString(url);
+                }
+                catch (WebException e) {
+                    Console.Error.WriteLine(e.Message);
+                    return null;
+                }
+            }
 
+            HtmlDocument hd = new HtmlDocument();
+            hd.Load(new StringReader(html));
+            return hd;
         }
 
         private static void TestXjbDbSaver() {
@@ -149,7 +166,6 @@ namespace Frost.Tester {
                         if (mov.DefaultCover == null) {
                             mov.DefaultCover = mov.Art.FirstOrDefault(a => a.Type == ArtType.Poster || a.Type == ArtType.Cover);
                         }
-                    
                     }
                     mvc.SaveChanges();
                 }

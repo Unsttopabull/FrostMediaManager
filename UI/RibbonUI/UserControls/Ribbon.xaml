@@ -83,7 +83,7 @@
             <RibbonGroup Header="Movie info" Background="#00000000" Height="86" Margin="0">
                 <RibbonMenuButton LargeImageSource="../Images/update.png" Label="Update movie information">
                     <RibbonMenuItem ImageSource="../Images/Sites/kolosej.png" Header="Kolosej.si" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.Kolosej}"/>
-                    <RibbonMenuItem ImageSource="../Images/Sites/tus.ico" Header="Planet-Tus.si" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.PlanetTus}"/>
+                    <RibbonMenuItem ImageSource="../Images/Sites/gremovkino.ico" Header="Gremovkino.si" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.GremoVKino}"/>
                     <RibbonMenuItem ImageSource="../Images/sites/opensubtitles.ico" Header="OpenSubtitles.org" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.OpenSubtitles}"/>
                 </RibbonMenuButton>
                 <!--<RibbonButton SmallImageSource="../Images/cut.png" Label="Cut" />

@@ -253,6 +253,24 @@ namespace Frost.Providers.Frost.Provider {
             }
         }
 
+        public Award FindAward(IAward award, bool createNotFound) {
+            if (award.Id > 0) {
+                Award aw = _mvc.Awards.Find(award.Id);
+                if (aw == null && createNotFound) {
+                    return new Award(award);
+                }
+                return aw;
+            }
+
+            Award a = _mvc.Awards.FirstOrDefault(awrd => awrd.AwardType == award.AwardType &&
+                                                         award.IsNomination == awrd.IsNomination &&
+                                                         award.Organization == awrd.Organization);
+            if (a == null && createNotFound) {
+                return new Award(award);
+            }
+            return a;
+        }
+
         public IEnumerable<IPromotionalVideo> PromotionalVideos {
             get {
                 if (_promotionalVideos != null) {
@@ -263,6 +281,22 @@ namespace Frost.Providers.Frost.Provider {
                 _promotionalVideos = _mvc.PromotionalVideos.Local;
                 return _promotionalVideos;
             }
+        }
+
+        public PromotionalVideo FindPromotionalVideo(IPromotionalVideo video, bool createNotFound) {
+            if (video.Id > 0) {
+                PromotionalVideo promotionalVideo = _mvc.PromotionalVideos.Find(video.Id);
+                if (promotionalVideo == null && createNotFound) {
+                    return new PromotionalVideo(video);
+                }
+                return promotionalVideo;
+            }
+
+            PromotionalVideo vid = _mvc.PromotionalVideos.FirstOrDefault(pv => string.Equals(video.Title, pv.Title));
+            if (vid == null && createNotFound) {
+                return new PromotionalVideo(video);
+            }
+            return vid;
         }
 
         public IEnumerable<ICertification> Certifications {

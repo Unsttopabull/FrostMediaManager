@@ -15,7 +15,7 @@ namespace Frost.MovieInfoParsers.Kolosej {
         public KolosejClient() : base("Kolosej") {
         }
 
-        public override List<ParsedMovie> Parse() {
+        public override void Parse() {
             string list;
             using (WebClient webCl = new WebClient { Encoding = Encoding.UTF8 }) {
                 list = webCl.DownloadString(@"http://www.kolosej.si/filmi/A-Z/original/");
@@ -62,11 +62,10 @@ namespace Frost.MovieInfoParsers.Kolosej {
             }
 
             AvailableMovies = movies;
-            return movies;
         }
 
         public override ParsedMovieInfo ParseMovieInfo(ParsedMovie movie) {
-            HtmlDocument hd = ParsedMovieInfo.DownloadWebPage(movie.Url);
+            HtmlDocument hd = DownloadWebPage(movie.Url);
 
             if (hd == null) {
                 return null;
