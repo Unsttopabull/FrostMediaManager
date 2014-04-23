@@ -8,7 +8,6 @@
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:userControls="clr-namespace:RibbonUI.UserControls"
-             xmlns:models="clr-namespace:Frost.Common.Models.Provider;assembly=Frost.Common"
              mc:Ignorable="d" x:Name="FlagsInfo"
              d:DesignHeight="75" d:DesignWidth="950">
     <UserControl.DataContext>
@@ -51,7 +50,7 @@
                 <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding SelectedMovie.ReleaseYear, StringFormat=({0}), TargetNullValue=(?), FallbackValue=(?)}"/>
                 <TextBlock IsHitTestVisible="False" FontWeight="Bold" FontSize="16" Margin="5,0,0,0" Text="{Binding OriginalTitle, StringFormat=aka {0}, TargetNullValue={}, FallbackValue={}}"/>
             </StackPanel>
-            <TextBlock Grid.Row="1" FontSize="14" Text="{Binding SelectedMovie.FirstPlot.Tagline, TargetNullValue={l:T No tagline}, FallbackValue={l:T No tagline}}"/>
+            <TextBlock Grid.Row="1" FontSize="14" Text="{Binding SelectedMovie.FirstPlot.Tagline, TargetNullValue={l:T No tagline}, FallbackValue={l:T No tagline}, UpdateSourceTrigger=PropertyChanged}"/>
             <StackPanel Grid.Row="3" Orientation="Horizontal">
                 <fmm:StarRating Rating="{Binding SelectedMovie.RatingAverage, Mode=TwoWay}"/>
                 <TextBlock FontSize="16" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding SelectedMovie.Top250, StringFormat=Top 250: {0}, TargetNullValue={x:Null}}"/>

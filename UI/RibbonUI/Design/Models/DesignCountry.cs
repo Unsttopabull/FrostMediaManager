@@ -3,6 +3,16 @@ using Frost.Common.Models.Provider.ISO;
 
 namespace RibbonUI.Design.Models {
     public class DesignCountry : ICountry {
+
+        public DesignCountry() {
+        }
+
+        public DesignCountry(string name) {
+            Name = name;
+
+            ISO3166 = new ISO3166(Name);
+        }
+
         public long Id { get; private set; }
 
         /// <summary>Gets or sets the country name.</summary>

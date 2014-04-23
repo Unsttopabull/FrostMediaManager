@@ -9,31 +9,30 @@ using HtmlAgilityPack;
 namespace Frost.InfoParsers {
 
     [Serializable]
-    public abstract class ParsedMovieInfo : IParsedMovieInfo {
-
+    public class ParsedMovieInfo {
         public ParsedMovieInfo() {
             Videos = new List<IParsedVideo>();
         }
 
-        public bool IsFinished { get; protected set; }
-        public string Distribution { get; protected set; }
-        public string Duration { get; protected set; }
-        public string ReleaseYear { get; protected set; }
-        public string Country { get; protected set; }
-        public string Language { get; protected set; }
-        public IEnumerable<string> Writers { get; protected set; }
-        public IEnumerable<string> Directors { get; protected set; }
-        public IEnumerable<string> Actors { get; protected set; }
-        public string OfficialSite { get; protected set; }
-        public string ImdbLink { get; protected set; }
-        public string ImdbRating { get; protected set; }
-        public string Summary { get; protected set; }
-        public string TrailerUrl { get; protected set; }
-        public ICollection<IParsedVideo> Videos { get; protected set; }
-        public ParsedAward Awards { get; protected set; }
-        public IEnumerable<string> Genres { get; protected set; }
+        public bool IsFinished { get; set; }
+        public string Distribution { get; set; }
+        public string Duration { get; set; }
+        public string ReleaseYear { get; set; }
+        public string Country { get; set; }
+        public string Language { get; set; }
+        public IEnumerable<string> Writers { get; set; }
+        public IEnumerable<string> Directors { get; set; }
+        public IEnumerable<string> Actors { get; set; }
+        public string OfficialSite { get; set; }
+        public string ImdbLink { get; set; }
+        public string ImdbRating { get; set; }
+        public string Summary { get; set; }
+        public string TrailerUrl { get; set; }
+        public ICollection<IParsedVideo> Videos { get; set; }
+        public ParsedAward Awards { get; set; }
+        public IEnumerable<string> Genres { get; set; }
 
-        protected HtmlDocument DownloadWebPage(string url, Encoding enc = null) {
+        public static HtmlDocument DownloadWebPage(string url, Encoding enc = null) {
             string html;
             using (WebClient webCl = new WebClient { Encoding = enc ?? Encoding.UTF8 }) {
                 try {
@@ -41,8 +40,6 @@ namespace Frost.InfoParsers {
                 }
                 catch (WebException e) {
                     Console.Error.WriteLine(e.Message);
-
-                    IsFinished = false;
                     return null;
                 }
             }

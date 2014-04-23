@@ -492,6 +492,31 @@ namespace Frost.Providers.Frost.Proxies {
 
         #region Add/Remove methods
 
+        /// <summary>Adds the specified writer to the provider data store.</summary>
+        /// <param name="writer">The writer to add.</param>
+        /// <returns>Returns the added writer. If the <paramref name="writer"/> is a duplicate it returns the existing instance in the provider store. Otherwise returns <c>null</c>.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding writers or the writers does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding writers.</exception>
+        public IPerson AddWriter(IPerson writer) {
+            Person p = Service.FindPerson(writer, true);
+            Entity.Directors.Add(p);
+            return p;
+        }
+
+        /// <summary>Removes the specified writer from the provider data store.</summary>
+        /// <param name="writer">The writer to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing writers in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing writers.</exception>
+        public bool RemoveWriter(IPerson writer) {
+            if (writer is Person) {
+                return Entity.Directors.Remove(writer as Person);
+            }
+
+            Person p = Service.FindPerson(writer, false);
+            return Entity.Directors.Remove(p);
+        }
+
         #region Actors
 
         public IActor AddActor(IActor actor) {
@@ -582,14 +607,21 @@ namespace Frost.Providers.Frost.Proxies {
         }
 
         public bool RemovePlot(IPlot plot) {
+            Plot p;
             if (plot is Plot) {
-                return Entity.Plots.Remove(plot as Plot);
+                p = plot as Plot;
+                bool removed = Entity.Plots.Remove(p);
+                if (removed) {
+                    Service.MarkAsDeleted(p);
+                }
             }
 
-            Plot p = Service.FindPlot(plot, false, Id);
+            p = Service.FindPlot(plot, false, Id);
             if (p != null) {
                 bool removed = Entity.Plots.Remove(p);
-                Service.MarkAsDeleted(p);
+                if (removed && Service.MarkAsDeleted(p)) {
+                    return true;
+                }
                 return removed;
             }
 
@@ -644,6 +676,70 @@ namespace Frost.Providers.Frost.Proxies {
         }
 
         #endregion
+
+        /// <summary>Adds the specified audio to the provider data store.</summary>
+        /// <param name="audio">The audio to add.</param>
+        /// <returns>Returns the added audio. If the <paramref name="audio"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding audios or the audio does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding audios.</exception>
+        public IAudio AddAudio(IAudio audio) {
+            if (audio == null) {
+                return null;
+            }
+
+            Audio a = new Audio(audio);
+            Entity.Audios.Add(a);
+
+            return new FrostAudio(a, Service);
+        }
+
+        /// <summary>Removes the specified audio from the provider data store.</summary>
+        /// <param name="audio">The audio to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing audios in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing audios.</exception>
+        public bool RemoveAudio(IAudio audio) {
+            if (audio is FrostAudio) {
+                return Entity.Audios.Remove((audio as FrostAudio).ProxiedEntity);
+            }
+
+            if (audio.Id > 0) {
+                return Entity.Audios.RemoveWhere(a => a.Id == audio.Id) > 0;
+            }
+            return false;
+        }
+
+        /// <summary>Adds the specified video to the provider data store.</summary>
+        /// <param name="video">The video to add.</param>
+        /// <returns>Returns the added video. If the <paramref name="video"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding videos or the video does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding videos.</exception>
+        public IVideo AddVideo(IVideo video) {
+            if (video == null) {
+                return null;
+            }
+
+            Video v = new Video(video);
+            Entity.Videos.Add(v);
+
+            return new FrostVideo(v, Service);
+        }
+
+        /// <summary>Removes the specified video from the provider data store.</summary>
+        /// <param name="video">The video to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing videos in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing video.</exception>
+        public bool RemoveVideo(IVideo video) {
+            if (video is FrostVideo) {
+                return Entity.Videos.Remove((video as FrostVideo).ProxiedEntity);
+            }
+
+            if (video.Id > 0) {
+                return Entity.Videos.RemoveWhere(v => v.Id == video.Id) > 0;
+            }
+            return false;
+        }
 
         #endregion
 

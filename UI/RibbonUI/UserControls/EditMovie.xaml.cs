@@ -1,11 +1,8 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Frost.Common;
-using Frost.Common.Models.Provider;
 using Frost.GettextMarkupExtension;
-using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls {

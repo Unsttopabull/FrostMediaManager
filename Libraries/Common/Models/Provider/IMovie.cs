@@ -249,6 +249,20 @@ namespace Frost.Common.Models.Provider {
         /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing actors.</exception>
         bool RemoveActor(IActor actor);
 
+        /// <summary>Adds the specified writer to the provider data store.</summary>
+        /// <param name="writer">The writer to add.</param>
+        /// <returns>Returns the added writer. If the <paramref name="writer"/> is a duplicate it returns the existing instance in the provider store. Otherwise returns <c>null</c>.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding writers or the writers does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding writers.</exception>
+        IPerson AddWriter(IPerson writer);
+
+        /// <summary>Removes the specified writer from the provider data store.</summary>
+        /// <param name="writer">The writer to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing writers in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing writers.</exception>
+        bool RemoveWriter(IPerson writer);
+
         /// <summary>Adds the specified director to the provider data store.</summary>
         /// <param name="director">The director to add.</param>
         /// <returns>Returns the added director. If the <paramref name="director"/> is a duplicate it returns the existing instance in the provider store. Otherwise returns <c>null</c>.</returns>
@@ -346,6 +360,34 @@ namespace Frost.Common.Models.Provider {
         /// <exception cref="NotSupportedException">Throws when the provider does not support removing countries in a particual scenario.</exception>
         /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing countries.</exception>
         bool RemoveSubtitle(ISubtitle subtitle);
+
+        /// <summary>Adds the specified audio to the provider data store.</summary>
+        /// <param name="audio">The audio to add.</param>
+        /// <returns>Returns the added audio. If the <paramref name="audio"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding audios or the audio does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding audios.</exception>
+        IAudio AddAudio(IAudio audio);
+
+        /// <summary>Removes the specified audio from the provider data store.</summary>
+        /// <param name="audio">The audio to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing audios in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing audios.</exception>
+        bool RemoveAudio(IAudio audio);
+
+        /// <summary>Adds the specified video to the provider data store.</summary>
+        /// <param name="video">The video to add.</param>
+        /// <returns>Returns the added video. If the <paramref name="video"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding videos or the video does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding videos.</exception>
+        IVideo AddVideo(IVideo video);
+
+        /// <summary>Removes the specified video from the provider data store.</summary>
+        /// <param name="video">The video to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing videos in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing video.</exception>
+        bool RemoveVideo(IVideo video);
 
         #endregion
 

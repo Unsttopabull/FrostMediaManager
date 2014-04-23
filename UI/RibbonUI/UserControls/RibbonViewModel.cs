@@ -247,7 +247,8 @@ namespace RibbonUI.UserControls {
         }
 
         private void UpdateMovie(WebUpdateSite site) {
-            WebUpdater wu = new WebUpdater(site, SelectedMovie);
+            WebUpdater wu = new WebUpdater(site, SelectedMovie) { Owner = ParentWindow };
+            wu.ShowDialog();
         }
 
         private void MenuItemOptionsOnClick() {

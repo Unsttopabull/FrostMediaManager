@@ -831,11 +831,11 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         #region Add/Remove
 
-        public void RemoveArt(MovieArt art) {
+        public void RemoveArt(MovieArt art, bool silent = false) {
         }
 
-        public void AddActor(IActor actor) {
-            IActor a = Add(_observedEntity.AddActor, actor);
+        public void AddActor(IActor actor, bool silent = false) {
+            IActor a = Add(_observedEntity.AddActor, actor, silent);
             if (a == null) {
                 return;
             }
@@ -843,21 +843,44 @@ namespace RibbonUI.Util.ObservableWrappers {
             if (!Actors.Any(act => act.Equals(a))) {
                 Actors.Add(new MovieActor(a));
             }
-            else {
+            else if(!silent){
                 MessageBox.Show(TranslationManager.T("This person has already been added to this movie as {0}.", "an actor"));
             }
         }
 
-        public bool RemoveActor(MovieActor actor) {
-            bool success = Remove(_observedEntity.RemoveActor, actor.ObservedEntity as IActor);
+        public bool RemoveActor(MovieActor actor, bool silent = false) {
+            bool success = Remove(_observedEntity.RemoveActor, actor.ObservedEntity as IActor, silent);
             if (success) {
                 Actors.Remove(actor);
             }
             return success;
         }
 
-        public IPerson AddDirector(IPerson director) {
-            IPerson p = Add(_observedEntity.AddDirector, director);
+        public IPerson AddWriter(IPerson writer, bool silent = false) {
+            IPerson p = Add(_observedEntity.AddWriter, writer, silent);
+
+            if (p == null) {
+                return null;
+            }
+
+            if (!Writers.Any(d => d.Equals(p))) {
+                Writers.Add(p);
+            }
+            else if(!silent){
+                MessageBox.Show(TranslationManager.T("This person has already been added to this movie as {0}.", "a writer"));
+            }
+            return p;
+        }
+
+        public void RemoveWriter(MoviePerson writer, bool silent = false) {
+            bool success = Remove(_observedEntity.RemoveWriter, writer.ObservedEntity, silent);
+            if (success) {
+                Writers.Remove(writer.ObservedEntity);
+            } 
+        }
+
+        public IPerson AddDirector(IPerson director, bool silent = false) {
+            IPerson p = Add(_observedEntity.AddDirector, director, silent);
 
             if (p == null) {
                 return null;
@@ -867,14 +890,14 @@ namespace RibbonUI.Util.ObservableWrappers {
                 Directors.Add(new MoviePerson(p));
                 OnPropertyChanged("DirectorNames");
             }
-            else {
+            else if(!silent){
                 MessageBox.Show(TranslationManager.T("This person has already been added to this movie as {0}.", "a director"));
             }
             return p;
         }
 
-        public bool RemoveDirector(MoviePerson director) {
-            bool removed = Remove(_observedEntity.RemoveDirector, director.ObservedEntity);
+        public bool RemoveDirector(MoviePerson director, bool silent = false) {
+            bool removed = Remove(_observedEntity.RemoveDirector, director.ObservedEntity, silent);
             if (removed) {
                 Directors.Remove(director);
                 OnPropertyChanged("DirectorNames");
@@ -882,16 +905,16 @@ namespace RibbonUI.Util.ObservableWrappers {
             return removed;
         }
 
-        public ISpecial AddSpecial(ISpecial special) {
-            return Add(_observedEntity.AddSpecial, special);
+        public ISpecial AddSpecial(ISpecial special, bool silent = false) {
+            return Add(_observedEntity.AddSpecial, special, silent);
         }
 
-        public bool RemoveSpecial(ISpecial special) {
-            return Remove(_observedEntity.RemoveSpecial, special);
+        public bool RemoveSpecial(ISpecial special, bool silent = false) {
+            return Remove(_observedEntity.RemoveSpecial, special, silent);
         }
 
-        public void AddGenre(IGenre genre) {
-            IGenre g = Add(_observedEntity.AddGenre, genre);
+        public void AddGenre(IGenre genre, bool silent = false) {
+            IGenre g = Add(_observedEntity.AddGenre, genre, silent);
             if (g == null) {
                 return;
             }
@@ -900,21 +923,21 @@ namespace RibbonUI.Util.ObservableWrappers {
                 Genres.Add(g);
                 OnPropertyChanged("GenreNames");
             }
-            else {
+            else if(!silent){
                 MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "genre"));
             }
         }
 
-        public void RemoveGenre(IGenre genre) {
-            bool success = Remove(_observedEntity.RemoveGenre, genre);
+        public void RemoveGenre(IGenre genre, bool silent = false) {
+            bool success = Remove(_observedEntity.RemoveGenre, genre, silent);
             if (success) {
                 Genres.Remove(genre);
                 OnPropertyChanged("GenreNames");
             }
         }
 
-        public void AddPlot(IPlot plot) {
-            IPlot p = Add(_observedEntity.AddPlot, plot);
+        public void AddPlot(IPlot plot, bool silent = false) {
+            IPlot p = Add(_observedEntity.AddPlot, plot, silent);
 
             if (p != null) {
                 Plots.Add(new MoviePlot(p));
@@ -922,8 +945,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
         }
 
-        public bool RemovePlot(MoviePlot plot) {
-            bool success = Remove(_observedEntity.RemovePlot, plot.ObservedEntity);
+        public bool RemovePlot(MoviePlot plot, bool silent = false) {
+            bool success = Remove(_observedEntity.RemovePlot, plot.ObservedEntity, silent);
 
             if (success) {
                 Plots.Remove(plot);
@@ -933,8 +956,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             return success;
         }
 
-        public void AddStudio(IStudio studio) {
-            IStudio stud = Add(_observedEntity.AddStudio, studio);
+        public void AddStudio(IStudio studio, bool silent = false) {
+            IStudio stud = Add(_observedEntity.AddStudio, studio, silent);
             if (stud == null) {
                 return;
             }
@@ -942,20 +965,20 @@ namespace RibbonUI.Util.ObservableWrappers {
             if (!Studios.Any(s => s.Equals(stud))) {
                 Studios.Add(new MovieStudio(stud));
             }
-            else {
+            else if(!silent){
                 MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "genre"));
             }
         }
 
-        public void RemoveStudio(MovieStudio studio) {
-            bool success = Remove(_observedEntity.RemoveStudio, studio.ObservedEntity);
+        public void RemoveStudio(MovieStudio studio, bool silent = false) {
+            bool success = Remove(_observedEntity.RemoveStudio, studio.ObservedEntity, silent);
             if (success) {
                 Studios.Remove(studio);
             }
         }
 
-        public void AddCountry(ICountry country) {
-            ICountry c = Add(_observedEntity.AddCountry, country);
+        public void AddCountry(ICountry country, bool silent = false) {
+            ICountry c = Add(_observedEntity.AddCountry, country, silent);
             if (c == null) {
                 return;
             }
@@ -963,59 +986,104 @@ namespace RibbonUI.Util.ObservableWrappers {
             if (!Countries.Any(cntry => cntry.Equals(c))) {
                 Countries.Add(new MovieCountry(c));
             }
-            else {
+            else if(!silent){
                 MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "country"));
             }
         }
 
-        public void RemoveCountry(MovieCountry country) {
-            bool success = Remove(_observedEntity.RemoveCountry, country.ObservedEntity);
+        public void RemoveCountry(MovieCountry country, bool silent = false) {
+            bool success = Remove(_observedEntity.RemoveCountry, country.ObservedEntity, silent);
             if (success) {
                 Countries.Remove(country);
             }
         }
 
-        public void AddSubtitle(ISubtitle subtitle) {
-            ISubtitle sub = Add(_observedEntity.AddSubtitle, subtitle);
+        public void AddSubtitle(ISubtitle subtitle, bool silent = false) {
+            ISubtitle sub = Add(_observedEntity.AddSubtitle, subtitle, silent);
             if (sub != null) {
                 Subtitles.Add(new MovieSubtitle(sub));
             }
         }
 
-        public void RemoveSubtitle(MovieSubtitle subtitle) {
-            bool success = Remove(_observedEntity.RemoveSubtitle, subtitle.ObservedEntity);
+        public void RemoveSubtitle(MovieSubtitle subtitle, bool silent = false) {
+            bool success = Remove(_observedEntity.RemoveSubtitle, subtitle.ObservedEntity, silent);
             if (success) {
                 Subtitles.Remove(subtitle);
             }
         }
 
-        public void RemoveAudio(MovieAudio audio) {
-            
+        public void AddAudio(IAudio audio, bool silent = false) {
+            IAudio a = Add(_observedEntity.AddAudio, audio, silent);
+            if (a != null) {
+                Audios.Add(new MovieAudio(a));
+            }            
         }
 
-        private bool Remove<T>(Func<T, bool> removeItem, T item) where T : IMovieEntity {
+        public void RemoveAudio(MovieAudio audio, bool silent = false) {
+            bool success = Remove(_observedEntity.RemoveAudio, audio.ObservedEntity, silent);
+            if (success) {
+                Audios.Remove(audio);
+            }            
+        }
+
+        public void AddVideo(IVideo video, bool silent = false) {
+            IVideo v = Add(_observedEntity.AddVideo, video, silent);
+            if (v != null) {
+                Videos.Add(new MovieVideo(v));
+            }               
+        }
+
+        public void RemoveVideo(MovieVideo video, bool silent = false) {
+            bool success = Remove(_observedEntity.RemoveVideo, video.ObservedEntity, silent);
+            if (success) {
+                Videos.Remove(video);
+            }                
+        }
+
+        private bool Remove<T>(Func<T, bool> removeItem, T item, bool silent) where T : IMovieEntity {
             try {
                 if (removeItem(item)) {
                     return true;
                 }
-                UIHelper.ProviderCouldNotRemove();
+
+                if (!silent) {
+                    UIHelper.ProviderCouldNotRemove();
+                }
+                else {
+                    throw new Exception(TranslationManager.T("Provider could not remove the item.\nProbable causes:\n\t* Item does not exists in the store\n\t* An error has occured."));
+                }
             }
             catch (Exception e) {
-                UIHelper.HandleProviderException(e);
+                if (!silent) {
+                    UIHelper.HandleProviderException(e);
+                }
+                else {
+                    throw;
+                }
             }
             return false;
         }
 
-        private T Add<T>(Func<T, T> addItem, T item) where T : class, IMovieEntity {
+        private T Add<T>(Func<T, T> addItem, T item, bool silent) where T : class, IMovieEntity {
             T addedItem = null;
             try {
                 addedItem = addItem(item);
                 if (addedItem == null) {
-                    UIHelper.ProviderCouldNotAdd();
+                    if (!silent) {
+                        UIHelper.ProviderCouldNotAdd();
+                    }
+                    else {
+                        throw new Exception(TranslationManager.T("Error: Provider could not add the item.\nPlease contact provider creator."));
+                    }
                 }
             }
             catch (Exception e) {
-                UIHelper.HandleProviderException(e);
+                if (!silent) {
+                    UIHelper.HandleProviderException(e);
+                }
+                else {
+                    throw;
+                }
             }
             return addedItem;
         }

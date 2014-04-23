@@ -260,6 +260,10 @@ namespace RibbonUI.UserControls {
             AddGenre ag = new AddGenre { Owner = ParentWindow, Genres = _service.Genres };
             ag.ShowDialog();
 
+            if (ag.DialogResult != true) {
+                return;
+            }
+
             if (string.IsNullOrEmpty(ag.NewGenre.Text)) {
                 foreach (IGenre genre in ag.GenreList.SelectedItems) {
                     SelectedMovie.AddGenre(genre);

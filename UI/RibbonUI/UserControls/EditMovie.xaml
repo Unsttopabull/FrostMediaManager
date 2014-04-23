@@ -76,7 +76,7 @@
 
                     <Label Grid.Row="8" Target="{Binding ElementName=MovieSet}" Content="{l:T Movie set, Postfix=:}"/>
                     <ComboBox Grid.Row="9" x:Name="MovieSet" SelectedItem="{Binding SelectedMovieSet}"
-                              IsEnabled="{Binding SelectedMovie[Set]}" ItemsSource="{Binding Sets}" DisplayMemberPath="Name"/>
+                              IsEnabled="{Binding SelectedMovie[Set]}" ItemsSource="{Binding Sets, IsAsync=True}" DisplayMemberPath="Name"/>
 
                     <Grid x:Name="TypeRatingDuration" x:FieldModifier="private" Grid.Row="10">
                         <Grid.ColumnDefinitions>
@@ -183,7 +183,7 @@
 
                         <Label Grid.Row="0" Grid.ColumnSpan="2" Target="{Binding ElementName=MovieDirectors}" Content="{l:T Directors, Postfix=:}"/>
                         <ListBox Grid.Row="1" Grid.Column="0" MinHeight="20" MaxHeight="50" Grid.ColumnSpan="2"
-                                 x:Name="MovieDirectors" ItemsSource="{Binding SelectedMovie.Directors}" SelectionMode="Single" >
+                                 x:Name="MovieDirectors" ItemsSource="{Binding SelectedMovie.Directors, IsAsync=True}" SelectionMode="Single" >
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Name}"/>
@@ -201,7 +201,7 @@
                         </StackPanel>
 
                         <Label Grid.Column="0" Grid.Row="3" Target="{Binding ElementName=MovieCountries}" Margin="-5,-5,0,0"  Content="{l:T Countries, Postfix=:}"/>
-                        <ListBox Grid.Row="4" Grid.Column="0" x:Name="MovieCountries" ItemsSource="{Binding SelectedMovie.Countries, FallbackValue={x:Null}}"
+                        <ListBox Grid.Row="4" Grid.Column="0" x:Name="MovieCountries" ItemsSource="{Binding SelectedMovie.Countries, IsAsync=True, FallbackValue={x:Null}}"
                                  MinHeight="32">
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type o:MovieCountry}">
@@ -265,7 +265,7 @@
                         </DockPanel>
                         <Button Grid.Column="1" Grid.Row="0" Margin="5,5,0,2" Content="{l:T Set as default}" Command="{Binding SetPlotAsDefault}" CommandParameter="{Binding ElementName=MoviePlotCombo, Path=SelectedItem}"/>
 
-                        <ComboBox Grid.Column="0" Grid.Row="1" x:Name="MoviePlotCombo" ItemsSource="{Binding SelectedMovie.Plots, FallbackValue={x:Null}}" IsEnabled="{Binding SelectedMovie[Plots], TargetNullValue=False, FallbackValue=False}"
+                        <ComboBox Grid.Column="0" Grid.Row="1" x:Name="MoviePlotCombo" ItemsSource="{Binding SelectedMovie.Plots, FallbackValue={x:Null}, IsAsync=True}" IsEnabled="{Binding SelectedMovie[Plots], TargetNullValue=False, FallbackValue=False}"
                                   SelectedIndex="0" IsSynchronizedWithCurrentItem="True" SelectedItem="{Binding SelectedPlot}">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type o:MoviePlot}">
@@ -326,7 +326,7 @@
                     </DockPanel>
                     <DataGrid Grid.Column="0" Grid.Row="1" AutoGenerateColumns="False" GridLinesVisibility="None"
                               SelectionMode="Single" x:Name="MovieActorsList" CellStyle="{StaticResource NoBorderCell}"
-                              CanUserResizeColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedMovie.Actors}"
+                              CanUserResizeColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedMovie.Actors, IsAsync=True}"
                               CanUserReorderColumns="False" ClipToBounds="True" MinRowHeight="20" EnableRowVirtualization="False"
                               MinColumnWidth="50" RowHeaderWidth="0" CanUserAddRows="False" 
                               CellEditEnding="ActorsListOnCellEditEnding" Background="Transparent">
@@ -375,7 +375,7 @@
                             <fmm:ImageButton DockPanel.Dock="Right" Style="{StaticResource EditButton}" ToolTip="{l:T Edit selected studio}"
                                              Command="{Binding EditStudioCommand}" CommandParameter="{Binding ElementName=MovieStudios, Path=SelectedItem}"/>                            
                         </DockPanel>
-                        <ListBox Grid.Row="3" x:Name="MovieStudios" ItemsSource="{Binding SelectedMovie.Studios}" MinHeight="32">
+                        <ListBox Grid.Row="3" x:Name="MovieStudios" ItemsSource="{Binding SelectedMovie.Studios, IsAsync=True}" MinHeight="32">
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type o:MovieStudio}">
                                     <StackPanel Orientation="Horizontal">

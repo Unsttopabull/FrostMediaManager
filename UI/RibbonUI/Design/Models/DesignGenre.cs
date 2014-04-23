@@ -3,6 +3,13 @@
 namespace RibbonUI.Design.Models {
     public class DesignGenre : IGenre {
 
+        public DesignGenre() {
+        }
+
+        public DesignGenre(string name) {
+            Name = name;
+        }
+
         public string Name { get; set; }
         public long Id { get; private set; }
 

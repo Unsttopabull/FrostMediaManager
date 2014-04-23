@@ -10,6 +10,7 @@ using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.DetectFeatures;
 using System.Diagnostics;
+using Frost.InfoParsers;
 using Frost.Providers.Frost;
 using Frost.Providers.Frost.DB;
 using Frost.Providers.Xbmc;
@@ -38,42 +39,13 @@ namespace Frost.Tester {
             else {
                 BasicConfigurator.Configure();
             }
-            //%timestamp [%thread] %level %logger %ndc - %message%newline
-
-            //EntityFrameworkProfiler.Initialize();
-
-            //FileStream debugLog = File.Create("debug.txt");
-            //Debug.Listeners.Add(new TextWriterTraceListener(debugLog));
-            //Debug.Listeners.Add(new ConsoleTraceListener());
-            //Debug.AutoFlush = true;
 
             Stopwatch sw = Stopwatch.StartNew();
 
             TimeSpan time = default(TimeSpan);
 
-            //SerXmlXbmcMovie(new PHPSerializer());
-            //TestPHPDeserialize2();
 
-            //TestXjbDbParser();
-            //TestMediaSearcher();
-            //TestHasher();
-
-            TestFmmDbSaver();
-            //TestXjbDbSaver();
-            //TestPhpDeserializeAttribute();
-            //TestXjbDB();
-            //WriteOutMovies();
-            //TestDbCheck();
-            //TestDataService();
-            //TestXbmcContext();
-
-            //TestFileFeatures();
-            //TestGremoVKino();
-            //TestDBInsert();
-            //TestISOMount();
-            //TestDiscUtils();
-            //TestImDisk();
-            //OutputPo();
+            TestTusParser();
 
             sw.Stop();
 
@@ -81,6 +53,10 @@ namespace Frost.Tester {
             Console.WriteLine("\tFIN: " + sw.Elapsed);
             Console.WriteLine(Filler);
             Console.Read();
+        }
+
+        private static void TestTusParser() {
+
         }
 
         private static void TestXjbDbSaver() {

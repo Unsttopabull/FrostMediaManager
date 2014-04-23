@@ -603,6 +603,60 @@ namespace RibbonUI.Design.Fakes {
             throw new NotImplementedException();
         }
 
+        /// <summary>Adds the specified audio to the provider data store.</summary>
+        /// <param name="audio">The audio to add.</param>
+        /// <returns>Returns the added audio. If the <paramref name="audio"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding audios or the audio does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding audios.</exception>
+        public IAudio AddAudio(IAudio audio) {
+            return null;
+        }
+
+        /// <summary>Adds the specified video to the provider data store.</summary>
+        /// <param name="video">The video to add.</param>
+        /// <returns>Returns the added video. If the <paramref name="video"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding videos or the video does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding videos.</exception>
+        public IVideo AddVideo(IVideo video) {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>Adds the specified writer to the provider data store.</summary>
+        /// <param name="writer">The writer to add.</param>
+        /// <returns>Returns the added writer. If the <paramref name="writer"/> is a duplicate it returns the existing instance in the provider store. Otherwise returns <c>null</c>.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding writers or the writers does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding writers.</exception>
+        public IPerson AddWriter(IPerson writer) {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>Removes the specified audio from the provider data store.</summary>
+        /// <param name="audio">The audio to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing audios in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing audios.</exception>
+        public bool RemoveAudio(IAudio audio) {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>Removes the specified video from the provider data store.</summary>
+        /// <param name="video">The video to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing videos in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing video.</exception>
+        public bool RemoveVideo(IVideo video) {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>Removes the specified writer from the provider data store.</summary>
+        /// <param name="writer">The writer to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing writers in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing writers.</exception>
+        public bool RemoveWriter(IPerson writer) {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         public bool this[string propertyName] {

@@ -358,10 +358,16 @@ namespace Frost.Providers.Frost.Provider {
             }
         }
 
-        internal  void MarkAsDeleted(object entity) {
-            DbEntityEntry entry = _mvc.Entry(entity);
-            if (entry != null) {
-                entry.State = EntityState.Deleted;
+        internal bool MarkAsDeleted(object entity) {
+            try {
+                DbEntityEntry entry = _mvc.Entry(entity);
+                if (entry != null) {
+                    entry.State = EntityState.Deleted;
+                }
+                return true;
+            }
+            catch {
+                return false;
             }
         }
 

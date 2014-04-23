@@ -40,8 +40,6 @@
   <ItemGroup>
     <Compile Include="PlanetTusClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TusMovie.cs" />
-    <Compile Include="TusMovieInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CinemaInfoParsers\InfoParsersCommon.csproj">

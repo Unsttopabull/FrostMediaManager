@@ -54,9 +54,15 @@ namespace RibbonUI.UserControls.List {
 
             switch (art.Type) {
                 case ArtType.Fanart:
+                    if (SelectedMovie.DefaultFanart == null) {
+                        return true;
+                    }
                     return art.ObservedEntity.Id != SelectedMovie.DefaultFanart.ObservedEntity.Id;
                 case ArtType.Cover:
                 case ArtType.Poster:
+                    if (SelectedMovie.DefaultCover == null) {
+                        return true;
+                    }
                     return art.ObservedEntity.Id != SelectedMovie.DefaultCover.ObservedEntity.Id;
                 default:
                     return true;

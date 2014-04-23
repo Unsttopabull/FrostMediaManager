@@ -21,6 +21,7 @@
             <Style TargetType="ListViewItem">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
             </Style>
+            <!--<BitmapImage x:Key="Fanart" UriSource="../../Images/photo.png"/>-->
         </ListView.Resources>
         <ListView.ItemTemplate>
             <DataTemplate DataType="{x:Type ow:MovieArt}">
@@ -29,10 +30,10 @@
                         <fmm:LoadingImage DockPanel.Dock="Left" Source="{Binding PreviewOrPath, IsAsync=True}" Stretch="Uniform" ImageMaxWidth="300" ImageMaxHeight="300"/>
                         <!--<Image DockPanel.Dock="Left" Source="{Binding PreviewOrPath, IsAsync=True}" Stretch="Uniform" MaxHeight="300" MaxWidth="300" />-->
                         <StackPanel Margin="10,0,0,0">
-                            <StackPanel Orientation="Horizontal" Tag="{Binding Preview}"
-                                    Style="{StaticResource CollapseOnTagNull}">
+                            <StackPanel Orientation="Horizontal" Tag="{Binding ElementName=Preview, Path=Text}"
+                                        Style="{StaticResource CollapseOnTagNull}">
                                 <Label Content="{l:T Preview, Postfix=:}" FontWeight="Bold" />
-                                <TextBlock Text="{Binding Preview}" VerticalAlignment="Center" />
+                                <TextBlock x:Name="Preview" Text="{Binding Preview}" VerticalAlignment="Center" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label Content="{l:T Path, Postfix=:}" FontWeight="Bold"/>

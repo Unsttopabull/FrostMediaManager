@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity.ModelConfiguration;
-using Frost.Providers.Xbmc.NFO;
+using Frost.Common.Models.Provider;
 
 namespace Frost.Providers.Xbmc.DB.StreamDetails {
 
@@ -20,6 +21,26 @@ namespace Frost.Providers.Xbmc.DB.StreamDetails {
 
         public XbmcDbStreamDetails(StreamType type) {
             Type = type;
+        }
+
+        internal XbmcDbStreamDetails(IAudio audio) {
+            Type = StreamType.Audio;
+            AudioChannels = audio.NumberOfChannels;
+            AudioCodec = audio.CodecId;
+            if (audio.Language != null && audio.Language.ISO639 != null) {
+                AudioLanguage = audio.Language.ISO639.Alpha3;
+            }
+        }
+
+        internal XbmcDbStreamDetails(IVideo video) {
+            Type = StreamType.Video;
+            VideoCodec = video.CodecId;
+            Aspect = video.Aspect;
+            VideoWidth = video.Width;
+            VideoHeight = video.Height;
+            if (video.Duration.HasValue) {
+                VideoDuration = (long?) Math.Round(video.Duration.Value / 1000.0);
+            }
         }
 
         /// <summary>Gets or sets this stream's database Id.</summary>

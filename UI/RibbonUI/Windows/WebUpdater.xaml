@@ -4,13 +4,58 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:l="http://www.frostmediamanager.com/xaml/translation"
+        xmlns:w="clr-namespace:RibbonUI.Windows"
         mc:Ignorable="d" WindowStyle="ToolWindow" ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
-        Title="{l:T Web updater}" SizeToContent="WidthAndHeight">
+        Title="{l:T Web updater}" SizeToContent="WidthAndHeight" x:Name="WebUpdaterWindow">
     <StackPanel Margin="5">
-        <TextBlock Text="{l:T Downloading...}" Margin="0,0,0,5"/>
+        <TextBlock Text="{Binding ElementName=WebUpdaterWindow, Path=LabelText, FallbackValue={l:T Downloading...}}" Margin="0,0,0,5"/>
         <Grid>
-            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding ProgressText, FallbackValue=Searching for information online...}" Panel.ZIndex="3" Foreground="Black" FontWeight="ExtraBold"/>
-            <ProgressBar IsIndeterminate="True" MinWidth="300" MinHeight="20"/>
+            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding ElementName=WebUpdaterWindow, Path=ProgressText, FallbackValue=Searching for information online...}" Panel.ZIndex="3" Foreground="Black" FontWeight="ExtraBold"/>
+            <ProgressBar x:Name="ProgressBar" IsIndeterminate="True" MinWidth="300" MinHeight="20"/>
         </Grid>
+        <ListView ItemsSource="{Binding ElementName=WebUpdaterWindow, Path=Errors, Mode=TwoWay}" MaxHeight="200" Margin="0,5,0,0">
+            <ListView.Resources>
+                <BitmapImage x:Key="Error" UriSource="../Images/error.png"/>
+                <BitmapImage x:Key="Warning" UriSource="../Images/warning.png"/>
+            </ListView.Resources>
+            <ListView.Style>
+                <Style TargetType="{x:Type ListView}">
+                    <Style.Triggers>
+                        <Trigger Property="HasItems" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="HasItems" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Style>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" MaxHeight="16">
+                            <Image.Style>
+                                <Style TargetType="{x:Type Image}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static w:ErrorType.Error}">
+                                            <Setter Property="Source" Value="{StaticResource Error}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static w:ErrorType.Warning}">
+                                            <Setter Property="Source" Value="{StaticResource Warning}"/>
+                                        </DataTrigger>                                        
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                        <TextBlock Margin="5,0,0,0" Text="{Binding Message, FallbackValue=Error}" VerticalAlignment="Center" Grid.Column="1"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button Content="{l:T Close}" MaxWidth="70" Margin="0,10,0,0" Visibility="{Binding ElementName=WebUpdaterWindow, Path=CloseButtonVisibility}" Click="OnCloseButtonClicked"/>
     </StackPanel>
 </Window>

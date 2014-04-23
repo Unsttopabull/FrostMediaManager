@@ -232,7 +232,7 @@ namespace Frost.Providers.Frost.DB {
         }
 
         internal Country FindCountry(ICountry country, bool createIfNotFound) {
-            Country c;
+            Country c = null;
             if (country.Id > 0) {
                 c = Countries.Find(country.Id);
                 if (c == null || (c.Name != country.Name)) {
@@ -246,9 +246,16 @@ namespace Frost.Providers.Frost.DB {
                 return c;
             }
 
-            c = Countries.FirstOrDefault(pr => (country.ISO3166 != null && pr.ISO3166.Alpha3 == country.ISO3166.Alpha3) || pr.Name == country.Name);
+            if (country.ISO3166 != null) {
+                c = Countries.FirstOrDefault(pr => pr.ISO3166.Alpha3 == country.ISO3166.Alpha3);
+            }
+
+            if (c == null) {
+                c = Countries.FirstOrDefault(pr => pr.Name == country.Name);
+            }
+
             if (c == null && createIfNotFound) {
-                Countries.Add(new Country(country));
+                c = Countries.Add(new Country(country));
             }
             return c;
         }

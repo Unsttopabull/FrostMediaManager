@@ -119,6 +119,10 @@
       <Project>{8491dccf-354e-4ff6-89d4-88a0bb9cb8af}</Project>
       <Name>Providers.Xtreamer</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Scrappers\CinemaInfoParsers\InfoParsersCommon.csproj">
+      <Project>{005F252B-C8AD-49E0-9A88-47BC289F00D0}</Project>
+      <Name>InfoParsersCommon</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

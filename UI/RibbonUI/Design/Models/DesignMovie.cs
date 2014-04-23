@@ -457,6 +457,43 @@ namespace RibbonUI.Design.Models {
             return audio;
         }
 
+        /// <summary>Adds the specified writer to the provider data store.</summary>
+        /// <param name="writer">The writer to add.</param>
+        /// <returns>Returns the added writer. If the <paramref name="writer"/> is a duplicate it returns the existing instance in the provider store. Otherwise returns <c>null</c>.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding writers or the writers does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding writers.</exception>
+        public IPerson AddWriter(IPerson writer) {
+            _writers.Add(writer);
+            return writer;
+        }
+
+        /// <summary>Removes the specified audio from the provider data store.</summary>
+        /// <param name="audio">The audio to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing audios in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing audios.</exception>
+        public bool RemoveAudio(IAudio audio) {
+            return _audios.Remove(audio);
+        }
+
+        /// <summary>Removes the specified video from the provider data store.</summary>
+        /// <param name="video">The video to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing videos in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing video.</exception>
+        public bool RemoveVideo(IVideo video) {
+            return _videos.Remove(video);
+        }
+
+        /// <summary>Removes the specified writer from the provider data store.</summary>
+        /// <param name="writer">The writer to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing writers in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing writers.</exception>
+        public bool RemoveWriter(IPerson writer) {
+            return _writers.Remove(writer);
+        }
+
         #endregion
 
         public void Update(MovieInfo movieInfo) {

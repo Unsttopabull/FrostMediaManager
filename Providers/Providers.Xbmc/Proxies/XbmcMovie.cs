@@ -11,6 +11,7 @@ using Frost.Providers.Xbmc.DB;
 using Frost.Providers.Xbmc.DB.Art;
 using Frost.Providers.Xbmc.DB.People;
 using Frost.Providers.Xbmc.DB.StreamDetails;
+using Frost.Providers.Xbmc.NFO;
 using Frost.Providers.Xbmc.Provider;
 
 namespace Frost.Providers.Xbmc.Proxies {
@@ -786,7 +787,10 @@ namespace Frost.Providers.Xbmc.Proxies {
         }
 
         public bool RemoveActor(IActor actor) {
-            XbmcMovieActor act = Entity.Actors.FirstOrDefault(a => a.Person.Name == actor.Name && a.Role == actor.Character);
+            XbmcMovieActor act = actor is XbmcMovieActor 
+                ? actor as XbmcMovieActor
+                : Entity.Actors.FirstOrDefault(a => a.Person.Name == actor.Name && a.Role == actor.Character);
+
             if (act != null) {
                 Entity.Actors.Remove(act);
 
@@ -802,6 +806,31 @@ namespace Frost.Providers.Xbmc.Proxies {
 
         #region Person
 
+        /// <summary>Adds the specified writer to the provider data store.</summary>
+        /// <param name="writer">The writer to add.</param>
+        /// <returns>Returns the added writer. If the <paramref name="writer"/> is a duplicate it returns the existing instance in the provider store. Otherwise returns <c>null</c>.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding writers or the writers does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding writers.</exception>
+        public IPerson AddWriter(IPerson writer) {
+            XbmcPerson p = Service.FindPerson(writer, true);
+            Entity.Writers.Add(p);
+            return p;
+        }
+
+        /// <summary>Removes the specified writer from the provider data store.</summary>
+        /// <param name="writer">The writer to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing writers in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing writers.</exception>
+        public bool RemoveWriter(IPerson writer) {
+            if (writer is XbmcPerson) {
+                return Entity.Writers.Remove(writer as XbmcPerson);
+            }
+
+            XbmcPerson p = Service.FindPerson(writer, false);
+            return Entity.Writers.Remove(p);
+        }
+
         public IPerson AddDirector(IPerson director) {
             XbmcPerson p = Service.FindPerson(director, true);
             Entity.Directors.Add(p);
@@ -809,6 +838,10 @@ namespace Frost.Providers.Xbmc.Proxies {
         }
 
         public bool RemoveDirector(IPerson director) {
+            if (director is XbmcPerson) {
+                return Entity.Directors.Remove(director as XbmcPerson);
+            }
+
             XbmcPerson p = Service.FindPerson(director, false);
             return Entity.Directors.Remove(p);
         }
@@ -911,6 +944,62 @@ namespace Frost.Providers.Xbmc.Proxies {
         }
 
         #endregion
+
+        /// <summary>Adds the specified audio to the provider data store.</summary>
+        /// <param name="audio">The audio to add.</param>
+        /// <returns>Returns the added audio. If the <paramref name="audio"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding audios or the audio does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding audios.</exception>
+        public IAudio AddAudio(IAudio audio) {
+            XbmcDbStreamDetails a = new XbmcDbStreamDetails(audio);
+            Entity.File.StreamDetails.Add(a);
+
+            return new XbmcAudioDetails(a);
+        }
+
+        /// <summary>Removes the specified audio from the provider data store.</summary>
+        /// <param name="audio">The audio to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing audios in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing audios.</exception>
+        public bool RemoveAudio(IAudio audio) {
+            if (audio is XbmcAudioDetails) {
+                return Entity.File.StreamDetails.Remove((audio as XbmcAudioDetails).ProxiedEntity);
+            }
+
+            if (audio.Id > 0) {
+                return Entity.File.StreamDetails.RemoveWhere(v => v.Id == audio.Id) > 0;
+            }
+            return false;
+        }
+
+        /// <summary>Adds the specified video to the provider data store.</summary>
+        /// <param name="video">The video to add.</param>
+        /// <returns>Returns the added video. If the <paramref name="video"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding videos or the video does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding videos.</exception>
+        public IVideo AddVideo(IVideo video) {
+            XbmcDbStreamDetails a = new XbmcDbStreamDetails(video);
+            Entity.File.StreamDetails.Add(a);
+
+            return new XbmcVideoDetails(a);
+        }
+
+        /// <summary>Removes the specified video from the provider data store.</summary>
+        /// <param name="video">The video to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing videos in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing video.</exception>
+        public bool RemoveVideo(IVideo video) {
+            if (video is XbmcVideoDetails) {
+                return Entity.File.StreamDetails.Remove((video as XbmcVideoDetails).ProxiedEntity);
+            }
+
+            if (video.Id > 0) {
+                return Entity.File.StreamDetails.RemoveWhere(v => v.Id == video.Id) > 0;
+            }
+            return false;
+        }
 
         #endregion
 

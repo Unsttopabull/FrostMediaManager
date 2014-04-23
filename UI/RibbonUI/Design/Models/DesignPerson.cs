@@ -3,6 +3,17 @@
 namespace RibbonUI.Design.Models {
     public class DesignPerson : IPerson {
 
+        /// <summary>Initializes a new instance of the <see cref="DesignPerson"/> class.</summary>
+        public DesignPerson() {
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="DesignPerson"/> class.</summary>
+        public DesignPerson(string name, string thumb, string imdbID) {
+            Name = name;
+            Thumb = thumb;
+            ImdbID = imdbID;
+        }
+
         public long Id { get; private set; }
 
         public bool this[string propertyName] {

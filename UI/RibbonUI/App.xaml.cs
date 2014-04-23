@@ -33,7 +33,7 @@ namespace RibbonUI {
             LoadPlugins();
 
             TranslationManager.CurrentTranslationProvider = new SecondLanguageTranslationProvider("Languages");
-            DispatcherUnhandledException += UnhandledExeption;
+            //DispatcherUnhandledException += UnhandledExeption;
         }
 
 

@@ -5,7 +5,6 @@ using System.Net;
 using System.Text;
 using System.Xml.XPath;
 using Frost.InfoParsers;
-using Frost.InfoParsers.Models;
 using HtmlAgilityPack;
 
 namespace Frost.MovieInfoParsers.Kolosej {
@@ -13,17 +12,19 @@ namespace Frost.MovieInfoParsers.Kolosej {
     public class KolosejClient : ParsingClient {
         private const string URL = "http://www.kolosej.si{0}";
 
-        public override List<IParsedMovie> Parse() {
+        public KolosejClient() : base("Kolosej") {
+        }
 
+        public override List<ParsedMovie> Parse() {
             string list;
             using (WebClient webCl = new WebClient { Encoding = Encoding.UTF8 }) {
-                 list = webCl.DownloadString(@"http://www.kolosej.si/filmi/A-Z/original/");
+                list = webCl.DownloadString(@"http://www.kolosej.si/filmi/A-Z/original/");
             }
 
             HtmlDocument hd = new HtmlDocument();
             hd.Load(new StringReader(list));
 
-            List<IParsedMovie> movies = new List<IParsedMovie>();
+            List<ParsedMovie> movies = new List<ParsedMovie>();
 
             HtmlNode mainContent = hd.GetElementbyId("main-content-one-column");
             XPathNavigator xPathNavigator = mainContent.CreateNavigator();
@@ -53,7 +54,7 @@ namespace Frost.MovieInfoParsers.Kolosej {
                         sloName = xpn.Value;
                     }
 
-                    movies.Add(new KolosejMovie(origName, sloName, link));
+                    movies.Add(new ParsedMovie(origName, sloName, link));
                 }
             }
             else {
@@ -62,6 +63,67 @@ namespace Frost.MovieInfoParsers.Kolosej {
 
             AvailableMovies = movies;
             return movies;
+        }
+
+        public override ParsedMovieInfo ParseMovieInfo(ParsedMovie movie) {
+            HtmlDocument hd = ParsedMovieInfo.DownloadWebPage(movie.Url);
+
+            if (hd == null) {
+                return null;
+            }
+
+            HtmlNode mainContent = hd.GetElementbyId("main-content-one-column");
+            HtmlNode movieInfo = mainContent.SelectSingleNode("//div[@class='movie-info']");
+            ParsedMovieInfo info = ParseMovieInfo(movieInfo);
+
+            if (info == null) {
+                return null;
+            }
+
+            info.Summary = mainContent.SelectSingleNode("//div[@class='summary']").InnerTextOrNull();
+
+            HtmlNode trailer = mainContent.SelectSingleNode("//div[@class='inline-trailer']/iframe[@src]");
+            if (trailer != null) {
+                info.TrailerUrl = trailer.Attributes["src"].Value.Trim();
+            }
+            return info;
+        }
+
+        private ParsedMovieInfo ParseMovieInfo(HtmlNode movieInfo) {
+            if (movieInfo == null) {
+                return null;
+            }
+
+            ParsedMovieInfo info = new ParsedMovieInfo();
+
+            string distrib = movieInfo.SelectSingleNode("div[@class='distribution']").InnerTextOrNull();
+            if (distrib != null) {
+                info.Distribution = distrib.Replace("Film distribucije ", "");
+            }
+
+            HtmlNode officialSite = movieInfo.SelectSingleNode("span[@class='title-orig']/a[@href]");
+            if (officialSite != null) {
+                info.OfficialSite = officialSite.Attributes["href"].Value;
+            }
+
+            HtmlNode duration = movieInfo.SelectSingleNode("span[@class='duration']/text()");
+            if (duration != null) {
+                info.Duration = duration.InnerText.Replace('\t', ' ').Replace('\n', ' ').Trim();
+            }
+
+            info.ReleaseYear = movieInfo.SelectSingleNode("span[@class='year']/text()").InnerTextOrNull();
+            info.Country = movieInfo.SelectSingleNode("span[@class='country']/a/text()").InnerTextOrNull();
+            info.Language = movieInfo.SelectSingleNode("span[@class='language']/text()").InnerTextOrNull();
+            info.Writers = movieInfo.SelectSingleNode("span[@class='screenplay']/text()").InnerTextSplitOrNull(true, ",", " in ");
+            info.Directors = movieInfo.SelectNodes("span[@class='director']/a/text()").InnerTextOrNull();
+            info.Actors = movieInfo.SelectNodes("span[@class='actors']/a/text()").InnerTextOrNull();
+
+            HtmlNode imdb = movieInfo.SelectSingleNode("//a[text()='IMDB']");
+            if (imdb != null && imdb.HasAttributes) {
+                info.ImdbLink = imdb.Attributes[0].Value;
+            }
+
+            return info;
         }
     }
 

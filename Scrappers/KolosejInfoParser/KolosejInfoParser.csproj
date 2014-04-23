@@ -39,8 +39,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="KolosejClient.cs" />
-    <Compile Include="KolosejMovie.cs" />
-    <Compile Include="KolosejMovieInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

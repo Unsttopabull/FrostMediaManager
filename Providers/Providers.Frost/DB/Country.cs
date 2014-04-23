@@ -13,7 +13,6 @@ namespace Frost.Providers.Frost.DB {
     /// <summary> Represents a country a movie was shot and/or produced in.</summary>
     [Table("Countries")]
     public class Country : ICountry {
-
         /// <summary>Initializes a new instance of the <see cref="Country"/> class.</summary>
         public Country() {
             Movies = new HashSet<Movie>();
@@ -49,7 +48,8 @@ namespace Frost.Providers.Frost.DB {
 
         internal Country(ICountry country) {
             Name = country.Name;
-            ISO3166 = country.ISO3166;
+
+            ISO3166 = country.ISO3166 ?? new ISO3166(Name);
         }
 
         /// <summary>Gets or sets the database Country Id.</summary>
@@ -103,7 +103,6 @@ namespace Frost.Providers.Frost.DB {
         }
 
         internal class CountryConfiguration : EntityTypeConfiguration<Country> {
-
             public CountryConfiguration() {
                 //Join tabela za Movie <--> Country
                 HasMany(m => m.Movies)
@@ -114,9 +113,7 @@ namespace Frost.Providers.Frost.DB {
                         m.MapRightKey("MovieId");
                     });
             }
-
         }
-
     }
 
 }

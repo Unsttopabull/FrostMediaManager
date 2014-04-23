@@ -24,8 +24,11 @@ namespace Frost.Common.Comparers {
                 return lhs.Id == rhs.Id;
             }
 
-            return string.Equals(lhs.ImdbID, rhs.ImdbID, StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(lhs.Name, rhs.Name);
+            if (!string.IsNullOrEmpty(lhs.ImdbID) && !string.IsNullOrEmpty(rhs.ImdbID)) {
+                return string.Equals(lhs.ImdbID, rhs.ImdbID, StringComparison.OrdinalIgnoreCase);
+            }
+
+            return string.Equals(lhs.Name, rhs.Name);
         }
 
         /// <summary>Returns a hash code for the specified object.</summary>
