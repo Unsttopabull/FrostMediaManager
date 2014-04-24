@@ -24,6 +24,14 @@ namespace Frost.MovieInfoParsers.GremoVKino {
         public GremoVKinoClient() : base("GremoVKino") {
         }
 
+        public override IEnumerable<ParsedMovie> Parse(string imdbId, string title) {
+            throw new NotImplementedException();
+        }
+
+        public override IEnumerable<ParsedMovie> Parse(string imdbId, string title, IEnumerable<string> movieHashes) {
+            throw new NotImplementedException();
+        }
+
         public override void Parse() {
             string maxUri = @"http://www.gremovkino.si/filmi/iskanje/seznam-filmi/" + MAX;
 

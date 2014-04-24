@@ -107,6 +107,10 @@
       <Project>{a85f5e2b-149a-4fb5-a749-056ae20ab72f}</Project>
       <Name>NetworkShares</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OpenSubtitlesMovieInfo\OpenSubtitlesMovieInfo.csproj">
+      <Project>{2ff698cb-77cd-4a19-a83e-4300420e2d0b}</Project>
+      <Name>OpenSubtitlesMovieInfo</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Providers\Providers.Frost\Providers.Frost.csproj">
       <Project>{b404da8f-fbf4-4ccc-be01-22c488863ec2}</Project>
       <Name>Providers.Frost</Name>

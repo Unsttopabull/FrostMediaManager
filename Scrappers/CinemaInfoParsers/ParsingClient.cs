@@ -13,9 +13,17 @@ namespace Frost.InfoParsers {
             Name = name;
         }
 
-        public string Name { get; set; }
+        public string Name { get; private set; }
+
+        public bool CanIndex { get; protected set; }
+
+
 
         public IEnumerable<ParsedMovie> AvailableMovies { get; protected set; }
+
+        public abstract IEnumerable<ParsedMovie> Parse(string imdbId, string title);
+
+        public abstract IEnumerable<ParsedMovie> Parse(string imdbId, string title, IEnumerable<string> movieHashes);
 
         public abstract void Parse();
         public abstract ParsedMovieInfo ParseMovieInfo(ParsedMovie movie);

@@ -14,7 +14,7 @@ namespace Frost.SharpOpenSubtitles.Models.Checking {
             while (enumerator.MoveNext()) {
                 DictionaryEntry current = (DictionaryEntry) enumerator.Current;
 
-                yield return new MovieInfo((string) current.Key, (XmlRpcStruct) current.Value);
+                yield return new MovieInfo(current.Key as string, current.Value as XmlRpcStruct);
             }
         }
 

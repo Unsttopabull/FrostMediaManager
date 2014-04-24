@@ -8,14 +8,11 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.DetectFeatures;
 using System.Diagnostics;
 using Frost.InfoParsers;
-using Frost.MovieInfoParsers.GremoVKino;
 using Frost.Providers.Frost;
 using Frost.Providers.Frost.DB;
 using Frost.Providers.Xbmc;
@@ -27,14 +24,13 @@ using HtmlAgilityPack;
 using log4net;
 using log4net.Config;
 using Newtonsoft.Json;
+using OpenSubtitlesMovieInfo;
 
 namespace Frost.Tester {
 
     internal class Program {
         private static readonly string Filler;
         private static readonly ILog Log = LogManager.GetLogger(typeof(Program));
-        private static int _numFailed;
-        private static int _page;
 
         static Program() {
             Filler = string.Join("", Enumerable.Repeat("_", Console.BufferWidth));
@@ -51,12 +47,22 @@ namespace Frost.Tester {
             Stopwatch sw = Stopwatch.StartNew();
 
             TimeSpan time = default(TimeSpan);
+
+            TestOSubInfoParser();
+
             sw.Stop();
 
             Console.WriteLine(Filler);
             Console.WriteLine("\tFIN: " + sw.Elapsed);
             Console.WriteLine(Filler);
             Console.Read();
+        }
+
+        private static void TestOSubInfoParser() {
+            OpenSubtitlesInfoClient cli = new OpenSubtitlesInfoClient();
+            IEnumerable<ParsedMovie> movies = cli.Parse(null, null, new[] { "51b739e60b4e3ce" });
+
+
         }
 
         public static HtmlDocument DownloadWebPage(string url, Encoding enc = null) {

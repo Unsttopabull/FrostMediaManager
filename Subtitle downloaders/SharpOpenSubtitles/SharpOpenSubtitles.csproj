@@ -105,7 +105,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\xml-rpc.net.3.0.0\xmlrpc.csproj">
+    <ProjectReference Include="..\..\Libraries\xml-rpc.net.3.0.0\xmlrpc.csproj">
       <Project>{1b4b0a58-0afb-4090-91dd-18912cc7de65}</Project>
       <Name>xmlrpc</Name>
     </ProjectReference>

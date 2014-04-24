@@ -159,26 +159,72 @@ namespace RibbonUI.Windows {
         }
 
         private async void SearchMovieInfo(ParsedMovieInfos info, WebUpdateSite site) {
-            await Task.Run(() => UpdateAvailable(info, site));
+            ParsingClient cli = null;
+            switch (site) {
+                case WebUpdateSite.Kolosej:
+                    cli = new KolosejClient();
+                    break;
+                case WebUpdateSite.OpenSubtitles:
+                    break;
+                case WebUpdateSite.GremoVKino:
+                    cli = new GremoVKinoClient();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("site");
+            }
 
-            LabelText = "Searching for available movie information.";
-            ProgressText = "Searching for movie in index.";
+            await Task.Run(() => UpdateAvailable(info, cli));
 
-            if (info.Movies == null || !info.Movies.Any()) {
-                MessageBox.Show("An error has occured updating available movie information.");
+            if (cli == null) {
+                MessageBox.Show("An error has occured accesing the parser/scrapper.");
                 Close();
                 return;
             }
 
-            ParsedMovie match = info.Movies.FirstOrDefault(m => string.Equals(m.OriginalName, _movie.Title, StringComparison.InvariantCultureIgnoreCase));
-            if (match == null) {
-                List<Result> matches = info.FuzzySearch.Search(_movie.Title).OrderByDescending(r => r.Score).ToList();
+            LabelText = "Searching for available movie information.";
+            ProgressText = "Searching for movie in index.";
+
+            ParsedMovie match = null;
+            if (cli.CanIndex) {
+                if (info.Movies == null || !info.Movies.Any()) {
+                    MessageBox.Show("An error has occured updating available movie information.");
+                    Close();
+                    return;
+                }
+
+                match = info.Movies.FirstOrDefault(m => string.Equals(m.OriginalName, _movie.Title, StringComparison.InvariantCultureIgnoreCase));
+                if (match == null) {
+                    List<Result> matches = info.FuzzySearch.Search(_movie.Title).OrderByDescending(r => r.Score).ToList();
+
+                    var names = matches.Select(r => r.Result1);
+
+                    Result bestMatch = matches.FirstOrDefault();
+                    if (bestMatch != null) {
+                        match = info.Movies.FirstOrDefault(m => m.OriginalName == bestMatch.Result1);
+                    }
+                }
+            }
+            else {
+                var movieHashes = _movie.Videos.Where(v => v != null && !string.IsNullOrEmpty(v.MovieHash)).Select(mv => mv.MovieHash);
+
+                List<ParsedMovie> movies;
+                try {
+                     movies = cli.Parse(_movie.ImdbID, _movie.Title, movieHashes).ToList();
+                }
+                catch (Exception e) {
+                    MessageBox.Show("An error has occured updating available movie information.");
+                    Close();
+                    return;
+                }
+
+                FuzzySearchService fuzzySearch = new FuzzySearchService(movies.Select(m => m.OriginalName));                
+                List<Result> matches = fuzzySearch.Search(_movie.Title).OrderByDescending(r => r.Score).ToList();
 
                 var names = matches.Select(r => r.Result1);
 
                 Result bestMatch = matches.FirstOrDefault();
                 if (bestMatch != null) {
-                    match = info.Movies.FirstOrDefault(m => m.OriginalName == bestMatch.Result1);
+                    match = movies.FirstOrDefault(m => m.OriginalName == bestMatch.Result1);
                 }
             }
 
@@ -198,7 +244,7 @@ namespace RibbonUI.Windows {
             }
         }
 
-        private void UpdateAvailable(ParsedMovieInfos info, WebUpdateSite site) {
+        private void UpdateAvailable(ParsedMovieInfos info, ParsingClient client) {
             if (info.ParsedTime != default(DateTime) && (DateTime.Now - info.ParsedTime) <= StaleTime) {
                 return;
             }
@@ -206,34 +252,20 @@ namespace RibbonUI.Windows {
             Dispatcher.Invoke(() => LabelText = TranslationManager.T("Preforming a one-time indexing operation."));
             Dispatcher.Invoke(() => ProgressText = TranslationManager.T("Indexing available movies"));
 
-            ParsingClient cli = null;
-            switch (site) {
-                case WebUpdateSite.Kolosej:
-                    cli = new KolosejClient();
-                    break;
-                case WebUpdateSite.OpenSubtitles:
-                    break;
-                case WebUpdateSite.GremoVKino:
-                    cli = new GremoVKinoClient();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException("site");
-            }
-
-            if (cli != null) {
+            if (client != null && client.CanIndex) {
                 try {
-                    cli.Parse();
+                    client.Parse();
                 }
                 catch (Exception e) {
                     return;
                 }
 
-                info.FuzzySearch = new FuzzySearchService(cli.AvailableMovies.Select(m => m.OriginalName));
-                info.Movies = cli.AvailableMovies;
+                info.FuzzySearch = new FuzzySearchService(client.AvailableMovies.Select(m => m.OriginalName));
+                info.Movies = client.AvailableMovies;
                 info.ParsedTime = DateTime.Now;
 
                 JsonSerializer js = new JsonSerializer();
-                using (TextWriter tw =  File.CreateText("Scrappers/" + cli.Name + ".cache")) {
+                using (TextWriter tw =  File.CreateText("Scrappers/" + client.Name + ".cache")) {
                     try {
                         js.Serialize(tw, info);
                     }

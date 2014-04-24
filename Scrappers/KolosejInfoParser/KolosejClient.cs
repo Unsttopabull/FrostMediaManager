@@ -15,6 +15,15 @@ namespace Frost.MovieInfoParsers.Kolosej {
         public KolosejClient() : base("Kolosej") {
         }
 
+
+        public override IEnumerable<ParsedMovie> Parse(string imdbId, string title) {
+            throw new NotImplementedException();
+        }
+
+        public override IEnumerable<ParsedMovie> Parse(string imdbId, string title, IEnumerable<string> movieHashes) {
+            throw new NotImplementedException();
+        }
+
         public override void Parse() {
             string list;
             using (WebClient webCl = new WebClient { Encoding = Encoding.UTF8 }) {

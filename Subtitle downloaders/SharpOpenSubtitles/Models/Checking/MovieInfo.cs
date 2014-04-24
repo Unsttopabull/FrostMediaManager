@@ -18,6 +18,10 @@ namespace Frost.SharpOpenSubtitles.Models.Checking {
         public MovieInfo(string movieHash, XmlRpcStruct info) {
             MovieHash = movieHash;
 
+            if (info == null) {
+                return;
+            }
+
             if (info.ContainsKey("MovieImdbID")) {
                 MovieImdbID = (string) info["MovieImdbID"];
             }
