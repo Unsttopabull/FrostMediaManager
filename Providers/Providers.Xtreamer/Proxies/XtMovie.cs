@@ -945,6 +945,24 @@ namespace Frost.Providers.Xtreamer.Proxies {
             throw new NotSupportedException("The provider does not support promotional videos.");
         }
 
+        /// <summary>Adds the specified art to the provider data store.</summary>
+        /// <param name="art">The art to add.</param>
+        /// <returns>Returns the added promotional video. If the <paramref name="art"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding art or the art does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding art.</exception>
+        public IArt AddArt(IArt art) {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>Removes the specified art from the provider data store.</summary>
+        /// <param name="art">The art to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing arts in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing art.</exception>
+        public bool RemoveArt(IArt art) {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         public bool this[string propertyName] {

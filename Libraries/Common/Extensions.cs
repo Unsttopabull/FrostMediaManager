@@ -5,6 +5,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
+using System.Windows.Threading;
 using Frost.Common.Util;
 
 namespace Frost.Common {
@@ -12,6 +14,24 @@ namespace Frost.Common {
     /// <summary>Contains extension methods to be used in this assembly.</summary>
     public static class Extensions {
         private static readonly DateTime Epoch = new DateTime(1970, 1, 1);
+
+        /// <summary />
+        /// A simple WPF threading extension method, to invoke a delegate
+        /// on the correct thread if it is not currently on the correct thread
+        /// Which can be used with DispatcherObject types
+        /// <summary />
+        /// <param name="disp" />The Dispatcher object on which to do the Invoke<param />
+        /// <param name="dotIt" />The delegate to run<param />
+        /// <param name="priority" />The DispatcherPriority<param />
+        public static void InvokeIfRequired(this Dispatcher disp, Action dotIt, DispatcherPriority priority) {
+            if (disp.Thread != Thread.CurrentThread) {
+                disp.Invoke(priority, dotIt);
+            }
+            else {
+                dotIt();
+            }
+        }
+
 
         /// <summary>Converts the date &amp; time to a UNIX timestamp (number of seconds since 1.1.1970)</summary>
         /// <param name="dt">The <see cref="DateTime"/> to convert.</param>
@@ -46,8 +66,8 @@ namespace Frost.Common {
         /// <returns>The trimmed string or <c>null</c> if the parameter <c><paramref name="str"/></c> was <c>null</c>.</returns>
         public static string TrimIfNotNull(this string str) {
             return (str != null)
-                ? str.Trim()
-                : null;
+                       ? str.Trim()
+                       : null;
         }
 
         [DllImport("Shlwapi.dll", CharSet = CharSet.Auto)]
@@ -55,7 +75,7 @@ namespace Frost.Common {
             long fileSize,
             [MarshalAs(UnmanagedType.LPTStr)] StringBuilder buffer,
             int bufferSize
-        );
+            );
 
         /// <summary>Formats the file size in bytes as a pretty printed string.</summary>
         /// <param name="size">The size in bytes.</param>

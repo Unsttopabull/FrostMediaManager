@@ -39,7 +39,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\IFanartClient.cs" />
+    <Compile Include="Models\IParsedArt.cs" />
+    <Compile Include="Models\IParsedArts.cs" />
+    <Compile Include="IParsedMovie.cs" />
     <Compile Include="Models\IParsedAward.cs" />
+    <Compile Include="ParsedArt.cs" />
+    <Compile Include="ParsedArts.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ParsedMovie.cs" />
     <Compile Include="Util\AsyncInline.cs" />
     <Compile Include="Extensions.cs" />

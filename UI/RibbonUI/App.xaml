@@ -104,6 +104,9 @@
                 <Trigger Property="Tag" Value="{x:Null}">
                     <Setter Property="Visibility" Value="Collapsed" />
                 </Trigger>
+                <Trigger Property="Tag" Value="">
+                    <Setter Property="Visibility" Value="Collapsed" />
+                </Trigger>                
             </Style.Triggers>
         </Style>
         <Style x:Key="CollapseOnTextNull" TargetType="{x:Type TextBlock}">

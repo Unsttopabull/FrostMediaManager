@@ -10,6 +10,9 @@
 
         public string OriginalName { get; private set; }
         public string SloveneName { get; private set; }
+
+        public int ReleaseYear { get; protected set; }
+
         public string Url { get; private set; }
 
         /// <summary>Returns a string that represents the current object.</summary>

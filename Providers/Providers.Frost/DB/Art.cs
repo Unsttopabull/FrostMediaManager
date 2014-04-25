@@ -31,7 +31,9 @@ namespace Frost.Providers.Frost.DB {
         }
 
         internal Art(IArt art) {
-            
+            Type = art.Type;
+            Path = art.Path;
+            Preview = art.Preview;
         }
 
         /// <summary>Gets or sets the database Art Id.</summary>

@@ -1,7 +1,16 @@
-﻿namespace Frost.PHPtoNET {
+﻿using System.Text;
 
-    public class PHPDeserializer2 {
-        public object Deserialize(PHPSerializedStream s) {
+namespace Frost.PHPtoNET {
+
+    public static class PHPDeserializer2 {
+
+        public static object Deserialize(string serialized, Encoding encoding) {
+            using (PHPSerializedStream serializedStream = new PHPSerializedStream(serialized, encoding)) {
+                return Deserialize(serializedStream);
+            }
+        }
+
+        public static object Deserialize(PHPSerializedStream s) {
             switch (s.Peek()) {
                 case 's':
                     return s.ReadString();
@@ -22,8 +31,14 @@
             }
         }
 
-        public T Deserialize<T>(PHPSerializedStream s) {
+        public static T Deserialize<T>(PHPSerializedStream s) {
             return s.DeserializeElement<T>();
+        }
+
+        public static T Deserialize<T>(string serialied, Encoding encoding) {
+            using (PHPSerializedStream serializedStream = new PHPSerializedStream(serialied, encoding)) {
+                return serializedStream.DeserializeElement<T>();
+            }
         }
     }
 

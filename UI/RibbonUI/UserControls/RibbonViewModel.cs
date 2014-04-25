@@ -33,6 +33,7 @@ namespace RibbonUI.UserControls {
         PlanetTus,
         OpenSubtitles,
         GremoVKino,
+        Omdb
     }
 
     class RibbonViewModel : INotifyPropertyChanged {
@@ -46,6 +47,7 @@ namespace RibbonUI.UserControls {
         private readonly IMoviesDataService _service;
         private ICommand _saveChangesCommand;
         private ICommand<WebUpdateSite> _updateMovieCommand;
+        private ICommand _updatePromotionalVideosCommand;
 
         public RibbonViewModel() {
             _service = TranslationManager.IsInDesignMode 
@@ -168,6 +170,16 @@ namespace RibbonUI.UserControls {
             set { _saveChangesCommand = value; }
         }
 
+        public ICommand UpdatePromotionalVideosCommand {
+            get {
+                if (_updatePromotionalVideosCommand == null) {
+                    _updateMovieCommand = new RelayCommand<WebUpdateSite>(UpdatePromotionalVideos);
+                }
+                return _updateMovieCommand;
+            }
+            set { _updatePromotionalVideosCommand = value; }
+        }
+
         #endregion
 
         private void OnRibbonLoaded(DependencyObject uc) {
@@ -250,6 +262,10 @@ namespace RibbonUI.UserControls {
         private void UpdateMovie(WebUpdateSite site) {
             WebUpdater wu = new WebUpdater(site, SelectedMovie) { Owner = ParentWindow };
             wu.ShowDialog();
+        }
+
+        private void UpdatePromotionalVideos(WebUpdateSite obj) {
+            
         }
 
         private void MenuItemOptionsOnClick() {

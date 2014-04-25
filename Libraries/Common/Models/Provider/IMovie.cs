@@ -417,6 +417,20 @@ namespace Frost.Common.Models.Provider {
         /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing promotional videos.</exception>
         bool RemovePromotionalVideo(IPromotionalVideo video);
 
+        /// <summary>Adds the specified art to the provider data store.</summary>
+        /// <param name="art">The art to add.</param>
+        /// <returns>Returns the added promotional video. If the <paramref name="art"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding art or the art does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding art.</exception>
+        IArt AddArt(IArt art);
+
+        /// <summary>Removes the specified art from the provider data store.</summary>
+        /// <param name="art">The art to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing arts in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing art.</exception>
+        bool RemoveArt(IArt art);
+
         #endregion
 
         /// <summary>Updates the movie with detected information.</summary>

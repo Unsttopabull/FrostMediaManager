@@ -166,6 +166,9 @@ namespace RibbonUI.Windows {
                 try {
                     service.SaveDetected(movieInfo);
                 }
+                catch (TaskCanceledException e) {
+                    
+                }
                 catch (Exception e) {
                 }
                 finally {

@@ -688,6 +688,10 @@ namespace Frost.Providers.Frost.Proxies {
         }
 
         public bool RemoveCountry(ICountry country) {
+            if (country is Country) {
+                return Entity.Countries.Remove(country as Country);
+            }
+
             Country c = Service.FindCountry(country, false);
             return Entity.Countries.Remove(c);
         }
@@ -804,6 +808,40 @@ namespace Frost.Providers.Frost.Proxies {
             PromotionalVideo promotionalVideo = Service.FindPromotionalVideo(video, false);
             if (promotionalVideo != null) {
                 return Entity.PromotionalVideos.Remove(promotionalVideo);
+            }
+            return false;
+        }
+
+        /// <summary>Adds the specified art to the provider data store.</summary>
+        /// <param name="art">The art to add.</param>
+        /// <returns>Returns the added promotional video. If the <paramref name="art"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding art or the art does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding art.</exception>
+        public IArt AddArt(IArt art) {
+            if (art is Art) {
+                Entity.Art.Add(art as Art);
+                return art;
+            }
+
+            Art a = Service.FindArt(art, true);
+            Entity.Art.Add(a);
+
+            return a;
+        }
+
+        /// <summary>Removes the specified art from the provider data store.</summary>
+        /// <param name="art">The art to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing arts in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing art.</exception>
+        public bool RemoveArt(IArt art) {
+            if (art is Art) {
+                return Entity.Art.Remove(art as Art);
+            }
+
+            Art a = Service.FindArt(art, false);
+            if (a != null) {
+                return Entity.Art.Remove(a);
             }
             return false;
         }

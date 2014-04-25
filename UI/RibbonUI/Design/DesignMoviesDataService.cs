@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
@@ -8,7 +9,7 @@ using RibbonUI.Design.Models;
 namespace RibbonUI.Design {
 
     public class DesignMoviesDataService : IMoviesDataService {
-        private IEnumerable<IMovie> _movies;
+        private ObservableCollection<IMovie> _movies;
         private IEnumerable<IFile> _files;
         private IEnumerable<IVideo> _videos;
         private IEnumerable<IAudio> _audios;
@@ -33,7 +34,7 @@ namespace RibbonUI.Design {
 
         #region Movies
 
-        public IEnumerable<IMovie> Movies {
+        public ObservableCollection<IMovie> Movies {
             get {
                 if (_movies != null) {
                     return _movies;
@@ -45,8 +46,8 @@ namespace RibbonUI.Design {
             }
         }
 
-        private static IEnumerable<IMovie> GetMovies() {
-            List<IMovie> movies = new List<IMovie>();
+        private static ObservableCollection<IMovie> GetMovies() {
+            ObservableCollection<IMovie> movies = new ObservableCollection<IMovie>();
 
             #region Movie 1
 

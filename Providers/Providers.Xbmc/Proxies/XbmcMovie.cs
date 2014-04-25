@@ -1041,6 +1041,39 @@ namespace Frost.Providers.Xbmc.Proxies {
             throw new NotSupportedException("The provider does not support promotional videos.");
         }
 
+        /// <summary>Adds the specified art to the provider data store.</summary>
+        /// <param name="art">The art to add.</param>
+        /// <returns>Returns the added promotional video. If the <paramref name="art"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding art or the art does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding art.</exception>
+        public IArt AddArt(IArt art) {
+            if (art is XbmcArt) {
+                if (Entity.Art.All(a => a.Url != art.Path)) {
+                    Entity.Art.Add(art as XbmcArt);
+                    return art;
+                }
+            }
+
+            return Service.FindArt(art, true);
+        }
+
+        /// <summary>Removes the specified art from the provider data store.</summary>
+        /// <param name="art">The art to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing arts in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing art.</exception>
+        public bool RemoveArt(IArt art) {
+            if (art is XbmcArt) {
+                Entity.Art.Remove(art as XbmcArt);
+            }
+
+            XbmcArt a = Service.FindArt(art, false);
+            if (a != null) {
+                return Entity.Art.Remove(a);
+            }
+            return false;
+        }
+
         #endregion
 
         public void Update(MovieInfo movieInfo) {

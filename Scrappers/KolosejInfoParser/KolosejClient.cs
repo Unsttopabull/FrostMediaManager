@@ -12,19 +12,22 @@ namespace Frost.MovieInfoParsers.Kolosej {
     public class KolosejClient : ParsingClient {
         private const string URL = "http://www.kolosej.si{0}";
 
-        public KolosejClient() : base("Kolosej") {
+        public KolosejClient() : base("Kolosej", true, false) {
         }
 
-
-        public override IEnumerable<ParsedMovie> Parse(string imdbId, string title) {
+        public override IEnumerable<ParsedMovie> GetByImdbId(string imdbId) {
             throw new NotImplementedException();
         }
 
-        public override IEnumerable<ParsedMovie> Parse(string imdbId, string title, IEnumerable<string> movieHashes) {
+        public override IEnumerable<ParsedMovie> GetByMovieHash(IEnumerable<string> movieHashes) {
             throw new NotImplementedException();
         }
 
-        public override void Parse() {
+        public override IEnumerable<ParsedMovie> GetByTitle(string title, int releaseYear) {
+            throw new NotImplementedException();
+        }
+
+        public override void Index() {
             string list;
             using (WebClient webCl = new WebClient { Encoding = Encoding.UTF8 }) {
                 list = webCl.DownloadString(@"http://www.kolosej.si/filmi/A-Z/original/");
@@ -88,7 +91,7 @@ namespace Frost.MovieInfoParsers.Kolosej {
                 return null;
             }
 
-            info.Summary = mainContent.SelectSingleNode("//div[@class='summary']").InnerTextOrNull();
+            info.Plot = mainContent.SelectSingleNode("//div[@class='summary']").InnerTextOrNull();
 
             HtmlNode trailer = mainContent.SelectSingleNode("//div[@class='inline-trailer']/iframe[@src]");
             if (trailer != null) {

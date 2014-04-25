@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
+using Frost.Common;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers;
 using Frost.InfoParsers.Models;
@@ -20,6 +21,7 @@ using RibbonUI.Annotations;
 using RibbonUI.Design.Models;
 using RibbonUI.UserControls;
 using RibbonUI.Util.ObservableWrappers;
+using SharpOmdbAPI;
 
 namespace RibbonUI.Windows {
 
@@ -114,7 +116,6 @@ namespace RibbonUI.Windows {
                         info = jser.Deserialize<ParsedMovieInfos>(tr);
                     }
                     catch (Exception e) {
-                        
                     }
                 }
 
@@ -153,6 +154,12 @@ namespace RibbonUI.Windows {
                     }
                     SearchMovieInfo(_movieInfos["OSub"], _site);
                     break;
+                case WebUpdateSite.Omdb:
+                    if (!_movieInfos.ContainsKey("OMDB")) {
+                        _movieInfos.Add("OMDB", new ParsedMovieInfos());
+                    }
+                    SearchMovieInfo(_movieInfos["OMDB"], _site);
+                    break;
                 default:
                     return;
             }
@@ -168,6 +175,9 @@ namespace RibbonUI.Windows {
                     break;
                 case WebUpdateSite.GremoVKino:
                     cli = new GremoVKinoClient();
+                    break;
+                case WebUpdateSite.Omdb:
+                    cli = new OmdbClient();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("site");
@@ -205,11 +215,9 @@ namespace RibbonUI.Windows {
                 }
             }
             else {
-                var movieHashes = _movie.Videos.Where(v => v != null && !string.IsNullOrEmpty(v.MovieHash)).Select(mv => mv.MovieHash);
-
                 List<ParsedMovie> movies;
                 try {
-                     movies = cli.Parse(_movie.ImdbID, _movie.Title, movieHashes).ToList();
+                    movies = GetMatchingMovies(cli).ToList();
                 }
                 catch (Exception e) {
                     MessageBox.Show("An error has occured updating available movie information.");
@@ -217,7 +225,7 @@ namespace RibbonUI.Windows {
                     return;
                 }
 
-                FuzzySearchService fuzzySearch = new FuzzySearchService(movies.Select(m => m.OriginalName));                
+                FuzzySearchService fuzzySearch = new FuzzySearchService(movies.Select(m => m.OriginalName));
                 List<Result> matches = fuzzySearch.Search(_movie.Title).OrderByDescending(r => r.Score).ToList();
 
                 var names = matches.Select(r => r.Result1);
@@ -229,7 +237,8 @@ namespace RibbonUI.Windows {
             }
 
             if (match != null) {
-                MessageBoxResult result = MessageBox.Show(string.Format("Found {0} ({1})", match.OriginalName, match.SloveneName), "Match found", MessageBoxButton.YesNo);
+                string message = string.Format("Found {0} {1}", match.OriginalName, string.IsNullOrEmpty(match.SloveneName) ? null : "(" + match.SloveneName + ")");
+                MessageBoxResult result = MessageBox.Show(message, "Match found", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes) {
                     _movie.Title = match.OriginalName;
                     DownloadAndUpdate(match, site);
@@ -244,17 +253,37 @@ namespace RibbonUI.Windows {
             }
         }
 
+        private IEnumerable<ParsedMovie> GetMatchingMovies(ParsingClient cli) {
+            if (cli.SupportsMovieHash) {
+                if (_movie["Videos"]) {
+                    List<string> hashes = _movie.Videos
+                                                .Where(v => v != null && !string.IsNullOrEmpty(v.MovieHash))
+                                                .Select(m => m.MovieHash)
+                                                .ToList();
+                    if (hashes.Count > 0) {
+                        return cli.GetByMovieHash(hashes);
+                    }
+                }
+            }
+
+            return !string.IsNullOrEmpty(_movie.ImdbID)
+                       ? cli.GetByImdbId(_movie.ImdbID).ToList()
+                       : cli.GetByTitle(_movie.Title, (int) (_movie.ReleaseYear.HasValue ? _movie.ReleaseYear.Value : 0));
+        }
+
         private void UpdateAvailable(ParsedMovieInfos info, ParsingClient client) {
             if (info.ParsedTime != default(DateTime) && (DateTime.Now - info.ParsedTime) <= StaleTime) {
                 return;
             }
 
-            Dispatcher.Invoke(() => LabelText = TranslationManager.T("Preforming a one-time indexing operation."));
-            Dispatcher.Invoke(() => ProgressText = TranslationManager.T("Indexing available movies"));
-
             if (client != null && client.CanIndex) {
+                Dispatcher.Invoke(() => {
+                    LabelText = TranslationManager.T("Preforming a one-time indexing operation.");
+                    ProgressText = TranslationManager.T("Indexing available movies");
+                });
+
                 try {
-                    client.Parse();
+                    client.Index();
                 }
                 catch (Exception e) {
                     return;
@@ -265,12 +294,11 @@ namespace RibbonUI.Windows {
                 info.ParsedTime = DateTime.Now;
 
                 JsonSerializer js = new JsonSerializer();
-                using (TextWriter tw =  File.CreateText("Scrappers/" + client.Name + ".cache")) {
+                using (TextWriter tw = File.CreateText("Scrappers/" + client.Name + ".cache")) {
                     try {
                         js.Serialize(tw, info);
                     }
                     catch (Exception e) {
-                        
                     }
                 }
             }
@@ -291,6 +319,9 @@ namespace RibbonUI.Windows {
                 case WebUpdateSite.GremoVKino:
                     cli = new GremoVKinoClient();
                     break;
+                case WebUpdateSite.Omdb:
+                    cli = new OmdbClient();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException("site");
             }
@@ -302,23 +333,23 @@ namespace RibbonUI.Windows {
             Task.Run(() => cli.ParseMovieInfo(movie))
                 .ContinueWith(t => {
                     if (t.IsFaulted || t.Result == null) {
-                       Dispatcher.Invoke(() => Errors.Add(new ErrorInfo(ErrorType.Error, TranslationManager.T("There was an error downloading movie information"))));
-                       Dispatcher.Invoke(() => {
-                           LabelText = "Errors have occured ...";
-                           ProgressText = "";
+                        Dispatcher.Invoke(() => Errors.Add(new ErrorInfo(ErrorType.Error, TranslationManager.T("There was an error downloading movie information"))));
+                        Dispatcher.Invoke(() => {
+                            LabelText = "Errors have occured ...";
+                            ProgressText = "";
 
-                           ProgressBar.IsIndeterminate = false;
-                           ProgressBar.Value = 100;
-                           CloseButtonVisibility = Visibility.Visible;
-                       });
-                       return;
+                            ProgressBar.IsIndeterminate = false;
+                            ProgressBar.Value = 100;
+                            CloseButtonVisibility = Visibility.Visible;
+                        });
+                        return;
                     }
 
                     if (t.IsCanceled) {
                         Dispatcher.Invoke(Close);
                         return;
                     }
-                    
+
                     if (t.IsCompleted) {
                         UpdateMovie(t.Result);
                     }
@@ -346,7 +377,7 @@ namespace RibbonUI.Windows {
                     foreach (string writer in movie.Writers) {
                         string w = writer;
                         try {
-                            Dispatcher.Invoke(() =>  _movie.AddWriter(new DesignPerson(w, null, null), true));
+                            Dispatcher.Invoke(() => _movie.AddWriter(new DesignPerson(w, null, null), true));
                         }
                         catch (Exception e) {
                             Dispatcher.Invoke(() => Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message)));
@@ -382,10 +413,10 @@ namespace RibbonUI.Windows {
                     _movie.Trailer = movie.TrailerUrl.Trim('/');
                 }
 
-                bool summaryAvailable = !string.IsNullOrEmpty(movie.Summary);
+                bool summaryAvailable = !string.IsNullOrEmpty(movie.Plot);
                 if (_movie["Plots"] && summaryAvailable) {
                     try {
-                        Dispatcher.Invoke(() => _movie.AddPlot(new DesignPlot { Full = movie.Summary }, true));
+                        Dispatcher.Invoke(() => _movie.AddPlot(new DesignPlot { Full = movie.Plot }, true));
                     }
                     catch (Exception e) {
                         Dispatcher.Invoke(() => Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message)));
@@ -394,7 +425,7 @@ namespace RibbonUI.Windows {
                 else if (_movie.MainPlot != null && summaryAvailable) {
                     MessageBoxResult result = MessageBox.Show("Could not add a new plot. Override current?", "", MessageBoxButton.YesNo);
                     if (result == MessageBoxResult.Yes) {
-                        _movie.MainPlot.Full = movie.Summary;
+                        _movie.MainPlot.Full = movie.Plot;
                     }
                 }
 
@@ -431,17 +462,20 @@ namespace RibbonUI.Windows {
                 if (_movie["PromotionalVideos"] && movie.Videos != null) {
                     foreach (IParsedVideo video in movie.Videos) {
                         IParsedVideo v = video;
-                        Dispatcher.Invoke(() => _movie.AddPromotionalVideo(new DesignPromotionalVideo(v)));
+                        Dispatcher.Invoke(() => _movie.AddPromotionalVideo(new DesignPromotionalVideo(v), true));
                     }
                 }
 
                 if (_movie["Awards"] && movie.Awards != null) {
                     foreach (ParsedAward award in movie.Awards) {
                         ParsedAward aw = award;
-                        Dispatcher.Invoke(() => _movie.AddAward(new DesignAward(aw)));
+                        Dispatcher.Invoke(() => _movie.AddAward(new DesignAward(aw), true));
                     }
                 }
 
+                if (_movie["Art"] && !string.IsNullOrEmpty(movie.Cover)) {
+                    Dispatcher.Invoke(() => _movie.AddArt(new DesignArt(ArtType.Cover, movie.Cover), true));
+                }
             }).ContinueWith(t => Dispatcher.Invoke(() => {
                 if (Errors.Count > 0) {
                     LabelText = "Finished with warnings...";
@@ -488,7 +522,6 @@ namespace RibbonUI.Windows {
         }
 
         public class ErrorInfo {
-
             public ErrorInfo(ErrorType type, string message) {
                 Type = type;
                 Message = message;

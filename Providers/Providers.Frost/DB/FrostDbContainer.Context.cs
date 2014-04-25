@@ -246,7 +246,7 @@ namespace Frost.Providers.Frost.DB {
                 return c;
             }
 
-            if (country.ISO3166 != null) {
+            if (country.ISO3166 != null && !string.IsNullOrEmpty(country.ISO3166.Alpha3)) {
                 c = Countries.FirstOrDefault(pr => pr.ISO3166.Alpha3 == country.ISO3166.Alpha3);
             }
 

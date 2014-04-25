@@ -52,6 +52,7 @@
     <Compile Include="Converters\TranslateEnumConverter.cs" />
     <Compile Include="Design\Fakes\FakeAudio.cs" />
     <Compile Include="Design\Models\DesignActor.cs" />
+    <Compile Include="Design\Models\DesignArt.cs" />
     <Compile Include="Design\Models\DesignAudio.cs" />
     <Compile Include="Design\Models\DesignAward.cs" />
     <Compile Include="Design\Models\DesignCertification.cs" />
@@ -267,8 +268,11 @@
     <Compile Include="Windows\Add\AddCodecMappingViewModel.cs">
       <DependentUpon>AddCodecMapping.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\WebUpdater.xaml.cs">
-      <DependentUpon>WebUpdater.xaml</DependentUpon>
+    <Compile Include="Windows\WebArtUpdater.xaml.cs">
+      <DependentUpon>WebArtUpdater.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\WebInfoUpdater.xaml.cs">
+      <DependentUpon>WebInfoUpdater.xaml</DependentUpon>
     </Compile>
     <Page Include="UserControls\ArtAndPlot.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -394,7 +398,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\WebUpdater.xaml">
+    <Page Include="Windows\WebArtUpdater.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\WebInfoUpdater.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -628,6 +636,10 @@
       <Project>{9f5b1086-cd30-4a6a-a54c-ce78172b358d}</Project>
       <Name>KolosejInfoParser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Scrappers\SharpOmdbAPI\SharpOmdbAPI.csproj">
+      <Project>{C796AC60-DB0E-41ED-9A65-47C7ABC52BE9}</Project>
+      <Name>SharpOmdbAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GettextTranslationExtension\GettextMarkupExtension.csproj">
       <Project>{a3ce8f2a-9950-409c-aa35-74cd1d1d6d87}</Project>
       <Name>GettextMarkupExtension</Name>
@@ -749,6 +761,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\play_video.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Sites\omdb.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\video.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Sites\traileraddict.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

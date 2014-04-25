@@ -49,19 +49,19 @@ namespace Frost.Providers.Xtreamer {
             }
         }
 
-        public void Save() {
+        public XjbMovie Save() {
             if (!_info.DirectoryPath.StartsWith(_xtPathRoot)) {
                 throw new NotSupportedException("The movie must be on the Xtreamer drive");
             }
 
             if (_info.IsMultipart) {
                 Debug.WriteLine("Skipping multipart movie: "+ _info.Title);
-                return;
+                return null;
             }
 
             if (_info.FileInfos.Count(f => f.Videos.Count > 0) == 0 && _info.Type != MovieType.ISO) {
                 Debug.WriteLine("Skipping movie without video: "+ _info.Title);
-                return;
+                return null;
             }
 
             XjbMovie xjbMovie = SaveDB(_info);
@@ -72,8 +72,9 @@ namespace Frost.Providers.Xtreamer {
 
                 xjbMovie.MovieVo = phpMovie;
 
-                //_mvc.SaveChanges();
+                return xjbMovie;
             }
+            return null;
         }
 
         private string GetPathOnDrive(string fullPath) {

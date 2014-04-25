@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
@@ -7,7 +8,7 @@ using Frost.Common.Models.Provider;
 namespace Frost.Common {
     public interface IMoviesDataService : IDisposable {
 
-        IEnumerable<IMovie> Movies { get; }
+        ObservableCollection<IMovie> Movies { get; }
         IEnumerable<IFile> Files { get; }
         IEnumerable<IVideo> Videos { get; }
         IEnumerable<IAudio> Audios { get; }

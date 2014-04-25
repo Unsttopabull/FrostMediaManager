@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
+using System.Net.Mime;
+using System.Windows.Threading;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
@@ -13,7 +17,7 @@ using IOFile = System.IO.File;
 namespace Frost.Providers.Frost.Provider {
     public class FrostMoviesDataDataService : IMoviesDataService {
         private readonly FrostDbContainer _mvc;
-        private IEnumerable<IMovie> _movies;
+        private ObservableCollection<IMovie> _movies;
         private IEnumerable<IFile> _files;
         private IEnumerable<IVideo> _videos;
         private IEnumerable<IAudio> _audios;
@@ -36,7 +40,7 @@ namespace Frost.Providers.Frost.Provider {
             _mvc = new FrostDbContainer();
         }
 
-        public IEnumerable<IMovie> Movies {
+        public ObservableCollection<IMovie> Movies {
             get {
                 if (_movies != null) {
                     return _movies;
@@ -58,7 +62,7 @@ namespace Frost.Providers.Frost.Provider {
 
                 _mvc.Languages.Load();
 
-                _movies = _mvc.Movies.Local.Select(m => new FrostMovie(m, this));
+                _movies = new ObservableCollection<IMovie>(_mvc.Movies.Local.Select(m => new FrostMovie(m, this)));
                 return _movies;
             }
         }
@@ -423,7 +427,10 @@ namespace Frost.Providers.Frost.Provider {
 
         public void SaveDetected(MovieInfo movieInfo) {
             MovieSaver ms = new MovieSaver(movieInfo, _mvc);
-            ms.Save(false);
+            Movie movie = ms.Save(false);
+            if (movie != null) {
+                _movies.Add(new FrostMovie(movie, this));
+            }
         }
 
         public bool HasUnsavedChanges() {

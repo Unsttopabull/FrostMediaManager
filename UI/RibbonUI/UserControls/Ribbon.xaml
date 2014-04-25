@@ -69,7 +69,7 @@
                               LargeImageSource="../Images/movieFolder.ico" Label="Open movie folder"
                               ToolTip="{Binding SelectedMovie.DirectoryPath}"
                               Command="{Binding OpenMovieInFolderCommand}" />
-                <RibbonButton SmallImageSource="../Images/save.png" Label="Play movie" />
+                <RibbonButton SmallImageSource="../Images/play.png" Label="Play movie" />
                 <RibbonButton SmallImageSource="../Images/refresh.png" Label="Refresh detection" />
                 <RibbonButton SmallImageSource="../Images/remove2.png" Label="Remove movie" />
             </RibbonGroup>
@@ -85,6 +85,7 @@
                     <RibbonMenuItem ImageSource="../Images/Sites/kolosej.png" Header="Kolosej.si" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.Kolosej}"/>
                     <RibbonMenuItem ImageSource="../Images/Sites/gremovkino.ico" Header="Gremovkino.si" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.GremoVKino}"/>
                     <RibbonMenuItem ImageSource="../Images/sites/opensubtitles.ico" Header="OpenSubtitles.org" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.OpenSubtitles}"/>
+                    <RibbonMenuItem ImageSource="../Images/sites/omdb.ico" Header="The OMDB API" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.Omdb}"/>
                 </RibbonMenuButton>
                 <!--<RibbonButton SmallImageSource="../Images/cut.png" Label="Cut" />
                 <RibbonButton SmallImageSource="../Images/copy.png" Label="Copy" />
@@ -94,6 +95,11 @@
                 <RibbonMenuButton LargeImageSource="../Images/art.png" Label="Download art">
                     <RibbonMenuItem ImageSource="../Images/Sites/fanart.ico" Header="Fanart.tv" />
                     <RibbonMenuItem ImageSource="../Images/sites/tmdb.ico" Header="Tmdb.org" />                    
+                </RibbonMenuButton>
+            </RibbonGroup>
+            <RibbonGroup>
+                <RibbonMenuButton LargeImageSource="../Images/video.png" Label="Download trailer &amp; promotional videos" IsEnabled="{Binding SelectedMovie[PromotionalVideos]}">
+                    <RibbonMenuItem ImageSource="../Images/Sites/traileraddict.png" Header="TrailerAddict.com" Command="{Binding UpdatePromotionalVideosCommand}"/>
                 </RibbonMenuButton>
             </RibbonGroup>
         </RibbonTab>

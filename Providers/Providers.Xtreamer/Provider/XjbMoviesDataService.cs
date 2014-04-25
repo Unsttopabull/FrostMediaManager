@@ -27,7 +27,7 @@ namespace Frost.Providers.Xtreamer.Provider {
     public class XjbMoviesDataService : IMoviesDataService {
         private readonly XjbEntities _xjb;
         private readonly string _xtreamerPath;
-        private ObservableCollection<XtMovie> _movies;
+        private ObservableCollection<IMovie> _movies;
         private readonly PersonEqualityComparer _personComparer;
 
         public XjbMoviesDataService() {
@@ -47,17 +47,16 @@ namespace Frost.Providers.Xtreamer.Provider {
             }
         }
 
-        public IEnumerable<IMovie> Movies {
+        public ObservableCollection<IMovie> Movies {
             get {
                 if (_movies == null) {
-                    _movies = new ObservableCollection<XtMovie>();
+                    _movies = new ObservableCollection<IMovie>();
 
                     var serialized = _xjb.Movies.Select(m => m.MovieVo);
-                    PHPDeserializer2 deser = new PHPDeserializer2();
                     foreach (string serializedMovie in serialized) {
                         using (PHPSerializedStream pser = new PHPSerializedStream(serializedMovie, Encoding.UTF8)) {
                             try {
-                                XjbPhpMovie movie = deser.Deserialize<XjbPhpMovie>(pser);
+                                XjbPhpMovie movie = PHPDeserializer2.Deserialize<XjbPhpMovie>(pser);
                                 if (movie != null) {
                                     _movies.Add(new XtMovie(movie, _xtreamerPath));
                                 }
@@ -113,18 +112,23 @@ namespace Frost.Providers.Xtreamer.Provider {
 
         public void SaveDetected(MovieInfo movieInfo) {
             XtMovieSaver ms = new XtMovieSaver(Path.GetPathRoot(_xtreamerPath), movieInfo, _xjb);
-            ms.Save();
+            XjbMovie xjbMovie = ms.Save();
+            if (xjbMovie != null) {
+                XjbPhpMovie phpMov = PHPDeserializer2.Deserialize<XjbPhpMovie>(xjbMovie.MovieVo, Encoding.UTF8);
+
+                _movies.Add(new XtMovie(phpMov, _xtreamerPath));
+            }
         }
 
         public bool HasUnsavedChanges() {
-            return _movies.Any(m => m.IsDirty) || People.Cast<XtPerson>().Any(p => p.IsDirty);
+            return _movies.Cast<XtMovie>().Any(m => m.IsDirty) || People.Cast<XtPerson>().Any(p => p.IsDirty);
         }
 
         public void SaveChanges() {
-            SaveChangedPeople(_movies.SelectMany(m => m.GetChangedDirectors()).Union(_movies.SelectMany(m => m.GetChangedWriters())));
-            SaveChangedActors(_movies.SelectMany(m => m.GetChangedActors()));
+            SaveChangedPeople(_movies.Cast<XtMovie>().SelectMany(m => m.GetChangedDirectors()).Union(_movies.Cast<XtMovie>().SelectMany(m => m.GetChangedWriters())));
+            SaveChangedActors(_movies.Cast<XtMovie>().SelectMany(m => m.GetChangedActors()));
 
-            IEnumerable<XtMovie> changedMovies = _movies.Where(m => m.IsDirty);
+            IEnumerable<XtMovie> changedMovies = _movies.Cast<XtMovie>().Where(m => m.IsDirty);
 
             PHPSerializer phpSerializer = new PHPSerializer();
             foreach (XtMovie changedMovie in changedMovies) {

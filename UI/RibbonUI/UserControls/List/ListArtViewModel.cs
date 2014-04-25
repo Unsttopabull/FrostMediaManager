@@ -46,7 +46,7 @@ namespace RibbonUI.UserControls.List {
 
 
         private bool CheckArt(MovieArt art) {
-            bool b = SelectedMovie != null && art != null;
+            bool b = SelectedMovie != null && art != null && art.ObservedEntity.Id > 0;
 
             if (!b || art.ObservedEntity.Id <= 0) {
                 return b;

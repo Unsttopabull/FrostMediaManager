@@ -12,7 +12,7 @@ using RibbonUI.Design.Models;
 
 namespace RibbonUI.Util.ObservableWrappers {
 
-    public class ObservableMovie : MovieItemBase<IMovie> {
+    public class ObservableMovie : MovieItemBase<IMovie>, IEquatable<IMovie> {
         private static readonly ILog Log = LogManager.GetLogger(typeof(ObservableMovie));
         private ObservableCollection<MovieSubtitle> _subtitles;
         private ObservableCollection<MovieCountry> _countries;
@@ -799,7 +799,7 @@ namespace RibbonUI.Util.ObservableWrappers {
         public string GenreNames {
             get {
                 return Genres != null
-                    ? string.Join(", ", Genres.Select(g => g.Name)) 
+                    ? string.Join(", ", Genres.Where(g => g != null).Select(g => g.Name)) 
                     : null;
             }
         }
@@ -807,7 +807,7 @@ namespace RibbonUI.Util.ObservableWrappers {
         public string DirectorNames {
             get {
                 return Directors != null
-                    ? string.Join(", ", Directors.Select(g => g.Name)) 
+                    ? string.Join(", ", Directors.Where(d => d != null).Select(g => g.Name)) 
                     : null;
             }
         }
@@ -831,9 +831,6 @@ namespace RibbonUI.Util.ObservableWrappers {
         #endregion
 
         #region Add/Remove
-
-        public void RemoveArt(MovieArt art, bool silent = false) {
-        }
 
         public void AddActor(IActor actor, bool silent = false) {
             IActor a = Add(_observedEntity.AddActor, actor, silent);
@@ -1075,7 +1072,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 PromotionalVideos.Add(v);
             }
             else if(!silent){
-                MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "country"));
+                MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "promotional video"));
             }
         }
 
@@ -1084,6 +1081,30 @@ namespace RibbonUI.Util.ObservableWrappers {
             if (success) {
                 PromotionalVideos.Remove(promotionalVideo);
             }                 
+        }
+
+        public void AddArt(IArt art, bool silent = false) {
+            IArt a = Add(_observedEntity.AddArt, art, silent);
+            if (a == null) {
+                if (!silent) {
+                    MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "art"));
+                }
+                return;
+            }
+
+            if (!Art.Any(pv => pv.Type == art.Type && string.Equals(pv.Path, art.Path, StringComparison.CurrentCultureIgnoreCase))) {
+                Art.Add(new MovieArt(a));
+            }
+            else if(!silent){
+                MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "promotional video"));
+            }            
+        }
+
+        public void RemoveArt(MovieArt art, bool silent = false) {
+            bool success = Remove(_observedEntity.RemoveArt, art.ObservedEntity, silent);
+            if (success) {
+                Art.Remove(art);
+            }               
         }
 
         private bool Remove<T>(Func<T, bool> removeItem, T item, bool silent) where T : IMovieEntity {
@@ -1135,6 +1156,13 @@ namespace RibbonUI.Util.ObservableWrappers {
         }
 
         #endregion
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(IMovie other) {
+            return _observedEntity.Equals(other);
+        }
 
         #region Images
 

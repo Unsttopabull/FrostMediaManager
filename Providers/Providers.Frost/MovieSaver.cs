@@ -46,16 +46,17 @@ namespace Frost.Providers.Frost {
             }
         }
 
-        public void Save(bool saveChanges) {
+        public Movie Save(bool saveChanges) {
             Movie mv = Save(_info);
 
             if (mv == null) {
-                return;
+                return null;
             }
 
             if (saveChanges) {
                 _mvc.SaveChanges();
             }
+            return mv;
         }
 
         private Movie Save(MovieInfo movie) {

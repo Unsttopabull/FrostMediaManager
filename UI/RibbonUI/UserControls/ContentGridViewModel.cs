@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
@@ -9,36 +10,39 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Frost.Common;
+using Frost.Common.Models.Provider;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;
 using RibbonUI.Design;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
+using IMovieList = System.Collections.Generic.List<Frost.Common.Models.Provider.IMovie>;
 
 namespace RibbonUI.UserControls {
 
     public class ContentGridViewModel : INotifyPropertyChanged, IDisposable {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IDisposable _searchObservable;
+        private readonly IMoviesDataService _service;
         private ICollectionView _collectionView;
         private string _movieSearchFilter;
         private ObservableMovie _selectedMovie;
         private ObservableCollection<ObservableMovie> _movies;
-        private DateTime _lastChangedMovie;
         private ObservableCollection<MovieCertification> _certifications;
+        private DateTime _lastChangedMovie;
         private RibbonTabs _tab;
 
         public ContentGridViewModel() {
-            if (TranslationManager.IsInDesignMode) {
-                LightInjectContainer.Register<IMoviesDataService, DesignMoviesDataService>();
-            }
-
-            IMoviesDataService service = LightInjectContainer.GetInstance<IMoviesDataService>();
+            _service = TranslationManager.IsInDesignMode 
+                           ? new DesignMoviesDataService()
+                           : LightInjectContainer.GetInstance<IMoviesDataService>();
 
             _lastChangedMovie = DateTime.Now;
 
-            Movies = new ObservableCollection<ObservableMovie>(service.Movies.Select(m => new ObservableMovie(m)));
+            Movies = new ThreadSafeObservableCollection<ObservableMovie>(_service.Movies.Select(m => new ObservableMovie(m)));
+            _service.Movies.CollectionChanged += MoviesChanged;
+
 
             _searchObservable = Observable.FromEventPattern<PropertyChangedEventArgs>(this, "PropertyChanged")
                                           .Where(ep => ep.EventArgs.PropertyName == "MovieSearchFilter")
@@ -48,6 +52,34 @@ namespace RibbonUI.UserControls {
 
             SubtitlesOnFocusCommand = new RelayCommand(() => Tab = RibbonTabs.Subtitles);
             SubtitlesLostFocusCommand = new RelayCommand(() => Tab = RibbonTabs.Search);
+        }
+
+        void MoviesChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            switch (e.Action) {
+                case NotifyCollectionChangedAction.Add:
+                    foreach (IMovie movie in e.NewItems) {
+                        Movies.Add(new ObservableMovie(movie));
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Remove:
+                    IMovieList movies = new IMovieList();
+                    foreach (IMovie mov in movies) {
+                        ObservableMovie movie = Movies.FirstOrDefault(m => m.Equals(mov));
+                        if (movie != null) {
+                            Movies.Remove(movie);
+                        }
+                    }
+                    break;
+                case NotifyCollectionChangedAction.Replace:
+                    break;
+                case NotifyCollectionChangedAction.Move:
+                    break;
+                case NotifyCollectionChangedAction.Reset:
+                    Movies = new ObservableCollection<ObservableMovie>(_service.Movies.Select(m => new ObservableMovie(m)));
+                    break;
+                default:
+                    return;
+            }
         }
 
         public ObservableCollection<ObservableMovie> Movies {

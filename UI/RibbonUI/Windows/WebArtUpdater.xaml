@@ -1,0 +1,17 @@
+﻿<Window x:Class="RibbonUI.Windows.WebArtUpdater"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:l="http://www.frostmediamanager.com/xaml/translation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" WindowStyle="ToolWindow" ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
+        Title="{l:T Web art updater}" SizeToContent="WidthAndHeight" x:Name="WebArtUpdaterWindow">
+    <StackPanel Margin="5">
+        <TextBlock Text="{Binding ElementName=WebArtUpdaterWindow, Path=LabelText, FallbackValue={l:T Downloading...}}" Margin="0,0,0,5"/>
+        <Grid>
+            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding ElementName=WebArtUpdaterWindow, Path=ProgressText, FallbackValue=Searching for information online...}" Panel.ZIndex="3" Foreground="Black" FontWeight="ExtraBold"/>
+            <ProgressBar x:Name="ProgressBar" IsIndeterminate="True" MinWidth="300" MinHeight="20"/>
+        </Grid>
+        <Button Content="{l:T Close}" MaxWidth="70" Margin="0,10,0,0" Visibility="{Binding ElementName=WebArtUpdaterWindow, Path=CloseButtonVisibility}" Command="Close"/>
+    </StackPanel>
+</Window>

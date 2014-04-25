@@ -83,6 +83,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Comparers\CountryEqualityComparer.cs" />
@@ -204,6 +205,7 @@
     </Compile>
     <Compile Include="Util\KeyedCollectionGeneric.cs" />
     <Compile Include="Util\MovieHasher.cs" />
+    <Compile Include="Util\ThreadSafeObservableCollection.cs" />
     <Compile Include="Util\ObservableHashSet.cs" />
     <Compile Include="Util\SerializableStringDictionary.cs" />
   </ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Linq;
 using Frost.Common;
@@ -14,7 +15,7 @@ using Frost.Providers.Xbmc.Proxies;
 namespace Frost.Providers.Xbmc.Provider {
     public class XbmcMoviesDataService : IMoviesDataService {
         private readonly XbmcContainer _xbmc;
-        private IEnumerable<IMovie> _movies;
+        private ObservableCollection<IMovie> _movies;
         private IEnumerable<IMovieSet> _sets;
         private IEnumerable<ICountry> _countries;
         private IEnumerable<IStudio> _studios;
@@ -32,7 +33,7 @@ namespace Frost.Providers.Xbmc.Provider {
             //_xbmc.Database.Log = Console.WriteLine;
         }
 
-        public IEnumerable<IMovie> Movies {
+        public ObservableCollection<IMovie> Movies {
             get {
                 if (_movies == null) {
                     _xbmc.Movies
@@ -45,7 +46,7 @@ namespace Frost.Providers.Xbmc.Provider {
                          .Include("Actors")
                          .Include("Actors.Person")
                          .Load();
-                    _movies = _xbmc.Movies.Local.Select(m => new XbmcMovie(m, this));
+                    _movies = new ObservableCollection<IMovie>(_xbmc.Movies.Local.Select(m => new XbmcMovie(m, this)));
                 }
                 return _movies;
             }
@@ -308,7 +309,10 @@ namespace Frost.Providers.Xbmc.Provider {
         
         public void SaveDetected(MovieInfo movieInfo) {
             XbmcMovieSaver ms = new XbmcMovieSaver(movieInfo, _xbmc);
-            ms.Save(false);
+            XbmcDbMovie xbmcDbMovie= ms.Save(false);
+            if (xbmcDbMovie != null) {
+                _movies.Add(new XbmcMovie(xbmcDbMovie, this));
+            }
         }
 
         public bool HasUnsavedChanges() {
