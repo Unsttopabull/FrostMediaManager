@@ -19,8 +19,6 @@ namespace Frost.Providers.Xbmc.Provider {
         private IEnumerable<IMovieSet> _sets;
         private IEnumerable<ICountry> _countries;
         private IEnumerable<IStudio> _studios;
-        private IEnumerable<IArt> _art;
-        private IEnumerable<IPlot> _plots;
         private IEnumerable<IPerson> _people;
         private IEnumerable<IGenre> _genres;
 
@@ -52,13 +50,7 @@ namespace Frost.Providers.Xbmc.Provider {
             }
         }
 
-        public IEnumerable<IFile> Files { get; private set; }
-        public IEnumerable<IVideo> Videos { get; private set; }
-        public IEnumerable<IAudio> Audios { get; private set; }
-
         #region Subtitles
-
-        public IEnumerable<ISubtitle> Subtitles { get; private set; }
 
         public XbmcSubtitleDetails FindSubtitle(ISubtitle subtitle, bool createIfNotFound) {
             XbmcSubtitleDetails p = null;
@@ -111,16 +103,6 @@ namespace Frost.Providers.Xbmc.Provider {
         }
 
         #endregion
-
-        public IEnumerable<IArt> Art {
-            get {
-                if (_art == null) {
-                    _xbmc.Art.Load();
-                    _art = _xbmc.Art.Local;
-                }
-                return _art;
-            }
-        }
 
         internal XbmcArt FindArt(IArt art, bool createNotFound) {
             if (art.Id > 0) {
@@ -190,12 +172,6 @@ namespace Frost.Providers.Xbmc.Provider {
 
         #endregion
 
-        public IEnumerable<IRating> Ratings { get { return null; } }
-
-        public IEnumerable<IPlot> Plots {
-            get { return _plots ?? (_plots = Movies.SelectMany(m => m.Plots)); }
-        }
-
         #region Genres
 
         public IEnumerable<IGenre> Genres {
@@ -215,8 +191,6 @@ namespace Frost.Providers.Xbmc.Provider {
         #endregion
 
         public IEnumerable<IAward> Awards { get; private set; }
-        public IEnumerable<IPromotionalVideo> PromotionalVideos { get; private set; }
-        public IEnumerable<ICertification> Certifications { get; private set; }
 
         #region Sets
 

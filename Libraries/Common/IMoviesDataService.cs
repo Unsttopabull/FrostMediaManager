@@ -9,23 +9,12 @@ namespace Frost.Common {
     public interface IMoviesDataService : IDisposable {
 
         ObservableCollection<IMovie> Movies { get; }
-        IEnumerable<IFile> Files { get; }
-        IEnumerable<IVideo> Videos { get; }
-        IEnumerable<IAudio> Audios { get; }
-        IEnumerable<ISubtitle> Subtitles { get; }
-        IEnumerable<IArt> Art { get; }
         IEnumerable<ICountry> Countries { get; }
 
         IEnumerable<IStudio> Studios { get; }
-
-        IEnumerable<IRating> Ratings { get; }
-        IEnumerable<IPlot> Plots { get; }
-
         IEnumerable<IGenre> Genres { get; }
 
         IEnumerable<IAward> Awards { get; }
-        IEnumerable<IPromotionalVideo> PromotionalVideos { get; }
-        IEnumerable<ICertification> Certifications { get; }
 
         IEnumerable<IMovieSet> Sets { get; }
 

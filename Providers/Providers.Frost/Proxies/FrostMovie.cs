@@ -701,14 +701,14 @@ namespace Frost.Providers.Frost.Proxies {
         #region Subtitles
 
         public ISubtitle AddSubtitle(ISubtitle subtitle) {
-            Subtitle sub = Service.FindOrCreateSubtitle(subtitle, true);
+            Subtitle sub = Service.FindSubtitle(subtitle, true);
             Entity.Subtitles.Add(sub);
 
             return new FrostSubtitle(sub, Service);
         }
 
         public bool RemoveSubtitle(ISubtitle subtitle) {
-            Subtitle sub = Service.FindOrCreateSubtitle(subtitle, false);
+            Subtitle sub = Service.FindSubtitle(subtitle, false);
             return Entity.Subtitles.Remove(sub);
         }
 

@@ -5,7 +5,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Frost.Common;
 using Frost.Common.Comparers;
 using Frost.Common.Models.FeatureDetector;
@@ -71,26 +70,14 @@ namespace Frost.Providers.Xtreamer.Provider {
             }
         }
 
-        public IEnumerable<IFile> Files { get; private set; }
-        public IEnumerable<IVideo> Videos { get; private set; }
-        public IEnumerable<IAudio> Audios { get; private set; }
-        public IEnumerable<ISubtitle> Subtitles { get; private set; }
-
-        public IEnumerable<IArt> Art { get; private set; }
         public IEnumerable<ICountry> Countries { get; private set; }
 
         public IEnumerable<IStudio> Studios { get; private set; }
-
-        public IEnumerable<IRating> Ratings { get; private set; }
-        public IEnumerable<IPlot> Plots { get; private set; }
-
         public IEnumerable<IGenre> Genres {
             get { return _movies.SelectMany(m => m.Genres).Distinct<IGenre>(new HasNameEqualityComparer()); }
         }
 
         public IEnumerable<IAward> Awards { get; private set; }
-        public IEnumerable<IPromotionalVideo> PromotionalVideos { get; private set; }
-        public IEnumerable<ICertification> Certifications { get; private set; }
 
         public IEnumerable<IMovieSet> Sets {
             get { return null; }
