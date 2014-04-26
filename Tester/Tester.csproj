@@ -61,6 +61,10 @@
     <Reference Include="log4net">
       <HintPath>..\ThirdParty\log4net\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ThirdParty\JsonNET\Net35\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.XML" />
@@ -95,13 +99,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Scrappers\OpenSubtitlesMovieInfo\OpenSubtitlesMovieInfo.csproj">
-      <Project>{2ff698cb-77cd-4a19-a83e-4300420e2d0b}</Project>
-      <Name>OpenSubtitlesMovieInfo</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Scrappers\SharpFanartTv\SharpFanartTv.csproj">
+    <ProjectReference Include="..\Downloaders\Art\SharpFanartTv\SharpFanartTv.csproj">
       <Project>{25d0e1a6-7fa0-49fa-989f-3f5f082bd23d}</Project>
       <Name>SharpFanartTv</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Downloaders\MovieInfo\SharpTraktTvAPI\SharpTraktTvAPI.csproj">
+      <Project>{7e74d034-0d99-4e49-bd80-f96b04d3eca9}</Project>
+      <Name>SharpTraktTvAPI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
