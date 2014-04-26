@@ -13,15 +13,14 @@ using Frost.Common;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers;
 using Frost.InfoParsers.Models;
-using Frost.MovieInfoParsers.GremoVKino;
-using Frost.MovieInfoParsers.Kolosej;
+using Frost.MovieInfoProviders;
+using Frost.MovieInfoProviders.Omdb;
 using FuzzySearch;
 using Newtonsoft.Json;
 using RibbonUI.Annotations;
 using RibbonUI.Design.Models;
 using RibbonUI.UserControls;
 using RibbonUI.Util.ObservableWrappers;
-using SharpOmdbAPI;
 
 namespace RibbonUI.Windows {
 

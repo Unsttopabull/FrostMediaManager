@@ -624,21 +624,13 @@
       <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Scrappers\CinemaInfoParsers\InfoParsersCommon.csproj">
+    <ProjectReference Include="..\..\Downloaders\MovieInfo\MovieInfoProviders\MovieInfoProviders.csproj">
+      <Project>{74a350a0-205e-42d6-9f20-b1c9a393f689}</Project>
+      <Name>MovieInfoProviders</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Downloaders\MovieInfo\InfoParsersCommon\InfoParsersCommon.csproj">
       <Project>{005F252B-C8AD-49E0-9A88-47BC289F00D0}</Project>
       <Name>InfoParsersCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Scrappers\GremoVKinoInfoParser\GremoVKinoInfoParser.csproj">
-      <Project>{14ceaeb8-b79e-4e1e-8c39-4e3470818ab4}</Project>
-      <Name>GremoVKinoInfoParser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Scrappers\KolosejInfoParser\KolosejInfoParser.csproj">
-      <Project>{9f5b1086-cd30-4a6a-a54c-ce78172b358d}</Project>
-      <Name>KolosejInfoParser</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Scrappers\SharpOmdbAPI\SharpOmdbAPI.csproj">
-      <Project>{C796AC60-DB0E-41ED-9A65-47C7ABC52BE9}</Project>
-      <Name>SharpOmdbAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\GettextTranslationExtension\GettextMarkupExtension.csproj">
       <Project>{a3ce8f2a-9950-409c-aa35-74cd1d1d6d87}</Project>

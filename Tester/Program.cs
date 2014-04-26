@@ -5,6 +5,9 @@ using System.Linq;
 using System.Diagnostics;
 using log4net;
 using log4net.Config;
+using Newtonsoft.Json.Linq;
+using SharpTraktTvAPI;
+using SharpTraktTvAPI.Models.Movie;
 
 namespace Frost.Tester {
 
@@ -17,7 +20,7 @@ namespace Frost.Tester {
         }
 
         private static void Main() {
-            if (System.IO.File.Exists("log4Net.config")) {
+            if (File.Exists("log4Net.config")) {
                 XmlConfigurator.Configure(new FileInfo("log4Net.config"));
             }
             else {
@@ -28,8 +31,7 @@ namespace Frost.Tester {
 
             TimeSpan time = default(TimeSpan);
 
-            TestOmdbApi();
-            //TestFanartTv();
+            TestTraktTv();
 
             sw.Stop();
 
@@ -39,21 +41,11 @@ namespace Frost.Tester {
             Console.Read();
         }
 
-        private static void TestOmdbApi() {
-            //List<OmdbSearch> omdbSearches = SharpOmdbClient.Search("50/50", 2011).ToList();
+        public static void TestTraktTv() {
+            SharpTraktTv trakt = new SharpTraktTv("dc9b6e2e5526762ae8a050780ef6d04b");
+            MovieSummaryResponse summary = trakt.Movie.SummaryById("tt9285016");
+            //MovieSummaryResponse summary2 = trakt.Movie.SummaryByImdbId("the-soAcial-network-2010");
         }
-
-        //private static void TestFanartTv() {
-        //    FanartTvArtClient cli = new FanartTvArtClient();
-        //    IParsedArts movieArtFromImdbId = cli.GetMovieArtFromImdbId("tt0499549");
-        //}
-
-        //private static void TestOSubInfoParser() {
-        //    OpenSubtitlesInfoClient cli = new OpenSubtitlesInfoClient();
-        //    IEnumerable<ParsedMovie> movies = cli.GetByMovieHash(new[] { "51b739e60b4e3ce" });
-
-
-        //}
     }
 
 }
