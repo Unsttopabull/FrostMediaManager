@@ -39,16 +39,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IParsedMovie.cs" />
+    <Compile Include="Models\IParsedActor.cs" />
+    <Compile Include="Models\IParsedMovie.cs" />
     <Compile Include="Models\IFanartClient.cs" />
     <Compile Include="Models\IParsedArt.cs" />
     <Compile Include="Models\IParsedArts.cs" />
     <Compile Include="Models\IParsedAward.cs" />
+    <Compile Include="Models\IParsedPerson.cs" />
+    <Compile Include="ParsedActor.cs" />
     <Compile Include="ParsedArt.cs" />
     <Compile Include="ParsedArts.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ParsedMovie.cs" />
+    <Compile Include="ParsedPerson.cs" />
     <Compile Include="Util\AsyncInline.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="HtmlParsingExtensions.cs" />

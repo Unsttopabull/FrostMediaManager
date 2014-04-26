@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Frost.InfoParsers;
+using Frost.MovieInfoProviders.Omdb;
 using SharpOmdbAPI;
 using SharpOmdbAPI.Models;
 
-namespace Frost.MovieInfoProviders.Omdb {
+namespace Frost.MovieInfoProviders {
 
     public class OmdbClient : ParsingClient {
         private const string IMDB_MOVIE_URL = "http://www.imdb.com/title/{0}/";
@@ -56,10 +57,18 @@ namespace Frost.MovieInfoProviders.Omdb {
 
             movieInfo.ReleaseYear = movie.Year;
             movieInfo.Duration = movie.Runtime;
-            movieInfo.Directors = movie.Director.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
-            movieInfo.Writers = movie.Writer.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
-            movieInfo.Writers = movie.Writer.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
-            movieInfo.Actors = movie.Actors.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
+            movieInfo.Directors = movie.Director
+                                       .Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries)
+                                       .Select(d => new ParsedPerson(d));
+
+            movieInfo.Writers = movie.Writer
+                                     .Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries)
+                                     .Select(d => new ParsedPerson(d));
+
+            movieInfo.Actors = movie.Actors
+                                    .Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries)
+                                    .Select(d => new ParsedActor(d));
+
             movieInfo.Genres = movie.Genre.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
             movieInfo.Plot = movie.Plot;
             movieInfo.Cover = movie.Poster;

@@ -37,8 +37,8 @@ namespace Frost.MovieInfoProviders {
         public override void Index() {
             string maxUri = @"http://www.gremovkino.si/filmi/iskanje/seznam-filmi/" + MAX;
 
-            List<string> uris = new List<string>{ "http://www.gremovkino.si/filmi/iskanje/seznam-filmi/"};
-            for (int i = 24; i <= MAX; i+=24) {
+            List<string> uris = new List<string> { "http://www.gremovkino.si/filmi/iskanje/seznam-filmi/" };
+            for (int i = 24; i <= MAX; i += 24) {
                 uris.Add(URI + i);
             }
 
@@ -100,7 +100,6 @@ namespace Frost.MovieInfoProviders {
         }
 
         private static string ParsePage(HtmlDocument hd, ICollection<ParsedMovie> movies) {
-
             HtmlNode searchResults = hd.GetElementbyId("trailers_list");
             searchResults = searchResults.SelectSingleNode("ul[1]");
             if (searchResults.ChildNodes.Count == 0) {
@@ -148,8 +147,8 @@ namespace Frost.MovieInfoProviders {
             HtmlDocument hd = DownloadWebPage(movie.Url);
 
             return hd != null
-                ? ParseMovieInfo(hd.GetElementbyId("trailer_info"))
-                : null;
+                       ? ParseMovieInfo(hd.GetElementbyId("trailer_info"))
+                       : null;
         }
 
         private ParsedMovieInfo ParseMovieInfo(HtmlNode movieInfo) {
@@ -164,9 +163,22 @@ namespace Frost.MovieInfoProviders {
 
             mi.ImdbLink = right.SelectSingleNode(string.Format(XPATH, "Imdb:")).InnerTextOrNull(false);
             mi.Genres = right.SelectSingleNode(string.Format(XPATH, "Žanr:")).InnerTextSplitOrNull(true, ',');
-            mi.Directors = right.SelectSingleNode(string.Format(XPATH, "Režija:")).InnerTextSplitOrNull(true, ',');
-            mi.Actors = right.SelectSingleNode(string.Format(XPATH, "Igrajo:")).InnerTextSplitOrNull(true, ',');
-            mi.Writers = right.SelectSingleNode(string.Format(XPATH, "Scenarij:")).InnerTextSplitOrNull(true, ',');
+
+            mi.Directors = right.SelectSingleNode(string.Format(XPATH, "Režija:"))
+                                .InnerTextSplitOrNull(true, ',')
+                                .Where(d => d != null)
+                                .Select(d => new ParsedPerson(d));
+
+            mi.Actors = right.SelectSingleNode(string.Format(XPATH, "Igrajo:"))
+                             .InnerTextSplitOrNull(true, ',')
+                             .Where(d => d != null)
+                             .Select(d => new ParsedActor(d));
+
+            mi.Writers = right.SelectSingleNode(string.Format(XPATH, "Scenarij:"))
+                              .InnerTextSplitOrNull(true, ',')
+                              .Where(d => d != null)
+                              .Select(d => new ParsedPerson(d));
+
             mi.Country = right.SelectSingleNode(string.Format(XPATH, "Država:")).InnerTextOrNull();
             mi.Duration = right.SelectSingleNode(string.Format(XPATH, "Trajanje:")).InnerTextOrNull();
             mi.OfficialSite = right.SelectSingleNode(string.Format(XPATH, "Uradna stran:")).InnerTextOrNull(false);
@@ -299,8 +311,6 @@ namespace Frost.MovieInfoProviders {
         }
 
         #endregion
-
-
     }
 
 }

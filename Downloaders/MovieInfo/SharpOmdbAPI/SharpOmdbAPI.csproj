@@ -40,7 +40,7 @@
   <ItemGroup>
     <Compile Include="Models\OmdbMovie.cs" />
     <Compile Include="Models\OmdbSearch.cs" />
-    <Compile Include="Models\OmdbSearcRoot.cs" />
+    <Compile Include="Models\OmdbSearchInfo.cs" />
     <Compile Include="SharpOmdbClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

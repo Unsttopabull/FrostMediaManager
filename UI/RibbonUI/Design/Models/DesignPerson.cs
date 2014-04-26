@@ -1,4 +1,5 @@
 ﻿using Frost.Common.Models.Provider;
+using Frost.InfoParsers.Models;
 
 namespace RibbonUI.Design.Models {
     public class DesignPerson : IPerson {
@@ -12,6 +13,13 @@ namespace RibbonUI.Design.Models {
             Name = name;
             Thumb = thumb;
             ImdbID = imdbID;
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="DesignPerson"/> class.</summary>
+        public DesignPerson(IParsedPerson person) {
+            Name = person.Name;
+            Thumb = person.Thumb;
+            ImdbID = person.ImdbID;
         }
 
         public long Id { get; private set; }

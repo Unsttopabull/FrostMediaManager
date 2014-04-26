@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Xml.XPath;
@@ -125,9 +126,20 @@ namespace Frost.MovieInfoProviders {
             info.ReleaseYear = movieInfo.SelectSingleNode("span[@class='year']/text()").InnerTextOrNull();
             info.Country = movieInfo.SelectSingleNode("span[@class='country']/a/text()").InnerTextOrNull();
             info.Language = movieInfo.SelectSingleNode("span[@class='language']/text()").InnerTextOrNull();
-            info.Writers = movieInfo.SelectSingleNode("span[@class='screenplay']/text()").InnerTextSplitOrNull(true, ",", " in ");
-            info.Directors = movieInfo.SelectNodes("span[@class='director']/a/text()").InnerTextOrNull();
-            info.Actors = movieInfo.SelectNodes("span[@class='actors']/a/text()").InnerTextOrNull();
+            info.Writers = movieInfo.SelectSingleNode("span[@class='screenplay']/text()")
+                                    .InnerTextSplitOrNull(true, ",", " in ")
+                                    .Where(d => d != null)
+                                    .Select(d => new ParsedPerson(d));
+
+            info.Directors = movieInfo.SelectNodes("span[@class='director']/a/text()")
+                                      .InnerTextOrNull()
+                                      .Where(d => d != null)
+                                      .Select(d => new ParsedPerson(d));
+
+            info.Actors = movieInfo.SelectNodes("span[@class='actors']/a/text()")
+                                   .InnerTextOrNull()
+                                   .Where(d => d != null)
+                                   .Select(d => new ParsedActor(d));
 
             HtmlNode imdb = movieInfo.SelectSingleNode("//a[text()='IMDB']");
             if (imdb != null && imdb.HasAttributes) {

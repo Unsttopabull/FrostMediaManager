@@ -373,10 +373,10 @@ namespace RibbonUI.Windows {
                 }
 
                 if (movie.Writers != null) {
-                    foreach (string writer in movie.Writers) {
-                        string w = writer;
+                    foreach (IParsedPerson writer in movie.Writers) {
+                        IParsedPerson w = writer;
                         try {
-                            Dispatcher.Invoke(() => _movie.AddWriter(new DesignPerson(w, null, null), true));
+                            Dispatcher.Invoke(() => _movie.AddWriter(new DesignPerson(w), true));
                         }
                         catch (Exception e) {
                             Dispatcher.Invoke(() => Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message)));
@@ -385,10 +385,10 @@ namespace RibbonUI.Windows {
                 }
 
                 if (movie.Directors != null) {
-                    foreach (string director in movie.Directors) {
-                        string d = director;
+                    foreach (IParsedPerson director in movie.Directors) {
+                        IParsedPerson d = director;
                         try {
-                            Dispatcher.Invoke(() => _movie.AddDirector(new DesignPerson(d, null, null), true));
+                            Dispatcher.Invoke(() => _movie.AddDirector(new DesignPerson(d), true));
                         }
                         catch (Exception e) {
                             Dispatcher.Invoke(() => Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message)));
@@ -397,10 +397,10 @@ namespace RibbonUI.Windows {
                 }
 
                 if (movie.Actors != null) {
-                    foreach (string actor in movie.Actors) {
-                        string a = actor;
+                    foreach (IParsedActor actor in movie.Actors) {
+                        IParsedActor a = actor;
                         try {
-                            Dispatcher.Invoke(() => _movie.AddActor(new DesignActor(a, null), true));
+                            Dispatcher.Invoke(() => _movie.AddActor(new DesignActor(a), true));
                         }
                         catch (Exception e) {
                             Dispatcher.Invoke(() => Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message)));

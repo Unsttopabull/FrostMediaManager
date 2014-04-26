@@ -9,7 +9,7 @@ namespace Frost.InfoParsers {
 
     public abstract class ParsingClient {
 
-        public ParsingClient(string name, bool canIndex, bool supportsMovieHash) {
+        protected ParsingClient(string name, bool canIndex, bool supportsMovieHash) {
             Name = name;
             CanIndex = canIndex;
             SupportsMovieHash = supportsMovieHash;
@@ -32,7 +32,7 @@ namespace Frost.InfoParsers {
         public abstract void Index();
         public abstract ParsedMovieInfo ParseMovieInfo(ParsedMovie movie);
 
-        public static HtmlDocument DownloadWebPage(string url, Encoding enc = null) {
+        protected static HtmlDocument DownloadWebPage(string url, Encoding enc = null) {
             string html;
             using (WebClient webCl = new WebClient { Encoding = enc ?? Encoding.UTF8 }) {
                 try {
@@ -48,19 +48,6 @@ namespace Frost.InfoParsers {
             hd.Load(new StringReader(html));
             return hd;
         }
-
-        //public void PullAllMovieInfo() {
-        //    Task[] tsk = new Task[AvailableMovies.Count];
-        //    for (int i = 0; i < AvailableMovies.Count; i++) {
-        //        Console.WriteLine(AvailableMovies[i]);
-        //        while (tsk.Count(t => t != null && !t.IsCompleted) >= 5) {
-        //            Thread.Sleep(500);
-        //        }
-        //        tsk[i] = ParseMovieInfo(AvailableMovies[i]);
-        //    }
-
-        //    Task.WaitAll(tsk.ToArray());
-        //}
     }
 
 }

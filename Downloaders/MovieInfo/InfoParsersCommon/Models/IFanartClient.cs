@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Frost.InfoParsers.Models;
-
-namespace SharpFanartTv {
+﻿namespace Frost.InfoParsers.Models {
 
     public interface IFanartClient {
 
