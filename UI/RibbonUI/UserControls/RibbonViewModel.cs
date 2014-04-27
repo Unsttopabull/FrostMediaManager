@@ -33,7 +33,8 @@ namespace RibbonUI.UserControls {
         PlanetTus,
         OpenSubtitles,
         GremoVKino,
-        Omdb
+        Omdb,
+        TraktTv
     }
 
     class RibbonViewModel : INotifyPropertyChanged {

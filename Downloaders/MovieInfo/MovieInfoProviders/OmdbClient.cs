@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Frost.InfoParsers;
 using Frost.MovieInfoProviders.Omdb;
@@ -55,7 +56,13 @@ namespace Frost.MovieInfoProviders {
         private ParsedMovieInfo ToParsedMovieInfo(OmdbMovie movie) {
             ParsedMovieInfo movieInfo = new ParsedMovieInfo();
 
-            movieInfo.ReleaseYear = movie.Year;
+            if (!string.IsNullOrEmpty(movie.Year)) {
+                int year;
+                if (int.TryParse(movie.Year, NumberStyles.Integer, CultureInfo.InvariantCulture, out year)) {
+                    movieInfo.ReleaseYear = year;
+                }
+            }
+
             movieInfo.Duration = movie.Runtime;
             movieInfo.Directors = movie.Director
                                        .Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries)
@@ -72,7 +79,7 @@ namespace Frost.MovieInfoProviders {
             movieInfo.Genres = movie.Genre.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
             movieInfo.Plot = movie.Plot;
             movieInfo.Cover = movie.Poster;
-            movieInfo.ImdbRating = movie.ImdbRating;
+            movieInfo.Rating = movie.ImdbRating;
 
             if (!string.IsNullOrEmpty(movie.ImdbId)) {
                 movieInfo.ImdbLink = string.Format(IMDB_MOVIE_URL, movie.ImdbId);

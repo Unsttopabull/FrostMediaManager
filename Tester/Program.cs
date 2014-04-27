@@ -8,6 +8,7 @@ using log4net.Config;
 using Newtonsoft.Json.Linq;
 using SharpTraktTvAPI;
 using SharpTraktTvAPI.Models.Movie;
+using SharpTraktTvAPI.Models.Search;
 
 namespace Frost.Tester {
 
@@ -43,8 +44,7 @@ namespace Frost.Tester {
 
         public static void TestTraktTv() {
             SharpTraktTv trakt = new SharpTraktTv("dc9b6e2e5526762ae8a050780ef6d04b");
-            MovieSummaryResponse summary = trakt.Movie.SummaryById("tt9285016");
-            //MovieSummaryResponse summary2 = trakt.Movie.SummaryByImdbId("the-soAcial-network-2010");
+            MovieMatch[] response = trakt.Search.SearchMovies("50/50", 5);
         }
     }
 

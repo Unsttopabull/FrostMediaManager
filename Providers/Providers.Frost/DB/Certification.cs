@@ -27,13 +27,11 @@ namespace Frost.Providers.Frost.DB {
             Rating = rating;
         }
 
-        internal Certification(ICertification certification) {
+        internal Certification(ICertification certification, Country country) {
             //Contract.Requires<ArgumentNullException>(certification != null);
 
             Rating = certification.Rating;
-            if (certification.Country != null) {
-                Country = new Country(certification.Country);
-            }
+            Country = country;
         }
 
         /// <summary>Gets or sets the database certification Id.</summary>

@@ -3,8 +3,14 @@
 namespace Frost.InfoParsers {
     public class ParsedActor : IParsedActor {
 
-        public ParsedActor(string name) {
+        public ParsedActor(string name, string character = null) {
             Name = name;
+            Character = character;
+        }
+
+        public ParsedActor(string name, string character, string imdbId, string thumb) : this(name, character) {
+            ImdbID = imdbId;
+            Thumb = thumb;
         }
 
         /// <summary>Gets or sets the full name of the person.</summary>

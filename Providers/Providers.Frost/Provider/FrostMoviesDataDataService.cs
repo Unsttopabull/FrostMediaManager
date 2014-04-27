@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Data.Entity;
+using System.Data.Entity.Core;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Net.Mime;
-using System.Windows.Threading;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
@@ -15,6 +13,7 @@ using Frost.Providers.Frost.Proxies;
 using IOFile = System.IO.File;
 
 namespace Frost.Providers.Frost.Provider {
+
     public class FrostMoviesDataDataService : IMoviesDataService {
         private readonly FrostDbContainer _mvc;
         private ObservableCollection<IMovie> _movies;
@@ -213,10 +212,10 @@ namespace Frost.Providers.Frost.Provider {
                 return p;
             }
 
-            p = movieId > 0 
+            p = movieId > 0
                     ? _mvc.Plots.FirstOrDefault(pr => plot.Full == pr.Full && pr.MovieId == movieId)
                     : _mvc.Plots.FirstOrDefault(pr => plot.Full == pr.Full);
-            
+
             if (p == null || _mvc.Entry(p).State == EntityState.Deleted) {
                 p = new Plot(plot);
             }
@@ -384,10 +383,32 @@ namespace Frost.Providers.Frost.Provider {
             return p;
         }
 
+        public Certification FindCertification(ICertification certification, long movieId, bool createNotFound) {
+            if (certification.Country == null) {
+                throw new NotSupportedException("The certification must have associated country");
+            }
+
+            Country c = FindCountry(certification.Country, true);
+
+            if (certification.Id > 0) {
+                Certification find = _mvc.Certifications.Find(certification.Id);
+                if (find == null && createNotFound) {
+                    return new Certification(certification, c);
+                }
+                return find;
+            }
+
+            Certification cert = _mvc.Certifications.FirstOrDefault(crt => crt.Rating == certification.Rating && crt.MovieId == movieId && crt.CountryId == c.Id);
+            if (cert == null && createNotFound) {
+                return new Certification(certification, c);
+            }
+            return cert;
+        }
+
         #endregion
 
         internal TSet FindHasName<TEntity, TSet>(TEntity hasName, bool createIfNotFound) where TEntity : class, IHasName, IMovieEntity
-                                                                                         where TSet : class, IHasName, IMovieEntity {
+            where TSet : class, IHasName, IMovieEntity {
             DbSet<TSet> set = _mvc.Set<TSet>();
             if (hasName.Id > 0) {
                 //check if the entity is already in the context otherwise retreive it
@@ -428,7 +449,12 @@ namespace Frost.Providers.Frost.Provider {
             try {
                 DbEntityEntry entry = _mvc.Entry(entity);
                 if (entry != null) {
-                    entry.State = EntityState.Deleted;
+                    if (entry.State == EntityState.Unchanged || entry.State == EntityState.Modified) {
+                        entry.State = EntityState.Deleted;
+                    }
+                    else {
+                        entry.State = EntityState.Detached;
+                    }
                 }
                 return true;
             }
@@ -466,7 +492,14 @@ namespace Frost.Providers.Frost.Provider {
         }
 
         public void SaveChanges() {
-            _mvc.SaveChanges();
+            try {
+                _mvc.SaveChanges();
+            }
+            catch (OptimisticConcurrencyException e) {
+            }
+            catch (Exception e) {
+                throw;
+            }
 
             foreach (Movie mov in _mvc.Movies.Where(m => m.MainPlot == null || m.DefaultFanart == null || m.DefaultCover == null)) {
                 if (mov.MainPlot == null) {
@@ -481,7 +514,13 @@ namespace Frost.Providers.Frost.Provider {
                     mov.DefaultCover = mov.Art.FirstOrDefault(a => a.Type == ArtType.Poster || a.Type == ArtType.Cover);
                 }
             }
-            _mvc.SaveChanges();
+
+            try {
+                _mvc.SaveChanges();
+            }
+            catch (Exception e) {
+                throw;
+            }
 
             MovieSaver.Reset();
         }
@@ -514,4 +553,5 @@ namespace Frost.Providers.Frost.Provider {
 
         #endregion
     }
+
 }

@@ -1,4 +1,4 @@
-﻿using SharpTraktTvAPI.Models.Movie.GenrealModels;
+﻿using SharpTraktTvAPI.Models.Genreal;
 
 namespace SharpTraktTvAPI.Models.Movie.SummariesModels {
 

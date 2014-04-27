@@ -14,7 +14,7 @@ namespace Frost.InfoParsers {
         }
 
         /// <summary>Initializes a new instance of the <see cref="ParsedPerson"/> class.</summary>
-        public ParsedPerson(string name, string thumb, string imdbID) {
+        public ParsedPerson(string name, string imdbID, string thumb) {
             Name = name;
             Thumb = thumb;
             ImdbID = imdbID;

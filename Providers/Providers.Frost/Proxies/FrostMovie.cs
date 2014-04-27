@@ -332,32 +332,8 @@ namespace Frost.Providers.Frost.Proxies {
                 if (value == null) {
                     Entity.MainPlot = null;
                 }
-                else {
-                    Plot p = Service.FindPlot(value, true, Id);
-
-                    if (p.MovieId == null || p.MovieId <= 0) {
-                        long? id;
-                        using (FrostDbContainer fdc = new FrostDbContainer()) {
-                            Movie movie = fdc.Movies.Find(Id);
-                            if (movie == null) {
-                                return;
-                            }
-
-                            Plot item = new Plot(value);
-                            movie.Plots.Add(item);
-                            try {
-                                fdc.SaveChanges();
-                            }
-                            catch {
-                                return;
-                            }
-                            id = item.MovieId;
-                        }
-
-                        if (id.HasValue) {
-                            p = Service.FindById<Plot>(id.Value);
-                        }
-                    }
+                else if(value.Id > 0){
+                    Plot p = Service.FindPlot(value, false, Id);
  
                     if (p != null) {
                         Entity.MainPlot = p;
@@ -614,6 +590,7 @@ namespace Frost.Providers.Frost.Proxies {
                 if (removed) {
                     Service.MarkAsDeleted(p);
                 }
+                return removed;
             }
 
             p = Service.FindPlot(plot, false, Id);
@@ -842,6 +819,42 @@ namespace Frost.Providers.Frost.Proxies {
             Art a = Service.FindArt(art, false);
             if (a != null) {
                 return Entity.Art.Remove(a);
+            }
+            return false;
+        }
+
+
+        /// <summary>Adds the specified certification to the provider data store.</summary>
+        /// <param name="certification">The certification to add.</param>
+        /// <returns>Returns the added promotional video. If the <paramref name="certification"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding certifications or the certification does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding certifications.</exception>
+        public ICertification AddCertification(ICertification certification) {
+            if (certification is FrostCertification) {
+                Entity.Certifications.Add(((FrostCertification)certification).ProxiedEntity);
+                return certification;
+            }
+
+            Certification a = Service.FindCertification(certification, Id, true);
+            Entity.Certifications.Add(a);
+
+            return new FrostCertification(a, Service);
+        }
+
+        /// <summary>Removes the specified certification from the provider data store.</summary>
+        /// <param name="certification">The certification to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing certifications in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing certifications.</exception>
+        public bool RemoveCertification(ICertification certification) {
+            FrostCertification c = certification as FrostCertification;
+            if (c != null) {
+                return Entity.Certifications.Remove(c.ProxiedEntity);
+            }
+
+            Certification cert = Service.FindCertification(certification, Id, false);
+            if (cert != null) {
+                return Entity.Certifications.Remove(cert);
             }
             return false;
         }

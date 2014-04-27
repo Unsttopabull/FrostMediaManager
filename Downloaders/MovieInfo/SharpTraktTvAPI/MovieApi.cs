@@ -33,7 +33,7 @@ namespace SharpTraktTvAPI {
             return GetSummary(id);
         }
 
-        public MovieSummaryResponse GetSummary(string value) {
+        private MovieSummaryResponse GetSummary(string value) {
             URLBuilder url = new URLBuilder(SharpTraktTv.API_URL_BASE);
             url.AddSegmentPath("movie", "summary.json", _apiKey, value);
 
@@ -45,7 +45,7 @@ namespace SharpTraktTvAPI {
         #region Summaries
 
         public MovieSummaryResponse Summaries(SummaryLength extended, params MovieSummarySearch[] values) {
-            return GetSummaries(values.Select(ms => ms.GetSlug()));
+            return GetSummaries(values.Select(ms => ms.GetSlug()), extended);
         }
 
         public MovieSummaryResponse Summaries(params MovieSummarySearch[] values) {
@@ -56,7 +56,7 @@ namespace SharpTraktTvAPI {
             return GetSummaries(id);
         }
 
-        public MovieSummaryResponse GetSummaries(IEnumerable<string> values, SummaryLength length = SummaryLength.Default) {
+        private MovieSummaryResponse GetSummaries(IEnumerable<string> values, SummaryLength length = SummaryLength.Default) {
             URLBuilder url = new URLBuilder(SharpTraktTv.API_URL_BASE);
             url.AddSegmentPath("movie", "summaries.json", _apiKey, string.Join(",", values));
 

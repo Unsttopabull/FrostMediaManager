@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using HtmlAgilityPack;
@@ -12,6 +13,17 @@ namespace Frost.InfoParsers {
                 return decode 
                     ? WebUtility.HtmlDecode(node.InnerText.Trim())
                     : node.InnerText.Trim();
+            }
+            return null;
+        }
+
+        public static int? InnerTextAsIntOrNull(this HtmlNode node, bool decode = true) {
+            string text = InnerTextOrNull(node, decode);
+            if (text != null) {
+                int value;
+                if(int.TryParse(text, NumberStyles.Integer, CultureInfo.InvariantCulture, out value)) {
+                    return value;
+                }
             }
             return null;
         }

@@ -1,8 +1,10 @@
 ﻿using System;
+using Frost.Common.Comparers;
 using Frost.Common.Models.Provider;
 
 namespace RibbonUI.Util.ObservableWrappers {
-    public class MovieCertification : MovieItemBase<ICertification>, ICertification {
+    public class MovieCertification : MovieItemBase<ICertification>, ICertification, IEquatable<ICertification> {
+        private static CountryEqualityComparer _comparer = new CountryEqualityComparer();
 
         public MovieCertification(ICertification observed) : base(observed) {
         }
@@ -56,6 +58,17 @@ namespace RibbonUI.Util.ObservableWrappers {
 
                 return GetImageSourceFromPath(string.Format("Images/RatingsE/{0}/{1}.png", Country.ISO3166.Alpha3, rating));
             }
+        }
+
+        /// <summary>Indicates whether the current object is equal to another object of the same type.</summary>
+        /// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
+        /// <param name="other">An object to compare with this object.</param>
+        public bool Equals(ICertification other) {
+            if (other == null) {
+                return false;
+            }
+
+            return string.Equals(Rating, other.Rating) && _comparer.Equals(Country, other.Country);
         }
     }
 }

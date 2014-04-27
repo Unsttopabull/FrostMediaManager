@@ -16,7 +16,7 @@ namespace SharpTraktTvAPI {
             _uri = new StringBuilder(baseUri);
         }
 
-        public void AddParameter<T>(string paramName, T value) {
+        public void AddParameter<T>(string paramName, T value, bool urlEncode = false) {
             if (_first) {
                 _uri.Append("?");
                 _first = false;
@@ -27,11 +27,20 @@ namespace SharpTraktTvAPI {
 
             _uri.Append(paramName);
             _uri.Append("=");
-            _uri.Append(value);
+
+            if (urlEncode) {
+                _uri.Append(WebUtility.UrlEncode(value.ToString()));
+            }
+            else {
+                _uri.Append(value);
+            }
         }
 
-        public void AddSegment(string segmentName) {
-            _uri.Append(segmentName + "/");
+        public void AddSegment(string segmentName, bool trailingSlash = true) {
+            _uri.Append(segmentName);
+            if (trailingSlash) {
+                _uri.Append("/");
+            }
         }
 
         public void AddSegmentPath(params string[] segments) {
@@ -77,7 +86,15 @@ namespace SharpTraktTvAPI {
             using (WebClient wc = new WebClient()) {
                 wc.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip");
                 try {
-                    return wc.UploadString(_uri.ToString(), data);
+                    string response = wc.UploadString(_uri.ToString(), data);
+
+                    string  contentEncoding = wc.ResponseHeaders["Content-Encoding"];
+                    if (contentEncoding != null && contentEncoding == "gzip") {
+                        using (StreamReader sr = new StreamReader(new GZipStream(new MemoryStream(Encoding.UTF8.GetBytes(response)), CompressionMode.Decompress))) {
+                            response = sr.ReadToEnd();
+                        }
+                    }
+                    return response;
                 }
                 catch (WebException e) {
                     return HandleWebException(e);
@@ -93,7 +110,19 @@ namespace SharpTraktTvAPI {
                 wc.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip");
 
                 try {
-                    return wc.DownloadString(_uri.ToString());
+                    byte[] response = wc.DownloadData(_uri.ToString());
+                    string json;
+
+                    string  contentEncoding = wc.ResponseHeaders["Content-Encoding"];
+                    if (contentEncoding != null && contentEncoding == "gzip") {
+                        using (StreamReader sr = new StreamReader(new GZipStream(new MemoryStream(response), CompressionMode.Decompress))) {
+                            json = sr.ReadToEnd();
+                        }
+                    }
+                    else {
+                        json = Encoding.UTF8.GetString(response);
+                    }
+                    return json;
                 }
                 catch (WebException e) {
                     return HandleWebException(e);
@@ -124,7 +153,17 @@ namespace SharpTraktTvAPI {
             return null;
         }
 
-        private JObject ThrowOnFailure(string json) {
+        private JContainer ThrowOnFailure(string json) {
+
+            if (json.StartsWith("[")) {
+                try {
+                    return JArray.Parse(json);
+                }
+                catch (Exception e) {
+                    throw new TraktTvException("Failed to parse the response as JSON.");
+                }
+            }
+
             JObject jObject;
             try {
                 jObject = JObject.Parse(json);

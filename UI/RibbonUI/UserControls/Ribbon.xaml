@@ -4,9 +4,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:in="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:uc="clr-namespace:RibbonUI.UserControls"
     x:Name="RibbonControl" x:Class="RibbonUI.UserControls.Ribbon"
-    mc:Ignorable="d" d:DesignHeight="140" d:DesignWidth="500">
+    mc:Ignorable="d" d:DesignHeight="140" d:DesignWidth="700">
     <UserControl.DataContext>
         <uc:RibbonViewModel/>
     </UserControl.DataContext>
@@ -20,43 +21,11 @@
             <RibbonContextualTabGroup Background="Red" x:Name="ContextSubtitle" Visibility="{Binding SubtitlesContextVisible}" Header="Subtitles" />
         </Ribbon.ContextualTabGroups>
 
-        <!-- Help Pane, located at the right-hand side -->
-        <Ribbon.HelpPaneContent>
-            <RibbonButton SmallImageSource="../Images/help.png" />
-        </Ribbon.HelpPaneContent>
-        <!-- Quick Access Toolbar - located at the upper-left corner -->
-        <!--<Ribbon.QuickAccessToolBar>
-            <RibbonQuickAccessToolBar>
-                <RibbonButton x:Name="Save" SmallImageSource="../Images/save.png" />
-            </RibbonQuickAccessToolBar>
-        </Ribbon.QuickAccessToolBar>-->
-        <!-- Application Menu, located at the left-hand side (down arrow) -->
         <Ribbon.ApplicationMenu>
-            <RibbonApplicationMenu LargeImageSource="../logo3.ico">
-                <!--<RibbonApplicationMenuItem Header="Export" ImageSource="../Images/export.png" Height="300">
-                    </RibbonApplicationMenuItem>
-
-                <RibbonApplicationMenu.FooterPaneContent>
-                    <DockPanel LastChildFill="false">
-                        <RibbonButton Command="ApplicationCommands.Close"
-                                      Label="Exit"
-                                      ToolTipTitle="Exit the application"
-                                      SmallImageSource="../Images/quit.png"
-                                      DockPanel.Dock="Right"
-                                      BorderBrush="#B8114EAF"
-                                      IsEnabled="True" />
-                    </DockPanel>
-                </RibbonApplicationMenu.FooterPaneContent>
-                <RibbonApplicationMenu.AuxiliaryPaneContent>
-                    <RibbonGallery />
-                </RibbonApplicationMenu.AuxiliaryPaneContent>-->
-                <RibbonApplicationMenuItem Header="Options" ImageSource="../Images/options.png" Command="{Binding OptionsCommand}"/>
+            <RibbonApplicationMenu Visibility="Collapsed">
             </RibbonApplicationMenu>
         </Ribbon.ApplicationMenu>
 
-        <!-- Ribbon Tab #2: -->
-
-        <!-- Ribbon Tab #1: Home -->
         <RibbonTab IsSelected="{Binding IsSearchTabSelected}" Header="Search" Margin="0,1,0,-1">
             <RibbonGroup Header="Searching &amp; Detection">
                 <RibbonButton LargeImageSource="../Images/search.ico" Label="Search for new movies" Command="{Binding SearchCommand}" />
@@ -76,9 +45,11 @@
             <RibbonGroup>
                 <RibbonButton LargeImageSource="../Images/save.png" Label="Save changes" Command="{Binding SaveChangesCommand}"/>
             </RibbonGroup>
+            <RibbonGroup>
+                <RibbonButton LargeImageSource="../Images/options.png" Label="Options" Command="{Binding OptionsCommand}"/>
+            </RibbonGroup>            
         </RibbonTab>
 
-        <!-- Ribbon Tab #3: -->
         <RibbonTab IsSelected="{Binding IsDetectTabSelected}" Header="Web update">
             <RibbonGroup Header="Movie info" Background="#00000000" Height="86" Margin="0">
                 <RibbonMenuButton LargeImageSource="../Images/update.png" Label="Update movie information">
@@ -86,19 +57,21 @@
                     <RibbonMenuItem ImageSource="../Images/Sites/gremovkino.ico" Header="Gremovkino.si" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.GremoVKino}"/>
                     <RibbonMenuItem ImageSource="../Images/sites/opensubtitles.ico" Header="OpenSubtitles.org" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.OpenSubtitles}"/>
                     <RibbonMenuItem ImageSource="../Images/sites/omdb.ico" Header="The OMDB API" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.Omdb}"/>
+                    <RibbonMenuItem ImageSource="../Images/sites/traktTv.png" Header="Trakt.TV" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.TraktTv}"/>
                 </RibbonMenuButton>
-                <!--<RibbonButton SmallImageSource="../Images/cut.png" Label="Cut" />
-                <RibbonButton SmallImageSource="../Images/copy.png" Label="Copy" />
-                <RibbonButton SmallImageSource="../Images/format_painter.png" Label="Format Painter" />-->
             </RibbonGroup>
-            <RibbonGroup>
+            <RibbonGroup Header="Art">
                 <RibbonMenuButton LargeImageSource="../Images/art.png" Label="Download art">
                     <RibbonMenuItem ImageSource="../Images/Sites/fanart.ico" Header="Fanart.tv" />
                     <RibbonMenuItem ImageSource="../Images/sites/tmdb.ico" Header="Tmdb.org" />                    
                 </RibbonMenuButton>
+                <RibbonMenuButton LargeImageSource="../Images/download4.png" Label="Save current art locally">
+                    <RibbonMenuItem Header="For current movie"/>
+                    <RibbonMenuItem Header="For all movies"/>
+                </RibbonMenuButton>
             </RibbonGroup>
             <RibbonGroup>
-                <RibbonMenuButton LargeImageSource="../Images/video.png" Label="Download trailer &amp; promotional videos" IsEnabled="{Binding SelectedMovie[PromotionalVideos]}">
+                <RibbonMenuButton LargeImageSource="../Images/video.png" Label="Download promotional videos" IsEnabled="{Binding SelectedMovie[PromotionalVideos]}">
                     <RibbonMenuItem ImageSource="../Images/Sites/traileraddict.png" Header="TrailerAddict.com" Command="{Binding UpdatePromotionalVideosCommand}"/>
                 </RibbonMenuButton>
             </RibbonGroup>

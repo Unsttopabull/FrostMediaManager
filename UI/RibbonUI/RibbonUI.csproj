@@ -71,6 +71,7 @@
     <Compile Include="Design\DesignCompositionRoot.cs" />
     <Compile Include="Design\DesignMoviesDataService.cs" />
     <Compile Include="Design\Fakes\FakeMovie.cs" />
+    <Compile Include="Design\Models\DesingCertification.cs" />
     <Compile Include="Design\Models\DesingFile.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Settings.cs" />
@@ -690,9 +691,7 @@
     </Reference>
     <Reference Include="System.Windows.Controls.Ribbon" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MvvmLightLibs.4.2.30.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
@@ -765,6 +764,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Sites\traileraddict.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Sites\traktTv.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\download.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\download4.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

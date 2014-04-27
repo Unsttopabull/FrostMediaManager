@@ -1,9 +1,17 @@
+using Newtonsoft.Json;
+
 namespace SharpTraktTvAPI.Models.Movie.SummaryModels {
 
     public class Actor {
-        public string name { get; set; }
-        public string character { get; set; }
-        public HeadshotImage images { get; set; }
+
+        [JsonProperty("name")]
+        public string Name { get; set; }
+
+        [JsonProperty("character")]
+        public string Character { get; set; }
+
+        [JsonProperty("images")]
+        public HeadshotImage Images { get; set; }
     }
 
 }

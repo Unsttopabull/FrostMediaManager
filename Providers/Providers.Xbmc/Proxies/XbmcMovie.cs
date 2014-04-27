@@ -30,6 +30,7 @@ namespace Frost.Providers.Xbmc.Proxies {
         private long? _top250;
         private double? _avgRating;
         private readonly XbmcPlot _xbmcPlot;
+        private XbmcCertification _mpaa;
 
         public XbmcMovie(XbmcDbMovie movie, XbmcMoviesDataService service) : base(movie, service){
             _xbmcPlot = new XbmcPlot(Entity);
@@ -37,7 +38,8 @@ namespace Frost.Providers.Xbmc.Proxies {
             _numChannels = -1;
 
             if (!string.IsNullOrEmpty(Entity.MpaaRating)) {
-                _certifications = new[] { new XbmcCertification(Entity) };
+                _mpaa = new XbmcCertification(Entity);
+                _certifications = new[] { _mpaa };
             }
         }
 
@@ -1072,6 +1074,48 @@ namespace Frost.Providers.Xbmc.Proxies {
                 return Entity.Art.Remove(a);
             }
             return false;
+        }
+
+        /// <summary>Adds the specified certification to the provider data store.</summary>
+        /// <param name="certification">The certification to add.</param>
+        /// <returns>Returns the added promotional video. If the <paramref name="certification"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding certifications or the certification does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding certifications.</exception>
+        public ICertification AddCertification(ICertification certification) {
+            CheckUsCert(certification);
+
+            _mpaa.Rating = certification.Rating;
+            return _mpaa;
+        }
+
+        /// <summary>Removes the specified certification from the provider data store.</summary>
+        /// <param name="certification">The certification to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing certifications in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing certifications.</exception>
+        public bool RemoveCertification(ICertification certification) {
+            CheckUsCert(certification);
+
+            _mpaa.Rating = null;
+            return true;
+        }
+
+        private static void CheckUsCert(ICertification certification) {
+            if (certification.Country == null) {
+                throw new NotSupportedException("XBMC only supports US certifications");
+            }
+
+            if (certification.Country.ISO3166 != null) {
+                if (!string.IsNullOrEmpty(certification.Country.ISO3166.Alpha3) && certification.Country.ISO3166.Alpha3 != "usa") {
+                    throw new NotSupportedException("XBMC only supports US certifications");
+                }
+                if (!string.IsNullOrEmpty(certification.Country.ISO3166.Alpha2) && certification.Country.ISO3166.Alpha2 != "us") {
+                    throw new NotSupportedException("XBMC only supports US certifications");
+                }
+            }
+            else if (certification.Country.Name != "United States") {
+                throw new NotSupportedException("XBMC only supports US certifications");
+            }
         }
 
         #endregion

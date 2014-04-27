@@ -838,12 +838,43 @@ namespace RibbonUI.Util.ObservableWrappers {
                 return;
             }
 
-            if (!Actors.Any(act => act.Equals(a))) {
+            MovieActor ac = Actors.FirstOrDefault(act => act.Equals(a));
+            if (ac == null) {
+                if (Update(actor, a)) {
+                    return;
+                }
+
                 Actors.Add(new MovieActor(a));
             }
-            else if(!silent){
-                MessageBox.Show(TranslationManager.T("This person has already been added to this movie as {0}.", "an actor"));
+            else {
+                if (!silent) {
+                    MessageBox.Show(TranslationManager.T("This person has already been added to this movie as {0}.", "an actor"));
+                }
             }
+        }
+
+        private bool Update(IActor newActor, IActor returnedActor) {
+            MovieActor ac;
+            if (!string.IsNullOrEmpty(newActor.Character)) {
+                ac = Actors.FirstOrDefault(act => act.Equals(returnedActor as IPerson) && string.IsNullOrEmpty(act.Character));
+                if (ac != null) {
+                    if (!string.IsNullOrEmpty(newActor.Thumb) && string.IsNullOrEmpty(ac.Thumb)) {
+                        ac.Thumb = newActor.Thumb;
+                    }
+
+                    ac.Character = newActor.Character;
+                    return true;
+                }
+            }
+
+            if (!string.IsNullOrEmpty(newActor.Thumb)) {
+                ac = Actors.FirstOrDefault(act => act.Equals(returnedActor as IPerson) && string.IsNullOrEmpty(act.Thumb));
+                if (ac != null) {
+                    ac.Thumb = newActor.Thumb;
+                    return true;
+                }
+            }
+            return false;
         }
 
         public bool RemoveActor(MovieActor actor, bool silent = false) {
@@ -1105,6 +1136,28 @@ namespace RibbonUI.Util.ObservableWrappers {
             if (success) {
                 Art.Remove(art);
             }               
+        }
+
+
+        public void AddCertification(ICertification cert, bool silent) {
+            ICertification c = Add(_observedEntity.AddCertification, cert, silent);
+            if (c == null) {
+                return;
+            }
+
+            if (!Certifications.Any(cer => cer.Equals(c))) {
+                Certifications.Add(new MovieCertification(c));
+            }
+            else if(!silent){
+                MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "country"));
+            }
+        }
+
+        public void RemoveCertification(MovieCertification cert, bool silent) {
+            bool success = Remove(_observedEntity.RemoveCertification, cert.ObservedEntity, silent);
+            if (success) {
+                Certifications.Remove(cert);
+            }
         }
 
         private bool Remove<T>(Func<T, bool> removeItem, T item, bool silent) where T : IMovieEntity {

@@ -159,8 +159,15 @@ namespace RibbonUI.Windows {
                     }
                     SearchMovieInfo(_movieInfos["OMDB"], _site);
                     break;
+                case WebUpdateSite.TraktTv:
+                    if (!_movieInfos.ContainsKey("TraktTV")) {
+                        _movieInfos.Add("TraktTV", new ParsedMovieInfos());
+                    }
+                    SearchMovieInfo(_movieInfos["TraktTV"], _site);
+                    break;
                 default:
-                    return;
+                    Close();
+                    break;
             }
         }
 
@@ -177,6 +184,9 @@ namespace RibbonUI.Windows {
                     break;
                 case WebUpdateSite.Omdb:
                     cli = new OmdbClient();
+                    break;
+                case WebUpdateSite.TraktTv:
+                    cli = new TraktTvClient();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("site");
@@ -240,7 +250,7 @@ namespace RibbonUI.Windows {
                 MessageBoxResult result = MessageBox.Show(message, "Match found", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes) {
                     _movie.Title = match.OriginalName;
-                    DownloadAndUpdate(match, site);
+                    DownloadAndUpdate(match, cli);
                 }
                 else {
                     Close();
@@ -304,26 +314,9 @@ namespace RibbonUI.Windows {
         }
 
 
-        private void DownloadAndUpdate(ParsedMovie movie, WebUpdateSite site) {
+        private void DownloadAndUpdate(ParsedMovie movie, ParsingClient cli) {
             LabelText = "Downloading...";
             ProgressText = "Getting movie information.";
-
-            ParsingClient cli = null;
-            switch (site) {
-                case WebUpdateSite.Kolosej:
-                    cli = new KolosejClient();
-                    break;
-                case WebUpdateSite.OpenSubtitles:
-                    break;
-                case WebUpdateSite.GremoVKino:
-                    cli = new GremoVKinoClient();
-                    break;
-                case WebUpdateSite.Omdb:
-                    cli = new OmdbClient();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException("site");
-            }
 
             if (cli == null) {
                 return;
@@ -415,7 +408,7 @@ namespace RibbonUI.Windows {
                 bool summaryAvailable = !string.IsNullOrEmpty(movie.Plot);
                 if (_movie["Plots"] && summaryAvailable) {
                     try {
-                        Dispatcher.Invoke(() => _movie.AddPlot(new DesignPlot { Full = movie.Plot }, true));
+                        Dispatcher.Invoke(() => _movie.AddPlot(new DesignPlot { Full = movie.Plot, Tagline = movie.Tagline }, true));
                     }
                     catch (Exception e) {
                         Dispatcher.Invoke(() => Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message)));
@@ -428,21 +421,18 @@ namespace RibbonUI.Windows {
                     }
                 }
 
-                if (_movie["ReleaseYear"] && !string.IsNullOrEmpty(movie.ReleaseYear)) {
-                    long relase;
-                    if (long.TryParse(movie.ReleaseYear, NumberStyles.Integer, CultureInfo.InvariantCulture, out relase)) {
-                        _movie.ReleaseYear = relase;
-                    }
+                if (_movie["ReleaseYear"] && movie.ReleaseYear.HasValue) {
+                    _movie.ReleaseYear = movie.ReleaseYear.Value;
                 }
 
-                if (_movie["RatingAverage"] && !string.IsNullOrEmpty(movie.ImdbRating)) {
+                if (_movie["RatingAverage"] && !string.IsNullOrEmpty(movie.Rating)) {
                     double rating;
-                    if (double.TryParse(movie.ImdbRating, NumberStyles.Float, CultureInfo.InvariantCulture, out rating)) {
+                    if (double.TryParse(movie.Rating, NumberStyles.Float, CultureInfo.InvariantCulture, out rating)) {
                         _movie.RatingAverage = rating;
                     }
                 }
 
-                if (_movie["ImdbId"] && !string.IsNullOrEmpty(movie.ImdbLink)) {
+                if (_movie["ImdbID"] && !string.IsNullOrEmpty(movie.ImdbLink)) {
                     Match match = IMDBIdExtract.Match(movie.ImdbLink);
                     if (match.Groups.Count > 0) {
                         _movie.ImdbID = match.Groups[0].Value;
@@ -465,15 +455,25 @@ namespace RibbonUI.Windows {
                     }
                 }
 
+                if (_movie["Ratings"] && !string.IsNullOrEmpty(movie.MPAA)) {
+                    Dispatcher.Invoke(() => _movie.AddCertification(new DesingCertification(movie.MPAA, new DesignCountry("United States")), true));
+                }
+
                 if (_movie["Awards"] && movie.Awards != null) {
-                    foreach (ParsedAward award in movie.Awards) {
-                        ParsedAward aw = award;
+                    foreach (IParsedAward award in movie.Awards) {
+                        IParsedAward aw = award;
                         Dispatcher.Invoke(() => _movie.AddAward(new DesignAward(aw), true));
                     }
                 }
 
-                if (_movie["Art"] && !string.IsNullOrEmpty(movie.Cover)) {
-                    Dispatcher.Invoke(() => _movie.AddArt(new DesignArt(ArtType.Cover, movie.Cover), true));
+                if (_movie["Art"]) {
+                    if (!string.IsNullOrEmpty(movie.Cover)) {
+                        Dispatcher.Invoke(() => _movie.AddArt(new DesignArt(ArtType.Cover, movie.Cover), true));
+                    }
+
+                    if (!string.IsNullOrEmpty(movie.Fanart)) {
+                        Dispatcher.Invoke(() => _movie.AddArt(new DesignArt(ArtType.Fanart, movie.Fanart), true));
+                    }
                 }
             }).ContinueWith(t => Dispatcher.Invoke(() => {
                 if (Errors.Count > 0) {

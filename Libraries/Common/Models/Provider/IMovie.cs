@@ -431,6 +431,20 @@ namespace Frost.Common.Models.Provider {
         /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing art.</exception>
         bool RemoveArt(IArt art);
 
+        /// <summary>Adds the specified certification to the provider data store.</summary>
+        /// <param name="certification">The certification to add.</param>
+        /// <returns>Returns the added promotional video. If the <paramref name="certification"/> is a duplicate it returns the existing instance in the provider store.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support adding certifications or the certification does not meet a certain criteria.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding certifications.</exception>
+        ICertification AddCertification(ICertification certification);
+
+        /// <summary>Removes the specified certification from the provider data store.</summary>
+        /// <param name="certification">The certification to remove.</param>
+        /// <returns>Returns true if the provider successfuly removed the item, otherwise false.</returns>
+        /// <exception cref="NotSupportedException">Throws when the provider does not support removing certifications in a particual scenario.</exception>
+        /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing certifications.</exception>
+        bool RemoveCertification(ICertification certification);
+
         #endregion
 
         /// <summary>Updates the movie with detected information.</summary>

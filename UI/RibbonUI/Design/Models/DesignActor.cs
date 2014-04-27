@@ -12,11 +12,9 @@ namespace RibbonUI.Design.Models {
             Character = character;
         }
 
-        public DesignActor(IParsedActor name) {
-            Name = name.Name;
-            Thumb = name.Thumb;
-            ImdbID = name.ImdbID;
-            Character = name.Character;
+        public DesignActor(IParsedActor actor) : this(actor.Name, actor.Character) {
+            Thumb = actor.Thumb;
+            ImdbID = actor.ImdbID;
         }
 
         public string Character { get; set; }

@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:RibbonUI.Windows"
         xmlns:l="http://www.frostmediamanager.com/xaml/translation"
-        xmlns:models="clr-namespace:Frost.Common.Models.Provider;assembly=Frost.Common"        
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:in="http://schemas.microsoft.com/expression/2010/interactions"
         Title="{l:T Add new genres}" Height="382" Width="390" Name="AddGenreWindow">

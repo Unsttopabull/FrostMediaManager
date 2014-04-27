@@ -1,34 +1,85 @@
-﻿using SharpTraktTvAPI.Models.Movie.GenrealModels;
+﻿using Newtonsoft.Json;
+using SharpTraktTvAPI.Models.Genreal;
 using SharpTraktTvAPI.Models.Movie.SummaryModels;
 
 namespace SharpTraktTvAPI.Models.Movie {
 
     public class MovieSummaryResponse {
-        public string title { get; set; }
-        public int year { get; set; }
-        public int released { get; set; }
-        public string url { get; set; }
-        public string trailer { get; set; }
-        public int runtime { get; set; }
-        public string tagline { get; set; }
-        public string overview { get; set; }
-        public string certification { get; set; }
-        public string imdb_id { get; set; }
-        public int tmdb_id { get; set; }
-        public int rt_id { get; set; }
-        public int last_updated { get; set; }
-        public Images images { get; set; }
-        public string[] genres { get; set; }
-        public Top_Watchers[] top_watchers { get; set; }
-        public Ratings ratings { get; set; }
-        public Stats stats { get; set; }
-        public People people { get; set; }
-        public bool watched { get; set; }
-        public int plays { get; set; }
-        public string rating { get; set; }
-        public int rating_advanced { get; set; }
-        public bool in_watchlist { get; set; }
-        public bool in_collection { get; set; }
+
+        [JsonProperty("title")]
+        public string Title { get; set; }
+
+        [JsonProperty("year")]
+        public int ReleaseYear { get; set; }
+
+        [JsonProperty("released")]
+        public int Released { get; set; }
+
+        [JsonProperty("url")]
+        public string Url { get; set; }
+
+        [JsonProperty("trailer")]
+        public string Trailer { get; set; }
+
+        [JsonProperty("runtime")]
+        public int Runtime { get; set; }
+
+        [JsonProperty("tagline")]
+        public string Tagline { get; set; }
+
+        [JsonProperty("overview")]
+        public string Overview { get; set; }
+
+        [JsonProperty("certification")]
+        public string Certification { get; set; }
+
+        [JsonProperty("imdb_id")]
+        public string ImdbID { get; set; }
+
+        [JsonProperty("tmdb_id")]
+        public int TmdbID { get; set; }
+
+        [JsonProperty("rt_id")]
+        public int RtID { get; set; }
+
+        [JsonProperty("last_updated")]
+        public int LastUpdated { get; set; }
+
+        [JsonProperty("images")]
+        public Images Images { get; set; }
+
+        [JsonProperty("genres")]
+        public string[] Genres { get; set; }
+
+        [JsonProperty("top_watchers")]
+        public Top_Watchers[] TopWatchers { get; set; }
+
+        [JsonProperty("ratings")]
+        public Ratings Ratings { get; set; }
+
+        [JsonProperty("stats")]
+        public Stats Stats { get; set; }
+
+        [JsonProperty("people")]
+        public People People { get; set; }
+
+        [JsonProperty("watched")]
+        public bool Watched { get; set; }
+
+        [JsonProperty("plays")]
+        public int Plays { get; set; }
+
+        [JsonProperty("rating")]
+        public string Rating { get; set; }
+
+        [JsonProperty("rating_advanced")]
+        public int RatingAdvanced { get; set; }
+
+        [JsonProperty("in_watchlist")]
+        public bool InWatchlist { get; set; }
+
+        [JsonProperty("in_collection")]
+        public bool InCollection { get; set; }
     }
 
 }

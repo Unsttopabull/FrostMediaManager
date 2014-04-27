@@ -45,6 +45,7 @@
     <Compile Include="OpenSubtitlesInfoClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TraktTvClient.cs" />
+    <Compile Include="TraktTv\TraktTvParsedMovie.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InfoParsersCommon\InfoParsersCommon.csproj">
@@ -55,7 +56,12 @@
       <Project>{c796ac60-db0e-41ed-9a65-47c7abc52be9}</Project>
       <Name>SharpOmdbAPI</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SharpTraktTvAPI\SharpTraktTvAPI.csproj">
+      <Project>{7e74d034-0d99-4e49-bd80-f96b04d3eca9}</Project>
+      <Name>SharpTraktTvAPI</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

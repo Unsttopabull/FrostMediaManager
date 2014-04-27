@@ -1,8 +1,14 @@
-﻿namespace SharpTraktTvAPI.Models.Movie.GenrealModels {
+﻿using Newtonsoft.Json;
+
+namespace SharpTraktTvAPI.Models.Genreal {
 
     public class Images {
-        public string poster { get; set; }
-        public string fanart { get; set; }
+
+        [JsonProperty("poster")]
+        public string Poster { get; set; }
+
+        [JsonProperty("fanart")]
+        public string Fanart { get; set; }
     }
 
 }

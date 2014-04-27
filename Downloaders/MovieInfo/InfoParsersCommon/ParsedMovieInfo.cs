@@ -11,8 +11,9 @@ namespace Frost.InfoParsers {
         }
 
         public string Distribution { get; set; }
+        public string MPAA { get; set; }
         public string Duration { get; set; }
-        public string ReleaseYear { get; set; }
+        public int? ReleaseYear { get; set; }
         public string Country { get; set; }
         public string Language { get; set; }
         public IEnumerable<IParsedPerson> Writers { get; set; }
@@ -20,8 +21,13 @@ namespace Frost.InfoParsers {
         public IEnumerable<IParsedActor> Actors { get; set; }
         public string OfficialSite { get; set; }
         public string ImdbLink { get; set; }
-        public string ImdbRating { get; set; }
+
+        /// <summary>Gets or sets the movie average rating on a scale from 1 to 10 (can have decimals).</summary>
+        /// <value>The average movie rating.</value>
+        public string Rating { get; set; }
+        public string TmdbId { get; set; }
         public string Plot { get; set; }
+        public string Tagline { get; set; }
         public string TrailerUrl { get; set; }
         public ICollection<IParsedVideo> Videos { get; set; }
         public IEnumerable<IParsedAward> Awards { get; set; }

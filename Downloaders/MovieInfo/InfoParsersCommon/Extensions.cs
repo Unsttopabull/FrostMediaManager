@@ -15,5 +15,9 @@ namespace Frost.InfoParsers {
             }
             return null;
         }
+
+        public static string ToInvariantString(this int value) {
+            return value.ToString(CultureInfo.InvariantCulture);
+        }
     }
 }

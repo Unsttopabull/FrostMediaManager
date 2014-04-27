@@ -123,7 +123,7 @@ namespace Frost.MovieInfoProviders {
                 info.Duration = duration.InnerText.Replace('\t', ' ').Replace('\n', ' ').Trim();
             }
 
-            info.ReleaseYear = movieInfo.SelectSingleNode("span[@class='year']/text()").InnerTextOrNull();
+            info.ReleaseYear = movieInfo.SelectSingleNode("span[@class='year']/text()").InnerTextAsIntOrNull();
             info.Country = movieInfo.SelectSingleNode("span[@class='country']/a/text()").InnerTextOrNull();
             info.Language = movieInfo.SelectSingleNode("span[@class='language']/text()").InnerTextOrNull();
             info.Writers = movieInfo.SelectSingleNode("span[@class='screenplay']/text()")

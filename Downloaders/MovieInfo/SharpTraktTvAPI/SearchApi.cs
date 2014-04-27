@@ -8,17 +8,17 @@ namespace SharpTraktTvAPI {
             _apiKey = apiKey;
         }
 
-        public MovieSearchResponse SearchMovies(string query, int limit = 30) {
+        public MovieMatch[] SearchMovies(string query, int limit = 30) {
             URLBuilder url = new URLBuilder(SharpTraktTv.API_URL_BASE);
             url.AddSegmentPath("search", "movies.json");
-            url.AddParameter("apikey", _apiKey);
-            url.AddParameter("query", query);
+            url.AddSegment(_apiKey, false);
+            url.AddParameter("query", query, true);
 
             if (limit != 30) {
                 url.AddParameter("limit", limit);
             }
 
-            return url.GetResposeAs<MovieSearchResponse>();
+            return url.GetResposeAs<MovieMatch[]>();
         }
     }
 }

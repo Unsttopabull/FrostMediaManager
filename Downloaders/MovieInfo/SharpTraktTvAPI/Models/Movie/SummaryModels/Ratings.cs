@@ -1,10 +1,20 @@
+using Newtonsoft.Json;
+
 namespace SharpTraktTvAPI.Models.Movie.SummaryModels {
 
     public class Ratings {
-        public int percentage { get; set; }
-        public int votes { get; set; }
-        public int loved { get; set; }
-        public int hated { get; set; }
+
+        [JsonProperty("percentage")]
+        public int Percentage { get; set; }
+
+        [JsonProperty("votes")]
+        public int Votes { get; set; }
+
+        [JsonProperty("loved")]
+        public int Loved { get; set; }
+
+        [JsonProperty("hated")]
+        public int Hated { get; set; }
     }
 
 }
