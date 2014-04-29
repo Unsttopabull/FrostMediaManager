@@ -13,7 +13,7 @@ namespace Frost.MovieInfoProviders {
         private const string IMDB_MOVIE_URL = "http://www.imdb.com/title/{0}/";
         private readonly SharpTraktTv _trakt;
 
-        public TraktTvClient() : base("TraktTV", false, false) {
+        public TraktTvClient() : base("TraktTV", false, false, true) {
             _trakt = new SharpTraktTv("dc9b6e2e5526762ae8a050780ef6d04b");
         }
 

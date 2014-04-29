@@ -9,10 +9,11 @@ namespace Frost.InfoParsers {
 
     public abstract class ParsingClient {
 
-        protected ParsingClient(string name, bool canIndex, bool supportsMovieHash) {
+        protected ParsingClient(string name, bool canIndex, bool supportsMovieHash, bool supportsImdbId) {
             Name = name;
             CanIndex = canIndex;
             SupportsMovieHash = supportsMovieHash;
+            SupportsImdbId = supportsImdbId;
         }
 
         public string Name { get; private set; }
@@ -20,6 +21,7 @@ namespace Frost.InfoParsers {
         public bool CanIndex { get; private set; }
 
         public bool SupportsMovieHash { get; private set; }
+        public bool SupportsImdbId { get; private set; }
 
         public IEnumerable<ParsedMovie> AvailableMovies { get; protected set; }
 

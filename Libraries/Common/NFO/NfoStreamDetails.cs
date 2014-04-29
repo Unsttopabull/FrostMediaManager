@@ -2,28 +2,28 @@
 using System.Collections.Generic;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using Frost.Providers.Xbmc.NFO.Files;
+using Frost.Common.NFO.Files;
 
-namespace Frost.Providers.Xbmc.NFO {
+namespace Frost.Common.NFO {
 
     /// <summary>Holds information about streams details in a movie.</summary>
     [Serializable]
-    public class XbmcStreamDetails {
+    public class NfoStreamDetails {
 
         /// <summary>Gets or sets the information about video streams.</summary>
         /// <value>The information about video streams</value>
         [XmlElement("video", Form = XmlSchemaForm.Unqualified)]
-        public List<XbmcXmlVideoInfo> Video { get; set; }
+        public List<NfoVideoInfo> Video { get; set; }
 
         /// <summary>Gets or sets the information about audio streams.</summary>
         /// <value>The information about audio streams</value>
         [XmlElement("audio", Form = XmlSchemaForm.Unqualified)]
-        public List<XbmcXmlAudioInfo> Audio { get; set; }
+        public List<NfoAudioInfo> Audio { get; set; }
 
         /// <summary>Gets or sets the information about subtitles streams.</summary>
         /// <value>The information about subtitles streams</value>
         [XmlElement("subtitle", Form = XmlSchemaForm.Unqualified)]
-        public List<XbmcXmlSubtitleInfo> Subtitles { get; set; }
+        public List<NfoSubtitleInfo> Subtitles { get; set; }
 
     }
 

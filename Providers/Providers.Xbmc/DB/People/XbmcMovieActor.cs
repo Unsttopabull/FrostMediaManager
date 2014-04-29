@@ -67,7 +67,7 @@ namespace Frost.Providers.Xbmc.DB.People {
 
         /// <summary>Gets or sets the full name of the person.</summary>
         /// <value>The full name of the person.</value>
-        string IPerson.Name {
+        string IHasName.Name {
             get {
                 try {
                     return Person.Name;

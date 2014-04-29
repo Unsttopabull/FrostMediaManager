@@ -3,52 +3,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using Frost.Common;
 
-namespace Frost.Providers.Xbmc.NFO.Files {
+namespace Frost.Common.NFO.Files {
 
     /// <summary>Represents movie's file information ready to be serialized</summary>
     [Serializable]
     [XmlType(AnonymousType = true)]
-    public class XbmcXmlFileInfo {
+    public class NfoFileInfo {
         private const string SEPARATOR = " / ";
 
-        /// <summary>Initializes a new instance of the <see cref="XbmcXmlFileInfo"/> class.</summary>
-        public XbmcXmlFileInfo() {
-            StreamDetails = new XbmcStreamDetails();
+        /// <summary>Initializes a new instance of the <see cref="NfoFileInfo"/> class.</summary>
+        public NfoFileInfo() {
+            StreamDetails = new NfoStreamDetails();
         }
 
         /// <summary>Gets or sets the information about containing streams.</summary>
         /// <value>The information about containing streams</value>
         [XmlElement("streamdetails", Form = XmlSchemaForm.Unqualified)]
-        public XbmcStreamDetails StreamDetails { get; set; }
+        public NfoStreamDetails StreamDetails { get; set; }
 
         /// <summary>Gets or sets the information about video streams in this file.</summary>
         /// <value>The information about video streams in this file.</value>
-        /// <remarks>Its a proxy property to <see cref="XbmcStreamDetails"/>'s property <see cref="XbmcStreamDetails.Video">Video</see>.</remarks>
+        /// <remarks>Its a proxy property to <see cref="NfoStreamDetails"/>'s property <see cref="NfoStreamDetails.Video">Video</see>.</remarks>
         /// <returns>Returns a list of video streams information if they exist; otherwise <c>null</c>.</returns>
         [XmlIgnore]
-        public List<XbmcXmlVideoInfo> Videos {
+        public List<NfoVideoInfo> Videos {
             get { return StreamDetails.Video; }
             set { StreamDetails.Video = value; }
         }
 
         /// <summary>Gets or sets the information about audio streams in this file.</summary>
         /// <value>The information about audio streams in this file.</value>
-        /// <remarks>Its a proxy property to <see cref="XbmcStreamDetails"/>'s property <see cref="XbmcStreamDetails.Audio">Audio</see>.</remarks>
+        /// <remarks>Its a proxy property to <see cref="NfoStreamDetails"/>'s property <see cref="NfoStreamDetails.Audio">Audio</see>.</remarks>
         /// <returns>Returns a list of audio streams information if they exist; otherwise <c>null</c>.</returns>
         [XmlIgnore]
-        public List<XbmcXmlAudioInfo> Audios {
+        public List<NfoAudioInfo> Audios {
             get { return StreamDetails.Audio; }
             set { StreamDetails.Audio = value; }
         }
 
         /// <summary>Gets or sets the information about video streams in this file.</summary>
         /// <value>The information about video streams in this file.</value>
-        /// <remarks>Its a proxy property to <see cref="XbmcStreamDetails"/>'s property <see cref="XbmcStreamDetails.Subtitles">Subtitles</see>.</remarks>
+        /// <remarks>Its a proxy property to <see cref="NfoStreamDetails"/>'s property <see cref="NfoStreamDetails.Subtitles">Subtitles</see>.</remarks>
         /// <returns>Returns a list of subtitle streams information if they exist; otherwise <c>null</c>.</returns>
         [XmlIgnore]
-        public List<XbmcXmlSubtitleInfo> Subtitles {
+        public List<NfoSubtitleInfo> Subtitles {
             get { return StreamDetails.Subtitles; }
             set { StreamDetails.Subtitles = value; }
         }

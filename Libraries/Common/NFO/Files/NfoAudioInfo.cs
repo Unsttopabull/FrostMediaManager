@@ -3,42 +3,45 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using Frost.Common.Models.Provider;
 
-namespace Frost.Providers.Xbmc.NFO.Files {
+namespace Frost.Common.NFO.Files {
 
     /// <summary>Represents serialized information about an audio stream in a movie</summary>
     [Serializable]
-    public class XbmcXmlAudioInfo {
+    public class NfoAudioInfo {
 
-        /// <summary>Initializes a new instance of the <see cref="XbmcXmlAudioInfo"/> class.</summary>
-        public XbmcXmlAudioInfo() {
+        /// <summary>Initializes a new instance of the <see cref="NfoAudioInfo"/> class.</summary>
+        public NfoAudioInfo() {
         }
 
-        public XbmcXmlAudioInfo(IAudio audio) {
-            Codec = audio.Codec;
+        /// <summary>Initializes a new instance of the <see cref="NfoAudioInfo"/> class.</summary>
+        public NfoAudioInfo(IAudio audio) {
+            Codec = audio.CodecId;
             Channels = audio.NumberOfChannels ?? 0;
 
             if (audio.Language != null && audio.Language.ISO639 != null) {
-                Language = audio.Language.ISO639.Alpha3;
+                Language = !string.IsNullOrEmpty(audio.Language.ISO639.Alpha3) 
+                    ? audio.Language.ISO639.Alpha3 
+                    : audio.Language.ISO639.Alpha2;
             }
         }
 
-        /// <summary>Initializes a new instance of the <see cref="XbmcXmlAudioInfo"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="NfoAudioInfo"/> class.</summary>
         /// <param name="codec">The codec this audio is encoded in.</param>
         /// <param name="channels">The number of chanells in the audio stream (5.1 has 6 chanels)</param>
         /// <param name="language">The language of this audio in a 3 letter abreviation (ISO 639-2 Code).</param>
         /// <param name="longLanguage">The full name of the language in this audio stream</param>
-        public XbmcXmlAudioInfo(string codec, int channels, string language, string longLanguage) {
+        public NfoAudioInfo(string codec, int channels, string language, string longLanguage) {
             Codec = codec;
             Language = language;
             LongLanguage = longLanguage;
             Channels = channels;
         }
 
-        /// <summary>Initializes a new instance of the <see cref="XbmcXmlAudioInfo"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="NfoAudioInfo"/> class.</summary>
         /// <param name="codec">The codec this audio is encoded in.</param>
         /// <param name="channels">The number of chanells in the audio stream (5.1 has 6 chanels)</param>
         /// <param name="language">The language of this audio in a 3 letter abreviation (ISO 639-2 Code).</param>
-        public XbmcXmlAudioInfo(string codec, int channels, string language) : this(codec, channels, language, null) {
+        public NfoAudioInfo(string codec, int channels, string language) : this(codec, channels, language, null) {
         }
 
         /// <summary>Gets or sets the codec this audio is encoded in.</summary>

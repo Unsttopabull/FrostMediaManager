@@ -171,6 +171,19 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\Provider\XmlActor.cs" />
+    <Compile Include="NFO\Art\NfoFanart.cs" />
+    <Compile Include="NFO\Art\NfoThumb.cs" />
+    <Compile Include="NFO\Files\NfoAudioInfo.cs" />
+    <Compile Include="NFO\Files\NfoFileInfo.cs" />
+    <Compile Include="NFO\Files\NfoSubtitleInfo.cs" />
+    <Compile Include="NFO\Files\NfoVideoInfo.cs" />
+    <Compile Include="NFO\NFO.cs" />
+    <Compile Include="NFO\NfoStreamDetails.cs" />
+    <Compile Include="NFO\NfoActor.cs" />
+    <Compile Include="NFO\NfoCertification.cs" />
+    <Compile Include="NFO\NfoMovie.cs" />
+    <Compile Include="NFO\NfoMovieDbId.cs" />
+    <Compile Include="NFO\NfoResumeInfo.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Proxies\ChangeTrackers\ChangeTrackingCollection.cs" />
@@ -208,8 +221,19 @@
     <Compile Include="Util\ThreadSafeObservableCollection.cs" />
     <Compile Include="Util\ObservableHashSet.cs" />
     <Compile Include="Util\SerializableStringDictionary.cs" />
+    <Compile Include="Util\XmlIndentedTextWriter.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="NFO\XSD\xbmcXmlMovie.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="NFO\XSD\xbmcXmlMovie_xsd11.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="NFO\XSD\yamjXmlMovie.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

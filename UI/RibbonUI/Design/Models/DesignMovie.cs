@@ -209,6 +209,9 @@ namespace RibbonUI.Design.Models {
         /// <summary>Gets or sets the directory path to this movie.</summary>
         public string DirectoryPath { get; set; }
 
+        /// <summary>Gets or sets the full path of the first file to begin playing the movie.</summary>
+        public string FirstFileName { get; set; }
+
         /// <summary>Gets or sets the number of audio channels used most frequently in associated audios.</summary>
         /// <value>The number of audio channels used most frequently in associated audios</value>
         public int? NumberOfAudioChannels { get; set; }
@@ -572,5 +575,9 @@ namespace RibbonUI.Design.Models {
             
         }
 
+        /// <summary>Saves the movie information in an .NFO file.</summary>
+        public void SaveAsNfo() {
+            throw new NotImplementedException();
+        }
     }
 }

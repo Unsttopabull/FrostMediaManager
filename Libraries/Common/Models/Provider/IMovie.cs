@@ -113,6 +113,10 @@ namespace Frost.Common.Models.Provider {
         /// <summary>Gets or sets the directory path to this movie.</summary>
         string DirectoryPath { get; set; }
 
+        /// <summary>Gets or sets the full path of the first file to begin playing the movie.</summary>
+        /// <remarks>Returns <c>null</c> if not supported.</remarks>
+        string FirstFileName { get; set; }
+
         /// <summary>Gets or sets the number of audio channels used most frequently in associated audios.</summary>
         /// <value>The number of audio channels used most frequently in associated audios</value>
         int? NumberOfAudioChannels { get; set; }
@@ -450,6 +454,9 @@ namespace Frost.Common.Models.Provider {
         /// <summary>Updates the movie with detected information.</summary>
         /// <param name="movieInfo">The detected movie information.</param>
         void Update(MovieInfo movieInfo);
+
+        /// <summary>Saves the movie information in an .NFO file.</summary>
+        void SaveAsNfo();
     }
 
 }

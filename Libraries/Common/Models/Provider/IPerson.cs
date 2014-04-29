@@ -1,9 +1,6 @@
 namespace Frost.Common.Models.Provider {
 
-    public interface IPerson : IMovieEntity {
-        /// <summary>Gets or sets the full name of the person.</summary>
-        /// <value>The full name of the person.</value>
-        string Name { get; set; }
+    public interface IPerson : IMovieEntity, IHasName {
 
         /// <summary>Gets or sets the persons thumbnail image.</summary>
         /// <value>The thumbnail image.</value>

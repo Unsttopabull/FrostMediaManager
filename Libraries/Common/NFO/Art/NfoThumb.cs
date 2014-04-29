@@ -2,21 +2,21 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace Frost.Providers.Xbmc.NFO.Art {
+namespace Frost.Common.NFO.Art {
 
     /// <summary>Represent a promotional image of the movie ready to be serialized.</summary>
     [Serializable]
-    public class XbmcXmlThumb {
+    public class NfoThumb {
 
-        /// <summary>Initializes a new instance of the <see cref="XbmcXmlThumb"/> class.</summary>
-        public XbmcXmlThumb() {
+        /// <summary>Initializes a new instance of the <see cref="NfoThumb"/> class.</summary>
+        public NfoThumb() {
         }
 
-        /// <summary>Initializes a new instance of the <see cref="XbmcXmlThumb"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="NfoThumb"/> class.</summary>
         /// <param name="path">The path to this image (can be local or network or an URI).</param>
         /// <param name="aspect">The type of the image used as a discriminator.</param>
         /// <param name="preview">The path to the preview of the art (a smaller, lower resolution copy).</param>
-        public XbmcXmlThumb(string path, string aspect = null, string preview = null) {
+        public NfoThumb(string path, string aspect = null, string preview = null) {
             Aspect = aspect;
             Preview = preview;
             Path = path;
@@ -42,7 +42,7 @@ namespace Frost.Providers.Xbmc.NFO.Art {
         /// <returns>The current instance serialized to an xml string.</returns>
         public string SerializeToString() {
             using (MemoryStream memoryStream = new MemoryStream()) {
-                XmlSerializer xs = new XmlSerializer(typeof(XbmcXmlThumb));
+                XmlSerializer xs = new XmlSerializer(typeof(NfoThumb));
                 xs.Serialize(memoryStream, this);
 
                 //seek the stream to the begining

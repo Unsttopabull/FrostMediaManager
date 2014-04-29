@@ -19,7 +19,7 @@ namespace Frost.MovieInfoProviders {
         private const string YOUTUBE_VIDEO_URL = "http://www.youtube.com/watch?v={0}";
         private int _numFailed;
 
-        public GremoVKinoClient() : base("GremoVKino", true, false) {
+        public GremoVKinoClient() : base("GremoVKino", true, false, false) {
         }
 
         public override IEnumerable<ParsedMovie> GetByImdbId(string imdbId) {

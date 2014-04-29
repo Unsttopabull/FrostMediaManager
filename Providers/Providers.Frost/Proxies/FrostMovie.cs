@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
+using Frost.Common.NFO;
 using Frost.Common.Proxies;
 using Frost.Providers.Frost.DB;
 using Frost.Providers.Frost.Provider;
+using FileIO = System.IO.File;
 
 namespace Frost.Providers.Frost.Proxies {
 
     public class FrostMovie : ProxyWithService<Movie, FrostMoviesDataDataService>, IMovie {
-
         public FrostMovie(Movie movie, FrostMoviesDataDataService service) : base(movie, service) {
         }
 
@@ -49,6 +51,7 @@ namespace Frost.Providers.Frost.Proxies {
                     case "IsMultipart":
                     case "PartTypes":
                     case "DirectoryPath":
+                    case "FirstFileName":
                     case "NumberOfAudioChannels":
                     case "AudioCodec":
                     case "VideoResolution":
@@ -308,8 +311,8 @@ namespace Frost.Providers.Frost.Proxies {
             get { return Entity.DefaultCover; }
             set {
                 Entity.DefaultCover = value != null
-                    ? Service.FindArt(value, true)
-                    : null;   
+                                          ? Service.FindArt(value, true)
+                                          : null;
             }
         }
 
@@ -319,8 +322,8 @@ namespace Frost.Providers.Frost.Proxies {
             get { return Entity.DefaultFanart; }
             set {
                 Entity.DefaultFanart = value != null
-                    ? Service.FindArt(value, true)
-                    : null;   
+                                           ? Service.FindArt(value, true)
+                                           : null;
             }
         }
 
@@ -332,9 +335,9 @@ namespace Frost.Providers.Frost.Proxies {
                 if (value == null) {
                     Entity.MainPlot = null;
                 }
-                else if(value.Id > 0){
+                else if (value.Id > 0) {
                     Plot p = Service.FindPlot(value, false, Id);
- 
+
                     if (p != null) {
                         Entity.MainPlot = p;
                     }
@@ -442,6 +445,12 @@ namespace Frost.Providers.Frost.Proxies {
 
         #region Utility
 
+        /// <summary>Gets or sets the full path of the first file to begin playing the movie.</summary>
+        public string FirstFileName {
+            get { return Entity.FirstFileName; }
+            set { Entity.FirstFileName = value; } 
+        }
+
         /// <summary>Gets a value indicating whether this movie has a trailer video availale.</summary>
         /// <value>Is <c>true</c> if the movie has a trailer video available; otherwise, <c>false</c>.</value>
         public bool HasTrailer {
@@ -519,6 +528,7 @@ namespace Frost.Providers.Frost.Proxies {
         #endregion
 
         #region Person
+
         public IPerson AddDirector(IPerson director) {
             Person p = Service.FindPerson(director, true);
             Entity.Directors.Add(p);
@@ -578,8 +588,8 @@ namespace Frost.Providers.Frost.Proxies {
         public IPlot AddPlot(IPlot plot) {
             Plot p = new Plot(plot);
             return Entity.Plots.Add(p)
-                ? p 
-                : null;
+                       ? p
+                       : null;
         }
 
         public bool RemovePlot(IPlot plot) {
@@ -831,7 +841,7 @@ namespace Frost.Providers.Frost.Proxies {
         /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding certifications.</exception>
         public ICertification AddCertification(ICertification certification) {
             if (certification is FrostCertification) {
-                Entity.Certifications.Add(((FrostCertification)certification).ProxiedEntity);
+                Entity.Certifications.Add(((FrostCertification) certification).ProxiedEntity);
                 return certification;
             }
 
@@ -862,7 +872,68 @@ namespace Frost.Providers.Frost.Proxies {
         #endregion
 
         public void Update(MovieInfo movieInfo) {
-            
+        }
+
+        /// <summary>Saves the movie information in an .NFO file.</summary>
+        public void SaveAsNfo() {
+            if (string.IsNullOrEmpty(DirectoryPath)) {
+                throw new Exception("Unknown directory path");
+            }
+
+            NfoMovie nfoMovie = NFO.FromIMovie(this);
+
+            string nfoName;
+            if (!GetNfoFileName(out nfoName)) {
+                nfoName = Path.Combine(DirectoryPath, nfoName + ".nfo");
+            }
+            else {
+                nfoName += ".nfo";
+            }
+
+            if (FileIO.Exists(nfoName)) {
+                string newFileName = string.Format("{0}_{1}.nfo", Path.GetFileNameWithoutExtension(nfoName), DateTime.Now.Ticks);
+                newFileName = Path.Combine(DirectoryPath, string.IsNullOrEmpty(newFileName)
+                                                                ? string.Format("{0}_{1}", DateTime.Now.Ticks, nfoName)
+                                                                : newFileName);
+
+                FileIO.Move(nfoName, newFileName);
+            }
+
+            nfoMovie.Serialize(nfoName);
+        }
+
+        private bool GetNfoFileName(out string nfoName) {
+            IVideo video = Videos.FirstOrDefault(v => v != null && v.File != null);
+            if (video != null) {
+                nfoName = GetFileNameWithoutExtension(video.File.FullPath);
+                return true;
+            }
+
+            IAudio audio = Audios.FirstOrDefault(a => a != null && a.File != null);
+            if (audio != null) {
+                nfoName = GetFileNameWithoutExtension(audio.File.FullPath);
+                return true;
+            }
+
+            ISubtitle subtitle = Subtitles.FirstOrDefault(s => s != null && s.File != null);
+            if (subtitle != null) {
+                nfoName = GetFileNameWithoutExtension(subtitle.File.FullPath);
+                return true;
+            }
+
+            nfoName = "movie";
+            return false;
+        }
+
+        private static string GetFileNameWithoutExtension(string fullPath) {
+            if (!Path.HasExtension(fullPath)) {
+                return fullPath;
+            }
+
+            int idx = fullPath.LastIndexOf('.');
+            fullPath = fullPath.Substring(0, idx);
+            return fullPath;
         }
     }
+
 }

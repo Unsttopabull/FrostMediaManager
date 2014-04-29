@@ -129,31 +129,9 @@
     <Compile Include="Proxies\XbmcVideoDetails.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="XmlIndentedTextWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="NFO\XbmcStreamDetails.cs" />
-    <Compile Include="NFO\XbmcXmlActor.cs" />
-    <Compile Include="NFO\Files\XbmcXmlAudioInfo.cs" />
-    <Compile Include="NFO\XbmcXmlCertification.cs" />
-    <Compile Include="NFO\Art\XbmcXmlFanart.cs" />
-    <Compile Include="NFO\Files\XbmcXmlFileInfo.cs" />
-    <Compile Include="NFO\XbmcXmlMovie.cs" />
-    <Compile Include="NFO\XbmcXmlMovieDbId.cs" />
-    <Compile Include="NFO\XbmcXmlResumeInfo.cs" />
-    <Compile Include="NFO\Files\XbmcXmlSubtitleInfo.cs" />
-    <Compile Include="NFO\Art\XbmcXmlThumb.cs" />
-    <Compile Include="NFO\Files\XbmcXmlVideoInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="NFO\XSD\xbmcXmlMovie.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="NFO\XSD\xbmcXmlMovie_xsd11.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="NFO\XSD\yamjXmlMovie.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

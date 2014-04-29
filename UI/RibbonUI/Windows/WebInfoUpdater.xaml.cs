@@ -275,7 +275,7 @@ namespace RibbonUI.Windows {
                 }
             }
 
-            return !string.IsNullOrEmpty(_movie.ImdbID)
+            return !string.IsNullOrEmpty(_movie.ImdbID) && cli.SupportsImdbId
                        ? cli.GetByImdbId(_movie.ImdbID).ToList()
                        : cli.GetByTitle(_movie.Title, (int) (_movie.ReleaseYear.HasValue ? _movie.ReleaseYear.Value : 0));
         }
@@ -519,16 +519,16 @@ namespace RibbonUI.Windows {
 
             public IEnumerable<ParsedMovie> Movies { get; set; }
         }
+    }
 
-        public class ErrorInfo {
-            public ErrorInfo(ErrorType type, string message) {
-                Type = type;
-                Message = message;
-            }
-
-            public ErrorType Type { get; private set; }
-            public string Message { get; private set; }
+    public class ErrorInfo {
+        public ErrorInfo(ErrorType type, string message) {
+            Type = type;
+            Message = message;
         }
+
+        public ErrorType Type { get; private set; }
+        public string Message { get; private set; }
     }
 
 }

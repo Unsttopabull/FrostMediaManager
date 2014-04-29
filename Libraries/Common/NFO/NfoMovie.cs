@@ -8,26 +8,25 @@ using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using Frost.Common;
-using Frost.Providers.Xbmc.DB;
-using Frost.Providers.Xbmc.NFO.Art;
-using Frost.Providers.Xbmc.NFO.Files;
+using Frost.Common.NFO.Art;
+using Frost.Common.NFO.Files;
+using Frost.Common.Util;
 
-namespace Frost.Providers.Xbmc.NFO {
+namespace Frost.Common.NFO {
     /// <summary>Represents an information about a movie in XBMC library ready to be serialized.</summary>
     [Serializable]
     [XmlType(AnonymousType = true)]
     [XmlRoot("movie", Namespace = "", IsNullable = false)]
-    public class XbmcXmlMovie {
+    public class NfoMovie {
         /// <summary>General separator between Genres, Names, Countries, Certifications ...</summary>
         private const string SEPARATOR = " / ";
 
         /// <summary>The XBMC YouTube plugin prefix for a movie trailer</summary>
         private const string YT_TRAILER_PREFIX = "plugin://plugin.video.youtube/?action=play_video&videoid=";
 
-        /// <summary>Initializes a new instance of the <see cref="XbmcXmlMovie"/> class.</summary>
-        public XbmcXmlMovie() {
-            FileInfo = new XbmcXmlFileInfo();
+        /// <summary>Initializes a new instance of the <see cref="NfoMovie"/> class.</summary>
+        public NfoMovie() {
+            FileInfo = new NfoFileInfo();
         }
 
         #region Properties/Elements
@@ -128,9 +127,9 @@ namespace Frost.Providers.Xbmc.NFO {
         /// <summary>Gets or sets the certifications for other countries</summary>
         /// <value>Other country ratings</value>
         [XmlIgnore]
-        public XbmcXmlCertification[] Certifications {
-            get { return XbmcXmlCertification.ParseCertificationsString(CertificationsString); }
-            set { CertificationsString = string.Join<XbmcXmlCertification>(SEPARATOR, value); }
+        public NfoCertification[] Certifications {
+            get { return NfoCertification.ParseCertificationsString(CertificationsString); }
+            set { CertificationsString = string.Join<NfoCertification>(SEPARATOR, value); }
         }
 
         /// <summary>Gets or sets the story summary.</summary>
@@ -191,12 +190,12 @@ namespace Frost.Providers.Xbmc.NFO {
         /// <summary>Gets or sets the movie Posters and Covers.</summary>
         /// <value>The movie Posters and Covers.</value>
         [XmlElement("thumb", Form = XmlSchemaForm.Unqualified)]
-        public XbmcXmlThumb[] Thumbs { get; set; }
+        public NfoThumb[] Thumbs { get; set; }
 
         /// <summary>Gets or sets the movie fanart images.</summary>
         /// <value>The fanart images.</value>
         [XmlElement("fanart", Form = XmlSchemaForm.Unqualified)]
-        public XbmcXmlFanart Fanart { get; set; }
+        public NfoFanart Fanart { get; set; }
 
         /// <summary>Gets or sets the US movie rating and reason for it</summary>
         /// <value>The US Movie rating</value>
@@ -216,7 +215,7 @@ namespace Frost.Providers.Xbmc.NFO {
         /// <summary>Gets or sets the online movie database ids.</summary>
         /// <value>The online movie databse Ids.</value>
         [XmlElement("id", Form = XmlSchemaForm.Unqualified)]
-        public List<XbmcXmlMovieDbId> Ids { get; set; }
+        public List<NfoMovieDbId> Ids { get; set; }
 
         /// <summary>Gets or sets the Internet Movie Databse identifier of this movie.</summary>
         /// <value>The Internet Movie Databse identifier of this movie.</value>
@@ -224,7 +223,7 @@ namespace Frost.Providers.Xbmc.NFO {
         public string ImdbId {
             get {
                 if (Ids != null) {
-                    XbmcXmlMovieDbId imdbID = GetOnlineDbID("imdb");
+                    NfoMovieDbId imdbID = GetOnlineDbID("imdb");
                     if (imdbID != null) {
                         return imdbID.Indentifier;
                     }
@@ -232,12 +231,16 @@ namespace Frost.Providers.Xbmc.NFO {
                 return null;
             }
             set {
-                XbmcXmlMovieDbId imdb = GetOnlineDbID("imdb");
+                NfoMovieDbId imdb = GetOnlineDbID("imdb");
                 if (imdb != null) {
                     imdb.Indentifier = value;
                 }
                 else {
-                    Ids.Add(new XbmcXmlMovieDbId("imdb", value));
+                    if (Ids == null) {
+                        Ids = new List<NfoMovieDbId>();
+                    }
+
+                    Ids.Add(new NfoMovieDbId("imdb", value));
                 }
             }
         }
@@ -248,7 +251,7 @@ namespace Frost.Providers.Xbmc.NFO {
         public string TmdbId {
             get {
                 if (Ids != null) {
-                    XbmcXmlMovieDbId tmdbId = GetOnlineDbID("tmdb");
+                    NfoMovieDbId tmdbId = GetOnlineDbID("tmdb");
                     if (tmdbId != null) {
                         return tmdbId.Indentifier;
                     }
@@ -256,12 +259,12 @@ namespace Frost.Providers.Xbmc.NFO {
                 return null;
             }
             set {
-                XbmcXmlMovieDbId tmdb = GetOnlineDbID("tmdb");
+                NfoMovieDbId tmdb = GetOnlineDbID("tmdb");
                 if (tmdb != null) {
                     tmdb.Indentifier = value;
                 }
                 else {
-                    Ids.Add(new XbmcXmlMovieDbId("tmdb", value));
+                    Ids.Add(new NfoMovieDbId("tmdb", value));
                 }
             }
         }
@@ -347,17 +350,17 @@ namespace Frost.Providers.Xbmc.NFO {
         /// <summary>Gets or sets the movie file information (Video/Audio/Subtitles).</summary>
         /// <value>The movie file information (Video/Audio/Subtitles)</value>
         [XmlElement("fileinfo", Form = XmlSchemaForm.Unqualified)]
-        public XbmcXmlFileInfo FileInfo { get; set; }
+        public NfoFileInfo FileInfo { get; set; }
 
         /// <summary>Gets or sets the actors that starred in the movie.</summary>
         /// <value>The actors that preformed in this movie.</value>
         [XmlElement("actor", Form = XmlSchemaForm.Unqualified)]
-        public List<XbmcXmlActor> Actors { get; set; }
+        public List<NfoActor> Actors { get; set; }
 
         /// <summary>Gets or sets the resuming information.</summary>
         /// <value>The resuming information.</value>
         [XmlElement("resume", Form = XmlSchemaForm.Unqualified)]
-        public XbmcXmlResumeInfo ResumingInfo { get; set; }
+        public NfoResumeInfo ResumingInfo { get; set; }
 
         /// <summary>Gets or sets the date and time the file was added.</summary>
         /// <value>The date and time the file was added.</value>
@@ -400,7 +403,7 @@ namespace Frost.Providers.Xbmc.NFO {
         /// otherwise the first id of the specified <c><paramref name="dbName"/></c>.
         /// <para>If the movie does not have the <c><paramref name="dbName"/></c> id set yet it returns <c>null</c>.</para>
         /// </returns>
-        private XbmcXmlMovieDbId GetOnlineDbID(string dbName) {
+        private NfoMovieDbId GetOnlineDbID(string dbName) {
             if (Ids == null) {
                 return null;
             }
@@ -445,72 +448,22 @@ namespace Frost.Providers.Xbmc.NFO {
         /// <summary>Serializes the current instance as XML in the specified location</summary>
         /// <param name="xmlSaveLocation">The XML save location.</param>
         public void Serialize(string xmlSaveLocation) {
-            XmlSerializer xs = new XmlSerializer(typeof (XbmcXmlMovie));
-            xs.Serialize(new XmlIndentedTextWriter(xmlSaveLocation), this);
+            XmlSerializer xs = new XmlSerializer(typeof (NfoMovie));
+
+            using (XmlIndentedTextWriter xmlWriter = new XmlIndentedTextWriter(xmlSaveLocation)) {
+                xs.Serialize(xmlWriter, this);
+            }
         }
 
-        /// <summary>Deserializes an instance of <see cref="XbmcXmlMovie"/> from XML at the specified location</summary>
+        /// <summary>Deserializes an instance of <see cref="NfoMovie"/> from XML at the specified location</summary>
         /// <param name="xmlLocation">The file path of the serialied xml.</param>
-        /// <returns>An instance of <see cref="XbmcXmlMovie"/> deserialized from XML at the specified location</returns>
-        public static XbmcXmlMovie Load(string xmlLocation) {
-            XmlSerializer xs = new XmlSerializer(typeof (XbmcXmlMovie));
+        /// <returns>An instance of <see cref="NfoMovie"/> deserialized from XML at the specified location</returns>
+        public static NfoMovie Load(string xmlLocation) {
+            XmlSerializer xs = new XmlSerializer(typeof (NfoMovie));
 
-            return (XbmcXmlMovie) xs.Deserialize(new XmlTextReader(xmlLocation));
+            return (NfoMovie) xs.Deserialize(new XmlTextReader(xmlLocation));
         }
 
         #endregion
-
-        /// <summary>Converts an instance of <see cref="XbmcXmlMovie"/> to <see cref="Common.Models.DB.XBMC.XbmcMovie">XbmcMovie</see> by explicit casting</summary>
-        /// <param name="xm">The <see cref="XbmcXmlMovie"/> to convert.</param>
-        /// <returns><see cref="XbmcXmlMovie"/> converted to an instance of <see cref="Common.Models.DB.XBMC.XbmcMovie">XbmcMovie</see></returns>
-        public static explicit operator XbmcDbMovie(XbmcXmlMovie xm) {
-            XbmcDbMovie mv = new XbmcDbMovie {
-                //WARNING: ToArray() call copying
-                CountryNames = xm.Countries.ToArray(),
-                DirectorNames = xm.Directors.ToArray(),
-                GenreNames = xm.Genres.ToArray(),
-                FilePathsString = GetFolderPath(xm.FilenameAndPath),
-                ImdbID = xm.ImdbId,
-                ImdbTop250 = xm.Top250.ToString(CultureInfo.InvariantCulture),
-                MpaaRating = xm.MPAA,
-                OriginalTitle = xm.OriginalTitle,
-                Plot = xm.Plot,
-                PlotOutline = xm.Outline,
-                Rating = xm.Rating.ToInvariantString(),
-                ReleaseYear = xm.Year.ToInvariantString(),
-                Runtime = (xm.RuntimeInSeconds ?? 0).ToInvariantString(),
-                Set = new XbmcSet(xm.Set),
-                StudioNames = xm.GetStudioNames(),
-                Tagline = xm.Tagline,
-                Title = xm.Title,
-                SortTitle = xm.SortTitle,
-                TrailerUrl = xm.Trailer,
-                Votes = xm.Votes,
-                WriterNames = xm.CreditsFormatted,
-                File = new XbmcFile(
-                    xm.DateAdded,
-                    xm.LastPlayed.ToString(CultureInfo.InvariantCulture),
-                    xm.PlayCount,
-                    xm.FilenameAndPath
-                    )
-            };
-
-            //xm.FanartUrls //XML
-            if (xm.Fanart != null) {
-                mv.FanartXml = xm.Fanart.SerializeToXml();
-            }
-
-            //xm.Thumbnails //XML
-            if (xm.Thumbs != null) {
-                StringBuilder sb = new StringBuilder();
-                foreach (XbmcXmlThumb thumb in xm.Thumbs) {
-                    sb.Append(thumb.SerializeToString());
-                }
-
-                mv.PostersXml = sb.ToString();
-            }
-
-            return mv;
-        }
     }
 }

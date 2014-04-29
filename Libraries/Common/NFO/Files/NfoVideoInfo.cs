@@ -1,18 +1,47 @@
 ﻿using System;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using Frost.Common.Models.Provider;
 
-namespace Frost.Providers.Xbmc.NFO.Files {
+namespace Frost.Common.NFO.Files {
 
     /// <summary>Represents serialized information about a video stream in a movie</summary>
     [Serializable]
-    public class XbmcXmlVideoInfo {
+    public class NfoVideoInfo {
 
-        /// <summary>Initializes a new instance of the <see cref="XbmcXmlVideoInfo"/> class.</summary>
-        public XbmcXmlVideoInfo() {
+        /// <summary>Initializes a new instance of the <see cref="NfoVideoInfo"/> class.</summary>
+        public NfoVideoInfo() {
         }
 
-        /// <summary>Initializes a new instance of the <see cref="XbmcXmlVideoInfo"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="NfoVideoInfo"/> class.</summary>
+        public NfoVideoInfo(IVideo video) {
+            Codec = video.CodecId;
+
+            if (video.Aspect.HasValue) {
+                Aspect = (double) video.Aspect;
+            }
+
+            if (video.Width.HasValue) {
+                Width = (int) video.Width;
+            }
+
+            if (video.Height.HasValue) {
+                Height = (int) video.Height;
+            }
+
+            if (video.Duration.HasValue) {
+                DurationInSecondsSpecified = true;
+                DurationInSeconds = (int) Math.Round(video.Duration.Value / 1000.0);
+            }
+
+            if (video.Language != null && video.Language.ISO639 != null) {
+                Language = !string.IsNullOrEmpty(video.Language.ISO639.Alpha3) 
+                    ? video.Language.ISO639.Alpha3 
+                    : video.Language.ISO639.Alpha2;
+            }
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="NfoVideoInfo"/> class.</summary>
         /// <param name="codec">The codec in which the video is encoded.</param>
         /// <param name="aspect">The ratio between width and height (width / height).</param>
         /// <param name="width">The width of the video.</param>
@@ -20,7 +49,7 @@ namespace Frost.Providers.Xbmc.NFO.Files {
         /// <param name="durationInSeconds">Duration of the video in seconds.</param>
         /// <param name="language">The language of the video in short format.</param>
         /// <param name="longLanguage">The full name of the language.</param>
-        public XbmcXmlVideoInfo(string codec, double aspect, int width, int height, int durationInSeconds, string language, string longLanguage) {
+        public NfoVideoInfo(string codec, double aspect, int width, int height, int durationInSeconds, string language, string longLanguage) {
             Codec = codec;
             Aspect = aspect;
             Width = width;
@@ -31,23 +60,23 @@ namespace Frost.Providers.Xbmc.NFO.Files {
             LongLanguage = longLanguage;
         }
 
-        /// <summary>Initializes a new instance of the <see cref="XbmcXmlVideoInfo"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="NfoVideoInfo"/> class.</summary>
         /// <param name="codec">The codec in which the video is encoded.</param>
         /// <param name="aspect">The ratio between width and height (width / height).</param>
         /// <param name="width">The width of the video.</param>
         /// <param name="height">The height of the video.</param>
         /// <param name="durationInSeconds">Duration of the video in seconds.</param>
-        public XbmcXmlVideoInfo(string codec, double aspect, int width, int height, int durationInSeconds) : this(codec, aspect, width, height) {
+        public NfoVideoInfo(string codec, double aspect, int width, int height, int durationInSeconds) : this(codec, aspect, width, height) {
             DurationInSeconds = durationInSeconds;
             DurationInSecondsSpecified = true;
         }
 
-        /// <summary>Initializes a new instance of the <see cref="XbmcXmlVideoInfo"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="NfoVideoInfo"/> class.</summary>
         /// <param name="codec">The codec in which the video is encoded.</param>
         /// <param name="aspect">The ratio between width and height (width / height).</param>
         /// <param name="width">The width of the video.</param>
         /// <param name="height">The height of the video.</param>
-        public XbmcXmlVideoInfo(string codec, double aspect, int width, int height) : this(codec, aspect, width, height, 0, null, null) {
+        public NfoVideoInfo(string codec, double aspect, int width, int height) : this(codec, aspect, width, height, 0, null, null) {
             DurationInSecondsSpecified = false;
         }
 
@@ -78,8 +107,8 @@ namespace Frost.Providers.Xbmc.NFO.Files {
         [XmlElement("durationinseconds", Form = XmlSchemaForm.Unqualified)]
         public int DurationInSeconds { get; set; }
 
-        /// <summary>Gets or sets a value indicating whether <see cref="XbmcXmlVideoInfo.DurationInSeconds"/> should be serialized.</summary>
-        /// <value>Is <c>true</c> if the <see cref="XbmcXmlVideoInfo.DurationInSeconds"/> should be serialized; otherwise, <c>false</c>.</value>
+        /// <summary>Gets or sets a value indicating whether <see cref="NfoVideoInfo.DurationInSeconds"/> should be serialized.</summary>
+        /// <value>Is <c>true</c> if the <see cref="NfoVideoInfo.DurationInSeconds"/> should be serialized; otherwise, <c>false</c>.</value>
         [XmlIgnore]
         public bool DurationInSecondsSpecified { get; set; }
 

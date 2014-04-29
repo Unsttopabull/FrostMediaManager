@@ -12,7 +12,7 @@ namespace Frost.MovieInfoProviders {
     public class OmdbClient : ParsingClient {
         private const string IMDB_MOVIE_URL = "http://www.imdb.com/title/{0}/";
 
-        public OmdbClient() : base("OMDB", false, false) {
+        public OmdbClient() : base("OMDB", false, false, true) {
         }
 
         public override IEnumerable<ParsedMovie> GetByImdbId(string imdbId) {

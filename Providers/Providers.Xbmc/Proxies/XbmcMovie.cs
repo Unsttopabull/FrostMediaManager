@@ -6,12 +6,12 @@ using System.Linq;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
+using Frost.Common.NFO;
 using Frost.Common.Proxies;
 using Frost.Providers.Xbmc.DB;
 using Frost.Providers.Xbmc.DB.Art;
 using Frost.Providers.Xbmc.DB.People;
 using Frost.Providers.Xbmc.DB.StreamDetails;
-using Frost.Providers.Xbmc.NFO;
 using Frost.Providers.Xbmc.Provider;
 
 namespace Frost.Providers.Xbmc.Proxies {
@@ -32,7 +32,7 @@ namespace Frost.Providers.Xbmc.Proxies {
         private readonly XbmcPlot _xbmcPlot;
         private XbmcCertification _mpaa;
 
-        public XbmcMovie(XbmcDbMovie movie, XbmcMoviesDataService service) : base(movie, service){
+        public XbmcMovie(XbmcDbMovie movie, XbmcMoviesDataService service) : base(movie, service) {
             _xbmcPlot = new XbmcPlot(Entity);
             _plots = new[] { _xbmcPlot };
             _numChannels = -1;
@@ -133,8 +133,8 @@ namespace Frost.Providers.Xbmc.Proxies {
             //get { return Entity.File.StreamDetails.OfType<XbmcSubtitleDetails>(); }
             get {
                 return Entity.File.StreamDetails
-                                  .Where(sd => sd.Type == StreamType.Subtitle)
-                                  .Select(sd => new XbmcSubtitleDetails(sd));
+                             .Where(sd => sd.Type == StreamType.Subtitle)
+                             .Select(sd => new XbmcSubtitleDetails(sd));
             }
         }
 
@@ -156,8 +156,8 @@ namespace Frost.Providers.Xbmc.Proxies {
             //get { return Entity.File.StreamDetails.OfType<XbmcVideoDetails>(); }
             get {
                 return Entity.File.StreamDetails
-                                  .Where(sd => sd.Type == StreamType.Video)
-                                  .Select(sd => new XbmcVideoDetails(sd));
+                             .Where(sd => sd.Type == StreamType.Video)
+                             .Select(sd => new XbmcVideoDetails(sd));
             }
         }
 
@@ -167,8 +167,8 @@ namespace Frost.Providers.Xbmc.Proxies {
             //get { return Entity.File.StreamDetails.OfType<XbmcAudioDetails>(); }
             get {
                 return Entity.File.StreamDetails
-                                  .Where(sd => sd.Type == StreamType.Audio)
-                                  .Select(sd => new XbmcAudioDetails(sd));
+                             .Where(sd => sd.Type == StreamType.Audio)
+                             .Select(sd => new XbmcAudioDetails(sd));
             }
         }
 
@@ -213,9 +213,7 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <summary>Gets or sets the default cover.</summary>
         /// <value>The default cover.</value>
         public IArt DefaultCover {
-            get {
-                return Entity.Art.FirstOrDefault(a => a.Type == XbmcArt.POSTER);
-            }
+            get { return Entity.Art.FirstOrDefault(a => a.Type == XbmcArt.POSTER); }
             set {
                 if (value == null) {
                     Entity.Art.RemoveWhere(a => a.Type == XbmcArt.POSTER);
@@ -232,16 +230,14 @@ namespace Frost.Providers.Xbmc.Proxies {
                     else {
                         dc.Path = value.Path;
                     }
-                }                
-            } 
+                }
+            }
         }
 
         /// <summary>Gets or sets the default fanart to be displayed.</summary>
         /// <value>The default fanart.</value>
         public IArt DefaultFanart {
-            get {
-                return Entity.Art.FirstOrDefault(a => a.Type == XbmcArt.FANART);
-            }
+            get { return Entity.Art.FirstOrDefault(a => a.Type == XbmcArt.FANART); }
             set {
                 if (value == null) {
                     Entity.Art.RemoveWhere(a => a.Type == XbmcArt.FANART);
@@ -258,8 +254,8 @@ namespace Frost.Providers.Xbmc.Proxies {
                     else {
                         dc.Path = value.Path;
                     }
-                }                
-            } 
+                }
+            }
         }
 
         /// <summary>Gets or sets the main plot.</summary>
@@ -474,9 +470,7 @@ namespace Frost.Providers.Xbmc.Proxies {
                 }
                 return null;
             }
-            set {
-                SetTrailer(ProxiedEntity, value);
-            }
+            set { SetTrailer(ProxiedEntity, value); }
         }
 
         /// <summary>Gets or sets the movie ranking on IMDB Top 250 list.</summary>
@@ -628,6 +622,31 @@ namespace Frost.Providers.Xbmc.Proxies {
                     value = value.Insert(0, "smb:");
                 }
                 Entity.Path.FolderPath = value;
+            }
+        }
+
+        /// <summary>Gets or sets the full path of the first file to begin playing the movie.</summary>
+        public string FirstFileName {
+            get {
+                if (Entity.FilePaths != null) {
+                    string path = Entity.FilePaths.FirstOrDefault(p => !string.IsNullOrEmpty(p));
+                    if (path != null) {
+                        if (!path.EndsWith("/") && !path.EndsWith("\\")) {
+                            return Entity.FilePathsString;
+                        }
+                    }
+                }
+
+                if (Entity.File != null) {
+
+                    if (Entity.File.FileNameString.StartsWith("stack://")) {
+                        return Entity.File.FileNames.FirstOrDefault();
+                    }
+                    return Path.Combine(Entity.FilePathsString, Entity.File.FileNameString);
+                }
+                return null;
+            }
+            set {
             }
         }
 
@@ -789,9 +808,9 @@ namespace Frost.Providers.Xbmc.Proxies {
         }
 
         public bool RemoveActor(IActor actor) {
-            XbmcMovieActor act = actor is XbmcMovieActor 
-                ? actor as XbmcMovieActor
-                : Entity.Actors.FirstOrDefault(a => a.Person.Name == actor.Name && a.Role == actor.Character);
+            XbmcMovieActor act = actor is XbmcMovieActor
+                                     ? actor as XbmcMovieActor
+                                     : Entity.Actors.FirstOrDefault(a => a.Person.Name == actor.Name && a.Role == actor.Character);
 
             if (act != null) {
                 Entity.Actors.Remove(act);
@@ -1121,7 +1140,57 @@ namespace Frost.Providers.Xbmc.Proxies {
         #endregion
 
         public void Update(MovieInfo movieInfo) {
-            
+        }
+
+        /// <summary>Saves the movie information in an .NFO file.</summary>
+        public void SaveAsNfo() {
+            if (string.IsNullOrEmpty(DirectoryPath)) {
+                throw new Exception("Unknown directory path");
+            }
+
+            NfoMovie nfoMovie = NFO.FromIMovie(this);
+
+            string nfoName;
+            if (!GetNfoFileName(out nfoName)) {
+                nfoName = Path.Combine(DirectoryPath, nfoName + ".nfo");
+            }
+            else {
+                nfoName += ".nfo";
+            }
+
+            if (File.Exists(nfoName)) {
+                string newFileName = string.Format("{0}_{1}.nfo", Path.GetFileNameWithoutExtension(nfoName), DateTime.Now.Ticks);
+                newFileName = Path.Combine(DirectoryPath, string.IsNullOrEmpty(newFileName)
+                                                              ? string.Format("{0}_{1}", DateTime.Now.Ticks, nfoName)
+                                                              : newFileName);
+
+                File.Move(nfoName, newFileName);
+            }
+
+            nfoMovie.Serialize(nfoName);
+        }
+
+        private bool GetNfoFileName(out string nfoName) {
+            if (Entity.FilePaths != null) {
+                string path = Entity.FilePaths.FirstOrDefault(p => !string.IsNullOrEmpty(p));
+                if (path != null) {
+                    if (path.EndsWith("/") || path.EndsWith("\\")) {
+                        nfoName = "movie";
+                        return false;
+                    }
+
+                    if (Path.HasExtension(path)) {
+                        int idx = path.LastIndexOf('.');
+                        nfoName = path.Substring(0, idx);
+                    }
+                    else {
+                        nfoName = path;
+                    }
+                    return true;
+                }
+            }
+            nfoName = "movie";
+            return false;
         }
     }
 

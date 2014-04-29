@@ -307,6 +307,15 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
         }
 
+        /// <summary>Gets or sets the full path of the first file to begin playing the movie.</summary>
+        public string FirstFileName {
+            get { return _observedEntity.FirstFileName; }
+            set {
+                _observedEntity.FirstFileName = value;
+                OnPropertyChanged();
+            }
+        }
+
         /// <summary>Gets or sets the number of audio channels used most frequently in associated audios.</summary>
         /// <value>The number of audio channels used most frequently in associated audios</value>
         public int? NumberOfAudioChannels {

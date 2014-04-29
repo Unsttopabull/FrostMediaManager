@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
+using Frost.Common.NFO;
+using Frost.Common.NFO.Art;
 using Frost.Common.Util.ISO;
-using Frost.Providers.Xbmc.NFO;
-using Frost.Providers.Xbmc.NFO.Art;
 
 namespace Frost.DetectFeatures {
 
@@ -27,9 +27,9 @@ namespace Frost.DetectFeatures {
         }
 
         private void GetXbmcNfo(string filePath) {
-            XbmcXmlMovie xbmcMovie = null;
+            NfoMovie xbmcMovie = null;
             try {
-                xbmcMovie = XbmcXmlMovie.Load(filePath);
+                xbmcMovie = NfoMovie.Load(filePath);
             }
             catch (Exception) {
                 if (Log.IsWarnEnabled) {
@@ -54,7 +54,7 @@ namespace Frost.DetectFeatures {
             return default(DateTime);
         }
 
-        private void OverrideDetectedInfoWithNfo(XbmcXmlMovie xbmcMovie) {
+        private void OverrideDetectedInfoWithNfo(NfoMovie xbmcMovie) {
             Movie.Title = xbmcMovie.Title ?? Movie.Title;
             Movie.OriginalTitle = xbmcMovie.OriginalTitle ?? Movie.OriginalTitle;
             Movie.SortTitle = xbmcMovie.SortTitle ?? Movie.SortTitle;
@@ -77,7 +77,7 @@ namespace Frost.DetectFeatures {
             AddNfoMovieCommon(xbmcMovie);
         }
 
-        private void AddNotDetectedNfoInfo(XbmcXmlMovie xbmcMovie) {
+        private void AddNotDetectedNfoInfo(NfoMovie xbmcMovie) {
             Movie.Title = Movie.Title ?? xbmcMovie.Title;
             Movie.OriginalTitle = Movie.OriginalTitle ?? xbmcMovie.OriginalTitle;
             Movie.SortTitle = Movie.SortTitle ?? xbmcMovie.SortTitle;
@@ -97,12 +97,12 @@ namespace Frost.DetectFeatures {
             AddNfoMovieCommon(xbmcMovie);
         }
 
-        public static IEnumerable<ArtInfo> GetArt(XbmcXmlMovie xm) {
+        public static IEnumerable<ArtInfo> GetArt(NfoMovie xm) {
             List<ArtInfo> art = new List<ArtInfo>();
 
             if (xm.Thumbs != null) {
                 //add all Thumbnails/Posters/Covers
-                foreach (XbmcXmlThumb thumb in xm.Thumbs) {
+                foreach (NfoThumb thumb in xm.Thumbs) {
                     ArtInfo a;
 
                     if (string.IsNullOrEmpty(thumb.Aspect)) {
@@ -134,7 +134,7 @@ namespace Frost.DetectFeatures {
             return art;
         }
 
-        private void AddNfoMovieCommon(XbmcXmlMovie xbmcMovie) {
+        private void AddNfoMovieCommon(NfoMovie xbmcMovie) {
             Movie.TmdbID = xbmcMovie.TmdbId;
             Movie.ImdbID = xbmcMovie.ImdbId;
             Movie.Watched = xbmcMovie.Watched;
@@ -148,7 +148,7 @@ namespace Frost.DetectFeatures {
             Movie.Art.AddRange(GetArt(xbmcMovie));
 
             if (xbmcMovie.Certifications != null) {
-                foreach (XbmcXmlCertification certification in xbmcMovie.Certifications) {
+                foreach (NfoCertification certification in xbmcMovie.Certifications) {
                     ISOCountryCode country = ISOCountryCodes.Instance.GetByEnglishName(certification.Country);
 
                     Movie.Certifications.Add(new CertificationInfo(country, certification.Rating));

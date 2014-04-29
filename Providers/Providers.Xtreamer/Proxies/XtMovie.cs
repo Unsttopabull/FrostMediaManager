@@ -7,8 +7,10 @@ using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
+using Frost.Common.NFO;
 using Frost.Common.Proxies.ChangeTrackers;
 using Frost.Common.Util.ISO;
+using Frost.Providers.Xtreamer.NFO;
 using Frost.Providers.Xtreamer.PHP;
 
 namespace Frost.Providers.Xtreamer.Proxies {
@@ -220,6 +222,13 @@ namespace Frost.Providers.Xtreamer.Proxies {
             set {
                 Entity.FilePathOnDrive = value.Replace(_xtreamerPath, "");
                 TrackChanges(Entity.FilePathOnDrive);
+            }
+        }
+
+        /// <summary>Gets or sets the full path of the first file to begin playing the movie.</summary>
+        public string FirstFileName {
+            get { return Path.Combine(DirectoryPath, Entity.FileName); }
+            set {
             }
         }
 
@@ -1021,6 +1030,44 @@ namespace Frost.Providers.Xtreamer.Proxies {
 
         public void Update(MovieInfo movieInfo) {
             
+        }
+
+        /// <summary>Saves the movie information in an .NFO file.</summary>
+        public void SaveAsNfo() {
+            if (string.IsNullOrEmpty(DirectoryPath)) {
+                throw new Exception("Unknown directory path");
+            }
+
+            XjbXmlMovie nfoMovie = new XjbXmlMovie(this);
+
+            string nfoName;
+            if (!GetNfoFileName(out nfoName)) {
+                nfoName = Path.Combine(DirectoryPath, nfoName + ".nfo");
+            }
+            else {
+                nfoName += ".nfo";
+            }
+
+            if (File.Exists(nfoName)) {
+                string newFileName = string.Format("{0}_{1}.nfo", Path.GetFileNameWithoutExtension(nfoName), DateTime.Now.Ticks);
+                newFileName = Path.Combine(DirectoryPath, string.IsNullOrEmpty(newFileName)
+                                                                ? string.Format("{0}_{1}", DateTime.Now.Ticks, nfoName)
+                                                                : newFileName);
+
+                File.Move(nfoName, newFileName);
+            }       
+     
+            nfoMovie.Serialize(nfoName);
+        }
+
+        private bool GetNfoFileName(out string nfoName) {
+            if (!string.IsNullOrEmpty(FirstFileName)) {
+                nfoName = FirstFileName;
+                return true;
+            }
+
+            nfoName = "movie";
+            return false;
         }
 
         #region Change Tracking

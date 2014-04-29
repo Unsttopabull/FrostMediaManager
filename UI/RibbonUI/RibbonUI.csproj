@@ -218,6 +218,9 @@
       <SubType>Code</SubType>
       <DependentUpon>EditVideo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ExportMoviesAsNfo.xaml.cs">
+      <DependentUpon>ExportMoviesAsNfo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\Loading.xaml.cs">
       <DependentUpon>Loading.xaml</DependentUpon>
     </Compile>
@@ -368,6 +371,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\Edit\EditPerson.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ExportMoviesAsNfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

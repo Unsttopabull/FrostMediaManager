@@ -2,20 +2,20 @@
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace Frost.Providers.Xbmc.NFO {
+namespace Frost.Common.NFO {
 
     /// <summary>Represents information about where to resume the movie, ready to be serialized.</summary>
     [Serializable]
-    public class XbmcXmlResumeInfo {
+    public class NfoResumeInfo {
 
-        /// <summary>Initializes a new instance of the <see cref="XbmcXmlResumeInfo"/> class.</summary>
-        public XbmcXmlResumeInfo() {
+        /// <summary>Initializes a new instance of the <see cref="NfoResumeInfo"/> class.</summary>
+        public NfoResumeInfo() {
         }
 
-        /// <summary>Initializes a new instance of the <see cref="XbmcXmlResumeInfo" /> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="NfoResumeInfo" /> class.</summary>
         /// <param name="position">The position.</param>
         /// <param name="total">The total.</param>
-        public XbmcXmlResumeInfo(float position, float total) {
+        public NfoResumeInfo(float position, float total) {
             Position = position;
             Total = total;
         }

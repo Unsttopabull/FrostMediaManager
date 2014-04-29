@@ -6,7 +6,7 @@ namespace Frost.MovieInfoProviders {
 
     public class OpenSubtitlesInfoClient : ParsingClient {
 
-        public OpenSubtitlesInfoClient() : base("OSub", false, false) {
+        public OpenSubtitlesInfoClient() : base("OSub", false, false, true) {
         }
 
         public override IEnumerable<ParsedMovie> GetByImdbId(string imdbId) {

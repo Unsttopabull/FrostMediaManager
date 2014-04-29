@@ -204,7 +204,6 @@ namespace Frost.Providers.Xtreamer.NFO {
 
         #endregion
 
-
         #region Serialization
 
         /// <summary>Serializes the instance to XML in the specified save location.</summary>
@@ -231,11 +230,16 @@ namespace Frost.Providers.Xtreamer.NFO {
         private void FromIMovie(IMovie movie) {
             Certifications = movie.Certifications.Select(c => new XjbCertification(c)).ToArray();
             Director = GetDirectorNames(movie);
-            GenreString = GetGenreNames(movie);
+            GenreString = string.Join(SEPARATOR, movie.Genres.Select(g => g.Name));
             ImdbId = movie.ImdbID;
             OriginalTitle = movie.OriginalTitle;
-            //Outline = movie.MainPlot.Summary,
-            //Plot = movie.MainPlot.Full,
+
+            if (movie.MainPlot != null) {
+                Outline = movie.MainPlot.Summary;
+                Plot = movie.MainPlot.Full;
+                Tagline = movie.MainPlot.Tagline;
+            }
+
             AverageRating = (float) (movie.RatingAverage ?? 0);
             //TODO: CHECK FOR CORECT FORMAT
             ReleaseDate = movie.ReleaseDate.HasValue ? movie.ReleaseDate.Value.ToString(CultureInfo.InvariantCulture) : null;
@@ -244,8 +248,8 @@ namespace Frost.Providers.Xtreamer.NFO {
                           : 0;
 
             SortTitle = movie.Title;
-            Studio = GetStudioNamesFormatted(movie);
-            //Tagline = movie.MainPlot.Summary,
+            Studio = string.Join(SEPARATOR, movie.Studios.Select(stud => stud.Name));
+
             Title = movie.Title;
             Year = (int) (movie.ReleaseYear ?? 0);
             Actors = GetXjbXmlActors(movie).ToArray();
@@ -261,20 +265,6 @@ namespace Frost.Providers.Xtreamer.NFO {
             return string.IsNullOrEmpty(directorsJoin)
                        ? null
                        : directorsJoin;
-        }
-
-        /// <summary>Gets the genre names in a formatted string.</summary>
-        /// <returns>The genre names in a single string separated with " / "</returns>
-        /// <example>\eg{ <c>"Horor / SciFi"</c>}</example>
-        private static string GetGenreNames(IMovie movie) {
-            return string.Join(SEPARATOR, movie.Genres.Select(g => g.Name));
-        }
-
-        /// <summary>Gets the studio names in a formatted string.</summary>
-        /// <returns>The studio names in a single string separated with " / "</returns>
-        /// <example>\eg{ ''<c>MGM / Fox</c>''}</example>
-        private static string GetStudioNamesFormatted(IMovie movie) {
-            return String.Join(SEPARATOR, movie.Studios.Select(stud => stud.Name));
         }
 
         /// <summary>Gets the movie actors as an <see cref="IEnumerable{T}"/> of <see cref="XjbXmlActor">XjbXmlActor</see> instances.</summary>

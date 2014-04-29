@@ -1,0 +1,64 @@
+﻿<Window x:Class="RibbonUI.Windows.ExportMoviesAsNfo"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:l="http://www.frostmediamanager.com/xaml/translation"
+        xmlns:w="clr-namespace:RibbonUI.Windows" Closed="OnWindowClose"
+        mc:Ignorable="d" WindowStyle="ToolWindow" ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
+        Title="{l:T NFO Export}" SizeToContent="WidthAndHeight" x:Name="NfoSaver">
+    <StackPanel Margin="5">
+        <TextBlock Text="{Binding ElementName=NfoSaver, Path=LabelText, FallbackValue={l:T Exporting movie information to NFO files...}}" Margin="0,0,0,5"/>
+        <Grid>
+            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                       Text="{Binding ElementName=NfoSaver, Path=NumberCompleted, StringFormat={l:T Exported {0} Movies}, FallbackValue=Exporting...}" 
+                       Panel.ZIndex="3" Foreground="Black" FontWeight="ExtraBold"/>
+            <ProgressBar x:Name="ProgressBar" MinWidth="300" MinHeight="20" 
+                         Value="{Binding ElementName=NfoSaver, Path=NumberCompleted, FallbackValue=0}"/>
+        </Grid>
+        <ListView ItemsSource="{Binding ElementName=NfoSaver, Path=Errors, Mode=TwoWay}" MaxHeight="200" Margin="0,5,0,0">
+            <ListView.Resources>
+                <BitmapImage x:Key="Error" UriSource="../Images/error.png"/>
+                <BitmapImage x:Key="Warning" UriSource="../Images/warning.png"/>
+            </ListView.Resources>
+            <ListView.Style>
+                <Style TargetType="{x:Type ListView}">
+                    <Style.Triggers>
+                        <Trigger Property="HasItems" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="HasItems" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListView.Style>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" MaxHeight="16">
+                            <Image.Style>
+                                <Style TargetType="{x:Type Image}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static w:ErrorType.Error}">
+                                            <Setter Property="Source" Value="{StaticResource Error}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static w:ErrorType.Warning}">
+                                            <Setter Property="Source" Value="{StaticResource Warning}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                        <TextBlock Margin="5,0,0,0" Text="{Binding Message, FallbackValue=Error}" VerticalAlignment="Center" Grid.Column="1"/>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button Content="{l:T Close}" MaxWidth="70" Margin="0,10,0,0" Visibility="{Binding ElementName=NfoSaver, Path=CloseButtonVisibility}" Click="OnCloseButtonClicked"/>
+    </StackPanel>
+</Window>

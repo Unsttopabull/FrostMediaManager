@@ -1,18 +1,18 @@
 ﻿using Frost.Common.Models.Provider;
 
-namespace Frost.Providers.Xbmc.NFO {
+namespace Frost.Common.NFO {
 
     /// <summary>Holds movie certifications information to be serialized</summary>
-    public class XbmcXmlCertification : CertificationBase {
+    public class NfoCertification : CertificationBase {
 
-        /// <summary>Initializes a new instance of the <see cref="XbmcXmlCertification"/> class.</summary>
-        public XbmcXmlCertification() {
+        /// <summary>Initializes a new instance of the <see cref="NfoCertification"/> class.</summary>
+        public NfoCertification() {
         }
 
-        /// <summary>Initializes a new instance of the <see cref="XbmcXmlCertification"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="NfoCertification"/> class.</summary>
         /// <param name="country">The coutry this certification applies to.</param>
         /// <param name="rating">The rating in the specified country.</param>
-        public XbmcXmlCertification(string country, string rating) {
+        public NfoCertification(string country, string rating) {
             Country = country;
             Rating = rating;
         }
@@ -31,19 +31,19 @@ namespace Frost.Providers.Xbmc.NFO {
             return Country + COUNTRY_RATING_SEPARATOR + Rating;
         }
 
-        /// <summary>Parses the certifications string and returns certifications as an array of <see cref="XbmcXmlCertification"/> instances.</summary>
+        /// <summary>Parses the certifications string and returns certifications as an array of <see cref="NfoCertification"/> instances.</summary>
         /// <param name="certStr">The certification string to parse.</param>
-        /// <returns>An array of <see cref="XbmcXmlCertification"/> instances parsed from the certifications string</returns>
-        public static XbmcXmlCertification[] ParseCertificationsString(string certStr) {
-            return ParseCertificationsString<XbmcXmlCertification>(certStr);
+        /// <returns>An array of <see cref="NfoCertification"/> instances parsed from the certifications string</returns>
+        public static NfoCertification[] ParseCertificationsString(string certStr) {
+            return ParseCertificationsString<NfoCertification>(certStr);
         }
 
-        /// <summary>Gets an instance of <see cref="XbmcXmlCertification"/> from the Country name and its rating</summary>
+        /// <summary>Gets an instance of <see cref="NfoCertification"/> from the Country name and its rating</summary>
         /// <param name="country">The country name.</param>
         /// <param name="rating">The rating.</param>
-        /// <returns>An instance of <see cref="XbmcXmlCertification"/> from the Country name and its rating</returns>
+        /// <returns>An instance of <see cref="NfoCertification"/> from the Country name and its rating</returns>
         protected override T FromCountyRating<T>(string country, string rating) {
-            return new XbmcXmlCertification(country, rating) as T;
+            return new NfoCertification(country, rating) as T;
         }
     }
 

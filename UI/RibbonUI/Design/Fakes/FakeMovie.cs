@@ -264,6 +264,9 @@ namespace RibbonUI.Design.Fakes {
             set { }
         }
 
+        /// <summary>Gets or sets the full path of the first file to begin playing the movie.</summary>
+        public string FirstFileName { get; set; }
+
         /// <summary>Gets or sets the DVD region of this movie or source.</summary>
         /// <value>The DVD region of this movie or source.</value>
         public DVDRegion DvdRegion {
@@ -791,6 +794,11 @@ namespace RibbonUI.Design.Fakes {
 
         public void Update(MovieInfo movieInfo) {
             
+        }
+
+        /// <summary>Saves the movie information in an .NFO file.</summary>
+        public void SaveAsNfo() {
+            throw new NotImplementedException();
         }
     }
 

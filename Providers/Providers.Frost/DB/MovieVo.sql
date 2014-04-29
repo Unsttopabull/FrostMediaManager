@@ -252,6 +252,7 @@ DROP TABLE IF EXISTS "Movies";
 	"IsMultipart"  boolean NOT NULL,
 	"PartTypes"  TEXT,
 	"DirectoryPath" TEXT NOT NULL,
+	"FirstFileName" TEXT,
 	"VideoCodec" TEXT,
 	"VideoResolution" TEXT,
 	"AudioCodec" TEXT,

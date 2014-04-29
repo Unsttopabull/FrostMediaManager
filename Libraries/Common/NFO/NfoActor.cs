@@ -3,21 +3,21 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 using Frost.Common.Models.Provider;
 
-namespace Frost.Providers.Xbmc.NFO {
+namespace Frost.Common.NFO {
 
     /// <summary>Represents a serialized actor in a movie</summary>
     [Serializable]
-    public class XbmcXmlActor : IXmlActor {
+    public class NfoActor : IXmlActor {
 
-        /// <summary>Initializes a new instance of the <see cref="XbmcXmlActor"/> class.</summary>
-        public XbmcXmlActor() {
+        /// <summary>Initializes a new instance of the <see cref="NfoActor"/> class.</summary>
+        public NfoActor() {
         }
 
-        /// <summary>Initializes a new instance of the <see cref="XbmcXmlActor"/> class.</summary>
+        /// <summary>Initializes a new instance of the <see cref="NfoActor"/> class.</summary>
         /// <param name="name">The actors full name.</param>
         /// <param name="role">The role or character the actor is portraying.</param>
         /// <param name="thumb">The actors thumbnail (small picture)</param>
-        public XbmcXmlActor(string name, string role, string thumb = null) {
+        public NfoActor(string name, string role, string thumb = null) {
             Name = name;
             Role = role;
             Thumb = thumb;

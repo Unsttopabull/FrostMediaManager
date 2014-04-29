@@ -29,17 +29,16 @@
         <RibbonTab IsSelected="{Binding IsSearchTabSelected}" Header="Search" Margin="0,1,0,-1">
             <RibbonGroup Header="Searching &amp; Detection">
                 <RibbonButton LargeImageSource="../Images/search.ico" Label="Search for new movies" Command="{Binding SearchCommand}" />
-                <RibbonButton SmallImageSource="../Images/refresh.png" Label="Update all" />
-                <RibbonButton SmallImageSource="../Images/export.png" Label="Export movies" />
-                <RibbonButton SmallImageSource="../Images/clear.png" Label="Clean database" />
+                <RibbonButton SmallImageSource="../Images/refresh.png" Label="Update all" IsEnabled="False"/>
+                <RibbonButton SmallImageSource="../Images/export.png" Label="Export movies" Command="{Binding ExportMoviesCommand}"/>
             </RibbonGroup>
             <RibbonGroup Header="Current movie">
                 <RibbonButton x:Name="OpenInFolder" x:FieldModifier="private"
                               LargeImageSource="../Images/movieFolder.ico" Label="Open movie folder"
                               ToolTip="{Binding SelectedMovie.DirectoryPath}"
                               Command="{Binding OpenMovieInFolderCommand}" />
-                <RibbonButton SmallImageSource="../Images/play.png" Label="Play movie" />
-                <RibbonButton SmallImageSource="../Images/refresh.png" Label="Refresh detection" />
+                <RibbonButton SmallImageSource="../Images/play.png" Label="Play movie" Command="{Binding PlayMovieCommand}"/>
+                <RibbonButton SmallImageSource="../Images/refresh.png" Label="Refresh detection" IsEnabled="false"/>
                 <RibbonButton SmallImageSource="../Images/remove2.png" Label="Remove movie" />
             </RibbonGroup>
             <RibbonGroup>

@@ -9,8 +9,10 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Shell;
 using Frost.Common;
+using Frost.Common.Models.Provider;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
+using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using RibbonUI.Annotations;
 using RibbonUI.Design;
 using RibbonUI.Util;
@@ -37,7 +39,7 @@ namespace RibbonUI.UserControls {
         TraktTv
     }
 
-    class RibbonViewModel : INotifyPropertyChanged {
+    internal class RibbonViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private ObservableMovie _selectedMovie;
         private bool _isSearchTabSelected;
@@ -49,11 +51,13 @@ namespace RibbonUI.UserControls {
         private ICommand _saveChangesCommand;
         private ICommand<WebUpdateSite> _updateMovieCommand;
         private ICommand _updatePromotionalVideosCommand;
+        private ICommand _exportMoviesCommand;
+        private ICommand _playMovieCommand;
 
         public RibbonViewModel() {
-            _service = TranslationManager.IsInDesignMode 
-                ? new DesignMoviesDataService()
-                : LightInjectContainer.GetInstance<IMoviesDataService>();
+            _service = TranslationManager.IsInDesignMode
+                           ? new DesignMoviesDataService()
+                           : LightInjectContainer.GetInstance<IMoviesDataService>();
 
             OpenMovieInFolderCommand = new RelayCommand(OpenInFolder);
             OnRibbonLoadedCommand = new RelayCommand<DependencyObject>(OnRibbonLoaded);
@@ -181,12 +185,41 @@ namespace RibbonUI.UserControls {
             set { _updatePromotionalVideosCommand = value; }
         }
 
+        public ICommand ExportMoviesCommand {
+            get {
+                if (_exportMoviesCommand == null) {
+                    _exportMoviesCommand = new RelayCommand(ExportMovies);
+                }
+                return _exportMoviesCommand;
+            }
+            set { _exportMoviesCommand = value; }
+        }
+
+        public ICommand PlayMovieCommand {
+            get {
+                if (_playMovieCommand == null) {
+                    _playMovieCommand = new RelayCommand(PlayMovie, o => SelectedMovie != null && !string.IsNullOrEmpty(SelectedMovie.FirstFileName));
+                }
+                return _playMovieCommand;
+            }
+            set { _playMovieCommand = value; }
+        }
+
+        private void ExportMovies() {
+            ExportMoviesAsNfo export = new ExportMoviesAsNfo(_service.Movies) { Owner = ParentWindow };
+            export.ShowDialog();
+        }
+
         #endregion
 
         private void OnRibbonLoaded(DependencyObject uc) {
             if (uc != null) {
                 ParentWindow = Window.GetWindow(uc);
             }
+        }
+
+        private void PlayMovie() {
+            
         }
 
         private void OpenInFolder() {
@@ -237,20 +270,21 @@ namespace RibbonUI.UserControls {
             }
 
             if (SettingsEx.Default.SearchFolders.Count > 0) {
-                SearchMovies sm = new SearchMovies { 
+                SearchMovies sm = new SearchMovies {
                     Owner = ParentWindow,
-                    TaskbarItemInfo =  new TaskbarItemInfo {
+                    TaskbarItemInfo = new TaskbarItemInfo {
                         ProgressState = TaskbarItemProgressState.Indeterminate
                     }
                 };
 
                 if (sm.ShowDialog() == true) {
-                    
                 }
                 GC.Collect();
             }
             else {
-                MessageBoxResult result = MessageBox.Show(ParentWindow, "No folders to search have been added yet. Please add them in the options menu.\nWould you like to open the options now?", "No folders to search.", MessageBoxButton.YesNo);
+                MessageBoxResult result = MessageBox.Show(ParentWindow,
+                    "No folders to search have been added yet. Please add them in the options menu.\nWould you like to open the options now?", "No folders to search.",
+                    MessageBoxButton.YesNo);
                 if (result != MessageBoxResult.Yes) {
                     return;
                 }
@@ -266,7 +300,6 @@ namespace RibbonUI.UserControls {
         }
 
         private void UpdatePromotionalVideos(WebUpdateSite obj) {
-            
         }
 
         private void MenuItemOptionsOnClick() {
@@ -282,4 +315,5 @@ namespace RibbonUI.UserControls {
             }
         }
     }
+
 }

@@ -13,7 +13,7 @@ namespace Frost.MovieInfoProviders {
     public class KolosejClient : ParsingClient {
         private const string URL = "http://www.kolosej.si{0}";
 
-        public KolosejClient() : base("Kolosej", true, false) {
+        public KolosejClient() : base("Kolosej", true, false, false) {
         }
 
         public override IEnumerable<ParsedMovie> GetByImdbId(string imdbId) {
