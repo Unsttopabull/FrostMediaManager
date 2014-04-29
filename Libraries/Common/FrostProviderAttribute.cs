@@ -3,9 +3,9 @@
 namespace Frost.Common {
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false, Inherited = false)]
-    public class IsPluginAttribute : Attribute {
+    public class FrostProviderAttribute : Attribute {
 
-        public IsPluginAttribute(string systemName, string iconPath = null) {
+        public FrostProviderAttribute(string systemName, string iconPath = null) {
             SystemName = systemName;
             IconPath = iconPath;
         }

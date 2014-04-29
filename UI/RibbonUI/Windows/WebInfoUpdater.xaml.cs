@@ -20,6 +20,7 @@ using Newtonsoft.Json;
 using RibbonUI.Annotations;
 using RibbonUI.Design.Models;
 using RibbonUI.UserControls;
+using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.Windows {
@@ -35,21 +36,21 @@ namespace RibbonUI.Windows {
         private static readonly Regex IMDBIdExtract = new Regex(@"(tt[0-9]+)", RegexOptions.IgnoreCase);
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly Dictionary<string, ParsedMovieInfos> _movieInfos;
-        private readonly WebUpdateSite _site;
+        private readonly string _downloader;
         private readonly ObservableMovie _movie;
         private string _labelText;
         private string _progressText;
         private bool _shown;
         private Visibility _closeButtonVisibility;
 
-        public WebUpdater(WebUpdateSite site, ObservableMovie movie) {
+        public WebUpdater(string downloader, ObservableMovie movie) {
             _movieInfos = new Dictionary<string, ParsedMovieInfos>();
             LoadCaches();
 
             Errors = new ObservableCollection<ErrorInfo>();
             CloseButtonVisibility = Visibility.Collapsed;
 
-            _site = site;
+            _downloader = downloader;
             _movie = movie;
             ContentRendered += OnContentRendered;
 
@@ -94,16 +95,16 @@ namespace RibbonUI.Windows {
         private void LoadCaches() {
             LabelText = "Loading caches ...";
 
-            if (!Directory.Exists("Scrappers")) {
+            if (!Directory.Exists("Downloaders")) {
                 try {
-                    Directory.CreateDirectory("Scrappers");
+                    Directory.CreateDirectory("Downloaders");
                 }
                 catch (Exception e) {
                     return;
                 }
             }
 
-            foreach (string cache in Directory.EnumerateFiles("Scrappers", "*.cache")) {
+            foreach (string cache in Directory.EnumerateFiles("Downloaders", "*.cache")) {
                 string scrapper = Path.GetFileNameWithoutExtension(cache);
                 ProgressText = scrapper;
 
@@ -127,71 +128,20 @@ namespace RibbonUI.Windows {
         }
 
         private void Update() {
-            switch (_site) {
-                case WebUpdateSite.Kolosej:
-                    if (!_movieInfos.ContainsKey("Kolosej")) {
-                        _movieInfos.Add("Kolosej", new ParsedMovieInfos());
-                    }
-
-                    SearchMovieInfo(_movieInfos["Kolosej"], _site);
-                    break;
-                case WebUpdateSite.PlanetTus:
-                    if (!_movieInfos.ContainsKey("Tus")) {
-                        _movieInfos.Add("Tus", new ParsedMovieInfos());
-                    }
-                    SearchMovieInfo(_movieInfos["Tus"], _site);
-                    break;
-                case WebUpdateSite.GremoVKino:
-                    if (!_movieInfos.ContainsKey("GremoVKino")) {
-                        _movieInfos.Add("GremoVKino", new ParsedMovieInfos());
-                    }
-                    SearchMovieInfo(_movieInfos["GremoVKino"], _site);
-                    break;
-                case WebUpdateSite.OpenSubtitles:
-                    if (!_movieInfos.ContainsKey("OSub")) {
-                        _movieInfos.Add("OSub", new ParsedMovieInfos());
-                    }
-                    SearchMovieInfo(_movieInfos["OSub"], _site);
-                    break;
-                case WebUpdateSite.Omdb:
-                    if (!_movieInfos.ContainsKey("OMDB")) {
-                        _movieInfos.Add("OMDB", new ParsedMovieInfos());
-                    }
-                    SearchMovieInfo(_movieInfos["OMDB"], _site);
-                    break;
-                case WebUpdateSite.TraktTv:
-                    if (!_movieInfos.ContainsKey("TraktTV")) {
-                        _movieInfos.Add("TraktTV", new ParsedMovieInfos());
-                    }
-                    SearchMovieInfo(_movieInfos["TraktTV"], _site);
-                    break;
-                default:
-                    Close();
-                    break;
+            IParsingClient cli = LightInjectContainer.TryGetInstance<IParsingClient>(_downloader);
+            if (cli == null) {
+                MessageBox.Show(TranslationManager.T("Error accessing movie info provider."));
+                return;
             }
+
+            if (!_movieInfos.ContainsKey(cli.Name)) {
+                _movieInfos.Add(cli.Name, new ParsedMovieInfos());
+            }
+
+            SearchMovieInfo(_movieInfos["Kolosej"], cli);
         }
 
-        private async void SearchMovieInfo(ParsedMovieInfos info, WebUpdateSite site) {
-            ParsingClient cli = null;
-            switch (site) {
-                case WebUpdateSite.Kolosej:
-                    cli = new KolosejClient();
-                    break;
-                case WebUpdateSite.OpenSubtitles:
-                    break;
-                case WebUpdateSite.GremoVKino:
-                    cli = new GremoVKinoClient();
-                    break;
-                case WebUpdateSite.Omdb:
-                    cli = new OmdbClient();
-                    break;
-                case WebUpdateSite.TraktTv:
-                    cli = new TraktTvClient();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException("site");
-            }
-
+        private async void SearchMovieInfo(ParsedMovieInfos info, IParsingClient cli) {
             await Task.Run(() => UpdateAvailable(info, cli));
 
             if (cli == null) {
@@ -262,7 +212,7 @@ namespace RibbonUI.Windows {
             }
         }
 
-        private IEnumerable<ParsedMovie> GetMatchingMovies(ParsingClient cli) {
+        private IEnumerable<ParsedMovie> GetMatchingMovies(IParsingClient cli) {
             if (cli.SupportsMovieHash) {
                 if (_movie["Videos"]) {
                     List<string> hashes = _movie.Videos
@@ -275,12 +225,12 @@ namespace RibbonUI.Windows {
                 }
             }
 
-            return !string.IsNullOrEmpty(_movie.ImdbID) && cli.SupportsImdbId
+            return !string.IsNullOrEmpty(_movie.ImdbID) && cli.IsImdbSupported
                        ? cli.GetByImdbId(_movie.ImdbID).ToList()
                        : cli.GetByTitle(_movie.Title, (int) (_movie.ReleaseYear.HasValue ? _movie.ReleaseYear.Value : 0));
         }
 
-        private void UpdateAvailable(ParsedMovieInfos info, ParsingClient client) {
+        private void UpdateAvailable(ParsedMovieInfos info, IParsingClient client) {
             if (info.ParsedTime != default(DateTime) && (DateTime.Now - info.ParsedTime) <= StaleTime) {
                 return;
             }
@@ -303,7 +253,7 @@ namespace RibbonUI.Windows {
                 info.ParsedTime = DateTime.Now;
 
                 JsonSerializer js = new JsonSerializer();
-                using (TextWriter tw = File.CreateText("Scrappers/" + client.Name + ".cache")) {
+                using (TextWriter tw = File.CreateText("Downloaders/" + client.Name + ".cache")) {
                     try {
                         js.Serialize(tw, info);
                     }
@@ -314,7 +264,7 @@ namespace RibbonUI.Windows {
         }
 
 
-        private void DownloadAndUpdate(ParsedMovie movie, ParsingClient cli) {
+        private void DownloadAndUpdate(ParsedMovie movie, IParsingClient cli) {
             LabelText = "Downloading...";
             ProgressText = "Getting movie information.";
 
@@ -518,6 +468,9 @@ namespace RibbonUI.Windows {
             public FuzzySearchService FuzzySearch { get; set; }
 
             public IEnumerable<ParsedMovie> Movies { get; set; }
+        }
+
+        private void WebUpdaterOnClosed(object sender, EventArgs e) {
         }
     }
 

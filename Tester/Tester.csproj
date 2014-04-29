@@ -58,6 +58,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Libraries\EF6\EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="LightInject">
+      <HintPath>..\packages\LightInject.3.0.1.6\lib\net45\LightInject.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\ThirdParty\log4net\log4net.dll</HintPath>
     </Reference>
@@ -102,6 +105,10 @@
     <ProjectReference Include="..\Downloaders\Art\SharpFanartTv\SharpFanartTv.csproj">
       <Project>{25d0e1a6-7fa0-49fa-989f-3f5f082bd23d}</Project>
       <Name>SharpFanartTv</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Downloaders\MovieInfo\InfoParsersCommon\InfoParsersCommon.csproj">
+      <Project>{005F252B-C8AD-49E0-9A88-47BC289F00D0}</Project>
+      <Name>InfoParsersCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\Downloaders\MovieInfo\SharpTraktTvAPI\SharpTraktTvAPI.csproj">
       <Project>{7e74d034-0d99-4e49-bd80-f96b04d3eca9}</Project>

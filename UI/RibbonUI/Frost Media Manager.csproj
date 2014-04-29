@@ -188,7 +188,7 @@
     </Compile>
     <Compile Include="Util\ObservableWrappers\ObservableBase.cs" />
     <Compile Include="Util\ObservableWrappers\ObservableMovie.cs" />
-    <Compile Include="Util\Provider.cs" />
+    <Compile Include="Util\Plugin.cs" />
     <Compile Include="Properties\SettingsEx.cs" />
     <Compile Include="Util\UIHelper.cs" />
     <Compile Include="Windows\Add\AddCountriesViewModel.cs">
@@ -468,6 +468,8 @@
     <Resource Include="Images\export.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Sites\opensubtitles.ico" />
+    <Resource Include="Images\Sites\podnapisiNet.ico" />
     <Resource Include="Images\xbmc.png" />
   </ItemGroup>
   <ItemGroup>
@@ -628,13 +630,13 @@
       <Project>{8542c013-aa9a-4852-98fa-6f05cc037a91}</Project>
       <Name>FeatureDetector</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Libraries\Common\Common.csproj">
-      <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Downloaders\MovieInfo\MovieInfoProviders\MovieInfoProviders.csproj">
       <Project>{74a350a0-205e-42d6-9f20-b1c9a393f689}</Project>
       <Name>MovieInfoProviders</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\Common\Common.csproj">
+      <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
+      <Name>Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Downloaders\MovieInfo\InfoParsersCommon\InfoParsersCommon.csproj">
       <Project>{005F252B-C8AD-49E0-9A88-47BC289F00D0}</Project>
@@ -726,24 +728,10 @@
     <Resource Include="Images\update.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Sites\opensubtitles.ico" />
-    <Resource Include="Images\Sites\podnapisiNet.ico" />
-    <Resource Include="Images\Sites\tus.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Sites\kolosej.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\clear.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\art.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Sites\fanart.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Sites\tmdb.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\photo.png" />
@@ -755,25 +743,13 @@
     <Resource Include="Images\warning.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Sites\gremovkino.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\play_video.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Sites\omdb.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\play.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\video.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Sites\traileraddict.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Sites\traktTv.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\download.png" />

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using Frost.InfoParsers;
 using Frost.MovieInfoProviders.Omdb;
 using SharpOmdbAPI;
@@ -11,8 +13,20 @@ namespace Frost.MovieInfoProviders {
 
     public class OmdbClient : ParsingClient {
         private const string IMDB_MOVIE_URL = "http://www.imdb.com/title/{0}/";
+        public const string CLIENT_NAME = "OmdbAPI";
 
-        public OmdbClient() : base("OMDB", false, false, true) {
+        public OmdbClient() : base(CLIENT_NAME, false, false, true) {
+            string directoryName;
+            try {
+                 directoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            }
+            catch {
+                return;
+            }
+
+            if (directoryName != null) {
+                Icon = new Uri(directoryName+"/omdb.ico");
+            }
         }
 
         public override IEnumerable<ParsedMovie> GetByImdbId(string imdbId) {

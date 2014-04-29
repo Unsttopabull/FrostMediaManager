@@ -39,6 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FrostPluginAttribute.cs" />
+    <Compile Include="Models\IInfoClient.cs" />
+    <Compile Include="Models\IParsingClient.cs" />
     <Compile Include="Models\IParsedActor.cs" />
     <Compile Include="Models\IParsedMovie.cs" />
     <Compile Include="Models\IFanartClient.cs" />
@@ -46,6 +49,7 @@
     <Compile Include="Models\IParsedArts.cs" />
     <Compile Include="Models\IParsedAward.cs" />
     <Compile Include="Models\IParsedPerson.cs" />
+    <Compile Include="Models\IPromotionalVideoClient.cs" />
     <Compile Include="ParsedActor.cs" />
     <Compile Include="ParsedArt.cs" />
     <Compile Include="ParsedArts.cs">

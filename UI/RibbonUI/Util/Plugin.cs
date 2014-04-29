@@ -2,10 +2,10 @@
 
 namespace RibbonUI.Util {
 
-    public class Provider {
+    public class Plugin {
 
         /// <summary>Initializes a new instance of the <see cref="T:System.Object"/> class.</summary>
-        public Provider(string name, string iconPath) {
+        public Plugin(string name, string iconPath) {
             Name = name;
             IconPath = iconPath;
         }

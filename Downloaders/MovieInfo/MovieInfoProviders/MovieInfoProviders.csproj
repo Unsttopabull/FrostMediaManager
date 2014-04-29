@@ -33,6 +33,9 @@
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\..\..\ThirdParty\HtmlAgilityPack\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
+    <Reference Include="LightInject">
+      <HintPath>..\..\..\packages\LightInject.3.0.1.6\lib\net45\LightInject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
@@ -43,6 +46,7 @@
     <Compile Include="OmdbClient.cs" />
     <Compile Include="Omdb\OmdbParsedMovie.cs" />
     <Compile Include="OpenSubtitlesInfoClient.cs" />
+    <Compile Include="Plugin\CompositionRoot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TraktTvClient.cs" />
     <Compile Include="TraktTv\TraktTvParsedMovie.cs" />
@@ -61,8 +65,13 @@
       <Name>SharpTraktTvAPI</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetPath)" "E:\Workspace\Ostalo\Repos\Git\FrostMediaManager2\UI\RibbonUI\bin\Debug\Downloaders" /Y</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

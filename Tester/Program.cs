@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Diagnostics;
+using System.Reflection;
+using Frost.InfoParsers.Models;
+using LightInject;
 using log4net;
 using log4net.Config;
 using Newtonsoft.Json.Linq;
@@ -43,7 +46,11 @@ namespace Frost.Tester {
         }
 
         public static void TestTraktTv() {
-            Process.Start("movie.avi");
+            using (ServiceContainer service = new ServiceContainer()) {
+                service.RegisterAssembly("Downloaders/Frost.MovieInfoProviders.dll");
+
+                List<IParsingClient> parsingClients = service.GetAllInstances<IParsingClient>().ToList();
+            }
 
             //SharpTraktTv trakt = new SharpTraktTv("dc9b6e2e5526762ae8a050780ef6d04b");
             //MovieMatch[] response = trakt.Search.SearchMovies("50/50", 5);

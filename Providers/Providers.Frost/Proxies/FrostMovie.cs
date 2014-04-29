@@ -262,6 +262,29 @@ namespace Frost.Providers.Frost.Proxies {
             set { Entity.DirectoryPath = value; }
         }
 
+
+        /// <summary>Gets or sets the full path of the first file to begin playing the movie.</summary>
+        public string FirstFileName {
+            get {
+                if (string.IsNullOrEmpty(Entity.FirstFileName)) {
+                    if (Type == MovieType.DVD) {
+                        IVideo video = Videos.FirstOrDefault(v => v != null && string.Equals("VIDEO_TS.IFO", v.File.NameWithExtension, StringComparison.InvariantCultureIgnoreCase));
+                        if (video != null) {
+                            Entity.FirstFileName = video.File.FullPath;
+                        }
+                    }
+                    else {
+                        IVideo video = Videos.FirstOrDefault(v => v != null && v.File != null);
+                        if (video != null) {
+                            Entity.FirstFileName = video.File.FullPath;
+                        }
+                    }
+                }
+                return Entity.FirstFileName;
+            }
+            set { Entity.FirstFileName = value; } 
+        }
+
         /// <summary>Gets or sets the number of audio channels used most frequently in associated audios.</summary>
         /// <value>The number of audio channels used most frequently in associated audios</value>
         public int? NumberOfAudioChannels {
@@ -444,12 +467,6 @@ namespace Frost.Providers.Frost.Proxies {
         #endregion
 
         #region Utility
-
-        /// <summary>Gets or sets the full path of the first file to begin playing the movie.</summary>
-        public string FirstFileName {
-            get { return Entity.FirstFileName; }
-            set { Entity.FirstFileName = value; } 
-        }
 
         /// <summary>Gets a value indicating whether this movie has a trailer video availale.</summary>
         /// <value>Is <c>true</c> if the movie has a trailer video available; otherwise, <c>false</c>.</value>

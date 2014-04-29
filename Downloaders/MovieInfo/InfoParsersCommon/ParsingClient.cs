@@ -3,25 +3,30 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Text;
+using Frost.InfoParsers.Models;
 using HtmlAgilityPack;
 
 namespace Frost.InfoParsers {
 
-    public abstract class ParsingClient {
+    public abstract class ParsingClient : IParsingClient {
 
         protected ParsingClient(string name, bool canIndex, bool supportsMovieHash, bool supportsImdbId) {
             Name = name;
             CanIndex = canIndex;
             SupportsMovieHash = supportsMovieHash;
-            SupportsImdbId = supportsImdbId;
+            IsImdbSupported = supportsImdbId;
         }
 
         public string Name { get; private set; }
 
+        public Uri Icon { get; protected set; }
+
         public bool CanIndex { get; private set; }
 
         public bool SupportsMovieHash { get; private set; }
-        public bool SupportsImdbId { get; private set; }
+        public bool IsImdbSupported { get; private set; }
+        public bool IsTitleSupported { get; private set; }
+        public bool IsTmdbSupported { get; private set; }
 
         public IEnumerable<ParsedMovie> AvailableMovies { get; protected set; }
 

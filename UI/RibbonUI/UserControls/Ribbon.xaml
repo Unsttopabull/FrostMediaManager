@@ -51,18 +51,18 @@
 
         <RibbonTab IsSelected="{Binding IsDetectTabSelected}" Header="Web update">
             <RibbonGroup Header="Movie info" Background="#00000000" Height="86" Margin="0">
-                <RibbonMenuButton LargeImageSource="../Images/update.png" Label="Update movie information">
-                    <RibbonMenuItem ImageSource="../Images/Sites/kolosej.png" Header="Kolosej.si" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.Kolosej}"/>
+                <RibbonMenuButton x:Name="MovieInfoDownloaders" LargeImageSource="../Images/update.png" Label="Update movie information">
+                    <!--<RibbonMenuItem ImageSource="../Images/Sites/kolosej.png" Header="Kolosej.si" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.Kolosej}"/>
                     <RibbonMenuItem ImageSource="../Images/Sites/gremovkino.ico" Header="Gremovkino.si" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.GremoVKino}"/>
                     <RibbonMenuItem ImageSource="../Images/sites/opensubtitles.ico" Header="OpenSubtitles.org" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.OpenSubtitles}"/>
                     <RibbonMenuItem ImageSource="../Images/sites/omdb.ico" Header="The OMDB API" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.Omdb}"/>
-                    <RibbonMenuItem ImageSource="../Images/sites/traktTv.png" Header="Trakt.TV" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.TraktTv}"/>
+                    <RibbonMenuItem ImageSource="../Images/sites/traktTv.png" Header="Trakt.TV" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.TraktTv}"/>-->
                 </RibbonMenuButton>
             </RibbonGroup>
             <RibbonGroup Header="Art">
-                <RibbonMenuButton LargeImageSource="../Images/art.png" Label="Download art">
-                    <RibbonMenuItem ImageSource="../Images/Sites/fanart.ico" Header="Fanart.tv" />
-                    <RibbonMenuItem ImageSource="../Images/sites/tmdb.ico" Header="Tmdb.org" />                    
+                <RibbonMenuButton x:Name="MovieArtDownloaders" LargeImageSource="../Images/art.png" Label="Download art">
+                    <!--<RibbonMenuItem ImageSource="../Images/Sites/fanart.ico" Header="Fanart.tv" />
+                    <RibbonMenuItem ImageSource="../Images/sites/tmdb.ico" Header="Tmdb.org" />-->                    
                 </RibbonMenuButton>
                 <RibbonMenuButton LargeImageSource="../Images/download4.png" Label="Save current art locally">
                     <RibbonMenuItem Header="For current movie"/>
@@ -70,8 +70,8 @@
                 </RibbonMenuButton>
             </RibbonGroup>
             <RibbonGroup>
-                <RibbonMenuButton LargeImageSource="../Images/video.png" Label="Download promotional videos" IsEnabled="{Binding SelectedMovie[PromotionalVideos]}">
-                    <RibbonMenuItem ImageSource="../Images/Sites/traileraddict.png" Header="TrailerAddict.com" Command="{Binding UpdatePromotionalVideosCommand}"/>
+                <RibbonMenuButton x:Name="MovieVideoDownloaders" LargeImageSource="../Images/video.png" Label="Download promotional videos" IsEnabled="{Binding SelectedMovie[PromotionalVideos]}">
+                    <!--<RibbonMenuItem ImageSource="../Images/Sites/traileraddict.png" Header="TrailerAddict.com" Command="{Binding UpdatePromotionalVideosCommand}"/>-->
                 </RibbonMenuButton>
             </RibbonGroup>
         </RibbonTab>

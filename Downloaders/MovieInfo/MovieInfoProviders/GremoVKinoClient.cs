@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Frost.InfoParsers;
@@ -17,9 +19,21 @@ namespace Frost.MovieInfoProviders {
         private const string XPATH = "table/tr/td[@class='trailer_leftCell' and text()='{0} ']/following-sibling::td[@class='trailer_rightCell']";
         private const string YOUTUBE = "http://www.youtube.com/";
         private const string YOUTUBE_VIDEO_URL = "http://www.youtube.com/watch?v={0}";
+        public const string CLIENT_NAME = "Gremovkino.si";
         private int _numFailed;
 
-        public GremoVKinoClient() : base("GremoVKino", true, false, false) {
+        public GremoVKinoClient() : base(CLIENT_NAME, true, false, false) {
+            string directoryName;
+            try {
+                 directoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            }
+            catch {
+                return;
+            }
+
+            if (directoryName != null) {
+                Icon = new Uri(directoryName+"/gremovkino.ico");
+            }
         }
 
         public override IEnumerable<ParsedMovie> GetByImdbId(string imdbId) {

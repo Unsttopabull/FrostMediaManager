@@ -30,15 +30,6 @@ namespace RibbonUI.UserControls {
         Export
     }
 
-    public enum WebUpdateSite {
-        Kolosej,
-        PlanetTus,
-        OpenSubtitles,
-        GremoVKino,
-        Omdb,
-        TraktTv
-    }
-
     internal class RibbonViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private ObservableMovie _selectedMovie;
@@ -49,7 +40,7 @@ namespace RibbonUI.UserControls {
         private Visibility _subtitlesContextVisible;
         private readonly IMoviesDataService _service;
         private ICommand _saveChangesCommand;
-        private ICommand<WebUpdateSite> _updateMovieCommand;
+        private ICommand<string> _updateMovieCommand;
         private ICommand _updatePromotionalVideosCommand;
         private ICommand _exportMoviesCommand;
         private ICommand _playMovieCommand;
@@ -73,10 +64,10 @@ namespace RibbonUI.UserControls {
         public ICommand SearchCommand { get; private set; }
         public ICommand OptionsCommand { get; private set; }
 
-        public ICommand<WebUpdateSite> UpdateMovieCommand {
+        public ICommand<string> UpdateMovieCommand {
             get {
                 if (_updateMovieCommand == null) {
-                    _updateMovieCommand = new RelayCommand<WebUpdateSite>(UpdateMovie);
+                    _updateMovieCommand = new RelayCommand<string>(UpdateMovie, s => !string.IsNullOrEmpty(s));
                 }
                 return _updateMovieCommand;
             }
@@ -178,7 +169,7 @@ namespace RibbonUI.UserControls {
         public ICommand UpdatePromotionalVideosCommand {
             get {
                 if (_updatePromotionalVideosCommand == null) {
-                    _updateMovieCommand = new RelayCommand<WebUpdateSite>(UpdatePromotionalVideos);
+                    _updateMovieCommand = new RelayCommand<string>(UpdatePromotionalVideos);
                 }
                 return _updateMovieCommand;
             }
@@ -198,7 +189,9 @@ namespace RibbonUI.UserControls {
         public ICommand PlayMovieCommand {
             get {
                 if (_playMovieCommand == null) {
-                    _playMovieCommand = new RelayCommand(PlayMovie, o => SelectedMovie != null && !string.IsNullOrEmpty(SelectedMovie.FirstFileName));
+                    _playMovieCommand = new RelayCommand(PlayMovie, o => {
+                        return SelectedMovie != null && !string.IsNullOrEmpty(SelectedMovie.FirstFileName);
+                    });
                 }
                 return _playMovieCommand;
             }
@@ -307,12 +300,12 @@ namespace RibbonUI.UserControls {
             }
         }
 
-        private void UpdateMovie(WebUpdateSite site) {
-            WebUpdater wu = new WebUpdater(site, SelectedMovie) { Owner = ParentWindow };
+        private void UpdateMovie(string downloader) {
+            WebUpdater wu = new WebUpdater(downloader, SelectedMovie) { Owner = ParentWindow };
             wu.ShowDialog();
         }
 
-        private void UpdatePromotionalVideos(WebUpdateSite obj) {
+        private void UpdatePromotionalVideos(string downloader) {
         }
 
         private void MenuItemOptionsOnClick() {

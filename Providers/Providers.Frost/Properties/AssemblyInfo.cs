@@ -35,4 +35,4 @@ using Frost.Common;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: IsPlugin("Frost Media Manager", "frost.ico")]
+[assembly: FrostProvider("Frost Media Manager", "frost.ico")]

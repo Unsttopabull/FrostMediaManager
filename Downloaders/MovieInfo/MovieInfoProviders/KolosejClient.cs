@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Xml.XPath;
 using Frost.InfoParsers;
@@ -12,8 +13,20 @@ namespace Frost.MovieInfoProviders {
 
     public class KolosejClient : ParsingClient {
         private const string URL = "http://www.kolosej.si{0}";
+        public const string CLIENT_NAME = "Kolosej.si";
 
-        public KolosejClient() : base("Kolosej", true, false, false) {
+        public KolosejClient() : base(CLIENT_NAME, true, false, false) {
+            string directoryName;
+            try {
+                 directoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            }
+            catch {
+                return;
+            }
+
+            if (directoryName != null) {
+                Icon = new Uri(directoryName+"/kolosej.png");
+            }
         }
 
         public override IEnumerable<ParsedMovie> GetByImdbId(string imdbId) {

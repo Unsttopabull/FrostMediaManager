@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:l="http://www.frostmediamanager.com/xaml/translation"
-        xmlns:w="clr-namespace:RibbonUI.Windows"
+        xmlns:w="clr-namespace:RibbonUI.Windows" Closed="WebUpdaterOnClosed"
         mc:Ignorable="d" WindowStyle="ToolWindow" ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
         Title="{l:T Web updater}" SizeToContent="WidthAndHeight" x:Name="WebUpdaterWindow">
     <StackPanel Margin="5">

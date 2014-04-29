@@ -1,12 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using Frost.InfoParsers;
 
 namespace Frost.MovieInfoProviders {
 
     public class OpenSubtitlesInfoClient : ParsingClient {
+        public const string CLIENT_NAME = "OpenSubtitles.ORG";
 
-        public OpenSubtitlesInfoClient() : base("OSub", false, false, true) {
+        public OpenSubtitlesInfoClient() : base(CLIENT_NAME, false, false, true) {
+            string directoryName;
+            try {
+                 directoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            }
+            catch {
+                return;
+            }
+
+            if (directoryName != null) {
+                Icon = new Uri(directoryName+"/opensubtitles.ico");
+            }
         }
 
         public override IEnumerable<ParsedMovie> GetByImdbId(string imdbId) {

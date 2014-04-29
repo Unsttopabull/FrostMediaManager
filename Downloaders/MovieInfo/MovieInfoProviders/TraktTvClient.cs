@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using Frost.InfoParsers;
 using Frost.MovieInfoProviders.TraktTv;
 using SharpTraktTvAPI;
@@ -11,10 +13,23 @@ namespace Frost.MovieInfoProviders {
 
     public class TraktTvClient : ParsingClient {
         private const string IMDB_MOVIE_URL = "http://www.imdb.com/title/{0}/";
+        public const string CLIENT_NAME = "Trakt.TV";
         private readonly SharpTraktTv _trakt;
 
-        public TraktTvClient() : base("TraktTV", false, false, true) {
+        public TraktTvClient() : base(CLIENT_NAME, false, false, true) {
             _trakt = new SharpTraktTv("dc9b6e2e5526762ae8a050780ef6d04b");
+
+            string directoryName;
+            try {
+                 directoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            }
+            catch {
+                return;
+            }
+
+            if (directoryName != null) {
+                Icon = new Uri(directoryName+"/traktTv.png");
+            }
         }
 
         public override IEnumerable<ParsedMovie> GetByImdbId(string imdbId) {

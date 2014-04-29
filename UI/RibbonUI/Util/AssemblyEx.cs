@@ -2,11 +2,12 @@
 using System.IO;
 using System.Reflection;
 using Frost.Common;
+using Frost.InfoParsers;
 
 namespace RibbonUI.Util {
     public static class AssemblyEx {
 
-        public static bool CheckIsPlugin(string plugin, out Assembly assembly, out Provider provider) {
+        public static bool CheckIsProvider(string plugin, out Assembly assembly, out Plugin provider) {
             string path = Path.Combine(Directory.GetCurrentDirectory(), plugin);
             if (!CheckIsAssembly(path)) {
                 assembly = null;
@@ -16,10 +17,10 @@ namespace RibbonUI.Util {
 
             try {
                 Assembly asm = Assembly.LoadFile(path);
-                IsPluginAttribute isPlugin = asm.GetCustomAttribute<IsPluginAttribute>();
-                if (isPlugin != null) {
+                FrostProviderAttribute isProvider = asm.GetCustomAttribute<FrostProviderAttribute>();
+                if (isProvider != null) {
                     assembly = asm;
-                    provider = new Provider(isPlugin.SystemName, isPlugin.IconPath);
+                    provider = new Plugin(isProvider.SystemName, isProvider.IconPath);
                     return true;
                 }
 
@@ -27,14 +28,33 @@ namespace RibbonUI.Util {
                 provider = null;
                 return false;
             }
-            catch (FileLoadException e) {
+            catch {
                 assembly = null;
                 provider = null;
                 return false;
             }
-            catch (Exception e) {
+        }
+
+        public static bool CheckIsPlugin(string plugin, out Assembly assembly) {
+            string path = Path.Combine(Directory.GetCurrentDirectory(), plugin);
+            if (!CheckIsAssembly(path)) {
                 assembly = null;
-                provider = null;
+                return false;
+            }
+
+            try {
+                Assembly asm = Assembly.LoadFile(path);
+                FrostPluginAttribute isPlugin = asm.GetCustomAttribute<FrostPluginAttribute>();
+                if (isPlugin != null) {
+                    assembly = asm;
+                    return true;
+                }
+
+                assembly = null;
+                return false;
+            }
+            catch(Exception e) {
+                assembly = null;
                 return false;
             }
         }

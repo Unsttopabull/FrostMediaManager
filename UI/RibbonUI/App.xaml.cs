@@ -15,10 +15,10 @@ namespace RibbonUI {
     /// <summary>Interaction logic for App.xaml</summary>
     public partial class App : Application {
         private static readonly ILog Log = LogManager.GetLogger(typeof(App));
-        internal static List<Provider> Systems { get; private set; }
+        internal static List<Plugin> Systems { get; private set; }
 
         static App() {
-            Systems = new List<Provider>();
+            Systems = new List<Plugin>();
         }
 
         public App() {
@@ -55,8 +55,8 @@ namespace RibbonUI {
                 int numFailed = 0;
                 foreach (string plugin in plugins) {
                     Assembly assembly;
-                    Provider provider;
-                    if (!AssemblyEx.CheckIsPlugin(plugin, out assembly, out provider)) {
+                    Plugin provider;
+                    if (!AssemblyEx.CheckIsProvider(plugin, out assembly, out provider)) {
                         numFailed++;
                         continue;
                     }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using Frost.InfoParsers;
 using Frost.InfoParsers.Models;
 using Newtonsoft.Json.Linq;
@@ -7,9 +9,29 @@ using Newtonsoft.Json.Linq;
 namespace SharpFanartTv {
 
     public class FanartTvArtClient : IFanartClient {
+        public const string CLIENT_NAME = "Fanart.TV";
         private const string API_KEY = @"99a04fb5ed7cf203c26c9989dc534ea5";
 
-        public IParsedArts GetMovieArtFromTitle(string title) {
+        public FanartTvArtClient() {
+            IsImdbSupported = true;
+            IsTitleSupported = true;
+            IsTitleSupported = false;
+            Name = CLIENT_NAME;
+
+            string directoryName;
+            try {
+                 directoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            }
+            catch {
+                return;
+            }
+
+            if (directoryName != null) {
+                Icon = new Uri(directoryName+"/fanart.ico");
+            }
+        }
+
+        public IParsedArts GetMovieArtFromTitle(string title, int year) {
             throw new NotSupportedException("Obtaining art through movie title is not supported");
         }
 
@@ -20,6 +42,13 @@ namespace SharpFanartTv {
         public IParsedArts GetMovieArtFromImdbId(string imdbId) {
             return GetById(imdbId);
         }
+
+        public bool IsImdbSupported { get; private set; }
+        public bool IsTmdbSupported { get; private set; }
+        public bool IsTitleSupported { get; private set; }
+
+        public Uri Icon { get; private set; }
+        public string Name { get; private set; }
 
         private static IParsedArts GetById(string imdbId) {
             SharpFanartTvClient cli = new SharpFanartTvClient(API_KEY, ResponseType.Json);
