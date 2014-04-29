@@ -5,11 +5,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using Frost.Common;
 using Frost.DetectFeatures;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
+using Microsoft.WindowsAPICodePack.Shell.Interop;
 using RibbonUI.Annotations;
 using RibbonUI.Design.Fakes;
 using RibbonUI.Util.ObservableWrappers;
@@ -30,7 +32,15 @@ namespace RibbonUI.UserControls {
             GoToImdbCommand = new RelayCommand<string>(GoToIMDB);
 
             ActorImdbClickedCommand = new RelayCommand<string>(
-                imdbId => Process.Start(string.Format(IMDB_PERSON_URI, imdbId)),
+                imdbId => {
+                    string uri = string.Format(IMDB_PERSON_URI, imdbId);
+                    try {;
+                        Process.Start(uri);
+                    }
+                    catch {
+                        MessageBox.Show(TranslationManager.T("Error opening IMDB page with address: " + uri));
+                    }
+                },
                 s => !string.IsNullOrEmpty(s)
                 );
 
@@ -131,13 +141,19 @@ namespace RibbonUI.UserControls {
         #endregion
 
         private void GoToIMDB(string imdbId) {
-            if (!String.IsNullOrEmpty(imdbId)) {
-                Process.Start(String.Format(IMDB_TITLE_URI, imdbId));
+            if (!string.IsNullOrEmpty(imdbId)) {
+                string uri = string.Format(IMDB_TITLE_URI, imdbId);
+                try {
+                    Process.Start(uri);
+                }
+                catch {
+                    MessageBox.Show(TranslationManager.T("Error opening IMDB page with address: " + uri));
+                }
             }
         }
 
         private void GoToTrailer(string trailer) {
-            if (String.IsNullOrEmpty(trailer)) {
+            if (string.IsNullOrEmpty(trailer)) {
                 return;
             }
 
@@ -150,11 +166,17 @@ namespace RibbonUI.UserControls {
                             return;
                         }
                         catch {
+                            MessageBox.Show(TranslationManager.T("Error opening trailer in Windows Media Player"));
                         }
                     }
                 }
             }
-            Process.Start(trailer);
+            try {
+                Process.Start(trailer);
+            }
+            catch {
+                MessageBox.Show("Error opening trailer with path: " + trailer);
+            }
         }
 
         [NotifyPropertyChangedInvocator]

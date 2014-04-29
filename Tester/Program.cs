@@ -43,8 +43,10 @@ namespace Frost.Tester {
         }
 
         public static void TestTraktTv() {
-            SharpTraktTv trakt = new SharpTraktTv("dc9b6e2e5526762ae8a050780ef6d04b");
-            MovieMatch[] response = trakt.Search.SearchMovies("50/50", 5);
+            Process.Start("movie.avi");
+
+            //SharpTraktTv trakt = new SharpTraktTv("dc9b6e2e5526762ae8a050780ef6d04b");
+            //MovieMatch[] response = trakt.Search.SearchMovies("50/50", 5);
         }
     }
 

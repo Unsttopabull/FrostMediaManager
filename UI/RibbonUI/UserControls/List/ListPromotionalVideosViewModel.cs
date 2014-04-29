@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Data;
 using Frost.Common.Models.Provider;
+using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;
 using RibbonUI.Util.ObservableWrappers;
@@ -48,7 +50,12 @@ namespace RibbonUI.UserControls.List {
 
         private void OpenVideoCommand(string uri) {
             if (!string.IsNullOrEmpty(uri)) {
-                Process.Start(uri);
+                try {
+                    Process.Start(uri);
+                }
+                catch {
+                    MessageBox.Show(TranslationManager.T("Error opening video with path: " + uri));
+                }
             }
         }
 

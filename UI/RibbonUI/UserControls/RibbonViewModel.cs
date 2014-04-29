@@ -219,14 +219,27 @@ namespace RibbonUI.UserControls {
         }
 
         private void PlayMovie() {
-            
+            try {
+                Process.Start(SelectedMovie.FirstFileName);
+            }
+            catch (IOException e) {
+                MessageBox.Show(TranslationManager.T("File could not be accessed: " + e.Message));
+            }
+            catch (Exception e) {
+                MessageBox.Show(TranslationManager.T("An error has occured opening file: "+SelectedMovie.FirstFileName));
+            }
         }
 
         private void OpenInFolder() {
             if (SelectedMovie != null) {
                 string directory = SelectedMovie.DirectoryPath;
                 if (!string.IsNullOrEmpty(directory) && Directory.Exists(directory)) {
-                    Process.Start(directory);
+                    try {
+                        Process.Start(directory);
+                    }
+                    catch {
+                        MessageBox.Show("Error opening movie folder");
+                    }
                 }
                 else {
                     MessageBox.Show(ParentWindow, TranslationManager.T("Folder not accessible"));
