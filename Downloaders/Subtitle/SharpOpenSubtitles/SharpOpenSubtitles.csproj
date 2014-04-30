@@ -96,7 +96,6 @@
     <Compile Include="Models\Upload\Send\UploadSubtitleInfo.cs" />
     <Compile Include="Models\Checking\Receive\SubtitleHashInfo.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Session.cs" />
     <Compile Include="Movie.cs" />
     <Compile Include="Subtitle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

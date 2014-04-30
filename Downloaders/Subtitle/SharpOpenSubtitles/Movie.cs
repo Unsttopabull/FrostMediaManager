@@ -25,7 +25,7 @@ namespace Frost.SharpOpenSubtitles {
         }
 
         /// <summary>Get details about given movie.</summary>
-        /// <param name="imdbID">MDb ID of requested movie, can be taken from results of <see cref="SearchOnIMDB">SearchOnIMDB(string)</see></param>
+        /// <param name="imdbID">IMDb ID (without leading 'tt') of requested movie, can be taken from results of <see cref="SearchOnIMDB">SearchOnIMDB(string)</see></param>
         /// <returns>
         /// Returns structure with movie information about given movie <paramref name="imdbID"/> containing movie title, release year, directors, cast, ...<br />
         /// All information is gathered from ​<a href="www.imdb.com">IMDb</a>.

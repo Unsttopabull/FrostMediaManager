@@ -630,10 +630,6 @@
       <Project>{8542c013-aa9a-4852-98fa-6f05cc037a91}</Project>
       <Name>FeatureDetector</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Downloaders\MovieInfo\MovieInfoProviders\MovieInfoProviders.csproj">
-      <Project>{74a350a0-205e-42d6-9f20-b1c9a393f689}</Project>
-      <Name>MovieInfoProviders</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Libraries\Common\Common.csproj">
       <Project>{73f12859-d8b1-49c1-a835-0810ce7bd006}</Project>
       <Name>Common</Name>

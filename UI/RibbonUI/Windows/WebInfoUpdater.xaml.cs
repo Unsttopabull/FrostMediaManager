@@ -13,8 +13,6 @@ using Frost.Common;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers;
 using Frost.InfoParsers.Models;
-using Frost.MovieInfoProviders;
-using Frost.MovieInfoProviders.Omdb;
 using FuzzySearch;
 using Newtonsoft.Json;
 using RibbonUI.Annotations;

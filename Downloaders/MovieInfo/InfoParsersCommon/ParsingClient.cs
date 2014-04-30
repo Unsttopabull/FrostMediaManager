@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using Frost.InfoParsers.Models;
 using HtmlAgilityPack;
@@ -54,6 +55,15 @@ namespace Frost.InfoParsers {
             HtmlDocument hd = new HtmlDocument();
             hd.Load(new StringReader(html));
             return hd;
+        }
+
+        protected static string GetAssemblyCurrentDirectory() {
+            try {
+                 return Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
+            }
+            catch {
+                return null;
+            }            
         }
     }
 

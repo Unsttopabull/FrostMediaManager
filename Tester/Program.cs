@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Diagnostics;
-using System.Reflection;
+using CookComputing.XmlRpc;
 using Frost.InfoParsers.Models;
+using Frost.SharpOpenSubtitles;
+using Frost.SharpOpenSubtitles.Models.Movies.Receive;
+using Frost.SharpOpenSubtitles.Models.Session.Receive;
 using LightInject;
 using log4net;
 using log4net.Config;
-using Newtonsoft.Json.Linq;
-using SharpTraktTvAPI;
-using SharpTraktTvAPI.Models.Movie;
-using SharpTraktTvAPI.Models.Search;
+using Newtonsoft.Json;
 
 namespace Frost.Tester {
 
@@ -35,7 +36,8 @@ namespace Frost.Tester {
 
             TimeSpan time = default(TimeSpan);
 
-            TestTraktTv();
+            //TestTraktTv();
+            TestOpenSubtitlesOrg();
 
             sw.Stop();
 
@@ -43,6 +45,18 @@ namespace Frost.Tester {
             Console.WriteLine("\tFIN: " + sw.Elapsed);
             Console.WriteLine(Filler);
             Console.Read();
+        }
+
+        private static void TestOpenSubtitlesOrg() {
+            OpenSubtitlesClient cli = new OpenSubtitlesClient(false);
+            LogInInfo login = cli.LogInAnonymous("en", "Frost Media Manager v1");
+            ImdbMovieDetailsInfo info = cli.Movie.GetImdbDetails(0088763);
+
+            string serializeObject = JsonConvert.SerializeObject(info);
+            File.WriteAllText("imdbInfo.js", serializeObject);
+            cli.LogOut();
+
+            //cli.Movie.GetImdbDetails()
         }
 
         public static void TestTraktTv() {
