@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows {
+namespace RibbonUI.Windows.Add {
 
     /// <summary>Interaction logic for SelectCountry.xaml</summary>
     public partial class AddStudios : Window {

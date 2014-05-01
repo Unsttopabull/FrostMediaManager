@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Frost.Common.Models.Provider;
 using RibbonUI.Annotations;
+using RibbonUI.Windows.WebUpdate;
 
 namespace RibbonUI.Windows {
 

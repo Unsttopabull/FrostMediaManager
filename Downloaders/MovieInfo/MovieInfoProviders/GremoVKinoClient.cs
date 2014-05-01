@@ -23,16 +23,10 @@ namespace Frost.MovieInfoProviders {
         private int _numFailed;
 
         public GremoVKinoClient() : base(CLIENT_NAME, true, false, false) {
-            string directoryName;
-            try {
-                 directoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            }
-            catch {
-                return;
-            }
+            string directoryName = GetAssemblyCurrentDirectory();
 
             if (directoryName != null) {
-                Icon = new Uri(directoryName+"/gremovkino.ico");
+                Icon = new Uri(directoryName + "/gremovkino.ico");
             }
         }
 
@@ -175,23 +169,33 @@ namespace Frost.MovieInfoProviders {
             mi.Plot = movieInfo.SelectSingleNode("//div[@id='short_desc']/div[2]").InnerTextOrNull();
             HtmlNode right = movieInfo.SelectSingleNode("//div[@id='rightData']");
 
+            if (right == null) {
+                return null;
+            }
+
             mi.ImdbLink = right.SelectSingleNode(string.Format(XPATH, "Imdb:")).InnerTextOrNull(false);
             mi.Genres = right.SelectSingleNode(string.Format(XPATH, "Žanr:")).InnerTextSplitOrNull(true, ',');
 
-            mi.Directors = right.SelectSingleNode(string.Format(XPATH, "Režija:"))
-                                .InnerTextSplitOrNull(true, ',')
-                                .Where(d => d != null)
-                                .Select(d => new ParsedPerson(d));
+            var directors = right.SelectSingleNode(string.Format(XPATH, "Režija:"));
+            if (directors != null) {
+                mi.Directors = directors.InnerTextSplitOrNull(true, ',')
+                                        .Where(d => d != null)
+                                        .Select(d => new ParsedActor(d));
+            }
 
-            mi.Actors = right.SelectSingleNode(string.Format(XPATH, "Igrajo:"))
-                             .InnerTextSplitOrNull(true, ',')
-                             .Where(d => d != null)
-                             .Select(d => new ParsedActor(d));
+            var actors = right.SelectSingleNode(string.Format(XPATH, "Igrajo:"));
+            if (actors != null) {
+                mi.Actors = actors.InnerTextSplitOrNull(true, ',')
+                                  .Where(d => d != null)
+                                  .Select(d => new ParsedActor(d));
+            }
 
-            mi.Writers = right.SelectSingleNode(string.Format(XPATH, "Scenarij:"))
-                              .InnerTextSplitOrNull(true, ',')
-                              .Where(d => d != null)
-                              .Select(d => new ParsedPerson(d));
+            var writers = right.SelectSingleNode(string.Format(XPATH, "Scenarij:"));
+            if (writers != null) {
+                mi.Writers = writers.InnerTextSplitOrNull(true, ',')
+                                    .Where(d => d != null)
+                                    .Select(d => new ParsedActor(d));
+            }
 
             mi.Country = right.SelectSingleNode(string.Format(XPATH, "Država:")).InnerTextOrNull();
             mi.Duration = right.SelectSingleNode(string.Format(XPATH, "Trajanje:")).InnerTextOrNull();

@@ -11,7 +11,7 @@ using Frost.XamlControls.Commands;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows {
+namespace RibbonUI.Windows.Edit {
     public class EditVideoViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private ObservableCollection<Codec> _codecs;

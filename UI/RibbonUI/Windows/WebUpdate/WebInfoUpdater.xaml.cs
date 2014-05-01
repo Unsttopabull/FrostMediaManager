@@ -17,11 +17,10 @@ using FuzzySearch;
 using Newtonsoft.Json;
 using RibbonUI.Annotations;
 using RibbonUI.Design.Models;
-using RibbonUI.UserControls;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows {
+namespace RibbonUI.Windows.WebUpdate {
 
     public enum ErrorType {
         Warning,
@@ -113,12 +112,32 @@ namespace RibbonUI.Windows {
                     try {
                         info = jser.Deserialize<ParsedMovieInfos>(tr);
                     }
+                    catch (JsonException ex) {
+                        string msg = ex.Message;
+                    }
                     catch (Exception e) {
+                        string msg = e.Message;
                     }
                 }
 
-                if (info != null && scrapper != null) {
-                    info.FuzzySearch = new FuzzySearchService(info.Movies.Select(m => m.OriginalName));
+                if (info != null && info.Movies != null && scrapper != null) {
+                    //IEnumerable<string> valuesToIndex = info.Movies.Where(m => !string.IsNullOrEmpty(m.OriginalName)).Select(m => m.OriginalName);
+
+                    List<string> movieNames = new List<string>();
+                    foreach (ParsedMovie mov in info.Movies.Where(mov => mov != null)) {
+                        if (string.IsNullOrEmpty(mov.OriginalName)) {
+                            if (string.IsNullOrEmpty(mov.TranslatedName)) {
+                                continue;
+                            }
+                            movieNames.Add(mov.TranslatedName);
+                        }
+                        else {
+                            movieNames.Add(mov.OriginalName);
+                        }
+                    }
+
+
+                    info.FuzzySearch = new FuzzySearchService(movieNames);
 
                     _movieInfos.Add(scrapper, info);
                 }
@@ -136,7 +155,7 @@ namespace RibbonUI.Windows {
                 _movieInfos.Add(cli.Name, new ParsedMovieInfos());
             }
 
-            SearchMovieInfo(_movieInfos["Kolosej"], cli);
+            SearchMovieInfo(_movieInfos[cli.Name], cli);
         }
 
         private async void SearchMovieInfo(ParsedMovieInfos info, IParsingClient cli) {
@@ -194,7 +213,7 @@ namespace RibbonUI.Windows {
             }
 
             if (match != null) {
-                string message = string.Format("Found {0} {1}", match.OriginalName, string.IsNullOrEmpty(match.SloveneName) ? null : "(" + match.SloveneName + ")");
+                string message = string.Format("Found {0} {1}", match.OriginalName, string.IsNullOrEmpty(match.TranslatedName) ? null : "(" + match.TranslatedName + ")");
                 MessageBoxResult result = MessageBox.Show(message, "Match found", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes) {
                     _movie.Title = match.OriginalName;
@@ -254,6 +273,7 @@ namespace RibbonUI.Windows {
                 using (TextWriter tw = File.CreateText("Downloaders/" + client.Name + ".cache")) {
                     try {
                         js.Serialize(tw, info);
+                        _movieInfos[client.Name] = info;
                     }
                     catch (Exception e) {
                     }

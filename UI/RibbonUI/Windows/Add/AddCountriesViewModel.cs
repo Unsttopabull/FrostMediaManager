@@ -7,7 +7,7 @@ using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows {
+namespace RibbonUI.Windows.Add {
     class AddCountriesViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private IEnumerable<MovieCountry> _countries;

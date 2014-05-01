@@ -12,7 +12,7 @@ using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;
 using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows {
+namespace RibbonUI.Windows.Add {
 
     internal class AddStudiosViewModel : INotifyPropertyChanged, IDisposable {
         public event PropertyChangedEventHandler PropertyChanged;

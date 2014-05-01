@@ -7,7 +7,7 @@ using Frost.Common.Models.Provider;
 using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;
 
-namespace RibbonUI.Windows {
+namespace RibbonUI.Windows.Add {
 
     public class AddGenreViewModel : INotifyPropertyChanged {
         private string _newGenreName;

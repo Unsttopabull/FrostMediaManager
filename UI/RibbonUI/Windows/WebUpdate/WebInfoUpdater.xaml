@@ -1,10 +1,12 @@
-﻿<Window x:Class="RibbonUI.Windows.WebUpdater"
+﻿<Window x:Class="RibbonUI.Windows.WebUpdate.WebUpdater"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:l="http://www.frostmediamanager.com/xaml/translation"
-        xmlns:w="clr-namespace:RibbonUI.Windows" Closed="WebUpdaterOnClosed"
+        xmlns:w="clr-namespace:RibbonUI.Windows"
+        xmlns:webUpdate="clr-namespace:RibbonUI.Windows.WebUpdate"
+        Closed="WebUpdaterOnClosed"
         mc:Ignorable="d" WindowStyle="ToolWindow" ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
         Title="{l:T Web updater}" SizeToContent="WidthAndHeight" x:Name="WebUpdaterWindow">
     <StackPanel Margin="5">
@@ -41,10 +43,10 @@
                             <Image.Style>
                                 <Style TargetType="{x:Type Image}">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static w:ErrorType.Error}">
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static webUpdate:ErrorType.Error}">
                                             <Setter Property="Source" Value="{StaticResource Error}"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static w:ErrorType.Warning}">
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static webUpdate:ErrorType.Warning}">
                                             <Setter Property="Source" Value="{StaticResource Warning}"/>
                                         </DataTrigger>                                        
                                     </Style.Triggers>

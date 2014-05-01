@@ -12,7 +12,7 @@ using RibbonUI.Design.Fakes;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows {
+namespace RibbonUI.Windows.Edit {
     class EditAudioViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private MovieAudio _selectedAudio;

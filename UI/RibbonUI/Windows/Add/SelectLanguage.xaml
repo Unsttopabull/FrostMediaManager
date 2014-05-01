@@ -1,14 +1,15 @@
-﻿<Window x:Class="RibbonUI.Windows.SelectLanguage"
+﻿<Window x:Class="RibbonUI.Windows.Add.SelectLanguage"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
         xmlns:models="clr-namespace:Frost.Common.Models;assembly=Frost.Common"
         xmlns:windows="clr-namespace:RibbonUI.Windows"
         xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
+        xmlns:add="clr-namespace:RibbonUI.Windows.Add"
         Title="{l:T Select language}" Height="110" Width="350"
         WindowStartupLocation="CenterOwner" Name="SelectLanguagesWindow">
     <Window.DataContext>
-        <windows:SelectLanguageViewModel/>
+        <add:SelectLanguageViewModel/>
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>

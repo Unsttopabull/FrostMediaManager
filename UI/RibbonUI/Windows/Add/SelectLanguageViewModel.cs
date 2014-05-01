@@ -10,7 +10,7 @@ using RibbonUI.Annotations;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows {
+namespace RibbonUI.Windows.Add {
     class SelectLanguageViewModel : INotifyPropertyChanged {
         private IEnumerable<MovieLanguage> _languages;
         public event PropertyChangedEventHandler PropertyChanged;

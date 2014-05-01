@@ -1,4 +1,4 @@
-﻿<Window x:Class="RibbonUI.Windows.WebArtUpdater"
+﻿<Window x:Class="RibbonUI.Windows.WebUpdate.WebArtUpdater"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="http://www.frostmediamanager.com/xaml/translation"

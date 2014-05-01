@@ -4,7 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:l="http://www.frostmediamanager.com/xaml/translation"
-        xmlns:w="clr-namespace:RibbonUI.Windows" Closed="OnWindowClose"
+        xmlns:w="clr-namespace:RibbonUI.Windows"
+        xmlns:webUpdate="clr-namespace:RibbonUI.Windows.WebUpdate"
+        Closed="OnWindowClose"
         mc:Ignorable="d" WindowStyle="ToolWindow" ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
         Title="{l:T NFO Export}" SizeToContent="WidthAndHeight" x:Name="NfoSaver">
     <StackPanel Margin="5">
@@ -44,10 +46,10 @@
                             <Image.Style>
                                 <Style TargetType="{x:Type Image}">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static w:ErrorType.Error}">
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static webUpdate:ErrorType.Error}">
                                             <Setter Property="Source" Value="{StaticResource Error}"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static w:ErrorType.Warning}">
+                                        <DataTrigger Binding="{Binding Type}" Value="{x:Static webUpdate:ErrorType.Warning}">
                                             <Setter Property="Source" Value="{StaticResource Warning}"/>
                                         </DataTrigger>
                                     </Style.Triggers>

@@ -1134,6 +1134,7 @@ namespace RibbonUI.Util.ObservableWrappers {
 
             if (!Art.Any(pv => pv.Type == art.Type && string.Equals(pv.Path, art.Path, StringComparison.CurrentCultureIgnoreCase))) {
                 Art.Add(new MovieArt(a));
+                OnPropertyChanged("HasArt");
             }
             else if(!silent){
                 MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "promotional video"));
@@ -1156,6 +1157,7 @@ namespace RibbonUI.Util.ObservableWrappers {
 
             if (!Certifications.Any(cer => cer.Equals(c))) {
                 Certifications.Add(new MovieCertification(c));
+                OnPropertyChanged("HasArt");
             }
             else if(!silent){
                 MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "country"));

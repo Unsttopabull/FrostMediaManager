@@ -1,13 +1,14 @@
-﻿<Window x:Class="RibbonUI.Windows.AddGenre"
+﻿<Window x:Class="RibbonUI.Windows.Add.AddGenre"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:RibbonUI.Windows"
         xmlns:l="http://www.frostmediamanager.com/xaml/translation"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:in="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:add="clr-namespace:RibbonUI.Windows.Add"
         Title="{l:T Add new genres}" Height="382" Width="390" Name="AddGenreWindow">
     <Window.DataContext>
-        <vm:AddGenreViewModel />
+        <add:AddGenreViewModel />
     </Window.DataContext>
     <Grid Margin="5,5,5,5">
         <Grid.RowDefinitions>

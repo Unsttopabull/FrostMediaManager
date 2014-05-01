@@ -13,12 +13,13 @@ using RibbonUI.Annotations;
 using RibbonUI.Properties;
 using RibbonUI.Util;
 
-namespace RibbonUI.Windows {
+namespace RibbonUI.Windows.Search {
 
     public class SearchMoviesViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
+        private readonly string[] _filePaths;
+        private FeatureDetector _detector;
         private string _logText;
-        private readonly FeatureDetector _detector;
         private string _progressText;
         private double _progressValue;
         private double _progressMax;
@@ -29,17 +30,21 @@ namespace RibbonUI.Windows {
             _isIndeterminate = true;
             LogText = "Detecting movies...";
 
-            string[] filePaths = Settings.Default.SearchFolders.Cast<string>().ToArray();
-            if (filePaths.Length == 0) {
+            _filePaths = Settings.Default.SearchFolders.Cast<string>().ToArray();
+            if (_filePaths.Length == 0) {
                 throw new ArgumentException("No search folders defined.");
             }
+        }
 
-            _detector = new FeatureDetector(filePaths);
+        public void Search() {
+            _detector = new FeatureDetector(_filePaths);
             _detector.PropertyChanged += DetectorPropertyChanged;
 
             Task.Run(() => _detector.Search())
                 .ContinueWith(OnDetectFinished);
         }
+
+        #region UI
 
         public Window ParentWindow { get; set; }
 
@@ -97,6 +102,20 @@ namespace RibbonUI.Windows {
                 OnPropertyChanged();
             }
         }
+
+        #endregion
+
+        #region SeachSettings
+
+        public bool SearchInfo { get; set; }
+        public bool SearchArt { get; set; }
+        public bool SearchVideos { get; set; }
+        public Plugin InfoPlugin { get; set; }
+        public Plugin ArtPlugin { get; set; }
+        public Plugin VideoPlugin { get; set; }
+
+        #endregion
+
 
         private void DetectorPropertyChanged(object sender, PropertyChangedEventArgs e) {
             if (e.PropertyName != "Count") {

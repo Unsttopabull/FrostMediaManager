@@ -16,13 +16,7 @@ namespace Frost.MovieInfoProviders {
         public const string CLIENT_NAME = "Kolosej.si";
 
         public KolosejClient() : base(CLIENT_NAME, true, false, false) {
-            string directoryName;
-            try {
-                 directoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            }
-            catch {
-                return;
-            }
+            string directoryName = GetAssemblyCurrentDirectory();
 
             if (directoryName != null) {
                 Icon = new Uri(directoryName+"/kolosej.png");

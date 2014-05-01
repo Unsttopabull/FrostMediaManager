@@ -16,7 +16,7 @@ using Frost.XamlControls.Commands;
 using Microsoft.Win32;
 using RibbonUI.Util;
 
-namespace RibbonUI.Windows {
+namespace RibbonUI.Windows.Add {
 
     public class AddCodecMappingViewModel : DependencyObject, INotifyPropertyChanged, IDisposable {
         private readonly bool _isVideo;

@@ -127,6 +127,7 @@
     <Compile Include="Util\AssemblyEx.cs" />
     <Compile Include="Util\Codec.cs" />
     <Compile Include="Util\LightInjectContainer.cs" />
+    <Compile Include="Util\NativeMethods.cs" />
     <Compile Include="Util\ObservableWrappers\MovieArt.cs" />
     <Compile Include="Util\ObservableWrappers\MovieCertification.cs" />
     <Compile Include="Util\ObservableWrappers\MovieCountry.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="Util\ObservableWrappers\ObservableBase.cs" />
     <Compile Include="Util\ObservableWrappers\ObservableMovie.cs" />
     <Compile Include="Util\Plugin.cs" />
+    <Compile Include="Util\Provider.cs" />
     <Compile Include="Properties\SettingsEx.cs" />
     <Compile Include="Util\UIHelper.cs" />
     <Compile Include="Windows\Add\AddCountriesViewModel.cs">
@@ -230,7 +232,7 @@
     <Compile Include="Windows\ProviderSelectViewModel.cs">
       <DependentUpon>ProviderSelect.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\SearchMovies.xaml.cs">
+    <Compile Include="Windows\Search\SearchMovies.xaml.cs">
       <DependentUpon>SearchMovies.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\Add\SelectLanguageViewModel.cs">
@@ -263,8 +265,11 @@
     <Compile Include="Windows\Add\AddCountries.xaml.cs">
       <DependentUpon>AddCountries.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\SearchMoviesViewModel.cs">
+    <Compile Include="Windows\Search\SearchMoviesViewModel.cs">
       <DependentUpon>SearchMovies.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\Search\SearchSettings.xaml.cs">
+      <DependentUpon>SearchSettings.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
@@ -272,11 +277,14 @@
     <Compile Include="Windows\Add\AddCodecMappingViewModel.cs">
       <DependentUpon>AddCodecMapping.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\WebArtUpdater.xaml.cs">
+    <Compile Include="Windows\WebUpdate\WebArtUpdater.xaml.cs">
       <DependentUpon>WebArtUpdater.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\WebInfoUpdater.xaml.cs">
+    <Compile Include="Windows\WebUpdate\WebInfoUpdater.xaml.cs">
       <DependentUpon>WebInfoUpdater.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\WebUpdate\WebPromoVideoUpdater.xaml.cs">
+      <DependentUpon>WebPromoVideoUpdater.xaml</DependentUpon>
     </Compile>
     <Page Include="UserControls\ArtAndPlot.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -390,7 +398,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\SearchMovies.xaml">
+    <Page Include="Windows\Search\SearchMovies.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -402,15 +410,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\Search\SearchSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\WebArtUpdater.xaml">
+    <Page Include="Windows\WebUpdate\WebArtUpdater.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\WebInfoUpdater.xaml">
+    <Page Include="Windows\WebUpdate\WebInfoUpdater.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\WebUpdate\WebPromoVideoUpdater.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

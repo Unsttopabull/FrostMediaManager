@@ -7,7 +7,6 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using Frost.Common;
-using Frost.Common.Comparers;
 using Frost.Common.Models.Provider;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
@@ -19,6 +18,8 @@ using RibbonUI.Design.Models;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Windows;
+using RibbonUI.Windows.Add;
+using RibbonUI.Windows.Edit;
 
 namespace RibbonUI.UserControls {
 

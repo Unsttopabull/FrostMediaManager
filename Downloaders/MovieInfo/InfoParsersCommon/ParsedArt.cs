@@ -4,21 +4,21 @@ namespace Frost.InfoParsers {
     public class ParsedArt : IParsedArt {
 
         /// <summary>Initializes a new instance of the <see cref="ParsedArt"/> class.</summary>
-        public ParsedArt(string preview, string fullUrl) {
+        public ParsedArt(string preview, string fullPath) {
             Preview = preview;
-            FullUrl = fullUrl;
+            FullPath = fullPath;
         }
 
         /// <summary>Initializes a new instance of the <see cref="ParsedArt"/> class.</summary>
-        public ParsedArt(string type, string preview, string fullUrl) {
+        public ParsedArt(ParsedArtType type, string preview, string fullPath) {
             Type = type;
             Preview = preview;
-            FullUrl = fullUrl;
+            FullPath = fullPath;
         }
 
         public string Preview { get; private set; }
-        public string FullUrl { get; private set; }
+        public string FullPath { get; private set; }
 
-        public string Type { get; private set; }
+        public ParsedArtType Type { get; private set; }
     }
 }

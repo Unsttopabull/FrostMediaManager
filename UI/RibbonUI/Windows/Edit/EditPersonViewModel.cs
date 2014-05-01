@@ -7,7 +7,7 @@ using Frost.XamlControls.Commands;
 using Microsoft.Win32;
 using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows {
+namespace RibbonUI.Windows.Edit {
     class EditPersonViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private string _thumbnailPath;
