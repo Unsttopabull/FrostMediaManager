@@ -13,7 +13,7 @@ using Frost.XamlControls.Commands;
 using Microsoft.Win32;
 using RibbonUI.Annotations;
 
-namespace RibbonUI.Windows {
+namespace RibbonUI.Windows.Add {
     class AddPersonViewModel : INotifyPropertyChanged, IDisposable {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IDisposable _searchTextObservable;

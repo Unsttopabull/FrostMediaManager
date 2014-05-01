@@ -10,7 +10,7 @@ using RibbonUI.Design;
 using RibbonUI.Design.Fakes;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
-using RibbonUI.Windows;
+using RibbonUI.Windows.Edit;
 
 namespace RibbonUI.UserControls.List {
 

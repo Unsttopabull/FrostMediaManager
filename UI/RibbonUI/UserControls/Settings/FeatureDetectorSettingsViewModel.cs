@@ -10,6 +10,7 @@ using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using RibbonUI.Util;
 using RibbonUI.Windows;
+using RibbonUI.Windows.Add;
 
 namespace RibbonUI.UserControls.Settings {
     public class FeatureDetectorSettingsViewModel {

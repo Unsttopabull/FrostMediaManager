@@ -1,4 +1,4 @@
-﻿using RibbonUI.Windows;
+﻿using RibbonUI.Windows.Edit;
 
 namespace RibbonUI.Util {
 

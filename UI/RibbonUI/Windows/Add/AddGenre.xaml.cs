@@ -2,7 +2,7 @@
 using System.Windows;
 using Frost.Common.Models.Provider;
 
-namespace RibbonUI.Windows {
+namespace RibbonUI.Windows.Add {
 
     /// <summary>Interaction logic for AddGenre.xaml</summary>
     public partial class AddGenre : Window {

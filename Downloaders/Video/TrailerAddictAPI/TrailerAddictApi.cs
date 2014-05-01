@@ -15,8 +15,8 @@ namespace SharpTrailerAddictAPI {
         /// <param name="width">The width of embed videos.</param>
         /// <param name="count">The count of featured trailers to return.</param>
         /// <returns>Returns the currently featured trailers with specified embed width.</returns>
-        public static Trailers GetFeatured(int count = 1, int width = 480) {
-            return Download(string.Format(API_URL,"featured", true, count > 1 ? "&count="+count : null, width == -1 ? null : width.ToString(CultureInfo.InvariantCulture)));
+        public static Models.Trailers GetFeatured(int count = 1, int width = 480) {
+            return Download(string.Format(API_URL, "featured", true, count > 1 ? "&count=" + count : null, width == -1 ? null : width.ToString(CultureInfo.InvariantCulture)));
         }
 
         /// <summary>Gets the specified number of videos with specified embed width for the movie with <paramref name="movieTitle"/> title.</summary>
@@ -24,13 +24,11 @@ namespace SharpTrailerAddictAPI {
         /// <param name="width">The width of embed videos.</param>
         /// <param name="count">The count of videos to return.</param>
         /// <returns>Returns the specified number of trailers set width for the <paramref name="movieTitle"/> movie.</returns>
-        public static Trailers GetMovieVideosByTitle(string movieTitle, int count = 1, int width = 480) {
-            return Download(string.Format(API_URL, "film",
-                                WebUtility.UrlEncode(movieTitle), 
-                                count > 1 ? "&count=" + count : null,
-                                width == -1 ? null : width.ToString(CultureInfo.InvariantCulture)
-                            )
-                    );
+        public static Models.Trailers GetMovieVideosByTitle(string movieTitle, int count = 1, int width = 480) {
+            movieTitle = movieTitle.Replace("'", "");
+
+            string format = string.Format(API_URL, "film", WebUtility.UrlEncode(movieTitle), count > 1 ? "&count=" + count : null, width <= 0 ? null : "&width=" + width.ToString(CultureInfo.InvariantCulture));
+            return Download(format);
         }
 
         /// <summary>Gets the specified number of videos with specified embed width for the movie with <paramref name="imdbId"/>.</summary>
@@ -38,7 +36,7 @@ namespace SharpTrailerAddictAPI {
         /// <param name="width">The width of embed videos.</param>
         /// <param name="count">The count of videos to return.</param>
         /// <returns>Returns the specified number of trailers set width for the movie with <paramref name="imdbId"/>.</returns>
-        public static Trailers GetMovieVideosByImdbId(string imdbId, int count = 1, int width = 480) {
+        public static Models.Trailers GetMovieVideosByImdbId(string imdbId, int count = 1, int width = 480) {
             return Download(string.Format(API_URL, "imdb",
                                 imdbId, 
                                 count > 1 ? "&count=" + count : null,
@@ -52,7 +50,7 @@ namespace SharpTrailerAddictAPI {
         /// <param name="width">The width of embed videos.</param>
         /// <param name="count">The count of videos to return.</param>
         /// <returns>Returns the specified number of trailers set width for the <paramref name="actorName"/> actor.</returns>
-        public static Trailers GetActorVideos(string actorName, int count = 1, int width = 480) {
+        public static Models.Trailers GetActorVideos(string actorName, int count = 1, int width = 480) {
             return Download(string.Format(API_URL, "actor",
                                 WebUtility.UrlEncode(actorName), 
                                 count > 1 ? "&count=" + count : null,
@@ -65,8 +63,9 @@ namespace SharpTrailerAddictAPI {
             using (WebClient wc = new WebClient()) {
                 string xml = wc.DownloadString(uri);
 
-                XmlSerializer xser = new XmlSerializer(TrailersType);
-                return (Trailers) xser.Deserialize(new StringReader(xml));
+                XmlSerializer xs = new XmlSerializer(TrailersType);
+                Trailers deserialize = (Trailers) xs.Deserialize(new StringReader(xml));
+                return deserialize;
             }
         }
     }

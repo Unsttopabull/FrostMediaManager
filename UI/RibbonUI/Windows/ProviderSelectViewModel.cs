@@ -8,15 +8,15 @@ using RibbonUI.Util;
 
 namespace RibbonUI.Windows {
     public class ProviderSelectViewModel : INotifyPropertyChanged {
-        private ObservableCollection<Plugin> _providers;
+        private ObservableCollection<Provider> _providers;
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ProviderSelectViewModel() {
-            Providers = new ObservableCollection<Plugin>(App.Systems);
-            SelectProviderCommand = new RelayCommand<Plugin>(OnSelectProvider, provider => provider != null);
+            Providers = new ObservableCollection<Provider>(App.Systems);
+            SelectProviderCommand = new RelayCommand<Provider>(OnSelectProvider, provider => provider != null);
         }
 
-        public ObservableCollection<Plugin> Providers {
+        public ObservableCollection<Provider> Providers {
             get { return _providers; }
             set {
                 if (Equals(value, _providers)) {
@@ -27,10 +27,10 @@ namespace RibbonUI.Windows {
             }
         }
 
-        public ICommand<Plugin> SelectProviderCommand { get; private set; }
+        public ICommand<Provider> SelectProviderCommand { get; private set; }
         public Window Window { get; set; }
 
-        private void OnSelectProvider(Plugin obj) {
+        private void OnSelectProvider(Provider obj) {
             Window.Tag = true;
             Window.Close();
 

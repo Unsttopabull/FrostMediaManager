@@ -26,10 +26,10 @@
                 <Border BorderThickness="0,0,0,1" BorderBrush="Gainsboro">
                     <DockPanel LastChildFill="False">
                         <StackPanel DockPanel.Dock="Left">
-                            <TextBlock Text="{l:T Click to play}" TextAlignment="Center" />  
                             <fmm:ImageButton EnabledSource="../../Images/play_video.png"
                                              Command="{Binding ElementName=ListPromotionalVideosControl, Path=DataContext.OpenPromotionalVideoCommand}"
                                              CommandParameter="{Binding Url}"/>
+                            <TextBlock Text="{l:T Click to play}" TextAlignment="Center" />
                         </StackPanel>
                         <StackPanel Margin="10,0,0,0">
                             <StackPanel Orientation="Horizontal">

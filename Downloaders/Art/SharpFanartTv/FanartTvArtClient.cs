@@ -70,14 +70,14 @@ namespace SharpFanartTv {
                 if (covers != null) {
                     arts.Covers = covers.Children()
                                         .Select(t => t.SelectToken("url").ToString())
-                                        .Select(s => new ParsedArt(s + "/preview", s));
+                                        .Select(s => new ParsedArt(ParsedArtType.Cover, s + "/preview", s));
                 }
 
                 JToken fanarts = first.SelectToken("moviebackground");
                 if (fanarts != null) {
                     arts.Fanart = fanarts.Children()
                                          .Select(t => t.SelectToken("url").ToString())
-                                         .Select(s => new ParsedArt(s + "/preview", s));
+                                         .Select(s => new ParsedArt(ParsedArtType.Fanart, s + "/preview", s));
                 }
 
                 return arts;

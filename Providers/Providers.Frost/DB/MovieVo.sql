@@ -268,6 +268,9 @@ DROP TABLE IF EXISTS "Movies";
 );
 
 CREATE UNIQUE INDEX "Movie_Id" on "Movies" ("Id" ASC);
+CREATE INDEX "Movie_Fanart" on "Movies" ("FanartId" ASC);
+CREATE INDEX "Movie_Cover" on "Movies" ("CoverId" ASC);
+CREATE INDEX "Movie_Plot" on "Movies" ("PlotId" ASC);
 CREATE INDEX "Movie_Title" on "Movies" ("Title" ASC);
 CREATE INDEX "Movie_Imdb" on "Movies" ("ImdbID" ASC);
 

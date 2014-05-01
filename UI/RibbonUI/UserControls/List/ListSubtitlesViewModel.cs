@@ -13,7 +13,7 @@ using RibbonUI.Annotations;
 using RibbonUI.Design;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
-using RibbonUI.Windows;
+using RibbonUI.Windows.Add;
 
 namespace RibbonUI.UserControls.List {
 

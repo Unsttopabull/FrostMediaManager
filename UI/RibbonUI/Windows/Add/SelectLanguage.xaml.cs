@@ -2,7 +2,7 @@
 using System.Windows;
 using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows {
+namespace RibbonUI.Windows.Add {
 
     /// <summary>Interaction logic for SelectLanguage.xaml</summary>
     public partial class SelectLanguage : Window {

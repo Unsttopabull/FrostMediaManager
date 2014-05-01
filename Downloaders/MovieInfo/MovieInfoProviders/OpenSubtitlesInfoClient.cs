@@ -15,7 +15,7 @@ namespace Frost.MovieInfoProviders {
 
     public class OpenSubtitlesInfoClient : ParsingClient {
         private const string USER_AGENT = "Frost Media Manager v1";
-        public const string CLIENT_NAME = "OpenSubtitles.ORG";
+        public const string CLIENT_NAME = "OpenSubtitles.org";
         private const string IMDB_TITLE_URI = "http://www.imdb.com/title/{0}/tt";
 
         public OpenSubtitlesInfoClient() : base(CLIENT_NAME, false, false, true) {

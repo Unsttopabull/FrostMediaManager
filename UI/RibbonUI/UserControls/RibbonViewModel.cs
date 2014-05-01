@@ -1,5 +1,4 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -9,15 +8,15 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Shell;
 using Frost.Common;
-using Frost.Common.Models.Provider;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
-using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using RibbonUI.Annotations;
 using RibbonUI.Design;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Windows;
+using RibbonUI.Windows.Search;
+using RibbonUI.Windows.WebUpdate;
 using SettingsEx = RibbonUI.Properties.Settings;
 
 namespace RibbonUI.UserControls {
@@ -28,6 +27,11 @@ namespace RibbonUI.UserControls {
         Search,
         Detect,
         Export
+    }
+
+    public enum SubtitleSites {
+        PodnapisiNet,
+        OpenSubtitles
     }
 
     internal class RibbonViewModel : INotifyPropertyChanged {
@@ -44,6 +48,8 @@ namespace RibbonUI.UserControls {
         private ICommand _updatePromotionalVideosCommand;
         private ICommand _exportMoviesCommand;
         private ICommand _playMovieCommand;
+        private ICommand _downloadSubtitlesCommand;
+        private ICommand<string> _updateMovieArtCommand;
 
         public RibbonViewModel() {
             _service = TranslationManager.IsInDesignMode
@@ -74,7 +80,76 @@ namespace RibbonUI.UserControls {
             private set { _updateMovieCommand = value; }
         }
 
+        public ICommand<string> UpdateMovieArtCommand {
+            get {
+                if (_updateMovieArtCommand == null) {
+                    _updateMovieArtCommand = new RelayCommand<string>(UpdateMovieArt, s => !string.IsNullOrEmpty(s) && SelectedMovie["Art"]);
+                }
+                return _updateMovieArtCommand;
+            }
+            private set { _updateMovieArtCommand = value; }
+        }
+
         public ICommand<DependencyObject> OnRibbonLoadedCommand { get; private set; }
+
+        public ICommand SaveChangesCommand {
+            get {
+                if (_saveChangesCommand != null) {
+                    return _saveChangesCommand;
+                }
+
+                return _saveChangesCommand = new RelayCommand(() => {
+                    try {
+                        _service.SaveChanges();
+                    }
+                    catch (Exception e) {
+                        UIHelper.HandleProviderException(e);
+                    }
+                });
+            }
+            set { _saveChangesCommand = value; }
+        }
+
+        public ICommand UpdatePromotionalVideosCommand {
+            get {
+                if (_updatePromotionalVideosCommand == null) {
+                    _updateMovieCommand = new RelayCommand<string>(UpdatePromotionalVideos);
+                }
+                return _updateMovieCommand;
+            }
+            set { _updatePromotionalVideosCommand = value; }
+        }
+
+        public ICommand ExportMoviesCommand {
+            get {
+                if (_exportMoviesCommand == null) {
+                    _exportMoviesCommand = new RelayCommand(ExportMovies);
+                }
+                return _exportMoviesCommand;
+            }
+            set { _exportMoviesCommand = value; }
+        }
+
+        public ICommand PlayMovieCommand {
+            get {
+                if (_playMovieCommand == null) {
+                    _playMovieCommand = new RelayCommand(PlayMovie, o => SelectedMovie != null && !string.IsNullOrEmpty(SelectedMovie.FirstFileName));
+                }
+                return _playMovieCommand;
+            }
+            set { _playMovieCommand = value; }
+        }
+
+        public ICommand DownloadSubtitlesCommand {
+            get {
+                if (_downloadSubtitlesCommand == null) {
+                    _downloadSubtitlesCommand = new RelayCommand<SubtitleSites>(DownloadSubtitles, o => SelectedMovie != null && !string.IsNullOrEmpty(SelectedMovie.DirectoryPath));
+                }
+                return _downloadSubtitlesCommand;
+            }
+            set { _downloadSubtitlesCommand = value; }
+        }
+
 
         #endregion
 
@@ -148,67 +223,21 @@ namespace RibbonUI.UserControls {
             }
         }
 
-        public ICommand SaveChangesCommand {
-            get {
-                if (_saveChangesCommand != null) {
-                    return _saveChangesCommand;
-                }
-
-                return _saveChangesCommand = new RelayCommand(() => {
-                    try {
-                        _service.SaveChanges();
-                    }
-                    catch (Exception e) {
-                        UIHelper.HandleProviderException(e);
-                    }
-                });
-            }
-            set { _saveChangesCommand = value; }
-        }
-
-        public ICommand UpdatePromotionalVideosCommand {
-            get {
-                if (_updatePromotionalVideosCommand == null) {
-                    _updateMovieCommand = new RelayCommand<string>(UpdatePromotionalVideos);
-                }
-                return _updateMovieCommand;
-            }
-            set { _updatePromotionalVideosCommand = value; }
-        }
-
-        public ICommand ExportMoviesCommand {
-            get {
-                if (_exportMoviesCommand == null) {
-                    _exportMoviesCommand = new RelayCommand(ExportMovies);
-                }
-                return _exportMoviesCommand;
-            }
-            set { _exportMoviesCommand = value; }
-        }
-
-        public ICommand PlayMovieCommand {
-            get {
-                if (_playMovieCommand == null) {
-                    _playMovieCommand = new RelayCommand(PlayMovie, o => {
-                        return SelectedMovie != null && !string.IsNullOrEmpty(SelectedMovie.FirstFileName);
-                    });
-                }
-                return _playMovieCommand;
-            }
-            set { _playMovieCommand = value; }
-        }
-
-        private void ExportMovies() {
-            ExportMoviesAsNfo export = new ExportMoviesAsNfo(_service.Movies) { Owner = ParentWindow };
-            export.ShowDialog();
-        }
-
         #endregion
 
         private void OnRibbonLoaded(DependencyObject uc) {
             if (uc != null) {
                 ParentWindow = Window.GetWindow(uc);
             }
+        }
+
+        private void DownloadSubtitles(SubtitleSites site) {
+            
+        }
+
+        private void ExportMovies() {
+            ExportMoviesAsNfo export = new ExportMoviesAsNfo(_service.Movies) { Owner = ParentWindow };
+            export.ShowDialog();
         }
 
         private void PlayMovie() {
@@ -271,12 +300,34 @@ namespace RibbonUI.UserControls {
         }
 
         private void SearchClick() {
+            SearchSettings ss = new SearchSettings { Owner = ParentWindow };
+            if (ss.ShowDialog() == true) {
+                Plugin art = null;
+                if (ss.SearchArt && ss.ArtPlugin != null) {
+                    art = ss.ArtPlugin;
+                }
+
+                Plugin info = null;
+                if (ss.SearchInfo && ss.InfoPlugin != null) {
+                    info = ss.InfoPlugin;
+                }
+
+                Plugin videos = null;
+                if (ss.SearchVideos && ss.VideoPlugin != null) {
+                    videos = ss.VideoPlugin;
+                }
+
+                SearchMovies(ss.SearchArt, art, ss.SearchInfo, info, ss.SearchVideos, videos);
+            }
+        }
+
+        private void SearchMovies(bool searchArt, Plugin art, bool searchInfo, Plugin info, bool searchVideos, Plugin videos) {
             if (SettingsEx.Default.SearchFolders == null) {
                 SettingsEx.Default.SearchFolders = new StringCollection();
             }
 
             if (SettingsEx.Default.SearchFolders.Count > 0) {
-                SearchMovies sm = new SearchMovies {
+                SearchMovies sm = new SearchMovies(searchInfo, searchArt, searchVideos, info, art, videos) {
                     Owner = ParentWindow,
                     TaskbarItemInfo = new TaskbarItemInfo {
                         ProgressState = TaskbarItemProgressState.Indeterminate
@@ -305,7 +356,14 @@ namespace RibbonUI.UserControls {
             wu.ShowDialog();
         }
 
+        private void UpdateMovieArt(string downloader) {
+            WebArtUpdater wau = new WebArtUpdater(downloader, SelectedMovie) { Owner = ParentWindow };
+            wau.ShowDialog();
+        }
+
         private void UpdatePromotionalVideos(string downloader) {
+            WebPromoVideoUpdater wpvu = new WebPromoVideoUpdater(downloader, SelectedMovie) { Owner = ParentWindow };
+            wpvu.ShowDialog();
         }
 
         private void MenuItemOptionsOnClick() {

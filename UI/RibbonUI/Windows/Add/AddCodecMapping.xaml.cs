@@ -2,7 +2,7 @@
 using System.Windows;
 using RibbonUI.Util;
 
-namespace RibbonUI.Windows {
+namespace RibbonUI.Windows.Add {
 
     /// <summary>Interaction logic for AddCodecMapping.xaml</summary>
     public partial class AddCodecMapping : Window {

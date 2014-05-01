@@ -1,28 +1,20 @@
-﻿using System.IO;
+﻿using System;
 
 namespace RibbonUI.Util {
-
     public class Plugin {
 
         /// <summary>Initializes a new instance of the <see cref="T:System.Object"/> class.</summary>
-        public Plugin(string name, string iconPath) {
+        public Plugin(string name) {
+            Name = name;
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="T:System.Object"/> class.</summary>
+        public Plugin(string name, Uri iconPath) {
             Name = name;
             IconPath = iconPath;
         }
 
         public string Name { get; set; }
-        public string IconPath { get; set; }
-
-        public string AssemblyPath { get; set; }
-
-        public string IconImage {
-            get {
-                string path = Directory.GetCurrentDirectory() + "\\providers\\" + IconPath;
-                if (File.Exists(path)) {
-                    return path;
-                }
-                return null;
-            }
-        }
+        public Uri IconPath { get; set; }
     }
 }

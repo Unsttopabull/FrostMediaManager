@@ -1,5 +1,6 @@
 ﻿using Frost.Common;
 using Frost.Common.Models.Provider;
+using Frost.InfoParsers.Models;
 
 namespace RibbonUI.Design.Models {
     public class DesignArt : IArt {
@@ -7,6 +8,26 @@ namespace RibbonUI.Design.Models {
         public DesignArt(ArtType type, string path) {
             Type = type;
             Path = path;
+        }
+
+        public DesignArt(IParsedArt parsedArt) {
+            switch (parsedArt.Type) {
+                case ParsedArtType.Cover:
+                    Type = ArtType.Cover;
+                    break;
+                case ParsedArtType.Poster:
+                    Type = ArtType.Poster;
+                    break;
+                case ParsedArtType.Fanart:
+                    Type = ArtType.Fanart;
+                    break;
+                default:
+                    Type = ArtType.Unknown;
+                    break;
+            }
+
+            Path = parsedArt.FullPath;
+            Preview = parsedArt.Preview;
         }
 
         /// <summary>Unique identifier.</summary>

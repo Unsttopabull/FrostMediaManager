@@ -51,36 +51,25 @@
 
         <RibbonTab IsSelected="{Binding IsDetectTabSelected}" Header="Web update">
             <RibbonGroup Header="Movie info" Background="#00000000" Height="86" Margin="0">
-                <RibbonMenuButton x:Name="MovieInfoDownloaders" LargeImageSource="../Images/update.png" Label="Update movie information">
-                    <!--<RibbonMenuItem ImageSource="../Images/Sites/kolosej.png" Header="Kolosej.si" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.Kolosej}"/>
-                    <RibbonMenuItem ImageSource="../Images/Sites/gremovkino.ico" Header="Gremovkino.si" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.GremoVKino}"/>
-                    <RibbonMenuItem ImageSource="../Images/sites/opensubtitles.ico" Header="OpenSubtitles.org" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.OpenSubtitles}"/>
-                    <RibbonMenuItem ImageSource="../Images/sites/omdb.ico" Header="The OMDB API" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.Omdb}"/>
-                    <RibbonMenuItem ImageSource="../Images/sites/traktTv.png" Header="Trakt.TV" Command="{Binding UpdateMovieCommand}" CommandParameter="{x:Static uc:WebUpdateSite.TraktTv}"/>-->
-                </RibbonMenuButton>
+                <RibbonMenuButton x:Name="MovieInfoDownloaders" LargeImageSource="../Images/update.png" Label="Update movie information"/>
             </RibbonGroup>
             <RibbonGroup Header="Art">
-                <RibbonMenuButton x:Name="MovieArtDownloaders" LargeImageSource="../Images/art.png" Label="Download art">
-                    <!--<RibbonMenuItem ImageSource="../Images/Sites/fanart.ico" Header="Fanart.tv" />
-                    <RibbonMenuItem ImageSource="../Images/sites/tmdb.ico" Header="Tmdb.org" />-->                    
-                </RibbonMenuButton>
+                <RibbonMenuButton x:Name="MovieArtDownloaders" LargeImageSource="../Images/art.png" Label="Download art"/>
                 <RibbonMenuButton LargeImageSource="../Images/download4.png" Label="Save current art locally">
                     <RibbonMenuItem Header="For current movie"/>
                     <RibbonMenuItem Header="For all movies"/>
                 </RibbonMenuButton>
             </RibbonGroup>
             <RibbonGroup>
-                <RibbonMenuButton x:Name="MovieVideoDownloaders" LargeImageSource="../Images/video.png" Label="Download promotional videos" IsEnabled="{Binding SelectedMovie[PromotionalVideos]}">
-                    <!--<RibbonMenuItem ImageSource="../Images/Sites/traileraddict.png" Header="TrailerAddict.com" Command="{Binding UpdatePromotionalVideosCommand}"/>-->
-                </RibbonMenuButton>
+                <RibbonMenuButton x:Name="MovieVideoDownloaders" LargeImageSource="../Images/video.png" Label="Download promotional videos" IsEnabled="{Binding SelectedMovie[PromotionalVideos]}"/>
             </RibbonGroup>
         </RibbonTab>
 
         <RibbonTab x:Name="SubtitlesTab" IsSelected="{Binding IsSubtitlesTabSelected}" ContextualTabGroupHeader="Subtitles">
             <RibbonGroup Header="Subtitles" IsEnabled="True">
                 <RibbonMenuButton Label="Download" LargeImageSource="../Images/add.png">
-                    <RibbonMenuItem ImageSource="../Images/sites/podnapisiNet.ico" Header="Download from Podnapisi.NET" />
-                    <RibbonMenuItem ImageSource="../Images/sites/opensubtitles.ico" Header="Download from OpenSubtitles.org" />
+                    <RibbonMenuItem ImageSource="../Images/sites/podnapisiNet.ico" Header="Download from Podnapisi.NET" Command="{Binding DownloadSubtitlesCommand}" CommandParameter="{x:Static uc:SubtitleSites.PodnapisiNet}"/>
+                    <RibbonMenuItem ImageSource="../Images/sites/opensubtitles.ico" Header="Download from OpenSubtitles.org" Command="{Binding DownloadSubtitlesCommand}" CommandParameter="{x:Static uc:SubtitleSites.OpenSubtitles}"/>
                 </RibbonMenuButton>
                 <RibbonButton Label="Detect Language" LargeImageSource="../Images/search_subs.ico" />
             </RibbonGroup>

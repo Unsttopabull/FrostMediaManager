@@ -7,7 +7,7 @@ using Frost.InfoParsers;
 namespace RibbonUI.Util {
     public static class AssemblyEx {
 
-        public static bool CheckIsProvider(string plugin, out Assembly assembly, out Plugin provider) {
+        public static bool CheckIsProvider(string plugin, out Assembly assembly, out Provider provider) {
             string path = Path.Combine(Directory.GetCurrentDirectory(), plugin);
             if (!CheckIsAssembly(path)) {
                 assembly = null;
@@ -20,7 +20,7 @@ namespace RibbonUI.Util {
                 FrostProviderAttribute isProvider = asm.GetCustomAttribute<FrostProviderAttribute>();
                 if (isProvider != null) {
                     assembly = asm;
-                    provider = new Plugin(isProvider.SystemName, isProvider.IconPath);
+                    provider = new Provider(isProvider.SystemName, isProvider.IconPath);
                     return true;
                 }
 

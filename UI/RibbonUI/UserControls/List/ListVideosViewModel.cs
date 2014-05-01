@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 using Frost.Common;
@@ -9,7 +8,7 @@ using RibbonUI.Annotations;
 using RibbonUI.Design;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
-using RibbonUI.Windows;
+using RibbonUI.Windows.Edit;
 
 namespace RibbonUI.UserControls.List {
     class ListVideosViewModel : INotifyPropertyChanged {

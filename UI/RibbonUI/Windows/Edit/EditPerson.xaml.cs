@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows {
+namespace RibbonUI.Windows.Edit {
 
     /// <summary>Interaction logic for EditPerson.xaml</summary>
     public partial class EditPerson : Window {

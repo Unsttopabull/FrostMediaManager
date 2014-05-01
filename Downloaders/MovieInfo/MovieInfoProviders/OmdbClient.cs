@@ -16,13 +16,7 @@ namespace Frost.MovieInfoProviders {
         public const string CLIENT_NAME = "OmdbAPI";
 
         public OmdbClient() : base(CLIENT_NAME, false, false, true) {
-            string directoryName;
-            try {
-                 directoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            }
-            catch {
-                return;
-            }
+            string directoryName = GetAssemblyCurrentDirectory();
 
             if (directoryName != null) {
                 Icon = new Uri(directoryName+"/omdb.ico");

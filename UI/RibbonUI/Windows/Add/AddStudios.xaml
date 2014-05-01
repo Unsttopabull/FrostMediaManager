@@ -1,16 +1,17 @@
-﻿<Window x:Class="RibbonUI.Windows.AddStudios"
+﻿<Window x:Class="RibbonUI.Windows.Add.AddStudios"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
         xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
         xmlns:vm="clr-namespace:RibbonUI.Windows"
+        xmlns:add="clr-namespace:RibbonUI.Windows.Add"
         Title="{l:T Select studios}" Height="520" Width="500" Name="AddStudiosWindow"
         WindowStartupLocation="CenterOwner" Closed="AddStudiosOnClosed">
     <Window.DataContext>
-        <vm:AddStudiosViewModel/>
+        <add:AddStudiosViewModel/>
     </Window.DataContext>
     <Window.Resources>
-        <BitmapImage x:Key="DefaultStudio" UriSource="..\Images\defaultscreen.png" />
+        <BitmapImage x:Key="DefaultStudio" UriSource="..\..\Images\defaultscreen.png" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>

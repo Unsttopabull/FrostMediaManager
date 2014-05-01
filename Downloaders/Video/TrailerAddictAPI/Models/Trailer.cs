@@ -2,9 +2,9 @@
 
 namespace SharpTrailerAddictAPI.Models {
 
-    [XmlType("trailersTrailer", AnonymousType = true)]
+    /// <remarks/>
+    [XmlType(AnonymousType = true)]
     public class Trailer {
-
         [XmlElement("title")]
         public string Title { get; set; }
 
@@ -17,10 +17,10 @@ namespace SharpTrailerAddictAPI.Models {
         [XmlElement("trailer_id")]
         public uint TrailerID { get; set; }
 
-        [XmlElement("embed")]
-        public object ImdbMovieId { get; set; }
+        [XmlElement("imdb")]
+        public object ImdbId { get; set; }
 
-        [XmlElement("title")]
+        [XmlElement("embed")]
         public string Embed { get; set; }
     }
 
