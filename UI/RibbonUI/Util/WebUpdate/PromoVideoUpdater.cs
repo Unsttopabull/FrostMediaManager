@@ -4,21 +4,21 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
+using Frost.Common.Models;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers.Models;
 using RibbonUI.Annotations;
 using RibbonUI.Design.Models;
-using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.Util.WebUpdate {
     public class PromoVideoUpdater : INotifyPropertyChanged {
         private readonly IPromotionalVideoClient _cli;
-        private readonly ObservableMovie _movie;
+        private readonly IMovieInfo _movie;
         public event PropertyChangedEventHandler PropertyChanged;
         private string _progressText;
         private string _labelText;
 
-        public PromoVideoUpdater(IPromotionalVideoClient cli, ObservableMovie movie) {
+        public PromoVideoUpdater(IPromotionalVideoClient cli, IMovieInfo movie) {
             _cli = cli;
             _movie = movie;
         }
@@ -72,7 +72,7 @@ namespace RibbonUI.Util.WebUpdate {
             }
             else {
                 MessageBox.Show(TranslationManager.T("No videos found"));
-            }            
+            }
         }
 
         private void UpdateMovie(IEnumerable<IParsedVideo> videos) {

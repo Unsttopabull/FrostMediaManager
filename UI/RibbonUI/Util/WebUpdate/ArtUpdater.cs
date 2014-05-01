@@ -3,22 +3,22 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
+using Frost.Common.Models;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers.Models;
 using RibbonUI.Annotations;
 using RibbonUI.Design.Models;
-using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.Util.WebUpdate {
 
     public class ArtUpdater : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IFanartClient _client;
-        private readonly ObservableMovie _movie;
+        private readonly IMovieInfo _movie;
         private string _progressText;
         private string _labelText;
 
-        public ArtUpdater(IFanartClient client, ObservableMovie movie) {
+        public ArtUpdater(IFanartClient client, IMovieInfo movie) {
             _movie = movie;
             _client = client;
         }

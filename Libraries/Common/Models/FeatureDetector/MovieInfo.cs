@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Frost.Common.Models.Provider;
 using Frost.Common.Util.ISO;
 
 namespace Frost.Common.Models.FeatureDetector {
 
-    public class MovieInfo {
+    public class MovieInfo : IMovieInfo {
         private static readonly ISOCountryCode Usa = ISOCountryCodes.Instance.GetByISOCode("USA");
 
         public MovieInfo() {
@@ -175,6 +176,16 @@ namespace Frost.Common.Models.FeatureDetector {
         public List<ArtInfo> Art { get; set; }
 
         public List<ISOCountryCode> Countries { get; set; }
+
+        public IEnumerable<string> MovieHashes { get; private set; }
+
+        public void AddArt(IArt art, bool silent = false) {
+            throw new NotImplementedException();
+        }
+
+        public void AddPromotionalVideo(IPromotionalVideo video, bool silent = false) {
+            throw new NotImplementedException();
+        }
 
         /// <summary>Gets the runtime sum of all the video parts in this movie in miliseconds.</summary>
         /// <returns>Full runtime sum of video parts in this movie in miliseconds.</returns>

@@ -91,7 +91,7 @@
     <Compile Include="Comparers\PersonEqualityComparer.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Models\ICommonMovieInfo.cs" />
+    <Compile Include="Models\IMovieInfo.cs" />
     <Compile Include="Models\FeatureDetector\ActorInfo.cs" />
     <Compile Include="Models\FeatureDetector\ArtInfo.cs" />
     <Compile Include="Models\FeatureDetector\AudioDetectionInfo.cs" />

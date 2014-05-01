@@ -43,6 +43,7 @@ namespace RibbonUI.Windows.WebUpdate {
 
         private async void Update() {
             await ((MovieInfoUpdater) DataContext).Update();
+            await ((MovieInfoUpdater) DataContext).UpdateMovie();
 
             Close();
         }

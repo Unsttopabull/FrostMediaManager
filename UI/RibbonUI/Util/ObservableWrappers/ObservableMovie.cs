@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using Frost.Common;
+using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 using Frost.Common.Util;
 using Frost.DetectFeatures;
@@ -12,7 +14,7 @@ using log4net;
 
 namespace RibbonUI.Util.ObservableWrappers {
 
-    public class ObservableMovie : MovieItemBase<IMovie>, IEquatable<IMovie> {
+    public class ObservableMovie : MovieItemBase<IMovie>, IMovieInfo, IEquatable<IMovie> {
         private static readonly ILog Log = LogManager.GetLogger(typeof(ObservableMovie));
         private ObservableCollection<MovieSubtitle> _subtitles;
         private ObservableCollection<MovieCountry> _countries;
@@ -668,6 +670,18 @@ namespace RibbonUI.Util.ObservableWrappers {
         #endregion
 
         #region Utlity
+
+        public IEnumerable<string> MovieHashes {
+            get {       
+                if (_observedEntity["Videos"]) {
+                    return _observedEntity.Videos
+                                          .Where(v => v != null && !string.IsNullOrEmpty(v.MovieHash))
+                                          .Select(m => m.MovieHash)
+                                          .ToList();
+                }
+                return null;
+            }
+        }
 
         #region Awards
 
