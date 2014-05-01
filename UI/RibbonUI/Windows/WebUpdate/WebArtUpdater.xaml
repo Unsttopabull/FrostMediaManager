@@ -4,13 +4,15 @@
         xmlns:l="http://www.frostmediamanager.com/xaml/translation"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:webUpdate="clr-namespace:RibbonUI.Util.WebUpdate"
         mc:Ignorable="d" WindowStyle="ToolWindow" ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
-        Title="{l:T Web art updater}" SizeToContent="WidthAndHeight" x:Name="WebArtUpdaterWindow">
+        Title="{l:T Web art updater}" SizeToContent="WidthAndHeight" x:Name="WebArtUpdaterWindow" d:DataContext="{d:DesignInstance webUpdate:ArtUpdater}">
     <StackPanel Margin="5">
-        <TextBlock Text="{Binding ElementName=WebArtUpdaterWindow, Path=LabelText, FallbackValue={l:T Downloading...}}" Margin="0,0,0,5"/>
+        <TextBlock Text="{Binding LabelText, FallbackValue={l:T Downloading...}, TargetNullValue={l:T Downloading ...}}" Margin="0,0,0,5"/>
         <Grid>
-            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding ElementName=WebArtUpdaterWindow, Path=ProgressText, FallbackValue=Searching for information online...}" Panel.ZIndex="3" Foreground="Black" FontWeight="ExtraBold"/>
-            <ProgressBar x:Name="ProgressBar" IsIndeterminate="True" MinWidth="300" MinHeight="20"/>
+            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" Panel.ZIndex="3" Foreground="Black" FontWeight="ExtraBold"
+                       VerticalAlignment="Center" Text="{Binding ProgressText, FallbackValue={l:T Searching for art online}, TargetNullValue={l:T Searching for art online}}"/>
+            <ProgressBar IsIndeterminate="True" MinWidth="300" MinHeight="20"/>
         </Grid>
         <Button Content="{l:T Close}" MaxWidth="70" Margin="0,10,0,0" Visibility="{Binding ElementName=WebArtUpdaterWindow, Path=CloseButtonVisibility}" Command="Close"/>
     </StackPanel>

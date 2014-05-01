@@ -11,6 +11,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using Frost.Common;
 using Frost.Common.Models.Provider;
+using Frost.Common.Util;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;

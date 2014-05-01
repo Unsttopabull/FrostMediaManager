@@ -115,10 +115,15 @@ namespace RibbonUI.Windows.Search {
         #region SeachSettings
 
         public bool SearchInfo { get; set; }
+
         public bool SearchArt { get; set; }
+
         public bool SearchVideos { get; set; }
+
         public Plugin InfoPlugin { get; set; }
+
         public Plugin ArtPlugin { get; set; }
+
         public Plugin VideoPlugin { get; set; }
 
         public ICommand CloseWindowCommand {
@@ -226,10 +231,20 @@ namespace RibbonUI.Windows.Search {
                 MovieInfo movieInfo = movieInfos[i];
                 ProgressText = movieInfo.Title ?? "Movie " + i;
 
+                if (SearchInfo) {
+                    SearchMovieInfo(movieInfo, InfoPlugin);
+                }
+
+                if (SearchArt) {
+                    SearchMovieArt(movieInfo, ArtPlugin);
+                }
+
+                if (SearchVideos) {
+                    SearchMovieVideos(movieInfo, VideoPlugin);
+                }
+
                 try {
                     service.SaveDetected(movieInfo);
-                }
-                catch (TaskCanceledException e) {
                 }
                 catch (Exception e) {
                 }
@@ -241,6 +256,23 @@ namespace RibbonUI.Windows.Search {
                     }                    
                 }
             }
+        }
+
+        private void SearchMovieInfo(MovieInfo movieInfo, Plugin infoPlugin) {
+            if (infoPlugin != null) {
+
+            }
+            else {
+                
+            }
+        }
+
+        private void SearchMovieVideos(MovieInfo movieInfo, Plugin videoPlugin) {
+            throw new NotImplementedException();
+        }
+
+        private void SearchMovieArt(MovieInfo movieInfo, Plugin videoPlugin) {
+            throw new NotImplementedException();
         }
 
         [NotifyPropertyChangedInvocator]

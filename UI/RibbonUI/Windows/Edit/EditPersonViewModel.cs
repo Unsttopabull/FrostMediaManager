@@ -2,9 +2,9 @@
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
-using Frost.Common.Properties;
 using Frost.XamlControls.Commands;
 using Microsoft.Win32;
+using RibbonUI.Annotations;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.Windows.Edit {
@@ -68,17 +68,6 @@ namespace RibbonUI.Windows.Edit {
             }            
         }
 
-        //private void OnWindowClose(Window window) {
-        //    if (window.DialogResult == true) {
-        //        return;
-        //    }
-
-        //    //DbEntityEntry personEntry = ParentWindow.Container.Entry(SelectedPerson);
-
-        //    //if (personEntry.State != EntityState.Unchanged && personEntry.State != EntityState.Detached) {
-        //    //    personEntry.Reload();
-        //    //}
-        //}
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {

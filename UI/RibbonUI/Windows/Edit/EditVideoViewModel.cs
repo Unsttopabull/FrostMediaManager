@@ -5,9 +5,9 @@ using System.Globalization;
 using System.Linq;
 using System.Windows;
 using Frost.Common;
-using Frost.Common.Properties;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
+using RibbonUI.Annotations;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 
@@ -19,6 +19,7 @@ namespace RibbonUI.Windows.Edit {
         private ObservableCollection<string> _colorSpaces;
         private MovieVideo _selectedVideo;
         private Codec _codecId;
+        private bool _isResolutionEditable;
 
         public EditVideoViewModel() {
 
@@ -163,7 +164,16 @@ namespace RibbonUI.Windows.Edit {
             }
         }
 
-        public bool IsResolutionEditable { get; private set; }
+        public bool IsResolutionEditable {
+            get { return _isResolutionEditable; }
+            private set {
+                if (value.Equals(_isResolutionEditable)) {
+                    return;
+                }
+                _isResolutionEditable = value;
+                OnPropertyChanged("IsResolutionEditable");
+            }
+        }
 
         public string FormattedVideoResolution {
             get {

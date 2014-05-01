@@ -1,5 +1,4 @@
-﻿using System;
-using Frost.Common;
+﻿using Frost.Common;
 using Frost.Common.Models.Provider;
 using Frost.Common.Proxies;
 using Frost.Providers.Frost.DB;
@@ -85,7 +84,7 @@ namespace Frost.Providers.Frost.Proxies {
         /// <value>The compression mode of this video.</value>
         public CompressionMode CompressionMode {
             get { return Entity.CompressionMode; }
-            set { Entity.CompressionMode = value; }
+            set { Entity.CompressionMode = value; } 
         }
 
         /// <summary>Gets or sets the video duration in miliseconds.</summary>

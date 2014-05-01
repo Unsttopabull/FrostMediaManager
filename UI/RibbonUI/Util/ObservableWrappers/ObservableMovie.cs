@@ -5,10 +5,10 @@ using System.Linq;
 using System.Windows;
 using Frost.Common;
 using Frost.Common.Models.Provider;
+using Frost.Common.Util;
 using Frost.DetectFeatures;
 using Frost.GettextMarkupExtension;
 using log4net;
-using RibbonUI.Design.Models;
 
 namespace RibbonUI.Util.ObservableWrappers {
 
@@ -431,8 +431,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             get {
                 if (_subtitles == null) {
                     _subtitles = _observedEntity.Subtitles == null
-                        ? new ObservableCollection<MovieSubtitle>()
-                        : new ObservableCollection<MovieSubtitle>(_observedEntity.Subtitles.Select(s => new MovieSubtitle(s)));
+                        ? new ThreadSafeObservableCollection<MovieSubtitle>()
+                        : new ThreadSafeObservableCollection<MovieSubtitle>(_observedEntity.Subtitles.Select(s => new MovieSubtitle(s)));
                 }
                 return _subtitles;
             }
@@ -444,8 +444,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             get {
                 if (_countries == null) {
                     _countries = _observedEntity.Countries == null 
-                        ? new ObservableCollection<MovieCountry>() 
-                        : new ObservableCollection<MovieCountry>(_observedEntity.Countries.Select(c => new MovieCountry(c)));
+                        ? new ThreadSafeObservableCollection<MovieCountry>() 
+                        : new ThreadSafeObservableCollection<MovieCountry>(_observedEntity.Countries.Select(c => new MovieCountry(c)));
                 }
                 return _countries;
             }
@@ -457,8 +457,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             get {
                 if (_studios == null) {
                     _studios = _observedEntity.Studios == null 
-                        ? new ObservableCollection<MovieStudio>() 
-                        : new ObservableCollection<MovieStudio>(_observedEntity.Studios.Select(s => new MovieStudio(s)));
+                        ? new ThreadSafeObservableCollection<MovieStudio>() 
+                        : new ThreadSafeObservableCollection<MovieStudio>(_observedEntity.Studios.Select(s => new MovieStudio(s)));
                 }
                 return _studios;
             }
@@ -470,8 +470,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             get {
                 if (_videos == null) {
                     _videos = _observedEntity.Videos == null 
-                        ? new ObservableCollection<MovieVideo>() 
-                        : new ObservableCollection<MovieVideo>(_observedEntity.Videos.Select(v => new MovieVideo(v)));
+                        ? new ThreadSafeObservableCollection<MovieVideo>() 
+                        : new ThreadSafeObservableCollection<MovieVideo>(_observedEntity.Videos.Select(v => new MovieVideo(v)));
                 }
                 return _videos;
             }
@@ -483,8 +483,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             get {
                 if (_audios == null) {
                     _audios = _observedEntity.Audios == null
-                        ? new ObservableCollection<MovieAudio>()
-                        : new ObservableCollection<MovieAudio>(_observedEntity.Audios.Select(a => new MovieAudio(a)));
+                        ? new ThreadSafeObservableCollection<MovieAudio>()
+                        : new ThreadSafeObservableCollection<MovieAudio>(_observedEntity.Audios.Select(a => new MovieAudio(a)));
                 }
                 return _audios;
             }
@@ -496,8 +496,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             get {
                 if (_ratings == null) {
                     _ratings = _observedEntity.Ratings == null 
-                        ? new ObservableCollection<IRating>() 
-                        : new ObservableCollection<IRating>(_observedEntity.Ratings);
+                        ? new ThreadSafeObservableCollection<IRating>() 
+                        : new ThreadSafeObservableCollection<IRating>(_observedEntity.Ratings);
                 }
 
                 return _ratings;
@@ -510,8 +510,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             get {
                 if (_plots == null) {
                     _plots = _observedEntity.Plots == null 
-                        ? new ObservableCollection<MoviePlot>() 
-                        : new ObservableCollection<MoviePlot>(_observedEntity.Plots.Select(p => new MoviePlot(p)));
+                        ? new ThreadSafeObservableCollection<MoviePlot>() 
+                        : new ThreadSafeObservableCollection<MoviePlot>(_observedEntity.Plots.Select(p => new MoviePlot(p)));
                 }
 
                 return _plots;
@@ -527,7 +527,6 @@ namespace RibbonUI.Util.ObservableWrappers {
                         ? new ObservableCollection<MovieArt>()
                         : new ObservableCollection<MovieArt>(_observedEntity.Art.Select(a => new MovieArt(a)));
                 }
-
                 return _art;
             }
         }
@@ -538,8 +537,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             get {
                 if (_certifications == null) {
                     _certifications = _observedEntity.Certifications == null
-                        ? new ObservableCollection<MovieCertification>()
-                        : new ObservableCollection<MovieCertification>(_observedEntity.Certifications.Select(c => new MovieCertification(c)));
+                        ? new ThreadSafeObservableCollection<MovieCertification>()
+                        : new ThreadSafeObservableCollection<MovieCertification>(_observedEntity.Certifications.Select(c => new MovieCertification(c)));
                 }
 
                 return _certifications;
@@ -552,8 +551,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             get {
                 if (_writers == null) {
                     _writers = _observedEntity.Writers == null 
-                        ? new ObservableCollection<IPerson>() 
-                        : new ObservableCollection<IPerson>(_observedEntity.Writers);
+                        ? new ThreadSafeObservableCollection<IPerson>() 
+                        : new ThreadSafeObservableCollection<IPerson>(_observedEntity.Writers);
                 }
 
                 return _writers;
@@ -566,8 +565,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             get {
                 if (_directors == null) {
                     _directors = _observedEntity.Directors == null 
-                        ? new ObservableCollection<MoviePerson>() 
-                        : new ObservableCollection<MoviePerson>(_observedEntity.Directors.Select(p => new MoviePerson(p)));
+                        ? new ThreadSafeObservableCollection<MoviePerson>() 
+                        : new ThreadSafeObservableCollection<MoviePerson>(_observedEntity.Directors.Select(p => new MoviePerson(p)));
                 }
 
                 return _directors;
@@ -579,12 +578,9 @@ namespace RibbonUI.Util.ObservableWrappers {
         public ObservableCollection<MovieActor> Actors {
             get {
                 if (_actors == null) {
-                    if (_observedEntity.Actors == null) {
-                        _actors = new ObservableCollection<MovieActor>();
-                    }
-                    else {
-                        _actors = new ObservableCollection<MovieActor>(_observedEntity.Actors.Select(a => new MovieActor(a)));
-                    }
+                    _actors = _observedEntity.Actors == null 
+                        ? new ThreadSafeObservableCollection<MovieActor>()
+                        : new ThreadSafeObservableCollection<MovieActor>(_observedEntity.Actors.Select(a => new MovieActor(a)));
                 }
 
                 return _actors;
@@ -597,8 +593,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             get {
                 if (_specials == null) {
                     _specials = _observedEntity.Specials == null 
-                        ? new ObservableCollection<ISpecial>() 
-                        : new ObservableCollection<ISpecial>(_observedEntity.Specials);
+                        ? new ThreadSafeObservableCollection<ISpecial>() 
+                        : new ThreadSafeObservableCollection<ISpecial>(_observedEntity.Specials);
                 }
 
                 return _specials;
@@ -611,8 +607,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             get {
                 if (_genres == null) {
                     _genres = _observedEntity.Genres == null 
-                        ? new ObservableCollection<IGenre>() 
-                        : new ObservableCollection<IGenre>(_observedEntity.Genres);
+                        ? new ThreadSafeObservableCollection<IGenre>() 
+                        : new ThreadSafeObservableCollection<IGenre>(_observedEntity.Genres);
                 }
 
                 return _genres;
@@ -623,8 +619,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             get {
                 if (_awards == null) {
                     _awards = _observedEntity.Awards == null
-                        ? new ObservableCollection<IAward>()
-                        : new ObservableCollection<IAward>(_observedEntity.Awards);
+                        ? new ThreadSafeObservableCollection<IAward>()
+                        : new ThreadSafeObservableCollection<IAward>(_observedEntity.Awards);
                 }
 
                 return _awards;
@@ -635,8 +631,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             get {
                 if (_promotionalVideos == null) {
                     _promotionalVideos = _observedEntity.PromotionalVideos == null 
-                        ? new ObservableCollection<IPromotionalVideo>()
-                        : new ObservableCollection<IPromotionalVideo>(_observedEntity.PromotionalVideos);
+                        ? new ThreadSafeObservableCollection<IPromotionalVideo>()
+                        : new ThreadSafeObservableCollection<IPromotionalVideo>(_observedEntity.PromotionalVideos);
                 }
 
                 return _promotionalVideos;
@@ -1002,6 +998,8 @@ namespace RibbonUI.Util.ObservableWrappers {
 
             if (!Studios.Any(s => s.Equals(stud))) {
                 Studios.Add(new MovieStudio(stud));
+                OnPropertyChanged("FirstStudioName");
+                OnPropertyChanged("FirstStudioLogo");
             }
             else if(!silent){
                 MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "genre"));
@@ -1012,6 +1010,8 @@ namespace RibbonUI.Util.ObservableWrappers {
             bool success = Remove(_observedEntity.RemoveStudio, studio.ObservedEntity, silent);
             if (success) {
                 Studios.Remove(studio);
+                OnPropertyChanged("FirstStudioName");
+                OnPropertyChanged("FirstStudioLogo");
             }
         }
 
@@ -1133,7 +1133,9 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
 
             if (!Art.Any(pv => pv.Type == art.Type && string.Equals(pv.Path, art.Path, StringComparison.CurrentCultureIgnoreCase))) {
-                Art.Add(new MovieArt(a));
+                MovieArt movieArt = new MovieArt(a);
+                Art.Add(movieArt);
+
                 OnPropertyChanged("HasArt");
             }
             else if(!silent){
@@ -1145,6 +1147,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             bool success = Remove(_observedEntity.RemoveArt, art.ObservedEntity, silent);
             if (success) {
                 Art.Remove(art);
+                OnPropertyChanged("HasArt");
             }               
         }
 

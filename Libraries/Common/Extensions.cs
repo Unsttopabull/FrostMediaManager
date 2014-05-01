@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using System.Windows.Threading;
 using Frost.Common.Util;
 
@@ -14,6 +13,7 @@ namespace Frost.Common {
     /// <summary>Contains extension methods to be used in this assembly.</summary>
     public static class Extensions {
         private static readonly DateTime Epoch = new DateTime(1970, 1, 1);
+        private static readonly TimeSpan TwoMinutes = new TimeSpan(0,0, 120);
 
         /// <summary />
         /// A simple WPF threading extension method, to invoke a delegate
@@ -24,11 +24,16 @@ namespace Frost.Common {
         /// <param name="dotIt" />The delegate to run<param />
         /// <param name="priority" />The DispatcherPriority<param />
         public static void InvokeIfRequired(this Dispatcher disp, Action dotIt, DispatcherPriority priority) {
-            if (disp.Thread != Thread.CurrentThread) {
-                disp.Invoke(priority, dotIt);
+            if (disp.CheckAccess()) {
+                dotIt();
             }
             else {
-                dotIt();
+                //if (disp.Thread != Thread.CurrentThread) {
+                //disp.Invoke(priority, dotIt);
+
+                disp.Invoke(priority, TwoMinutes, dotIt);
+                //disp.BeginInvoke(priority, dotIt);
+                //disp.InvokeAsync(dotIt, priority);
             }
         }
 

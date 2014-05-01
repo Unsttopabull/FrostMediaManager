@@ -83,7 +83,7 @@ namespace RibbonUI.UserControls {
         public ICommand<string> UpdateMovieArtCommand {
             get {
                 if (_updateMovieArtCommand == null) {
-                    _updateMovieArtCommand = new RelayCommand<string>(UpdateMovieArt, s => !string.IsNullOrEmpty(s) && SelectedMovie["Art"]);
+                    _updateMovieArtCommand = new RelayCommand<string>(UpdateMovieArt, s => !string.IsNullOrEmpty(s) && SelectedMovie != null && SelectedMovie["Art"]);
                 }
                 return _updateMovieArtCommand;
             }

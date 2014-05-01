@@ -193,6 +193,10 @@
     <Compile Include="Util\Provider.cs" />
     <Compile Include="Properties\SettingsEx.cs" />
     <Compile Include="Util\UIHelper.cs" />
+    <Compile Include="Util\WebUpdate\ArtUpdater.cs" />
+    <Compile Include="Util\WebUpdate\ErrorInfo.cs" />
+    <Compile Include="Util\WebUpdate\MovieInfoUpdater.cs" />
+    <Compile Include="Util\WebUpdate\PromoVideoUpdater.cs" />
     <Compile Include="Windows\Add\AddCountriesViewModel.cs">
       <DependentUpon>AddCountries.xaml</DependentUpon>
     </Compile>

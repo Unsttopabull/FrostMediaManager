@@ -4,12 +4,16 @@
         xmlns:l="http://www.frostmediamanager.com/xaml/translation"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:webUpdate="clr-namespace:RibbonUI.Util.WebUpdate"
         mc:Ignorable="d" WindowStyle="ToolWindow" ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
+        d:DataContext="{d:DesignInstance webUpdate:PromoVideoUpdater}"
         Title="{l:T Web promotional videos updater}" SizeToContent="WidthAndHeight" x:Name="WebPromoVideoUpdaterWindow">
     <StackPanel Margin="5">
-        <TextBlock Text="{Binding ElementName=WebPromoVideoUpdaterWindow, Path=LabelText, FallbackValue={l:T Downloading...}}" Margin="0,0,0,5"/>
+        <TextBlock Text="{Binding LabelText, FallbackValue={l:T Downloading...}, TargetNullValue={l:T Downloading...}}" Margin="0,0,0,5"/>
         <Grid>
-            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding ElementName=WebPromoVideoUpdaterWindow, Path=ProgressText, FallbackValue=Searching for information online...}" Panel.ZIndex="3" Foreground="Black" FontWeight="ExtraBold"/>
+            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  Panel.ZIndex="3" Foreground="Black" FontWeight="ExtraBold"
+                       Text="{Binding ProgressText, FallbackValue={l:T Searching for videos online...}, TargetNullValue={l:T Searching for videos online...}}"/>
+            
             <ProgressBar x:Name="ProgressBar" IsIndeterminate="True" MinWidth="300" MinHeight="20"/>
         </Grid>
         <Button Content="{l:T Close}" MaxWidth="70" Margin="0,10,0,0" Visibility="{Binding ElementName=WebPromoVideoUpdaterWindow, Path=CloseButtonVisibility}" Command="Close"/>

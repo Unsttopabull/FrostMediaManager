@@ -4,21 +4,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:l="http://www.frostmediamanager.com/xaml/translation"
-        xmlns:w="clr-namespace:RibbonUI.Windows"
         xmlns:webUpdate="clr-namespace:RibbonUI.Windows.WebUpdate"
-        Closed="WebUpdaterOnClosed"
-        mc:Ignorable="d" WindowStyle="ToolWindow" ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
+        xmlns:u="clr-namespace:RibbonUI.Util.WebUpdate"
+        Closed="WebUpdaterOnClosed" mc:Ignorable="d" d:DataContext="{d:DesignInstance u:MovieInfoUpdater}"
+        WindowStyle="ToolWindow" ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
         Title="{l:T Web updater}" SizeToContent="WidthAndHeight" x:Name="WebUpdaterWindow">
     <StackPanel Margin="5">
-        <TextBlock Text="{Binding ElementName=WebUpdaterWindow, Path=LabelText, FallbackValue={l:T Downloading...}}" Margin="0,0,0,5"/>
+        <TextBlock Text="{Binding Path=LabelText, FallbackValue={l:T Downloading...}, TargetNullValue={l:T Downloading...}}" Margin="0,0,0,5"/>
         <Grid>
-            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding ElementName=WebUpdaterWindow, Path=ProgressText, FallbackValue=Searching for information online...}" Panel.ZIndex="3" Foreground="Black" FontWeight="ExtraBold"/>
-            <ProgressBar x:Name="ProgressBar" IsIndeterminate="True" MinWidth="300" MinHeight="20"/>
+            <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"
+                       Text="{Binding ProgressText, FallbackValue={l:T Searching for information online...}, TargetNullValue={l:T Searching for information online...}}" 
+                       Panel.ZIndex="3" Foreground="Black" FontWeight="ExtraBold"/>
+            <ProgressBar x:Name="ProgressBar" IsIndeterminate="{Binding IsProgressbarIndeterminate}" Value="{Binding ProgressValue}" MinWidth="300" MinHeight="20"/>
         </Grid>
-        <ListView ItemsSource="{Binding ElementName=WebUpdaterWindow, Path=Errors, Mode=TwoWay}" MaxHeight="200" Margin="0,5,0,0">
+        <ListView ItemsSource="{Binding Errors, Mode=TwoWay}" MaxHeight="200" Margin="0,5,0,0">
             <ListView.Resources>
-                <BitmapImage x:Key="Error" UriSource="../Images/error.png"/>
-                <BitmapImage x:Key="Warning" UriSource="../Images/warning.png"/>
+                <BitmapImage x:Key="Error" UriSource="../../Images/error.png"/>
+                <BitmapImage x:Key="Warning" UriSource="../../Images/warning.png"/>
             </ListView.Resources>
             <ListView.Style>
                 <Style TargetType="{x:Type ListView}">
@@ -58,6 +60,6 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button Content="{l:T Close}" MaxWidth="70" Margin="0,10,0,0" Visibility="{Binding ElementName=WebUpdaterWindow, Path=CloseButtonVisibility}" Click="OnCloseButtonClicked"/>
+        <Button Content="{l:T Close}" MaxWidth="70" Margin="0,10,0,0" Visibility="{Binding CloseButtonVisibility}" Click="OnCloseButtonClicked"/>
     </StackPanel>
 </Window>

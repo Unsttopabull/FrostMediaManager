@@ -91,6 +91,7 @@
     <Compile Include="Comparers\PersonEqualityComparer.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Models\ICommonMovieInfo.cs" />
     <Compile Include="Models\FeatureDetector\ActorInfo.cs" />
     <Compile Include="Models\FeatureDetector\ArtInfo.cs" />
     <Compile Include="Models\FeatureDetector\AudioDetectionInfo.cs" />
@@ -194,6 +195,7 @@
     </Compile>
     <Compile Include="Proxies\ProxyWithService.cs" />
     <Compile Include="Util\EfLogger.cs" />
+    <Compile Include="Util\FastObservableCollection.cs" />
     <Compile Include="Util\IKeyValue.cs">
       <SubType>Code</SubType>
     </Compile>
