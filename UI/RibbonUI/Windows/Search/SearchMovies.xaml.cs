@@ -36,6 +36,7 @@ namespace RibbonUI.Windows.Search {
         }
 
         public void SearchMoviesLoaded(object sender, RoutedEventArgs e) {
+
             if (ViewModel != null) {
                 ViewModel.ParentWindow = this;
                 ViewModel.Search();

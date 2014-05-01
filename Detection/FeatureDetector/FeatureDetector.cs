@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Frost.Common;
@@ -35,7 +36,7 @@ namespace Frost.DetectFeatures {
         private readonly string[] _filePaths;
         private static Regex _mediaFileRegex;
         private static List<string> _videoExtensions;
-        private const string REGEX_FORMAT = @"(?!sample).*\.({0})$";
+        private const string REGEX_FORMAT = @"(?!sample)[^\.]*\.({0})$";
 
         static FeatureDetector() {
             VideoExtensions = new List<string> {
@@ -78,15 +79,24 @@ namespace Frost.DetectFeatures {
             _filePaths = filePaths.ToArray();
         }
 
-        public IEnumerable<MovieInfo> Search() {
+        public IEnumerable<MovieInfo> Search(CancellationToken token) {
             Count = 0;
             Task<IEnumerable<MovieInfo>>[] arr = new Task<IEnumerable<MovieInfo>>[_filePaths.Length];
 
             for (int i = 0; i < _filePaths.Length; i++) {
                 string filePath = _filePaths[i];
-                if (Directory.Exists(filePath)) {
-                    arr[i] = SearchDir(new DirectoryInfo(filePath), true, true);                    
+
+                if (token.IsCancellationRequested) {
+                    return null;
                 }
+
+                if (Directory.Exists(filePath)) {
+                    arr[i] = SearchDir(token, new DirectoryInfo(filePath), true, true);                    
+                }
+            }
+
+            if (token.IsCancellationRequested) {
+                return null;
             }
 
             try {
@@ -107,8 +117,16 @@ namespace Frost.DetectFeatures {
                 }
             }
 
+            if (token.IsCancellationRequested) {
+                return null;
+            }
+
             List<MovieInfo> files = new List<MovieInfo>();
             foreach (Task<IEnumerable<MovieInfo>> task in arr) {
+                if (token.IsCancellationRequested) {
+                    return null;
+                }
+
                 if (task == null) {
                     continue;
                 }
@@ -130,9 +148,13 @@ namespace Frost.DetectFeatures {
             return files;
         }
 
-        private async Task<IEnumerable<MovieInfo>> SearchDir(DirectoryInfo directory, bool recursive = true, bool fullDirName = false) {
+        private async Task<IEnumerable<MovieInfo>> SearchDir(CancellationToken token, DirectoryInfo directory, bool recursive = true, bool fullDirName = false) {
             //Debug.WriteLine(fullDirName ? directory.FullName : directory.Name, "DIRECTORY");
             //Debug.Indent();
+
+            if (token.IsCancellationRequested) {
+                return null;
+            }
 
             List<MovieInfo> mf = new List<MovieInfo>();
 
@@ -165,6 +187,10 @@ namespace Frost.DetectFeatures {
                 return null;
             }
 
+            if (token.IsCancellationRequested) {
+                return null;
+            }
+
             //foreach (FileInfo fileInfo in mediaFiles) {
             //    Debug.WriteLine(fileInfo.Name, "FILE");
             //}
@@ -173,7 +199,7 @@ namespace Frost.DetectFeatures {
                 //if files are in DVD format (ifo, vob, bup)
                 if (mediaFiles.Any(f => f.Extension.OrdinalEquals(".vob") || f.Extension.OrdinalEquals(".ifo") || f.Extension.OrdinalEquals(".bup"))) {
                     try {
-                        mf.Add(await Task.Run(() => DetectDvdMovie(mediaFiles)));
+                        mf.Add(await Task.Run(() => DetectDvdMovie(mediaFiles), token));
                     }
                     catch (Exception e) {
                         if (Log.IsErrorEnabled) {
@@ -184,7 +210,7 @@ namespace Frost.DetectFeatures {
                 }
                 else {
                     try {
-                        mf.AddRange(await Task.Run(() => DetectMultipartMovie(mediaFiles)));
+                        mf.AddRange(await Task.Run(() => DetectMultipartMovie(mediaFiles), token));
                     }
                     catch (Exception e) {
                         if (Log.IsErrorEnabled) {
@@ -195,11 +221,18 @@ namespace Frost.DetectFeatures {
                 }
             }
 
+            if (token.IsCancellationRequested) {
+                return null;
+            }
+
             if (recursive) {
                 //int ident = Debug.IndentLevel;
                 try {
                     foreach (DirectoryInfo directoryInfo in directory.EnumerateDirectories()) {
-                        mf.AddRange(await SearchDir(directoryInfo));
+                        if (token.IsCancellationRequested) {
+                            return null;
+                        }
+                        mf.AddRange(await SearchDir(token, directoryInfo));
                     }
                 }
                 catch (DirectoryNotFoundException e) {

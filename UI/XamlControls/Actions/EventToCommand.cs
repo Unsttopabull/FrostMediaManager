@@ -49,9 +49,10 @@ namespace Frost.XamlControls.Actions {
                 _commandType = typeof(ICommand);
             }
 
-            PropertyInfo commandPropertyInfo = dataContext.GetType()
-                                                          .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                                                          .FirstOrDefault(p => string.Equals(p.Name, CommandName, StringComparison.Ordinal) && _commandType.IsAssignableFrom(p.PropertyType)
+            PropertyInfo commandPropertyInfo = 
+                dataContext.GetType()
+                           .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                           .FirstOrDefault(p => string.Equals(p.Name, CommandName, StringComparison.Ordinal) && _commandType.IsAssignableFrom(p.PropertyType)
                 );
 
             if (commandPropertyInfo != null) {
