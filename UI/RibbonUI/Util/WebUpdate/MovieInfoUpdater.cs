@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -14,6 +13,7 @@ using Frost.Common;
 using Frost.Common.Models;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Util;
+using Frost.Common.Util.ISO;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers;
 using Frost.InfoParsers.Models;
@@ -41,8 +41,8 @@ namespace RibbonUI.Util.WebUpdate {
         public event PropertyChangedEventHandler PropertyChanged;
 
         static MovieInfoUpdater() {
-            MovieInfos = new Dictionary<string, ParsedMovieInfos>();        
-            LoadCaches();    
+            MovieInfos = new Dictionary<string, ParsedMovieInfos>();
+            LoadCaches();
         }
 
         public MovieInfoUpdater(IParsingClient cli, IMovieInfo movieInfo) {
@@ -50,6 +50,7 @@ namespace RibbonUI.Util.WebUpdate {
             _movieInfo = movieInfo;
 
             Errors = new ThreadSafeObservableCollection<ErrorInfo>();
+            IsProgressbarIndeterminate = true;
         }
 
         public string LabelText {
@@ -160,30 +161,36 @@ namespace RibbonUI.Util.WebUpdate {
             }
         }
 
-        public async Task Update(bool silent = false) {
+        public async Task<bool> Update(bool silent = false) {
             if (!MovieInfos.ContainsKey(_cli.Name)) {
                 MovieInfos.Add(_cli.Name, new ParsedMovieInfos());
             }
 
-            await SearchMovieInfo(MovieInfos[_cli.Name], _cli);
+            return await SearchMovieInfo(MovieInfos[_cli.Name], _cli, silent);
         }
 
-        private async Task SearchMovieInfo(ParsedMovieInfos info, IParsingClient cli) {
-            await Task.Run(() => UpdateAvailable(info, cli));
+        private async Task<bool> SearchMovieInfo(ParsedMovieInfos info, IParsingClient cli, bool silent) {
+            await Task.Run(() => UpdateAvailable(info, cli, silent));
 
             if (cli == null) {
-                MessageBox.Show("An error has occured accesing the parser/scrapper.");
-                return;
+                if (!silent) {
+                    MessageBox.Show("An error has occured accessing the parser/scrapper.");
+                }
+                return false;
             }
 
-            LabelText = "Searching for available movie information.";
-            ProgressText = "Searching for movie in index.";
+            if (!silent) {
+                LabelText = "Searching for available movie information.";
+                ProgressText = "Searching for movie in index.";
+            }
 
             ParsedMovie match = null;
             if (cli.CanIndex) {
                 if (info.Movies == null || !info.Movies.Any()) {
-                    MessageBox.Show("An error has occured updating available movie information.");
-                    return;
+                    if (!silent) {
+                        MessageBox.Show("An error has occured updating available movie information.");
+                    }
+                    return false;
                 }
 
                 match = info.Movies.FirstOrDefault(m => string.Equals(m.OriginalName, _movieInfo.Title, StringComparison.InvariantCultureIgnoreCase));
@@ -199,11 +206,19 @@ namespace RibbonUI.Util.WebUpdate {
             else {
                 List<ParsedMovie> movies;
                 try {
-                    movies = GetMatchingMovies(cli).ToList();
+                    IEnumerable<ParsedMovie> matchingMovies = GetMatchingMovies(cli);
+                    if (matchingMovies != null) {
+                        movies = matchingMovies.ToList();
+                    }
+                    else {
+                        movies = null;
+                    }
                 }
                 catch (Exception e) {
-                    MessageBox.Show("An error has occured updating available movie information.");
-                    return;
+                    if (!silent) {
+                        MessageBox.Show("An error has occured updating available movie information.");
+                    }
+                    return false;
                 }
 
                 FuzzySearchService fuzzySearch = new FuzzySearchService(movies.Select(m => m.OriginalName));
@@ -216,40 +231,50 @@ namespace RibbonUI.Util.WebUpdate {
             }
 
             if (match != null) {
-                string message = string.Format("Found {0} {1}", match.OriginalName, string.IsNullOrEmpty(match.TranslatedName) ? null : "(" + match.TranslatedName + ")");
-                MessageBoxResult result = MessageBox.Show(message, "Match found", MessageBoxButton.YesNo);
+                MessageBoxResult result;
+                if (!silent) {
+                    string message = string.Format("Found {0} {1}", match.OriginalName, string.IsNullOrEmpty(match.TranslatedName) ? null : "(" + match.TranslatedName + ")");
+                    result = MessageBox.Show(message, "Match found", MessageBoxButton.YesNo);
+                }
+                else {
+                    result = MessageBoxResult.Yes;
+                }
+
                 if (result == MessageBoxResult.Yes) {
-                    _movieInfo.Title = match.OriginalName;
-                    DownloadAndUpdate(match, cli);
+                    _movieInfo.OriginalTitle = match.OriginalName;
+                    await DownloadAndUpdate(match, cli, silent);
+                    return true;
                 }
             }
-            else {
+            else if (!silent) {
                 MessageBox.Show(TranslationManager.T("Movie information not found."));
             }
+            return false;
         }
 
         private IEnumerable<ParsedMovie> GetMatchingMovies(IParsingClient cli) {
             if (cli.SupportsMovieHash) {
-
-
                 if (_movieInfo.MovieHashes != null && _movieInfo.MovieHashes.Any()) {
                     return cli.GetByMovieHash(_movieInfo.MovieHashes);
                 }
             }
 
-            return !string.IsNullOrEmpty(_movieInfo.ImdbID) && cli.IsImdbSupported
-                       ? cli.GetByImdbId(_movieInfo.ImdbID).ToList()
-                       : cli.GetByTitle(_movieInfo.Title, (int) (_movieInfo.ReleaseYear.HasValue ? _movieInfo.ReleaseYear.Value : 0));
+            if (!string.IsNullOrEmpty(_movieInfo.ImdbID) && cli.IsImdbSupported) {
+                return cli.GetByImdbId(_movieInfo.ImdbID).ToList();
+            }
+            return cli.GetByTitle(_movieInfo.Title, (int) (_movieInfo.ReleaseYear.HasValue ? _movieInfo.ReleaseYear.Value : 0));
         }
 
-        private void UpdateAvailable(ParsedMovieInfos info, IParsingClient client) {
+        private void UpdateAvailable(ParsedMovieInfos info, IParsingClient client, bool silent) {
             if (info.ParsedTime != default(DateTime) && (DateTime.Now - info.ParsedTime) <= StaleTime) {
                 return;
             }
 
             if (client != null && client.CanIndex) {
-                LabelText = TranslationManager.T("Preforming a one-time indexing operation.");
-                ProgressText = TranslationManager.T("Indexing available movies");
+                if (!silent) {
+                    LabelText = TranslationManager.T("Preforming a one-time indexing operation.");
+                    ProgressText = TranslationManager.T("Indexing available movies");
+                }
 
                 try {
                     client.Index();
@@ -275,190 +300,307 @@ namespace RibbonUI.Util.WebUpdate {
         }
 
 
-        private void DownloadAndUpdate(ParsedMovie movie, IParsingClient cli) {
-            LabelText = "Downloading...";
-            ProgressText = "Getting movie information.";
+        private async Task DownloadAndUpdate(ParsedMovie movie, IParsingClient cli, bool silent) {
+            if (!silent) {
+                LabelText = "Downloading...";
+                ProgressText = "Getting movie information.";
+            }
 
             if (cli == null) {
                 return;
             }
 
-            Task.Run(() => cli.ParseMovieInfo(movie))
-                .ContinueWith(t => {
-                    if (t.IsFaulted || t.Result == null) {
-                        Errors.Add(new ErrorInfo(ErrorType.Error, TranslationManager.T("There was an error downloading movie information")));
-                        LabelText = "Errors have occured ...";
-                        ProgressText = "";
+            await Task.Run(() => cli.ParseMovieInfo(movie))
+                      .ContinueWith(t => {
+                          if (t.IsFaulted || t.Result == null) {
+                              Errors.Add(new ErrorInfo(ErrorType.Error, TranslationManager.T("There was an error downloading movie information")));
 
-                        IsProgressbarIndeterminate = false;
-                        ProgressValue = 100;
-                        CloseButtonVisibility = Visibility.Visible;
-                        return;
-                    }
+                              if (!silent) {
+                                  LabelText = "Errors have occured ...";
+                                  ProgressText = "";
+                              }
 
-                    if (t.IsCanceled) {
-                        return;
-                    }
+                              IsProgressbarIndeterminate = false;
+                              ProgressValue = 100;
+                              CloseButtonVisibility = Visibility.Visible;
+                              return;
+                          }
 
-                    if (t.IsCompleted) {
-                        _parsedInfo = t.Result;
-                    }
-                });
+                          if (t.IsCanceled) {
+                              return;
+                          }
+
+                          if (t.IsCompleted) {
+                              _parsedInfo = t.Result;
+                          }
+                      });
         }
 
         public Task UpdateMovieInfo() {
             MovieInfo movie = _movieInfo as MovieInfo;
-            if (movie == null) {
-                return null;
+            if (movie == null || _parsedInfo == null) {
+                return Task.FromResult<object>(null);
             }
-
-            return null;
-        }
-
-        public Task UpdateMovie() {
-            ObservableMovie movie = _movieInfo as ObservableMovie;
-            if (movie == null) {
-                return null;
-            }
-
-            LabelText = "Finished downloading...";
-            ProgressText = "Updating movie information.";
 
             return Task.Run(() => {
                 if (_parsedInfo.Genres != null) {
-                    foreach (string genre in this._parsedInfo.Genres) {
-                        string g = genre;
-                        try {
-                            movie.AddGenre(new DesignGenre(g), true);
-                        }
-                        catch (Exception e) {
-                            Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
-                        }
+                    foreach (string genre in _parsedInfo.Genres) {
+                        movie.Genres.Add(genre);
                     }
                 }
 
                 if (_parsedInfo.Writers != null) {
                     foreach (IParsedPerson writer in _parsedInfo.Writers) {
-                        IParsedPerson w = writer;
-                        try {
-                            movie.AddWriter(new DesignPerson(w), true);
-                        }
-                        catch (Exception e) {
-                            Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
-                        }
+                        movie.Writers.Add(new PersonInfo(writer.Name, writer.Thumb) { ImdbID = writer.ImdbID });
                     }
                 }
 
                 if (_parsedInfo.Directors != null) {
                     foreach (IParsedPerson director in _parsedInfo.Directors) {
-                        IParsedPerson d = director;
-                        try {
-                            movie.AddDirector(new DesignPerson(d), true);
-                        }
-                        catch (Exception e) {
-                            Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
-                        }
+                        movie.Directors.Add(new PersonInfo(director.Name, director.Thumb) { ImdbID = director.ImdbID });
                     }
                 }
 
                 if (_parsedInfo.Actors != null) {
                     foreach (IParsedActor actor in _parsedInfo.Actors) {
-                        IParsedActor a = actor;
-                        try {
-                            movie.AddActor(new DesignActor(a), true);
-                        }
-                        catch (Exception e) {
-                            Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
-                        }
+                        PersonInfo p = new PersonInfo(actor.Name, actor.Thumb) { ImdbID = actor.ImdbID };
+                        movie.Actors.Add(new ActorInfo(p, actor.Character));
                     }
                 }
 
-                if (movie["Trailer"] && !string.IsNullOrEmpty(_parsedInfo.TrailerUrl)) {
+                if (!string.IsNullOrEmpty(_parsedInfo.TrailerUrl)) {
                     movie.Trailer = _parsedInfo.TrailerUrl.Trim('/');
                 }
 
                 bool summaryAvailable = !string.IsNullOrEmpty(_parsedInfo.Plot);
-                if (movie["Plots"] && summaryAvailable) {
-                    try {
-                        movie.AddPlot(new DesignPlot { Full = _parsedInfo.Plot, Tagline = _parsedInfo.Tagline }, true);
-                    }
-                    catch (Exception e) {
-                        Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
-                    }
-                }
-                else if (movie.MainPlot != null && summaryAvailable) {
-                    MessageBoxResult result = MessageBox.Show("Could not add a new plot. Override current?", "", MessageBoxButton.YesNo);
-                    if (result == MessageBoxResult.Yes) {
-                        movie.MainPlot.Full = _parsedInfo.Plot;
-                    }
+                if (summaryAvailable) {
+                    movie.Plots.Add(new PlotInfo(_parsedInfo.Plot, null, _parsedInfo.Tagline, null));
                 }
 
-                if (movie["ReleaseYear"] && _parsedInfo.ReleaseYear.HasValue) {
+                if (_parsedInfo.ReleaseYear.HasValue) {
                     movie.ReleaseYear = _parsedInfo.ReleaseYear.Value;
                 }
 
-                if (movie["RatingAverage"] && !string.IsNullOrEmpty(_parsedInfo.Rating)) {
+                if (!string.IsNullOrEmpty(_parsedInfo.Rating)) {
                     double rating;
                     if (double.TryParse(_parsedInfo.Rating, NumberStyles.Float, CultureInfo.InvariantCulture, out rating)) {
                         movie.RatingAverage = rating;
                     }
                 }
 
-                if (movie["ImdbID"] && !string.IsNullOrEmpty(_parsedInfo.ImdbLink)) {
+                if (!string.IsNullOrEmpty(_parsedInfo.ImdbLink)) {
                     Match match = IMDBIdExtract.Match(_parsedInfo.ImdbLink);
                     if (match.Groups.Count > 0) {
                         movie.ImdbID = match.Groups[0].Value;
                     }
                 }
 
-                if (!string.IsNullOrEmpty(_parsedInfo.Country)) {
-                    try {
-                        movie.AddCountry(new DesignCountry(_parsedInfo.Country), true);
-                    }
-                    catch (Exception e) {
-                        Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
+                if (_parsedInfo.Countries != null) {
+                    foreach (string country in _parsedInfo.Countries) {
+                        ISOCountryCode countryCode = ISOCountryCodes.Instance.GetByEnglishName(country);
+                        if (countryCode != null) {
+                            movie.Countries.Add(countryCode);
+                        }                        
                     }
                 }
 
-                if (movie["PromotionalVideos"] && _parsedInfo.Videos != null) {
+                if (_parsedInfo.Videos != null) {
                     foreach (IParsedVideo video in _parsedInfo.Videos) {
                         IParsedVideo v = video;
                         movie.AddPromotionalVideo(new DesignPromotionalVideo(v), true);
                     }
                 }
 
-                if (movie["Ratings"] && !string.IsNullOrEmpty(_parsedInfo.MPAA)) {
-                    movie.AddCertification(new DesingCertification(_parsedInfo.MPAA, new DesignCountry("United States")), true);
+                if (!string.IsNullOrEmpty(_parsedInfo.MPAA)) {
+                    movie.Certifications.Add(new CertificationInfo(ISOCountryCodes.Instance.GetByISOCode("usa"), _parsedInfo.MPAA));
                 }
 
-                if (movie["Awards"] && _parsedInfo.Awards != null) {
+                if (_parsedInfo.Awards != null) {
                     foreach (IParsedAward award in _parsedInfo.Awards) {
-                        IParsedAward aw = award;
-                        movie.AddAward(new DesignAward(aw), true);
+                        movie.Awards.Add(new AwardInfo(award.Award, award.Organization, award.IsNomination));
                     }
                 }
 
-                if (movie["Art"]) {
-                    if (!string.IsNullOrEmpty(_parsedInfo.Cover)) {
-                         movie.AddArt(new DesignArt(ArtType.Cover, _parsedInfo.Cover), true);
-                    }
-
-                    if (!string.IsNullOrEmpty(_parsedInfo.Fanart)) {
-                        movie.AddArt(new DesignArt(ArtType.Fanart, _parsedInfo.Fanart), true);
-                    }
+                if (!string.IsNullOrEmpty(_parsedInfo.Cover)) {
+                    movie.AddArt(new DesignArt(ArtType.Cover, _parsedInfo.Cover, _parsedInfo.CoverPreview), true);
                 }
-            }).ContinueWith(t => {
-                if (Errors.Count > 0) {
-                    LabelText = "Finished with warnings...";
-                    ProgressText = "";
 
-                    IsProgressbarIndeterminate = false;
-                    ProgressValue = 100;
-                    CloseButtonVisibility = Visibility.Visible;
+                if (!string.IsNullOrEmpty(_parsedInfo.Fanart)) {
+                    movie.AddArt(new DesignArt(ArtType.Fanart, _parsedInfo.Fanart, _parsedInfo.FanartPreview), true);
                 }
             });
         }
 
+        public Task UpdateMovie(bool silent = false) {
+            ObservableMovie movie = _movieInfo as ObservableMovie;
+            if (movie == null || _parsedInfo == null) {
+                return Task.FromResult<object>(null);
+            }
+
+            if (!silent) {
+                LabelText = "Finished downloading...";
+                ProgressText = "Updating movie information.";
+            }
+
+            return Task.Run(() => UpdateMovieInfo(silent, movie))
+                       .ContinueWith(t => {
+                           if (Errors.Count > 0) {
+                               if (!silent) {
+                                   LabelText = "Finished with warnings...";
+                                   ProgressText = "";
+                               }
+
+                               IsProgressbarIndeterminate = false;
+                               ProgressValue = 100;
+                               CloseButtonVisibility = Visibility.Visible;
+                           }
+                       });
+        }
+
+        private void UpdateMovieInfo(bool silent, ObservableMovie movie) {
+            if (_parsedInfo.Genres != null) {
+                foreach (string genre in _parsedInfo.Genres) {
+                    string g = genre;
+                    try {
+                        movie.AddGenre(new DesignGenre(g), true);
+                    }
+                    catch (Exception e) {
+                        Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
+                    }
+                }
+            }
+
+            if (_parsedInfo.Writers != null) {
+                foreach (IParsedPerson writer in _parsedInfo.Writers) {
+                    IParsedPerson w = writer;
+                    try {
+                        movie.AddWriter(new DesignPerson(w), true);
+                    }
+                    catch (Exception e) {
+                        Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
+                    }
+                }
+            }
+
+            if (_parsedInfo.Directors != null) {
+                foreach (IParsedPerson director in _parsedInfo.Directors) {
+                    IParsedPerson d = director;
+                    try {
+                        movie.AddDirector(new DesignPerson(d), true);
+                    }
+                    catch (Exception e) {
+                        Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
+                    }
+                }
+            }
+
+            if (_parsedInfo.Actors != null) {
+                foreach (IParsedActor actor in _parsedInfo.Actors) {
+                    IParsedActor a = actor;
+                    try {
+                        movie.AddActor(new DesignActor(a), true);
+                    }
+                    catch (Exception e) {
+                        Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
+                    }
+                }
+            }
+
+            if (movie["Trailer"] && !string.IsNullOrEmpty(_parsedInfo.TrailerUrl)) {
+                movie.Trailer = _parsedInfo.TrailerUrl.Trim('/');
+            }
+
+            bool summaryAvailable = !string.IsNullOrEmpty(_parsedInfo.Plot);
+            if (movie["Plots"] && summaryAvailable) {
+                try {
+                    movie.AddPlot(new DesignPlot { Full = _parsedInfo.Plot, Tagline = _parsedInfo.Tagline }, true);
+                }
+                catch (Exception e) {
+                    Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
+                }
+            }
+            else if (movie.MainPlot != null && summaryAvailable) {
+                MessageBoxResult result = !silent
+                                              ? MessageBox.Show("Could not add a new plot. Override current?", "", MessageBoxButton.YesNo)
+                                              : MessageBoxResult.Yes;
+
+                if (result == MessageBoxResult.Yes) {
+                    movie.MainPlot.Full = _parsedInfo.Plot;
+                }
+            }
+
+            if (movie["ReleaseYear"] && _parsedInfo.ReleaseYear.HasValue) {
+                movie.ReleaseYear = _parsedInfo.ReleaseYear.Value;
+            }
+
+            if (movie["RatingAverage"] && !string.IsNullOrEmpty(_parsedInfo.Rating)) {
+                double rating;
+                if (double.TryParse(_parsedInfo.Rating, NumberStyles.Float, CultureInfo.InvariantCulture, out rating)) {
+                    movie.RatingAverage = rating;
+                }
+            }
+
+            if (movie["ImdbID"] && !string.IsNullOrEmpty(_parsedInfo.ImdbLink)) {
+                Match match = IMDBIdExtract.Match(_parsedInfo.ImdbLink);
+                if (match.Groups.Count > 0) {
+                    movie.ImdbID = match.Groups[0].Value;
+                }
+            }
+
+            if (_parsedInfo.Countries != null) {
+                foreach (string country in _parsedInfo.Countries) {
+                    try {
+                        movie.AddCountry(new DesignCountry(country), true);
+                    }
+                    catch (Exception e) {
+                        Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
+                    }                    
+                }
+            }
+
+            if (movie["PromotionalVideos"] && _parsedInfo.Videos != null) {
+                foreach (IParsedVideo video in _parsedInfo.Videos) {
+                    IParsedVideo v = video;
+                    try {
+                        movie.AddPromotionalVideo(new DesignPromotionalVideo(v), true);
+                    }
+                    catch (Exception e) {
+                        Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
+                    }
+                }
+            }
+
+            if (movie["Ratings"] && !string.IsNullOrEmpty(_parsedInfo.MPAA)) {
+                try {
+                    movie.AddCertification(new DesingCertification(_parsedInfo.MPAA, new DesignCountry("United States")), true);
+                }
+                catch (Exception e) {
+                    Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
+                }
+            }
+
+            if (movie["Awards"] && _parsedInfo.Awards != null) {
+                foreach (IParsedAward award in _parsedInfo.Awards) {
+                    IParsedAward aw = award;
+                    try {
+                        movie.AddAward(new DesignAward(aw), true);
+                    }
+                    catch (Exception e) {
+                        Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
+                    }
+                }
+            }
+
+            if (movie["Art"]) {
+                if (!string.IsNullOrEmpty(_parsedInfo.Cover)) {
+                    movie.AddArt(new DesignArt(ArtType.Cover, _parsedInfo.Cover, _parsedInfo.CoverPreview), true);
+                }
+
+                if (!string.IsNullOrEmpty(_parsedInfo.Fanart)) {
+                    movie.AddArt(new DesignArt(ArtType.Fanart, _parsedInfo.Fanart, _parsedInfo.FanartPreview), true);
+                }
+            }
+        }
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) {
@@ -467,7 +609,6 @@ namespace RibbonUI.Util.WebUpdate {
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
 
         private class ParsedMovieInfos {
             public DateTime ParsedTime { get; set; }

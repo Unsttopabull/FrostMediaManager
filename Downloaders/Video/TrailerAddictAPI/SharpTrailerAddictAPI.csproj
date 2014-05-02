@@ -45,6 +45,7 @@
     <Compile Include="TrailerAddictApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TrailerAddictClient.cs" />
+    <Compile Include="TrailerAddictException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

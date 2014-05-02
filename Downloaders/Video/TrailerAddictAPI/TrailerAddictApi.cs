@@ -63,8 +63,19 @@ namespace SharpTrailerAddictAPI {
             using (WebClient wc = new WebClient()) {
                 string xml = wc.DownloadString(uri);
 
-                XmlSerializer xs = new XmlSerializer(TrailersType);
-                Trailers deserialize = (Trailers) xs.Deserialize(new StringReader(xml));
+                if (string.IsNullOrEmpty(xml)) {
+                    return null;
+                }
+
+                Trailers deserialize;
+                try {
+                    XmlSerializer xs = new XmlSerializer(TrailersType);
+                    deserialize = (Trailers) xs.Deserialize(new StringReader(xml));
+                }
+                catch (Exception e) {
+                    throw new TrailerAddictException("Error parsing response", e);
+                }
+
                 return deserialize;
             }
         }

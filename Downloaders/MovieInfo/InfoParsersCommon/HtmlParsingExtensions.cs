@@ -30,7 +30,8 @@ namespace Frost.InfoParsers {
 
         public static IEnumerable<string> InnerTextOrNull(this HtmlNodeCollection nodes, bool decode = true) {
             if (nodes != null && nodes.Count > 0) {
-                return nodes.Select(node => decode ? WebUtility.HtmlDecode(node.InnerText.Trim()) : node.InnerText.Trim());
+                return nodes.Where(node => node != null)
+                            .Select(node => decode ? WebUtility.HtmlDecode(node.InnerText.Trim()) : node.InnerText.Trim());
             }
             return null;
         }
@@ -45,7 +46,8 @@ namespace Frost.InfoParsers {
 
         public static IEnumerable<string> InnerTextSplitOrNull(this HtmlNode node, bool decode, params string[] delimiters) {
             if (node != null) {
-                return node.InnerText.Split(delimiters, StringSplitOptions.RemoveEmptyEntries)
+                return node.InnerText
+                           .Split(delimiters, StringSplitOptions.RemoveEmptyEntries)
                            .Select(str => decode ? WebUtility.HtmlDecode(str.Trim()) : str.Trim());
             }
             return null;

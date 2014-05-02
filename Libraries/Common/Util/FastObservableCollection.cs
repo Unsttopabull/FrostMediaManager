@@ -109,8 +109,7 @@ namespace Frost.Common.Util {
 
                     foreach (NotifyCollectionChangedEventHandler handler in delegates) {
                         // If the subscriber is a DispatcherObject and different thread.
-                        DispatcherObject dispatcherObject
-                            = handler.Target as DispatcherObject;
+                        DispatcherObject dispatcherObject = handler.Target as DispatcherObject;
 
                         if (dispatcherObject != null && !dispatcherObject.CheckAccess()) {
                             // Invoke handler in the target dispatcher's thread... 

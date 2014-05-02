@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -45,39 +46,69 @@ namespace RibbonUI.Util.WebUpdate {
             }
         }
 
-        public async Task Update(bool silent = false) {
+        public async Task<bool> Update(bool silent = false) {
             IParsedArts parsedArts = null;
 
             try {
                 if (_client.IsImdbSupported && !string.IsNullOrEmpty(_movie.ImdbID)) {
-                    ProgressText = "Searching for art by Imdb ID";
+                    if (!silent) {
+                        ProgressText = "Searching for art by Imdb ID";
+                    }
                     parsedArts = await Task.Run(() => _client.GetMovieArtFromImdbId(_movie.ImdbID));
                 }
                 else if (_client.IsTmdbSupported && !string.IsNullOrEmpty(_movie.TmdbID)) {
-                    ProgressText = "Searching for art by Tmdb ID";
+                    if (!silent) {
+                        ProgressText = "Searching for art by Tmdb ID";
+                    }
                     parsedArts = await Task.Run(() => _client.GetMovieArtFromTmdbId(_movie.TmdbID));
                 }
                 else if (_client.IsTitleSupported) {
-                    ProgressText = "Searching for art by Title";
+                    if (!silent) {
+                        ProgressText = "Searching for art by Title";
+                    }
                     parsedArts = await Task.Run(() => _client.GetMovieArtFromTitle(_movie.Title, (int) (_movie.ReleaseYear.HasValue ? _movie.ReleaseYear.Value : 0)));
+                }
+                else {
+                    List<string> lst = new List<string>();
+                    if (_client.IsImdbSupported) {
+                        lst.Add("Imdb ID");
+                    }
+
+                    if (_client.IsTmdbSupported) {
+                        lst.Add("Tmdb ID");
+                    }
+
+                    if (_client.IsTitleSupported) {
+                        lst.Add("Movie title");
+                    }
+
+                    MessageBox.Show(string.Format("No required info found. Plugin requires : {0}", string.Join(" or ", lst)));
+                    return false;
                 }
             }
             catch (Exception e) {
-                MessageBox.Show(e.Message);
-                return;
+                if (!silent) {
+                    MessageBox.Show(e.Message);
+                }
+                return false;
             }
 
-            if (parsedArts != null) {
-                UpdateMovie(parsedArts);
+            if (parsedArts == null) {
+                if (!silent) {
+                    MessageBox.Show(TranslationManager.T("No art found"));
+                }
+                return false;
             }
-            else {
-                MessageBox.Show(TranslationManager.T("No art found"));
-            }            
+
+            UpdateMovie(parsedArts, silent);
+            return true;
         }
 
-        private void UpdateMovie(IParsedArts parsedArts) {
-            LabelText = "Updating movie with art....";
-            ProgressText = "Updating ...";
+        private void UpdateMovie(IParsedArts parsedArts, bool silent) {
+            if (!silent) {
+                LabelText = "Updating movie with art....";
+                ProgressText = "Updating ...";
+            }
 
             if (parsedArts.Covers != null) {
                 foreach (IParsedArt cover in parsedArts.Covers) {

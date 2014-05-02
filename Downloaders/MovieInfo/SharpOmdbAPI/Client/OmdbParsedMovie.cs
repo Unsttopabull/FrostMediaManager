@@ -2,7 +2,7 @@
 using Frost.InfoParsers;
 using SharpOmdbAPI.Models;
 
-namespace Frost.MovieInfoProviders.Omdb {
+namespace SharpOmdbAPI.Client {
 
     public class OmdbParsedMovie : ParsedMovie {
         private readonly OmdbMovie _movie;

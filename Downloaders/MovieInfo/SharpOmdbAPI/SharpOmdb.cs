@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Net;
 using Newtonsoft.Json;
 using SharpOmdbAPI.Models;
@@ -12,7 +11,7 @@ namespace SharpOmdbAPI {
         Full
     }
 
-    public static class SharpOmdbClient {
+    public static class SharpOmdb {
         private const string SEARCH_URI = "http://www.omdbapi.com/?s={0}{1}";
         private const string GET_IMDB_URI = "http://www.omdbapi.com/?i={0}&plot={1}&tomatoes={2}";
         private const string GET_TITLE_URI = "http://www.omdbapi.com/?t={0}{1}&plot={2}&tomatoes={3}";

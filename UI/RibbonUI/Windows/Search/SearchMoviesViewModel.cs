@@ -11,10 +11,12 @@ using System.Windows.Shell;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.DetectFeatures;
+using Frost.InfoParsers.Models;
 using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;
 using RibbonUI.Properties;
 using RibbonUI.Util;
+using RibbonUI.Util.WebUpdate;
 
 namespace RibbonUI.Windows.Search {
 
@@ -187,7 +189,7 @@ namespace RibbonUI.Windows.Search {
                     CloseParentWindow();
                     return;
                 }
-                
+
                 await Task.Run(() => Save(movieInfos, service));
 
                 if (_tokenSource.Token.IsCancellationRequested) {
@@ -203,6 +205,8 @@ namespace RibbonUI.Windows.Search {
                 }
 
                 ProgressText = "Finished!";
+
+                CloseParentWindow();
             }
             else if (task.IsFaulted) {
                 const string ERROR_MESSAGE = "Errors occured during detection phase. Search & Save can not continue.";
@@ -219,7 +223,7 @@ namespace RibbonUI.Windows.Search {
             }
         }
 
-        private void Save(IReadOnlyList<MovieInfo> movieInfos, IMoviesDataService service) {
+        private async Task Save(IReadOnlyList<MovieInfo> movieInfos, IMoviesDataService service) {
             ProgressMax = movieInfos.Count;
             double percent = 1.0 / ProgressMax;
 
@@ -231,16 +235,29 @@ namespace RibbonUI.Windows.Search {
                 MovieInfo movieInfo = movieInfos[i];
                 ProgressText = movieInfo.Title ?? "Movie " + i;
 
+                Task[] downloaders = new Task[3];
                 if (SearchInfo) {
-                    SearchMovieInfo(movieInfo, InfoPlugin);
+                    LogText = "Searching for movie info online ...";
+                    downloaders[0] = SearchMovieInfo(movieInfo, InfoPlugin);
                 }
 
                 if (SearchArt) {
-                    SearchMovieArt(movieInfo, ArtPlugin);
+                    LogText = "Searching for movie art online ...";
+                    downloaders[1] = SearchMovieArt(movieInfo, ArtPlugin);
                 }
 
                 if (SearchVideos) {
-                    SearchMovieVideos(movieInfo, VideoPlugin);
+                    LogText = "Searching for movie videos online ...";
+                    downloaders[2] = SearchMovieVideos(movieInfo, VideoPlugin);
+                }
+
+                LogText = "Searching for movie info, art and videos online ...";
+
+                try {
+                    await Task.WhenAll(downloaders.Where(t => t != null));
+                }
+                catch (Exception e) {
+                    
                 }
 
                 try {
@@ -253,26 +270,60 @@ namespace RibbonUI.Windows.Search {
 
                     if (ParentWindow != null) {
                         ParentWindow.Dispatcher.Invoke(() => ParentWindow.TaskbarItemInfo.ProgressValue += percent);
-                    }                    
+                    }
                 }
             }
         }
 
-        private void SearchMovieInfo(MovieInfo movieInfo, Plugin infoPlugin) {
+        private Task SearchMovieInfo(MovieInfo movieInfo, Plugin infoPlugin) {
             if (infoPlugin != null) {
+                IParsingClient client = LightInjectContainer.TryGetInstance<IParsingClient>(infoPlugin.Name);
+                if (client == null) {
+                    return null;
+                }
 
+                MovieInfoUpdater mi = new MovieInfoUpdater(client, movieInfo);
+                return mi.Update(true).ContinueWith(t => mi.UpdateMovieInfo());
             }
-            else {
-                
-            }
+            return SearchInfoUsingAll(movieInfo);
         }
 
-        private void SearchMovieVideos(MovieInfo movieInfo, Plugin videoPlugin) {
-            throw new NotImplementedException();
+        private Task SearchInfoUsingAll(MovieInfo movieInfo) {
+            return null;
         }
 
-        private void SearchMovieArt(MovieInfo movieInfo, Plugin videoPlugin) {
-            throw new NotImplementedException();
+        private Task SearchMovieVideos(MovieInfo movieInfo, Plugin videoPlugin) {
+            if (videoPlugin != null) {
+                IPromotionalVideoClient client = LightInjectContainer.TryGetInstance<IPromotionalVideoClient>(videoPlugin.Name);
+                if (client == null) {
+                    return null;
+                }
+
+                PromoVideoUpdater mi = new PromoVideoUpdater(client, movieInfo);
+                return mi.Update(true);
+            }
+            return SearchVideosUsingAll(movieInfo);
+        }
+
+        private Task SearchVideosUsingAll(MovieInfo movieInfo) {
+            return null;
+        }
+
+        private Task SearchMovieArt(MovieInfo movieInfo, Plugin videoPlugin) {
+            if (videoPlugin != null) {
+                IFanartClient client = LightInjectContainer.TryGetInstance<IFanartClient>(videoPlugin.Name);
+                if (client == null) {
+                    return null;
+                }
+
+                ArtUpdater mi = new ArtUpdater(client, movieInfo);
+                return mi.Update(true);
+            }
+            return SearchArtUsingAll(movieInfo);
+        }
+
+        private Task SearchArtUsingAll(MovieInfo movieInfo) {
+            return null;
         }
 
         [NotifyPropertyChangedInvocator]

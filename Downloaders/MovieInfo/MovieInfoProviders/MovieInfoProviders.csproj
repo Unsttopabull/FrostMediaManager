@@ -43,8 +43,6 @@
   <ItemGroup>
     <Compile Include="GremoVKinoClient.cs" />
     <Compile Include="KolosejClient.cs" />
-    <Compile Include="OmdbClient.cs" />
-    <Compile Include="Omdb\OmdbParsedMovie.cs" />
     <Compile Include="OpenSubtitlesInfoClient.cs" />
     <Compile Include="OpenSubtitles\OSubParsedMovie.cs" />
     <Compile Include="Plugin\CompositionRoot.cs" />
@@ -63,17 +61,11 @@
       <Project>{005f252b-c8ad-49e0-9a88-47bc289f00d0}</Project>
       <Name>InfoParsersCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SharpOmdbAPI\SharpOmdbAPI.csproj">
-      <Project>{c796ac60-db0e-41ed-9a65-47c7abc52be9}</Project>
-      <Name>SharpOmdbAPI</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="TraktTv\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(TargetPath)" "E:\Workspace\Ostalo\Repos\Git\FrostMediaManager2\UI\RibbonUI\bin\Debug\Downloaders" /Y</PostBuildEvent>

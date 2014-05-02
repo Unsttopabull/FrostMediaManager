@@ -3,8 +3,17 @@ namespace Frost.Common.Models.FeatureDetector {
 
     public class ActorInfo : PersonInfo {
 
+        /// <summary>Initializes a new instance of the <see cref="ActorInfo"/> class.</summary>
         public ActorInfo() {
             
+        }
+
+        /// <summary>Initializes a new instance of the <see cref="ActorInfo"/> class.</summary>
+        public ActorInfo(PersonInfo person, string character) {
+            Character = character;
+            Name = person.Name;
+            ImdbID = person.ImdbID;
+            Thumb = person.Thumb;
         }
 
         /// <summary>Initializes a new instance of the <see cref="ActorInfo"/> class.</summary>

@@ -6,6 +6,8 @@ namespace Frost.Common.Models {
     public interface IMovieInfo {
         string Title { get; set; }
 
+        string OriginalTitle { get; set; }
+
         long? ReleaseYear { get; }
 
         string ImdbID { get; }

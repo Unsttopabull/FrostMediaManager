@@ -197,7 +197,9 @@ namespace Frost.MovieInfoProviders {
                                     .Select(d => new ParsedActor(d));
             }
 
-            mi.Country = right.SelectSingleNode(string.Format(XPATH, "Država:")).InnerTextOrNull();
+            mi.Countries = right.SelectSingleNode(string.Format(XPATH, "Država:"))
+                                .InnerTextSplitOrNull(true, ",", " in ", " po likih ");
+
             mi.Duration = right.SelectSingleNode(string.Format(XPATH, "Trajanje:")).InnerTextOrNull();
             mi.OfficialSite = right.SelectSingleNode(string.Format(XPATH, "Uradna stran:")).InnerTextOrNull(false);
 

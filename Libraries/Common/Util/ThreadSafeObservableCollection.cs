@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Threading;
 
@@ -10,6 +11,7 @@ namespace Frost.Common.Util {
 
         private readonly Dispatcher _dispatcher;
         private readonly ReaderWriterLockSlim _lock;
+        private static readonly TimeSpan timeout = new TimeSpan(0,0, 30);
 
         #endregion
 
@@ -35,8 +37,25 @@ namespace Frost.Common.Util {
             _lock = new ReaderWriterLockSlim();
         }
 
+        /// <summary />
+        /// A simple WPF threading extension method, to invoke a delegate
+        /// on the correct thread if it is not currently on the correct thread
+        /// Which can be used with DispatcherObject types
+        /// <summary />
+        /// <param name="disp" />The Dispatcher object on which to do the Invoke<param />
+        /// <param name="dotIt" />The delegate to run<param />
+        /// <param name="priority" />The DispatcherPriority<param />
+        private void InvokeIfRequired(Dispatcher disp, Action dotIt, DispatcherPriority priority) {
+            if (disp.CheckAccess()) {
+                dotIt();
+            }
+            else {
+                disp.Invoke(priority, timeout, dotIt);
+            }
+        }
+
         protected override void ClearItems() {
-            _dispatcher.InvokeIfRequired(() => {
+            InvokeIfRequired(_dispatcher, () => {
                 _lock.EnterWriteLock();
                 try {
                     base.ClearItems();
@@ -48,7 +67,9 @@ namespace Frost.Common.Util {
         }
 
         protected override void InsertItem(int index, T item) {
-            _dispatcher.InvokeIfRequired(() => {
+            ThreadState threadState = _dispatcher.Thread.ThreadState;
+
+            InvokeIfRequired(_dispatcher, () => {
                 if (index > Count) {
                     return;
                 }
@@ -64,7 +85,7 @@ namespace Frost.Common.Util {
         }
 
         protected override void MoveItem(int oldIndex, int newIndex) {
-            _dispatcher.InvokeIfRequired(() => {
+            InvokeIfRequired(_dispatcher, () => {
                 _lock.EnterReadLock();
                 int itemCount = Count;
                 _lock.ExitReadLock();
@@ -86,7 +107,7 @@ namespace Frost.Common.Util {
         }
 
         protected override void RemoveItem(int index) {
-            _dispatcher.InvokeIfRequired(() => {
+            InvokeIfRequired(_dispatcher, () => {
                 if (index >= Count) {
                     return;
                 }
@@ -103,7 +124,7 @@ namespace Frost.Common.Util {
 
         /// <summary />Sets an item<summary />
         protected override void SetItem(int index, T item) {
-            _dispatcher.InvokeIfRequired(() => {
+            InvokeIfRequired(_dispatcher, () => {
                 _lock.EnterWriteLock();
                 try {
                     base.SetItem(index, item);

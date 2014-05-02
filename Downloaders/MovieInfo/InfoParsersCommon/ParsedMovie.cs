@@ -15,6 +15,7 @@
         public ParsedMovie(string title, int releaseYear, string imdbId) {
             OriginalName = title;
             ReleaseYear = releaseYear;
+            ImdbID = imdbId;
         }
 
         public string OriginalName { get; set; }

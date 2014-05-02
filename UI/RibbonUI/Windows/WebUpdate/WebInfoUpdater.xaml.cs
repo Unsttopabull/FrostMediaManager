@@ -42,8 +42,21 @@ namespace RibbonUI.Windows.WebUpdate {
         }
 
         private async void Update() {
-            await ((MovieInfoUpdater) DataContext).Update();
-            await ((MovieInfoUpdater) DataContext).UpdateMovie();
+            bool updateSuccess;
+            try {
+                updateSuccess = await ((MovieInfoUpdater) DataContext).Update();
+            }
+            catch (Exception e) {
+                updateSuccess = false;
+            }
+
+            if (updateSuccess) {
+                try {
+                    await ((MovieInfoUpdater) DataContext).UpdateMovie();
+                }
+                catch (Exception e) {
+                }
+            }
 
             Close();
         }

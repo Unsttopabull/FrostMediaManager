@@ -240,7 +240,7 @@ namespace Frost.Common.NFO {
                         Ids = new List<NfoMovieDbId>();
                     }
 
-                    Ids.Add(new NfoMovieDbId("imdb", value));
+                    Ids.Add(new NfoMovieDbId(value, "imdb"));
                 }
             }
         }

@@ -34,6 +34,8 @@ namespace RibbonUI.Util.ObservableWrappers {
         private ObservableCollection<IAward> _awards;
 
         public ObservableMovie(IMovie movie) : base(movie) {
+            _art = new ThreadSafeObservableCollection<MovieArt>();
+            _countries = new ThreadSafeObservableCollection<MovieCountry>();
         }
 
         #region Properties
@@ -373,7 +375,11 @@ namespace RibbonUI.Util.ObservableWrappers {
                 if (ObservedEntity.DefaultFanart != null) {
                     return new MovieArt(ObservedEntity.DefaultFanart);
                 }
-                MovieArt art = Art.FirstOrDefault(a => a.Type == ArtType.Fanart && !string.IsNullOrEmpty(a.PreviewOrPath));
+
+                MovieArt art;
+                lock (_art) {
+                    art = Art.FirstOrDefault(a => a.Type == ArtType.Fanart && !string.IsNullOrEmpty(a.PreviewOrPath));
+                }
                 return art;
             }
             set {
@@ -391,7 +397,10 @@ namespace RibbonUI.Util.ObservableWrappers {
                     return new MovieArt(ObservedEntity.DefaultCover);
                 }
 
-                MovieArt art = Art.FirstOrDefault(a => (a.Type == ArtType.Cover || a.Type == ArtType.Poster) && !String.IsNullOrEmpty(a.PreviewOrPath));
+                MovieArt art;
+                lock (_art) {
+                    art = Art.FirstOrDefault(a => (a.Type == ArtType.Cover || a.Type == ArtType.Poster) && !String.IsNullOrEmpty(a.PreviewOrPath));
+                }
                 return art;
             }
             set {
@@ -444,10 +453,16 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <summary>The countries that this movie was shot or/and produced in.</summary>
         public ObservableCollection<MovieCountry> Countries {
             get {
-                if (_countries == null) {
-                    _countries = _observedEntity.Countries == null 
-                        ? new ThreadSafeObservableCollection<MovieCountry>() 
-                        : new ThreadSafeObservableCollection<MovieCountry>(_observedEntity.Countries.Select(c => new MovieCountry(c)));
+                if (_countries.Count != _observedEntity.Countries.Count()) {
+                    ThreadSafeObservableCollection<MovieCountry> countries = (ThreadSafeObservableCollection<MovieCountry>) _countries;
+                    countries.SuspendCollectionChangeNotification();
+                    countries.Clear();
+
+                    foreach (ICountry country in _observedEntity.Countries) {
+                        countries.Add(new MovieCountry(country));
+                    }
+                    countries.ResumeCollectionChangeNotification();
+                    countries.NotifyChanges();
                 }
                 return _countries;
             }
@@ -524,10 +539,18 @@ namespace RibbonUI.Util.ObservableWrappers {
         /// <value>The movie promotional images</value>
         public ObservableCollection<MovieArt> Art {
             get {
-                if (_art == null) {
-                    _art = _observedEntity.Art == null
-                        ? new ObservableCollection<MovieArt>()
-                        : new ObservableCollection<MovieArt>(_observedEntity.Art.Select(a => new MovieArt(a)));
+                if (_art.Count != _observedEntity.Art.Count()) {
+                    lock (_art) {
+                        ThreadSafeObservableCollection<MovieArt> arts = (ThreadSafeObservableCollection<MovieArt>) _art;
+                        arts.SuspendCollectionChangeNotification();
+                        arts.Clear();
+
+                        foreach (IArt art in _observedEntity.Art) {
+                            arts.Add(new MovieArt(art));
+                        }
+                        arts.ResumeCollectionChangeNotification();
+                        arts.NotifyChanges();
+                    }
                 }
                 return _art;
             }
@@ -1151,6 +1174,13 @@ namespace RibbonUI.Util.ObservableWrappers {
                 Art.Add(movieArt);
 
                 OnPropertyChanged("HasArt");
+
+                if (movieArt.Type == ArtType.Fanart) {
+                    OnPropertyChanged("DefaultFanart");
+                }
+                else if (movieArt.Type == ArtType.Cover || movieArt.Type == ArtType.Poster) {
+                    OnPropertyChanged("DefaultCover");
+                }
             }
             else if(!silent){
                 MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "promotional video"));
@@ -1162,6 +1192,13 @@ namespace RibbonUI.Util.ObservableWrappers {
             if (success) {
                 Art.Remove(art);
                 OnPropertyChanged("HasArt");
+
+                if (art.Type == ArtType.Fanart) {
+                    OnPropertyChanged("DefaultFanart");
+                }
+                else if (art.Type == ArtType.Cover || art.Type == ArtType.Poster) {
+                    OnPropertyChanged("DefaultCover");
+                }
             }               
         }
 

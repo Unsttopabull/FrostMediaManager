@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using Frost.InfoParsers;
-using Frost.MovieInfoProviders.Omdb;
-using SharpOmdbAPI;
 using SharpOmdbAPI.Models;
 
-namespace Frost.MovieInfoProviders {
+namespace SharpOmdbAPI.Client {
 
     public class OmdbClient : ParsingClient {
         private const string IMDB_MOVIE_URL = "http://www.imdb.com/title/{0}/";
@@ -19,13 +15,18 @@ namespace Frost.MovieInfoProviders {
             string directoryName = GetAssemblyCurrentDirectory();
 
             if (directoryName != null) {
-                Icon = new Uri(directoryName+"/omdb.ico");
+                Icon = new Uri(directoryName + "/omdb.ico");
             }
         }
 
         public override IEnumerable<ParsedMovie> GetByImdbId(string imdbId) {
-            OmdbMovie movie = SharpOmdbClient.GetByImdbId(imdbId, PlotLength.Full);
-            return new[] { new OmdbParsedMovie(movie) };
+            OmdbMovie movie = SharpOmdb.GetByImdbId(imdbId, PlotLength.Full);
+            if (movie != null) {
+                return new[] { new OmdbParsedMovie(movie) };
+            }
+            else {
+                return null;
+            }
         }
 
         public override IEnumerable<ParsedMovie> GetByMovieHash(IEnumerable<string> movieHashes) {
@@ -33,8 +34,14 @@ namespace Frost.MovieInfoProviders {
         }
 
         public override IEnumerable<ParsedMovie> GetByTitle(string title, int releaseYear) {
-            IEnumerable<OmdbSearch> search = SharpOmdbClient.Search(title, releaseYear);
-            return search.Select(s => new OmdbParsedMovie(s));
+            IEnumerable<OmdbSearch> search = SharpOmdb.Search(title, releaseYear);
+
+            if (search != null) {
+                return search.Select(s => new OmdbParsedMovie(s));
+            }
+            else {
+                return null;
+            }
         }
 
         public override void Index() {
@@ -50,10 +57,10 @@ namespace Frost.MovieInfoProviders {
 
                 OmdbMovie mov;
                 if (omdbMovie.Search != null && !string.IsNullOrEmpty(omdbMovie.Search.ImdbId)) {
-                    mov = SharpOmdbClient.GetByImdbId(omdbMovie.Search.ImdbId, PlotLength.Full);
+                    mov = SharpOmdb.GetByImdbId(omdbMovie.Search.ImdbId, PlotLength.Full);
                 }
                 else {
-                    mov = SharpOmdbClient.GetByTitle(movie.OriginalName, movie.ReleaseYear, PlotLength.Full);
+                    mov = SharpOmdb.GetByTitle(movie.OriginalName, movie.ReleaseYear, PlotLength.Full);
                 }
 
                 return ToParsedMovieInfo(mov);
@@ -93,7 +100,7 @@ namespace Frost.MovieInfoProviders {
                 movieInfo.ImdbLink = string.Format(IMDB_MOVIE_URL, movie.ImdbId);
             }
 
-            movieInfo.Country = movie.Country.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+            movieInfo.Countries = movie.Country.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
             movieInfo.Language = movie.Language;
 
             return movieInfo;

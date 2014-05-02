@@ -5,9 +5,10 @@ using Frost.InfoParsers.Models;
 namespace RibbonUI.Design.Models {
     public class DesignArt : IArt {
 
-        public DesignArt(ArtType type, string path) {
+        public DesignArt(ArtType type, string path, string preview) {
             Type = type;
             Path = path;
+            Preview = preview;
         }
 
         public DesignArt(IParsedArt parsedArt) {

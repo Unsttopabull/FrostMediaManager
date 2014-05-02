@@ -11,7 +11,6 @@ namespace Frost.MovieInfoProviders.Plugin {
         public void Compose(IServiceRegistry registry) {
             registry.Register<IParsingClient, GremoVKinoClient>(GremoVKinoClient.CLIENT_NAME);
             registry.Register<IParsingClient, KolosejClient>(KolosejClient.CLIENT_NAME);
-            registry.Register<IParsingClient, OmdbClient>(OmdbClient.CLIENT_NAME);
             registry.Register<IParsingClient, OpenSubtitlesInfoClient>(OpenSubtitlesInfoClient.CLIENT_NAME);
         }
     }

@@ -79,7 +79,11 @@ namespace SharpTraktTvAPI.Client {
             info.TrailerUrl = summary.Trailer;
             info.Genres = summary.Genres;
             info.Fanart = summary.Images.Fanart;
+            info.FanartPreview = summary.Images.FanartMedium;
             info.Cover = summary.Images.Poster;
+            info.CoverPreview = summary.Images.PosterMedium;
+
+            info.MPAA = summary.Certification;
 
             info.Writers = summary.People.Writers.Select(w => new ParsedPerson(w.Name, null, w.Images.Headshot == @"http://slurm.trakt.us/images/avatar-large.jpg" ? null : w.Images.Headshot));
             info.Directors = summary.People.Directors.Select(d => new ParsedPerson(d.Name, null, d.Images.Headshot == @"http://slurm.trakt.us/images/avatar-large.jpg" ? null : d.Images.Headshot));

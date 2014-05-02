@@ -219,8 +219,7 @@
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>xcopy "$(TargetPath)" "E:\Workspace\Ostalo\Repos\Git\FrostMediaManager2\UI\RibbonUI\bin\Debug\Downloaders" /Y</PostBuildEvent>
   </PropertyGroup>
   <Target Name="BeforeBuild">
     <CreateItem Include="AssemblyBuildNumber.cs" Condition="'$(BuildingInsideVisualStudio)' == ''">

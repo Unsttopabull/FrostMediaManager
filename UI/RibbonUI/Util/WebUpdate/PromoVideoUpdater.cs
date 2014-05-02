@@ -45,39 +45,69 @@ namespace RibbonUI.Util.WebUpdate {
             }
         }
 
-        public async Task Update(bool silent = false) {
+        public async Task<bool> Update(bool silent = false) {
             IEnumerable<IParsedVideo> parsedVideos = null;
 
             try {
                 if (_cli.IsImdbSupported && !string.IsNullOrEmpty(_movie.ImdbID)) {
-                    ProgressText = "Searching for videos by Imdb ID";
+                    if (!silent) {
+                        ProgressText = "Searching for videos by Imdb ID";
+                    }
                     parsedVideos = await Task.Run(() => _cli.GetMovieArtFromImdbId(_movie.ImdbID));
                 }
                 else if (_cli.IsTmdbSupported && !string.IsNullOrEmpty(_movie.TmdbID)) {
-                    ProgressText = "Searching for videos by Tmdb ID";
+                    if (!silent) {
+                        ProgressText = "Searching for videos by Tmdb ID";
+                    }
                     parsedVideos = await Task.Run(() => _cli.GetMovieArtFromTmdbId(_movie.TmdbID));
                 }
                 else if (_cli.IsTitleSupported) {
-                    ProgressText = "Searching for videos by Title";
+                    if (!silent) {
+                        ProgressText = "Searching for videos by Title";
+                    }
                     parsedVideos = await Task.Run(() => _cli.GetMovieArtFromTitle(_movie.Title, (int) (_movie.ReleaseYear.HasValue ? _movie.ReleaseYear.Value : 0)));
+                }
+                else {
+                    List<string> lst = new List<string>();
+                    if (_cli.IsImdbSupported) {
+                        lst.Add("Imdb ID");
+                    }
+
+                    if (_cli.IsTmdbSupported) {
+                        lst.Add("Tmdb ID");
+                    }
+
+                    if (_cli.IsTitleSupported) {
+                        lst.Add("Movie title");
+                    }
+
+                    MessageBox.Show(string.Format("No required info found. Plugin requires : {0}", string.Join(" or ", lst)));
+                    return false;
                 }
             }
             catch (Exception e) {
-                MessageBox.Show(e.Message);
-                return;
+                if (!silent) {
+                    MessageBox.Show(e.Message);
+                }
+                return false;
             }
 
-            if (parsedVideos != null) {
-                UpdateMovie(parsedVideos);
+            if (parsedVideos == null) {
+                if (!silent) {
+                    MessageBox.Show(TranslationManager.T("No videos found"));
+                }
+                return false;
             }
-            else {
-                MessageBox.Show(TranslationManager.T("No videos found"));
-            }
+
+            UpdateMovie(parsedVideos, silent);
+            return true;
         }
 
-        private void UpdateMovie(IEnumerable<IParsedVideo> videos) {
-            LabelText = "Updating movie with promotional videos....";
-            ProgressText = "Updating ...";
+        private void UpdateMovie(IEnumerable<IParsedVideo> videos, bool silent) {
+            if (!silent) {
+                LabelText = "Updating movie with promotional videos....";
+                ProgressText = "Updating ...";
+            }
 
             foreach (IParsedVideo parsedVideo in videos) {
                 _movie.AddPromotionalVideo(new DesignPromotionalVideo(parsedVideo), true);

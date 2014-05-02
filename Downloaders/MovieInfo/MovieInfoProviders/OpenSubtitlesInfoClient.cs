@@ -16,7 +16,7 @@ namespace Frost.MovieInfoProviders {
     public class OpenSubtitlesInfoClient : ParsingClient {
         private const string USER_AGENT = "Frost Media Manager v1";
         public const string CLIENT_NAME = "OpenSubtitles.org";
-        private const string IMDB_TITLE_URI = "http://www.imdb.com/title/{0}/tt";
+        private const string IMDB_TITLE_URI = "http://www.imdb.com/title/tt{0}";
 
         public OpenSubtitlesInfoClient() : base(CLIENT_NAME, false, false, true) {
             string directoryName = GetAssemblyCurrentDirectory();
@@ -63,7 +63,7 @@ namespace Frost.MovieInfoProviders {
             MovieHashInfo movieHashInfo = cli.Movie.CheckHash(movieHashes.ToArray());
             cli.LogOut();
 
-            if (movieHashInfo.Status != "200 OK" || movieHashInfo.Data == null) {
+            if (movieHashInfo == null || movieHashInfo.Status != "200 OK" || movieHashInfo.Data == null) {
                 return null;
             }
 
@@ -120,7 +120,7 @@ namespace Frost.MovieInfoProviders {
             ParsedMovieInfo info = new ParsedMovieInfo();
 
             ImdbMovieDetails details = movie.Details;
-            info.Country = details.Countries.FirstOrDefault();
+            info.Countries = details.Countries;
             info.Cover = details.Cover;
 
             if (details.Awards != null) {
@@ -150,13 +150,16 @@ namespace Frost.MovieInfoProviders {
             if (details.Actors != null) {
                 info.Actors = details.Actors
                                      .Where(a => a != null)
-                                     .Select(actor => new ParsedActor(actor.Name, null, actor.ImdbId, null))
+                                     .Select(actor => new ParsedActor(actor.Name, null, string.IsNullOrEmpty(actor.ImdbId) ? null : "nm" + actor.ImdbId, null))
                                      .Cast<IParsedActor>()
                                      .ToList();
             }
 
             info.Duration = details.Duration;
-            info.Genres = details.Genres;
+
+            if (details.Genres != null) {
+                info.Genres = details.Genres.Select(g => g.Trim());
+            }
 
             if (!string.IsNullOrEmpty(details.Id)) {
                 info.ImdbLink = string.Format(IMDB_TITLE_URI, details.Id);

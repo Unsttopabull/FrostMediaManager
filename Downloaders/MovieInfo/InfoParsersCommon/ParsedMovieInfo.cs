@@ -14,7 +14,7 @@ namespace Frost.InfoParsers {
         public string MPAA { get; set; }
         public string Duration { get; set; }
         public int? ReleaseYear { get; set; }
-        public string Country { get; set; }
+        public IEnumerable<string> Countries { get; set; }
         public string Language { get; set; }
         public IEnumerable<IParsedPerson> Writers { get; set; }
         public IEnumerable<IParsedPerson> Directors { get; set; }
@@ -37,8 +37,10 @@ namespace Frost.InfoParsers {
         public IEnumerable<string> Genres { get; set; }
 
         public string Cover { get; set; }
+        public string CoverPreview { get; set; }
 
         public string Fanart { get; set; }
+        public string FanartPreview { get; set; }
     }
 
 }
