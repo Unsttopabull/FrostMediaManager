@@ -839,13 +839,23 @@ namespace Frost.Providers.Frost.Proxies {
         /// <exception cref="NotSupportedException">Throws when the provider does not support removing arts in a particual scenario.</exception>
         /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing art.</exception>
         public bool RemoveArt(IArt art) {
+            Art a;
             if (art is Art) {
-                return Entity.Art.Remove(art as Art);
+                a = art as Art;
+                bool removed = Entity.Art.Remove(a);
+                if (removed) {
+                    Service.MarkAsDeleted(a);
+                }
+                return removed;
             }
 
-            Art a = Service.FindArt(art, false);
+            a = Service.FindArt(art, false);
             if (a != null) {
-                return Entity.Art.Remove(a);
+                bool removed = Entity.Art.Remove(a);
+                if (removed) {
+                    Service.MarkAsDeleted(a);
+                }
+                return removed;
             }
             return false;
         }

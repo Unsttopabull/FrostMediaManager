@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 using Frost.Common.Util.ISO;
@@ -18,6 +16,7 @@ namespace Frost.Providers.Frost {
         private static readonly Dictionary<string, Special> Specials;
         private static readonly Dictionary<string, Studio> Studios;
         private static readonly Dictionary<string, Person> People;
+        private static readonly Dictionary<string, PromotionalVideo> PromotionalVideos;
 
         private readonly MovieInfo _info;
         private readonly FrostDbContainer _mvc;
@@ -31,6 +30,7 @@ namespace Frost.Providers.Frost {
             Specials = new Dictionary<string, Special>(StringComparer.InvariantCultureIgnoreCase);
             Studios = new Dictionary<string, Studio>(StringComparer.InvariantCultureIgnoreCase);
             People = new Dictionary<string, Person>(StringComparer.InvariantCultureIgnoreCase);
+            PromotionalVideos = new Dictionary<string, PromotionalVideo>(StringComparer.InvariantCultureIgnoreCase);
         }
 
         public MovieSaver(MovieInfo movie, FrostDbContainer db = null) {
@@ -86,6 +86,7 @@ namespace Frost.Providers.Frost {
             mv.Writers = new HashSet<Person>(movie.Writers.ConvertAll(GetPerson));
             mv.Directors = new HashSet<Person>(movie.Directors.ConvertAll(GetPerson));
             mv.Actors = new HashSet<Actor>(movie.Actors.ConvertAll(actorInfo => new Actor(GetPerson(actorInfo), actorInfo.Character)));
+            mv.PromotionalVideos = new HashSet<PromotionalVideo>(movie.PromotionalVideos.ConvertAll(GetPromotionalVideo));
 
             mv.Videos = new HashSet<Video>();
             mv.Audios = new HashSet<Audio>();
@@ -101,6 +102,14 @@ namespace Frost.Providers.Frost {
             }
 
             return mv;
+        }
+
+        private PromotionalVideo GetPromotionalVideo(PromotionalVideoInfo v) {
+            PromotionalVideo promoVideo;
+            if (PromotionalVideos.TryGetValue(v.Url, out promoVideo)) {
+                return promoVideo;
+            }
+            return new PromotionalVideo(v);
         }
 
         private void AddSubtitles(FileDetectionInfo fileInfo, Movie mv, File file) {

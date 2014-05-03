@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.IO;
-using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Diagnostics;
-using CookComputing.XmlRpc;
+using Frost.Common.Models.FeatureDetector;
+using Frost.DetectFeatures;
 using Frost.InfoParsers.Models;
-using Frost.SharpOpenSubtitles;
-using Frost.SharpOpenSubtitles.Models.Movies.Receive;
-using Frost.SharpOpenSubtitles.Models.Session.Receive;
+using Frost.Providers.Frost.DB;
 using LightInject;
 using log4net;
 using log4net.Config;
-using Newtonsoft.Json;
+using File = System.IO.File;
 
 namespace Frost.Tester {
 
@@ -37,7 +36,8 @@ namespace Frost.Tester {
             TimeSpan time = default(TimeSpan);
 
             //TestTraktTv();
-            TestOpenSubtitlesOrg();
+            //TestOpenSubtitlesOrg();
+            TetsFD();
 
             sw.Stop();
 
@@ -47,17 +47,22 @@ namespace Frost.Tester {
             Console.Read();
         }
 
-        private static void TestOpenSubtitlesOrg() {
-            OpenSubtitlesClient cli = new OpenSubtitlesClient(false);
-            LogInInfo login = cli.LogInAnonymous("en", "Frost Media Manager v1");
-            ImdbMovieDetailsInfo info = cli.Movie.GetImdbDetails(0088763);
-
-            string serializeObject = JsonConvert.SerializeObject(info);
-            File.WriteAllText("imdbInfo.js", serializeObject);
-            cli.LogOut();
-
-            //cli.Movie.GetImdbDetails()
+        private static void TetsFD() {
+            FrostDbContainer dc = new FrostDbContainer();
+            DbEntityEntry dbEntityEntry = dc.Entry(new object());
         }
+
+        //private static void TestOpenSubtitlesOrg() {
+        //    OpenSubtitlesClient cli = new OpenSubtitlesClient(false);
+        //    LogInInfo login = cli.LogInAnonymous("en", "Frost Media Manager v1");
+        //    ImdbMovieDetailsInfo info = cli.Movie.GetImdbDetails(0088763);
+
+        //    string serializeObject = JsonConvert.SerializeObject(info);
+        //    File.WriteAllText("imdbInfo.js", serializeObject);
+        //    cli.LogOut();
+
+        //    //cli.Movie.GetImdbDetails()
+        //}
 
         public static void TestTraktTv() {
             using (ServiceContainer service = new ServiceContainer()) {

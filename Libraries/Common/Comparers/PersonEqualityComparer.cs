@@ -37,7 +37,7 @@ namespace Frost.Common.Comparers {
         /// <exception cref="T:System.ArgumentNullException">The type of <paramref name="person"/> is a reference type and <paramref name="person"/> is null.</exception>
         public int GetHashCode(IPerson person) {
             if (person == null) {
-                throw new ArgumentNullException("person");
+                return 0;
             }
 
             return person.Name != null

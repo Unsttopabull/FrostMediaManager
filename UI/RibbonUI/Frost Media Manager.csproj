@@ -624,7 +624,7 @@
     <Resource Include="Images\sofa.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\default\mpaaur.png" />
+    <Resource Include="Images\default\mpaanr.png" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
@@ -657,6 +657,10 @@
     <ProjectReference Include="..\..\Downloaders\MovieInfo\InfoParsersCommon\InfoParsersCommon.csproj">
       <Project>{005F252B-C8AD-49E0-9A88-47BC289F00D0}</Project>
       <Name>InfoParsersCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Libraries\ConcurrentCollections\Swordfish.NET.Collections.csproj">
+      <Project>{f2e1680e-1b15-4cf2-bab0-54b8c8f6abdf}</Project>
+      <Name>Swordfish.NET.Collections</Name>
     </ProjectReference>
     <ProjectReference Include="..\GettextTranslationExtension\GettextMarkupExtension.csproj">
       <Project>{a3ce8f2a-9950-409c-aa35-74cd1d1d6d87}</Project>

@@ -1,41 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using Frost.Common;
 using Frost.Common.Models;
 using Frost.Common.Models.Provider;
-using Frost.Common.Util;
 using Frost.DetectFeatures;
 using Frost.GettextMarkupExtension;
 using log4net;
+using Swordfish.NET.Collections;
 
 namespace RibbonUI.Util.ObservableWrappers {
 
     public class ObservableMovie : MovieItemBase<IMovie>, IMovieInfo, IEquatable<IMovie> {
         private static readonly ILog Log = LogManager.GetLogger(typeof(ObservableMovie));
-        private ObservableCollection<MovieSubtitle> _subtitles;
-        private ObservableCollection<MovieCountry> _countries;
-        private ObservableCollection<MovieStudio> _studios;
-        private ObservableCollection<MovieVideo> _videos;
-        private ObservableCollection<MovieAudio> _audios;
-        private ObservableCollection<IPromotionalVideo> _promotionalVideos;
-        private ObservableCollection<IRating> _ratings;
-        private ObservableCollection<MoviePlot> _plots;
-        private ObservableCollection<MovieArt> _art;
-        private ObservableCollection<MovieCertification> _certifications;
-        private ObservableCollection<IPerson> _writers;
-        private ObservableCollection<MoviePerson> _directors;
-        private ObservableCollection<MovieActor> _actors;
-        private ObservableCollection<ISpecial> _specials;
-        private ObservableCollection<IGenre> _genres;
-        private ObservableCollection<IAward> _awards;
+        private ConcurrentObservableCollection<MovieSubtitle> _subtitles;
+        private ConcurrentObservableCollection<MovieCountry> _countries;
+        private ConcurrentObservableCollection<MovieStudio> _studios;
+        private ConcurrentObservableCollection<MovieVideo> _videos;
+        private ConcurrentObservableCollection<MovieAudio> _audios;
+        private ConcurrentObservableCollection<IPromotionalVideo> _promotionalVideos;
+        private ConcurrentObservableCollection<IRating> _ratings;
+        private ConcurrentObservableCollection<MoviePlot> _plots;
+        private ConcurrentObservableCollection<MovieArt> _art;
+        private ConcurrentObservableCollection<MovieCertification> _certifications;
+        private ConcurrentObservableCollection<IPerson> _writers;
+        private ConcurrentObservableCollection<MoviePerson> _directors;
+        private ConcurrentObservableCollection<MovieActor> _actors;
+        private ConcurrentObservableCollection<ISpecial> _specials;
+        private ConcurrentObservableCollection<IGenre> _genres;
+        private ConcurrentObservableCollection<IAward> _awards;
 
         public ObservableMovie(IMovie movie) : base(movie) {
-            _art = new ThreadSafeObservableCollection<MovieArt>();
-            _countries = new ThreadSafeObservableCollection<MovieCountry>();
         }
 
         #region Properties
@@ -376,11 +373,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                     return new MovieArt(ObservedEntity.DefaultFanart);
                 }
 
-                MovieArt art;
-                lock (_art) {
-                    art = Art.FirstOrDefault(a => a.Type == ArtType.Fanart && !string.IsNullOrEmpty(a.PreviewOrPath));
-                }
-                return art;
+                return Art.FirstOrDefault(a => a.Type == ArtType.Fanart && !string.IsNullOrEmpty(a.PreviewOrPath));
             }
             set {
                 ObservedEntity.DefaultFanart = value != null
@@ -397,11 +390,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                     return new MovieArt(ObservedEntity.DefaultCover);
                 }
 
-                MovieArt art;
-                lock (_art) {
-                    art = Art.FirstOrDefault(a => (a.Type == ArtType.Cover || a.Type == ArtType.Poster) && !String.IsNullOrEmpty(a.PreviewOrPath));
-                }
-                return art;
+                return Art.FirstOrDefault(a => (a.Type == ArtType.Cover || a.Type == ArtType.Poster) && !String.IsNullOrEmpty(a.PreviewOrPath));
             }
             set {
                 ObservedEntity.DefaultCover = value != null
@@ -438,12 +427,12 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         /// <summary>Gets or sets the movie subtitles.</summary>
         /// <value>The movie subtitles.</value>
-        public ObservableCollection<MovieSubtitle> Subtitles {
+        public ConcurrentObservableCollection<MovieSubtitle> Subtitles {
             get {
                 if (_subtitles == null) {
                     _subtitles = _observedEntity.Subtitles == null
-                        ? new ThreadSafeObservableCollection<MovieSubtitle>()
-                        : new ThreadSafeObservableCollection<MovieSubtitle>(_observedEntity.Subtitles.Select(s => new MovieSubtitle(s)));
+                        ? new ConcurrentObservableCollection<MovieSubtitle>()
+                        : new ConcurrentObservableCollection<MovieSubtitle>(_observedEntity.Subtitles.Select(s => new MovieSubtitle(s)));
                 }
                 return _subtitles;
             }
@@ -451,18 +440,12 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         /// <summary>Gets or sets the countries that this movie was shot or/and produced in.</summary>
         /// <summary>The countries that this movie was shot or/and produced in.</summary>
-        public ObservableCollection<MovieCountry> Countries {
+        public ConcurrentObservableCollection<MovieCountry> Countries {
             get {
-                if (_countries.Count != _observedEntity.Countries.Count()) {
-                    ThreadSafeObservableCollection<MovieCountry> countries = (ThreadSafeObservableCollection<MovieCountry>) _countries;
-                    countries.SuspendCollectionChangeNotification();
-                    countries.Clear();
-
-                    foreach (ICountry country in _observedEntity.Countries) {
-                        countries.Add(new MovieCountry(country));
-                    }
-                    countries.ResumeCollectionChangeNotification();
-                    countries.NotifyChanges();
+                if (_countries == null) {
+                    _countries = _observedEntity.Countries == null 
+                        ? new ConcurrentObservableCollection<MovieCountry>() 
+                        : new ConcurrentObservableCollection<MovieCountry>(_observedEntity.Countries.Select(s => new MovieCountry(s)));
                 }
                 return _countries;
             }
@@ -470,12 +453,12 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         /// <summary>Gets or sets the studio(s) that produced the movie.</summary>
         /// <value>The studio(s) that produced the movie.</value>
-        public ObservableCollection<MovieStudio> Studios {
+        public ConcurrentObservableCollection<MovieStudio> Studios {
             get {
                 if (_studios == null) {
                     _studios = _observedEntity.Studios == null 
-                        ? new ThreadSafeObservableCollection<MovieStudio>() 
-                        : new ThreadSafeObservableCollection<MovieStudio>(_observedEntity.Studios.Select(s => new MovieStudio(s)));
+                        ? new ConcurrentObservableCollection<MovieStudio>() 
+                        : new ConcurrentObservableCollection<MovieStudio>(_observedEntity.Studios.Select(s => new MovieStudio(s)));
                 }
                 return _studios;
             }
@@ -483,12 +466,12 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         /// <summary>Gets or sets the information about video streams of this movie.</summary>
         /// <value>The information about video streams of this movie</value>
-        public ObservableCollection<MovieVideo> Videos {
+        public ConcurrentObservableCollection<MovieVideo> Videos {
             get {
                 if (_videos == null) {
                     _videos = _observedEntity.Videos == null 
-                        ? new ThreadSafeObservableCollection<MovieVideo>() 
-                        : new ThreadSafeObservableCollection<MovieVideo>(_observedEntity.Videos.Select(v => new MovieVideo(v)));
+                        ? new ConcurrentObservableCollection<MovieVideo>() 
+                        : new ConcurrentObservableCollection<MovieVideo>(_observedEntity.Videos.Select(v => new MovieVideo(v)));
                 }
                 return _videos;
             }
@@ -496,12 +479,12 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         /// <summary>Gets or sets the information about audio streams of this movie.</summary>
         /// <value>The information about audio streams of this movie</value>
-        public ObservableCollection<MovieAudio> Audios {
+        public ConcurrentObservableCollection<MovieAudio> Audios {
             get {
                 if (_audios == null) {
                     _audios = _observedEntity.Audios == null
-                        ? new ThreadSafeObservableCollection<MovieAudio>()
-                        : new ThreadSafeObservableCollection<MovieAudio>(_observedEntity.Audios.Select(a => new MovieAudio(a)));
+                        ? new ConcurrentObservableCollection<MovieAudio>()
+                        : new ConcurrentObservableCollection<MovieAudio>(_observedEntity.Audios.Select(a => new MovieAudio(a)));
                 }
                 return _audios;
             }
@@ -509,12 +492,12 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         /// <summary>Gets or sets the information about this movie's critics and their ratings</summary>
         /// <value>The information about this movie's critics and their ratings</value>
-        public ObservableCollection<IRating> Ratings {
+        public ConcurrentObservableCollection<IRating> Ratings {
             get {
                 if (_ratings == null) {
                     _ratings = _observedEntity.Ratings == null 
-                        ? new ThreadSafeObservableCollection<IRating>() 
-                        : new ThreadSafeObservableCollection<IRating>(_observedEntity.Ratings);
+                        ? new ConcurrentObservableCollection<IRating>() 
+                        : new ConcurrentObservableCollection<IRating>(_observedEntity.Ratings);
                 }
 
                 return _ratings;
@@ -523,12 +506,12 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         /// <summary>Gets or sets this movie's story and plot with summary and a tagline.</summary>
         /// <value>This movie's story and plot with summary and a tagline</value>
-        public ObservableCollection<MoviePlot> Plots {
+        public ConcurrentObservableCollection<MoviePlot> Plots {
             get {
                 if (_plots == null) {
                     _plots = _observedEntity.Plots == null 
-                        ? new ThreadSafeObservableCollection<MoviePlot>() 
-                        : new ThreadSafeObservableCollection<MoviePlot>(_observedEntity.Plots.Select(p => new MoviePlot(p)));
+                        ? new ConcurrentObservableCollection<MoviePlot>() 
+                        : new ConcurrentObservableCollection<MoviePlot>(_observedEntity.Plots.Select(p => new MoviePlot(p)));
                 }
 
                 return _plots;
@@ -537,33 +520,26 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         /// <summary>Gets or sets the movie promotional images.</summary>
         /// <value>The movie promotional images</value>
-        public ObservableCollection<MovieArt> Art {
+        public ConcurrentObservableCollection<MovieArt> Art {
             get {
-                if (_art.Count != _observedEntity.Art.Count()) {
-                    lock (_art) {
-                        ThreadSafeObservableCollection<MovieArt> arts = (ThreadSafeObservableCollection<MovieArt>) _art;
-                        arts.SuspendCollectionChangeNotification();
-                        arts.Clear();
-
-                        foreach (IArt art in _observedEntity.Art) {
-                            arts.Add(new MovieArt(art));
-                        }
-                        arts.ResumeCollectionChangeNotification();
-                        arts.NotifyChanges();
-                    }
+                if (_art == null) {
+                    _art = _observedEntity.Art == null 
+                        ? new ConcurrentObservableCollection<MovieArt>() 
+                        : new ConcurrentObservableCollection<MovieArt>(_observedEntity.Art.Select(a => new MovieArt(a)));
                 }
+
                 return _art;
             }
         }
 
         /// <summary>Gets or sets the information about this movie's certification ratings/restrictions in certain countries.</summary>
         /// <value>The information about this movie's certification ratings/restrictions in certain countries.</value>
-        public ObservableCollection<MovieCertification> Certifications {
+        public ConcurrentObservableCollection<MovieCertification> Certifications {
             get {
                 if (_certifications == null) {
                     _certifications = _observedEntity.Certifications == null
-                        ? new ThreadSafeObservableCollection<MovieCertification>()
-                        : new ThreadSafeObservableCollection<MovieCertification>(_observedEntity.Certifications.Select(c => new MovieCertification(c)));
+                        ? new ConcurrentObservableCollection<MovieCertification>()
+                        : new ConcurrentObservableCollection<MovieCertification>(_observedEntity.Certifications.Select(c => new MovieCertification(c)));
                 }
 
                 return _certifications;
@@ -572,12 +548,12 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         /// <summary>Gets or sets the name of the credited writer(s).</summary>
         /// <value>The names of the credited script writer(s)</value>
-        public ObservableCollection<IPerson> Writers {
+        public ConcurrentObservableCollection<IPerson> Writers {
             get {
                 if (_writers == null) {
                     _writers = _observedEntity.Writers == null 
-                        ? new ThreadSafeObservableCollection<IPerson>() 
-                        : new ThreadSafeObservableCollection<IPerson>(_observedEntity.Writers);
+                        ? new ConcurrentObservableCollection<IPerson>() 
+                        : new ConcurrentObservableCollection<IPerson>(_observedEntity.Writers);
                 }
 
                 return _writers;
@@ -586,12 +562,12 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         /// <summary>Gets or sets the movie directors.</summary>
         /// <value>People that directed this movie.</value>
-        public ObservableCollection<MoviePerson> Directors {
+        public ConcurrentObservableCollection<MoviePerson> Directors {
             get {
                 if (_directors == null) {
                     _directors = _observedEntity.Directors == null 
-                        ? new ThreadSafeObservableCollection<MoviePerson>() 
-                        : new ThreadSafeObservableCollection<MoviePerson>(_observedEntity.Directors.Select(p => new MoviePerson(p)));
+                        ? new ConcurrentObservableCollection<MoviePerson>() 
+                        : new ConcurrentObservableCollection<MoviePerson>(_observedEntity.Directors.Select(p => new MoviePerson(p)));
                 }
 
                 return _directors;
@@ -600,12 +576,12 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         /// <summary>Gets or sets the Person to Movie link with payload as in character name the person is protraying.</summary>
         /// <value>The Person to Movie link with payload as in character name the person is protraying.</value>
-        public ObservableCollection<MovieActor> Actors {
+        public ConcurrentObservableCollection<MovieActor> Actors {
             get {
                 if (_actors == null) {
                     _actors = _observedEntity.Actors == null 
-                        ? new ThreadSafeObservableCollection<MovieActor>()
-                        : new ThreadSafeObservableCollection<MovieActor>(_observedEntity.Actors.Select(a => new MovieActor(a)));
+                        ? new ConcurrentObservableCollection<MovieActor>()
+                        : new ConcurrentObservableCollection<MovieActor>(_observedEntity.Actors.Select(a => new MovieActor(a)));
                 }
 
                 return _actors;
@@ -614,12 +590,12 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         /// <summary>Gets or sets the special information about this movie release.</summary>
         /// <value>The special information about this movie release</value>
-        public ObservableCollection<ISpecial> Specials {
+        public ConcurrentObservableCollection<ISpecial> Specials {
             get {
                 if (_specials == null) {
                     _specials = _observedEntity.Specials == null 
-                        ? new ThreadSafeObservableCollection<ISpecial>() 
-                        : new ThreadSafeObservableCollection<ISpecial>(_observedEntity.Specials);
+                        ? new ConcurrentObservableCollection<ISpecial>() 
+                        : new ConcurrentObservableCollection<ISpecial>(_observedEntity.Specials);
                 }
 
                 return _specials;
@@ -628,36 +604,36 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         /// <summary>Gets or sets the movie genres.</summary>
         /// <value>The movie genres.</value>
-        public ObservableCollection<IGenre> Genres {
+        public ConcurrentObservableCollection<IGenre> Genres {
             get {
                 if (_genres == null) {
                     _genres = _observedEntity.Genres == null 
-                        ? new ThreadSafeObservableCollection<IGenre>() 
-                        : new ThreadSafeObservableCollection<IGenre>(_observedEntity.Genres);
+                        ? new ConcurrentObservableCollection<IGenre>() 
+                        : new ConcurrentObservableCollection<IGenre>(_observedEntity.Genres);
                 }
 
                 return _genres;
             }
         }
 
-        public ObservableCollection<IAward> Awards {
+        public ConcurrentObservableCollection<IAward> Awards {
             get {
                 if (_awards == null) {
                     _awards = _observedEntity.Awards == null
-                        ? new ThreadSafeObservableCollection<IAward>()
-                        : new ThreadSafeObservableCollection<IAward>(_observedEntity.Awards);
+                        ? new ConcurrentObservableCollection<IAward>()
+                        : new ConcurrentObservableCollection<IAward>(_observedEntity.Awards);
                 }
 
                 return _awards;
             }
         }
 
-        public ObservableCollection<IPromotionalVideo> PromotionalVideos {
+        public ConcurrentObservableCollection<IPromotionalVideo> PromotionalVideos {
             get {
                 if (_promotionalVideos == null) {
                     _promotionalVideos = _observedEntity.PromotionalVideos == null 
-                        ? new ThreadSafeObservableCollection<IPromotionalVideo>()
-                        : new ThreadSafeObservableCollection<IPromotionalVideo>(_observedEntity.PromotionalVideos);
+                        ? new ConcurrentObservableCollection<IPromotionalVideo>()
+                        : new ConcurrentObservableCollection<IPromotionalVideo>(_observedEntity.PromotionalVideos);
                 }
 
                 return _promotionalVideos;

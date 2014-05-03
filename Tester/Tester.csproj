@@ -102,6 +102,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Detection\FeatureDetector\FeatureDetector.csproj">
+      <Project>{8542c013-aa9a-4852-98fa-6f05cc037a91}</Project>
+      <Name>FeatureDetector</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Downloaders\Art\SharpFanartTv\SharpFanartTv.csproj">
       <Project>{25d0e1a6-7fa0-49fa-989f-3f5f082bd23d}</Project>
       <Name>SharpFanartTv</Name>
@@ -114,13 +118,17 @@
       <Project>{7e74d034-0d99-4e49-bd80-f96b04d3eca9}</Project>
       <Name>SharpTraktTvAPI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Downloaders\Subtitle\SharpOpenSubtitles\SharpOpenSubtitles.csproj">
-      <Project>{10711252-7056-44a6-ac29-5c7c203b0095}</Project>
-      <Name>SharpOpenSubtitles</Name>
+    <ProjectReference Include="..\Libraries\Common\Common.csproj">
+      <Project>{73F12859-D8B1-49C1-A835-0810CE7BD006}</Project>
+      <Name>Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Libraries\xml-rpc.net.3.0.0\xmlrpc.csproj">
       <Project>{1B4B0A58-0AFB-4090-91DD-18912CC7DE65}</Project>
       <Name>xmlrpc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Providers\Providers.Frost\Providers.Frost.csproj">
+      <Project>{b404da8f-fbf4-4ccc-be01-22c488863ec2}</Project>
+      <Name>Providers.Frost</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

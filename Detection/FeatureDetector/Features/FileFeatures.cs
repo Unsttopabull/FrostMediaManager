@@ -182,16 +182,16 @@ namespace Frost.DetectFeatures {
             _fnInfos = new Dictionary<string, FileNameInfo>();
         }
 
-        public FileFeatures(NFOPriority nfoPriority, params string[] fileNames) : this(nfoPriority) {
-            _files = new FileDetectionInfo[fileNames.Length];
+        public FileFeatures(NFOPriority nfoPriority, params string[] filePaths) : this(nfoPriority) {
+            _files = new FileDetectionInfo[filePaths.Length];
 
-            foreach (string filenName in fileNames) {
+            foreach (string filenName in filePaths) {
                 FileNameParser fnp = new FileNameParser(filenName);
                 FileNameInfo nameInfo = fnp.Parse();
                 _fnInfos.Add(nameInfo.FileOrFolderName, nameInfo);
             }
 
-            Init(fileNames);
+            Init(filePaths);
         }
 
         public FileFeatures(NFOPriority nfoPriority, params FileNameInfo[] fileNameInfos) : this(nfoPriority) {

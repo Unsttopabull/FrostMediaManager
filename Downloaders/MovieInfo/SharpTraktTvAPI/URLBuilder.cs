@@ -29,7 +29,7 @@ namespace SharpTraktTvAPI {
             _uri.Append("=");
 
             if (urlEncode) {
-                _uri.Append(WebUtility.UrlEncode(value.ToString()));
+                _uri.Append(WebUtility.UrlEncode(value.ToString().TrimEnd('-')));
             }
             else {
                 _uri.Append(value);

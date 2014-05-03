@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -11,14 +10,13 @@ using System.Windows.Data;
 using System.Windows.Input;
 using Frost.Common;
 using Frost.Common.Models.Provider;
-using Frost.Common.Util;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;
 using RibbonUI.Design;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
-using IMovieList = System.Collections.Generic.List<Frost.Common.Models.Provider.IMovie>;
+using Swordfish.NET.Collections;
 
 namespace RibbonUI.UserControls {
 
@@ -29,8 +27,7 @@ namespace RibbonUI.UserControls {
         private ICollectionView _collectionView;
         private string _movieSearchFilter;
         private ObservableMovie _selectedMovie;
-        private ObservableCollection<ObservableMovie> _movies;
-        private ObservableCollection<MovieCertification> _certifications;
+        private ConcurrentObservableCollection<ObservableMovie> _movies;
         private DateTime _lastChangedMovie;
         private RibbonTabs _tab;
 
@@ -41,7 +38,7 @@ namespace RibbonUI.UserControls {
 
             _lastChangedMovie = DateTime.Now;
 
-            Movies = new ThreadSafeObservableCollection<ObservableMovie>(_service.Movies.Select(m => new ObservableMovie(m)));
+            Movies = new ConcurrentObservableCollection<ObservableMovie>(_service.Movies.Select(m => new ObservableMovie(m)));
             _service.Movies.CollectionChanged += MoviesChanged;
 
 
@@ -63,9 +60,8 @@ namespace RibbonUI.UserControls {
                     }
                     break;
                 case NotifyCollectionChangedAction.Remove:
-                    IMovieList movies = new IMovieList();
-                    foreach (IMovie mov in movies) {
-                        ObservableMovie movie = Movies.FirstOrDefault(m => m.Equals(mov));
+                    foreach (IMovie mov in e.OldItems) {
+                        ObservableMovie movie = Enumerable.FirstOrDefault(Movies, m => m.Equals(mov));
                         if (movie != null) {
                             Movies.Remove(movie);
                         }
@@ -76,14 +72,14 @@ namespace RibbonUI.UserControls {
                 case NotifyCollectionChangedAction.Move:
                     break;
                 case NotifyCollectionChangedAction.Reset:
-                    Movies = new ObservableCollection<ObservableMovie>(_service.Movies.Select(m => new ObservableMovie(m)));
+                    Movies = new ConcurrentObservableCollection<ObservableMovie>(_service.Movies.Select(m => new ObservableMovie(m)));
                     break;
                 default:
                     return;
             }
         }
 
-        public ObservableCollection<ObservableMovie> Movies {
+        public ConcurrentObservableCollection<ObservableMovie> Movies {
             get { return _movies; }
             set {
                 if (Equals(value, _movies)) {
@@ -117,15 +113,6 @@ namespace RibbonUI.UserControls {
                 _lastChangedMovie = now;
 
                 _selectedMovie = value;
-
-                if (_selectedMovie != null) {
-                    var certs = _selectedMovie.Certifications;
-
-                    Certifications = certs == null
-                        ? new ObservableCollection<MovieCertification>()
-                        : new ObservableCollection<MovieCertification>(certs.Select(c => new MovieCertification(c)));
-                }
-
                 OnPropertyChanged();
             }
         }
@@ -148,17 +135,6 @@ namespace RibbonUI.UserControls {
                     return;
                 }
                 _tab = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollection<MovieCertification> Certifications {
-            get { return _certifications; }
-            set {
-                if (Equals(value, _certifications)) {
-                    return;
-                }
-                _certifications = value;
                 OnPropertyChanged();
             }
         }

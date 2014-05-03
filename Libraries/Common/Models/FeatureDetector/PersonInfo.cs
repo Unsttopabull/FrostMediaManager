@@ -17,10 +17,13 @@ namespace Frost.Common.Models.FeatureDetector {
         /// <summary>Initializes a new instance of the <see cref="PersonInfo"/> class.</summary>
         /// <param name="name">The full name of the actor.</param>
         /// <param name="thumb">The thumbnail image.</param>
-        public PersonInfo(string name, string thumb) : this(name) {
+        /// <param name="imdbId">The IMDB Id (nm1234567)</param>
+        public PersonInfo(string name, string thumb, string imdbId = null) : this(name) {
             if (!string.IsNullOrEmpty(thumb)) {
                 _thumb = thumb;
             }
+
+            ImdbID = imdbId;
         }
         
         /// <summary>Gets or sets the full name of the person.</summary>

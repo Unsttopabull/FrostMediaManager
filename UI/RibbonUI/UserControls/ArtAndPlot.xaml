@@ -4,13 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:converters="clr-namespace:RibbonUI.Converters"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:l="http://www.frostmediamanager.com/xaml/translation"
     xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:userControls="clr-namespace:RibbonUI.UserControls"
-    xmlns:models="clr-namespace:Frost.Common.Models.Provider;assembly=Frost.Common"
     xmlns:ow="clr-namespace:RibbonUI.Util.ObservableWrappers"
     x:Class="RibbonUI.UserControls.ArtAndPlot"
     mc:Ignorable="d"
@@ -23,7 +21,7 @@
             <SolidColorBrush x:Key="BorderBackground" Color="Black" Opacity="0.8" />
             <BitmapImage x:Key="DefaultCover" UriSource="../Images/default/cover.png"/>
             <BitmapImage x:Key="DefaultFanart"  UriSource="../Images/default/fanart.jpg" />
-            <BitmapImage x:Key="DefaultMpaa"    UriSource="../Images/default/mpaaur.png"/>
+            <BitmapImage x:Key="DefaultMpaa"    UriSource="../Images/default/mpaanr.png"/>
             <BitmapImage x:Key="OscarWon"       UriSource="../Images/awards/oscar-icon.png"/>
             <BitmapImage x:Key="OscarNominated" UriSource="../Images/awards/oscar-icon-nomination.png"/>
             <BitmapImage x:Key="GoldenGlobeWon" UriSource="../Images/awards/golden-globes.png"/>

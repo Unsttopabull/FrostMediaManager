@@ -53,7 +53,7 @@ namespace RibbonUI.Util.ObservableWrappers {
 
                 string rating = Rating;
                 if (Country.ISO3166.Alpha3.Equals("usa", StringComparison.OrdinalIgnoreCase)) {
-                    rating = "mpaa" + rating;
+                    rating = "mpaa" + rating.Replace("-", "");
                 }
 
                 return GetImageSourceFromPath(string.Format("Images/RatingsE/{0}/{1}.png", Country.ISO3166.Alpha3, rating));

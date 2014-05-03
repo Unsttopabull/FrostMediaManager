@@ -345,28 +345,13 @@ namespace RibbonUI.Util.WebUpdate {
             return Task.Run(() => {
                 if (_parsedInfo.Genres != null) {
                     foreach (string genre in _parsedInfo.Genres) {
-                        movie.Genres.Add(genre);
+                        if (!movie.Genres.Contains(genre)) {
+                            movie.Genres.Add(genre);
+                        }
                     }
                 }
 
-                if (_parsedInfo.Writers != null) {
-                    foreach (IParsedPerson writer in _parsedInfo.Writers) {
-                        movie.Writers.Add(new PersonInfo(writer.Name, writer.Thumb) { ImdbID = writer.ImdbID });
-                    }
-                }
-
-                if (_parsedInfo.Directors != null) {
-                    foreach (IParsedPerson director in _parsedInfo.Directors) {
-                        movie.Directors.Add(new PersonInfo(director.Name, director.Thumb) { ImdbID = director.ImdbID });
-                    }
-                }
-
-                if (_parsedInfo.Actors != null) {
-                    foreach (IParsedActor actor in _parsedInfo.Actors) {
-                        PersonInfo p = new PersonInfo(actor.Name, actor.Thumb) { ImdbID = actor.ImdbID };
-                        movie.Actors.Add(new ActorInfo(p, actor.Character));
-                    }
-                }
+                UpdatePeople(movie);
 
                 if (!string.IsNullOrEmpty(_parsedInfo.TrailerUrl)) {
                     movie.Trailer = _parsedInfo.TrailerUrl.Trim('/');
@@ -398,7 +383,7 @@ namespace RibbonUI.Util.WebUpdate {
                 if (_parsedInfo.Countries != null) {
                     foreach (string country in _parsedInfo.Countries) {
                         ISOCountryCode countryCode = ISOCountryCodes.Instance.GetByEnglishName(country);
-                        if (countryCode != null) {
+                        if (countryCode != null && !movie.Countries.Contains(countryCode)) {
                             movie.Countries.Add(countryCode);
                         }                        
                     }
@@ -411,7 +396,7 @@ namespace RibbonUI.Util.WebUpdate {
                     }
                 }
 
-                if (!string.IsNullOrEmpty(_parsedInfo.MPAA)) {
+                if (!string.IsNullOrEmpty(_parsedInfo.MPAA) && !movie.Certifications.Any(c => c.Country != null && string.Equals(c.Country.Alpha3, "usa", StringComparison.OrdinalIgnoreCase))) {
                     movie.Certifications.Add(new CertificationInfo(ISOCountryCodes.Instance.GetByISOCode("usa"), _parsedInfo.MPAA));
                 }
 
@@ -429,6 +414,58 @@ namespace RibbonUI.Util.WebUpdate {
                     movie.AddArt(new DesignArt(ArtType.Fanart, _parsedInfo.Fanart, _parsedInfo.FanartPreview), true);
                 }
             });
+        }
+
+        private void UpdatePeople(MovieInfo movie) {
+            if (_parsedInfo.Writers != null) {
+                foreach (IParsedPerson writer in _parsedInfo.Writers) {
+                    if (movie.Writers.Any(w => PersonEquals(writer, w))) {
+                        continue;
+                    }
+                    movie.Writers.Add(new PersonInfo(writer.Name, writer.Thumb, writer.ImdbID));
+                }
+            }
+
+            if (_parsedInfo.Directors != null) {
+                foreach (IParsedPerson director in _parsedInfo.Directors) {
+                    if (movie.Directors.Any(d => PersonEquals(director, d))) {
+                        continue;
+                    }
+                    movie.Directors.Add(new PersonInfo(director.Name, director.Thumb, director.ImdbID));
+                }
+            }
+
+            if (_parsedInfo.Actors != null) {
+                foreach (IParsedActor actor in _parsedInfo.Actors) {
+                    ActorInfo actorInfo = movie.Actors.FirstOrDefault(a => PersonEquals(actor, a));
+
+                    if (actorInfo != null) {
+                        if (string.Equals(actor.Character, actorInfo.Character, StringComparison.CurrentCultureIgnoreCase)) {
+                            continue;
+                        }
+
+                        if (string.IsNullOrEmpty(actorInfo.Character) && !string.IsNullOrEmpty(actor.Character)) {
+                            actorInfo.Character = actor.Character;
+                            continue;
+                        }
+                    }
+
+                    PersonInfo p = new PersonInfo(actor.Name, actor.Thumb, actor.ImdbID);
+                    movie.Actors.Add(new ActorInfo(p, actor.Character));
+                }
+            }
+        }
+
+        private bool PersonEquals(IParsedPerson lhs, PersonInfo rhs) {
+            if (lhs == null || rhs == null) {
+                return false;
+            }
+
+            if (!string.IsNullOrEmpty(lhs.ImdbID) && !string.IsNullOrEmpty(rhs.ImdbID)) {
+                return string.Equals(lhs.ImdbID, rhs.ImdbID, StringComparison.OrdinalIgnoreCase);
+            }
+
+            return string.Equals(lhs.Name, rhs.Name);            
         }
 
         public Task UpdateMovie(bool silent = false) {
@@ -593,11 +630,21 @@ namespace RibbonUI.Util.WebUpdate {
 
             if (movie["Art"]) {
                 if (!string.IsNullOrEmpty(_parsedInfo.Cover)) {
-                    movie.AddArt(new DesignArt(ArtType.Cover, _parsedInfo.Cover, _parsedInfo.CoverPreview), true);
+                    try {
+                        movie.AddArt(new DesignArt(ArtType.Cover, _parsedInfo.Cover, _parsedInfo.CoverPreview), true);
+                    }
+                    catch (Exception e) {
+                        Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
+                    }
                 }
 
                 if (!string.IsNullOrEmpty(_parsedInfo.Fanart)) {
-                    movie.AddArt(new DesignArt(ArtType.Fanart, _parsedInfo.Fanart, _parsedInfo.FanartPreview), true);
+                    try {
+                        movie.AddArt(new DesignArt(ArtType.Fanart, _parsedInfo.Fanart, _parsedInfo.FanartPreview), true);
+                    }
+                    catch (Exception e) {
+                        Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
+                    }
                 }
             }
         }

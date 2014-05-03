@@ -92,6 +92,7 @@
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Models\FeatureDetector\AwardInfo.cs" />
+    <Compile Include="Models\FeatureDetector\PromotionalVideoInfo.cs" />
     <Compile Include="Models\IMovieInfo.cs" />
     <Compile Include="Models\FeatureDetector\ActorInfo.cs" />
     <Compile Include="Models\FeatureDetector\ArtInfo.cs" />

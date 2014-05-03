@@ -227,7 +227,11 @@ namespace RibbonUI.Windows.Search {
             ProgressMax = movieInfos.Count;
             double percent = 1.0 / ProgressMax;
 
-            for (int i = 0; i < movieInfos.Count; i++) {
+            LogText = "Searching for movie info, art and videos online ...";
+
+            //for (int i = 0; i < movieInfos.Count; i++) {
+            Parallel.For(0, movieInfos.Count, new ParallelOptions { MaxDegreeOfParallelism = 5 }, i => {
+
                 if (_tokenSource.Token.IsCancellationRequested) {
                     return;
                 }
@@ -237,28 +241,47 @@ namespace RibbonUI.Windows.Search {
 
                 Task[] downloaders = new Task[3];
                 if (SearchInfo) {
-                    LogText = "Searching for movie info online ...";
                     downloaders[0] = SearchMovieInfo(movieInfo, InfoPlugin);
                 }
 
                 if (SearchArt) {
-                    LogText = "Searching for movie art online ...";
                     downloaders[1] = SearchMovieArt(movieInfo, ArtPlugin);
                 }
 
                 if (SearchVideos) {
-                    LogText = "Searching for movie videos online ...";
                     downloaders[2] = SearchMovieVideos(movieInfo, VideoPlugin);
                 }
 
-                LogText = "Searching for movie info, art and videos online ...";
-
                 try {
-                    await Task.WhenAll(downloaders.Where(t => t != null));
+                    Task.WaitAll(downloaders.Where(t => t != null).ToArray());
                 }
                 catch (Exception e) {
-                    
                 }
+
+                ProgressValue++;
+
+                if (ParentWindow != null) {
+                    ParentWindow.Dispatcher.Invoke(() => ParentWindow.TaskbarItemInfo.ProgressValue += percent);
+                }
+            });
+
+            if (_tokenSource.Token.IsCancellationRequested) {
+                return;
+            }
+
+            ProgressValue = 0;
+            if (ParentWindow != null) {
+                ParentWindow.Dispatcher.Invoke(() => ParentWindow.TaskbarItemInfo.ProgressValue = 0);
+            }
+
+            LogText = "Provider is saving movies ...";
+            for (int i = 0; i < movieInfos.Count; i++) {
+                if (_tokenSource.Token.IsCancellationRequested) {
+                    return;
+                }
+
+                MovieInfo movieInfo = movieInfos[i];
+                ProgressText = movieInfo.Title ?? "Movie " + i;
 
                 try {
                     service.SaveDetected(movieInfo);
@@ -275,21 +298,22 @@ namespace RibbonUI.Windows.Search {
             }
         }
 
-        private Task SearchMovieInfo(MovieInfo movieInfo, Plugin infoPlugin) {
+        private async Task SearchMovieInfo(MovieInfo movieInfo, Plugin infoPlugin) {
             if (infoPlugin != null) {
                 IParsingClient client = LightInjectContainer.TryGetInstance<IParsingClient>(infoPlugin.Name);
                 if (client == null) {
-                    return null;
+                    return;
                 }
 
                 MovieInfoUpdater mi = new MovieInfoUpdater(client, movieInfo);
-                return mi.Update(true).ContinueWith(t => mi.UpdateMovieInfo());
+                await mi.Update(true);
+                await mi.UpdateMovieInfo();
             }
-            return SearchInfoUsingAll(movieInfo);
+            await SearchInfoUsingAll(movieInfo);
         }
 
-        private Task SearchInfoUsingAll(MovieInfo movieInfo) {
-            return null;
+        private async Task SearchInfoUsingAll(MovieInfo movieInfo) {
+            return;
         }
 
         private Task SearchMovieVideos(MovieInfo movieInfo, Plugin videoPlugin) {

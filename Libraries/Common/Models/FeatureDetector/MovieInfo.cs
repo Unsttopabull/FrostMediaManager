@@ -22,6 +22,7 @@ namespace Frost.Common.Models.FeatureDetector {
             Studios = new List<string>();
             Plots = new List<PlotInfo>();
             Awards = new List<AwardInfo>();
+            PromotionalVideos = new List<PromotionalVideoInfo>();
         }
 
         /// <summary>Gets or sets the title of the movie in the local language.</summary>
@@ -173,8 +174,10 @@ namespace Frost.Common.Models.FeatureDetector {
         public List<PersonInfo> Directors { get; set; }
 
         public List<ActorInfo> Actors { get; set; }
-
+        
         public List<ArtInfo> Art { get; set; }
+
+        public List<PromotionalVideoInfo> PromotionalVideos { get; set; }
 
         public List<AwardInfo> Awards { get; set; }
 
@@ -183,11 +186,11 @@ namespace Frost.Common.Models.FeatureDetector {
         public IEnumerable<string> MovieHashes { get; private set; }
 
         public void AddArt(IArt art, bool silent = false) {
-            //throw new NotImplementedException();
+            Art.Add(new ArtInfo(art.Type, art.Path, art.Preview));
         }
 
         public void AddPromotionalVideo(IPromotionalVideo video, bool silent = false) {
-            //throw new NotImplementedException();
+            PromotionalVideos.Add(new PromotionalVideoInfo(video.Type, video.Title, video.Url, video.Duration, video.Language, video.SubtitleLanguage));
         }
 
         /// <summary>Gets the runtime sum of all the video parts in this movie in miliseconds.</summary>

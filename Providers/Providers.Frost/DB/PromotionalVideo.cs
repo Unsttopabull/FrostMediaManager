@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity.ModelConfiguration;
 using Frost.Common;
+using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 
 namespace Frost.Providers.Frost.DB {
@@ -11,13 +12,21 @@ namespace Frost.Providers.Frost.DB {
         }
 
         internal PromotionalVideo(IPromotionalVideo promotionalVideo) {
-
             Type = promotionalVideo.Type;
             Title = promotionalVideo.Title;
             Url = promotionalVideo.Url;
             Duration = promotionalVideo.Duration;
             Language = promotionalVideo.Language;
             SubtitleLanguage = promotionalVideo.SubtitleLanguage;
+        }
+
+        internal PromotionalVideo(PromotionalVideoInfo promotionalVideo) {
+            Type = promotionalVideo.Type;
+            Title = promotionalVideo.Title;
+            Url = promotionalVideo.Url;
+            Duration = promotionalVideo.Duration;
+            Language = promotionalVideo.Language;
+            SubtitleLanguage = promotionalVideo.SubtitleLanguage;            
         }
 
         public long Id { get; set; }

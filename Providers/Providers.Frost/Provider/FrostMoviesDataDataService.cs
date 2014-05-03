@@ -98,7 +98,7 @@ namespace Frost.Providers.Frost.Provider {
             }
 
             a = _mvc.Art.FirstOrDefault(ar => ar.Path == art.Path);
-            if (a == null && createIfNotFound) {
+            if ((a == null || _mvc.Entry(a).State == EntityState.Deleted) && createIfNotFound) {
                 return new Art(art);
             }
             return a;
@@ -216,7 +216,7 @@ namespace Frost.Providers.Frost.Provider {
                     ? _mvc.Plots.FirstOrDefault(pr => plot.Full == pr.Full && pr.MovieId == movieId)
                     : _mvc.Plots.FirstOrDefault(pr => plot.Full == pr.Full);
 
-            if (p == null || _mvc.Entry(p).State == EntityState.Deleted) {
+            if ((p == null || _mvc.Entry(p).State == EntityState.Deleted) && createIfNotFound) {
                 p = new Plot(plot);
             }
 

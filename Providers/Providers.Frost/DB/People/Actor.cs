@@ -19,13 +19,11 @@ namespace Frost.Providers.Frost.DB {
 
         public string Character { get; set; }
 
-        [Required]
         public virtual Movie Movie { get; set; }
 
         [ForeignKey("Movie")]
         public long MovieId { get; set; }
 
-        [Required]
         public virtual Person Person { get; set; }
 
         [ForeignKey("Person")]
@@ -126,12 +124,14 @@ namespace Frost.Providers.Frost.DB {
                 //1:M with Person
                 HasRequired(a => a.Person)
                     .WithMany(p => p.MoviesAsActor)
-                    .HasForeignKey(a => a.PersonId);
+                    .HasForeignKey(a => a.PersonId)
+                    .WillCascadeOnDelete();
             
                 //1:M with Movie
                 HasRequired(a => a.Movie)
                     .WithMany(m => m.Actors)
-                    .HasForeignKey(a => a.MovieId);
+                    .HasForeignKey(a => a.MovieId)
+                    .WillCascadeOnDelete();
             }
         }
     }
