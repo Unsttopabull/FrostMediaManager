@@ -70,6 +70,10 @@ namespace Frost.Providers.Xtreamer.Provider {
             }
         }
 
+        public bool RemoveMovie(IMovie movie) {
+            return Movies.Remove(movie);
+        }
+
         public IEnumerable<ICountry> Countries { get; private set; }
 
         public IEnumerable<IStudio> Studios { get; private set; }

@@ -327,7 +327,7 @@
                     <DataGrid Grid.Column="0" Grid.Row="1" AutoGenerateColumns="False" GridLinesVisibility="None"
                               SelectionMode="Single" x:Name="MovieActorsList" CellStyle="{StaticResource NoBorderCell}"
                               CanUserResizeColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedMovie.Actors, IsAsync=True}"
-                              CanUserReorderColumns="False" ClipToBounds="True" MinRowHeight="20" EnableRowVirtualization="False"
+                              CanUserReorderColumns="False" ClipToBounds="True" MinRowHeight="20" EnableRowVirtualization="True"
                               MinColumnWidth="50" RowHeaderWidth="0" CanUserAddRows="False" 
                               CellEditEnding="ActorsListOnCellEditEnding" Background="Transparent">
                         <DataGrid.Resources>
@@ -363,7 +363,7 @@
                                              Command="{Binding EditGenreCommand}" CommandParameter="{Binding SelectedItem, ElementName=MovieGenres}"/>
                         </DockPanel>
 
-                        <ListBox Grid.Row="1" x:Name="MovieGenres" MinHeight="20" DataContext="{Binding ElementName=MovieEdit, Path=DataContext.SelectedMovie.Genres}" ItemsSource="{Binding}" DisplayMemberPath="(models:IGenre.Name)"/>
+                        <ListBox Grid.Row="1" x:Name="MovieGenres" MinHeight="20" DataContext="{Binding ElementName=MovieEdit, Path=DataContext.SelectedMovie.Genres, IsAsync=True}" ItemsSource="{Binding}" DisplayMemberPath="(models:IGenre.Name)"/>
 
                         <DockPanel Grid.Row="2" LastChildFill="False">
                             <Label DockPanel.Dock="Left" Content="{l:T Studios, Postfix=:}"/>

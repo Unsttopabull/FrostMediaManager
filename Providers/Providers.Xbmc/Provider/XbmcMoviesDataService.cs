@@ -50,6 +50,10 @@ namespace Frost.Providers.Xbmc.Provider {
             }
         }
 
+        public bool RemoveMovie(IMovie movie) {
+            return Movies.Remove(movie);
+        }
+
         #region Subtitles
 
         public XbmcSubtitleDetails FindSubtitle(ISubtitle subtitle, bool createIfNotFound) {

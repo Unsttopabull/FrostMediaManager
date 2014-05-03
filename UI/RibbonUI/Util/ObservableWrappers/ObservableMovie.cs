@@ -580,7 +580,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             get {
                 if (_actors == null) {
                     _actors = _observedEntity.Actors == null 
-                        ? new ConcurrentObservableCollection<MovieActor>()
+                        ? new ConcurrentObservableCollection<MovieActor>() 
                         : new ConcurrentObservableCollection<MovieActor>(_observedEntity.Actors.Select(a => new MovieActor(a)));
                 }
 

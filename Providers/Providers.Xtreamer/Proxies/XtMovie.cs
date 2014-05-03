@@ -960,7 +960,7 @@ namespace Frost.Providers.Xtreamer.Proxies {
         /// <exception cref="NotSupportedException">Throws when the provider does not support adding art or the art does not meet a certain criteria.</exception>
         /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding art.</exception>
         public IArt AddArt(IArt art) {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         /// <summary>Removes the specified art from the provider data store.</summary>
@@ -969,7 +969,7 @@ namespace Frost.Providers.Xtreamer.Proxies {
         /// <exception cref="NotSupportedException">Throws when the provider does not support removing arts in a particual scenario.</exception>
         /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing art.</exception>
         public bool RemoveArt(IArt art) {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         /// <summary>Adds the specified certification to the provider data store.</summary>
@@ -978,7 +978,18 @@ namespace Frost.Providers.Xtreamer.Proxies {
         /// <exception cref="NotSupportedException">Throws when the provider does not support adding certifications or the certification does not meet a certain criteria.</exception>
         /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding certifications.</exception>
         public ICertification AddCertification(ICertification certification) {
-            throw new NotImplementedException();
+            if (certification.Country == null || string.IsNullOrEmpty(certification.Country.ISO3166.Alpha2)) {
+                throw new NotSupportedException("Certification country ISO-3166 Alpha 2 code must be provided");
+            }
+
+            ICertification cert = Certifications.FirstOrDefault(c => string.Equals(c.Country.ISO3166.Alpha2, certification.Country.ISO3166.Alpha2, StringComparison.OrdinalIgnoreCase));
+            if (cert != null) {
+                return cert;
+            }
+            
+            Entity.Certifications.Add(certification.Country.ISO3166.Alpha2, certification.Rating);
+
+            return new XtCertification(Entity, certification.Country.ISO3166.Alpha2);
         }
 
         /// <summary>Removes the specified certification from the provider data store.</summary>
@@ -987,7 +998,14 @@ namespace Frost.Providers.Xtreamer.Proxies {
         /// <exception cref="NotSupportedException">Throws when the provider does not support removing certifications in a particual scenario.</exception>
         /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing certifications.</exception>
         public bool RemoveCertification(ICertification certification) {
-            throw new NotImplementedException();
+            if (certification.Country == null || certification.Country.ISO3166 == null || string.IsNullOrEmpty(certification.Country.ISO3166.Alpha2)) {
+                throw new NotSupportedException("Certification country ISO-3166 Alpha 2 code must be provided");
+            }
+
+            if (Entity.Certifications.ContainsKey(certification.Country.ISO3166.Alpha2)) {
+                return Entity.Certifications.Remove(certification.Country.ISO3166.Alpha2);
+            }
+            return false;
         }
 
         #endregion
@@ -1003,7 +1021,6 @@ namespace Frost.Providers.Xtreamer.Proxies {
                     case "HasArt":
                     case "HasSubtitles":
                     case "HasTrailer":
-                    case "Arts":
                     case "Geres":
                     case "Ratings":
                     case "Specials":

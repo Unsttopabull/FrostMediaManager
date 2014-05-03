@@ -116,7 +116,7 @@ namespace RibbonUI.UserControls {
         public ICommand<MovieActor> EditActorCommand { get; private set; }
 
         public ICommand<MoviePlot> SetPlotLanguageCommand { get; private set; }
-        public ICommand AddPlotCommand { get; private set; }
+        public ICommand AddPlotCommand { get; private set; } 
         public ICommand<MoviePlot> RemovePlotCommand { get; private set; }
 
         public ICommand AddCountryCommand { get; private set; }

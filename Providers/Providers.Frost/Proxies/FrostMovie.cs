@@ -534,12 +534,30 @@ namespace Frost.Providers.Frost.Proxies {
         }
 
         public bool RemoveActor(IActor actor) {
+            if (actor is Actor) {
+                Actor a = actor as Actor;
+                bool removed = Entity.Actors.Remove(a);
+                if (removed) {
+                    Service.MarkAsDeleted(a);
+                }
+                return removed;
+            }
+
             Person p = Service.FindPerson(actor, false);
             if (p == null) {
                 return false;
             }
 
-            return Entity.Actors.RemoveWhere(a => a.Person == p && a.Character == actor.Character) > 0;
+            Actor act = Entity.Actors.FirstOrDefault(a => a.Person == p && a.Character == actor.Character);
+            if (act == null) {
+                return false;
+            }
+
+            bool remove = Entity.Actors.Remove(act);
+            if (remove) {
+                Service.MarkAsDeleted(act);
+            }
+            return remove;
         }
 
         #endregion

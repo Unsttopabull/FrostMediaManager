@@ -9,8 +9,7 @@ namespace RibbonUI.UserControls {
 
     /// <summary>Interaction logic for EditMovie.xaml</summary>
     public partial class EditMovie : UserControl {
-        public static readonly DependencyProperty SelectedMovieProperty = DependencyProperty.Register("SelectedMovie", typeof(ObservableMovie), typeof(EditMovie),
-            new PropertyMetadata(default(ObservableMovie), OnSelectedMovieChanged));
+        public static readonly DependencyProperty SelectedMovieProperty = DependencyProperty.Register("SelectedMovie", typeof(ObservableMovie), typeof(EditMovie), new PropertyMetadata(default(ObservableMovie), OnSelectedMovieChanged));
 
         public EditMovie() {
             InitializeComponent();

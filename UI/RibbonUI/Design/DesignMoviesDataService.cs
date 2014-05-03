@@ -46,6 +46,10 @@ namespace RibbonUI.Design {
             }
         }
 
+        public bool RemoveMovie(IMovie movie) {
+            return Movies.Remove(movie);
+        }
+
         private static ObservableCollection<IMovie> GetMovies() {
             ObservableCollection<IMovie> movies = new ObservableCollection<IMovie>();
 

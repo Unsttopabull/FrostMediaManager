@@ -28,5 +28,7 @@ namespace Frost.Common {
 
         void SaveDetected(MovieInfo movieInfo);
 
+        bool RemoveMovie(IMovie movie);
+
     }
 }

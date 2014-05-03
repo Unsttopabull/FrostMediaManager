@@ -195,8 +195,6 @@
                     <controls:ArtAndPlot x:Name="ArtAndPlot" Background="Transparent"
                                          SelectedMovie="{Binding ElementName=ContentGridControl, Path=DataContext.SelectedMovie}"/>
                 </TabItem>
-                <TabItem Header="{l:T Trivia and goofs}">
-                </TabItem>
                 <TabItem x:Name="MovieEditTab" x:FieldModifier="private" Header="{l:T Edit Movie info}">
                     <controls:EditMovie x:Name="EditMovie" SelectedMovie="{Binding IsAsync=True, ElementName=ContentGridControl, Path=DataContext.SelectedMovie}" />
                 </TabItem>

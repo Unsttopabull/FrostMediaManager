@@ -30,7 +30,7 @@ namespace Frost.Providers.Xbmc.Proxies {
         private long? _top250;
         private double? _avgRating;
         private readonly XbmcPlot _xbmcPlot;
-        private XbmcCertification _mpaa;
+        private readonly XbmcCertification _mpaa;
 
         public XbmcMovie(XbmcDbMovie movie, XbmcMoviesDataService service) : base(movie, service) {
             _xbmcPlot = new XbmcPlot(Entity);

@@ -57,6 +57,10 @@ namespace Frost.Providers.Frost.Provider {
             }
         }
 
+        public bool RemoveMovie(IMovie movie) {
+            return Movies.Remove(movie);
+        }
+
         internal Subtitle FindSubtitle(ISubtitle subtitle, bool createIfNotFound) {
             Subtitle p;
             if (subtitle.Id > 0) {
