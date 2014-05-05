@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Frost.InfoParsers;
 using Frost.InfoParsers.Models;
+using Frost.InfoParsers.Models.Info;
 using SharpTrailerAddictAPI.Models;
 
 namespace SharpTrailerAddictAPI {
@@ -35,7 +36,7 @@ namespace SharpTrailerAddictAPI {
         public string Name { get; private set; }
         public Uri Icon { get; private set; }
 
-        public IEnumerable<IParsedVideo> GetMovieArtFromTitle(string title, int year) {
+        public IEnumerable<IParsedVideo> GetMovieVideosFromTitle(string title, int year) {
             Trailers trailers = TrailerAddictApi.GetMovieVideosByTitle(title, 30);
 
             if (trailers == null || trailers.Trailer == null) {
@@ -45,11 +46,11 @@ namespace SharpTrailerAddictAPI {
             return trailers.Trailer.Select(t => new ParsedVideo { Type = GetVideoType(t.Title), Url = t.Link, Title = t.Title });
         }
 
-        public IEnumerable<IParsedVideo> GetMovieArtFromTmdbId(string tmdbId) {
+        public IEnumerable<IParsedVideo> GetMovieVideosFromTmdbId(string tmdbId) {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<IParsedVideo> GetMovieArtFromImdbId(string imdbId) {
+        public IEnumerable<IParsedVideo> GetMovieVideosFromImdbId(string imdbId) {
             Trailers trailers = TrailerAddictApi.GetMovieVideosByImdbId(imdbId.TrimStart('t'), 30);
 
             if (trailers == null || trailers.Trailer == null) {

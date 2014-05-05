@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;
@@ -11,7 +10,7 @@ namespace RibbonUI.UserControls.List {
         private ObservableMovie _selectedMovie;
 
         public ListCertificationsViewModel() {
-            RemoveCommand = new RelayCommand<MovieCertification>(OnCertificationRemove, cert => cert != null);
+            RemoveCommand = new RelayCommand<MovieCertification>(OnCertificationRemove, cert => SelectedMovie != null && cert != null);
         }
 
         public ICommand<MovieCertification> RemoveCommand { get; private set; }
@@ -27,8 +26,8 @@ namespace RibbonUI.UserControls.List {
             }
         }
 
-        private void OnCertificationRemove(MovieCertification obj) {
-            
+        private void OnCertificationRemove(MovieCertification cert) {
+            SelectedMovie.RemoveCertification(cert);
         }
 
         [NotifyPropertyChangedInvocator]

@@ -59,7 +59,7 @@
             <RowDefinition Height="60" />
         </Grid.RowDefinitions>
 
-        <ListView ItemsSource="{Binding Countries}" Panel.ZIndex="1" Grid.Row="0" Grid.Column="3"
+        <ListView ItemsSource="{Binding SelectedMovie.Countries}" Panel.ZIndex="1" Grid.Row="0" Grid.Column="3"
                   Background="Transparent" BorderBrush="Transparent" IsHitTestVisible="False"
                   ScrollViewer.VerticalScrollBarVisibility="Disabled" Grid.ColumnSpan="2"
                   Style="{StaticResource CollapseOnDisabled}">

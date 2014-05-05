@@ -12,6 +12,8 @@ using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.DetectFeatures;
 using Frost.InfoParsers.Models;
+using Frost.InfoParsers.Models.Art;
+using Frost.InfoParsers.Models.Info;
 using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;
 using RibbonUI.Properties;

@@ -16,7 +16,7 @@ using Frost.Common.Util;
 using Frost.Common.Util.ISO;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers;
-using Frost.InfoParsers.Models;
+using Frost.InfoParsers.Models.Info;
 using FuzzySearch;
 using Newtonsoft.Json;
 using RibbonUI.Annotations;

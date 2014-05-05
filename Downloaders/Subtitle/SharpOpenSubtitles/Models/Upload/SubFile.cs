@@ -17,7 +17,7 @@ namespace Frost.SharpOpenSubtitles.Models.Upload {
 
         /// <summary>Size of the video file in bytes.</summary>
         [XmlRpcMember("moviebytesize")]
-        public double MovieBytesize;
+        public double MovieSizeInBytes;
 
         /// <summary>Length of video in miliseconds.</summary>
         [XmlRpcMember("movietimems")]

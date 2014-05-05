@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Frost.InfoParsers.Models;
+using Frost.InfoParsers.Models.Info;
 
 namespace Frost.InfoParsers {
 

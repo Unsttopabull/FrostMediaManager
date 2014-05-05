@@ -183,7 +183,10 @@
 
                         <Label Grid.Row="0" Grid.ColumnSpan="2" Target="{Binding ElementName=MovieDirectors}" Content="{l:T Directors, Postfix=:}"/>
                         <ListBox Grid.Row="1" Grid.Column="0" MinHeight="20" MaxHeight="50" Grid.ColumnSpan="2"
-                                 x:Name="MovieDirectors" ItemsSource="{Binding SelectedMovie.Directors, IsAsync=True}" SelectionMode="Single" >
+                                 x:Name="MovieDirectors" ItemsSource="{Binding SelectedMovie.Directors, IsAsync=True}" SelectionMode="Single">
+                            <ListBox.InputBindings>
+                                <KeyBinding Key="Delete" Command="{Binding RemoveDirectorCommand}" CommandParameter="{Binding ElementName=MovieDirectors, Path=SelectedItem}"/>
+                            </ListBox.InputBindings>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Name}"/>
@@ -203,6 +206,9 @@
                         <Label Grid.Column="0" Grid.Row="3" Target="{Binding ElementName=MovieCountries}" Margin="-5,-5,0,0"  Content="{l:T Countries, Postfix=:}"/>
                         <ListBox Grid.Row="4" Grid.Column="0" x:Name="MovieCountries" ItemsSource="{Binding SelectedMovie.Countries, IsAsync=True, FallbackValue={x:Null}}"
                                  MinHeight="32">
+                            <ListBox.InputBindings>
+                                <KeyBinding Key="Delete" Command="{Binding RemoveCountryCommand}" CommandParameter="{Binding ElementName=MovieCountries, Path=SelectedItem}"/>
+                            </ListBox.InputBindings>                            
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type o:MovieCountry}">
                                     <StackPanel Orientation="Horizontal">
@@ -328,11 +334,14 @@
                               SelectionMode="Single" x:Name="MovieActorsList" CellStyle="{StaticResource NoBorderCell}"
                               CanUserResizeColumns="False" CanUserResizeRows="False" ItemsSource="{Binding SelectedMovie.Actors, IsAsync=True}"
                               CanUserReorderColumns="False" ClipToBounds="True" MinRowHeight="20" EnableRowVirtualization="True"
-                              MinColumnWidth="50" RowHeaderWidth="0" CanUserAddRows="False" 
+                              MinColumnWidth="50" RowHeaderWidth="0" CanUserAddRows="False"
                               CellEditEnding="ActorsListOnCellEditEnding" Background="Transparent">
                         <DataGrid.Resources>
                             <BitmapImage x:Key="Person" UriSource="../Images/person.png" />
                         </DataGrid.Resources>
+                        <DataGrid.InputBindings>
+                            <KeyBinding Key="Delete" Command="{Binding RemoveActorCommand}" CommandParameter="{Binding ElementName=MovieActorsList, Path=SelectedItem}"/>
+                        </DataGrid.InputBindings>
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="{l:T Image}" IsReadOnly="True">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -363,7 +372,12 @@
                                              Command="{Binding EditGenreCommand}" CommandParameter="{Binding SelectedItem, ElementName=MovieGenres}"/>
                         </DockPanel>
 
-                        <ListBox Grid.Row="1" x:Name="MovieGenres" MinHeight="20" DataContext="{Binding ElementName=MovieEdit, Path=DataContext.SelectedMovie.Genres, IsAsync=True}" ItemsSource="{Binding}" DisplayMemberPath="(models:IGenre.Name)"/>
+                        <ListBox Grid.Row="1" x:Name="MovieGenres" MinHeight="20" DataContext="{Binding ElementName=MovieEdit, Path=DataContext.SelectedMovie.Genres, IsAsync=True}"
+                                 ItemsSource="{Binding}" DisplayMemberPath="(models:IGenre.Name)">
+                            <ListBox.InputBindings>
+                                <KeyBinding Key="Delete" Command="{Binding ElementName=MovieEdit, Path=DataContext.RemoveMovieGenreCommand}" CommandParameter="{Binding ElementName=MovieGenres, Path=SelectedItem}"/>
+                            </ListBox.InputBindings>
+                        </ListBox>
 
                         <DockPanel Grid.Row="2" LastChildFill="False">
                             <Label DockPanel.Dock="Left" Content="{l:T Studios, Postfix=:}"/>
@@ -376,6 +390,9 @@
                                              Command="{Binding EditStudioCommand}" CommandParameter="{Binding ElementName=MovieStudios, Path=SelectedItem}"/>                            
                         </DockPanel>
                         <ListBox Grid.Row="3" x:Name="MovieStudios" ItemsSource="{Binding SelectedMovie.Studios, IsAsync=True}" MinHeight="32">
+                            <ListBox.InputBindings>
+                                <KeyBinding Key="Delete" Command="{Binding Path=RemoveStudioCommand}" CommandParameter="{Binding ElementName=MovieStudios, Path=SelectedItem}"/>
+                            </ListBox.InputBindings>                            
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="{x:Type o:MovieStudio}">
                                     <StackPanel Orientation="Horizontal">

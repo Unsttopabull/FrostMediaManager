@@ -7,6 +7,7 @@ using System.Windows;
 using Frost.Common.Models;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers.Models;
+using Frost.InfoParsers.Models.Info;
 using RibbonUI.Annotations;
 using RibbonUI.Design.Models;
 
@@ -53,19 +54,19 @@ namespace RibbonUI.Util.WebUpdate {
                     if (!silent) {
                         ProgressText = "Searching for videos by Imdb ID";
                     }
-                    parsedVideos = await Task.Run(() => _cli.GetMovieArtFromImdbId(_movie.ImdbID));
+                    parsedVideos = await Task.Run(() => _cli.GetMovieVideosFromImdbId(_movie.ImdbID));
                 }
                 else if (_cli.IsTmdbSupported && !string.IsNullOrEmpty(_movie.TmdbID)) {
                     if (!silent) {
                         ProgressText = "Searching for videos by Tmdb ID";
                     }
-                    parsedVideos = await Task.Run(() => _cli.GetMovieArtFromTmdbId(_movie.TmdbID));
+                    parsedVideos = await Task.Run(() => _cli.GetMovieVideosFromTmdbId(_movie.TmdbID));
                 }
                 else if (_cli.IsTitleSupported) {
                     if (!silent) {
                         ProgressText = "Searching for videos by Title";
                     }
-                    parsedVideos = await Task.Run(() => _cli.GetMovieArtFromTitle(_movie.Title, (int) (_movie.ReleaseYear.HasValue ? _movie.ReleaseYear.Value : 0)));
+                    parsedVideos = await Task.Run(() => _cli.GetMovieVideosFromTitle(_movie.Title, (int) (_movie.ReleaseYear.HasValue ? _movie.ReleaseYear.Value : 0)));
                 }
                 else {
                     List<string> lst = new List<string>();

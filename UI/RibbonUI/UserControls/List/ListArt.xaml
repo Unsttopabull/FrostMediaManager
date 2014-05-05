@@ -40,8 +40,10 @@
                             </StackPanel>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Right" Orientation="Vertical" VerticalAlignment="Center">
-                            <Button Content="{l:T Remove}" Command="{Binding ElementName=ListArtControl, Path=DataContext.RemoveCommand}" CommandParameter="{Binding}" Width="{Binding ElementName=SetDefault, Path=ActualWidth}"/>
-                            <Button Content="{l:T Set as default}" Command="{Binding ElementName=ListArtControl, Path=DataContext.SetAsDefaultCommand}" CommandParameter="{Binding}" x:Name="SetDefault"/>
+                            <fmm:ImageButton ToolTip="{l:T Remove art}"  Command="{Binding ElementName=ListArtControl, Path=DataContext.RemoveCommand}" CommandParameter="{Binding}"
+                                             Style="{StaticResource RemoveButton}" ImageMaxHeight="32"/>
+                            <fmm:ImageButton ToolTip="{l:T Set as default}" Command="{Binding ElementName=ListArtControl, Path=DataContext.SetAsDefaultCommand}" CommandParameter="{Binding}"
+                                             x:Name="SetDefault" ImageMaxHeight="32" DisabledSource="../../Images/Stars/star.png" EnabledSource="../../Images/Stars/star_disabled.png" />
                         </StackPanel>
                     </DockPanel>
                 </Border>

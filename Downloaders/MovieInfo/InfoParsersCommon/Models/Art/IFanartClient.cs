@@ -1,4 +1,4 @@
-﻿namespace Frost.InfoParsers.Models {
+﻿namespace Frost.InfoParsers.Models.Art {
 
     public interface IFanartClient : IInfoClient {
 

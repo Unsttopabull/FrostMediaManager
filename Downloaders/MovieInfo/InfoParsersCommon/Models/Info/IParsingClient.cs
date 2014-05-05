@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Frost.InfoParsers.Models {
+namespace Frost.InfoParsers.Models.Info {
 
     public interface IParsingClient : IInfoClient {
         bool CanIndex { get; }

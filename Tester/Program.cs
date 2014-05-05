@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Infrastructure;
 using System.IO;
 using System.Linq;
 using System.Diagnostics;
-using Frost.Common.Models.FeatureDetector;
-using Frost.DetectFeatures;
+using Frost.InfoParsers;
 using Frost.InfoParsers.Models;
+using Frost.InfoParsers.Models.Info;
 using Frost.Providers.Frost.DB;
+using Frost.SharpOpenSubtitles;
+using Frost.SharpOpenSubtitles.Models.Checking.Receive;
+using Frost.SharpOpenSubtitles.Models.Search.Receive;
+using Frost.SharpOpenSubtitles.Models.Search.Send;
+using Frost.SharpOpenSubtitles.Models.Session.Receive;
 using LightInject;
 using log4net;
 using log4net.Config;
@@ -48,8 +52,39 @@ namespace Frost.Tester {
         }
 
         private static void TetsFD() {
-            FrostDbContainer dc = new FrostDbContainer();
-            DbEntityEntry dbEntityEntry = dc.Entry(new object());
+            using (FrostDbContainer fdb = new FrostDbContainer()) {
+                //ca8f30e39564b6ea
+                MovieHash[] hash = fdb.Movies.Find(22)
+                                             .Videos
+                                             .Select(v => v.File.Size != null ? new MovieHash(v.MovieHash, v.File.Size.Value) : null)
+                                             .Where(mh => mh != null)
+                                             .ToArray();
+
+                OpenSubtitlesClient cli = new OpenSubtitlesClient(false);
+
+                LogInInfo status = cli.LogIn(null, null, "en", "Frost Media Manager v1");
+                if (status.Status != "200 OK") {
+                    return;
+                }
+
+                SearchSubtitleInfo movieHashInfo;
+                try {
+                    SubtitleLookupInfo[] lookupinfo = new SubtitleLookupInfo[hash.Length];
+
+                    for (int i = 0; i < hash.Length; i++) {
+                        lookupinfo[i] = new SubtitleLookupInfo {
+                            MovieHash = hash[i].MovieHashDigest,
+                            SubLanguageID = "slv",
+                            MovieByteSize = hash[i].FileByteSize
+                        };
+                    }
+
+                    movieHashInfo = cli.Subtitle.Search(lookupinfo);
+                }
+                finally {
+                    cli.LogOut();
+                }
+            }
         }
 
         //private static void TestOpenSubtitlesOrg() {

@@ -1,74 +1,122 @@
-﻿namespace Frost.SharpOpenSubtitles.Models.Search {
+﻿using CookComputing.XmlRpc;
+
+namespace Frost.SharpOpenSubtitles.Models.Search {
     public class SubtitleInfo {
 
-        /// <summary></summary>
-        public string IDSubMovieFile;
-        /// <summary></summary>
+        [XmlRpcMember("IDSubMovieFile")]
+        public string SubtitleMovieFileId;
+
+        [XmlRpcMember("MovieHash")]
         public string MovieHash;
-        /// <summary></summary>
+
+        [XmlRpcMember("MovieByteSize")]
         public string MovieByteSize;
-        /// <summary></summary>
+
+        [XmlRpcMember("MovieTimeMS")]
         public string MovieTimeMS;
 
-        /// <summary></summary>
-        public string IDSubtitleFile;
-        /// <summary></summary>
-        public string SubFileName;
-        /// <summary></summary>
-        public string SubActualCD;
-        /// <summary></summary>
-        public string SubSize;
-        /// <summary></summary>
-        public string SubHash;
-        /// <summary></summary>
-        public string IDSubtitle;
+        [XmlRpcMember("IDSubtitleFile")]
+        public string SubtitleFileId;
 
-        /// <summary></summary>
+
+        [XmlRpcMember("SubFileName")]
+        public string SubFileName;
+
+        [XmlRpcMember("SubActualCD")]
+        public string PartNumber;
+
+        [XmlRpcMember("SubSize")]
+        public string SubtitleSize;
+
+        [XmlRpcMember("SubHash")]
+        public string SubtitleHash;
+
+        [XmlRpcMember("IDSubtitle")]
+        public string SubtitleId;
+
+
+        [XmlRpcMember("UserID")]
         public string UserID;
 
-        /// <summary></summary>
-        public string SubLanguageID;
-        /// <summary></summary>
-        public string SubFormat;
-        /// <summary></summary>
-        public string SubSumCD;
-        /// <summary></summary>
-        public string SubAuthorComment;
-        /// <summary></summary>
-        public string SubAddDate;
-        /// <summary></summary>
-        public string SubBad;
-        /// <summary></summary>
-        public string SubRating;
-        /// <summary></summary>
-        public string SubDownloadsCnt;
 
-        /// <summary></summary>
+        [XmlRpcMember("SubLanguageID")]
+        public string SubtitleLanguageId;
+
+        [XmlRpcMember("SubFormat")]
+        public string SubtitleFormat;
+
+        [XmlRpcMember("SubSumCD")]
+        public string NumParts;
+
+        [XmlRpcMember("SubAuthorComment")]
+        public string AuthorComment;
+
+        [XmlRpcMember("SubAddDate")]
+        public string DateAdded;
+
+        [XmlRpcMember("SubBad")]
+        public string IsBad;
+
+        [XmlRpcMember("SubRating")]
+        public string Rating;
+
+        [XmlRpcMember("SubDownloadsCnt")]
+        public string DownloadCount;
+
+
+        [XmlRpcMember("MovieReleaseName")]
         public string MovieReleaseName;
-        /// <summary></summary>
-        public string IDMovie;
-        /// <summary></summary>
-        public string IDMovieImdb;
-        /// <summary></summary>
+
+        [XmlRpcMember("IDMovie")]
+        public string MovieId;
+
+        [XmlRpcMember("IDMovieImdb")]
+        public string ImdbMovieId;
+
+        [XmlRpcMember("MovieName")]
         public string MovieName;
-        /// <summary></summary>
+
+        [XmlRpcMember("MovieNameEng")]
         public string MovieNameEng;
-        /// <summary></summary>
-        public string MovieYear;
-        /// <summary></summary>
+
+        [XmlRpcMember("MovieYear")]
+        public string ReleaseYear;
+
+        [XmlRpcMember("MovieImdbRating")]
         public string MovieImdbRating;
 
-        /// <summary></summary>
-        public string UserNickName;
 
-        /// <summary></summary>
+        [XmlRpcMember("UserNickName")]
+        public string UploaderName;
+
+        [XmlRpcMember("UserRank")]
+        public string UploaderRank;
+
+
+        [XmlRpcMember("ISO639")]
         public string ISO639;
-        /// <summary></summary>
+
+        [XmlRpcMember("LanguageName")]
         public string LanguageName;
 
-        /// <summary></summary>
-        public string SubDownloadLink;
-        /// <summary></summary>
-        public string ZipDownloadLink;
+
+        [XmlRpcMember("SubHearingImpaired")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public string IsForHearingImpaired;
+
+        [XmlRpcMember("SubHD")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public string IsForHD;
+
+
+        [XmlRpcMember("SubDownloadLink")]
+        public string SubtitleDownloadLink;
+
+        [XmlRpcMember("ZipDownloadLink")]
+        public string SubtitleZipDownloadLink;
+
+        [XmlRpcMember("SubtitlesLink")]
+        [XmlRpcMissingMapping(MappingAction.Ignore)]
+        public string SubtitlesLink;
     }
 }

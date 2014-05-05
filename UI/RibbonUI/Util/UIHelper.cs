@@ -115,7 +115,7 @@ namespace RibbonUI.Util {
                 return;                
             }
 
-            MessageBox.Show(string.Format("An error has occured int the provider{0}", !string.IsNullOrEmpty(exception.Message) ? "\nProvider message: " + exception.Message : null));
+             MessageBox.Show(string.Format("An error has occured int the provider{0}", !string.IsNullOrEmpty(exception.Message) ? "\nProvider message: " + exception.Message : null));
         }
     }
 }

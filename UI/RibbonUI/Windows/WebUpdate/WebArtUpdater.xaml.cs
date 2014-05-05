@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using Frost.GettextMarkupExtension;
-using Frost.InfoParsers.Models;
+using Frost.InfoParsers.Models.Art;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Util.WebUpdate;

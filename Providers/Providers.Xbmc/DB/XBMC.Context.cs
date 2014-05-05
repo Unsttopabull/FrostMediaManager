@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Data;
-using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
-using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Frost.Common.Util;
 using Frost.Providers.Xbmc.DB.Art;
 using Frost.Providers.Xbmc.DB.People;
@@ -37,23 +34,24 @@ namespace Frost.Providers.Xbmc.DB {
 
         private void FixForEf() {
             try {
-                SQLiteConnection dbConnection = (SQLiteConnection) Database.Connection;
-                dbConnection.Open();
+                using (SQLiteConnection dbConnection = (SQLiteConnection) Database.Connection) {
+                    dbConnection.Open();
 
-                SQLiteCommand cmd = new SQLiteCommand(Resources.addEfTables, dbConnection);
-                cmd.ExecuteNonQuery();
+                    using (SQLiteCommand cmd = new SQLiteCommand(Resources.addEfTables, dbConnection)) {
+                        cmd.ExecuteNonQuery();
+                    }
 
-                DataTable cols = dbConnection.GetSchema("Columns");
-                if (cols.Select("COLUMN_NAME='idStream' AND TABLE_NAME='streamdetails'").Length == 0) {
-                    cmd = new SQLiteCommand(Resources.StreamDetailsPK, dbConnection);
-                    cmd.ExecuteNonQuery();
+                    DataTable cols = dbConnection.GetSchema("Columns");
+                    if (cols.Select("COLUMN_NAME='idStream' AND TABLE_NAME='streamdetails'").Length == 0) {
+                        using (SQLiteCommand cmdFix = new SQLiteCommand(Resources.StreamDetailsPK, dbConnection)) {
+                            cmdFix.ExecuteNonQuery();
+                        }
+                    }
                 }
             }
             catch (SQLiteException e) {
-
             }
             catch (Exception e) {
-                
             }
         }
 
@@ -150,7 +148,6 @@ namespace Frost.Providers.Xbmc.DB {
                 EfLogger.LogChanges(this, "xbmc.log");
             }
             catch (Exception e) {
-                
             }
 
             return base.SaveChanges();
@@ -174,8 +171,7 @@ namespace Frost.Providers.Xbmc.DB {
                         _sw.Dispose();
                     }
                 }
-                catch (Exception e){
-                    
+                catch (Exception e) {
                 }
             }
         }

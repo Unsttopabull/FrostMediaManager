@@ -1,4 +1,4 @@
-using Frost.InfoParsers.Models;
+using Frost.InfoParsers.Models.Info;
 
 namespace Frost.InfoParsers {
 

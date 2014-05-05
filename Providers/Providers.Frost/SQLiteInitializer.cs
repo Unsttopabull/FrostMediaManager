@@ -20,7 +20,8 @@ namespace Frost.Providers.Frost {
         }
 
         public void InitializeDatabase(TContext context) {
-            string dbName = context.Database.Connection.ConnectionString.Split('=')[1];
+            string[] strings = context.Database.Connection.ConnectionString.Split(new string[] { "data source=", ";" }, StringSplitOptions.RemoveEmptyEntries);
+            string dbName = strings[0];
             try {
                 if (_dropCreate && File.Exists(dbName)) {
                     try {
@@ -32,8 +33,19 @@ namespace Frost.Providers.Frost {
                 }
 
                 if (!File.Exists(dbName)) {
-                    SQLiteConnection.CreateFile(dbName);
-                    SQLiteCommand.Execute(_initSQL, SQLiteExecuteType.NonQuery, context.Database.Connection.ConnectionString, new object());
+                    try {
+                        SQLiteConnection.CreateFile(dbName);
+                    }
+                    catch (Exception e) {
+                        
+                    }
+
+                    try {
+                        SQLiteCommand.Execute(_initSQL, SQLiteExecuteType.NonQuery, context.Database.Connection.ConnectionString, new object());
+                    }
+                    catch (Exception e) {
+                        
+                    }
                     return;
                 }
 

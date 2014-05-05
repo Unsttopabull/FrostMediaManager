@@ -512,11 +512,11 @@ namespace Frost.Providers.Frost.Proxies {
         /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing writers.</exception>
         public bool RemoveWriter(IPerson writer) {
             if (writer is Person) {
-                return Entity.Directors.Remove(writer as Person);
+                return Entity.Writers.Remove(writer as Person);
             }
 
             Person p = Service.FindPerson(writer, false);
-            return Entity.Directors.Remove(p);
+            return Entity.Writers.Remove(p);
         }
 
         #region Actors
@@ -731,7 +731,14 @@ namespace Frost.Providers.Frost.Proxies {
 
         public bool RemoveSubtitle(ISubtitle subtitle) {
             Subtitle sub = Service.FindSubtitle(subtitle, false);
-            return Entity.Subtitles.Remove(sub);
+            if (sub != null) {
+                bool removed = Entity.Subtitles.Remove(sub);
+                if (removed) {
+                    Service.MarkAsDeleted(sub);
+                }
+                return removed;
+            }
+            return false;
         }
 
         #endregion
@@ -759,11 +766,25 @@ namespace Frost.Providers.Frost.Proxies {
         /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing audios.</exception>
         public bool RemoveAudio(IAudio audio) {
             if (audio is FrostAudio) {
-                return Entity.Audios.Remove((audio as FrostAudio).ProxiedEntity);
+                Audio a = (audio as FrostAudio).ProxiedEntity;
+                bool removed = Entity.Audios.Remove(a);
+                if (removed) {
+                    Service.MarkAsDeleted(a);
+                }
+                return removed;
             }
 
-            if (audio.Id > 0) {
-                return Entity.Audios.RemoveWhere(a => a.Id == audio.Id) > 0;
+            if (audio.Id <= 0) {
+                return false;
+            }
+
+            Audio aud = Entity.Audios.FirstOrDefault(a => a.Id == audio.Id);
+            if (aud != null) {
+                bool removed = Entity.Audios.Remove(aud);
+                if (removed) {
+                    Service.MarkAsDeleted(aud);
+                }
+                return removed;
             }
             return false;
         }
@@ -790,12 +811,27 @@ namespace Frost.Providers.Frost.Proxies {
         /// <exception cref="NotSupportedException">Throws when the provider does not support removing videos in a particual scenario.</exception>
         /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing video.</exception>
         public bool RemoveVideo(IVideo video) {
+            Video vid;
             if (video is FrostVideo) {
-                return Entity.Videos.Remove((video as FrostVideo).ProxiedEntity);
+                vid = (video as FrostVideo).ProxiedEntity;
+                bool removed = Entity.Videos.Remove(vid);
+                if (removed) {
+                    Service.MarkAsDeleted(vid);
+                }
+                return removed;
             }
 
-            if (video.Id > 0) {
-                return Entity.Videos.RemoveWhere(v => v.Id == video.Id) > 0;
+            if (video.Id <= 0) {
+                return false;
+            }
+
+            vid = Entity.Videos.FirstOrDefault(a => a.Id == video.Id);
+            if (vid != null) {
+                bool removed = Entity.Videos.Remove(vid);
+                if (removed) {
+                    Service.MarkAsDeleted(vid);
+                }
+                return removed;
             }
             return false;
         }
@@ -824,12 +860,21 @@ namespace Frost.Providers.Frost.Proxies {
         /// <exception cref="NotImplementedException">Throws when the provider has not implemented removing promotional videos.</exception>
         public bool RemovePromotionalVideo(IPromotionalVideo video) {
             if (video is PromotionalVideo) {
-                return Entity.PromotionalVideos.Remove(video as PromotionalVideo);
+                PromotionalVideo pm = video as PromotionalVideo;
+                bool removed = Entity.PromotionalVideos.Remove(pm);
+                if (removed) {
+                    Service.MarkAsDeleted(pm);
+                }
+                return removed;
             }
 
             PromotionalVideo promotionalVideo = Service.FindPromotionalVideo(video, false);
             if (promotionalVideo != null) {
-                return Entity.PromotionalVideos.Remove(promotionalVideo);
+                bool removed = Entity.PromotionalVideos.Remove(promotionalVideo);
+                if (removed) {
+                    Service.MarkAsDeleted(promotionalVideo);
+                }
+                return removed;
             }
             return false;
         }
@@ -904,12 +949,20 @@ namespace Frost.Providers.Frost.Proxies {
         public bool RemoveCertification(ICertification certification) {
             FrostCertification c = certification as FrostCertification;
             if (c != null) {
-                return Entity.Certifications.Remove(c.ProxiedEntity);
+                bool removed = Entity.Certifications.Remove(c.ProxiedEntity);
+                if (removed) {
+                    Service.MarkAsDeleted(c.ProxiedEntity);
+                }
+                return removed;
             }
 
             Certification cert = Service.FindCertification(certification, Id, false);
             if (cert != null) {
-                return Entity.Certifications.Remove(cert);
+                bool removed = Entity.Certifications.Remove(cert);
+                if (removed) {
+                    Service.MarkAsDeleted(cert);
+                }
+                return removed;
             }
             return false;
         }
@@ -979,6 +1032,59 @@ namespace Frost.Providers.Frost.Proxies {
             fullPath = fullPath.Substring(0, idx);
             return fullPath;
         }
+
+        //public void RemoveSelf() {
+
+        //    MainPlot = null;
+        //    DefaultFanart = null;
+        //    DefaultCover = null;
+
+        //    Task[] removeTasks = new Task[7];
+
+        //    removeTasks[0] = Task.Run(() => {
+        //        foreach (IAudio audio in Audios.ToArray()) {
+        //            RemoveAudio(audio);
+        //        }
+        //    });
+
+        //    removeTasks[1] = Task.Run(() => {
+        //        foreach (IVideo video in Videos.ToArray()) {
+        //            RemoveVideo(video);
+        //        }
+        //    });
+
+        //    removeTasks[2] = Task.Run(() => {
+        //        foreach (ISubtitle subtitle in Subtitles.ToArray()) {
+        //            RemoveSubtitle(subtitle);
+        //        }
+        //    });
+
+        //    removeTasks[3] = Task.Run(() => {
+        //        foreach (IActor actor in Actors.ToArray()) {
+        //            RemoveActor(actor);
+        //        }
+        //    });
+
+        //    removeTasks[4] = Task.Run(() => {
+        //        foreach (IPlot plot in Plots.ToArray()) {
+        //            RemovePlot(plot);
+        //        }
+        //    });
+
+        //    removeTasks[5] = Task.Run(() => {
+        //        foreach (IArt art in Art.ToArray()) {
+        //            RemoveArt(art);
+        //        }
+        //    });
+
+        //    removeTasks[6] = Task.Run(() => {
+        //        foreach (ICertification certification in Certifications.ToArray()) {
+        //            RemoveCertification(certification);
+        //        }
+        //    });
+
+        //    Task.WaitAll(removeTasks);
+        //}
     }
 
 }

@@ -51,7 +51,7 @@ namespace RibbonUI.UserControls.List {
             };
 
             ChangeLanguageCommand = new RelayCommand<MovieSubtitle>(LangEdit);
-            RemoveCommand = new RelayCommand<MovieSubtitle>(subtitle => SelectedMovie.RemoveSubtitle(subtitle), s => s != null);
+            RemoveCommand = new RelayCommand<MovieSubtitle>(subtitle => SelectedMovie.RemoveSubtitle(subtitle), s =>  SelectedMovie != null && s != null);
         }
 
         public ObservableMovie SelectedMovie {

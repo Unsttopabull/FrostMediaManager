@@ -24,8 +24,8 @@ namespace RibbonUI.UserControls.List {
                 : LightInjectContainer.GetInstance<IMoviesDataService>();
 
 
-            EditVideoCommand = new RelayCommand<MovieVideo>(OnEditClicked); //, v => v != null);
-            RemoveVideoCommand = new RelayCommand<MovieVideo>(OnRemoveClicked); //, v => v != null);
+            EditVideoCommand = new RelayCommand<MovieVideo>(OnEditClicked);
+            RemoveVideoCommand = new RelayCommand<MovieVideo>(OnRemoveClicked);
         }
 
         public Window ParentWindow { get; set; }
@@ -69,7 +69,7 @@ namespace RibbonUI.UserControls.List {
         }
 
         private void OnRemoveClicked(MovieVideo selectedVideo) {
-            
+            SelectedMovie.RemoveVideo(selectedVideo);
         }
 
         [NotifyPropertyChangedInvocator]

@@ -1194,7 +1194,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
         }
 
-        public void RemoveCertification(MovieCertification cert, bool silent) {
+        public void RemoveCertification(MovieCertification cert, bool silent = false) {
             bool success = Remove(_observedEntity.RemoveCertification, cert.ObservedEntity, silent);
             if (success) {
                 Certifications.Remove(cert);

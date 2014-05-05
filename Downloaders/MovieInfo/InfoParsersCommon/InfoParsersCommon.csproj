@@ -41,14 +41,20 @@
   <ItemGroup>
     <Compile Include="FrostPluginAttribute.cs" />
     <Compile Include="Models\IInfoClient.cs" />
-    <Compile Include="Models\IParsingClient.cs" />
-    <Compile Include="Models\IParsedActor.cs" />
-    <Compile Include="Models\IFanartClient.cs" />
-    <Compile Include="Models\IParsedArt.cs" />
-    <Compile Include="Models\IParsedArts.cs" />
-    <Compile Include="Models\IParsedAward.cs" />
-    <Compile Include="Models\IParsedPerson.cs" />
+    <Compile Include="Models\Subtitles\IMovieHash.cs" />
+    <Compile Include="Models\Info\IParsingClient.cs" />
+    <Compile Include="Models\Info\IParsedActor.cs" />
+    <Compile Include="Models\Art\IFanartClient.cs" />
+    <Compile Include="Models\Info\IParsedArt.cs" />
+    <Compile Include="Models\Art\IParsedArts.cs" />
+    <Compile Include="Models\Info\IParsedAward.cs" />
+    <Compile Include="Models\Info\IParsedPerson.cs" />
     <Compile Include="Models\IPromotionalVideoClient.cs" />
+    <Compile Include="Models\Subtitles\ISubtitleClient.cs" />
+    <Compile Include="Models\Subtitles\ISubtitleFile.cs" />
+    <Compile Include="Models\Subtitles\ISubtitleInfo.cs" />
+    <Compile Include="Models\Subtitles\ISubtitleUploadInfo.cs" />
+    <Compile Include="MovieHashInfo.cs" />
     <Compile Include="ParsedActor.cs" />
     <Compile Include="ParsedArt.cs" />
     <Compile Include="ParsedArts.cs">
@@ -58,7 +64,7 @@
     <Compile Include="ParsedPerson.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="HtmlParsingExtensions.cs" />
-    <Compile Include="Models\IParsedVideo.cs" />
+    <Compile Include="Models\Info\IParsedVideo.cs" />
     <Compile Include="ParsedAward.cs" />
     <Compile Include="ParsedMovieInfo.cs" />
     <Compile Include="ParsedVideo.cs" />

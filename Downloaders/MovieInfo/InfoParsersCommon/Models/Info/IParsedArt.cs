@@ -1,4 +1,4 @@
-namespace Frost.InfoParsers.Models {
+namespace Frost.InfoParsers.Models.Info {
 
     /// <summary>The type of the image.</summary>
     public enum ParsedArtType : long {

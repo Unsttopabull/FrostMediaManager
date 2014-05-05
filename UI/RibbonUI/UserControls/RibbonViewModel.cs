@@ -17,6 +17,7 @@ using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Windows;
 using RibbonUI.Windows.Search;
 using RibbonUI.Windows.WebUpdate;
+using MessageBox = System.Windows.MessageBox;
 using SettingsEx = RibbonUI.Properties.Settings;
 
 namespace RibbonUI.UserControls {
@@ -50,6 +51,7 @@ namespace RibbonUI.UserControls {
         private ICommand _playMovieCommand;
         private ICommand _downloadSubtitlesCommand;
         private ICommand<string> _updateMovieArtCommand;
+        private ICommand _removeMovieCommand;
 
         public RibbonViewModel() {
             _service = TranslationManager.IsInDesignMode
@@ -223,11 +225,30 @@ namespace RibbonUI.UserControls {
             }
         }
 
+        public ICommand RemoveMovieCommand {
+            get {
+                if (_removeMovieCommand == null) {
+                    _removeMovieCommand = new RelayCommand(RemoveMovie, o => SelectedMovie != null);
+                }
+                return _removeMovieCommand;
+            }
+            set { _removeMovieCommand = value; }
+        }
+
+        public ICommand DetectSubtitleLanguage { get; set; }
+
         #endregion
 
         private void OnRibbonLoaded(DependencyObject uc) {
             if (uc != null) {
                 ParentWindow = Window.GetWindow(uc);
+            }
+        }
+
+
+        private void RemoveMovie() {
+            if (MessageBox.Show(TranslationManager.T("Do you really want to remove {0}?", "movie"), TranslationManager.T("Remove {0}", "movie"), MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
+                _service.RemoveMovie(SelectedMovie.ObservedEntity);
             }
         }
 

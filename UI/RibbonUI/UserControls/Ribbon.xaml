@@ -4,7 +4,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:in="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:uc="clr-namespace:RibbonUI.UserControls"
     x:Name="RibbonControl" x:Class="RibbonUI.UserControls.Ribbon"
     mc:Ignorable="d" d:DesignHeight="140" d:DesignWidth="700">
@@ -39,7 +38,7 @@
                               Command="{Binding OpenMovieInFolderCommand}" />
                 <RibbonButton SmallImageSource="../Images/play.png" Label="Play movie" Command="{Binding PlayMovieCommand}"/>
                 <RibbonButton SmallImageSource="../Images/refresh.png" Label="Refresh detection" IsEnabled="false"/>
-                <RibbonButton SmallImageSource="../Images/remove2.png" Label="Remove movie" />
+                <RibbonButton SmallImageSource="../Images/remove2.png" Label="Remove movie" Command="{Binding RemoveMovieCommand}"/>
             </RibbonGroup>
             <RibbonGroup>
                 <RibbonButton LargeImageSource="../Images/save.png" Label="Save changes" Command="{Binding SaveChangesCommand}"/>
@@ -71,7 +70,7 @@
                     <RibbonMenuItem ImageSource="../Images/sites/podnapisiNet.ico" Header="Download from Podnapisi.NET" Command="{Binding DownloadSubtitlesCommand}" CommandParameter="{x:Static uc:SubtitleSites.PodnapisiNet}"/>
                     <RibbonMenuItem ImageSource="../Images/sites/opensubtitles.ico" Header="Download from OpenSubtitles.org" Command="{Binding DownloadSubtitlesCommand}" CommandParameter="{x:Static uc:SubtitleSites.OpenSubtitles}"/>
                 </RibbonMenuButton>
-                <RibbonButton Label="Detect Language" LargeImageSource="../Images/search_subs.ico" />
+                <RibbonButton Label="Detect Language" LargeImageSource="../Images/search_subs.ico" Command="{Binding DetectSubtitleLanguage}"/>
             </RibbonGroup>
         </RibbonTab>
     </Ribbon>

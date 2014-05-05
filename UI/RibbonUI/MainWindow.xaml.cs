@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Windows;
-using System.Windows.Media.Media3D;
 using Frost.Common;
 using log4net;
 using RibbonUI.Properties;

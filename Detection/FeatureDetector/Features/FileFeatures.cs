@@ -438,11 +438,11 @@ namespace Frost.DetectFeatures {
             GetVideoInfo(file);
             GetAudioInfo(file);
 
+            GetArtInfo();
+
             if (_nfoPriority != NFOPriority.Ignore) {
                 GetNfoInfo(file.Name);
             }
-
-            GetArtInfo();
         }
 
         private void GetFileNameInfo() {

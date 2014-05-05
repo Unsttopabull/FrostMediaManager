@@ -197,6 +197,7 @@
     <Compile Include="Util\WebUpdate\ErrorInfo.cs" />
     <Compile Include="Util\WebUpdate\MovieInfoUpdater.cs" />
     <Compile Include="Util\WebUpdate\PromoVideoUpdater.cs" />
+    <Compile Include="Util\WebUpdate\SubtitleUpdater.cs" />
     <Compile Include="Windows\Add\AddCountriesViewModel.cs">
       <DependentUpon>AddCountries.xaml</DependentUpon>
     </Compile>
@@ -776,6 +777,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\download4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\default.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\default_disabled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Stars\star_disabled.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

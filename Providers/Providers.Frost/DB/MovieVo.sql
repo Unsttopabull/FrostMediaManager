@@ -80,7 +80,7 @@ CREATE TABLE "Certifications" (
 	"MovieId"  integer NOT NULL,
 	"CountryId"  integer NOT NULL,
 	CONSTRAINT "FK_MovieCertification" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT "FK_CertificationLanguage" FOREIGN KEY ("CountryId") REFERENCES "Countries" ("Id") ON DELETE SET NULL ON UPDATE CASCADE
+	CONSTRAINT "FK_CertificationLanguage" FOREIGN KEY ("CountryId") REFERENCES "Countries" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE UNIQUE INDEX "Certifications_Id" on "Certifications" ("Id" ASC);
@@ -295,7 +295,7 @@ CREATE TABLE "MovieStudios" (
 	"StudioId"  integer NOT NULL,
 	PRIMARY KEY ("MovieId" ASC, "StudioId" ASC),
 	CONSTRAINT "FK_MovieStudios_Movie" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT "FK_MovieStudios_Genre" FOREIGN KEY ("StudioId") REFERENCES "Studios" ("Id") ON DELETE CASCADE
+	CONSTRAINT "FK_MovieStudios_Studio" FOREIGN KEY ("StudioId") REFERENCES "Studios" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- ----------------------------
@@ -307,7 +307,7 @@ CREATE TABLE "MovieWriters" (
 	"WriterId"  integer NOT NULL,
 	PRIMARY KEY ("MovieId" ASC, "WriterId" ASC),
 	CONSTRAINT "FK_MovieWriter_Movie" FOREIGN KEY ("MovieId") REFERENCES "Movies" ("Id") ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT "FK_MovieWriter_Genre" FOREIGN KEY ("WriterId") REFERENCES "People" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT "FK_MovieWriter_Writer" FOREIGN KEY ("WriterId") REFERENCES "People" ("Id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- ----------------------------

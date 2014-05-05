@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Frost.InfoParsers;
-using Frost.InfoParsers.Models;
+using Frost.InfoParsers.Models.Info;
 using Frost.MovieInfoProviders.OpenSubtitles;
 using Frost.SharpOpenSubtitles;
 using Frost.SharpOpenSubtitles.Models.Checking.Receive;

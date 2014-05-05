@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using Frost.Common.Models;
 using Frost.GettextMarkupExtension;
-using Frost.InfoParsers.Models;
+using Frost.InfoParsers.Models.Art;
+using Frost.InfoParsers.Models.Info;
 using RibbonUI.Annotations;
 using RibbonUI.Design.Models;
 

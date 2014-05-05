@@ -7,12 +7,12 @@
         Icon="..\logo3.ico" Closed="ProviderSelectOnClosed" Name="ProviderSelectWindow"
         ResizeMode="NoResize" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
-        <vm:ProviderSelectViewModel/>
+        <vm:ProviderSelectViewModel />
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <ListBox Grid.Row="0" Name="ProvidersList" ItemsSource="{Binding Providers}">
             <ListBox.Resources>
@@ -25,20 +25,21 @@
                     <Grid>
                         <Grid.InputBindings>
                             <MouseBinding Command="{Binding ElementName=ProviderSelectWindow, Path=DataContext.SelectProviderCommand}"
-                                          CommandParameter="{Binding ElementName=ProvidersList, Path=SelectedItem}" Gesture="LeftDoubleClick"/>
+                                          CommandParameter="{Binding ElementName=ProvidersList, Path=SelectedItem}"
+                                          Gesture="LeftDoubleClick" />
                         </Grid.InputBindings>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Image Grid.Column="0" Source="{Binding IconImage, FallbackValue={x:Null}, TargetNullValue={x:Null}}" MaxWidth="64" MaxHeight="64"/>
-                        <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        <Image Grid.Column="0" Source="{Binding IconImage, FallbackValue={x:Null}, TargetNullValue={x:Null}}" MaxWidth="64" MaxHeight="64" />
+                        <TextBlock Grid.Column="1" Text="{Binding Name}" VerticalAlignment="Center" Margin="5,0,0,0" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
         <DockPanel Grid.Row="1" LastChildFill="False" Margin="5">
-            <Button DockPanel.Dock="Right" Content="{l:T Load}" Width="100" Command="{Binding SelectProviderCommand}" CommandParameter="{Binding SelectedItem, ElementName=ProvidersList}"/>
+            <Button DockPanel.Dock="Right" Content="{l:T Load}" Width="100" Command="{Binding SelectProviderCommand}" CommandParameter="{Binding SelectedItem, ElementName=ProvidersList}" />
         </DockPanel>
     </Grid>
 </Window>

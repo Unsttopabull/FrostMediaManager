@@ -58,7 +58,18 @@ namespace Frost.Providers.Frost.Provider {
         }
 
         public bool RemoveMovie(IMovie movie) {
-            return Movies.Remove(movie);
+            if (!(movie is FrostMovie)) {
+                return false;
+            }
+
+            FrostMovie m = movie as FrostMovie;
+            int rowsChanged = _mvc.Database.ExecuteSqlCommand("DELETE FROM Movies WHERE Id = {0};", m.Id);
+
+            if (rowsChanged > 0) {
+                Movies.Remove(movie);
+                return true;
+            }
+            return false;
         }
 
         internal Subtitle FindSubtitle(ISubtitle subtitle, bool createIfNotFound) {
@@ -85,7 +96,7 @@ namespace Frost.Providers.Frost.Provider {
                                      subtitle.ForHearingImpaired == pr.ForHearingImpaired &&
                                      subtitle.Encoding == pr.Encoding));
 
-            if (p == null && createIfNotFound) {
+            if ((p == null || _mvc.Entry(p).State == EntityState.Deleted) && createIfNotFound) {
                 _mvc.Subtitles.Add(new Subtitle(subtitle));
             }
             return p;
@@ -403,7 +414,7 @@ namespace Frost.Providers.Frost.Provider {
             }
 
             Certification cert = _mvc.Certifications.FirstOrDefault(crt => crt.Rating == certification.Rating && crt.MovieId == movieId && crt.CountryId == c.Id);
-            if (cert == null && createNotFound) {
+            if ((cert == null || _mvc.Entry(cert).State == EntityState.Deleted) && createNotFound) {
                 return new Certification(certification, c);
             }
             return cert;

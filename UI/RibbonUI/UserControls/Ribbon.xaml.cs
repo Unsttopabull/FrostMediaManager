@@ -7,10 +7,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Ribbon;
 using System.Windows.Media.Imaging;
-using Frost.Common.Models.FeatureDetector;
-using Frost.InfoParsers;
 using Frost.InfoParsers.Models;
-using LightInject;
+using Frost.InfoParsers.Models.Art;
+using Frost.InfoParsers.Models.Info;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 

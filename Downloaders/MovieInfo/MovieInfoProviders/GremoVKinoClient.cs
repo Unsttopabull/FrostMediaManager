@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Frost.InfoParsers;
-using Frost.InfoParsers.Models;
+using Frost.InfoParsers.Models.Info;
 using HtmlAgilityPack;
 
 namespace Frost.MovieInfoProviders {

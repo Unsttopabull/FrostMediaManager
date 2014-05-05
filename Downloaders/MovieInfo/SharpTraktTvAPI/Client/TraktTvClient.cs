@@ -80,8 +80,8 @@ namespace SharpTraktTvAPI.Client {
             info.Genres = summary.Genres;
             info.Fanart = summary.Images.Fanart;
             info.FanartPreview = summary.Images.FanartMedium;
-            info.Cover = summary.Images.Poster;
-            info.CoverPreview = summary.Images.PosterMedium;
+            info.Cover = summary.Images.PosterMedium;
+            info.CoverPreview = summary.Images.PosterSmall;
 
             info.MPAA = summary.Certification;
 

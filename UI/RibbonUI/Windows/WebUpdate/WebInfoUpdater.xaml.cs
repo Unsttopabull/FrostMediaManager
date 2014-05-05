@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using Frost.GettextMarkupExtension;
-using Frost.InfoParsers.Models;
+using Frost.InfoParsers.Models.Info;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Util.WebUpdate;

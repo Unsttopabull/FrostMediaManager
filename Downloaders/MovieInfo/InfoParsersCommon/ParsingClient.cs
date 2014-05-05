@@ -4,7 +4,7 @@ using System.IO;
 using System.Net;
 using System.Reflection;
 using System.Text;
-using Frost.InfoParsers.Models;
+using Frost.InfoParsers.Models.Info;
 using HtmlAgilityPack;
 
 namespace Frost.InfoParsers {

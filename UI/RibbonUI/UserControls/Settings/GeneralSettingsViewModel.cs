@@ -9,7 +9,6 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Frost.Common.Proxies.ChangeTrackers;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using Microsoft.WindowsAPICodePack.Dialogs;

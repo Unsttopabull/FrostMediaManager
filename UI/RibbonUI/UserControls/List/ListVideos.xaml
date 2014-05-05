@@ -8,6 +8,7 @@
              xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
              xmlns:vm="clr-namespace:RibbonUI.UserControls.List"
              xmlns:models="clr-namespace:Frost.Common.Models.Provider;assembly=Frost.Common"
+             xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
              mc:Ignorable="d" Loaded="OnWindowLoaded" Name="ListVideosControl"
              d:DesignHeight="300" d:DesignWidth="580">
     <UserControl.DataContext>
@@ -137,12 +138,10 @@
                     </StackPanel>
 
                     <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
-                        <Button Command="{Binding ElementName=ListVideosControl, Path=DataContext.RemoveVideoCommand}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}" Style="{StaticResource TransparentBorderlessButton}">
-                            <Image Source="../../Images/remove.png" MaxHeight="32"/>
-                        </Button>
-                        <Button Command="{Binding ElementName=ListVideosControl, Path=DataContext.EditVideoCommand}" CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Content}" Style="{StaticResource TransparentBorderlessButton}">
-                            <Image Source="../../Images/edit.ico" />
-                        </Button>
+                        <fmm:ImageButton Command="{Binding ElementName=ListVideosControl, Path=DataContext.RemoveVideoCommand}" CommandParameter="{Binding}"
+                                         Style="{StaticResource RemoveButton}" ImageMaxHeight="32"/>
+                        <fmm:ImageButton Command="{Binding ElementName=ListVideosControl, Path=DataContext.EditVideoCommand}" CommandParameter="{Binding}"
+                                         Style="{StaticResource EditButton}" ImageMaxHeight="32"/>
                     </StackPanel>
                 </DockPanel>
             </DataTemplate>

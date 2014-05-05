@@ -11,7 +11,6 @@ using Frost.Common;
 using Frost.DetectFeatures;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
-using Microsoft.WindowsAPICodePack.Shell.Interop;
 using RibbonUI.Annotations;
 using RibbonUI.Design.Fakes;
 using RibbonUI.Util.ObservableWrappers;
@@ -55,15 +54,6 @@ namespace RibbonUI.UserControls {
                 }
                 _selectedMovie = value;
 
-                //if (_selectedMovie != null && _selectedMovie.Countries != null) {
-                //    Countries = _selectedMovie.Countries.Select(c => new MovieCountry(c)).ToList();
-                //}
-                //else {
-                //    Countries = new List<MovieCountry>();
-                //}
-                Countries = new List<MovieCountry>();
-
-                OnPropertyChanged("Countries");
                 OnPropertyChanged("MPAARatingImage");
                 OnPropertyChanged("BoxImage");
 
@@ -72,8 +62,6 @@ namespace RibbonUI.UserControls {
         }
 
         #region Utility properties
-
-        public List<MovieCountry> Countries { get; set; }
 
         public string BoxImage {
             get {

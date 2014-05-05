@@ -1,4 +1,4 @@
-namespace Frost.InfoParsers.Models {
+namespace Frost.InfoParsers.Models.Info {
 
     public interface IParsedAward {
         string Organization { get; set; }

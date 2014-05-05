@@ -8,6 +8,7 @@
              xmlns:vm="clr-namespace:RibbonUI.UserControls.List"
              xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
              xmlns:models="clr-namespace:Frost.Common.Models.Provider;assembly=Frost.Common"
+             xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
              mc:Ignorable="d" Name="ListSubtitlesControl"
              d:DesignHeight="300" d:DesignWidth="602" Loaded="ListSubtitlesOnLoaded">
     <UserControl.DataContext>
@@ -69,9 +70,8 @@
                     </StackPanel>
 
                     <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
-                        <Button Command="{Binding ElementName=ListSubtitlesControl, Path=DataContext.RemoveCommand}" CommandParameter="{Binding}" Style="{StaticResource TransparentBorderlessButton}">
-                            <Image Source="../../Images/remove.png" MaxHeight="32" />
-                        </Button>                      
+                        <fmm:ImageButton Command="{Binding ElementName=ListSubtitlesControl, Path=DataContext.RemoveCommand}" 
+                                         CommandParameter="{Binding}" Style="{StaticResource RemoveButton}" ImageMaxHeight="32"/>
                     </StackPanel>
                 </DockPanel>
             </DataTemplate>

@@ -3,7 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Frost.InfoParsers;
-using Frost.InfoParsers.Models;
+using Frost.InfoParsers.Models.Art;
+using Frost.InfoParsers.Models.Info;
 using Newtonsoft.Json.Linq;
 
 namespace SharpFanartTv {
