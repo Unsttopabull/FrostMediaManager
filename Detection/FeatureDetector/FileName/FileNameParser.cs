@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Frost.Common;
-using Frost.Common.Util;
+using Frost.Common.Util.Collections;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.Util;
 

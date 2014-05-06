@@ -1,5 +1,5 @@
 ﻿using System;
-using Frost.Common.Util;
+using Frost.Common.Util.Collections;
 
 namespace Frost.DetectFeatures.Util {
     public class LanguageMapping : IEquatable<LanguageMapping>, IKeyValue {

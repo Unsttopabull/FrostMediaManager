@@ -6,7 +6,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-namespace Frost.Common.Util {
+namespace Frost.Common.Util.Collections {
 
     /// <summary>Fixes <see cref="StringDictionary"/> so it is able to be serialized in user.config</summary>
     [Serializable]

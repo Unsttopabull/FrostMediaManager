@@ -2,7 +2,7 @@
 using System.Collections.Specialized;
 using System.Windows;
 using Frost.Common.Proxies.ChangeTrackers;
-using Frost.Common.Util;
+using Frost.Common.Util.Collections;
 using RibbonUI.Properties;
 using RibbonUI.UserControls.Settings;
 using RibbonUI.Util;

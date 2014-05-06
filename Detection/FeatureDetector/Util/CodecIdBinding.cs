@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Frost.Common.Properties;
-using Frost.Common.Util;
+using Frost.Common.Util.Collections;
 
 namespace Frost.DetectFeatures.Util {
 

@@ -197,8 +197,7 @@
     </Compile>
     <Compile Include="Proxies\ProxyWithService.cs" />
     <Compile Include="Util\EfLogger.cs" />
-    <Compile Include="Util\FastObservableCollection.cs" />
-    <Compile Include="Util\IKeyValue.cs">
+    <Compile Include="Util\Collections\IKeyValue.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Util\IsoImageMount.cs" />
@@ -220,11 +219,10 @@
     <Compile Include="Util\ISO\Language\ISOLanguageCodes.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Util\KeyedCollectionGeneric.cs" />
+    <Compile Include="Util\Collections\KeyedCollectionGeneric.cs" />
     <Compile Include="Util\MovieHasher.cs" />
-    <Compile Include="Util\ThreadSafeObservableCollection.cs" />
-    <Compile Include="Util\ObservableHashSet.cs" />
-    <Compile Include="Util\SerializableStringDictionary.cs" />
+    <Compile Include="Util\Collections\ObservableHashSet.cs" />
+    <Compile Include="Util\Collections\SerializableStringDictionary.cs" />
     <Compile Include="Util\XmlIndentedTextWriter.cs" />
   </ItemGroup>
   <ItemGroup>

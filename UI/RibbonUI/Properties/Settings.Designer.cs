@@ -82,9 +82,9 @@ namespace RibbonUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::Frost.Common.Util.SerializableStringDictionary AudioCodecIdBindingsAdded {
+        public global::Frost.Common.Util.Collections.SerializableStringDictionary AudioCodecIdBindingsAdded {
             get {
-                return ((global::Frost.Common.Util.SerializableStringDictionary)(this["AudioCodecIdBindingsAdded"]));
+                return ((global::Frost.Common.Util.Collections.SerializableStringDictionary)(this["AudioCodecIdBindingsAdded"]));
             }
             set {
                 this["AudioCodecIdBindingsAdded"] = value;
@@ -93,9 +93,9 @@ namespace RibbonUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::Frost.Common.Util.SerializableStringDictionary AudioCodecIdBindingsRemoved {
+        public global::Frost.Common.Util.Collections.SerializableStringDictionary AudioCodecIdBindingsRemoved {
             get {
-                return ((global::Frost.Common.Util.SerializableStringDictionary)(this["AudioCodecIdBindingsRemoved"]));
+                return ((global::Frost.Common.Util.Collections.SerializableStringDictionary)(this["AudioCodecIdBindingsRemoved"]));
             }
             set {
                 this["AudioCodecIdBindingsRemoved"] = value;
@@ -104,9 +104,9 @@ namespace RibbonUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::Frost.Common.Util.SerializableStringDictionary VideoCodecIdBindingsAdded {
+        public global::Frost.Common.Util.Collections.SerializableStringDictionary VideoCodecIdBindingsAdded {
             get {
-                return ((global::Frost.Common.Util.SerializableStringDictionary)(this["VideoCodecIdBindingsAdded"]));
+                return ((global::Frost.Common.Util.Collections.SerializableStringDictionary)(this["VideoCodecIdBindingsAdded"]));
             }
             set {
                 this["VideoCodecIdBindingsAdded"] = value;
@@ -115,9 +115,9 @@ namespace RibbonUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::Frost.Common.Util.SerializableStringDictionary VideoCodecIdBindingsRemoved {
+        public global::Frost.Common.Util.Collections.SerializableStringDictionary VideoCodecIdBindingsRemoved {
             get {
-                return ((global::Frost.Common.Util.SerializableStringDictionary)(this["VideoCodecIdBindingsRemoved"]));
+                return ((global::Frost.Common.Util.Collections.SerializableStringDictionary)(this["VideoCodecIdBindingsRemoved"]));
             }
             set {
                 this["VideoCodecIdBindingsRemoved"] = value;
@@ -126,9 +126,9 @@ namespace RibbonUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::Frost.Common.Util.SerializableStringDictionary KnownSegmentsAdded {
+        public global::Frost.Common.Util.Collections.SerializableStringDictionary KnownSegmentsAdded {
             get {
-                return ((global::Frost.Common.Util.SerializableStringDictionary)(this["KnownSegmentsAdded"]));
+                return ((global::Frost.Common.Util.Collections.SerializableStringDictionary)(this["KnownSegmentsAdded"]));
             }
             set {
                 this["KnownSegmentsAdded"] = value;
@@ -137,9 +137,9 @@ namespace RibbonUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::Frost.Common.Util.SerializableStringDictionary KnownSegmentsRemoved {
+        public global::Frost.Common.Util.Collections.SerializableStringDictionary KnownSegmentsRemoved {
             get {
-                return ((global::Frost.Common.Util.SerializableStringDictionary)(this["KnownSegmentsRemoved"]));
+                return ((global::Frost.Common.Util.Collections.SerializableStringDictionary)(this["KnownSegmentsRemoved"]));
             }
             set {
                 this["KnownSegmentsRemoved"] = value;
@@ -148,9 +148,9 @@ namespace RibbonUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::Frost.Common.Util.SerializableStringDictionary CustomLanguageMappingsAdded {
+        public global::Frost.Common.Util.Collections.SerializableStringDictionary CustomLanguageMappingsAdded {
             get {
-                return ((global::Frost.Common.Util.SerializableStringDictionary)(this["CustomLanguageMappingsAdded"]));
+                return ((global::Frost.Common.Util.Collections.SerializableStringDictionary)(this["CustomLanguageMappingsAdded"]));
             }
             set {
                 this["CustomLanguageMappingsAdded"] = value;
@@ -159,9 +159,9 @@ namespace RibbonUI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::Frost.Common.Util.SerializableStringDictionary CustomLanguageMappingsRemoved {
+        public global::Frost.Common.Util.Collections.SerializableStringDictionary CustomLanguageMappingsRemoved {
             get {
-                return ((global::Frost.Common.Util.SerializableStringDictionary)(this["CustomLanguageMappingsRemoved"]));
+                return ((global::Frost.Common.Util.Collections.SerializableStringDictionary)(this["CustomLanguageMappingsRemoved"]));
             }
             set {
                 this["CustomLanguageMappingsRemoved"] = value;

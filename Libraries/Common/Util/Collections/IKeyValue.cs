@@ -1,4 +1,4 @@
-namespace Frost.Common.Util {
+namespace Frost.Common.Util.Collections {
 
     public interface IKeyValue {
 

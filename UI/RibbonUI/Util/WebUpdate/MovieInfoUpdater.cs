@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
@@ -12,7 +11,6 @@ using System.Windows;
 using Frost.Common;
 using Frost.Common.Models;
 using Frost.Common.Models.FeatureDetector;
-using Frost.Common.Util;
 using Frost.Common.Util.ISO;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers;
@@ -23,6 +21,7 @@ using RibbonUI.Annotations;
 using RibbonUI.Design.Models;
 using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Windows.WebUpdate;
+using Swordfish.NET.Collections;
 
 namespace RibbonUI.Util.WebUpdate {
 
@@ -49,7 +48,7 @@ namespace RibbonUI.Util.WebUpdate {
             _cli = cli;
             _movieInfo = movieInfo;
 
-            Errors = new ThreadSafeObservableCollection<ErrorInfo>();
+            Errors = new ConcurrentObservableCollection<ErrorInfo>();
             IsProgressbarIndeterminate = true;
         }
 
@@ -97,7 +96,7 @@ namespace RibbonUI.Util.WebUpdate {
             }
         }
 
-        public ObservableCollection<ErrorInfo> Errors { get; set; }
+        public ConcurrentObservableCollection<ErrorInfo> Errors { get; set; }
 
         public Visibility CloseButtonVisibility {
             get { return _closeButtonVisibility; }

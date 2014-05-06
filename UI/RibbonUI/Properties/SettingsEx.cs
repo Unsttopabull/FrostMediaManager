@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using Frost.Common.Util;
+using Frost.Common.Util.Collections;
 using Frost.DetectFeatures;
 using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Frost.Common;
-using Frost.Common.Models;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 

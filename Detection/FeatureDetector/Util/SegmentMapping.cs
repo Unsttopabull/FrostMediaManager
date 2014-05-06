@@ -1,5 +1,5 @@
 ﻿using System;
-using Frost.Common.Util;
+using Frost.Common.Util.Collections;
 using Frost.DetectFeatures.FileName;
 
 namespace Frost.DetectFeatures.Util {

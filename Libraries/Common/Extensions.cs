@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Threading;
-using Frost.Common.Util;
+using Frost.Common.Util.Collections;
 
 namespace Frost.Common {
 

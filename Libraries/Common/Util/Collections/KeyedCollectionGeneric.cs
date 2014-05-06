@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
-namespace Frost.Common.Util {
+namespace Frost.Common.Util.Collections {
 
     /// <summary>Generic KeyedCollection, so we don't need to subclass every time.</summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>

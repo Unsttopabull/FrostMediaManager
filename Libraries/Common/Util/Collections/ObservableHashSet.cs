@@ -5,7 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 
-namespace Frost.Common.Util {
+namespace Frost.Common.Util.Collections {
 
     /// <summary>Represents a set of values that is observable.</summary>
     /// <typeparam name="T">The type of elements in the hash set.</typeparam>
