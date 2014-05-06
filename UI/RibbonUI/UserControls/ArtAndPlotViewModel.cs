@@ -24,7 +24,7 @@ namespace RibbonUI.UserControls {
         private ObservableMovie _selectedMovie;
 
         public ArtAndPlotViewModel() {
-            if (TranslationManager.IsInDesignMode) {
+            if (Gettext.IsInDesignMode) {
                 SelectedMovie = new ObservableMovie(new FakeMovie());
             }
 
@@ -37,7 +37,7 @@ namespace RibbonUI.UserControls {
                         Process.Start(uri);
                     }
                     catch {
-                        MessageBox.Show(TranslationManager.T("Error opening IMDB page with address: " + uri));
+                        MessageBox.Show(Gettext.T("Error opening IMDB page with address: " + uri));
                     }
                 },
                 s => !string.IsNullOrEmpty(s)
@@ -135,7 +135,7 @@ namespace RibbonUI.UserControls {
                     Process.Start(uri);
                 }
                 catch {
-                    MessageBox.Show(TranslationManager.T("Error opening IMDB page with address: " + uri));
+                    MessageBox.Show(Gettext.T("Error opening IMDB page with address: " + uri));
                 }
             }
         }
@@ -154,7 +154,7 @@ namespace RibbonUI.UserControls {
                             return;
                         }
                         catch {
-                            MessageBox.Show(TranslationManager.T("Error opening trailer in Windows Media Player"));
+                            MessageBox.Show(Gettext.T("Error opening trailer in Windows Media Player"));
                         }
                     }
                 }

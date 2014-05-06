@@ -247,7 +247,7 @@ namespace RibbonUI.Util.WebUpdate {
                 }
             }
             else if (!silent) {
-                MessageBox.Show(TranslationManager.T("Movie information not found."));
+                MessageBox.Show(Gettext.T("Movie information not found."));
             }
             return false;
         }
@@ -272,8 +272,8 @@ namespace RibbonUI.Util.WebUpdate {
 
             if (client != null && client.CanIndex) {
                 if (!silent) {
-                    LabelText = TranslationManager.T("Preforming a one-time indexing operation.");
-                    ProgressText = TranslationManager.T("Indexing available movies");
+                    LabelText = Gettext.T("Preforming a one-time indexing operation.");
+                    ProgressText = Gettext.T("Indexing available movies");
                 }
 
                 try {
@@ -313,7 +313,7 @@ namespace RibbonUI.Util.WebUpdate {
             await Task.Run(() => cli.ParseMovieInfo(movie))
                       .ContinueWith(t => {
                           if (t.IsFaulted || t.Result == null) {
-                              Errors.Add(new ErrorInfo(ErrorType.Error, TranslationManager.T("There was an error downloading movie information")));
+                              Errors.Add(new ErrorInfo(ErrorType.Error, Gettext.T("There was an error downloading movie information")));
 
                               if (!silent) {
                                   LabelText = "Errors have occured ...";

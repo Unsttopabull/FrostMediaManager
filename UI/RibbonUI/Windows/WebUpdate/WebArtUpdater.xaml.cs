@@ -13,7 +13,7 @@ namespace RibbonUI.Windows.WebUpdate {
         public WebArtUpdater(string downloader, ObservableMovie movie) {
             IFanartClient cli = LightInjectContainer.TryGetInstance<IFanartClient>(downloader);
             if (cli == null) {
-                MessageBox.Show(TranslationManager.T("Error: Downloader plugin could not be instantied."));
+                MessageBox.Show(Gettext.T("Error: Downloader plugin could not be instantied."));
                 return;
             }
             DataContext = new ArtUpdater(cli, movie);

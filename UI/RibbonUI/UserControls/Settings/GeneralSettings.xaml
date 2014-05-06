@@ -12,7 +12,7 @@
         <settings:GeneralSettingsViewModel/>
     </UserControl.DataContext>
     <UserControl.Resources>
-        <ObjectDataProvider x:Key="Cultures" ObjectInstance="{x:Static l:TranslationManager.Instance}" MethodName="get_Languages" />
+        <ObjectDataProvider x:Key="Cultures" ObjectInstance="{x:Static l:Gettext.Instance}" MethodName="get_Languages" />
     </UserControl.Resources>
     <Grid Margin="5,0,5,0">
         <Grid.Resources>

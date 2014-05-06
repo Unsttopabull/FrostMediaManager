@@ -54,7 +54,7 @@ namespace RibbonUI.UserControls {
         private ICommand _removeMovieCommand;
 
         public RibbonViewModel() {
-            _service = TranslationManager.IsInDesignMode
+            _service = Gettext.IsInDesignMode
                            ? new DesignMoviesDataService()
                            : LightInjectContainer.GetInstance<IMoviesDataService>();
 
@@ -247,7 +247,7 @@ namespace RibbonUI.UserControls {
 
 
         private void RemoveMovie() {
-            if (MessageBox.Show(TranslationManager.T("Do you really want to remove {0}?", "movie"), TranslationManager.T("Remove {0}", "movie"), MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
+            if (MessageBox.Show(Gettext.T("Do you really want to remove {0}?", "movie"), Gettext.T("Remove {0}", "movie"), MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
                 _service.RemoveMovie(SelectedMovie.ObservedEntity);
             }
         }
@@ -266,10 +266,10 @@ namespace RibbonUI.UserControls {
                 Process.Start(SelectedMovie.FirstFileName);
             }
             catch (IOException e) {
-                MessageBox.Show(TranslationManager.T("File could not be accessed: " + e.Message));
+                MessageBox.Show(Gettext.T("File could not be accessed: " + e.Message));
             }
             catch (Exception e) {
-                MessageBox.Show(TranslationManager.T("An error has occured opening file: "+SelectedMovie.FirstFileName));
+                MessageBox.Show(Gettext.T("An error has occured opening file: "+SelectedMovie.FirstFileName));
             }
         }
 
@@ -285,7 +285,7 @@ namespace RibbonUI.UserControls {
                     }
                 }
                 else {
-                    MessageBox.Show(ParentWindow, TranslationManager.T("Folder not accessible"));
+                    MessageBox.Show(ParentWindow, Gettext.T("Folder not accessible"));
                 }
             }
         }

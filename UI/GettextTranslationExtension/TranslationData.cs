@@ -25,7 +25,7 @@ namespace Frost.GettextMarkupExtension {
             _args = args;
             _number = number;
             _pluralKey = pluralKey;
-            LanguageChangedEventManager.AddListener(TranslationManager.Instance, this);
+            LanguageChangedEventManager.AddListener(Gettext.Instance, this);
         }
 
         public TranslationData(string key, string context, object[] arguments, string prefix, string postfix) : this(key, null, 0, context, arguments, prefix, postfix) {
@@ -40,15 +40,15 @@ namespace Frost.GettextMarkupExtension {
             if (!string.IsNullOrEmpty(pluralKey)) {
                 sb = new StringBuilder(
                     string.IsNullOrEmpty(context)
-                        ? TranslationManager.Instance.TranslatePlural(key, pluralKey, number, args)
-                        : TranslationManager.Instance.TranslatePluralContext(key, pluralKey, number, context, args)
+                        ? Gettext.Instance.TranslatePlural(key, pluralKey, number, args)
+                        : Gettext.Instance.TranslatePluralContext(key, pluralKey, number, context, args)
                 );
             }
             else {
                 sb = new StringBuilder(
                     string.IsNullOrEmpty(context)
-                        ? TranslationManager.Instance.Translate(key, args)
-                        : TranslationManager.Instance.TranslateContext(key, context, args)
+                        ? Gettext.Instance.Translate(key, args)
+                        : Gettext.Instance.TranslateContext(key, context, args)
                 );
             }
 
@@ -99,7 +99,7 @@ namespace Frost.GettextMarkupExtension {
                 return;
             }
 
-            LanguageChangedEventManager.RemoveListener(TranslationManager.Instance, this);
+            LanguageChangedEventManager.RemoveListener(Gettext.Instance, this);
             if (!finalizer) {
                 GC.SuppressFinalize(this);
             }

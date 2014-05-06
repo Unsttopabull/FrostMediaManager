@@ -32,7 +32,7 @@ namespace RibbonUI {
             ShutdownMode = ShutdownMode.OnExplicitShutdown;
             LoadPlugins();
 
-            TranslationManager.CurrentTranslationProvider = new SecondLanguageTranslationProvider("Languages");
+            Gettext.CurrentTranslationProvider = new SecondLanguageTranslationProvider("Languages");
             //DispatcherUnhandledException += UnhandledExeption;
         }
 

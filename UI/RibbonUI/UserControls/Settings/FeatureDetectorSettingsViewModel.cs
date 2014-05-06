@@ -110,7 +110,7 @@ namespace RibbonUI.UserControls.Settings {
         #endregion
 
         private void AddFileExtension() {
-            string extension = InputBox.Show(ParentWindow, TranslationManager.T("Enter new extension:"), TranslationManager.T("Add new extension"), TranslationManager.T("Add"));
+            string extension = InputBox.Show(ParentWindow, Gettext.T("Enter new extension:"), Gettext.T("Add new extension"), Gettext.T("Add"));
             if (string.IsNullOrEmpty(extension)) {
                 return;
             }
@@ -161,7 +161,7 @@ namespace RibbonUI.UserControls.Settings {
         }
 
         private void AddSubtitleFileExtension() {
-            string extension = InputBox.Show(ParentWindow, TranslationManager.T("Enter new extension:"), TranslationManager.T("Add new extension"), TranslationManager.T("Add"));
+            string extension = InputBox.Show(ParentWindow, Gettext.T("Enter new extension:"), Gettext.T("Add new extension"), Gettext.T("Add"));
             if (string.IsNullOrEmpty(extension)) {
                 return;
             }

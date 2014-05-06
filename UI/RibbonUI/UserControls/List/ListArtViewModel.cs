@@ -77,7 +77,7 @@ namespace RibbonUI.UserControls.List {
 
         private void SetAsDefaultOnClick(MovieArt art) {
             if (art.ObservedEntity.Id <= 0) {
-                MessageBox.Show(TranslationManager.T("Art has to be saved to the database first to be able to be set as default."));
+                MessageBox.Show(Gettext.T("Art has to be saved to the database first to be able to be set as default."));
                 return;
             }
 

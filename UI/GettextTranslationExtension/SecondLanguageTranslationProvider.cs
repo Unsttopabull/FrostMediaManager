@@ -109,19 +109,19 @@ namespace Frost.GettextMarkupExtension {
         /// <param name="args"></param>
         /// <returns></returns>
         public string Translate(string key, params object[] args) {
-            return TranslationManager.IsInDesignMode ? key : _translator.Translate(key, args ?? new object[] { });
+            return Gettext.IsInDesignMode ? key : _translator.Translate(key, args ?? new object[] { });
         }
 
         public string TranslateContext(string key, string context, params object[] args) {
-            return TranslationManager.IsInDesignMode ? key : _translator.TranslateContextual(context, key, args ?? new object[] { });
+            return Gettext.IsInDesignMode ? key : _translator.TranslateContextual(context, key, args ?? new object[] { });
         }
 
         public string TranslatePlural(string key, string pluralKey, long number, params object[] args) {
-            return TranslationManager.IsInDesignMode ? key : _translator.TranslatePlural(key, pluralKey, number, args ?? new object[] { });
+            return Gettext.IsInDesignMode ? key : _translator.TranslatePlural(key, pluralKey, number, args ?? new object[] { });
         }
 
         public string TranslateContextPlural(string key, string pluralKey, string context, long number, params object[] args) {
-            return TranslationManager.IsInDesignMode ? key : _translator.TranslateContextualPlural(context, key, pluralKey, number, args ?? new object[] { });
+            return Gettext.IsInDesignMode ? key : _translator.TranslateContextualPlural(context, key, pluralKey, number, args ?? new object[] { });
         }
 
         /// <summary>Gets the available languages.</summary>

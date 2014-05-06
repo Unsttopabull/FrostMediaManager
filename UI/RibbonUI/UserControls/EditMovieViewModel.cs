@@ -31,11 +31,11 @@ namespace RibbonUI.UserControls {
         private MoviePlot _selectedPlot;
 
         public EditMovieViewModel() {
-            _service = TranslationManager.IsInDesignMode
+            _service = Gettext.IsInDesignMode
                 ? new DesignMoviesDataService()
                 : LightInjectContainer.GetInstance<IMoviesDataService>();
 
-            if (TranslationManager.IsInDesignMode) {
+            if (Gettext.IsInDesignMode) {
                 SelectedMovie = new ObservableMovie(new FakeMovie());
             }
 
@@ -284,16 +284,16 @@ namespace RibbonUI.UserControls {
         }
 
         private void EditGenreOnClick(IGenre genre) {
-            if (MessageBox.Show(ParentWindow, TranslationManager.T(
+            if (MessageBox.Show(ParentWindow, Gettext.T(
                 "Please note this will edit this genre name in all the movies in the collection.\n" +
                 "If you want to edit this genre only for this movie ucheck it and add a new genre.\n\n" +
                 "Do you really want to edit this genre?"),
-                TranslationManager.T("Genre edit"),
+                Gettext.T("Genre edit"),
                 MessageBoxButton.YesNo) != MessageBoxResult.Yes) {
                 return;
             }
 
-            string genreName = InputBox.Show(ParentWindow, TranslationManager.T("Genre name:"), TranslationManager.T("Edit genre"), TranslationManager.T("Edit"), genre.Name);
+            string genreName = InputBox.Show(ParentWindow, Gettext.T("Genre name:"), Gettext.T("Edit genre"), Gettext.T("Edit"), genre.Name);
 
             if (!genre.Name.Equals(genreName, StringComparison.CurrentCultureIgnoreCase)) {
                 genre.Name = genreName;
@@ -315,8 +315,8 @@ namespace RibbonUI.UserControls {
 
         private void RemovePotOnClick(MoviePlot moviePlot) {
             if (MessageBox.Show(ParentWindow,
-                TranslationManager.T("Do you really want to remove plot: \"{0}\"?", moviePlot),
-                TranslationManager.T("Confrim remove"), MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
+                Gettext.T("Do you really want to remove plot: \"{0}\"?", moviePlot),
+                Gettext.T("Confrim remove"), MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
                 SelectedMovie.RemovePlot(moviePlot);
             }
         }
@@ -332,7 +332,7 @@ namespace RibbonUI.UserControls {
                 ? LightInjectContainer.GetInstance<IPlot>()
                 : new DesignPlot();
 
-            plot.Full = TranslationManager.T("Enter full description");
+            plot.Full = Gettext.T("Enter full description");
 
             SelectedMovie.AddPlot(plot);
 
@@ -375,7 +375,7 @@ namespace RibbonUI.UserControls {
                     //check if they have already been added as an actor without a character
                     MovieActor ma = SelectedMovie.Actors.FirstOrDefault(a => a.Name == person.Name && a.Character == null);
                     if (ma != null) {
-                        MessageBox.Show(ParentWindow, TranslationManager.T("This actor with unspecified character already exists in the list. To add another role specify a character."));
+                        MessageBox.Show(ParentWindow, Gettext.T("This actor with unspecified character already exists in the list. To add another role specify a character."));
                         return;
                     }
 
@@ -392,7 +392,7 @@ namespace RibbonUI.UserControls {
                     //check if they have already been added as an actor with this character
                     MovieActor ma = SelectedMovie.Actors.FirstOrDefault(a => a.Name == person.Name && a.Character == addActorCharacter);
                     if (ma != null) {
-                        MessageBox.Show(ParentWindow, TranslationManager.T("This actor already exists in the list. To add another actor's role specify a diffrent character."));
+                        MessageBox.Show(ParentWindow, Gettext.T("This actor already exists in the list. To add another actor's role specify a diffrent character."));
                         return;
                     }
 
@@ -453,7 +453,7 @@ namespace RibbonUI.UserControls {
                 return;
             }
 
-            string studioName = InputBox.Show(ParentWindow, TranslationManager.T("Studio name:"), TranslationManager.T("Edit studio"), TranslationManager.T("Edit"), studio.Name);
+            string studioName = InputBox.Show(ParentWindow, Gettext.T("Studio name:"), Gettext.T("Edit studio"), Gettext.T("Edit"), studio.Name);
             if (!studio.Name.Equals(studioName, StringComparison.CurrentCultureIgnoreCase)) {
                 studio.Name = studioName;
             }

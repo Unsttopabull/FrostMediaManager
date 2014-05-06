@@ -95,7 +95,7 @@ namespace RibbonUI.Util.WebUpdate {
 
             if (parsedVideos == null) {
                 if (!silent) {
-                    MessageBox.Show(TranslationManager.T("No videos found"));
+                    MessageBox.Show(Gettext.T("No videos found"));
                 }
                 return false;
             }

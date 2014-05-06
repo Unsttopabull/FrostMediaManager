@@ -866,7 +866,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
             else {
                 if (!silent) {
-                    MessageBox.Show(TranslationManager.T("This person has already been added to this movie as {0}.", "an actor"));
+                    MessageBox.Show(Gettext.T("This person has already been added to this movie as {0}.", "an actor"));
                 }
             }
         }
@@ -914,7 +914,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 Writers.Add(p);
             }
             else if(!silent){
-                MessageBox.Show(TranslationManager.T("This person has already been added to this movie as {0}.", "a writer"));
+                MessageBox.Show(Gettext.T("This person has already been added to this movie as {0}.", "a writer"));
             }
             return p;
         }
@@ -938,7 +938,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 OnPropertyChanged("DirectorNames");
             }
             else if(!silent){
-                MessageBox.Show(TranslationManager.T("This person has already been added to this movie as {0}.", "a director"));
+                MessageBox.Show(Gettext.T("This person has already been added to this movie as {0}.", "a director"));
             }
             return p;
         }
@@ -971,7 +971,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 OnPropertyChanged("GenreNames");
             }
             else if(!silent){
-                MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "genre"));
+                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", "genre"));
             }
         }
 
@@ -1015,7 +1015,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 OnPropertyChanged("FirstStudioLogo");
             }
             else if(!silent){
-                MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "genre"));
+                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", "genre"));
             }
         }
 
@@ -1038,7 +1038,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 Awards.Add(a);
             }
             else if(!silent){
-                MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "award"));
+                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", "award"));
             }
         }
 
@@ -1059,7 +1059,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 Countries.Add(new MovieCountry(c));
             }
             else if(!silent){
-                MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "country"));
+                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", "country"));
             }
         }
 
@@ -1116,7 +1116,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             IPromotionalVideo v = Add(_observedEntity.AddPromotionalVideo, promotionalVideo, silent);
             if (v == null) {
                 if (!silent) {
-                    MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "promotional video"));
+                    MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", "promotional video"));
                 }
                 return;
             }
@@ -1125,7 +1125,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 PromotionalVideos.Add(v);
             }
             else if(!silent){
-                MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "promotional video"));
+                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", "promotional video"));
             }
         }
 
@@ -1140,7 +1140,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             IArt a = Add(_observedEntity.AddArt, art, silent);
             if (a == null) {
                 if (!silent) {
-                    MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "art"));
+                    MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", "art"));
                 }
                 return;
             }
@@ -1159,7 +1159,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 }
             }
             else if(!silent){
-                MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "promotional video"));
+                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", "promotional video"));
             }            
         }
 
@@ -1190,7 +1190,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 OnPropertyChanged("HasArt");
             }
             else if(!silent){
-                MessageBox.Show(TranslationManager.T("This {0} has already been added to this movie.", "country"));
+                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", "country"));
             }
         }
 
@@ -1211,7 +1211,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                     UIHelper.ProviderCouldNotRemove();
                 }
                 else {
-                    throw new Exception(TranslationManager.T("Provider could not remove the item.\nProbable causes:\n\t* Item does not exists in the store\n\t* An error has occured."));
+                    throw new Exception(Gettext.T("Provider could not remove the item.\nProbable causes:\n\t* Item does not exists in the store\n\t* An error has occured."));
                 }
             }
             catch (Exception e) {
@@ -1234,7 +1234,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                         UIHelper.ProviderCouldNotAdd();
                     }
                     else {
-                        throw new Exception(TranslationManager.T("Error: Provider could not add the item.\nPlease contact provider creator."));
+                        throw new Exception(Gettext.T("Error: Provider could not add the item.\nPlease contact provider creator."));
                     }
                 }
             }

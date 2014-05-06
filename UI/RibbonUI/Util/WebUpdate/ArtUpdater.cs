@@ -96,7 +96,7 @@ namespace RibbonUI.Util.WebUpdate {
 
             if (parsedArts == null) {
                 if (!silent) {
-                    MessageBox.Show(TranslationManager.T("No art found"));
+                    MessageBox.Show(Gettext.T("No art found"));
                 }
                 return false;
             }

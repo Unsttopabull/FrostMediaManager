@@ -82,11 +82,11 @@ namespace RibbonUI.Util {
         }
 
         public static void ProviderCouldNotRemove() {
-            MessageBox.Show(TranslationManager.T("Provider could not remove the item.\nProbable causes:\n\t* Item does not exists in the store\n\t* An error has occured."));            
+            MessageBox.Show(Gettext.T("Provider could not remove the item.\nProbable causes:\n\t* Item does not exists in the store\n\t* An error has occured."));            
         }
 
         public static void ProviderCouldNotAdd() {
-            MessageBox.Show(TranslationManager.T("Error: Provider could not add the item.\nPlease contact provider creator."));
+            MessageBox.Show(Gettext.T("Error: Provider could not add the item.\nPlease contact provider creator."));
         }
 
         public static IEnumerable<IStudio> GetStudios() {

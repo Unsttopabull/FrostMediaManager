@@ -21,7 +21,7 @@ namespace RibbonUI.Windows.Edit {
 
         public EditAudioViewModel() {
             Codecs = new ObservableCollection<Codec> {
-                new Codec(TranslationManager.T("Unknown"), "unk"),
+                new Codec(Gettext.T("Unknown"), "unk"),
                 new Codec("Windows Media Audio", "wma"),
                 new Codec("Windows Media Audio HD", "wmahd"),
                 new Codec("Windows Media Audio Pro", "wmapro"),
@@ -51,7 +51,7 @@ namespace RibbonUI.Windows.Edit {
                 SelectedAudio.Language = language;
             });
 
-            if (TranslationManager.IsInDesignMode) {
+            if (Gettext.IsInDesignMode) {
                 SelectedAudio = new MovieAudio(new FakeAudio());
             }
         }

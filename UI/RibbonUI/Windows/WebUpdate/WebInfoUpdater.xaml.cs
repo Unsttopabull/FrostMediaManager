@@ -22,7 +22,7 @@ namespace RibbonUI.Windows.WebUpdate {
         public WebUpdater(string downloader, ObservableMovie movie) {
             IParsingClient cli = LightInjectContainer.TryGetInstance<IParsingClient>(downloader);
             if (cli == null) {
-                MessageBox.Show(TranslationManager.T("Error accessing movie info provider."));
+                MessageBox.Show(Gettext.T("Error accessing movie info provider."));
                 return;
             }
 

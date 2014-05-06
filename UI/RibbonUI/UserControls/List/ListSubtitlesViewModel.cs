@@ -24,7 +24,7 @@ namespace RibbonUI.UserControls.List {
         private ObservableMovie _selectedMovie;
 
         public ListSubtitlesViewModel() {
-            _service = TranslationManager.IsInDesignMode
+            _service = Gettext.IsInDesignMode
                 ? new DesignMoviesDataService()
                 : LightInjectContainer.GetInstance<IMoviesDataService>();
 

@@ -47,7 +47,7 @@
     <Compile Include="TExtension.cs" />
     <Compile Include="TPluralExtension.cs" />
     <Compile Include="TranslationData.cs" />
-    <Compile Include="TranslationManager.cs" />
+    <Compile Include="Gettext.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

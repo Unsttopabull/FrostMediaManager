@@ -21,7 +21,7 @@ namespace RibbonUI.UserControls.List {
         private ObservableMovie _selectedMovie;
 
         public ListAudiosViewModel() {
-            if (TranslationManager.IsInDesignMode) {
+            if (Gettext.IsInDesignMode) {
                 _service = new DesignMoviesDataService();
                 SelectedMovie = new ObservableMovie(new FakeMovie());
             }

@@ -7,20 +7,20 @@ using System.Threading;
 using System.Windows;
 
 namespace Frost.GettextMarkupExtension {
-    public class TranslationManager : DependencyObject {
-        private static readonly TranslationManager Singleton = new TranslationManager();
+    public class Gettext : DependencyObject {
+        private static readonly Gettext Singleton = new Gettext();
         public event EventHandler LanguageChanged;
 
-        static TranslationManager() {
+        static Gettext() {
             
         }
 
-        private TranslationManager() {
+        private Gettext() {
         }
 
         #region Static members & Wrappers
 
-        public static TranslationManager Instance {
+        public static Gettext Instance {
             get { return Singleton; }
         }
 

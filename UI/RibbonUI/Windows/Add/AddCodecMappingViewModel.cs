@@ -124,7 +124,7 @@ namespace RibbonUI.Windows.Add {
             OpenFileDialog ofd = new OpenFileDialog {
                 CheckFileExists = true,
                 Multiselect = false,
-                Filter = TranslationManager.T("Image Files") + " (*.bmp, *.jpg, *.jpeg, *.png, *.gif, *.tiff)|*.bmp;*.jpg;*.jpeg;*.png;*.gif;*.tiff"
+                Filter = Gettext.T("Image Files") + " (*.bmp, *.jpg, *.jpeg, *.png, *.gif, *.tiff)|*.bmp;*.jpg;*.jpeg;*.png;*.gif;*.tiff"
             };
 
             if (ofd.ShowDialog() == true) {

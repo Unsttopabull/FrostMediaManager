@@ -16,7 +16,7 @@ namespace RibbonUI.Windows.Add {
         public event PropertyChangedEventHandler PropertyChanged;
 
         public SelectLanguageViewModel() {
-            if (TranslationManager.IsInDesignMode) {
+            if (Gettext.IsInDesignMode) {
                 Languages = UIHelper.GetLanguages().Select(l => new MovieLanguage(l));
             }
 

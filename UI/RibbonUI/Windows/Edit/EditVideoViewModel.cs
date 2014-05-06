@@ -26,7 +26,7 @@ namespace RibbonUI.Windows.Edit {
             #region Collection Initializers
 
             Codecs = new ObservableCollection<Codec>() {
-                new Codec(TranslationManager.T("Unknown"), "unk"),
+                new Codec(Gettext.T("Unknown"), "unk"),
                 new Codec("Windows Media Video", "wmv"),
                 new Codec("Windows Media Video HD", "wmva"),
                 new Codec("Nero Digital Standard", "nds"),
@@ -66,7 +66,7 @@ namespace RibbonUI.Windows.Edit {
             };
 
             Resolutions = new ObservableCollection<string> {
-                TranslationManager.T("Unknown"),
+                Gettext.T("Unknown"),
                 "SDp",
                 "SDi",
                 "SD",

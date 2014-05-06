@@ -54,7 +54,7 @@ namespace RibbonUI.UserControls.List {
                     Process.Start(uri);
                 }
                 catch {
-                    MessageBox.Show(TranslationManager.T("Error opening video with path: " + uri));
+                    MessageBox.Show(Gettext.T("Error opening video with path: " + uri));
                 }
             }
         }

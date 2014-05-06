@@ -36,7 +36,7 @@ namespace RibbonUI.UserControls {
             if (e.EditAction == DataGridEditAction.Commit) {
                 TextBox textBox = ((TextBox) e.EditingElement);
                 string text = textBox.Text;
-                if (string.IsNullOrEmpty(text) || (!string.IsNullOrEmpty(text) && text.OrdinalEquals(TranslationManager.T("Unknown")))) {
+                if (string.IsNullOrEmpty(text) || (!string.IsNullOrEmpty(text) && text.OrdinalEquals(Gettext.T("Unknown")))) {
                     textBox.Text = null;
                 }
             }

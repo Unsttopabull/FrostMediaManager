@@ -89,12 +89,12 @@ namespace RibbonUI.UserControls {
                 ThumbButtonInfos = new ThumbButtonInfoCollection {
                     new ThumbButtonInfo {
                         ImageSource = new BitmapImage(new Uri("pack://application:,,,/RibbonUI;component/Images/go-next.png")),
-                        Description = TranslationManager.T("Go to previous movie"),
+                        Description = Gettext.T("Go to previous movie"),
                         Command = new RelayCommand(() =>  MovieList.SelectedIndex--, o => MovieList.SelectedIndex > 0),
                     },
                     new ThumbButtonInfo {
                         ImageSource = new BitmapImage(new Uri("pack://application:,,,/RibbonUI;component/Images/go-previous.png")),
-                        Description = TranslationManager.T("Go to next movie"),
+                        Description = Gettext.T("Go to next movie"),
                         Command = new RelayCommand(() => MovieList.SelectedIndex++, o => MovieList.SelectedIndex < MovieList.Items.Count - 1),
                     }
                 }

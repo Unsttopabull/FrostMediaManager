@@ -32,7 +32,7 @@ namespace RibbonUI.UserControls {
         private RibbonTabs _tab;
 
         public ContentGridViewModel() {
-            _service = TranslationManager.IsInDesignMode 
+            _service = Gettext.IsInDesignMode 
                            ? new DesignMoviesDataService()
                            : LightInjectContainer.GetInstance<IMoviesDataService>();
 

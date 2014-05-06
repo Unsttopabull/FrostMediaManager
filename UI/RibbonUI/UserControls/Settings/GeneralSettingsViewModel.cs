@@ -88,7 +88,7 @@ namespace RibbonUI.UserControls.Settings {
         }
 
         private void LangSelectionChanged(CultureInfo selectedCulture) {
-            TranslationManager.CurrentCulture = selectedCulture;
+            Gettext.CurrentCulture = selectedCulture;
         }
 
         private void LangSelectOnLoaded(ComboBox cb) {
