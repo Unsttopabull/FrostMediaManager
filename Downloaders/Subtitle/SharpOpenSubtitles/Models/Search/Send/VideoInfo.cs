@@ -1,6 +1,6 @@
 ﻿using CookComputing.XmlRpc;
 
-namespace Frost.SharpOpenSubtitles.Models.Search.Send {
+namespace Frost.SharpOpenSubtitles.Models.Search {
     public class VideoInfo {
 
         /// <summary>The movie MovieHash value.</summary>

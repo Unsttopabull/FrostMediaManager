@@ -1,6 +1,6 @@
 ﻿using CookComputing.XmlRpc;
 
-namespace Frost.SharpOpenSubtitles.Models.Upload.Send {
+namespace Frost.SharpOpenSubtitles.Models.Upload {
     public class UploadSubtitleInfo {
 
         /// <summary>Basic upload information structure.</summary>

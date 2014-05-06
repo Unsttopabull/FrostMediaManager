@@ -1,6 +1,6 @@
 ﻿using CookComputing.XmlRpc;
 
-namespace Frost.SharpOpenSubtitles.Models.UI.Receive {
+namespace Frost.SharpOpenSubtitles.Models.UI {
 
     public class SubLanguageInfo {
 

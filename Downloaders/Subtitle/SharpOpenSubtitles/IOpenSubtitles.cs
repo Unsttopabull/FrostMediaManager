@@ -1,15 +1,11 @@
 ﻿using CookComputing.XmlRpc;
-using Frost.SharpOpenSubtitles.Models.Checking.Receive;
-using Frost.SharpOpenSubtitles.Models.Movies.Receive;
-using Frost.SharpOpenSubtitles.Models.Movies.Send;
-using Frost.SharpOpenSubtitles.Models.Report.Receive;
-using Frost.SharpOpenSubtitles.Models.Report.Send;
-using Frost.SharpOpenSubtitles.Models.Search.Receive;
-using Frost.SharpOpenSubtitles.Models.Search.Send;
-using Frost.SharpOpenSubtitles.Models.Session.Receive;
-using Frost.SharpOpenSubtitles.Models.UI.Receive;
-using Frost.SharpOpenSubtitles.Models.Upload.Receive;
-using Frost.SharpOpenSubtitles.Models.Upload.Send;
+using Frost.SharpOpenSubtitles.Models.Checking;
+using Frost.SharpOpenSubtitles.Models.Movies;
+using Frost.SharpOpenSubtitles.Models.Report;
+using Frost.SharpOpenSubtitles.Models.Search;
+using Frost.SharpOpenSubtitles.Models.Session;
+using Frost.SharpOpenSubtitles.Models.UI;
+using Frost.SharpOpenSubtitles.Models.Upload;
 
 namespace Frost.SharpOpenSubtitles {
 

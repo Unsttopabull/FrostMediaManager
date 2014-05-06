@@ -1,7 +1,7 @@
 ﻿using CookComputing.XmlRpc;
-using Frost.SharpOpenSubtitles.Models.Session.Receive;
+using Frost.SharpOpenSubtitles.Models.Session;
 
-namespace Frost.SharpOpenSubtitles.Models.UI.Receive {
+namespace Frost.SharpOpenSubtitles.Models.UI {
 
     public class AvailableTranslationsInfo : SessionInfo {
 

@@ -1,5 +1,5 @@
 ﻿using CookComputing.XmlRpc;
-using Frost.SharpOpenSubtitles.Models.UI.Receive;
+using Frost.SharpOpenSubtitles.Models.UI;
 
 namespace Frost.SharpOpenSubtitles {
     public class Program {

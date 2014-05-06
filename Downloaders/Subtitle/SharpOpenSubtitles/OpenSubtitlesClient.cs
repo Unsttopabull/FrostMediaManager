@@ -2,8 +2,8 @@
 using System.Security.Authentication;
 using System.Threading;
 using CookComputing.XmlRpc;
-using Frost.SharpOpenSubtitles.Models.Report.Receive;
-using Frost.SharpOpenSubtitles.Models.Session.Receive;
+using Frost.SharpOpenSubtitles.Models.Report;
+using Frost.SharpOpenSubtitles.Models.Session;
 
 namespace Frost.SharpOpenSubtitles {
 

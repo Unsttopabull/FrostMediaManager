@@ -1,6 +1,6 @@
 ﻿using CookComputing.XmlRpc;
 
-namespace Frost.SharpOpenSubtitles.Models.Search.Receive {
+namespace Frost.SharpOpenSubtitles.Models.Search {
     public class SearchSubtitleInfo {
 
         /// <summary>Array of found subtitle file matches, when no matches are found data is empty.</summary>

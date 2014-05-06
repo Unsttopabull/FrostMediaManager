@@ -1,6 +1,6 @@
 ﻿using CookComputing.XmlRpc;
 
-namespace Frost.SharpOpenSubtitles.Models.Report.Send {
+namespace Frost.SharpOpenSubtitles.Models.Report {
 
     public class SubtitleVote {
 

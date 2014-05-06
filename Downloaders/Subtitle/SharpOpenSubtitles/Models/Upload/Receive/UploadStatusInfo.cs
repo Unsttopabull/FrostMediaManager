@@ -1,7 +1,7 @@
 ﻿using CookComputing.XmlRpc;
-using Frost.SharpOpenSubtitles.Models.Session.Receive;
+using Frost.SharpOpenSubtitles.Models.Session;
 
-namespace Frost.SharpOpenSubtitles.Models.Upload.Receive {
+namespace Frost.SharpOpenSubtitles.Models.Upload {
     public class UploadStatusInfo : SessionInfo {
 
         /// <summary>Link to subtitle on OSDb server (to be used in a web browser).</summary>

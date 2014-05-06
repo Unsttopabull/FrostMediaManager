@@ -1,6 +1,6 @@
 ﻿using CookComputing.XmlRpc;
 
-namespace Frost.SharpOpenSubtitles.Models.Session.Receive {
+namespace Frost.SharpOpenSubtitles.Models.Session {
     public class LogInInfo : SessionInfo {
 
         /// <summary>Token string/session id, must be used in subsequent communication.</summary>

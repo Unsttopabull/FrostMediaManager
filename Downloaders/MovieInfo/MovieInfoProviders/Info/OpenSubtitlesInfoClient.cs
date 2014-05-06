@@ -6,10 +6,9 @@ using Frost.InfoParsers;
 using Frost.InfoParsers.Models.Info;
 using Frost.MovieInfoProviders.OpenSubtitles;
 using Frost.SharpOpenSubtitles;
-using Frost.SharpOpenSubtitles.Models.Checking.Receive;
+using Frost.SharpOpenSubtitles.Models.Checking;
 using Frost.SharpOpenSubtitles.Models.Movies;
-using Frost.SharpOpenSubtitles.Models.Movies.Receive;
-using Frost.SharpOpenSubtitles.Models.Session.Receive;
+using Frost.SharpOpenSubtitles.Models.Session;
 
 namespace Frost.MovieInfoProviders {
 

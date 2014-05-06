@@ -1,7 +1,7 @@
 ﻿using CookComputing.XmlRpc;
-using Frost.SharpOpenSubtitles.Models.Session.Receive;
+using Frost.SharpOpenSubtitles.Models.Session;
 
-namespace Frost.SharpOpenSubtitles.Models.Report.Receive {
+namespace Frost.SharpOpenSubtitles.Models.Report {
 
     public class VoteInfo : SessionInfo {
         /// <summary></summary>

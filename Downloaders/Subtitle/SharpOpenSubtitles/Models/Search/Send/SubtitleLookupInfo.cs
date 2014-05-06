@@ -1,6 +1,6 @@
 ﻿using CookComputing.XmlRpc;
 
-namespace Frost.SharpOpenSubtitles.Models.Search.Send {
+namespace Frost.SharpOpenSubtitles.Models.Search {
     public class SubtitleLookupInfo {
 
         /// <summary>List of language ISO639-3 language codes to search for, divided by ',' (e.g. 'cze,eng,slo'), see <see cref="IOpenSubtitles.GetSubLanguages">GetSubLanguages(string)</see> function for a list of available languages</summary>
