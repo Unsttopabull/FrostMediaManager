@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LightInject">
-      <HintPath>..\..\..\packages\LightInject.3.0.1.6\lib\net45\LightInject.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\ThirdParty\JsonNET\Net35\Newtonsoft.Json.dll</HintPath>
@@ -76,9 +73,6 @@
     <Compile Include="Models\Search\Ratings.cs" />
     <Compile Include="Models\StatusResponse.cs" />
     <Compile Include="MovieApi.cs" />
-    <Compile Include="Client\CompositionRoot.cs" />
-    <Compile Include="Client\TraktTvClient.cs" />
-    <Compile Include="Client\TraktTvParsedMovie.cs" />
     <Compile Include="SearchApi.cs" />
     <Compile Include="TraktTvException.cs" />
     <Compile Include="URLBuilder.cs" />
@@ -87,12 +81,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\InfoParsersCommon\InfoParsersCommon.csproj">
-      <Project>{005f252b-c8ad-49e0-9a88-47bc289f00d0}</Project>
-      <Name>InfoParsersCommon</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

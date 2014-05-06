@@ -9,11 +9,11 @@ using Newtonsoft.Json.Linq;
 
 namespace SharpFanartTv {
 
-    public class FanartTvArtClient : IFanartClient {
+    public class FanartTvClient : IFanartClient {
         public const string CLIENT_NAME = "Fanart.TV";
         private const string API_KEY = @"99a04fb5ed7cf203c26c9989dc534ea5";
 
-        public FanartTvArtClient() {
+        public FanartTvClient() {
             IsImdbSupported = true;
             IsTitleSupported = true;
             IsTitleSupported = false;

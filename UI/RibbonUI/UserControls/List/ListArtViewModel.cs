@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Data;
 using Frost.Common;
+using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using RibbonUI.Annotations;
 using RibbonUI.Util.ObservableWrappers;
@@ -46,7 +48,7 @@ namespace RibbonUI.UserControls.List {
 
 
         private bool CheckArt(MovieArt art) {
-            bool b = SelectedMovie != null && art != null && art.ObservedEntity.Id > 0;
+            bool b = SelectedMovie != null && art != null;
 
             if (!b || art.ObservedEntity.Id <= 0) {
                 return b;
@@ -74,6 +76,11 @@ namespace RibbonUI.UserControls.List {
         }
 
         private void SetAsDefaultOnClick(MovieArt art) {
+            if (art.ObservedEntity.Id <= 0) {
+                MessageBox.Show(TranslationManager.T("Art has to be saved to the database first to be able to be set as default."));
+                return;
+            }
+
             switch (art.Type) {
                 case ArtType.Fanart:
                     SelectedMovie.DefaultFanart = art;
