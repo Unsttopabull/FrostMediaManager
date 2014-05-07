@@ -6,8 +6,9 @@ using Frost.InfoParsers;
 using Frost.InfoParsers.Models.Art;
 using Frost.InfoParsers.Models.Info;
 using Newtonsoft.Json.Linq;
+using SharpFanartTv;
 
-namespace SharpFanartTv {
+namespace Frost.MovieInfoProviders.Art {
 
     public class FanartTvClient : IFanartClient {
         public const string CLIENT_NAME = "Fanart.TV";

@@ -3,6 +3,11 @@ using Frost.Common.Models.Provider;
 
 namespace RibbonUI.Design.Models {
     public class DesingFile : IFile {
+
+        public DesingFile() {
+            DateAdded = DateTime.Now;
+        }
+
         public long Id { get; private set; }
 
         public bool this[string propertyName] {

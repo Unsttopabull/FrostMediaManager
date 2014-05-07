@@ -24,7 +24,7 @@ namespace Frost.InfoParsers {
 
         /// <summary>Gets or sets the movie average rating on a scale from 1 to 10 (can have decimals).</summary>
         /// <value>The average movie rating.</value>
-        public string Rating { get; set; }
+        public double? Rating { get; set; }
         public string TmdbId { get; set; }
         public string Plot { get; set; }
         public string Tagline { get; set; }

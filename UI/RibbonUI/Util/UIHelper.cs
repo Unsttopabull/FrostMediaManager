@@ -8,12 +8,15 @@ using Frost.Common.Models.Provider.ISO;
 using Frost.Common.Util.ISO;
 using Frost.GettextMarkupExtension;
 using RibbonUI.Design.Models;
+using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.Util {
+
     public static class UIHelper {
         private static List<ILanguage> _languages;
         private static List<ICountry> _countries;
         private static List<IStudio> _studios;
+
         private static readonly string[] ExculsionList = {
             "Ancient",
             "Ancient",
@@ -26,6 +29,22 @@ namespace RibbonUI.Util {
             "BCE",
             "post"
         };
+
+        public static IEnumerable<MovieLanguage> Languages {
+            get { return GetLanguages().Select(l => new MovieLanguage(l)); }
+        }
+
+        public static IEnumerable<ISOLanguageCode> GetLanguagesWithImages() {
+            if (!Directory.Exists("Images/Languages")) {
+                return null;
+            }
+
+            return Directory.EnumerateFiles("Images/Languages", "*.png")
+                            .Select(fileName => ISOLanguageCodes.Instance.GetByISOCode(Path.GetFileNameWithoutExtension(fileName)))
+                            .Where(isoCode => isoCode != null)
+                            .OrderBy(isoCode => isoCode.EnglishName)
+                            .ToList();
+        }
 
         public static IEnumerable<ILanguage> GetLanguages() {
             if (_languages != null) {
@@ -54,6 +73,11 @@ namespace RibbonUI.Util {
             return _languages;
         }
 
+        public static IEnumerable<ISOLanguageCode> GetISOLanguages() {
+            IEnumerable<ISOLanguageCode> codes = ISOLanguageCodes.GetAllKnownCodes();
+            return codes.Where(lang => !ExculsionList.Any(s => lang.EnglishName.Contains(s))).ToList();
+        }
+
         public static IEnumerable<ICountry> GetCountries() {
             if (_countries != null) {
                 return _countries;
@@ -70,8 +94,8 @@ namespace RibbonUI.Util {
                 }
 
                 ICountry c = canCreateLang
-                                  ? LightInjectContainer.GetInstance<ICountry>()
-                                  : new DesignCountry();
+                                 ? LightInjectContainer.GetInstance<ICountry>()
+                                 : new DesignCountry();
 
                 c.Name = lang.EnglishName;
                 c.ISO3166 = new ISO3166(lang.Alpha2, lang.Alpha3);
@@ -82,7 +106,7 @@ namespace RibbonUI.Util {
         }
 
         public static void ProviderCouldNotRemove() {
-            MessageBox.Show(Gettext.T("Provider could not remove the item.\nProbable causes:\n\t* Item does not exists in the store\n\t* An error has occured."));            
+            MessageBox.Show(Gettext.T("Provider could not remove the item.\nProbable causes:\n\t* Item does not exists in the store\n\t* An error has occured."));
         }
 
         public static void ProviderCouldNotAdd() {
@@ -106,16 +130,20 @@ namespace RibbonUI.Util {
 
         public static void HandleProviderException(Exception exception) {
             if (exception is NotSupportedException) {
-                MessageBox.Show(string.Format("Provider does not support the requested operation.{0}", !string.IsNullOrEmpty(exception.Message) ? "\nProvider message: " + exception.Message : null));
+                MessageBox.Show(string.Format("Provider does not support the requested operation.{0}",
+                    !string.IsNullOrEmpty(exception.Message) ? "\nProvider message: " + exception.Message : null));
                 return;
             }
 
             if (exception is NotImplementedException) {
-                MessageBox.Show(string.Format("Provider has not implemented the requested operation.{0}", !string.IsNullOrEmpty(exception.Message) ? "\nProvider message: " + exception.Message : null));
-                return;                
+                MessageBox.Show(string.Format("Provider has not implemented the requested operation.{0}",
+                    !string.IsNullOrEmpty(exception.Message) ? "\nProvider message: " + exception.Message : null));
+                return;
             }
 
-             MessageBox.Show(string.Format("An error has occured int the provider{0}", !string.IsNullOrEmpty(exception.Message) ? "\nProvider message: " + exception.Message : null));
+            MessageBox.Show(string.Format("An error has occured int the provider{0}",
+                !string.IsNullOrEmpty(exception.Message) ? "\nProvider message: " + exception.Message : null));
         }
     }
+
 }

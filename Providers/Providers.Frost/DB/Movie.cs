@@ -273,7 +273,7 @@ namespace Frost.Providers.Frost.DB {
         /// <summary>Gets a value indicating whether this movie has available subtitles.</summary>
         /// <value>Is <c>true</c> if the movie has available subtitles; otherwise, <c>false</c>.</value>
         public bool HasSubtitles {
-            get { return Subtitles.Count != 0; }
+            get { return Subtitles.Count() != 0; }
         }
 
         /// <summary>Gets a value indicating whether this movie has available fanart.</summary>

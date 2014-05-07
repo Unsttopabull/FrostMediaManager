@@ -70,6 +70,7 @@
     <Compile Include="ParsedVideo.cs" />
     <Compile Include="ParsingClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SubtitleInfo.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

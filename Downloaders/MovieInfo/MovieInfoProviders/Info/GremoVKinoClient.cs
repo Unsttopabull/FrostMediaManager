@@ -8,7 +8,7 @@ using Frost.InfoParsers;
 using Frost.InfoParsers.Models.Info;
 using HtmlAgilityPack;
 
-namespace Frost.MovieInfoProviders {
+namespace Frost.MovieInfoProviders.Info {
 
     public class GremoVKinoClient : ParsingClient {
         private const int MAX = 9744;

@@ -1,0 +1,113 @@
+﻿<Window x:Class="RibbonUI.Windows.SelectSubtitles"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:l="http://www.frostmediamanager.com/xaml/translation"
+        xmlns:u="clr-namespace:RibbonUI.Util.WebUpdate"
+        xmlns:subtitles="clr-namespace:Frost.InfoParsers.Models.Subtitles;assembly=Frost.InfoParsers"
+        xmlns:converters="clr-namespace:RibbonUI.Converters"
+        xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance u:SubtitleUpdater}" x:Name="SelectSubtitlesWindow"
+        WindowStyle="ToolWindow" ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
+        Title="{l:T Select languages}" SizeToContent="WidthAndHeight" MaxHeight="500">
+    <Window.Resources>
+        <converters:ISO639ToISOLanguageImagesConverter x:Key="ISO639ToISOLanguageImagesConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <ListView x:Name="SubtitleList"  Grid.Row="0" Grid.ColumnSpan="2" MinWidth="300" MinHeight="300" ItemsSource="{Binding ElementName=SelectSubtitlesWindow, Path=Subtitles}">
+            <ListView.GroupStyle>
+                <GroupStyle ContainerStyle="{StaticResource ExpanderGroup}" />
+            </ListView.GroupStyle>
+            <ListView.Resources>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                </Style>
+            </ListView.Resources>
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="subtitles:ISubtitleInfo">
+                    <Border BorderThickness="0,0,0,1" BorderBrush="Gainsboro">
+                        <DockPanel LastChildFill="False">
+                            <Image DockPanel.Dock="Left" Source="{Binding ISO639Language, Converter={StaticResource ISO639ToISOLanguageImagesConverter}, FallbackValue={StaticResource UnknownLanguageLarge}, TargetNullValue={StaticResource UnknownLanguageLarge}}"
+                                   MinHeight="32" MaxHeight="48">
+                                    <Image.CacheMode>
+                                        <BitmapCache />
+                                    </Image.CacheMode>
+                                </Image>
+                            <StackPanel Margin="15,0,0,0" MinWidth="200" x:Name="DetailsHolder">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{l:T Movie name:, Postfix=:}" FontWeight="Bold" />
+                                    <TextBlock VerticalAlignment="Center">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} ({1})">
+                                                <Binding Path="MovieName" TargetNullValue="{l:T Unknown}" FallbackValue="{l:T Unknown}"/>
+                                                <Binding Path="MovieReleaseYear" TargetNullValue="?" FallbackValue="?"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </StackPanel>                  
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{l:T For release:, Postfix=:}" FontWeight="Bold" />
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding MovieRelease, StringFormat={}{0}, TargetNullValue={l:T Unknown}, FallbackValue={l:T Unknown}}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{l:T Filename, Postfix=:}" FontWeight="Bold" />
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding FileName, TargetNullValue={l:T Unknown}, FallbackValue={l:T Unknown}}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{l:T Format, Postfix=:}" FontWeight="Bold" />
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding SubtitleFormat, TargetNullValue={l:T Unknown}, FallbackValue={l:T Unknown}}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{l:T Part, Postfix=:}" FontWeight="Bold" />
+                                    <TextBlock VerticalAlignment="Center">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} / {1}">
+                                                <Binding Path="PartNumber" FallbackValue="?" TargetNullValue="?"/>
+                                                <Binding Path="NumberOfParts" FallbackValue="?" TargetNullValue="?"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{l:T Download count, Postfix=:}" FontWeight="Bold" />
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding DownloadCount, TargetNullValue={l:T Unknown}, FallbackValue={l:T Unknown}}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{l:T Rating, Postfix=:}" FontWeight="Bold" />
+                                    <fmm:StarRating Rating="{Binding Rating, FallbackValue=0, TargetNullValue=0}" IsHitTestVisible="False" Height="16"/>
+                                    <!--<TextBlock VerticalAlignment="Center" Text="{Binding Rating, StringFormat={}{0}/10, TargetNullValue=?, FallbackValue=?}" />-->
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{l:T Is for hearing impaired, Postfix=:}" FontWeight="Bold" />
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding IsForHearingImpaired, TargetNullValue={l:T Unknown}, FallbackValue={l:T Unknown}}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="{l:T Uploader comment, Postfix=:}" FontWeight="Bold" />
+                                    <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" MaxWidth="400">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} / {1}">
+                                                <Binding Path="UploaderName" FallbackValue="?" TargetNullValue="{l:T Anonymous}"/>
+                                                <Binding Path="UploaderComment" FallbackValue="{l:T None}" TargetNullValue="{l:T None}"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                </StackPanel>                            
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button Grid.Row="1" Grid.Column="0" Margin="5" Content="{l:T Download}" Command="{Binding ElementName=SelectSubtitlesWindow, Path=DownloadSubtitleCommand}" CommandParameter="{Binding ElementName=SubtitleList, Path=SelectedItem}"/>
+        <Button Grid.Row="1" Grid.Column="1" Margin="5" Content="{l:T Cancel}" Click="OnCancelClick"/>
+    </Grid>
+</Window>

@@ -6,9 +6,6 @@
         xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
         Name="AddCountriesControl"
         Title="{l:T SelectCountry}" Height="212" Width="350" WindowStartupLocation="CenterOwner">
-    <Window.Resources>
-        <BitmapImage x:Key="UnknownCountry" UriSource="..\..\Images\unknown.png" />
-    </Window.Resources>
     <Window.DataContext>
         <add:AddCountriesViewModel/>
     </Window.DataContext>
@@ -27,7 +24,7 @@
                 <DataTemplate DataType="{x:Type o:MovieCountry}">
                     <StackPanel Orientation="Horizontal">
                         <Image
-                            Source="{Binding Image, TargetNullValue={StaticResource UnknownCountry}, FallbackValue={StaticResource UnknownCountry}}"
+                            Source="{Binding Image, TargetNullValue={StaticResource UnknownCountryOrLanguage}, FallbackValue={StaticResource UnknownCountryOrLanguage}}"
                             MaxHeight="32" MaxWidth="32" />
                         <TextBlock Text="{Binding Name, TargetNullValue=Unknown, FallbackValue=Unknown}"
                                    Margin="5,0,0,0" VerticalAlignment="Center" />

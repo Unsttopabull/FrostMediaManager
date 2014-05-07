@@ -1,9 +1,19 @@
 ﻿using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
+using Frost.Common.Util.ISO;
 
 namespace RibbonUI.Design.Models {
 
     public class DesignLanguage : ILanguage {
+
+        public DesignLanguage() {
+            
+        }
+
+        public DesignLanguage(ISOLanguageCode iso) {
+            Name = iso.EnglishName;
+            ISO639 = new ISO639(iso.Alpha2, iso.Alpha3);
+        }
 
         public long Id { get; private set; }
 

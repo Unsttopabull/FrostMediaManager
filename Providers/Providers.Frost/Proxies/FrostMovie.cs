@@ -70,6 +70,7 @@ namespace Frost.Providers.Frost.Proxies {
                     case "Specials":
                     case "Genres":
                     case "Awards":
+                    case "Subtitles":
                     case "PromotionalVideos":
                     case "HasTrailer":
                     case "HasSubtitles":
@@ -724,9 +725,16 @@ namespace Frost.Providers.Frost.Proxies {
 
         public ISubtitle AddSubtitle(ISubtitle subtitle) {
             Subtitle sub = Service.FindSubtitle(subtitle, true);
-            Entity.Subtitles.Add(sub);
 
-            return new FrostSubtitle(sub, Service);
+            FrostSubtitle fs = new FrostSubtitle(sub, Service);
+            fs.Language = subtitle.Language;
+            fs.File = subtitle.File;
+
+            if (fs.File != null) {
+                Entity.Subtitles.Add(sub);
+            }
+
+            return fs;
         }
 
         public bool RemoveSubtitle(ISubtitle subtitle) {

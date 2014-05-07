@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:uc="clr-namespace:RibbonUI.UserControls"
+    xmlns:l="http://www.frostmediamanager.com/xaml/translation"
     x:Name="RibbonControl" x:Class="RibbonUI.UserControls.Ribbon"
     mc:Ignorable="d" d:DesignHeight="140" d:DesignWidth="700">
     <UserControl.DataContext>
@@ -16,16 +17,12 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Ribbon x:Name="RibbonHeader" Title="Frost Media Manager" Background="#FFDFE9F5">
-        <Ribbon.ContextualTabGroups>
-            <RibbonContextualTabGroup Background="Red" x:Name="ContextSubtitle" Visibility="{Binding SubtitlesContextVisible}" Header="Subtitles" />
-        </Ribbon.ContextualTabGroups>
-
         <Ribbon.ApplicationMenu>
             <RibbonApplicationMenu Visibility="Collapsed">
             </RibbonApplicationMenu>
         </Ribbon.ApplicationMenu>
 
-        <RibbonTab IsSelected="{Binding IsSearchTabSelected}" Header="Search" Margin="0,1,0,-1">
+        <RibbonTab IsSelected="{Binding IsSearchTabSelected}" Header="{l:T Search}" Margin="0,1,0,-1">
             <RibbonGroup Header="Searching &amp; Detection">
                 <RibbonButton LargeImageSource="../Images/search.ico" Label="Search for new movies" Command="{Binding SearchCommand}" />
                 <RibbonButton SmallImageSource="../Images/refresh.png" Label="Update all" IsEnabled="False"/>
@@ -48,7 +45,7 @@
             </RibbonGroup>            
         </RibbonTab>
 
-        <RibbonTab IsSelected="{Binding IsDetectTabSelected}" Header="Web update">
+        <RibbonTab IsSelected="{Binding IsDetectTabSelected}" Header="{l:T Web update}">
             <RibbonGroup Header="Movie info" Background="#00000000" Height="86" Margin="0">
                 <RibbonMenuButton x:Name="MovieInfoDownloaders" LargeImageSource="../Images/update.png" Label="Update movie information"/>
             </RibbonGroup>
@@ -64,12 +61,9 @@
             </RibbonGroup>
         </RibbonTab>
 
-        <RibbonTab x:Name="SubtitlesTab" IsSelected="{Binding IsSubtitlesTabSelected}" ContextualTabGroupHeader="Subtitles">
+        <RibbonTab x:Name="SubtitlesTab" IsSelected="{Binding IsSubtitlesTabSelected}" Header="{l:T Subtitles}">
             <RibbonGroup Header="Subtitles" IsEnabled="True">
-                <RibbonMenuButton Label="Download" LargeImageSource="../Images/add.png">
-                    <RibbonMenuItem ImageSource="../Images/sites/podnapisiNet.ico" Header="Download from Podnapisi.NET" Command="{Binding DownloadSubtitlesCommand}" CommandParameter="{x:Static uc:SubtitleSites.PodnapisiNet}"/>
-                    <RibbonMenuItem ImageSource="../Images/sites/opensubtitles.ico" Header="Download from OpenSubtitles.org" Command="{Binding DownloadSubtitlesCommand}" CommandParameter="{x:Static uc:SubtitleSites.OpenSubtitles}"/>
-                </RibbonMenuButton>
+                <RibbonMenuButton x:Name="MovieSubtitleDownloaders" Label="Download" LargeImageSource="../Images/add.png"/>
                 <RibbonButton Label="Detect Language" LargeImageSource="../Images/search_subs.ico" Command="{Binding DetectSubtitleLanguage}"/>
             </RibbonGroup>
         </RibbonTab>

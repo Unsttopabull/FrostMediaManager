@@ -6,9 +6,10 @@ using System.Reflection;
 using Frost.InfoParsers;
 using Frost.InfoParsers.Models;
 using Frost.InfoParsers.Models.Info;
+using SharpTrailerAddictAPI;
 using SharpTrailerAddictAPI.Models;
 
-namespace SharpTrailerAddictAPI {
+namespace Frost.MovieInfoProviders.Videos {
     public class TrailerAddictClient : IPromotionalVideoClient {
         public const string CLIENT_NAME = "TrailerAddict";
 

@@ -365,11 +365,8 @@ namespace RibbonUI.Util.WebUpdate {
                     movie.ReleaseYear = _parsedInfo.ReleaseYear.Value;
                 }
 
-                if (!string.IsNullOrEmpty(_parsedInfo.Rating)) {
-                    double rating;
-                    if (double.TryParse(_parsedInfo.Rating, NumberStyles.Float, CultureInfo.InvariantCulture, out rating)) {
-                        movie.RatingAverage = rating;
-                    }
+                if (_parsedInfo.Rating.HasValue) {
+                    movie.RatingAverage = _parsedInfo.Rating.Value;
                 }
 
                 if (!string.IsNullOrEmpty(_parsedInfo.ImdbLink)) {
@@ -569,11 +566,8 @@ namespace RibbonUI.Util.WebUpdate {
                 movie.ReleaseYear = _parsedInfo.ReleaseYear.Value;
             }
 
-            if (movie["RatingAverage"] && !string.IsNullOrEmpty(_parsedInfo.Rating)) {
-                double rating;
-                if (double.TryParse(_parsedInfo.Rating, NumberStyles.Float, CultureInfo.InvariantCulture, out rating)) {
-                    movie.RatingAverage = rating;
-                }
+            if (movie["RatingAverage"] && _parsedInfo.Rating.HasValue) {
+                movie.RatingAverage = _parsedInfo.Rating.Value;
             }
 
             if (movie["ImdbID"] && !string.IsNullOrEmpty(_parsedInfo.ImdbLink)) {

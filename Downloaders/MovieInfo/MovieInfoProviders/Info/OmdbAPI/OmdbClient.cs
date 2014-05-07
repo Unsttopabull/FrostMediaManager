@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Frost.InfoParsers;
+using SharpOmdbAPI;
 using SharpOmdbAPI.Models;
 
-namespace SharpOmdbAPI.Client {
+namespace Frost.MovieInfoProviders.Info.OmdbAPI {
 
     public class OmdbClient : ParsingClient {
         private const string IMDB_MOVIE_URL = "http://www.imdb.com/title/{0}/";
@@ -94,7 +95,7 @@ namespace SharpOmdbAPI.Client {
             movieInfo.Genres = movie.Genre.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries);
             movieInfo.Plot = movie.Plot;
             movieInfo.Cover = movie.Poster;
-            movieInfo.Rating = movie.ImdbRating;
+            movieInfo.Rating = movie.ImdbRating.TryGetDouble();
 
             if (!string.IsNullOrEmpty(movie.ImdbId)) {
                 movieInfo.ImdbLink = string.Format(IMDB_MOVIE_URL, movie.ImdbId);

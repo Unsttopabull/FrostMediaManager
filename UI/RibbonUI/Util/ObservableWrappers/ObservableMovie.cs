@@ -8,6 +8,8 @@ using Frost.Common.Models;
 using Frost.Common.Models.Provider;
 using Frost.DetectFeatures;
 using Frost.GettextMarkupExtension;
+using Frost.InfoParsers;
+using Frost.InfoParsers.Models.Subtitles;
 using log4net;
 using Swordfish.NET.Collections;
 
@@ -676,6 +678,18 @@ namespace RibbonUI.Util.ObservableWrappers {
                     return _observedEntity.Videos
                                           .Where(v => v != null && !string.IsNullOrEmpty(v.MovieHash))
                                           .Select(m => m.MovieHash)
+                                          .ToList();
+                }
+                return null;
+            }
+        }
+
+        public IEnumerable<IMovieHash> MovieHashesInfo {
+            get {       
+                if (_observedEntity["Videos"]) {
+                    return _observedEntity.Videos
+                                          .Where(v => v != null && !string.IsNullOrEmpty(v.MovieHash))
+                                          .Select(m => new MovieHash(m.MovieHash, m.File.Size.HasValue ? m.File.Size.Value : 0))
                                           .ToList();
                 }
                 return null;

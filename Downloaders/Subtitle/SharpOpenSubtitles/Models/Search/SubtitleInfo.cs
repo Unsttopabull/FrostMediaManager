@@ -20,7 +20,7 @@ namespace Frost.SharpOpenSubtitles.Models.Search {
 
 
         [XmlRpcMember("SubFileName")]
-        public string SubFileName;
+        public string SubtitleFileName;
 
         [XmlRpcMember("SubActualCD")]
         public string PartNumber;
@@ -110,7 +110,7 @@ namespace Frost.SharpOpenSubtitles.Models.Search {
 
 
         [XmlRpcMember("SubDownloadLink")]
-        public string SubtitleDownloadLink;
+        public string SubtitleGGzipDownloadLink;
 
         [XmlRpcMember("ZipDownloadLink")]
         public string SubtitleZipDownloadLink;

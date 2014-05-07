@@ -66,9 +66,14 @@
     </Compile>
     <Compile Include="Models\Search\Receive\DownloadInfo.cs" />
     <Compile Include="Models\Search\Receive\SearchSubtitleInfo.cs" />
+    <Compile Include="Models\Search\Send\SubtitleImdbLookupInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\Search\Send\SubtitleLookupInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Models\Search\SubtitleContents.cs" />
     <Compile Include="Models\Search\SubtitleInfo.cs" />
-    <Compile Include="Models\Search\Send\SubtitleLookupInfo.cs" />
     <Compile Include="Models\Search\Send\VideoInfo.cs" />
     <Compile Include="Models\Session\Receive\LogInInfo.cs" />
     <Compile Include="Models\Session\Receive\SessionInfo.cs" />

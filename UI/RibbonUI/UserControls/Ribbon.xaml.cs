@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using Frost.InfoParsers.Models;
 using Frost.InfoParsers.Models.Art;
 using Frost.InfoParsers.Models.Info;
+using Frost.InfoParsers.Models.Subtitles;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 
@@ -18,7 +19,8 @@ namespace RibbonUI.UserControls {
     internal enum DownloaderType {
         MovieInfo,
         Art,
-        PromotionalVideo
+        PromotionalVideo,
+        Subtitle
     }
 
     /// <summary>Interaction logic for Ribbon.xaml</summary>
@@ -35,6 +37,7 @@ namespace RibbonUI.UserControls {
             MovieInfoPlugins = new List<Plugin>();
             MovieArtPlugins = new List<Plugin>();
             MoviePromoVideoPlugins = new List<Plugin>();
+            MovieSubtitlePlugins = new List<Plugin>();
         }
 
         public Ribbon() {
@@ -58,6 +61,8 @@ namespace RibbonUI.UserControls {
         public static List<Plugin> MovieArtPlugins { get; private set; }
 
         public static List<Plugin> MoviePromoVideoPlugins { get; private set; }
+
+        public static List<Plugin> MovieSubtitlePlugins { get; private set; }
 
         private static void SelectedTabChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             ((RibbonViewModel) ((Ribbon) d).DataContext).OnRibbonTabSelect(e.NewValue is RibbonTabs ? (RibbonTabs) e.NewValue : RibbonTabs.None);
@@ -94,6 +99,29 @@ namespace RibbonUI.UserControls {
             LoadMovieInfoDownloaders();
             LoadMovieArtDownloaders();
             LoadPromotionalVideoDownloaders();
+            LoadSubtitlePlugins();
+        }
+
+        private void LoadSubtitlePlugins() {
+            Type subtitleClientType = typeof(ISubtitleClient);
+            IEnumerable<string> parsingClients = LightInjectContainer.AvailableServices
+                                                                     .Where(s => s.ServiceType == subtitleClientType)
+                                                                     .Select(sr => sr.ServiceName);
+            foreach (string clientName in parsingClients) {
+                ISubtitleClient cli;
+                try {
+                    cli = LightInjectContainer.GetInstance<ISubtitleClient>(clientName);
+                }
+                catch (Exception e) {
+                    MessageBox.Show(string.Format("Failed to load plugin {0}.\n\n{1}", clientName, e.Message));
+                    continue;
+                }
+
+                RibbonMenuItem item = GetRibbonMenuItem(cli, DownloaderType.Subtitle);
+                if (item != null) {
+                    MovieSubtitleDownloaders.Items.Add(item);
+                }
+            }
         }
 
         private void LoadMovieArtDownloaders() {
@@ -197,6 +225,10 @@ namespace RibbonUI.UserControls {
                 case DownloaderType.PromotionalVideo:
                     item.Command = ((RibbonViewModel) DataContext).UpdatePromotionalVideosCommand;
                     MoviePromoVideoPlugins.Add(p);
+                    break;
+                case DownloaderType.Subtitle:
+                    item.Command = ((RibbonViewModel) DataContext).DownloadSubtitlesCommand;
+                    MovieSubtitlePlugins.Add(p);
                     break;
             }
 

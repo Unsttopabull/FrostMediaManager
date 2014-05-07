@@ -10,6 +10,7 @@ using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
 using Frost.XamlControls.Commands;
+using RibbonUI.Util;
 
 namespace RibbonUI.UserControls.Settings {
 
@@ -23,11 +24,10 @@ namespace RibbonUI.UserControls.Settings {
 
         public FileNameParserSettingsViewModel() {
             if (Directory.Exists("Images/Languages")) {
-                Languages = Directory.EnumerateFiles("Images/Languages", "*.png")
-                                     .Select(fileName => ISOLanguageCodes.Instance.GetByISOCode(Path.GetFileNameWithoutExtension(fileName)))
-                                     .Where(isoCode => isoCode != null)
-                                     .OrderBy(isoCode => isoCode.EnglishName)
-                                     .ToList();
+                var langs = UIHelper.GetLanguagesWithImages();
+                Languages = langs != null 
+                    ? langs.ToList()
+                    : UIHelper.GetISOLanguages().ToList();
             }
 
             RemoveLanguageMappingCommand = new RelayCommand<LanguageMapping>(

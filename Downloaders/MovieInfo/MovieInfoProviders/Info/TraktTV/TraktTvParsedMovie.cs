@@ -2,7 +2,7 @@
 using SharpTraktTvAPI.Models.Movie;
 using SharpTraktTvAPI.Models.Search;
 
-namespace SharpTraktTvAPI.Client {
+namespace Frost.MovieInfoProviders.Info.TraktTV {
     public class TraktTvParsedMovie : ParsedMovie {
         public TraktTvParsedMovie(MovieSummaryResponse summary) : base(summary.Title, null, null) {
             Summary = summary;

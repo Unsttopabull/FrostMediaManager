@@ -1,20 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Shell;
 using Frost.Common;
 using Frost.GettextMarkupExtension;
+using Frost.InfoParsers.Models.Subtitles;
 using Frost.XamlControls.Commands;
+using Microsoft.WindowsAPICodePack.Shell.Interop;
 using RibbonUI.Annotations;
 using RibbonUI.Design;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
+using RibbonUI.Util.WebUpdate;
 using RibbonUI.Windows;
+using RibbonUI.Windows.Add;
 using RibbonUI.Windows.Search;
 using RibbonUI.Windows.WebUpdate;
 using MessageBox = System.Windows.MessageBox;
@@ -145,7 +152,7 @@ namespace RibbonUI.UserControls {
         public ICommand DownloadSubtitlesCommand {
             get {
                 if (_downloadSubtitlesCommand == null) {
-                    _downloadSubtitlesCommand = new RelayCommand<SubtitleSites>(DownloadSubtitles, o => SelectedMovie != null && !string.IsNullOrEmpty(SelectedMovie.DirectoryPath));
+                    _downloadSubtitlesCommand = new RelayCommand<string>(DownloadSubtitles, o => SelectedMovie != null && !string.IsNullOrEmpty(SelectedMovie.DirectoryPath));
                 }
                 return _downloadSubtitlesCommand;
             }
@@ -250,10 +257,6 @@ namespace RibbonUI.UserControls {
             if (MessageBox.Show(Gettext.T("Do you really want to remove {0}?", "movie"), Gettext.T("Remove {0}", "movie"), MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
                 _service.RemoveMovie(SelectedMovie.ObservedEntity);
             }
-        }
-
-        private void DownloadSubtitles(SubtitleSites site) {
-            
         }
 
         private void ExportMovies() {
@@ -369,6 +372,35 @@ namespace RibbonUI.UserControls {
 
                 SettingsWindow sw = new SettingsWindow { Owner = ParentWindow };
                 sw.ShowDialog();
+            }
+        }
+
+        private async void DownloadSubtitles(string downloader) {
+            SelectLanguages sl = new SelectLanguages() { Owner = ParentWindow };
+            if (sl.ShowDialog() == true) {
+                List<string> languages = sl.Languages.Select(l => l.ISO3166.Alpha3).ToList();
+                if (languages.Count == 0) {
+                    if (MessageBox.Show("No languages selected, search all?", "No languages selected", MessageBoxButton.YesNo) != MessageBoxResult.Yes) {
+                        return;
+                    }
+                    languages = null;
+                }
+
+                WebSubtitleUpdater wsu = new WebSubtitleUpdater(downloader, SelectedMovie, languages) { Owner = ParentWindow };
+                if (wsu.ShowDialog() != true) {
+                    return;
+                }
+
+                SelectSubtitles ss = new SelectSubtitles(wsu.SubtitleInfos) { Owner = ParentWindow };
+                if (ss.ShowDialog() == true) {
+                    ProgressIndicator pi = new ProgressIndicator { Owner = ParentWindow };
+                    pi.Show();
+
+                    SubtitleDownloader sd = new SubtitleDownloader(ss.SubtitleInfo, SelectedMovie);
+                    await sd.Download();
+
+                    pi.Close();
+                }
             }
         }
 

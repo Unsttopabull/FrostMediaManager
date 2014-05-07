@@ -61,11 +61,26 @@ namespace Frost.Providers.Frost.Proxies {
 
         public IFile File {
             get { return Entity.File; }
+            set {
+                if (value == null) {
+                    Entity.File = null;
+                    return;
+                }
+
+                Entity.File = Service.FindFile(value, true);
+            }
         }
 
         public ILanguage Language {
             get { return Entity.Language; }
-            set { Entity.Language = Service.FindLanguage(value, true); }
+            set {
+                if (value == null) {
+                    Entity.Language = null;
+                    return;
+                }
+
+                Entity.Language = Service.FindLanguage(value, true);
+            }
         }
 
         #endregion

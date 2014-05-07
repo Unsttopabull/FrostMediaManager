@@ -47,6 +47,36 @@ namespace Frost.SharpOpenSubtitles {
             return _rpc.Proxy.SearchSubtitles(_rpc.Token, lookup);
         }
 
+        /// <summary>Search for subtitle files matching your videos using either video file hashes or IMDb IDs.</summary>
+        /// <param name="lookup">The Subtitle lookup information.</param>
+        /// <remarks>This function can be used to search for subtitle files. There are two ways to call it:
+        /// <list type="number">
+        /// <item>
+        ///     <description>using video file hashes (more at once allowed):
+        ///         <list type="bullet">
+        ///             <item><description>Search the database using video file hashes to get exact matches for your video files.</description></item>
+        ///         </list>
+        ///     </description>
+        /// </item>
+        /// <item>
+        ///     <description>using IMDb IDs:
+        ///         <list type="bullet">
+        ///             <item><description>If method 1 returns no subtitle files, you can use this method to search for subtitle files matching given imdbid.</description></item>
+        ///             <item><description>You'll most probably have to synchronize the subtitles yourself or try more to find a match. If you find one, please, contribute by uploading them using UploadSubtitles method.</description></item>
+        ///             <item><description>When this method is used you don't have to specify moviehash and moviebytesize.</description></item>
+        ///             <item><description>Some fields (IDSubMovieFile, MovieHash, MovieByteSize, MovieTimeMS) are missing in output when using this method.</description></item>
+        ///         </list>
+        ///     </description>
+        /// </item>
+        /// </list>
+        /// If sublanguageid is empty or contains the string 'all' - search is performed for all languages.
+        /// Also remember you can <b>not</b> combine imdbid and moviehash searches in one call.
+        /// </remarks>
+        /// <returns>TBD</returns>
+        public SearchSubtitleInfo Search(SubtitleImdbLookupInfo[] lookup) {
+            return _rpc.Proxy.SearchSubtitles(_rpc.Token, lookup);
+        }
+
         /// <summary>Schedule a periodical search for subtitles matching given video files, send results to user's e-mail address.</summary>
         /// <param name="sublangs">Array of subtitle file language IDs (ISO639-3 codes), if no languages are specified (array is empty), system will try to find subtitles in all languages.</param>
         /// <param name="videos">Array of video file information.</param>

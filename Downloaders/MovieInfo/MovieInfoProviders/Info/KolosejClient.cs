@@ -8,7 +8,7 @@ using System.Xml.XPath;
 using Frost.InfoParsers;
 using HtmlAgilityPack;
 
-namespace Frost.MovieInfoProviders {
+namespace Frost.MovieInfoProviders.Info {
 
     public class KolosejClient : ParsingClient {
         private const string URL = "http://www.kolosej.si{0}";

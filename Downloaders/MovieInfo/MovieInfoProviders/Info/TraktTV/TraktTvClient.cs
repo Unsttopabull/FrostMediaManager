@@ -4,10 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Frost.InfoParsers;
+using SharpTraktTvAPI;
 using SharpTraktTvAPI.Models.Movie;
 using SharpTraktTvAPI.Models.Search;
 
-namespace SharpTraktTvAPI.Client {
+namespace Frost.MovieInfoProviders.Info.TraktTV {
 
     public class TraktTvClient : ParsingClient {
         private const string IMDB_MOVIE_URL = "http://www.imdb.com/title/{0}/";
@@ -64,7 +65,7 @@ namespace SharpTraktTvAPI.Client {
                 info.ImdbLink = string.Format(IMDB_MOVIE_URL, summary.ImdbID);
             }
 
-            info.Rating = summary.Ratings.Percentage.ToInvariantString();
+            info.Rating = summary.Ratings.Percentage / 10.0;
             info.Plot = summary.Overview;
             info.Tagline = summary.Tagline;
 

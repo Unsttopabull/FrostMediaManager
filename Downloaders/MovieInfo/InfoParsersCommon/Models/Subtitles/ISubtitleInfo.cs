@@ -4,11 +4,15 @@ namespace Frost.InfoParsers.Models.Subtitles {
 
         /// <summary>Url to the subtitle file to download.</summary>
         /// <value>The subtitle download link.</value>
-        string SubtitleDownloadLink { get; }
+        string SubtitleFileDownloadLink { get; }
+
+        /// <summary>Url to the ZIP archive of the subtitle file to download.</summary>
+        /// <value>The subtitle download link.</value>
+        string SubtitleZipDownloadLink { get; }
 
         /// <summary>Url to the GZip Compressed subtitle file to download.</summary>
         /// <value>The subtitle gzip download link.</value>
-        string SubtitleGzipDownloadLink { get; }
+        string SubtitleGZipDownloadLink { get; }
 
         /// <summary>Url to the site where to download the subtitles</summary>
         /// <value>The subtitles link.</value>
@@ -26,15 +30,19 @@ namespace Frost.InfoParsers.Models.Subtitles {
 
         string FileName { get; }
 
-        long SubtitleByteSize { get; }
+        long? SubtitleByteSize { get; }
 
         /// <summary>Gets the subtitle part number (eg. 1 for CD1 etc.).</summary>
         /// <value>The part number.</value>
-        int PartNumber { get; }
+        int? PartNumber { get; }
 
-        int DownloadCount { get; }
+        int? NumberOfParts { get; }
 
-        double Rating { get; }
+        int? DownloadCount { get; }
+
+        /// <summary>Gets the rating on the scale from 1-10.0.</summary>
+        /// <value>The rating.</value>
+        double? Rating { get; }
 
         string UploaderName { get; }
 
@@ -42,12 +50,14 @@ namespace Frost.InfoParsers.Models.Subtitles {
 
         string ISO639Language { get; }
 
-        bool IsForHearingImpaired { get; }
+        string LanguageName { get; }
+
+        bool? IsForHearingImpaired { get; }
 
         string MovieName { get; }
         string MovieRelease { get; }
 
-        int MovieReleaseYear { get; }
+        int? MovieReleaseYear { get; }
     }
 
 }

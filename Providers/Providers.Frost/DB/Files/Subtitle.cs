@@ -22,10 +22,6 @@ namespace Frost.Providers.Frost.DB {
             Encoding = subtitle.Encoding;
             EmbededInVideo = subtitle.EmbededInVideo;
             ForHearingImpaired = subtitle.ForHearingImpaired;
-
-            if (subtitle.Language != null) {
-                Language = new Language(subtitle.Language);
-            }
         }
 
         /// <summary>Initializes a new instance of the <see cref="Subtitle" /> class.</summary>

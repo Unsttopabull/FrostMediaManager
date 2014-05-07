@@ -57,7 +57,7 @@ namespace Frost.InfoParsers {
             return hd;
         }
 
-        protected static string GetAssemblyCurrentDirectory() {
+        public static string GetAssemblyCurrentDirectory() {
             try {
                  return Path.GetDirectoryName(Assembly.GetCallingAssembly().Location);
             }

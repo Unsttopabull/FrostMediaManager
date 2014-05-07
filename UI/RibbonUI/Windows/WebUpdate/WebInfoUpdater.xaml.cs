@@ -15,9 +15,7 @@ namespace RibbonUI.Windows.WebUpdate {
     }
 
     /// <summary>Interaction logic for WebUpdater.xaml</summary>
-    public partial class WebUpdater : Window, INotifyPropertyChanged {
-
-        public event PropertyChangedEventHandler PropertyChanged;
+    public partial class WebUpdater : Window {
 
         public WebUpdater(string downloader, ObservableMovie movie) {
             IParsingClient cli = LightInjectContainer.TryGetInstance<IParsingClient>(downloader);

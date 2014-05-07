@@ -78,10 +78,10 @@ namespace Frost.Providers.Frost.Provider {
                 p = _mvc.Subtitles.Find(subtitle.Id);
                 if (p == null || (subtitle.MD5 != null && p.MD5 != subtitle.MD5)) {
                     if (createIfNotFound) {
-                        p = _mvc.Subtitles.Add(new Subtitle(subtitle));
+                        p = new Subtitle(subtitle);
                     }
                     else {
-                        return null;
+                        p = null;
                     }
                 }
                 return p;
@@ -97,7 +97,7 @@ namespace Frost.Providers.Frost.Provider {
                                      subtitle.Encoding == pr.Encoding));
 
             if ((p == null || _mvc.Entry(p).State == EntityState.Deleted) && createIfNotFound) {
-                _mvc.Subtitles.Add(new Subtitle(subtitle));
+                p = new Subtitle(subtitle);
             }
             return p;
         }
@@ -330,20 +330,26 @@ namespace Frost.Providers.Frost.Provider {
                 c = _mvc.Languages.Find(language.Id);
                 if (c == null || (c.Name != language.Name)) {
                     if (createIfNotFound) {
-                        c = _mvc.Languages.Add(new Language(language));
+                        c = new Language(language);
                     }
                     else {
-                        return null;
+                        c = null;
                     }
                 }
                 return c;
             }
 
-            c = _mvc.Languages.FirstOrDefault(pr => (language.ISO639 != null && pr.ISO639.Alpha3 == language.ISO639.Alpha3) || pr.Name == language.Name);
-            if (c == null) {
-                return null;
+            if (language.ISO639 != null) {
+                c = _mvc.Languages.FirstOrDefault(pr => (pr.ISO639.Alpha3 == language.ISO639.Alpha3) || pr.Name == language.Name);
             }
-            return _mvc.Languages.Add(new Language(language));
+            else {
+                c = _mvc.Languages.FirstOrDefault(pr => pr.Name == language.Name);
+            }
+
+            if (c == null && createIfNotFound) {
+                return new Language(language);
+            }
+            return c;
         }
 
         #endregion
@@ -421,6 +427,27 @@ namespace Frost.Providers.Frost.Provider {
         }
 
         #endregion
+
+        public File FindFile(IFile file, bool createNofTound) {
+            if (file is File) {
+                return file as File;
+            }
+
+            if (file.Id > 0) {
+                File find = _mvc.Files.Find(file.Id);
+                if (find != null) {
+                    return find;
+                }
+            }
+
+            string path = file.FolderPath.Replace("/", "\\");
+
+            File fi = _mvc.Files.FirstOrDefault(f => f.FolderPath == path && f.Name == file.Name);
+            if (fi == null && createNofTound) {
+                return new File(file);
+            }
+            return fi;
+        }
 
         internal TSet FindHasName<TEntity, TSet>(TEntity hasName, bool createIfNotFound) where TEntity : class, IHasName, IMovieEntity
             where TSet : class, IHasName, IMovieEntity {
@@ -567,6 +594,7 @@ namespace Frost.Providers.Frost.Provider {
         }
 
         #endregion
+
     }
 
 }

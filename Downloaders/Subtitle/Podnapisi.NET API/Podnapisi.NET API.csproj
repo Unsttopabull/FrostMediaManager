@@ -60,7 +60,7 @@
     <Compile Include="Subtitles.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\xml-rpc.net.3.0.0\xmlrpc.csproj">
+    <ProjectReference Include="..\..\..\Libraries\xml-rpc.net.3.0.0\xmlrpc.csproj">
       <Project>{1B4B0A58-0AFB-4090-91DD-18912CC7DE65}</Project>
       <Name>xmlrpc</Name>
     </ProjectReference>

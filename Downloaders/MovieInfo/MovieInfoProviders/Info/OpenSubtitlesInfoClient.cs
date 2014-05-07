@@ -4,13 +4,13 @@ using System.Globalization;
 using System.Linq;
 using Frost.InfoParsers;
 using Frost.InfoParsers.Models.Info;
-using Frost.MovieInfoProviders.OpenSubtitles;
+using Frost.MovieInfoProviders.Info.OpenSubtitles;
 using Frost.SharpOpenSubtitles;
 using Frost.SharpOpenSubtitles.Models.Checking;
 using Frost.SharpOpenSubtitles.Models.Movies;
 using Frost.SharpOpenSubtitles.Models.Session;
 
-namespace Frost.MovieInfoProviders {
+namespace Frost.MovieInfoProviders.Info {
 
     public class OpenSubtitlesInfoClient : ParsingClient {
         private const string USER_AGENT = "Frost Media Manager v1";

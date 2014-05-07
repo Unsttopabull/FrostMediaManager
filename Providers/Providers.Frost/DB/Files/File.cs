@@ -46,19 +46,11 @@ namespace Frost.Providers.Frost.DB {
         }
 
         public File(IFile value) {
-            //Contract.Requires<ArgumentNullException>(value.AudioDetails != null);
-            //Contract.Requires<ArgumentNullException>(value.VideoDetails != null);
-            //Contract.Requires<ArgumentNullException>(value.Subtitles != null);
-
             Extension = value.Extension;
             Name = value.Name;
             FolderPath = value.FolderPath;
             Size = value.Size;
             DateAdded = value.DateAdded;
-
-            //AudioDetails = new HashSet<Audio>(value.AudioDetails.Select(a => new Audio(a)));
-            //VideoDetails = new HashSet<Video>(value.VideoDetails.Select(v => new Video(v)));
-            //Subtitles = new HashSet<Subtitle>(value.Subtitles.Select(sub => new Subtitle(sub)));
         }
 
         #region Properties/Columns

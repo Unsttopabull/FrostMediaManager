@@ -2,6 +2,15 @@
 
 namespace RibbonUI.Design.Models {
     class DesignSubtitle : ISubtitle {
+
+        public DesignSubtitle() {
+            
+        }
+
+        public DesignSubtitle(IFile file) {
+            File = file;
+        }
+
         public ILanguage Language { get; set; }
         public long Id { get; private set; }
 
