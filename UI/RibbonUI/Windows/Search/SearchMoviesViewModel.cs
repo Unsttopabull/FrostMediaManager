@@ -9,12 +9,14 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Shell;
 using Frost.Common;
+using Frost.Common.Models;
 using Frost.Common.Models.FeatureDetector;
 using Frost.DetectFeatures;
 using Frost.InfoParsers.Models;
 using Frost.InfoParsers.Models.Art;
 using Frost.InfoParsers.Models.Info;
 using Frost.XamlControls.Commands;
+using log4net;
 using RibbonUI.Annotations;
 using RibbonUI.Properties;
 using RibbonUI.Util;
@@ -23,6 +25,7 @@ using RibbonUI.Util.WebUpdate;
 namespace RibbonUI.Windows.Search {
 
     public class SearchMoviesViewModel : INotifyPropertyChanged {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SearchMoviesViewModel));
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly string[] _filePaths;
         private FeatureDetector _detector;
@@ -203,7 +206,7 @@ namespace RibbonUI.Windows.Search {
                     service.SaveChanges();
                 }
                 catch (Exception e) {
-                    UIHelper.HandleProviderException(e);
+                    UIHelper.HandleProviderException(Log, e);
                 }
 
                 ProgressText = "Finished!";
@@ -211,6 +214,16 @@ namespace RibbonUI.Windows.Search {
                 CloseParentWindow();
             }
             else if (task.IsFaulted) {
+                if (Log.IsErrorEnabled) {
+                    if (task.Exception != null && task.Exception.InnerExceptions != null) {
+                        int count = task.Exception.InnerExceptions.Count;
+                        for (int i = 0; i < count; i++) {
+                            Exception exception = task.Exception.InnerExceptions[i];
+                            Log.Error(string.Format("Error while detecting movies ({0}/{1}).", i, count), exception);
+                        }
+                    }
+                }
+
                 const string ERROR_MESSAGE = "Errors occured during detection phase. Search & Save can not continue.";
                 if (ParentWindow != null) {
                     MessageBox.Show(ParentWindow, ERROR_MESSAGE);
@@ -225,7 +238,7 @@ namespace RibbonUI.Windows.Search {
             }
         }
 
-        private async Task Save(IReadOnlyList<MovieInfo> movieInfos, IMoviesDataService service) {
+        private Task Save(IReadOnlyList<MovieInfo> movieInfos, IMoviesDataService service) {
             ProgressMax = movieInfos.Count;
             double percent = 1.0 / ProgressMax;
 
@@ -258,6 +271,21 @@ namespace RibbonUI.Windows.Search {
                     Task.WaitAll(downloaders.Where(t => t != null).ToArray());
                 }
                 catch (Exception e) {
+                    if (Log.IsErrorEnabled) {
+                        if (e is AggregateException ) {
+                            AggregateException ae = e as AggregateException;
+                            if (ae.InnerExceptions != null) {
+                                int count = ae.InnerExceptions.Count;
+                                for (int j = 0; j < count; j++) {
+                                    Exception ex = ae.InnerExceptions[i];
+                                    Log.Error(string.Format("Error occured wile downloading art/info/videos ({0}/{1}).", i, count), ex);
+                                }
+                            }
+                        }
+                        else {
+                            Log.Error("Error occured wile downloading art/info/videos.", e);
+                        }
+                    }
                 }
 
                 ProgressValue++;
@@ -268,7 +296,7 @@ namespace RibbonUI.Windows.Search {
             });
 
             if (_tokenSource.Token.IsCancellationRequested) {
-                return;
+                return Task.FromResult<object>(null);
             }
 
             ProgressValue = 0;
@@ -279,7 +307,7 @@ namespace RibbonUI.Windows.Search {
             LogText = "Provider is saving movies ...";
             for (int i = 0; i < movieInfos.Count; i++) {
                 if (_tokenSource.Token.IsCancellationRequested) {
-                    return;
+                    return Task.FromResult<object>(null);
                 }
 
                 MovieInfo movieInfo = movieInfos[i];
@@ -289,6 +317,9 @@ namespace RibbonUI.Windows.Search {
                     service.SaveDetected(movieInfo);
                 }
                 catch (Exception e) {
+                    if (Log.IsErrorEnabled) {
+                        Log.Error(string.Format("Provider \"{0}\" thew an exception while saving detected movie \"{1}\"", service, movieInfo.Title), e);
+                    }
                 }
                 finally {
                     ProgressValue++;
@@ -298,12 +329,17 @@ namespace RibbonUI.Windows.Search {
                     }
                 }
             }
+
+            return Task.FromResult<object>(null);
         }
 
-        private async Task SearchMovieInfo(MovieInfo movieInfo, Plugin infoPlugin) {
+        private async Task SearchMovieInfo(IMovieInfo movieInfo, Plugin infoPlugin) {
             if (infoPlugin != null) {
                 IParsingClient client = LightInjectContainer.TryGetInstance<IParsingClient>(infoPlugin.Name);
                 if (client == null) {
+                    if (Log.IsWarnEnabled) {
+                        Log.Warn(string.Format("Failed to instantie an IParsingClient using service name \"{0}\".", infoPlugin.Name));
+                    }
                     return;
                 }
 
@@ -311,45 +347,36 @@ namespace RibbonUI.Windows.Search {
                 await mi.Update(true);
                 await mi.UpdateMovieInfo();
             }
-            await SearchInfoUsingAll(movieInfo);
         }
 
-        private async Task SearchInfoUsingAll(MovieInfo movieInfo) {
-            return;
-        }
-
-        private Task SearchMovieVideos(MovieInfo movieInfo, Plugin videoPlugin) {
+        private async Task SearchMovieVideos(IMovieInfo movieInfo, Plugin videoPlugin) {
             if (videoPlugin != null) {
                 IPromotionalVideoClient client = LightInjectContainer.TryGetInstance<IPromotionalVideoClient>(videoPlugin.Name);
                 if (client == null) {
-                    return null;
+                    if (Log.IsWarnEnabled) {
+                        Log.Warn(string.Format("Failed to instantie an IPromotionalVideoClient using service name \"{0}\".", videoPlugin.Name));
+                    }
+                    return;
                 }
 
                 PromoVideoUpdater mi = new PromoVideoUpdater(client, movieInfo);
-                return mi.Update(true);
+                await mi.Update(true);
             }
-            return SearchVideosUsingAll(movieInfo);
         }
 
-        private Task SearchVideosUsingAll(MovieInfo movieInfo) {
-            return null;
-        }
-
-        private Task SearchMovieArt(MovieInfo movieInfo, Plugin videoPlugin) {
-            if (videoPlugin != null) {
-                IFanartClient client = LightInjectContainer.TryGetInstance<IFanartClient>(videoPlugin.Name);
+        private async Task SearchMovieArt(IMovieInfo movieInfo, Plugin artPlugin) {
+            if (artPlugin != null) {
+                IFanartClient client = LightInjectContainer.TryGetInstance<IFanartClient>(artPlugin.Name);
                 if (client == null) {
-                    return null;
+                    if (Log.IsWarnEnabled) {
+                        Log.Warn(string.Format("Failed to instantie an IFanartClient using service name \"{0}\".", artPlugin.Name));
+                    }
+                    return;
                 }
 
                 ArtUpdater mi = new ArtUpdater(client, movieInfo);
-                return mi.Update(true);
+                await mi.Update(true);
             }
-            return SearchArtUsingAll(movieInfo);
-        }
-
-        private Task SearchArtUsingAll(MovieInfo movieInfo) {
-            return null;
         }
 
         [NotifyPropertyChangedInvocator]

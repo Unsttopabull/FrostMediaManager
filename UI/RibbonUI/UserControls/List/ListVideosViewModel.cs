@@ -64,8 +64,6 @@ namespace RibbonUI.UserControls.List {
             };
 
             editVideo.ShowDialog();
-
-            OnPropertyChanged("Videos");
         }
 
         private void OnRemoveClicked(MovieVideo selectedVideo) {

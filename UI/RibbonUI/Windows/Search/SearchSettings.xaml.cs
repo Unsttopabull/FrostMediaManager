@@ -14,10 +14,6 @@ namespace RibbonUI.Windows.Search {
         public bool SearchInfo { get; set; }
         public bool SearchVideos { get; set; }
 
-        public bool SpecificArtPlugin { get; set; }
-        public bool SpecificInfoPlugin { get; set; }
-        public bool SpecificVideoPlugin { get; set; }
-
         public Plugin ArtPlugin { get; set; }
         public Plugin InfoPlugin { get; set; }
         public Plugin VideoPlugin { get; set; }

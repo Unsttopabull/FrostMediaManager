@@ -1,23 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
+using System.Security;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Documents;
 using Frost.Common.Models.Provider;
 using Frost.Common.Util.ISO;
 using Frost.InfoParsers.Models.Subtitles;
+using log4net;
 using RibbonUI.Design.Models;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.Util.WebUpdate {
 
     public class SubtitleDownloader {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SubtitleDownloader));
         private readonly ISubtitleInfo _info;
         private readonly ObservableMovie _movie;
 
@@ -28,6 +29,9 @@ namespace RibbonUI.Util.WebUpdate {
 
         public async Task Download() {
             if (string.IsNullOrEmpty(_movie.DirectoryPath)) {
+                if (Log.IsErrorEnabled) {
+                    Log.Error(string.Format("Movie \"{0}\" has no folder path available.", _movie.Title));
+                }
                 throw new Exception("Unknown directory path");
             }
 
@@ -47,6 +51,10 @@ namespace RibbonUI.Util.WebUpdate {
                     Process.Start(_info.SubtitlesLink);
                 }
                 catch (Exception e) {
+                    if (Log.IsWarnEnabled) {
+                        Log.Warn(string.Format("Failed to open subtitle download link (user interaction required) with path: \"{0}\"", _info.SubtitlesLink));
+                    }
+
                     MessageBox.Show("Failed to open the subtitle download site");
                 }
                 success = false;
@@ -61,6 +69,10 @@ namespace RibbonUI.Util.WebUpdate {
                     await Task.Run(() => AddSubtitleToMovie(filePath));
                 }
                 catch (Exception e) {
+                    if (Log.IsWarnEnabled) {
+                        Log.Warn(string.Format("Failed to add downloaded subtitle info to the movie \"{0}\"", _movie.Title));
+                    }
+
                     MessageBox.Show("Provider failed to save the subtitle information");
                 }
             }
@@ -71,7 +83,35 @@ namespace RibbonUI.Util.WebUpdate {
             try {
                 fi = new FileInfo(filePath);
             }
+            catch (SecurityException e) {
+                if (Log.IsErrorEnabled) {
+                    Log.Warn(string.Format("Failed to access subtitle file information. (Don't have security privileges) \"{0}\"", _movie.Title), e);
+                }
+
+                MessageBox.Show("Failed to access subtitle file information. Don't have security privileges.");
+                return;
+            }
+            catch (UnauthorizedAccessException e) {
+                if (Log.IsErrorEnabled) {
+                    Log.Warn(string.Format("Failed to access subtitle file information. (Access unauthorized) \"{0}\"", _movie.Title), e);
+                }
+
+                MessageBox.Show("Failed to access subtitle file information. Access unauthorized.");
+                return;
+            }
+            catch (IOException e) {
+                if (Log.IsErrorEnabled) {
+                    Log.Warn(string.Format("Failed to access subtitle file information. (IO Error) \"{0}\"", _movie.Title), e);
+                }
+
+                MessageBox.Show("Failed to access subtitle file information.");
+                return;
+            }
             catch (Exception e) {
+                if (Log.IsErrorEnabled) {
+                    Log.Warn(string.Format("Failed to access subtitle file information. (Unknown error) \"{0}\"", _movie.Title), e);
+                }
+
                 MessageBox.Show("Failed to obtain subtitle file information.");
                 return;
             }
@@ -113,6 +153,10 @@ namespace RibbonUI.Util.WebUpdate {
                 _movie.AddSubtitle(ds);
             }
             catch (Exception e) {
+                if (Log.IsWarnEnabled) {
+                    Log.Warn(string.Format("Failed to add downloaded subtitle info to the movie \"{0}\"", _movie.Title));
+                }
+
                 MessageBox.Show("Provider failed to save the subtitle information");
             }
         }
@@ -127,7 +171,9 @@ namespace RibbonUI.Util.WebUpdate {
                 }
             }
             catch (Exception e) {
-                MessageBox.Show("Failed to calculate subtitle hash.");
+                if (Log.IsWarnEnabled) {
+                    Log.Warn(string.Format("Failed to compute subtitle MD5 Hash for file: \"{0}\"", fi.FullName), e);
+                }
             }
 
             ds.MD5 = md5Hash;
@@ -135,7 +181,7 @@ namespace RibbonUI.Util.WebUpdate {
 
         private string GetName() {
             string subName;
-            if (!GetNfoFileName(out subName)) {
+            if (!GetSubFileName(out subName)) {
                 subName = Path.Combine(_movie.DirectoryPath, _info.FileName);
             }
             else {
@@ -159,6 +205,10 @@ namespace RibbonUI.Util.WebUpdate {
                     await wc.DownloadFileTaskAsync(_info.SubtitleFileDownloadLink, filePath);
                 }
                 catch (Exception e) {
+                    if (Log.IsErrorEnabled) {
+                        Log.Error(string.Format("Failed to download subtitle using direct link: \"{0}\".", _info.SubtitleFileDownloadLink), e);
+                    }
+
                     MessageBox.Show("Failed to download the subtitle file.\n\nError message:\n" + e.Message);
                     return false;
                 }
@@ -173,6 +223,10 @@ namespace RibbonUI.Util.WebUpdate {
                     data = await wc.DownloadDataTaskAsync(_info.SubtitleGZipDownloadLink);
                 }
                 catch (Exception e) {
+                    if (Log.IsErrorEnabled) {
+                        Log.Error(string.Format("Failed to download subtitle using GZip link: \"{0}\".", _info.SubtitleGZipDownloadLink), e);
+                    }
+
                     MessageBox.Show("Failed to download the subtitle archive.\n\nError message:\n" + e.Message);
                     return false;
                 }
@@ -202,9 +256,16 @@ namespace RibbonUI.Util.WebUpdate {
                 }
                 catch {
                     fileWriteFailure = true;
+                    throw;
                 }
             }
-            catch {
+            catch (Exception e) {
+                if (Log.IsErrorEnabled) {
+                    Log.Error(fileWriteFailure
+                                    ? string.Format("Failed to write subtitle file to drive with the following path:\n\"{0}\"", filePath)
+                                    : "Failed to decompress subtitle archive.", e);
+                }
+
                 MessageBox.Show(fileWriteFailure
                                     ? string.Format("Failed to write subtitle file to drive with the following path:\n\"{0}\"", filePath)
                                     : "Failed to decompress subtitle archive.");
@@ -220,6 +281,10 @@ namespace RibbonUI.Util.WebUpdate {
                     data = await wc.DownloadDataTaskAsync(_info.SubtitleZipDownloadLink);
                 }
                 catch (Exception e) {
+                    if (Log.IsErrorEnabled) {
+                        Log.Error(string.Format("Failed to download subtitle using ZIP link: \"{0}\".", _info.SubtitleZipDownloadLink), e);
+                    }
+
                     MessageBox.Show("Failed to download the subtitle archive.\n\nError message:\n" + e.Message);
                     return false;
                 }
@@ -244,10 +309,17 @@ namespace RibbonUI.Util.WebUpdate {
                     }
                     catch {
                         failedWriteFile = true;
+                        throw;
                     }
                 }
             }
-            catch (Exception) {
+            catch (Exception e) {
+                if (Log.IsErrorEnabled) {
+                    Log.Error(failedWriteFile
+                                    ? string.Format("Failed to write subtitle file to drive with the following path:\n\"{0}\"", path)
+                                    : "Failed to decompress subtitle archive.", e);
+                }
+
                 MessageBox.Show(failedWriteFile
                                     ? string.Format("Failed to write subtitle file to drive with the following path:\n\"{0}\"", path)
                                     : "Failed to decompress subtitle archive.");
@@ -256,7 +328,7 @@ namespace RibbonUI.Util.WebUpdate {
             return true;
         }
 
-        private bool GetNfoFileName(out string nfoName) {
+        private bool GetSubFileName(out string nfoName) {
             try {
                 MovieVideo video = _movie.Videos.FirstOrDefault(v => v != null && v.File != null);
                 if (video != null) {
@@ -276,7 +348,11 @@ namespace RibbonUI.Util.WebUpdate {
                     return true;
                 }
             }
-            catch {
+            catch (Exception e) {
+                if (Log.IsWarnEnabled) {
+                    Log.Warn(string.Format("Exception has occured while trying to obtain movie file name for movie \"{0}\".", _movie.Title), e);
+                }
+
                 nfoName = null;
                 return false;
             }

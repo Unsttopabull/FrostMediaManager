@@ -44,42 +44,24 @@
 
         <GroupBox Header="Movie info plugin select" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,5,5"
                   Visibility="{Binding ElementName=MovieInfo, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <StackPanel Margin="5,0,0,0">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Use specific plugin:" Margin="0,5,5,5"/>
-                    <CheckBox VerticalAlignment="Center" x:Name="UseSpecificInfoPlugin" IsChecked="{Binding ElementName=SearchSettingsWindow, Path=SpecificInfoPlugin}"/>
-                </StackPanel>
-                <ComboBox ItemsSource="{x:Static uc:Ribbon.MovieInfoPlugins}" Style="{StaticResource PluginSelectComboBox}" SelectedItem="{Binding ElementName=SearchSettingsWindow, Path=InfoPlugin}"
-                          Visibility="{Binding ElementName=UseSpecificInfoPlugin, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            </StackPanel>
+            <ComboBox ItemsSource="{x:Static uc:Ribbon.MovieInfoPlugins}" Style="{StaticResource PluginSelectComboBox}"
+                      SelectedItem="{Binding ElementName=SearchSettingsWindow, Path=InfoPlugin}" Margin="5,0,0,0"/>
         </GroupBox>
 
         <Label Grid.Column="0" Grid.Row="3" Content="Search for art online:" Margin="0,0,5,0"/>
         <CheckBox x:Name="MovieArt" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" Margin="0,0,5,0" IsChecked="{Binding ElementName=SearchSettingsWindow, Path=SearchArt}"/>
         <GroupBox Header="Art plugin select" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,5,5"
                   Visibility="{Binding ElementName=MovieArt, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <StackPanel Margin="5,0,0,0">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Use specific plugin:" Margin="0,5,5,5"/>
-                    <CheckBox VerticalAlignment="Center" x:Name="UseSpecificArtPlugin" IsChecked="{Binding ElementName=SearchSettingsWindow, Path=SpecificArtPlugin}"/>
-                </StackPanel>
-                <ComboBox ItemsSource="{x:Static uc:Ribbon.MovieArtPlugins}" Style="{StaticResource PluginSelectComboBox}" SelectedItem="{Binding ElementName=SearchSettingsWindow, Path=ArtPlugin}"
-                          Visibility="{Binding ElementName=UseSpecificArtPlugin, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            </StackPanel>
+            <ComboBox ItemsSource="{x:Static uc:Ribbon.MovieArtPlugins}" Style="{StaticResource PluginSelectComboBox}"
+                      SelectedItem="{Binding ElementName=SearchSettingsWindow, Path=ArtPlugin}" Margin="5,0,0,0"/>
         </GroupBox>       
 
         <Label Grid.Column="0" Grid.Row="5" Content="Search for promotional videos online:" Margin="0,0,5,0"/>
         <CheckBox x:Name="MovieVideos" Grid.Column="1" Grid.Row="5" VerticalAlignment="Center" Margin="0,0,5,0" IsChecked="{Binding ElementName=SearchSettingsWindow, Path=SearchVideos}"/>
         <GroupBox Header="Promotional videos plugin select" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,5,5"
                   Visibility="{Binding ElementName=MovieVideos, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <StackPanel Margin="5,0,0,0">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Use specific plugin:" Margin="0,5,5,5"/>
-                    <CheckBox VerticalAlignment="Center" x:Name="UseSpecificVideoPlugin" IsChecked="{Binding ElementName=SearchSettingsWindow, Path=SpecificVideoPlugin}"/>
-                </StackPanel>
-                <ComboBox ItemsSource="{x:Static uc:Ribbon.MoviePromoVideoPlugins}" Style="{StaticResource PluginSelectComboBox}" SelectedItem="{Binding ElementName=SearchSettingsWindow, Path=VideoPlugin}"
-                          Visibility="{Binding ElementName=UseSpecificVideoPlugin, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            </StackPanel>
+            <ComboBox ItemsSource="{x:Static uc:Ribbon.MoviePromoVideoPlugins}" Style="{StaticResource PluginSelectComboBox}"
+                      SelectedItem="{Binding ElementName=SearchSettingsWindow, Path=VideoPlugin}" Margin="5,0,0,0"/>
         </GroupBox>
         
         <Grid Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" Margin="0,20,0,0">

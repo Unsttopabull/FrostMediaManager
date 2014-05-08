@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Frost.Common.Models.Provider;
+using log4net;
 using RibbonUI.Annotations;
 using RibbonUI.Util.WebUpdate;
 using RibbonUI.Windows.WebUpdate;
@@ -15,6 +16,7 @@ namespace RibbonUI.Windows {
 
     /// <summary>Interaction logic for ExportMoviesAsNfo.xaml</summary>
     public partial class ExportMoviesAsNfo : Window, INotifyPropertyChanged {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(ExportMoviesAsNfo));
         public event PropertyChangedEventHandler PropertyChanged;
         private Visibility _closeButtonVisibility;
         private CancellationTokenSource _tokenSource;
@@ -50,6 +52,10 @@ namespace RibbonUI.Windows {
                         m.SaveAsNfo();
                     }
                     catch (Exception e) {
+                        if (Log.IsErrorEnabled) {
+                            Log.Error(string.Format("Failed to save movie \"{0}\" as NFO.", m.Title), e);
+                        }
+
                         IMovie mCopy = m;
                         Dispatcher.Invoke(() => Errors.Add(new ErrorInfo(ErrorType.Warning, mCopy.Title + "\t" + e.Message)));
                     }

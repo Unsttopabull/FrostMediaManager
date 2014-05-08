@@ -59,22 +59,12 @@ namespace RibbonUI.Windows.Add {
         }
 
         public ICommand AddLanguageCommand {
-            get {
-                if (_addLanguagesCommand == null) {
-                    _addLanguagesCommand = new RelayCommand<MovieLanguage>(AddLanguage, language => language != null);
-                }
-                return _addLanguagesCommand;
-            }
+            get { return _addLanguagesCommand ?? (_addLanguagesCommand = new RelayCommand<MovieLanguage>(AddLanguage, language => language != null)); }
             set { _addLanguagesCommand = value; }
         }
 
         public ICommand RemoveLanguageCommand {
-            get {
-                if (_removeLanguagesCommand == null) {
-                    _removeLanguagesCommand = new RelayCommand<MovieLanguage>(RemoveLanguage, language => language != null);
-                }
-                return _removeLanguagesCommand;
-            }
+            get { return _removeLanguagesCommand ?? (_removeLanguagesCommand = new RelayCommand<MovieLanguage>(RemoveLanguage, language => language != null)); }
             set { _removeLanguagesCommand = value; }
         }
 

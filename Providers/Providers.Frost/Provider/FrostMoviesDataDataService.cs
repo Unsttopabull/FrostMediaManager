@@ -471,7 +471,7 @@ namespace Frost.Providers.Frost.Provider {
 
             //primary key not available so search in the DB by Name
             TSet hn = set.FirstOrDefault(n => n.Name == hasName.Name);
-            if (hn == null && createIfNotFound) {
+            if ((hn == null || _mvc.Entry(hn).State == EntityState.Deleted) && createIfNotFound) {
                 hn = set.Create();
                 hn.Name = hasName.Name;
 

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers.Models.Subtitles;
+using log4net;
 using RibbonUI.Util;
 using RibbonUI.Util.ObservableWrappers;
 using RibbonUI.Util.WebUpdate;
@@ -12,12 +13,17 @@ namespace RibbonUI.Windows.WebUpdate {
 
     /// <summary>Interaction logic for WebSubtitleUpdater.xaml</summary>
     public partial class WebSubtitleUpdater : Window {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(WebSubtitleUpdater));
         private readonly IEnumerable<string> _languages;
 
         public WebSubtitleUpdater(string downloader, ObservableMovie movie, IEnumerable<string> languages) {
             _languages = languages;
             ISubtitleClient cli = LightInjectContainer.TryGetInstance<ISubtitleClient>(downloader);
             if (cli == null) {
+                if (Log.IsWarnEnabled) {
+                    Log.Warn(string.Format("Failed to instantie ISubtitleClient with service name: \"{0}\".", downloader));
+                }
+
                 MessageBox.Show(Gettext.T("Error accessing subtitle provider."));
                 return;
             }
@@ -46,7 +52,7 @@ namespace RibbonUI.Windows.WebUpdate {
                 subs = await ((SubtitleUpdater) DataContext).Update(_languages);
             }
             catch (Exception e) {
-                UIHelper.HandleProviderException(e);
+                UIHelper.HandleProviderException(Log, e);
                 subs = null;
             }
 

@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
@@ -11,6 +9,7 @@ using Frost.Common;
 using Frost.DetectFeatures;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
+using log4net;
 using RibbonUI.Annotations;
 using RibbonUI.Design.Fakes;
 using RibbonUI.Util.ObservableWrappers;
@@ -20,6 +19,7 @@ namespace RibbonUI.UserControls {
     public class ArtAndPlotViewModel : INotifyPropertyChanged {
         private const string IMDB_PERSON_URI = "http://www.imdb.com/name/{0}";
         private const string IMDB_TITLE_URI = "http://www.imdb.com/title/{0}";
+        private static readonly ILog Log = LogManager.GetLogger(typeof(ArtAndPlotViewModel));
         public event PropertyChangedEventHandler PropertyChanged;
         private ObservableMovie _selectedMovie;
 
@@ -33,10 +33,14 @@ namespace RibbonUI.UserControls {
             ActorImdbClickedCommand = new RelayCommand<string>(
                 imdbId => {
                     string uri = string.Format(IMDB_PERSON_URI, imdbId);
-                    try {;
+                    try {
                         Process.Start(uri);
                     }
-                    catch {
+                    catch (Exception e) {
+                        if (Log.IsWarnEnabled) {
+                            Log.Warn(string.Format("Failed to open an IMDB person website. Person ImdbID \"{0}\".", imdbId), e);
+                        }
+
                         MessageBox.Show(Gettext.T("Error opening IMDB page with address: " + uri));
                     }
                 },
@@ -82,7 +86,6 @@ namespace RibbonUI.UserControls {
         }
 
 
-
         public string MPAARatingImage {
             get {
                 if (SelectedMovie == null) {
@@ -92,7 +95,7 @@ namespace RibbonUI.UserControls {
                 string rating = SelectedMovie.MPAARating;
                 if (!String.IsNullOrEmpty(rating)) {
                     rating = rating.Replace("Rated ", "").ToUpper();
-                    string mpaa = null;
+                    string mpaa;
                     switch (rating) {
                         case "G":
                             mpaa = "Images/RatingsE/usa/mpaag.png";
@@ -134,7 +137,11 @@ namespace RibbonUI.UserControls {
                 try {
                     Process.Start(uri);
                 }
-                catch {
+                catch (Exception e) {
+                    if (Log.IsWarnEnabled) {
+                        Log.Warn(string.Format("Failed to open a movie IMDB website with ImdbId \"{0}\".", imdbId), e);
+                    }
+
                     MessageBox.Show(Gettext.T("Error opening IMDB page with address: " + uri));
                 }
             }
@@ -150,10 +157,14 @@ namespace RibbonUI.UserControls {
                     string extension = Path.GetExtension(trailer).Trim('.');
                     if (FeatureDetector.VideoExtensions.Contains(extension)) {
                         try {
-                            Process.Start("wmplayer", String.Format("\"{0}\"", trailer));
+                            Process.Start("wmplayer", string.Format("\"{0}\"", trailer));
                             return;
                         }
-                        catch {
+                        catch (Exception e) {
+                            if (Log.IsWarnEnabled) {
+                                Log.Warn(string.Format("Failed to open a movie trailer with Windows Media Player and path \"{0}\".", trailer), e);
+                            }
+
                             MessageBox.Show(Gettext.T("Error opening trailer in Windows Media Player"));
                         }
                     }
@@ -162,7 +173,11 @@ namespace RibbonUI.UserControls {
             try {
                 Process.Start(trailer);
             }
-            catch {
+            catch (Exception e) {
+                if (Log.IsWarnEnabled) {
+                    Log.Warn(string.Format("Failed to open a movie trailer with path \"{0}\".", trailer), e);
+                }
+
                 MessageBox.Show("Error opening trailer with path: " + trailer);
             }
         }

@@ -8,12 +8,14 @@ using Frost.Common.Models;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers.Models.Art;
 using Frost.InfoParsers.Models.Info;
+using log4net;
 using RibbonUI.Annotations;
 using RibbonUI.Design.Models;
 
 namespace RibbonUI.Util.WebUpdate {
 
     public class ArtUpdater : INotifyPropertyChanged {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(ArtUpdater));
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IFanartClient _client;
         private readonly IMovieInfo _movie;
@@ -88,6 +90,10 @@ namespace RibbonUI.Util.WebUpdate {
                 }
             }
             catch (Exception e) {
+                if (Log.IsErrorEnabled) {
+                    Log.Error("Error has occured wile getting art info.", e);
+                }
+
                 if (!silent) {
                     MessageBox.Show(e.Message);
                 }

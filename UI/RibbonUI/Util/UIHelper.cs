@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Windows;
+using System.Windows.Media;
 using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
 using Frost.Common.Util.ISO;
 using Frost.GettextMarkupExtension;
+using Frost.InfoParsers.Models;
+using log4net;
 using RibbonUI.Design.Models;
 using RibbonUI.Util.ObservableWrappers;
 
@@ -128,22 +132,43 @@ namespace RibbonUI.Util {
             return _studios;
         }
 
-        public static void HandleProviderException(Exception exception) {
+        public static void HandleProviderException(ILog log, Exception exception) {
+            string exceptionText;
             if (exception is NotSupportedException) {
-                MessageBox.Show(string.Format("Provider does not support the requested operation.{0}",
-                    !string.IsNullOrEmpty(exception.Message) ? "\nProvider message: " + exception.Message : null));
+                exceptionText = string.Format("Provider does not support the requested operation.{0}", !string.IsNullOrEmpty(exception.Message) ? "\nProvider message: " + exception.Message : null);
+                if (log.IsErrorEnabled) {
+                    log.Error(exceptionText, exception);
+                }
+
+                MessageBox.Show(exceptionText);
                 return;
             }
 
             if (exception is NotImplementedException) {
-                MessageBox.Show(string.Format("Provider has not implemented the requested operation.{0}",
-                    !string.IsNullOrEmpty(exception.Message) ? "\nProvider message: " + exception.Message : null));
+                exceptionText = string.Format("Provider has not implemented the requested operation.{0}", !string.IsNullOrEmpty(exception.Message) ? "\nProvider message: " + exception.Message : null);
+
+                if (log.IsErrorEnabled) {
+                    log.Error(exceptionText, exception);
+                }
+
+                MessageBox.Show(exceptionText);
                 return;
             }
 
-            MessageBox.Show(string.Format("An error has occured int the provider{0}",
-                !string.IsNullOrEmpty(exception.Message) ? "\nProvider message: " + exception.Message : null));
+            exceptionText = string.Format("An error has occured int the provider{0}", !string.IsNullOrEmpty(exception.Message) ? "\nProvider message: " + exception.Message : null);
+            if (log.IsErrorEnabled) {
+                log.Error(exceptionText, exception);
+            }
+
+            MessageBox.Show(exceptionText);
         }
+    }
+
+    public enum PluginType {
+        Art,
+        MovieInfo,
+        Subtitles,
+        Videos
     }
 
 }

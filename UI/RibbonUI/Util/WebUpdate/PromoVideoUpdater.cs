@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -8,11 +9,13 @@ using Frost.Common.Models;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers.Models;
 using Frost.InfoParsers.Models.Info;
+using log4net;
 using RibbonUI.Annotations;
 using RibbonUI.Design.Models;
 
 namespace RibbonUI.Util.WebUpdate {
     public class PromoVideoUpdater : INotifyPropertyChanged {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(PromoVideoUpdater));
         private readonly IPromotionalVideoClient _cli;
         private readonly IMovieInfo _movie;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -47,7 +50,7 @@ namespace RibbonUI.Util.WebUpdate {
         }
 
         public async Task<bool> Update(bool silent = false) {
-            IEnumerable<IParsedVideo> parsedVideos = null;
+            IEnumerable<IParsedVideo> parsedVideos;
 
             try {
                 if (_cli.IsImdbSupported && !string.IsNullOrEmpty(_movie.ImdbID)) {
@@ -86,7 +89,21 @@ namespace RibbonUI.Util.WebUpdate {
                     return false;
                 }
             }
+            catch (WebException e) {
+                if (Log.IsErrorEnabled) {
+                    Log.Error(string.Format("Exception occured while downloading promotional videos for movie \"{0}\" with plugin \"{1}\".", _movie.Title, _cli.Name));
+                }
+
+                if (!silent) {
+                    MessageBox.Show(e.Message);
+                }
+                return false;                
+            }
             catch (Exception e) {
+                if (Log.IsErrorEnabled) {
+                    Log.Error(string.Format("Unknown exception occured while getting promotional videos for movie \"{0}\" with plugin \"{1}\".", _movie.Title, _cli.Name));
+                }
+
                 if (!silent) {
                     MessageBox.Show(e.Message);
                 }

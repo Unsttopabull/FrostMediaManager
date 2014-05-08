@@ -1230,7 +1230,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
             catch (Exception e) {
                 if (!silent) {
-                    UIHelper.HandleProviderException(e);
+                    UIHelper.HandleProviderException(Log, e);
                 }
                 else {
                     throw;
@@ -1254,7 +1254,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             }
             catch (Exception e) {
                 if (!silent) {
-                    UIHelper.HandleProviderException(e);
+                    UIHelper.HandleProviderException(Log, e);
                 }
                 else {
                     throw;

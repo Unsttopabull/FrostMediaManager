@@ -8,12 +8,15 @@ using Frost.DetectFeatures;
 using Frost.DetectFeatures.Util;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
+using log4net;
 using RibbonUI.Util;
 using RibbonUI.Windows;
 using RibbonUI.Windows.Add;
 
 namespace RibbonUI.UserControls.Settings {
+
     public class FeatureDetectorSettingsViewModel {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(FeatureDetectorSettingsViewModel));
         private ObservableChangeTrackingCollection<CodecIdBinding> _audioBindings;
         private ObservableChangeTrackingCollection<CodecIdBinding> _videoBindings;
         private ObservableChangeTrackingCollection<string> _knownSubtiteExtensions;
@@ -23,66 +26,52 @@ namespace RibbonUI.UserControls.Settings {
             RemoveFileExtensionCommand = new RelayCommand<string>(
                 ext => KnownVideoExtensions.Remove(ext),
                 ext => !string.IsNullOrEmpty(ext)
-            );
+                );
             AddFileExtensionCommand = new RelayCommand(AddFileExtension);
 
             AddAudioCodecMappingCommand = new RelayCommand(AddAudioCodecMapping);
             RemoveAudioCodecMappingCommand = new RelayCommand<CodecIdBinding>(
                 cb => AudioCodecBindings.Remove(cb),
                 cb => cb != null
-            );
-            
+                );
+
 
             AddVideoCodecMappingCommand = new RelayCommand(AddVideoCodecMapping);
             RemoveVideoCodecMappingCommand = new RelayCommand<CodecIdBinding>(
                 cb => VideoCodecBindings.Remove(cb),
                 cb => cb != null
-            );
-           
+                );
+
 
             AddSubtitleFileExtensionCommand = new RelayCommand(AddSubtitleFileExtension);
             RemoveSubtitleFileExtensionCommand = new RelayCommand<string>(
                 ext => KnownSubtitleExtensions.Remove(ext),
                 ext => !string.IsNullOrEmpty(ext)
-            );
+                );
         }
 
         public ObservableChangeTrackingCollection<CodecIdBinding> AudioCodecBindings {
-            get {
-                if (_audioBindings == null) {
-                    _audioBindings = new ObservableChangeTrackingCollection<CodecIdBinding>(FileFeatures.AudioCodecIdMappings);
-                }
-                return _audioBindings;
-            }
+            get { return _audioBindings ?? (_audioBindings = new ObservableChangeTrackingCollection<CodecIdBinding>(FileFeatures.AudioCodecIdMappings)); }
             set { _audioBindings = value; }
         }
 
         public ObservableChangeTrackingCollection<CodecIdBinding> VideoCodecBindings {
-            get {
-                if (_videoBindings == null) {
-                    _videoBindings = new ObservableChangeTrackingCollection<CodecIdBinding>(FileFeatures.VideoCodecIdMappings);
-                }
-                return _videoBindings;
-            }
-            set { _videoBindings = value; }            
+            get { return _videoBindings ?? (_videoBindings = new ObservableChangeTrackingCollection<CodecIdBinding>(FileFeatures.VideoCodecIdMappings)); }
+            set { _videoBindings = value; }
         }
 
         public ObservableChangeTrackingCollection<string> KnownSubtitleExtensions {
             get {
-                if (_knownSubtiteExtensions == null) {
-                    _knownSubtiteExtensions = new ObservableChangeTrackingCollection<string>(new ObservableCollection<string>(FileFeatures.KnownSubtitleExtensions));
-                }
-                return _knownSubtiteExtensions;
+                return _knownSubtiteExtensions ??
+                       (_knownSubtiteExtensions = new ObservableChangeTrackingCollection<string>(new ObservableCollection<string>(FileFeatures.KnownSubtitleExtensions)));
             }
             set { _knownSubtiteExtensions = value; }
         }
 
         public ObservableChangeTrackingCollection<string> KnownVideoExtensions {
             get {
-                if (_knownVideoExtensions == null) {
-                    _knownVideoExtensions = new ObservableChangeTrackingCollection<string>(new ObservableCollection<string>(FeatureDetector.VideoExtensions));
-                }
-                return _knownVideoExtensions;
+                return _knownVideoExtensions ??
+                       (_knownVideoExtensions = new ObservableChangeTrackingCollection<string>(new ObservableCollection<string>(FeatureDetector.VideoExtensions)));
             }
             set { _knownVideoExtensions = value; }
         }
@@ -131,11 +120,14 @@ namespace RibbonUI.UserControls.Settings {
                 return;
             }
 
+            string destFileName = Directory.GetCurrentDirectory() + "Images/FlagsE/vcodec_" + addedCodec.Mapping;
             try {
-                File.Copy(addedCodec.ImagePath, Directory.GetCurrentDirectory() + "Images/FlagsE/vcodec_" + addedCodec.Mapping);
+                File.Copy(addedCodec.ImagePath, destFileName);
             }
-            catch(Exception) {
-                        
+            catch (Exception) {
+                if (Log.IsErrorEnabled) {
+                    Log.Error(string.Format("Could not copy file \"{0}\" to path \"{1}\".", addedCodec.ImagePath, destFileName));
+                }
             }
         }
 
@@ -152,11 +144,14 @@ namespace RibbonUI.UserControls.Settings {
                 return;
             }
 
+            string destFileName = Directory.GetCurrentDirectory() + "Images/FlagsE/acodec_" + addedCodec.Mapping;
             try {
-                File.Copy(addedCodec.ImagePath, Directory.GetCurrentDirectory() + "Images/FlagsE/acodec_" + addedCodec.Mapping);
+                File.Copy(addedCodec.ImagePath, destFileName);
             }
-            catch(Exception) {
-                        
+            catch (Exception) {
+                if (Log.IsErrorEnabled) {
+                    Log.Error(string.Format("Could not copy file \"{0}\" to path \"{1}\".", addedCodec.ImagePath, destFileName));
+                }
             }
         }
 
@@ -168,6 +163,6 @@ namespace RibbonUI.UserControls.Settings {
 
             FileFeatures.KnownSubtitleExtensions.Add(extension);
         }
-
     }
+
 }

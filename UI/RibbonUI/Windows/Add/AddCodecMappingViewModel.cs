@@ -9,11 +9,11 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Frost.Common.Properties;
 using Frost.DetectFeatures;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using Microsoft.Win32;
+using RibbonUI.Annotations;
 using RibbonUI.Util;
 
 namespace RibbonUI.Windows.Add {

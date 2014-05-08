@@ -6,15 +6,13 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Shell;
 using Frost.Common;
 using Frost.GettextMarkupExtension;
-using Frost.InfoParsers.Models.Subtitles;
 using Frost.XamlControls.Commands;
-using Microsoft.WindowsAPICodePack.Shell.Interop;
+using log4net;
 using RibbonUI.Annotations;
 using RibbonUI.Design;
 using RibbonUI.Util;
@@ -37,12 +35,8 @@ namespace RibbonUI.UserControls {
         Export
     }
 
-    public enum SubtitleSites {
-        PodnapisiNet,
-        OpenSubtitles
-    }
-
     internal class RibbonViewModel : INotifyPropertyChanged {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(RibbonViewModel));
         public event PropertyChangedEventHandler PropertyChanged;
         private ObservableMovie _selectedMovie;
         private bool _isSearchTabSelected;
@@ -112,7 +106,7 @@ namespace RibbonUI.UserControls {
                         _service.SaveChanges();
                     }
                     catch (Exception e) {
-                        UIHelper.HandleProviderException(e);
+                        UIHelper.HandleProviderException(Log, e);
                     }
                 });
             }
@@ -142,7 +136,8 @@ namespace RibbonUI.UserControls {
         public ICommand PlayMovieCommand {
             get {
                 if (_playMovieCommand == null) {
-                    _playMovieCommand = new RelayCommand(PlayMovie, o => SelectedMovie != null && !string.IsNullOrEmpty(SelectedMovie.FirstFileName));
+                    _playMovieCommand = new RelayCommand(PlayMovie,
+                        o => SelectedMovie != null && SelectedMovie["FirstFileName"] && !string.IsNullOrEmpty(SelectedMovie.FirstFileName));
                 }
                 return _playMovieCommand;
             }
@@ -158,7 +153,6 @@ namespace RibbonUI.UserControls {
             }
             set { _downloadSubtitlesCommand = value; }
         }
-
 
         #endregion
 
@@ -252,7 +246,6 @@ namespace RibbonUI.UserControls {
             }
         }
 
-
         private void RemoveMovie() {
             if (MessageBox.Show(Gettext.T("Do you really want to remove {0}?", "movie"), Gettext.T("Remove {0}", "movie"), MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
                 _service.RemoveMovie(SelectedMovie.ObservedEntity);
@@ -269,10 +262,18 @@ namespace RibbonUI.UserControls {
                 Process.Start(SelectedMovie.FirstFileName);
             }
             catch (IOException e) {
+                if (Log.IsWarnEnabled) {
+                    Log.Warn(string.Format("File \"{0}\" of movie {1} could not be accessed to play.", SelectedMovie.FirstFileName, SelectedMovie.Title));
+                }
+
                 MessageBox.Show(Gettext.T("File could not be accessed: " + e.Message));
             }
             catch (Exception e) {
-                MessageBox.Show(Gettext.T("An error has occured opening file: "+SelectedMovie.FirstFileName));
+                if (Log.IsWarnEnabled) {
+                    Log.Warn(string.Format("Unknown error occured while accessing file \"{0}\" of movie {1} to play.", SelectedMovie.FirstFileName, SelectedMovie.Title));
+                }
+
+                MessageBox.Show(Gettext.T("An error has occured opening file: " + SelectedMovie.FirstFileName));
             }
         }
 
@@ -283,12 +284,16 @@ namespace RibbonUI.UserControls {
                     try {
                         Process.Start(directory);
                     }
-                    catch {
+                    catch (Exception e) {
+                        if (Log.IsWarnEnabled) {
+                            Log.Warn(string.Format("Could not open movie folder with path: \"{0}\" of movie \"{1}\".", directory, SelectedMovie.Title));
+                        }
+
                         MessageBox.Show("Error opening movie folder");
                     }
                 }
                 else {
-                    MessageBox.Show(ParentWindow, Gettext.T("Folder not accessible"));
+                    MessageBox.Show(ParentWindow, Gettext.T("Folder not accessible or doesn't exists."));
                 }
             }
         }
@@ -318,8 +323,6 @@ namespace RibbonUI.UserControls {
                 case RibbonTabs.Export:
                     IsExportTabSelected = true;
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException("tab");
             }
         }
 

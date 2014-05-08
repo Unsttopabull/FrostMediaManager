@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Windows;
@@ -6,11 +7,14 @@ using System.Windows.Data;
 using Frost.Common.Models.Provider;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
+using log4net;
 using RibbonUI.Annotations;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.UserControls.List {
-    class ListPromotionalVideosViewModel : INotifyPropertyChanged {
+
+    internal class ListPromotionalVideosViewModel : INotifyPropertyChanged {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(ListPromotionalVideosViewModel));
         public event PropertyChangedEventHandler PropertyChanged;
         private ObservableMovie _selectedMovie;
         private ICollectionView _collectionView;
@@ -53,7 +57,11 @@ namespace RibbonUI.UserControls.List {
                 try {
                     Process.Start(uri);
                 }
-                catch {
+                catch (Exception e) {
+                    if (Log.IsWarnEnabled) {
+                        Log.Warn(string.Format("Failed to open the promotional video with path \"{0}\".", uri), e);
+                    }
+
                     MessageBox.Show(Gettext.T("Error opening video with path: " + uri));
                 }
             }
@@ -71,4 +79,5 @@ namespace RibbonUI.UserControls.List {
             }
         }
     }
+
 }

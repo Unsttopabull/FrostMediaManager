@@ -592,7 +592,17 @@ namespace Frost.Providers.Frost.Proxies {
         }
 
         public bool RemoveSpecial(ISpecial special) {
-            Special s = Service.FindHasName<ISpecial, Special>(special, true);
+            Special s;
+            if (special is Special) {
+                s = special as Special;
+                bool removed = Entity.Specials.Remove(s);
+                if (removed) {
+                    Service.MarkAsDeleted(s);
+                }
+                return removed;
+            }
+
+            s = Service.FindHasName<ISpecial, Special>(special, true);
             if (s != null) {
                 return Entity.Specials.Remove(s);
             }
@@ -938,8 +948,9 @@ namespace Frost.Providers.Frost.Proxies {
         /// <exception cref="NotSupportedException">Throws when the provider does not support adding certifications or the certification does not meet a certain criteria.</exception>
         /// <exception cref="NotImplementedException">Throws when the provider has not implemented adding certifications.</exception>
         public ICertification AddCertification(ICertification certification) {
-            if (certification is FrostCertification) {
-                Entity.Certifications.Add(((FrostCertification) certification).ProxiedEntity);
+            FrostCertification cert = certification as FrostCertification;
+            if (cert != null) {
+                Entity.Certifications.Add(cert.ProxiedEntity);
                 return certification;
             }
 

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -16,6 +16,7 @@ using Frost.GettextMarkupExtension;
 using Frost.InfoParsers;
 using Frost.InfoParsers.Models.Info;
 using FuzzySearch;
+using log4net;
 using Newtonsoft.Json;
 using RibbonUI.Annotations;
 using RibbonUI.Design.Models;
@@ -26,6 +27,7 @@ using Swordfish.NET.Collections;
 namespace RibbonUI.Util.WebUpdate {
 
     public class MovieInfoUpdater : INotifyPropertyChanged {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(MovieInfoUpdater));
         private static readonly TimeSpan StaleTime = new TimeSpan(30, 0, 0);
         private static readonly Regex IMDBIdExtract = new Regex(@"(tt[0-9]+)", RegexOptions.IgnoreCase);
         private static readonly Dictionary<string, ParsedMovieInfos> MovieInfos;
@@ -117,6 +119,9 @@ namespace RibbonUI.Util.WebUpdate {
                     Directory.CreateDirectory("Downloaders");
                 }
                 catch (Exception e) {
+                    if (Log.IsErrorEnabled) {
+                        Log.Error("Downloaders plugin folder inaccessible", e);
+                    }
                     return;
                 }
             }
@@ -133,10 +138,19 @@ namespace RibbonUI.Util.WebUpdate {
                         info = jser.Deserialize<ParsedMovieInfos>(tr);
                     }
                     catch (JsonException ex) {
-                        string msg = ex.Message;
+                        if (Log.IsErrorEnabled) {
+                            Log.Error(string.Format("Failed to parse JSON while loading cache for: {0}.", cache), ex);
+                        }
+                    }
+                    catch (IOException e) {
+                        if (Log.IsWarnEnabled) {
+                            Log.Warn(string.Format("Failed to acces cache file for: {0}.", cache), e);
+                        }
                     }
                     catch (Exception e) {
-                        string msg = e.Message;
+                        if (Log.IsWarnEnabled) {
+                            Log.Warn(string.Format("Unknown exception occured wile accesing cache file for: {0}.", cache), e);
+                        }
                     }
                 }
 
@@ -206,14 +220,25 @@ namespace RibbonUI.Util.WebUpdate {
                 List<ParsedMovie> movies;
                 try {
                     IEnumerable<ParsedMovie> matchingMovies = GetMatchingMovies(cli);
-                    if (matchingMovies != null) {
-                        movies = matchingMovies.ToList();
+                    movies = matchingMovies != null
+                                 ? matchingMovies.ToList()
+                                 : null;
+                }
+                catch (WebException e) {
+                    if (Log.IsWarnEnabled) {
+                        Log.Warn(string.Format("Error downloading data with plugin {0}.", cli.Name), e);
                     }
-                    else {
-                        movies = null;
+
+                    if (!silent) {
+                        MessageBox.Show("An error has occured downloading movie information.");
                     }
+                    return false;
                 }
                 catch (Exception e) {
+                    if (Log.IsErrorEnabled) {
+                        Log.Error(string.Format("Unknown error has occured while getting matching movies from plugin \"{0}\".", cli.Name), e);
+                    }
+
                     if (!silent) {
                         MessageBox.Show("An error has occured updating available movie information.");
                     }
@@ -279,6 +304,10 @@ namespace RibbonUI.Util.WebUpdate {
                     client.Index();
                 }
                 catch (Exception e) {
+                    if (Log.IsWarnEnabled) {
+                        Log.Warn(string.Format("Failed to index available movies with plugin \"{0}\"", client.Name), e);
+                    }
+
                     return;
                 }
 
@@ -287,12 +316,16 @@ namespace RibbonUI.Util.WebUpdate {
                 info.ParsedTime = DateTime.Now;
 
                 JsonSerializer js = new JsonSerializer();
-                using (TextWriter tw = File.CreateText("Downloaders/" + client.Name + ".cache")) {
+                var path = "Downloaders/" + client.Name + ".cache";
+                using (TextWriter tw = File.CreateText(path)) {
                     try {
                         js.Serialize(tw, info);
                         MovieInfos[client.Name] = info;
                     }
                     catch (Exception e) {
+                        if (Log.IsErrorEnabled) {
+                            Log.Error(string.Format("Failed to save plugin index cache for plugin \"{0}\" with path \"{1}\"", client.Name, path), e);
+                        }
                     }
                 }
             }
@@ -312,6 +345,10 @@ namespace RibbonUI.Util.WebUpdate {
             await Task.Run(() => cli.ParseMovieInfo(movie))
                       .ContinueWith(t => {
                           if (t.IsFaulted || t.Result == null) {
+                              if (Log.IsErrorEnabled) {
+                                  Log.Error(string.Format("Downloading movie info for movie: \"{0}\" failed using plugin \"{1}\".", movie, cli.Name), t.Exception);
+                              }
+
                               Errors.Add(new ErrorInfo(ErrorType.Error, Gettext.T("There was an error downloading movie information")));
 
                               if (!silent) {
@@ -381,7 +418,7 @@ namespace RibbonUI.Util.WebUpdate {
                         ISOCountryCode countryCode = ISOCountryCodes.Instance.GetByEnglishName(country);
                         if (countryCode != null && !movie.Countries.Contains(countryCode)) {
                             movie.Countries.Add(countryCode);
-                        }                        
+                        }
                     }
                 }
 
@@ -392,7 +429,8 @@ namespace RibbonUI.Util.WebUpdate {
                     }
                 }
 
-                if (!string.IsNullOrEmpty(_parsedInfo.MPAA) && !movie.Certifications.Any(c => c.Country != null && string.Equals(c.Country.Alpha3, "usa", StringComparison.OrdinalIgnoreCase))) {
+                if (!string.IsNullOrEmpty(_parsedInfo.MPAA) &&
+                    !movie.Certifications.Any(c => c.Country != null && string.Equals(c.Country.Alpha3, "usa", StringComparison.OrdinalIgnoreCase))) {
                     movie.Certifications.Add(new CertificationInfo(ISOCountryCodes.Instance.GetByISOCode("usa"), _parsedInfo.MPAA));
                 }
 
@@ -461,7 +499,7 @@ namespace RibbonUI.Util.WebUpdate {
                 return string.Equals(lhs.ImdbID, rhs.ImdbID, StringComparison.OrdinalIgnoreCase);
             }
 
-            return string.Equals(lhs.Name, rhs.Name);            
+            return string.Equals(lhs.Name, rhs.Name);
         }
 
         public Task UpdateMovie(bool silent = false) {
@@ -493,11 +531,19 @@ namespace RibbonUI.Util.WebUpdate {
         private void UpdateMovieInfo(bool silent, ObservableMovie movie) {
             if (_parsedInfo.Genres != null) {
                 foreach (string genre in _parsedInfo.Genres) {
+                    if (string.IsNullOrEmpty(genre)) {
+                        continue;
+                    }
+
                     string g = genre;
                     try {
                         movie.AddGenre(new DesignGenre(g), true);
                     }
                     catch (Exception e) {
+                        if (Log.IsWarnEnabled) {
+                            Log.Warn(string.Format("Failed to add {0} \"{1}\" to movie \"{2}\".", "genre", genre, movie), e);
+                        }
+
                         Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
                     }
                 }
@@ -505,11 +551,19 @@ namespace RibbonUI.Util.WebUpdate {
 
             if (_parsedInfo.Writers != null) {
                 foreach (IParsedPerson writer in _parsedInfo.Writers) {
+                    if (writer == null) {
+                        continue;
+                    }
+
                     IParsedPerson w = writer;
                     try {
                         movie.AddWriter(new DesignPerson(w), true);
                     }
                     catch (Exception e) {
+                        if (Log.IsWarnEnabled) {
+                            Log.Warn(string.Format("Failed to add {0} \"{1}\" to movie \"{2}\".", "writer", writer.Name, movie), e);
+                        }
+
                         Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
                     }
                 }
@@ -517,11 +571,19 @@ namespace RibbonUI.Util.WebUpdate {
 
             if (_parsedInfo.Directors != null) {
                 foreach (IParsedPerson director in _parsedInfo.Directors) {
+                    if (director == null) {
+                        continue;
+                    }
+
                     IParsedPerson d = director;
                     try {
                         movie.AddDirector(new DesignPerson(d), true);
                     }
                     catch (Exception e) {
+                        if (Log.IsWarnEnabled) {
+                            Log.Warn(string.Format("Failed to add {0} \"{1}\" to movie \"{2}\".", "director", director.Name, movie), e);
+                        }
+
                         Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
                     }
                 }
@@ -529,11 +591,19 @@ namespace RibbonUI.Util.WebUpdate {
 
             if (_parsedInfo.Actors != null) {
                 foreach (IParsedActor actor in _parsedInfo.Actors) {
+                    if (actor == null) {
+                        continue;
+                    }
+
                     IParsedActor a = actor;
                     try {
                         movie.AddActor(new DesignActor(a), true);
                     }
                     catch (Exception e) {
+                        if (Log.IsWarnEnabled) {
+                            Log.Warn(string.Format("Failed to add {0} \"{1}\" to movie \"{2}\".", "actor", actor.Name, movie), e);
+                        }
+
                         Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
                     }
                 }
@@ -549,6 +619,10 @@ namespace RibbonUI.Util.WebUpdate {
                     movie.AddPlot(new DesignPlot { Full = _parsedInfo.Plot, Tagline = _parsedInfo.Tagline }, true);
                 }
                 catch (Exception e) {
+                    if (Log.IsWarnEnabled) {
+                        Log.Warn(string.Format("Failed to add {0} to movie \"{2}\".", "plot", movie), e);
+                    }
+
                     Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
                 }
             }
@@ -579,43 +653,71 @@ namespace RibbonUI.Util.WebUpdate {
 
             if (_parsedInfo.Countries != null) {
                 foreach (string country in _parsedInfo.Countries) {
+                    if (string.IsNullOrEmpty(country)) {
+                        continue;
+                    }
+
                     try {
                         movie.AddCountry(new DesignCountry(country), true);
                     }
                     catch (Exception e) {
+                        if (Log.IsWarnEnabled) {
+                            Log.Warn(string.Format("Failed to add {0} \"{1}\" to movie \"{2}\".", "country", country, movie), e);
+                        }
+
                         Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
-                    }                    
+                    }
                 }
             }
 
             if (movie["PromotionalVideos"] && _parsedInfo.Videos != null) {
                 foreach (IParsedVideo video in _parsedInfo.Videos) {
+                    if (video == null) {
+                        continue;
+                    }
+
                     IParsedVideo v = video;
                     try {
                         movie.AddPromotionalVideo(new DesignPromotionalVideo(v), true);
                     }
                     catch (Exception e) {
+                        if (Log.IsWarnEnabled) {
+                            Log.Warn(string.Format("Failed to add {0} \"{1}\" to movie \"{2}\".", "promotional video", video.Title, movie), e);
+                        }
+
                         Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
                     }
                 }
             }
 
-            if (movie["Ratings"] && !string.IsNullOrEmpty(_parsedInfo.MPAA)) {
+            if (movie["Certifications"] && !string.IsNullOrEmpty(_parsedInfo.MPAA)) {
                 try {
                     movie.AddCertification(new DesingCertification(_parsedInfo.MPAA, new DesignCountry("United States")), true);
                 }
                 catch (Exception e) {
+                    if (Log.IsWarnEnabled) {
+                        Log.Warn(string.Format("Failed to add {0} \"{1}\" to movie \"{2}\".", "MPAA rating", _parsedInfo.MPAA, movie), e);
+                    }
+
                     Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
                 }
             }
 
             if (movie["Awards"] && _parsedInfo.Awards != null) {
                 foreach (IParsedAward award in _parsedInfo.Awards) {
+                    if (award == null) {
+                        continue;
+                    }
+
                     IParsedAward aw = award;
                     try {
                         movie.AddAward(new DesignAward(aw), true);
                     }
                     catch (Exception e) {
+                        if (Log.IsWarnEnabled) {
+                            Log.Warn(string.Format("Failed to add {0} \"{1}\" to movie \"{2}\".", "award", award.Award, movie), e);
+                        }
+
                         Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
                     }
                 }
@@ -627,6 +729,10 @@ namespace RibbonUI.Util.WebUpdate {
                         movie.AddArt(new DesignArt(ArtType.Cover, _parsedInfo.Cover, _parsedInfo.CoverPreview), true);
                     }
                     catch (Exception e) {
+                        if (Log.IsWarnEnabled) {
+                            Log.Warn(string.Format("Failed to add {0} \"{1}\" to movie \"{2}\".", "cover", _parsedInfo.Cover, movie), e);
+                        }
+
                         Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
                     }
                 }
@@ -636,6 +742,10 @@ namespace RibbonUI.Util.WebUpdate {
                         movie.AddArt(new DesignArt(ArtType.Fanart, _parsedInfo.Fanart, _parsedInfo.FanartPreview), true);
                     }
                     catch (Exception e) {
+                        if (Log.IsWarnEnabled) {
+                            Log.Warn(string.Format("Failed to add {0} \"{1}\" to movie \"{2}\".", "fanart", _parsedInfo.Fanart, movie), e);
+                        }
+
                         Errors.Add(new ErrorInfo(ErrorType.Warning, e.Message));
                     }
                 }

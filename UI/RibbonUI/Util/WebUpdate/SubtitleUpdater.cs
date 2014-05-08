@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers.Models.Subtitles;
+using log4net;
 using RibbonUI.Annotations;
 using RibbonUI.Util.ObservableWrappers;
 
 namespace RibbonUI.Util.WebUpdate {
+
     public class SubtitleUpdater : INotifyPropertyChanged {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SubtitleUpdater));
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly ISubtitleClient _cli;
         private readonly ObservableMovie _movie;
@@ -51,9 +55,7 @@ namespace RibbonUI.Util.WebUpdate {
                 subtitles = await GetSubtitleInfo(languages, silent);
             }
             catch (Exception e) {
-                if (!silent) {
-                    MessageBox.Show(e.Message);
-                }
+                HandleException(e, "");
                 return null;
             }
 
@@ -67,6 +69,27 @@ namespace RibbonUI.Util.WebUpdate {
             return subtitles;
         }
 
+        private void HandleException(Exception e, string arg, bool silent = false) {
+            if (e is WebException) {
+                if (Log.IsWarnEnabled) {
+                    Log.Warn(string.Format("Error downloading subtitle data {0} with plugin {1}.", arg, _cli.Name), e);
+                }
+                if (!silent) {
+                    MessageBox.Show("An error has occured downloading subtitle information.");
+                }
+
+                return;
+            }
+
+            if (Log.IsErrorEnabled) {
+                Log.Error(string.Format("Unknown error has occured while getting subtitle info {0} from plugin \"{1}\".", arg, _cli.Name), e);
+
+                if (!silent) {
+                    MessageBox.Show("An error has occured getting subtitle information.");
+                }
+            }
+        }
+
         private async Task<IEnumerable<ISubtitleInfo>> GetSubtitleInfo(IEnumerable<string> languages, bool silent) {
             if (_cli.IsMovieHashSupported) {
                 if (_movie.MovieHashes != null && _movie.MovieHashes.Any()) {
@@ -77,6 +100,7 @@ namespace RibbonUI.Util.WebUpdate {
                         }
                     }
                     catch (Exception e) {
+                        HandleException(e, "by MovieHash", true);
                     }
                 }
             }
@@ -90,6 +114,7 @@ namespace RibbonUI.Util.WebUpdate {
                     return await Task.Run(() => _cli.GetMovieSubtitlesFromImdbId(_movie.ImdbID, languages));
                 }
                 catch (Exception e) {
+                    HandleException(e, string.Format("by Imdb [{0}]", _movie.ImdbID), true);
                     return null;
                 }
             }
@@ -102,6 +127,7 @@ namespace RibbonUI.Util.WebUpdate {
                     return await Task.Run(() => _cli.GetMovieSubtitlesFromTitle(_movie.Title, (int) (_movie.ReleaseYear.HasValue ? _movie.ReleaseYear.Value : 0), languages));
                 }
                 catch (Exception e) {
+                    HandleException(e, string.Format("by movie Title [{0}]", _movie.ImdbID), true);
                     return null;
                 }
             }
@@ -131,4 +157,5 @@ namespace RibbonUI.Util.WebUpdate {
             }
         }
     }
+
 }
