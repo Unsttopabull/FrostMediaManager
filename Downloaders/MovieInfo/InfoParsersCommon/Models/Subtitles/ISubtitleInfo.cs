@@ -26,7 +26,7 @@ namespace Frost.InfoParsers.Models.Subtitles {
 
         /// <summary>Gets the subtitle MD5 hash.</summary>
         /// <value>The subtitle hash.</value>
-        string SubtitleHash { get; }
+        string SubtitleHash { get; set; }
 
         string FileName { get; }
 

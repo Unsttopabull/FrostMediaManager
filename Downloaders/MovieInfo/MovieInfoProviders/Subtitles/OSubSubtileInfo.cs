@@ -55,6 +55,7 @@ namespace Frost.MovieInfoProviders.Subtitles {
         /// <value>The subtitle hash.</value>
         public string SubtitleHash {
             get { return _info.SubtitleHash; }
+            set { _info.SubtitleHash = value; }
         }
 
         public string FileName {

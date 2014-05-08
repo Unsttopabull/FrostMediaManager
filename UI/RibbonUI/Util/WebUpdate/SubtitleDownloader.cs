@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -7,6 +8,8 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
+using Frost.Common.Models.Provider;
 using Frost.Common.Util.ISO;
 using Frost.InfoParsers.Models.Subtitles;
 using RibbonUI.Design.Models;
@@ -33,7 +36,7 @@ namespace RibbonUI.Util.WebUpdate {
             if (!string.IsNullOrEmpty(_info.SubtitleGZipDownloadLink)) {
                 success = await DownloadGzip(filePath);
             }
-            else if(!string.IsNullOrEmpty(_info.SubtitleZipDownloadLink)) {
+            else if (!string.IsNullOrEmpty(_info.SubtitleZipDownloadLink)) {
                 success = await DownloadZip(filePath);
             }
             else if (!string.IsNullOrEmpty(_info.SubtitleFileDownloadLink)) {
@@ -66,7 +69,7 @@ namespace RibbonUI.Util.WebUpdate {
         private void AddSubtitleToMovie(string filePath) {
             FileInfo fi;
             try {
-                 fi = new FileInfo(filePath);
+                fi = new FileInfo(filePath);
             }
             catch (Exception e) {
                 MessageBox.Show("Failed to obtain subtitle file information.");
@@ -103,27 +106,31 @@ namespace RibbonUI.Util.WebUpdate {
                 ds.MD5 = _info.SubtitleHash;
             }
             else {
-                string md5Hash = null;
-                try {
-                    using (FileStream fs = fi.Create()) {
-                        using (MD5 md5 = MD5.Create()) {
-                            md5Hash = md5.ComputeHash(fs).Aggregate("", (str, b) => str + b.ToString("x2"));
-                        }
-                    }
-                }
-                catch (Exception e) {
-                    MessageBox.Show("Failed to calculate subtitle hash.");
-                }
-
-                ds.MD5 = md5Hash;
+                ComputeMD5(fi, ds);
             }
 
             try {
                 _movie.AddSubtitle(ds);
             }
             catch (Exception e) {
-                MessageBox.Show("Provider failed to save the subtitle information");                
+                MessageBox.Show("Provider failed to save the subtitle information");
             }
+        }
+
+        private static void ComputeMD5(FileInfo fi, ISubtitle ds) {
+            string md5Hash = null;
+            try {
+                using (FileStream fs = fi.Create()) {
+                    using (MD5 md5 = MD5.Create()) {
+                        md5Hash = md5.ComputeHash(fs).Aggregate("", (str, b) => str + b.ToString("x2"));
+                    }
+                }
+            }
+            catch (Exception e) {
+                MessageBox.Show("Failed to calculate subtitle hash.");
+            }
+
+            ds.MD5 = md5Hash;
         }
 
         private string GetName() {
@@ -171,17 +178,36 @@ namespace RibbonUI.Util.WebUpdate {
                 }
             }
 
+            bool fileWriteFailure = false;
             try {
+                byte[] dataDecompressed;
                 using (MemoryStream ms = new MemoryStream(data)) {
                     using (GZipStream gzip = new GZipStream(ms, CompressionMode.Decompress)) {
-                        using (StreamReader sr = new StreamReader(gzip)) {
-                            File.WriteAllText(filePath, sr.ReadToEnd());
+                        using (MemoryStream msDecompressed = new MemoryStream()) {
+                            gzip.CopyTo(msDecompressed);
+                            dataDecompressed = msDecompressed.ToArray();
                         }
                     }
                 }
+
+                if (string.IsNullOrEmpty(_info.SubtitleHash)) {
+                    using (MD5 md5 = MD5.Create()) {
+                        _info.SubtitleHash = md5.ComputeHash(dataDecompressed)
+                                                .Aggregate("", (str, b) => str + b.ToString("x2"));
+                    }
+                }
+
+                try {
+                    File.WriteAllBytes(filePath, dataDecompressed);
+                }
+                catch {
+                    fileWriteFailure = true;
+                }
             }
             catch {
-                MessageBox.Show("Failed to decompress subtitle archive.");
+                MessageBox.Show(fileWriteFailure
+                                    ? string.Format("Failed to write subtitle file to drive with the following path:\n\"{0}\"", filePath)
+                                    : "Failed to decompress subtitle archive.");
                 return false;
             }
             return true;
@@ -199,36 +225,60 @@ namespace RibbonUI.Util.WebUpdate {
                 }
             }
 
+            bool failedWriteFile = false;
             try {
                 using (ZipArchive za = new ZipArchive(new MemoryStream(data), ZipArchiveMode.Read)) {
                     ZipArchiveEntry entry = za.GetEntry(_info.FileName);
-                    entry.ExtractToFile(path);
+
+
+                    if (string.IsNullOrEmpty(_info.SubtitleHash)) {
+                        using (Stream s = entry.Open()) {
+                            using (MD5 md5 = MD5.Create()) {
+                                _info.SubtitleHash = md5.ComputeHash(s).Aggregate("", (str, b) => str + b.ToString("x2"));
+                            }
+                        }
+                    }
+
+                    try {
+                        entry.ExtractToFile(path);
+                    }
+                    catch {
+                        failedWriteFile = true;
+                    }
                 }
             }
-            catch (Exception e) {
-                MessageBox.Show("Failed to decompress subtitle archive.\n\nError message:\n"+e.Message);
+            catch (Exception) {
+                MessageBox.Show(failedWriteFile
+                                    ? string.Format("Failed to write subtitle file to drive with the following path:\n\"{0}\"", path)
+                                    : "Failed to decompress subtitle archive.");
                 return false;
             }
             return true;
         }
 
         private bool GetNfoFileName(out string nfoName) {
-            MovieVideo video = _movie.Videos.FirstOrDefault(v => v != null && v.File != null);
-            if (video != null) {
-                nfoName = GetFileNameWithoutExtension(video.File.FullPath);
-                return true;
-            }
+            try {
+                MovieVideo video = _movie.Videos.FirstOrDefault(v => v != null && v.File != null);
+                if (video != null) {
+                    nfoName = GetFileNameWithoutExtension(video.File.FullPath);
+                    return true;
+                }
 
-            MovieAudio audio = _movie.Audios.FirstOrDefault(a => a != null && a.File != null);
-            if (audio != null) {
-                nfoName = GetFileNameWithoutExtension(audio.File.FullPath);
-                return true;
-            }
+                MovieAudio audio = _movie.Audios.FirstOrDefault(a => a != null && a.File != null);
+                if (audio != null) {
+                    nfoName = GetFileNameWithoutExtension(audio.File.FullPath);
+                    return true;
+                }
 
-            MovieSubtitle subtitle = _movie.Subtitles.FirstOrDefault(s => s != null && s.File != null);
-            if (subtitle != null) {
-                nfoName = GetFileNameWithoutExtension(subtitle.File.FullPath);
-                return true;
+                MovieSubtitle subtitle = _movie.Subtitles.FirstOrDefault(s => s != null && s.File != null);
+                if (subtitle != null) {
+                    nfoName = GetFileNameWithoutExtension(subtitle.File.FullPath);
+                    return true;
+                }
+            }
+            catch {
+                nfoName = null;
+                return false;
             }
 
             nfoName = null;
