@@ -55,9 +55,21 @@ namespace RibbonUI.UserControls {
         private ICommand _removeMovieCommand;
 
         public RibbonViewModel() {
-            _service = Gettext.IsInDesignMode
-                           ? new DesignMoviesDataService()
-                           : LightInjectContainer.GetInstance<IMoviesDataService>();
+
+            try {
+                _service = Gettext.IsInDesignMode
+                               ? new DesignMoviesDataService()
+                               : LightInjectContainer.GetInstance<IMoviesDataService>();
+            }
+            catch (Exception e) {
+                MessageBox.Show(Gettext.T("Failed to access provider service"));
+
+                if (Log.IsFatalEnabled) {
+                    Log.Fatal("Failed to access provider service", e);
+                }
+                Application.Current.Shutdown();
+                return;
+            }
 
             OpenMovieInFolderCommand = new RelayCommand(OpenInFolder);
             OnRibbonLoadedCommand = new RelayCommand<DependencyObject>(OnRibbonLoaded);

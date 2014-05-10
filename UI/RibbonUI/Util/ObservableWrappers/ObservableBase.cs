@@ -15,6 +15,8 @@ namespace RibbonUI.Util.ObservableWrappers {
 
         public bool this[string propertyName] {
             get { return _observedEntity[propertyName]; }
+            set {
+            }
         }
 
         public T ObservedEntity {

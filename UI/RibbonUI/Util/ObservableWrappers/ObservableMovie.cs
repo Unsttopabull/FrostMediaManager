@@ -860,6 +860,10 @@ namespace RibbonUI.Util.ObservableWrappers {
                        : null;
         }
 
+        public void NotifyPropertyChanged(string property) {
+            OnPropertyChanged(property);
+        }
+
         #endregion
 
         #region Add/Remove

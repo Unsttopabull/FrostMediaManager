@@ -42,7 +42,7 @@ namespace Frost.Providers.Xtreamer.Provider {
                 _xjb = new XjbEntities(xjbDb);
             }
             else {
-                _xjb = new XjbEntities();
+                throw new FileNotFoundException("Xtreamer Movie Jukebox database not found");
             }
         }
 

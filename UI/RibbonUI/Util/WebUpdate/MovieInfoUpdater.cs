@@ -219,7 +219,7 @@ namespace RibbonUI.Util.WebUpdate {
             else {
                 List<ParsedMovie> movies;
                 try {
-                    IEnumerable<ParsedMovie> matchingMovies = GetMatchingMovies(cli);
+                    IEnumerable<ParsedMovie> matchingMovies = await GetMatchingMovies(cli);
                     movies = matchingMovies != null
                                  ? matchingMovies.ToList()
                                  : null;
@@ -276,17 +276,17 @@ namespace RibbonUI.Util.WebUpdate {
             return false;
         }
 
-        private IEnumerable<ParsedMovie> GetMatchingMovies(IParsingClient cli) {
+        private async Task<IEnumerable<ParsedMovie>> GetMatchingMovies(IParsingClient cli) {
             if (cli.SupportsMovieHash) {
                 if (_movieInfo.MovieHashes != null && _movieInfo.MovieHashes.Any()) {
-                    return cli.GetByMovieHash(_movieInfo.MovieHashes);
+                    return await Task.Run(() => cli.GetByMovieHash(_movieInfo.MovieHashes));
                 }
             }
 
             if (!string.IsNullOrEmpty(_movieInfo.ImdbID) && cli.IsImdbSupported) {
-                return cli.GetByImdbId(_movieInfo.ImdbID).ToList();
+                return await Task.Run(() => cli.GetByImdbId(_movieInfo.ImdbID).ToList());
             }
-            return cli.GetByTitle(_movieInfo.Title, (int) (_movieInfo.ReleaseYear.HasValue ? _movieInfo.ReleaseYear.Value : 0));
+            return await Task.Run(() => cli.GetByTitle(_movieInfo.Title, (int) (_movieInfo.ReleaseYear.HasValue ? _movieInfo.ReleaseYear.Value : 0)));
         }
 
         private void UpdateAvailable(ParsedMovieInfos info, IParsingClient client, bool silent) {
@@ -431,6 +431,7 @@ namespace RibbonUI.Util.WebUpdate {
 
                 if (!string.IsNullOrEmpty(_parsedInfo.MPAA) &&
                     !movie.Certifications.Any(c => c.Country != null && string.Equals(c.Country.Alpha3, "usa", StringComparison.OrdinalIgnoreCase))) {
+
                     movie.Certifications.Add(new CertificationInfo(ISOCountryCodes.Instance.GetByISOCode("usa"), _parsedInfo.MPAA));
                 }
 
@@ -617,6 +618,7 @@ namespace RibbonUI.Util.WebUpdate {
             if (movie["Plots"] && summaryAvailable) {
                 try {
                     movie.AddPlot(new DesignPlot { Full = _parsedInfo.Plot, Tagline = _parsedInfo.Tagline }, true);
+                    movie.NotifyPropertyChanged("Plots");
                 }
                 catch (Exception e) {
                     if (Log.IsWarnEnabled) {
@@ -633,6 +635,9 @@ namespace RibbonUI.Util.WebUpdate {
 
                 if (result == MessageBoxResult.Yes) {
                     movie.MainPlot.Full = _parsedInfo.Plot;
+                    movie.NotifyPropertyChanged("MainPlot");
+                    movie.NotifyPropertyChanged("FirstPlot");
+                    movie.NotifyPropertyChanged("Plots");
                 }
             }
 

@@ -31,5 +31,11 @@ namespace Frost.InfoParsers {
         /// <summary>Gets or sets the Persons imdb identifier.</summary>
         /// <value>The imdb identifier of the person.</value>
         public string ImdbID { get; set; }
+
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString() {
+            return string.Format("{0} [{2}], {1}", Name, Thumb, ImdbID ?? "??");
+        }
     }
 }

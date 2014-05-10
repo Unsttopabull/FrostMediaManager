@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
@@ -24,11 +25,12 @@ namespace Frost.Providers.Xbmc.Provider {
 
         public XbmcMoviesDataService() {
             string dbLoc = XbmcContainer.FindXbmcDB();
-            _xbmc = !string.IsNullOrEmpty(dbLoc) 
-                ? new XbmcContainer(dbLoc) 
-                : new XbmcContainer();
-
-            //_xbmc.Database.Log = Console.WriteLine;
+            if (!string.IsNullOrEmpty(dbLoc)) {
+                _xbmc = new XbmcContainer(dbLoc);
+            }
+            else {
+                throw new FileNotFoundException("XBMC Database not found.");
+            }
         }
 
         public ObservableCollection<IMovie> Movies {

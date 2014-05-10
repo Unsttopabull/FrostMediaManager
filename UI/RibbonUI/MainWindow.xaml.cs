@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Windows;
 using Frost.Common;
+using Frost.GettextMarkupExtension;
 using log4net;
 using RibbonUI.Properties;
 using RibbonUI.Util;
@@ -44,7 +45,7 @@ namespace RibbonUI {
                 LightInjectContainer.RegisterAssembly(assemblyPath);
             }
             catch (Exception e) {
-                MessageBox.Show("There was an error loading the provider, see log for more info. Program will now exit.");
+                MessageBox.Show(Gettext.T("There was an error loading the provider, see log for more info. Program will now exit."));
                 Log.Fatal(string.Format("There was an error loading the provider assembly file \"{0}\"", assemblyPath), e);
 
                 Application.Current.Shutdown();
@@ -52,12 +53,25 @@ namespace RibbonUI {
             }
 
             if (!LightInjectContainer.CanGetInstance<IMoviesDataService>()) {
-                try {
-                    _loading.Dispatcher.InvokeShutdown();
+                if (Log.IsFatalEnabled) {
+                    Log.Fatal("Provider did not register a service, the program can not continue");
                 }
-                catch { }
 
-                MessageBox.Show("Provider did not register a service, the program can not continue", "No service registered", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Gettext.T("Provider did not register a service, the program can not continue."), Gettext.T("No service registered"), MessageBoxButton.OK, MessageBoxImage.Error);
+                Application.Current.Shutdown();
+                return;
+            }
+
+            try {
+                LightInjectContainer.GetInstance<IMoviesDataService>();
+            }
+            catch(Exception e) {
+                _loading.Dispatcher.InvokeShutdown();
+                MessageBox.Show(Gettext.T("Could not create provider service, the program can not continue. See log for more info."), Gettext.T("Error creating provider service"), MessageBoxButton.OK, MessageBoxImage.Error);
+
+                if (Log.IsFatalEnabled) {
+                    Log.Fatal("Could not create provider service, the program can not continue.", e);
+                }
 
                 Application.Current.Shutdown();
                 return;
@@ -78,4 +92,5 @@ namespace RibbonUI {
             _loading.Dispatcher.InvokeShutdown();
         }
     }
+
 }
