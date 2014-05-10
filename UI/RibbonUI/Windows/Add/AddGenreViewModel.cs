@@ -30,8 +30,12 @@ namespace RibbonUI.Windows.Add {
                 _genres = value;
 
                 if (_genres != null) {
-                    ICollectionView collectionView = CollectionViewSource.GetDefaultView(_genres);
-                    collectionView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+                    try {
+                        ICollectionView collectionView = CollectionViewSource.GetDefaultView(_genres);
+                        collectionView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
+                    }
+                    catch {
+                    }
                 }
 
                 OnPropertyChanged();

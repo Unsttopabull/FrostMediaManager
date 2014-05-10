@@ -258,7 +258,14 @@ namespace RibbonUI.UserControls {
         #region Genre Handlers
 
         private void AddGenreClick() {
-            AddGenre ag = new AddGenre { Owner = ParentWindow, Genres = _service.Genres };
+            AddGenre ag = new AddGenre { Owner = ParentWindow };
+            try {
+                ag.Genres = _service.Genres;
+            }
+            catch (Exception e) {
+                
+            }
+
             ag.ShowDialog();
 
             if (ag.DialogResult != true) {

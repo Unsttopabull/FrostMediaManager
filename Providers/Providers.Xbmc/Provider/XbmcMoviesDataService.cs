@@ -51,7 +51,25 @@ namespace Frost.Providers.Xbmc.Provider {
         }
 
         public bool RemoveMovie(IMovie movie) {
-            return Movies.Remove(movie);
+            if (!(movie is XbmcMovie)) {
+                return false;
+            }
+
+            XbmcMovie m = movie as XbmcMovie;
+
+            int rowsChanged;
+            try {
+                rowsChanged = _xbmc.Database.ExecuteSqlCommand("DELETE FROM movie WHERE idMovie = {0};", m.Id);
+            }
+            catch {
+                return false;
+            }
+
+            if (rowsChanged > 0) {
+                Movies.Remove(movie);
+                return true;
+            }
+            return false;
         }
 
         #region Subtitles
@@ -59,20 +77,15 @@ namespace Frost.Providers.Xbmc.Provider {
         public XbmcSubtitleDetails FindSubtitle(ISubtitle subtitle, bool createIfNotFound) {
             XbmcSubtitleDetails p = null;
 
-            XbmcFile file = FindFile(subtitle.File, true);
             if (subtitle.Id > 0) {
                 XbmcDbStreamDetails s = _xbmc.StreamDetails.Find(subtitle.Id);
                 if (s != null) {
                     return new XbmcSubtitleDetails(s);
                 }
 
-                if (!createIfNotFound) {
-                    return null;
-                }
-
-                p = new XbmcSubtitleDetails(subtitle);
-
-                return p;
+                return createIfNotFound 
+                    ? new XbmcSubtitleDetails(subtitle) 
+                    : null;
             }
 
             if (subtitle.Language != null && subtitle.Language.ISO639 != null) {
@@ -90,21 +103,6 @@ namespace Frost.Providers.Xbmc.Provider {
             return p;      
         }
 
-        private XbmcFile FindFile(IFile file, bool createIfNotFound) {
-            XbmcFile f;
-            if (file.Id > 0) {
-                f = _xbmc.Files.Find(file.Id);
-                return f ?? _xbmc.Files.Add(new XbmcFile(file));
-            }
-
-            string fileNameString = XbmcFile.GetFileNamesString(new[] { file.Name });
-
-            f = _xbmc.Files.FirstOrDefault(xf => fileNameString == xf.FileNameString);
-            if (f == null && createIfNotFound) {
-                return _xbmc.Files.Add(new XbmcFile(file));
-            }
-            return f;
-        }
 
         #endregion
 
@@ -145,13 +143,13 @@ namespace Frost.Providers.Xbmc.Provider {
                 }
 
                 return createIfNotFound
-                    ? _xbmc.Countries.Add(new XbmcCountry(country))
+                    ? new XbmcCountry(country)
                     : null;
             }
 
             c = _xbmc.Countries.FirstOrDefault(pr => (country.ISO3166 != null && pr.ISO3166.Alpha3 == country.ISO3166.Alpha3) || pr.Name == country.Name);
             if (c == null && createIfNotFound) {
-                _xbmc.Countries.Add(new XbmcCountry(country));
+                return new XbmcCountry(country);
             }
             return c;
         }
@@ -243,13 +241,13 @@ namespace Frost.Providers.Xbmc.Provider {
                 }
 
                 return createIfNotFound
-                    ? _xbmc.People.Add(new XbmcPerson(person))
+                    ? new XbmcPerson(person)
                     : null;
             }
 
             p = _xbmc.People.FirstOrDefault(pr => pr.Name == person.Name);
             if (p == null && createIfNotFound) {
-                p = _xbmc.People.Add(new XbmcPerson(person));
+                p = new XbmcPerson(person);
             }
             return p;
         }
@@ -265,8 +263,6 @@ namespace Frost.Providers.Xbmc.Provider {
                     if (createIfNotFound) {
                         find = set.Create();
                         find.Name = hasName.Name;
-
-                        find = set.Add(find);
                     }
                     else {
                         return null;
@@ -279,8 +275,6 @@ namespace Frost.Providers.Xbmc.Provider {
             if (hn == null && createIfNotFound) {
                 hn = set.Create();
                 hn.Name = hasName.Name;
-
-                hn = set.Add(hn);
             }
             return hn;            
         }

@@ -10,7 +10,7 @@ using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 using Frost.Providers.Frost.DB;
 using Frost.Providers.Frost.Proxies;
-using IOFile = System.IO.File;
+using FileIO = System.IO.File;
 
 namespace Frost.Providers.Frost.Provider {
 
@@ -63,7 +63,14 @@ namespace Frost.Providers.Frost.Provider {
             }
 
             FrostMovie m = movie as FrostMovie;
-            int rowsChanged = _mvc.Database.ExecuteSqlCommand("DELETE FROM Movies WHERE Id = {0};", m.Id);
+
+            int rowsChanged;
+            try {
+                rowsChanged = _mvc.Database.ExecuteSqlCommand("DELETE FROM Movies WHERE Id = {0};", m.Id);
+            }
+            catch {
+                return false;
+            }
 
             if (rowsChanged > 0) {
                 Movies.Remove(movie);
@@ -77,12 +84,9 @@ namespace Frost.Providers.Frost.Provider {
             if (subtitle.Id > 0) {
                 p = _mvc.Subtitles.Find(subtitle.Id);
                 if (p == null || (subtitle.MD5 != null && p.MD5 != subtitle.MD5)) {
-                    if (createIfNotFound) {
-                        p = new Subtitle(subtitle);
-                    }
-                    else {
-                        p = null;
-                    }
+                    p = createIfNotFound 
+                        ? new Subtitle(subtitle) 
+                        : null;
                 }
                 return p;
             }
@@ -139,7 +143,7 @@ namespace Frost.Providers.Frost.Provider {
                 c = _mvc.Countries.Find(country.Id);
                 if (c == null || (c.Name != country.Name)) {
                     if (createIfNotFound) {
-                        c = _mvc.Countries.Add(new Country(country));
+                        c = new Country(country);
                     }
                     else {
                         return null;
@@ -157,7 +161,7 @@ namespace Frost.Providers.Frost.Provider {
             }
 
             if (c == null && createIfNotFound) {
-                c = _mvc.Countries.Add(new Country(country));
+                c = new Country(country);
             }
             return c;
         }
@@ -187,8 +191,6 @@ namespace Frost.Providers.Frost.Provider {
                     if (createNotFound) {
                         find = set.Create();
                         ((IHasName) find).Name = studio.Name;
-
-                        find = set.Add(find);
                     }
                     else {
                         return null;
@@ -202,8 +204,6 @@ namespace Frost.Providers.Frost.Provider {
             if (hn == null && createNotFound) {
                 hn = set.Create();
                 ((IHasName) hn).Name = studio.Name;
-
-                hn = set.Add(hn);
             }
             return hn;
         }
@@ -231,8 +231,11 @@ namespace Frost.Providers.Frost.Provider {
                     ? _mvc.Plots.FirstOrDefault(pr => plot.Full == pr.Full && pr.MovieId == movieId)
                     : _mvc.Plots.FirstOrDefault(pr => plot.Full == pr.Full);
 
-            if ((p == null || _mvc.Entry(p).State == EntityState.Deleted) && createIfNotFound) {
-                p = new Plot(plot);
+            if ((p == null || _mvc.Entry(p).State == EntityState.Deleted)) {
+                if (createIfNotFound) {
+                    return new Plot(plot);
+                }
+                return null;
             }
 
             return p;
@@ -329,22 +332,16 @@ namespace Frost.Providers.Frost.Provider {
             if (language.Id > 0) {
                 c = _mvc.Languages.Find(language.Id);
                 if (c == null || (c.Name != language.Name)) {
-                    if (createIfNotFound) {
-                        c = new Language(language);
-                    }
-                    else {
-                        c = null;
-                    }
+                    c = createIfNotFound 
+                        ? new Language(language) 
+                        : null;
                 }
                 return c;
             }
 
-            if (language.ISO639 != null) {
-                c = _mvc.Languages.FirstOrDefault(pr => (pr.ISO639.Alpha3 == language.ISO639.Alpha3) || pr.Name == language.Name);
-            }
-            else {
-                c = _mvc.Languages.FirstOrDefault(pr => pr.Name == language.Name);
-            }
+            c = language.ISO639 != null 
+                ? _mvc.Languages.FirstOrDefault(pr => (pr.ISO639.Alpha3 == language.ISO639.Alpha3) || pr.Name == language.Name) 
+                : _mvc.Languages.FirstOrDefault(pr => pr.Name == language.Name);
 
             if (c == null && createIfNotFound) {
                 return new Language(language);
@@ -393,13 +390,13 @@ namespace Frost.Providers.Frost.Provider {
                 }
 
                 return createIfNotFound
-                           ? _mvc.People.Add(new Person(person))
+                           ? new Person(person)
                            : null;
             }
 
             p = _mvc.People.FirstOrDefault(pr => (person.ImdbID != null && pr.ImdbID == person.ImdbID) || pr.Name == person.Name);
             if (p == null && createIfNotFound) {
-                p = _mvc.People.Add(new Person(person));
+                p = new Person(person);
             }
             return p;
         }
@@ -420,8 +417,10 @@ namespace Frost.Providers.Frost.Provider {
             }
 
             Certification cert = _mvc.Certifications.FirstOrDefault(crt => crt.Rating == certification.Rating && crt.MovieId == movieId && crt.CountryId == c.Id);
-            if ((cert == null || _mvc.Entry(cert).State == EntityState.Deleted) && createNotFound) {
-                return new Certification(certification, c);
+            if (cert == null || _mvc.Entry(cert).State == EntityState.Deleted) {
+                return createNotFound 
+                    ? new Certification(certification, c) 
+                    : null;
             }
             return cert;
         }
@@ -459,8 +458,6 @@ namespace Frost.Providers.Frost.Provider {
                     if (createIfNotFound) {
                         find = set.Create();
                         find.Name = hasName.Name;
-
-                        find = set.Add(find);
                     }
                     else {
                         return null;
@@ -474,8 +471,6 @@ namespace Frost.Providers.Frost.Provider {
             if ((hn == null || _mvc.Entry(hn).State == EntityState.Deleted) && createIfNotFound) {
                 hn = set.Create();
                 hn.Name = hasName.Name;
-
-                hn = set.Add(hn);
             }
             return hn;
         }

@@ -34,18 +34,19 @@ namespace Frost.Providers.Xbmc.DB {
 
         private void FixForEf() {
             try {
-                using (SQLiteConnection dbConnection = (SQLiteConnection) Database.Connection) {
+                SQLiteConnection dbConnection = (SQLiteConnection) Database.Connection;
+                if (dbConnection.State == ConnectionState.Closed) {
                     dbConnection.Open();
+                }
 
-                    using (SQLiteCommand cmd = new SQLiteCommand(Resources.addEfTables, dbConnection)) {
-                        cmd.ExecuteNonQuery();
-                    }
+                using (SQLiteCommand cmd = new SQLiteCommand(Resources.addEfTables, dbConnection)) {
+                    cmd.ExecuteNonQuery();
+                }
 
-                    DataTable cols = dbConnection.GetSchema("Columns");
-                    if (cols.Select("COLUMN_NAME='idStream' AND TABLE_NAME='streamdetails'").Length == 0) {
-                        using (SQLiteCommand cmdFix = new SQLiteCommand(Resources.StreamDetailsPK, dbConnection)) {
-                            cmdFix.ExecuteNonQuery();
-                        }
+                DataTable cols = dbConnection.GetSchema("Columns");
+                if (cols.Select("COLUMN_NAME='idStream' AND TABLE_NAME='streamdetails'").Length == 0) {
+                    using (SQLiteCommand cmdFix = new SQLiteCommand(Resources.StreamDetailsPK, dbConnection)) {
+                        cmdFix.ExecuteNonQuery();
                     }
                 }
             }

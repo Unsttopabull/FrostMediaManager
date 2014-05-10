@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
@@ -68,10 +69,14 @@ namespace RibbonUI.UserControls.List {
             EditAudio editAudio = new EditAudio {
                 Owner = ParentWindow,
                 SelectedAudio = audio,
-                SelectedLanguage = {
-                    ItemsSource = _service.Languages
-                }
             };
+
+            if (_service.Languages != null && _service.Languages.Any()) {
+                editAudio.SelectedLanguage.ItemsSource = _service.Languages;
+            }
+            else {
+                editAudio.SelectedLanguage.ItemsSource = UIHelper.LanguagesWithImages;
+            }
 
             editAudio.ShowDialog();
 

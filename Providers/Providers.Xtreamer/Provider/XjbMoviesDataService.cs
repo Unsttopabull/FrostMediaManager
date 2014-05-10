@@ -77,8 +77,13 @@ namespace Frost.Providers.Xtreamer.Provider {
         public IEnumerable<ICountry> Countries { get; private set; }
 
         public IEnumerable<IStudio> Studios { get; private set; }
+
         public IEnumerable<IGenre> Genres {
-            get { return _movies.SelectMany(m => m.Genres).Distinct<IGenre>(new HasNameEqualityComparer()); }
+            get {
+                return _movies.Where(m => m.Genres != null)
+                              .SelectMany(m => m.Genres)
+                              .Distinct<IGenre>(new HasNameEqualityComparer());
+            }
         }
 
         public IEnumerable<IAward> Awards { get; private set; }
@@ -253,7 +258,7 @@ namespace Frost.Providers.Xtreamer.Provider {
             foreach (XtActor actor in addedItems) {
                 XjbMoviePerson dbActor = _xjb.MoviesPersons.OfType<XjbActor>().FirstOrDefault(a => a.Person.Name == actor.Name && a.Character == actor.Character);
 
-                if(dbActor == null){
+                if (dbActor == null) {
                     dbActor = new XjbActor(FindPerson(actor, true), actor.Character);
                 }
 
@@ -262,8 +267,8 @@ namespace Frost.Providers.Xtreamer.Provider {
 
             foreach (XtActor actor in removedItems) {
                 XjbActor a = actor.Id > 0
-                    ? m.Cast.OfType<XjbActor>().FirstOrDefault(p => p.PersonId == actor.Id && p.Character == actor.Character)
-                    : m.Cast.OfType<XjbActor>().FirstOrDefault(p => p.Person.Name == actor.Name && p.Character == actor.Character);
+                                 ? m.Cast.OfType<XjbActor>().FirstOrDefault(p => p.PersonId == actor.Id && p.Character == actor.Character)
+                                 : m.Cast.OfType<XjbActor>().FirstOrDefault(p => p.Person.Name == actor.Name && p.Character == actor.Character);
 
                 if (a != null) {
                     m.Cast.Remove(a);

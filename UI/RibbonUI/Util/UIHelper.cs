@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Windows;
-using System.Windows.Media;
 using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
 using Frost.Common.Util.ISO;
 using Frost.GettextMarkupExtension;
-using Frost.InfoParsers.Models;
 using log4net;
 using RibbonUI.Design.Models;
 using RibbonUI.Util.ObservableWrappers;
@@ -33,6 +30,10 @@ namespace RibbonUI.Util {
             "BCE",
             "post"
         };
+
+        public static IEnumerable<MovieLanguage> LanguagesWithImages {
+            get { return GetLanguagesWithImages().Select(l => new MovieLanguage(new DesignLanguage(l))); }
+        }
 
         public static IEnumerable<MovieLanguage> Languages {
             get { return GetLanguages().Select(l => new MovieLanguage(l)); }

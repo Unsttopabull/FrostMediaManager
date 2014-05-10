@@ -134,9 +134,9 @@
                 </in:Interaction.Triggers>
             </e:DoubleUpDown>
 
-            <Label Content="{l:T Compression mode, Postfix=:}"/>
+            <Label Content="{l:T Compression mode, Postfix=:}" Target="{Binding ElementName=CompressionModeComboBox}"/>
             <ComboBox VerticalAlignment="Center" SelectedItem="{Binding SelectedVideo.CompressionMode}" IsEnabled="{Binding SelectedVideo[CompressionMode]}"
-                      ItemsSource="{Binding Source={StaticResource CompressionModes}}" SelectedIndex="0" />
+                      ItemsSource="{Binding Source={StaticResource CompressionModes}}" SelectedIndex="0"  x:Name="CompressionModeComboBox"/>
 
         </StackPanel>
         <StackPanel Grid.Row="0" Grid.Column="4">
@@ -254,7 +254,7 @@
                       ItemsSource="{Binding Source={StaticResource BitRateModes}}" IsEnabled="{Binding SelectedVideo[BitRateMode]}"/>
 
             <StackPanel Orientation="Horizontal">
-                <Label Content="{l:T Language, Postfix=:}"/>
+                <Label Content="{l:T Language, Postfix=:}" Target="{Binding ElementName=SelectedLanguage}"/>
                 <Button Style="{StaticResource TransparentBorderlessButtonCollapseOnTagNull}" ToolTip="{l:T Clear value}" Tag="{Binding ElementName=SelectedLanguage, Path=SelectedItem}">
                     <in:Interaction.Triggers>
                         <in:EventTrigger EventName="Click">

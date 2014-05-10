@@ -33,13 +33,16 @@ namespace Frost.Providers.Xtreamer.Proxies {
         private bool? _hasNfo;
         private readonly XtCover _xtCover;
         private readonly XtPlot _xtPlot;
+        private readonly XtStudio _xtStudio;
 
         public XtMovie(XjbPhpMovie movie, string xtPath) : base(movie) {
             _xtreamerPath = xtPath;
             _xtPathRoot = Path.GetPathRoot(_xtreamerPath);
 
+            _studios = new List<IStudio>();
+            _xtStudio = new XtStudio(Entity);
             if (Entity.Studio != null) {
-                _studios = new List<IStudio> { new XtStudio(Entity) };
+                _studios.Add(_xtStudio);
             }
 
             _audios = new List<IAudio> { new XtAudio(Entity, _xtreamerPath) };
@@ -607,7 +610,7 @@ namespace Frost.Providers.Xtreamer.Proxies {
         /// <value>The movie genres.</value>
         public IEnumerable<IGenre> Genres {
             get {
-                if (_genres != null) {
+                if (_genres == null) {
                     _genres = new ChangeTrackingCollection<XtGenre>(
                         Entity.Genres.Select(g => new XtGenre(g)).ToList(),
                         g => Entity.Genres.Add(g.ProxiedEntity),
@@ -834,11 +837,23 @@ namespace Frost.Providers.Xtreamer.Proxies {
         }
 
         public IStudio AddStudio(IStudio studio) {
-            throw new NotSupportedException();
+            if (_studios.Count != 0) {
+                throw new NotSupportedException("Can only edit existing studio.");
+            }
+            
+            _xtStudio.Name = studio.Name;
+            _studios.Add(_xtStudio);
+
+            return _xtStudio;
         }
 
         public bool RemoveStudio(IStudio studio) {
-            throw new NotSupportedException();
+            if (_xtStudio != null) {
+                _xtStudio.Name = null;
+            }
+            _studios.Clear();
+
+            return true;
         }
 
         /// <summary>Adds the specified award to the provider data store.</summary>

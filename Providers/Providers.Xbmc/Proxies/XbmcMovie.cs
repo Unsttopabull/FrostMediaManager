@@ -153,7 +153,6 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <summary>Gets or sets the information about video streams of this movie.</summary>
         /// <value>The information about video streams of this movie</value>
         public IEnumerable<IVideo> Videos {
-            //get { return Entity.File.StreamDetails.OfType<XbmcVideoDetails>(); }
             get {
                 return Entity.File.StreamDetails
                              .Where(sd => sd.Type == StreamType.Video)
@@ -164,7 +163,6 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <summary>Gets or sets the information about audio streams of this movie.</summary>
         /// <value>The information about audio streams of this movie</value>
         public IEnumerable<IAudio> Audios {
-            //get { return Entity.File.StreamDetails.OfType<XbmcAudioDetails>(); }
             get {
                 return Entity.File.StreamDetails
                              .Where(sd => sd.Type == StreamType.Audio)
@@ -187,8 +185,7 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <summary>Gets or sets the movie promotional images.</summary>
         /// <value>The movie promotional images</value>
         public IEnumerable<IArt> Art {
-            get { return Entity.Art.Where(a => (a.Type == XbmcArt.FANART || a.Type == XbmcArt.POSTER) && a.MediaType == XbmcArt.MOVIE); }
-            //get { return null; }
+            get { return Entity.Art.Where(a => a != null && (a.Type == XbmcArt.FANART || a.Type == XbmcArt.POSTER) && a.MediaType == XbmcArt.MOVIE); }
         }
 
         #endregion
@@ -213,7 +210,7 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <summary>Gets or sets the default cover.</summary>
         /// <value>The default cover.</value>
         public IArt DefaultCover {
-            get { return Entity.Art.FirstOrDefault(a => a.Type == XbmcArt.POSTER); }
+            get { return Entity.Art.FirstOrDefault(a => a != null && a.Type == XbmcArt.POSTER); }
             set {
                 if (value == null) {
                     Entity.Art.RemoveWhere(a => a.Type == XbmcArt.POSTER);
@@ -237,7 +234,7 @@ namespace Frost.Providers.Xbmc.Proxies {
         /// <summary>Gets or sets the default fanart to be displayed.</summary>
         /// <value>The default fanart.</value>
         public IArt DefaultFanart {
-            get { return Entity.Art.FirstOrDefault(a => a.Type == XbmcArt.FANART); }
+            get { return Entity.Art.FirstOrDefault(a => a != null && a.Type == XbmcArt.FANART); }
             set {
                 if (value == null) {
                     Entity.Art.RemoveWhere(a => a.Type == XbmcArt.FANART);

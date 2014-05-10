@@ -12,6 +12,7 @@ using Frost.Common;
 using Frost.Common.Models.Provider;
 using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
+using log4net;
 using RibbonUI.Annotations;
 using RibbonUI.Design;
 using RibbonUI.Util;
@@ -21,6 +22,7 @@ using Swordfish.NET.Collections;
 namespace RibbonUI.UserControls {
 
     public class ContentGridViewModel : INotifyPropertyChanged, IDisposable {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(ContentGridViewModel));
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IDisposable _searchObservable;
         private readonly IMoviesDataService _service;
@@ -38,8 +40,19 @@ namespace RibbonUI.UserControls {
 
             _lastChangedMovie = DateTime.Now;
 
-            Movies = new ConcurrentObservableCollection<ObservableMovie>(_service.Movies.Select(m => new ObservableMovie(m)));
-            _service.Movies.CollectionChanged += MoviesChanged;
+            try {
+                Movies = new ConcurrentObservableCollection<ObservableMovie>(_service.Movies.Select(m => new ObservableMovie(m)));
+                _service.Movies.CollectionChanged += MoviesChanged;
+            }
+            catch (Exception e) {
+                MessageBox.Show(Gettext.T("Provider service returned an error while retrieving movies."));
+
+                if (Log.IsFatalEnabled) {
+                    Log.Fatal(string.Format("Exception occured while retrieving movies from the provider service \"{0}\".", _service), e);
+                }
+                Application.Current.Shutdown();
+                return;
+            }
 
 
             _searchObservable = Observable.FromEventPattern<PropertyChangedEventArgs>(this, "PropertyChanged")
