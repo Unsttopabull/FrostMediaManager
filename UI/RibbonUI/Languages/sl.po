@@ -469,7 +469,7 @@ msgid "Add"
 msgstr "Dodaj"
 
 msgid "SelectCountry"
-msgstr "Izberi državo"
+msgstr "Izberi države"
 
 msgid "Add new genres"
 msgstr "Dodaj nove žanre"
@@ -664,7 +664,7 @@ msgid "This actor already exists in the list. To add another actor's role specif
 msgstr "Ta igralec že obstaja. Če želite dodati igralca v novi vlogi prosimo navedite drugaćno vlogo."
 
 msgid "Please note this will edit this studio name in all the movies in the collection.\nIf you want to edit studio name only for this movie remove this studio add a new one with desired name.\n\nDo you really want to edit this studio?"
-msgstr "To bo uredilo ime studija za vse fime.\nČe želite urediti ime samo za ta film odstranite za studio in dodajte novega z želenim imenom.\n\nŽelite urediti ta studijo?"
+msgstr "To bo uredilo ime studija za vse filme.Če želite urediti ime samo za ta film odstranite za studio in dodajte novega z želenim imenom.\n\nŽelite urediti ta studijo?"
 
 msgid "Studio edit"
 msgstr "Urejanje studija"
@@ -764,6 +764,9 @@ msgstr "nagrada"
 
 msgid "country"
 msgstr "država"
+
+msgid "studio"
+msgstr "studijo"
 
 msgid "promotional video"
 msgstr "promocijski videoposnetek"
@@ -903,3 +906,59 @@ msgstr "Napaka med dostopanjem do po vtičnika informacij filmov."
 msgid "Error accessing subtitle provider."
 msgstr "Napaka med dostopanjem do vtičnika za podnapise."
 
+msgid "Search for movie info online"
+msgstr "Poišči informacije filma na spletu"
+
+msgid "Search for art online"
+msgstr "Poišči slike filma na spletu"
+
+msgid "Search for promotional videos online"
+msgstr "Poišči promocijske videoposnetke na spletu"
+
+msgid "Codec Id"
+msgstr "Id kodeka"
+
+msgid "Mapped codec"
+msgstr "Preslikava kodeka"
+
+msgid "Folder to search for movies"
+msgstr "Mape v katerih iskati filme"
+
+msgid "Searching & Detection"
+msgstr "Iskanje & Zaznavanje"
+
+msgid "Current movie"
+msgstr "Trenutni film"
+
+msgid "Search for new movies"
+msgstr "Išči nove filme"
+
+msgid "Export movies"
+msgstr "Izvozi filme"
+
+msgid "Open movie folder"
+msgstr "Odpri mapo filma"
+
+msgid "Play movie"
+msgstr "Odpri film"
+
+msgid "Remove movie"
+msgstr "Odstrani film"
+
+msgid "Save changes"
+msgstr "Shrani spemembe"
+
+msgid "Options"
+msgstr "Nastavitve"
+
+msgid "Update movie information"
+msgstr "Posodobi informacije filma"
+
+msgid "Download art"
+msgstr "Prenesi slike"
+
+msgid "Download promotional videos"
+msgstr "Prenesi promocijske videoposnetke"
+
+msgid "Movie info"
+msgstr "Informacije filma"

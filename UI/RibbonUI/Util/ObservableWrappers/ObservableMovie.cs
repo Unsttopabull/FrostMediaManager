@@ -932,7 +932,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 Writers.Add(p);
             }
             else if(!silent){
-                MessageBox.Show(Gettext.T("This person has already been added to this movie as {0}.", "a writer"));
+                MessageBox.Show(Gettext.T("This person has already been added to this movie as {0}.", Gettext.T("a writer")));
             }
             return p;
         }
@@ -956,7 +956,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 OnPropertyChanged("DirectorNames");
             }
             else if(!silent){
-                MessageBox.Show(Gettext.T("This person has already been added to this movie as {0}.", "a director"));
+                MessageBox.Show(Gettext.T("This person has already been added to this movie as {0}.", Gettext.T("a director")));
             }
             return p;
         }
@@ -989,7 +989,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 OnPropertyChanged("GenreNames");
             }
             else if(!silent){
-                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", "genre"));
+                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", Gettext.T("genre")));
             }
         }
 
@@ -1033,7 +1033,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 OnPropertyChanged("FirstStudioLogo");
             }
             else if(!silent){
-                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", "genre"));
+                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", Gettext.T("studio")));
             }
         }
 
@@ -1056,7 +1056,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 Awards.Add(a);
             }
             else if(!silent){
-                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", "award"));
+                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", Gettext.T("award")));
             }
         }
 
@@ -1077,7 +1077,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 Countries.Add(new MovieCountry(c));
             }
             else if(!silent){
-                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", "country"));
+                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", Gettext.T("country")));
             }
         }
 
@@ -1134,7 +1134,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             IPromotionalVideo v = Add(_observedEntity.AddPromotionalVideo, promotionalVideo, silent);
             if (v == null) {
                 if (!silent) {
-                    MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", "promotional video"));
+                    MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", Gettext.T("promotional video")));
                 }
                 return;
             }
@@ -1143,7 +1143,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 PromotionalVideos.Add(v);
             }
             else if(!silent){
-                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", "promotional video"));
+                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", Gettext.T("promotional video")));
             }
         }
 
@@ -1158,7 +1158,7 @@ namespace RibbonUI.Util.ObservableWrappers {
             IArt a = Add(_observedEntity.AddArt, art, silent);
             if (a == null) {
                 if (!silent) {
-                    MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", "art"));
+                    MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", Gettext.T("art")));
                 }
                 return;
             }
@@ -1177,7 +1177,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 }
             }
             else if(!silent){
-                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", "promotional video"));
+                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", Gettext.T("promotional video")));
             }            
         }
 
@@ -1208,7 +1208,7 @@ namespace RibbonUI.Util.ObservableWrappers {
                 OnPropertyChanged("HasArt");
             }
             else if(!silent){
-                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", "country"));
+                MessageBox.Show(Gettext.T("This {0} has already been added to this movie.", Gettext.T("country")));
             }
         }
 

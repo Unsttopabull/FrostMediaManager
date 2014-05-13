@@ -10,7 +10,7 @@
         xmlns:util="clr-namespace:RibbonUI.Util"
         xmlns:add="clr-namespace:RibbonUI.Windows.Add"
         mc:Ignorable="d" d:DataContext="{d:DesignInstance add:AddCodecMappingViewModel}"
-        Title="{l:T Add codec mapping}" Height="615" Width="485" Closed="AddCodecMappingOnClosed">
+        Title="{l:T Add codec mapping}" Height="615" Width="605" Closed="AddCodecMappingOnClosed">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>

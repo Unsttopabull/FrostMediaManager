@@ -6,6 +6,7 @@
              xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:settings="clr-namespace:RibbonUI.UserControls.Settings"
+             xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
              mc:Ignorable="d" Loaded="GeneralSettingsOnLoaded"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.DataContext>
@@ -43,15 +44,11 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0">Folder to search for movies:</Label>
+            <Label Grid.Row="0" Grid.Column="0" Content="{l:T Folder to search for movies, Postfix=:}"/>
             <ListBox x:Name="MovieFolders" Grid.Row="1" Grid.Column="0" MinHeight="100" ItemsSource="{Binding SearchFolders}" />
             <StackPanel Grid.Row="0" VerticalAlignment="Center" Orientation="Horizontal" FlowDirection="RightToLeft">
-                <Button Style="{StaticResource TransparentBorderlessButton}" Command="{Binding RemoveMovieFolderCommand}" CommandParameter="{Binding ElementName=MovieFolders, Path=SelectedItem}">
-                    <Image Source="../../Images/remove.png" MaxHeight="16" />
-                </Button>
-                <Button Style="{StaticResource TransparentBorderlessButton}" Command="{Binding AddMovieFolderCommand}">
-                    <Image Source="../../Images/add.png" MaxHeight="16" />
-                </Button>
+                <fmm:ImageButton Command="{Binding RemoveMovieFolderCommand}" CommandParameter="{Binding ElementName=MovieFolders, Path=SelectedItem}" Style="{StaticResource RemoveButton}"/>
+                <fmm:ImageButton Command="{Binding AddMovieFolderCommand}" Style="{StaticResource AddButton}"/>
             </StackPanel>
         </Grid>
     </Grid>

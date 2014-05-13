@@ -39,7 +39,7 @@
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Label Grid.Column="0" Grid.Row="0" Content="Search for movie info online:" Margin="0,0,5,0"/>
+        <Label Grid.Column="0" Grid.Row="0" Content="{l:T Search for movie info online, Postfix=:}" Margin="0,0,5,0"/>
         <CheckBox x:Name="MovieInfo" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Margin="0,0,5,0" IsChecked="{Binding ElementName=SearchSettingsWindow, Path=SearchInfo}"/>
 
         <GroupBox Header="Movie info plugin select" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,5,5"
@@ -48,7 +48,7 @@
                       SelectedItem="{Binding ElementName=SearchSettingsWindow, Path=InfoPlugin}" Margin="5,0,0,0"/>
         </GroupBox>
 
-        <Label Grid.Column="0" Grid.Row="3" Content="Search for art online:" Margin="0,0,5,0"/>
+        <Label Grid.Column="0" Grid.Row="3" Content="{l:T Search for art online, Postfix=:}" Margin="0,0,5,0"/>
         <CheckBox x:Name="MovieArt" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center" Margin="0,0,5,0" IsChecked="{Binding ElementName=SearchSettingsWindow, Path=SearchArt}"/>
         <GroupBox Header="Art plugin select" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,5,5"
                   Visibility="{Binding ElementName=MovieArt, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -56,7 +56,7 @@
                       SelectedItem="{Binding ElementName=SearchSettingsWindow, Path=ArtPlugin}" Margin="5,0,0,0"/>
         </GroupBox>       
 
-        <Label Grid.Column="0" Grid.Row="5" Content="Search for promotional videos online:" Margin="0,0,5,0"/>
+        <Label Grid.Column="0" Grid.Row="5" Content="{l:T Search for promotional videos online, Postfix=:}" Margin="0,0,5,0"/>
         <CheckBox x:Name="MovieVideos" Grid.Column="1" Grid.Row="5" VerticalAlignment="Center" Margin="0,0,5,0" IsChecked="{Binding ElementName=SearchSettingsWindow, Path=SearchVideos}"/>
         <GroupBox Header="Promotional videos plugin select" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,0,5,5"
                   Visibility="{Binding ElementName=MovieVideos, Path=IsChecked, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -69,8 +69,8 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button Content="Search" Grid.Column="0" Margin="5,0,5,5" Click="OnSearchClick"/>
-            <Button Content="Cancel" Grid.Column="1" Margin="5,0,5,5" Click="SearchSettingsOnCancelClick"/>
+            <Button Content="{l:T Search}" Grid.Column="0" Margin="5,0,5,5" Click="OnSearchClick"/>
+            <Button Content="{l:T Cancel}" Grid.Column="1" Margin="5,0,5,5" Click="SearchSettingsOnCancelClick"/>
         </Grid>
     </Grid>
 </Window>

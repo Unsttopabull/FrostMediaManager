@@ -62,8 +62,8 @@
                   AutoGenerateColumns="False" CellStyle="{StaticResource NoBorderCell}" GridLinesVisibility="None"
                   SelectionMode="Single" RowDetailsVisibilityMode="Collapsed" RowHeaderWidth="0">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Codec Id" Binding="{Binding CodecId}" MinWidth="150" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Mapped codec" Binding="{Binding Mapping}" IsReadOnly="True" Width="*" />
+                <DataGridTextColumn Header="{l:T Codec Id}" Binding="{Binding CodecId}" MinWidth="150" IsReadOnly="True"/>
+                <DataGridTextColumn Header="{l:T Mapped codec}" Binding="{Binding Mapping}" IsReadOnly="True" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
 
@@ -80,8 +80,8 @@
                 <KeyBinding Key="Delete" Command="{Binding RemoveVideoCodecMappingCommand}" CommandParameter="{Binding ElementName=VideoCodecBindings, Path=SelectedItem}"/>
             </DataGrid.InputBindings>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Codec Id" Binding="{Binding CodecId}" MinWidth="150" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Mapped codec" Binding="{Binding Mapping}" IsReadOnly="True" Width="*"/>
+                <DataGridTextColumn Header="{l:T Codec Id}" Binding="{Binding CodecId}" MinWidth="150" IsReadOnly="True"/>
+                <DataGridTextColumn Header="{l:T Mapped codec}" Binding="{Binding Mapping}" IsReadOnly="True" Width="*"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

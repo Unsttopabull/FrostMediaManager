@@ -466,7 +466,7 @@ msgid "Add"
 msgstr "Add"
 
 msgid "SelectCountry"
-msgstr "Select country"
+msgstr "Select countries"
 
 msgid "Add new genres"
 msgstr "Add new genres"
@@ -763,6 +763,9 @@ msgstr "award"
 msgid "country"
 msgstr "country"
 
+msgid "studio"
+msgstr "studio"
+
 msgid "promotional video"
 msgstr "promotional video"
 
@@ -901,3 +904,59 @@ msgstr "Error accessing movie info provider."
 msgid "Error accessing subtitle provider."
 msgstr "Error accessing subtitle provider."
 
+msgid "Search for movie info online"
+msgstr "Search for movie info online"
+
+msgid "Search for art online"
+msgstr "Search for art online"
+
+msgid "Search for promotional videos online"
+msgstr "Search for promotional videos online"
+
+msgid "Codec Id"
+msgstr "Codec Id"
+
+msgid "Mapped codec"
+msgstr "Mapped codec"
+
+msgid "Folder to search for movies"
+msgstr "Folder to search for movies"
+
+msgid "Searching & Detection"
+msgstr "Searching & Detection"
+
+msgid "Current movie"
+msgstr "Current movie"
+
+msgid "Search for new movies"
+msgstr "Search for new movies"
+
+msgid "Export movies"
+msgstr "Export movies"
+
+msgid "Open movie folder"
+msgstr "Open movie folder"
+
+msgid "Play movie"
+msgstr "Play movie"
+
+msgid "Remove movie"
+msgstr "Remove movie"
+
+msgid "Save changes"
+msgstr "Save changes"
+
+msgid "Options"
+msgstr "Options"
+
+msgid "Update movie information"
+msgstr "Update movie information"
+
+msgid "Download art"
+msgstr "Download art"
+
+msgid "Download promotional videos"
+msgstr "Download promotional videos"
+
+msgid "Movie info"
+msgstr "Movie info"

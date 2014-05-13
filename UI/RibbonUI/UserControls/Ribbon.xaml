@@ -23,42 +23,42 @@
         </Ribbon.ApplicationMenu>
 
         <RibbonTab IsSelected="{Binding IsSearchTabSelected}" Header="{l:T Search}" Margin="0,1,0,-1">
-            <RibbonGroup Header="Searching &amp; Detection">
-                <RibbonButton LargeImageSource="../Images/search.ico" Label="Search for new movies" Command="{Binding SearchCommand}" />
-                <RibbonButton SmallImageSource="../Images/export.png" Label="Export movies" Command="{Binding ExportMoviesCommand}"/>
+            <RibbonGroup Header="{l:T Searching &amp; Detection}">
+                <RibbonButton LargeImageSource="../Images/search.ico" Label="{l:T Search for new movies}" Command="{Binding SearchCommand}" />
+                <RibbonButton SmallImageSource="../Images/export.png" Label="{l:T Export movies}" Command="{Binding ExportMoviesCommand}"/>
             </RibbonGroup>
-            <RibbonGroup Header="Current movie">
+            <RibbonGroup Header="{l:T Current movie}">
                 <RibbonButton x:Name="OpenInFolder" x:FieldModifier="private"
-                              LargeImageSource="../Images/movieFolder.ico" Label="Open movie folder"
+                              LargeImageSource="../Images/movieFolder.ico" Label="{l:T Open movie folder}"
                               ToolTip="{Binding SelectedMovie.DirectoryPath}"
                               Command="{Binding OpenMovieInFolderCommand}" />
-                <RibbonButton SmallImageSource="../Images/play.png" Label="Play movie" Command="{Binding PlayMovieCommand}"/>
-                <RibbonButton SmallImageSource="../Images/remove2.png" Label="Remove movie" Command="{Binding RemoveMovieCommand}"/>
+                <RibbonButton SmallImageSource="../Images/play.png" Label="{l:T Play movie}" Command="{Binding PlayMovieCommand}"/>
+                <RibbonButton SmallImageSource="../Images/remove2.png" Label="{l:T Remove movie}" Command="{Binding RemoveMovieCommand}"/>
             </RibbonGroup>
             <RibbonGroup>
-                <RibbonButton LargeImageSource="../Images/save.png" Label="Save changes" Command="{Binding SaveChangesCommand}"/>
+                <RibbonButton LargeImageSource="../Images/save.png" Label="{l:T Save changes}" Command="{Binding SaveChangesCommand}"/>
             </RibbonGroup>
             <RibbonGroup>
-                <RibbonButton LargeImageSource="../Images/options.png" Label="Options" Command="{Binding OptionsCommand}"/>
+                <RibbonButton LargeImageSource="../Images/options.png" Label="{l:T Options}" Command="{Binding OptionsCommand}"/>
             </RibbonGroup>            
         </RibbonTab>
 
         <RibbonTab IsSelected="{Binding IsDetectTabSelected}" Header="{l:T Web update}">
-            <RibbonGroup Header="Movie info" Background="#00000000" Height="86" Margin="0">
-                <RibbonMenuButton x:Name="MovieInfoDownloaders" LargeImageSource="../Images/update.png" Label="Update movie information"/>
+            <RibbonGroup Header="{l:T Movie info}" Background="#00000000" Height="86" Margin="0">
+                <RibbonMenuButton x:Name="MovieInfoDownloaders" LargeImageSource="../Images/update.png" Label="{l:T Update movie information}"/>
             </RibbonGroup>
-            <RibbonGroup Header="Art">
-                <RibbonMenuButton x:Name="MovieArtDownloaders" LargeImageSource="../Images/art.png" Label="Download art" IsEnabled="{Binding SelectedMovie[Art], FallbackValue=False, TargetNullValue=False}"/>
+            <RibbonGroup Header="{l:T Art}">
+                <RibbonMenuButton x:Name="MovieArtDownloaders" LargeImageSource="../Images/art.png" Label="{l:T Download art}" IsEnabled="{Binding SelectedMovie[Art], FallbackValue=False, TargetNullValue=False}"/>
             </RibbonGroup>
             <RibbonGroup>
-                <RibbonMenuButton x:Name="MovieVideoDownloaders" LargeImageSource="../Images/video.png" Label="Download promotional videos" IsEnabled="{Binding SelectedMovie[PromotionalVideos], TargetNullValue=False, FallbackValue=False}"/>
+                <RibbonMenuButton x:Name="MovieVideoDownloaders" LargeImageSource="../Images/video.png" Label="{l:T Download promotional videos}" IsEnabled="{Binding SelectedMovie[PromotionalVideos], TargetNullValue=False, FallbackValue=False}"/>
             </RibbonGroup>
         </RibbonTab>
 
         <RibbonTab x:Name="SubtitlesTab" IsSelected="{Binding IsSubtitlesTabSelected}" Header="{l:T Subtitles}">
-            <RibbonGroup Header="Subtitles" IsEnabled="True">
-                <RibbonMenuButton x:Name="MovieSubtitleDownloaders" Label="Download" LargeImageSource="../Images/add.png"/>
-                <RibbonButton Label="Detect Language" LargeImageSource="../Images/search_subs.ico" Command="{Binding DetectSubtitleLanguage}"/>
+            <RibbonGroup Header="{l:T Subtitles}" IsEnabled="True">
+                <RibbonMenuButton x:Name="MovieSubtitleDownloaders" Label="{l:T Download}" LargeImageSource="../Images/add.png"/>
+                <!--<RibbonButton Label="{l:T Detect Language}" LargeImageSource="../Images/search_subs.ico" Command="{Binding DetectSubtitleLanguage}"/>-->
             </RibbonGroup>
         </RibbonTab>
     </Ribbon>
