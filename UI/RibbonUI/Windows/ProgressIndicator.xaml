@@ -9,7 +9,7 @@
         WindowStyle="ToolWindow" ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
         Title="{l:T Downloading ...}" SizeToContent="WidthAndHeight" x:Name="WebUpdaterWindow">
     <StackPanel Margin="5">
-        <TextBlock Text="{l:T Downloading...}" Margin="0,0,0,5"/>
+        <TextBlock Text="{l:T Downloading ...}" Margin="0,0,0,5"/>
         <Grid>
             <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"
                        Panel.ZIndex="3" Foreground="Black" FontWeight="ExtraBold"/>

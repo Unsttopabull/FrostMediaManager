@@ -136,7 +136,7 @@ namespace RibbonUI.Util {
         public static void HandleProviderException(ILog log, Exception exception) {
             string exceptionText;
             if (exception is NotSupportedException) {
-                exceptionText = string.Format("Provider does not support the requested operation.{0}", !string.IsNullOrEmpty(exception.Message) ? "\nProvider message: " + exception.Message : null);
+                exceptionText = string.Format(Gettext.T("Provider does not support the requested operation.")+"{0}", (!string.IsNullOrEmpty(exception.Message) ? Gettext.T("\nProvider message: ") + exception.Message : null));
                 if (log.IsErrorEnabled) {
                     log.Error(exceptionText, exception);
                 }
@@ -146,7 +146,7 @@ namespace RibbonUI.Util {
             }
 
             if (exception is NotImplementedException) {
-                exceptionText = string.Format("Provider has not implemented the requested operation.{0}", !string.IsNullOrEmpty(exception.Message) ? "\nProvider message: " + exception.Message : null);
+                exceptionText = string.Format(Gettext.T("Provider has not implemented the requested operation.")+"{0}", !string.IsNullOrEmpty(exception.Message) ? Gettext.T("\nProvider message: ") + exception.Message : null);
 
                 if (log.IsErrorEnabled) {
                     log.Error(exceptionText, exception);
@@ -156,7 +156,7 @@ namespace RibbonUI.Util {
                 return;
             }
 
-            exceptionText = string.Format("An error has occured int the provider{0}", !string.IsNullOrEmpty(exception.Message) ? "\nProvider message: " + exception.Message : null);
+            exceptionText = string.Format(Gettext.T("An error has occured in the provider.")+"{0}", !string.IsNullOrEmpty(exception.Message) ? Gettext.T("\nProvider message: ") + exception.Message : null);
             if (log.IsErrorEnabled) {
                 log.Error(exceptionText, exception);
             }
@@ -164,12 +164,4 @@ namespace RibbonUI.Util {
             MessageBox.Show(exceptionText);
         }
     }
-
-    public enum PluginType {
-        Art,
-        MovieInfo,
-        Subtitles,
-        Videos
-    }
-
 }

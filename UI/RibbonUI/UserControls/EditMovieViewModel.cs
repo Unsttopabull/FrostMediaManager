@@ -382,7 +382,7 @@ namespace RibbonUI.UserControls {
                     //check if they have already been added as an actor without a character
                     MovieActor ma = SelectedMovie.Actors.FirstOrDefault(a => a.Name == person.Name && a.Character == null);
                     if (ma != null) {
-                        MessageBox.Show(ParentWindow, Gettext.T("This actor with unspecified character already exists in the list. To add another role specify a character."));
+                        MessageBox.Show(ParentWindow, Gettext.T("This actor with unspecified character already exists in the list. To add another role please specify a character."));
                         return;
                     }
 
@@ -453,10 +453,13 @@ namespace RibbonUI.UserControls {
 
         private void EditStudioOnClick(MovieStudio studio) {
             if (MessageBox.Show(ParentWindow,
-                "Please note this will edit this studio name in all the movies in the collection.\n" +
-                "If you want to edit studio name only for this movie remove this studio add a new one with desired name.\n\n" +
-                "Do you really want to edit this studio?",
-                "Studio edit", MessageBoxButton.YesNo) != MessageBoxResult.Yes) {
+                Gettext.T("Please note this will edit this studio name in all the movies in the collection.\n" +
+                          "If you want to edit studio name only for this movie remove this studio add a new one with desired name.\n\n" +
+                          "Do you really want to edit this studio?"),
+                Gettext.T("Studio edit"),
+                MessageBoxButton.YesNo) != MessageBoxResult.Yes) 
+            {
+
                 return;
             }
 

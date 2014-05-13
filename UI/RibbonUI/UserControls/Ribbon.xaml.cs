@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Ribbon;
 using System.Windows.Media.Imaging;
+using Frost.GettextMarkupExtension;
 using Frost.InfoParsers.Models;
 using Frost.InfoParsers.Models.Art;
 using Frost.InfoParsers.Models.Info;
@@ -113,7 +114,7 @@ namespace RibbonUI.UserControls {
                     cli = LightInjectContainer.GetInstance<ISubtitleClient>(clientName);
                 }
                 catch (Exception e) {
-                    MessageBox.Show(string.Format("Failed to load plugin {0}.\n\n{1}", clientName, e.Message));
+                    MessageBox.Show(string.Format(Gettext.T("Failed to load plugin {0}.\n\n{1}"), clientName, e.Message));
                     continue;
                 }
 
@@ -135,7 +136,7 @@ namespace RibbonUI.UserControls {
                     cli = LightInjectContainer.GetInstance<IFanartClient>(clientName);
                 }
                 catch (Exception e) {
-                    MessageBox.Show(string.Format("Failed to load plugin {0}.\n\n{1}", clientName, e.Message));
+                    MessageBox.Show(string.Format(Gettext.T("Failed to load plugin {0}.\n\n{1}"), clientName, e.Message));
                     continue;
                 }
 
@@ -157,7 +158,7 @@ namespace RibbonUI.UserControls {
                     cli = LightInjectContainer.GetInstance<IPromotionalVideoClient>(clientName);
                 }
                 catch (Exception e) {
-                    MessageBox.Show(string.Format("Failed to load plugin {0}.\n\n{1}", clientName, e.Message));
+                    MessageBox.Show(string.Format(Gettext.T("Failed to load plugin {0}.\n\n{1}"), clientName, e.Message));
                     continue;
                 }
 
@@ -179,7 +180,7 @@ namespace RibbonUI.UserControls {
                     cli = LightInjectContainer.GetInstance<IParsingClient>(clientName);
                 }
                 catch (Exception e) {
-                    MessageBox.Show(string.Format("Failed to load plugin {0}.\n\n{1}", clientName, e.Message));
+                    MessageBox.Show(string.Format(Gettext.T("Failed to load plugin {0}.\n\n{1}"), clientName, e.Message));
                     continue;
                 }
 

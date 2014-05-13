@@ -8,7 +8,7 @@
         mc:Ignorable="d" WindowStyle="ToolWindow" ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
         Title="{l:T Web art updater}" SizeToContent="WidthAndHeight" x:Name="WebArtUpdaterWindow" d:DataContext="{d:DesignInstance webUpdate:ArtUpdater}">
     <StackPanel Margin="5">
-        <TextBlock Text="{Binding LabelText, FallbackValue={l:T Downloading...}, TargetNullValue={l:T Downloading ...}}" Margin="0,0,0,5"/>
+        <TextBlock Text="{Binding LabelText, FallbackValue={l:T Downloading ...}, TargetNullValue={l:T Downloading ...}}" Margin="0,0,0,5"/>
         <Grid>
             <TextBlock TextAlignment="Center" HorizontalAlignment="Center" Panel.ZIndex="3" Foreground="Black" FontWeight="ExtraBold"
                        VerticalAlignment="Center" Text="{Binding ProgressText, FallbackValue={l:T Searching for art online}, TargetNullValue={l:T Searching for art online}}"/>

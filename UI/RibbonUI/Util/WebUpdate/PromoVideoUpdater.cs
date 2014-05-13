@@ -55,19 +55,19 @@ namespace RibbonUI.Util.WebUpdate {
             try {
                 if (_cli.IsImdbSupported && !string.IsNullOrEmpty(_movie.ImdbID)) {
                     if (!silent) {
-                        ProgressText = "Searching for videos by Imdb ID";
+                        ProgressText = Gettext.T("Searching for videos by Imdb ID");
                     }
                     parsedVideos = await Task.Run(() => _cli.GetMovieVideosFromImdbId(_movie.ImdbID));
                 }
                 else if (_cli.IsTmdbSupported && !string.IsNullOrEmpty(_movie.TmdbID)) {
                     if (!silent) {
-                        ProgressText = "Searching for videos by Tmdb ID";
+                        ProgressText = Gettext.T("Searching for videos by Tmdb ID");
                     }
                     parsedVideos = await Task.Run(() => _cli.GetMovieVideosFromTmdbId(_movie.TmdbID));
                 }
                 else if (_cli.IsTitleSupported) {
                     if (!silent) {
-                        ProgressText = "Searching for videos by Title";
+                        ProgressText = Gettext.T("Searching for videos by Title");
                     }
                     parsedVideos = await Task.Run(() => _cli.GetMovieVideosFromTitle(_movie.Title, (int) (_movie.ReleaseYear.HasValue ? _movie.ReleaseYear.Value : 0)));
                 }
@@ -82,10 +82,10 @@ namespace RibbonUI.Util.WebUpdate {
                     }
 
                     if (_cli.IsTitleSupported) {
-                        lst.Add("Movie title");
+                        lst.Add(Gettext.T("Movie title"));
                     }
 
-                    MessageBox.Show(string.Format("No required info found. Plugin requires : {0}", string.Join(" or ", lst)));
+                    MessageBox.Show(string.Format(Gettext.T("No required info found. Plugin requires:") + "{0}", string.Join(Gettext.T(" or "), lst)));
                     return false;
                 }
             }

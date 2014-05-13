@@ -12,6 +12,7 @@ using Frost.Common;
 using Frost.Common.Models;
 using Frost.Common.Models.FeatureDetector;
 using Frost.DetectFeatures;
+using Frost.GettextMarkupExtension;
 using Frost.InfoParsers.Models;
 using Frost.InfoParsers.Models.Art;
 using Frost.InfoParsers.Models.Info;
@@ -224,12 +225,12 @@ namespace RibbonUI.Windows.Search {
                     }
                 }
 
-                const string ERROR_MESSAGE = "Errors occured during detection phase. Search & Save can not continue.";
+                string errorMessage = Gettext.T("Errors occured during detection phase. Search & Save can not continue.");
                 if (ParentWindow != null) {
-                    MessageBox.Show(ParentWindow, ERROR_MESSAGE);
+                    MessageBox.Show(ParentWindow, errorMessage);
                 }
                 else {
-                    MessageBox.Show(ERROR_MESSAGE);
+                    MessageBox.Show(errorMessage);
                 }
                 CloseParentWindow();
             }

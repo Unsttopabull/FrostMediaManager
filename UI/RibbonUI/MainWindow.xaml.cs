@@ -46,7 +46,10 @@ namespace RibbonUI {
             }
             catch (Exception e) {
                 MessageBox.Show(Gettext.T("There was an error loading the provider, see log for more info. Program will now exit."));
-                Log.Fatal(string.Format("There was an error loading the provider assembly file \"{0}\"", assemblyPath), e);
+
+                if (Log.IsFatalEnabled) {
+                    Log.Fatal(string.Format("There was an error loading the provider assembly file \"{0}\"", assemblyPath), e);
+                }
 
                 Application.Current.Shutdown();
                 return;

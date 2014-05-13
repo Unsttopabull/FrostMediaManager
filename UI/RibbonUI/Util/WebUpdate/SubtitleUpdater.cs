@@ -75,7 +75,7 @@ namespace RibbonUI.Util.WebUpdate {
                     Log.Warn(string.Format("Error downloading subtitle data {0} with plugin {1}.", arg, _cli.Name), e);
                 }
                 if (!silent) {
-                    MessageBox.Show("An error has occured downloading subtitle information.");
+                    MessageBox.Show(Gettext.T("An error has occured downloading subtitle information."));
                 }
 
                 return;
@@ -85,7 +85,7 @@ namespace RibbonUI.Util.WebUpdate {
                 Log.Error(string.Format("Unknown error has occured while getting subtitle info {0} from plugin \"{1}\".", arg, _cli.Name), e);
 
                 if (!silent) {
-                    MessageBox.Show("An error has occured getting subtitle information.");
+                    MessageBox.Show(Gettext.T("An error has occured getting subtitle information."));
                 }
             }
         }
@@ -145,7 +145,7 @@ namespace RibbonUI.Util.WebUpdate {
                 lst.Add("Movie title");
             }
 
-            MessageBox.Show(string.Format("No required info found. Plugin requires : {0}", string.Join(" or ", lst)));
+            MessageBox.Show(string.Format(Gettext.T("No required info found. Plugin requires:")+" {0}", string.Join(Gettext.T(" or "), lst)));
             return null;
         }
 

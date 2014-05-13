@@ -62,7 +62,7 @@ namespace RibbonUI.UserControls.List {
                         Log.Warn(string.Format("Failed to open the promotional video with path \"{0}\".", uri), e);
                     }
 
-                    MessageBox.Show(Gettext.T("Error opening video with path: " + uri));
+                    MessageBox.Show(Gettext.T("Error opening video with path: ") + uri);
                 }
             }
         }

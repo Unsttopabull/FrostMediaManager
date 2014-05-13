@@ -187,21 +187,21 @@ namespace RibbonUI.Util.WebUpdate {
 
             if (cli == null) {
                 if (!silent) {
-                    MessageBox.Show("An error has occured accessing the parser/scrapper.");
+                    MessageBox.Show(Gettext.T("An error has occured accessing the parser/scrapper."));
                 }
                 return false;
             }
 
             if (!silent) {
-                LabelText = "Searching for available movie information.";
-                ProgressText = "Searching for movie in index.";
+                LabelText = Gettext.T("Searching for available movie information.");
+                ProgressText = Gettext.T("Searching for movie in index.");
             }
 
             ParsedMovie match = null;
             if (cli.CanIndex) {
                 if (info.Movies == null || !info.Movies.Any()) {
                     if (!silent) {
-                        MessageBox.Show("An error has occured updating available movie information.");
+                        MessageBox.Show(Gettext.T("An error has occured updating available movie information."));
                     }
                     return false;
                 }
@@ -230,7 +230,7 @@ namespace RibbonUI.Util.WebUpdate {
                     }
 
                     if (!silent) {
-                        MessageBox.Show("An error has occured downloading movie information.");
+                        MessageBox.Show(Gettext.T("An error has occured downloading movie information."));
                     }
                     return false;
                 }
@@ -240,25 +240,27 @@ namespace RibbonUI.Util.WebUpdate {
                     }
 
                     if (!silent) {
-                        MessageBox.Show("An error has occured updating available movie information.");
+                        MessageBox.Show(Gettext.T("An error has occured updating available movie information."));
                     }
                     return false;
                 }
 
-                FuzzySearchService fuzzySearch = new FuzzySearchService(movies.Select(m => m.OriginalName));
-                List<Result> matches = fuzzySearch.Search(_movieInfo.Title).OrderByDescending(r => r.Score).ToList();
+                if (movies != null) {
+                    FuzzySearchService fuzzySearch = new FuzzySearchService(movies.Select(m => m.OriginalName));
+                    List<Result> matches = fuzzySearch.Search(_movieInfo.Title).OrderByDescending(r => r.Score).ToList();
 
-                Result bestMatch = matches.FirstOrDefault();
-                if (bestMatch != null) {
-                    match = movies.FirstOrDefault(m => m.OriginalName == bestMatch.Result1);
+                    Result bestMatch = matches.FirstOrDefault();
+                    if (bestMatch != null) {
+                        match = movies.FirstOrDefault(m => m.OriginalName == bestMatch.Result1);
+                    }
                 }
             }
 
             if (match != null) {
                 MessageBoxResult result;
                 if (!silent) {
-                    string message = string.Format("Found {0} {1}", match.OriginalName, string.IsNullOrEmpty(match.TranslatedName) ? null : "(" + match.TranslatedName + ")");
-                    result = MessageBox.Show(message, "Match found", MessageBoxButton.YesNo);
+                    string message = string.Format(Gettext.T("Found {0} {1}"), match.OriginalName, string.IsNullOrEmpty(match.TranslatedName) ? null : "(" + match.TranslatedName + ")");
+                    result = MessageBox.Show(message, Gettext.T("Match found"), MessageBoxButton.YesNo);
                 }
                 else {
                     result = MessageBoxResult.Yes;
@@ -334,8 +336,8 @@ namespace RibbonUI.Util.WebUpdate {
 
         private async Task DownloadAndUpdate(ParsedMovie movie, IParsingClient cli, bool silent) {
             if (!silent) {
-                LabelText = "Downloading...";
-                ProgressText = "Getting movie information.";
+                LabelText = Gettext.T("Downloading ...");
+                ProgressText = Gettext.T("Getting movie information.");
             }
 
             if (cli == null) {
@@ -352,7 +354,7 @@ namespace RibbonUI.Util.WebUpdate {
                               Errors.Add(new ErrorInfo(ErrorType.Error, Gettext.T("There was an error downloading movie information")));
 
                               if (!silent) {
-                                  LabelText = "Errors have occured ...";
+                                  LabelText = Gettext.T("Errors have occured ...");
                                   ProgressText = "";
                               }
 

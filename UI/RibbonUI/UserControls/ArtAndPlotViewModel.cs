@@ -41,7 +41,7 @@ namespace RibbonUI.UserControls {
                             Log.Warn(string.Format("Failed to open an IMDB person website. Person ImdbID \"{0}\".", imdbId), e);
                         }
 
-                        MessageBox.Show(Gettext.T("Error opening IMDB page with address: " + uri));
+                        MessageBox.Show(Gettext.T("Error opening IMDB page with address: ") + uri);
                     }
                 },
                 s => !string.IsNullOrEmpty(s)
@@ -142,7 +142,7 @@ namespace RibbonUI.UserControls {
                         Log.Warn(string.Format("Failed to open a movie IMDB website with ImdbId \"{0}\".", imdbId), e);
                     }
 
-                    MessageBox.Show(Gettext.T("Error opening IMDB page with address: " + uri));
+                    MessageBox.Show(Gettext.T("Error opening IMDB page with address: ") + uri);
                 }
             }
         }
@@ -178,7 +178,7 @@ namespace RibbonUI.UserControls {
                     Log.Warn(string.Format("Failed to open a movie trailer with path \"{0}\".", trailer), e);
                 }
 
-                MessageBox.Show("Error opening trailer with path: " + trailer);
+                MessageBox.Show(Gettext.T("Error opening trailer with path: ") + trailer);
             }
         }
 

@@ -9,7 +9,7 @@
         d:DataContext="{d:DesignInstance webUpdate:PromoVideoUpdater}"
         Title="{l:T Web promotional videos updater}" SizeToContent="WidthAndHeight" x:Name="WebPromoVideoUpdaterWindow">
     <StackPanel Margin="5">
-        <TextBlock Text="{Binding LabelText, FallbackValue={l:T Downloading...}, TargetNullValue={l:T Downloading...}}" Margin="0,0,0,5"/>
+        <TextBlock Text="{Binding LabelText, FallbackValue={l:T Downloading ...}, TargetNullValue={l:T Downloading ...}}" Margin="0,0,0,5"/>
         <Grid>
             <TextBlock TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"  Panel.ZIndex="3" Foreground="Black" FontWeight="ExtraBold"
                        Text="{Binding ProgressText, FallbackValue={l:T Searching for videos online...}, TargetNullValue={l:T Searching for videos online...}}"/>

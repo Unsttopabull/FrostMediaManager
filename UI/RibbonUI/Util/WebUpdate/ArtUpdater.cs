@@ -82,10 +82,10 @@ namespace RibbonUI.Util.WebUpdate {
                     }
 
                     if (_client.IsTitleSupported) {
-                        lst.Add("Movie title");
+                        lst.Add(Gettext.T("Movie title"));
                     }
 
-                    MessageBox.Show(string.Format("No required info found. Plugin requires : {0}", string.Join(" or ", lst)));
+                    MessageBox.Show(string.Format(Gettext.T("No required info found. Plugin requires:")+ "{0}", string.Join(Gettext.T(" or "), lst)));
                     return false;
                 }
             }
@@ -113,8 +113,8 @@ namespace RibbonUI.Util.WebUpdate {
 
         private void UpdateMovie(IParsedArts parsedArts, bool silent) {
             if (!silent) {
-                LabelText = "Updating movie with art....";
-                ProgressText = "Updating ...";
+                LabelText = Gettext.T("Updating movie with art....");
+                ProgressText = Gettext.T("Updating ...");
             }
 
             if (parsedArts.Covers != null) {

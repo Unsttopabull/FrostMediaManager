@@ -278,14 +278,14 @@ namespace RibbonUI.UserControls {
                     Log.Warn(string.Format("File \"{0}\" of movie {1} could not be accessed to play.", SelectedMovie.FirstFileName, SelectedMovie.Title));
                 }
 
-                MessageBox.Show(Gettext.T("File could not be accessed: " + e.Message));
+                MessageBox.Show(Gettext.T("File could not be accessed: ") + e.Message);
             }
             catch (Exception e) {
                 if (Log.IsWarnEnabled) {
                     Log.Warn(string.Format("Unknown error occured while accessing file \"{0}\" of movie {1} to play.", SelectedMovie.FirstFileName, SelectedMovie.Title));
                 }
 
-                MessageBox.Show(Gettext.T("An error has occured opening file: " + SelectedMovie.FirstFileName));
+                MessageBox.Show(Gettext.T("An error has occured opening file: ") + SelectedMovie.FirstFileName);
             }
         }
 
@@ -301,7 +301,7 @@ namespace RibbonUI.UserControls {
                             Log.Warn(string.Format("Could not open movie folder with path: \"{0}\" of movie \"{1}\".", directory, SelectedMovie.Title));
                         }
 
-                        MessageBox.Show("Error opening movie folder");
+                        MessageBox.Show(Gettext.T("Error opening movie folder"));
                     }
                 }
                 else {
@@ -379,7 +379,8 @@ namespace RibbonUI.UserControls {
             }
             else {
                 MessageBoxResult result = MessageBox.Show(ParentWindow,
-                    "No folders to search have been added yet. Please add them in the options menu.\nWould you like to open the options now?", "No folders to search.",
+                    Gettext.T("No folders to search have been added yet. Please add them in the options menu.\nWould you like to open the options now?"),
+                    Gettext.T("No folders to search."),
                     MessageBoxButton.YesNo);
                 if (result != MessageBoxResult.Yes) {
                     return;
@@ -395,7 +396,7 @@ namespace RibbonUI.UserControls {
             if (sl.ShowDialog() == true) {
                 List<string> languages = sl.Languages.Select(l => l.ISO3166.Alpha3).ToList();
                 if (languages.Count == 0) {
-                    if (MessageBox.Show("No languages selected, search all?", "No languages selected", MessageBoxButton.YesNo) != MessageBoxResult.Yes) {
+                    if (MessageBox.Show(Gettext.T("No languages selected, search all?"), Gettext.T("No languages selected"), MessageBoxButton.YesNo) != MessageBoxResult.Yes) {
                         return;
                     }
                     languages = null;

@@ -1,9 +1,10 @@
+# Martin Kraner <martinkraner@outlook.com>, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-15 15:03+0200\n"
-"PO-Revision-Date: 2014-02-15 15:03+0200\n"
+"PO-Revision-Date: 2014-05-11 15:34+0200\n"
 "Last-Translator: Martin Kraner <martinkraner@outlook.com>\n"
 "Language-Team: Martin Kraner\n"
 "Language: sl\n"
@@ -14,158 +15,548 @@ msgstr ""
 "n%100==4 ? 2 : 3);\n"
 "X-Generator: Virtaal 0.7.1\n"
 
+msgid "Directors"
+msgstr "Režiserji"
+
+msgid "Genres"
+msgstr "Žanri"
+
+msgid "Movie set"
+msgstr "Zbirka"
+
+msgid "No plot available"
+msgstr "Opis ni na voljo"
+
+msgid "Unknown"
+msgstr "Neznano"
+
 msgid "Actor"
 msgstr "Igralec"
-
-msgid "Actors"
-msgstr "Igralci"
-
-msgid "Add"
-msgstr "Dodaj"
-
-msgid "Add a new director"
-msgstr "Dodaj novega režiserja"
-
-msgid "Add new plot"
-msgstr "Dodaj nov opis"
-
-msgid "Add new studio"
-msgstr "Dodaj nov studijo"
-
-msgid "Add a person"
-msgstr "Dodaj novo osebo"
-
-msgid "Add new actor"
-msgstr "Dodaj novega igralca"
-
-msgid "Add new art"
-msgstr "Dodaj novo sliko"
-
-msgid "Add new countries"
-msgstr "Dodaj nove države"
-
-msgid "Add new genre"
-msgstr "Dodaj novi žanr"
-
-msgid "Art"
-msgstr "Slike"
-
-msgid "Aspect"
-msgstr "Razmerje"
-
-msgid "Audios"
-msgstr "Zvoki"
-
-msgid "Back left channel"
-msgstr "Zadnji levi kanal"
-
-msgid "Back right channel"
-msgstr "Zadnji desni kanal"
-
-msgid "Bit depth"
-msgstr "Bitna globina"
-
-msgid "Bit depth in bits"
-msgstr "Bitna globina v bitih"
-
-msgid "Bit rate (kb/s)"
-msgstr "Bitna hitrost (kb/s)"
-
-msgid "Bit rate in kbps"
-msgstr "Bitna hitrost v kb/s"
-
-msgid "Bit rate mode"
-msgstr "Način bitne hitrosti"
-
-msgid "Cancel"
-msgstr "Prekliči"
-
-msgid "Channel layout"
-msgstr "Razporeditev kanalov"
-
-msgid "Channel positions"
-msgstr "Položaj kanalov"
 
 msgid "Character"
 msgstr "Vloga"
 
-msgid "Chroma subsampling"
-msgstr "Barvno podvzorčenje"
+msgid "Use advanced search"
+msgstr "Uporabi napredno iskanje"
 
-msgid "Clear value"
-msgstr "Počisti vrednost"
+msgid "Title"
+msgstr "Naslov"
 
-msgid "Click to set language"
-msgstr "Kliknite, da nastavite jezik"
+msgid "Release year"
+msgstr "Leto izdaje"
 
-msgid "Close"
-msgstr "Zapri"
+msgid "Fanart"
+msgstr "Ozadje"
 
-msgid "Codec"
-msgstr "Kodek"
+msgid "Movie has available fanart images"
+msgstr "Filim ima na voljo promocijske slike"
 
-msgid "Color space"
-msgstr "Barvni prostor"
+msgid "Movie has a .NFO metadata file"
+msgstr "Film ima na voljo .NFO datoteko z metapodatki"
 
-msgid "Compression mode"
-msgstr "Način stiskanja"
+msgid "Movie has available trailer"
+msgstr "Film ima na voljo napovednik"
 
-msgid "Constant"
-msgstr "Konstantno"
+msgid "Movie has available subtitles"
+msgstr "Film ima na voljo podnapise"
 
-msgid "Countries"
-msgstr "Države"
+msgid "If you have already seen this movie"
+msgstr "Če ste že videli ta film"
 
-msgid "Directors"
-msgstr "Režiserji"
-
-msgid "Duration"
-msgstr "Trajanje"
-
-msgid "DVD Region"
-msgstr "DVD Regija"
-
-msgid "Edit audio"
-msgstr "Uredi zvok"
+msgid "General Info"
+msgstr "Osnovne informacije"
 
 msgid "Edit Movie info"
 msgstr "Uredi informacije filma"
 
-msgid "Edit person"
-msgstr "Uredi osebo"
+msgid "Subtitles"
+msgstr "Podnapisi"
 
-msgid "Edit selected genre"
-msgstr "Uredi izbran žanr"
+msgid "Videos"
+msgstr "Videji"
 
-msgid "Edit selected person"
-msgstr "Uredi izbrano osebo"
+msgid "Audios"
+msgstr "Zvoki"
 
-msgid "Edit selected studio"
-msgstr "Uredi izbran studijo"
+msgid "Promotional videos"
+msgstr "Promocijski videoposnetki"
 
-msgid "Edit video"
-msgstr "Uredi video"
+msgid "Art"
+msgstr "Slike"
+
+msgid "Original title"
+msgstr "Izvirni naslov"
+
+msgid "Sort title"
+msgstr "Naslov za sortiranje"
 
 msgid "Edithion"
 msgstr "Izdaja"
 
-msgid "Encoding"
-msgstr "Nabor znakov"
+msgid "Type"
+msgstr "Tip"
 
-msgid "Fanart"
-msgstr "Slike"
+msgid "DVD Region"
+msgstr "DVD regija"
 
-msgid "File name"
-msgstr "Ime datoteke"
+msgid "ImdbID"
+msgstr "Imdb ID"
+
+msgid "TmdbID"
+msgstr "Tmdb ID"
+
+msgid "Rating"
+msgstr "Ocena"
+
+msgid "Release group"
+msgstr "Izdajna skupina"
+
+msgid "Play count"
+msgstr "Število ogledov"
+
+msgid "Duration"
+msgstr "Trajanje"
+
+msgid "Top 250"
+msgstr "Najboljših 250"
+
+msgid "Trailer"
+msgstr "Napovednik"
+
+msgid "Open file search dialog"
+msgstr "Odpri iskalnik datotek"
+
+msgid "Edit selected person"
+msgstr "Uredi izbrano osebo"
+
+msgid "Add a new director"
+msgstr "Dodaj novega režiserja"
+
+msgid "Remove selected director"
+msgstr "Odstrani izbranega režiserja"
+
+msgid "Countries"
+msgstr "Države"
+
+msgid "Add new countries"
+msgstr "Dodaj nove države"
+
+msgid "Remove selected country"
+msgstr "Odstrani izbrano državo"
+
+msgid "Tagline"
+msgstr "Slogan"
+
+msgid "Plot"
+msgstr "Opis"
+
+msgid "Remove current plot"
+msgstr "Odstrani trenutni opsi"
+
+msgid "Add new plot"
+msgstr "Dodaj novi opis"
+
+msgid "Set as default"
+msgstr "Nastavi kot privzeto"
+
+msgid "Unknown language"
+msgstr "Neznan jezik"
+
+msgid "Set plot language"
+msgstr "Nastavi jezik opisa"
+
+msgid "Set language"
+msgstr "Nastavi jezik"
+
+msgid "Plot summary"
+msgstr "Povzetek filma"
+
+msgid "Plot full"
+msgstr "Razširjen opis"
+
+msgid "Actors"
+msgstr "Igralci"
+
+msgid "Remove selected actor"
+msgstr "Odstrani izbranega igralca"
+
+msgid "Add new actor"
+msgstr "Dodaj novega igralca"
+
+msgid "Image"
+msgstr "Slika"
+
+msgid "Loading..."
+msgstr "Nalagam..."
+
+msgid "Remove selected genre"
+msgstr "Odstrani izbran žanr"
+
+msgid "Add new genre"
+msgstr "Dodaj nov žanr"
+
+msgid "Edit selected genre"
+msgstr "Uredi izbran žanr"
+
+msgid "Studios"
+msgstr "Studijo"
+
+msgid "Remove selected studio"
+msgstr "Odstrani izbran studijo"
+
+msgid "Add new studio"
+msgstr "Dodaj nov studijo"
+
+msgid "Edit selected studio"
+msgstr "Uredi izbran studijo"
+
+msgid "Unknown title"
+msgstr "Neznan naslov"
+
+msgid "No tagline"
+msgstr "Brez slogana"
+
+msgid "Search"
+msgstr "Išči"
+
+msgid "Web update"
+msgstr "Posodobitev preko spleta"
+
+msgid "Preview"
+msgstr "Predogled"
+
+msgid "Path"
+msgstr "Pot"
+
+msgid "Remove art"
+msgstr "Odstrani sliko"
+
+msgid "Source"
+msgstr "Vir"
+
+msgid "Channel layout"
+msgstr "Razporeditev kanalov"
+
+msgid "Number of channels"
+msgstr "Število kanalov"
+
+msgid "Channel positions"
+msgstr "Položaj kanalov"
+
+msgid "Codec"
+msgstr "Kodek"
+
+msgid "Bit rate (kb/s)"
+msgstr "Bitna hitrost (kb/s)"
+
+msgid "Bit rate mode"
+msgstr "Način bitne hitrosti"
+
+msgid "Sampling rate (kHz)"
+msgstr "Vzorčevalna hitrost (kHz)"
+
+msgid "Bit depth"
+msgstr "Bitna globina"
+
+msgid "Compression mode"
+msgstr "Način stiskanja"
+
+msgid "Language"
+msgstr "Jezik"
+
+msgid "Country"
+msgstr "Država"
+
+msgid "Click to play"
+msgstr "Klikni za predvajanje"
+
+msgid "Click to set language"
+msgstr "Klikni za spremembo jezika"
 
 msgid "Format"
 msgstr "Format"
 
+msgid "Encoding"
+msgstr "Kodiranje"
+
+msgid "Is embeded in the video:"
+msgstr "Je vdelan v video:"
+
+msgid "Is for hearing impaired:"
+msgstr "Je za gluhe in naglušne:"
+
+msgid "File name"
+msgstr "Ime datoteke"
+
+msgid "Standard"
+msgstr "Standard"
+
 msgid "FPS"
 msgstr "FPS"
 
+msgid "Scan type"
+msgstr "Način osveževanja"
+
+msgid "Color space"
+msgstr "Barvni prostor"
+
+msgid "Chroma subsampling"
+msgstr "Barvno podvzorčenje"
+
+msgid "Aspect"
+msgstr "Razmerje"
+
+msgid "Width"
+msgstr "Širina"
+
+msgid "Height"
+msgstr "Višina"
+
+msgid "File extensions to search for"
+msgstr "Končnice iskanih datotek"
+
+msgid "Subtitle extensions to search for"
+msgstr "Končnice iskanih podnapisov"
+
+msgid "Custom audio codec mappings"
+msgstr "Preslikave zvočnih kodekov"
+
+msgid "Custom video codec mappings"
+msgstr "Preslikave video kodekov"
+
+msgid "Known segments"
+msgstr "Znani delci"
+
+msgid "Remove selected known segment"
+msgstr "Odstrani izbran znani delec"
+
+msgid "Segment"
+msgstr "Delec"
+
+msgid "Segment type"
+msgstr "Tip delca"
+
+msgid "Add a new known segment"
+msgstr "Dodaj nov znan delec"
+
+msgid "Excluded segments"
+msgstr "Izključeni delci"
+
+msgid "Remove segment from exclusion"
+msgstr "Odstrani delec iz izključenosti"
+
+msgid "Release groups"
+msgstr "Izdajne skupine"
+
+msgid "Remove selected release group"
+msgstr "Odstrani izbrano izdajno skupino"
+
+msgid "Custom language mappings"
+msgstr "Preslikave jezikov po meri"
+
+msgid "Remove selected language mapping"
+msgstr "Odstrani izbrano preslikavo jezika"
+
+msgid "Mapping"
+msgstr "Preslikava"
+
+msgid "Exclude a segment"
+msgstr "Izkjučite delec"
+
+msgid "Add a new segment to exclude"
+msgstr "Izkjučite nov delec"
+
+msgid "Add a release group"
+msgstr "Dodaj izdajno skupino"
+
+msgid "Add a new release group"
+msgstr "Dodaj novo izdajno skupino"
+
+msgid "Add a new language mapping"
+msgstr "Dodaj novo preslikavo jezika"
+
+msgid "Set user interface langauge"
+msgstr "Nastavi jezik uporabniškega vmesnika"
+
+msgid "NFO Export"
+msgstr "Izvozi v NFO"
+
+msgid "Exporting movie information to NFO files..."
+msgstr "Izvažam informacije filmov v NFO datoteke..."
+
+msgid "Exported {0} Movies"
+msgstr "Izvozil {0} filmov"
+
+msgid "Close"
+msgstr "Zapri"
+
+msgid "Downloading ..."
+msgstr "Prenašam ..."
+
+msgid "Provider select"
+msgstr "Izbor ponudnika"
+
+msgid "Load"
+msgstr "Naloži"
+
+msgid "Select languages"
+msgstr "Izberi jezike"
+
+msgid "Movie name:"
+msgstr "Ime filma:"
+
+msgid "For release:"
+msgstr "Za izdajo:"
+
+msgid "Filename"
+msgstr "Ime datoteke"
+
+msgid "Part"
+msgstr "Del"
+
+msgid "Download count"
+msgstr "Število prenosov"
+
+msgid "Is for hearing impaired"
+msgstr "Je za gluhe in naglušne"
+
+msgid "Uploader comment"
+msgstr "Komentar nalagalca"
+
+msgid "Anonymous"
+msgstr "Anonimni"
+
+msgid "None"
+msgstr "Brez"
+
+msgid "Download"
+msgstr "Prenesi"
+
+msgid "Cancel"
+msgstr "Prekliči"
+
+msgid "UI and search folders"
+msgstr "Uporabniški vmesnik in mape za iskanje"
+
+msgid "Feature detector"
+msgstr "Razpoznavalnik lastnosti"
+
+msgid "File name parser"
+msgstr "Parser imen datotek"
+
+msgid "Reset to factory"
+msgstr "Resetiraj na privzete nastavitve"
+
+msgid "Save"
+msgstr "Shrani"
+
+msgid "Add codec mapping"
+msgstr "Dodaj preslikavo kodeka"
+
+msgid "Click to set logo"
+msgstr "Klikni za nastavitev logotipa"
+
+msgid "New codec id"
+msgstr "Nov Id kodeka"
+
+msgid "The studio already exists"
+msgstr "Studijo že obstaja"
+
+msgid "New codec mapping"
+msgstr "Nova preslikava kodeka"
+
+msgid "Add"
+msgstr "Dodaj"
+
+msgid "SelectCountry"
+msgstr "Izberi državo"
+
+msgid "Add new genres"
+msgstr "Dodaj nove žanre"
+
+msgid "Select genres or add a new one"
+msgstr "Izberi žanre ali dodaj novega"
+
+msgid "New genre name"
+msgstr "Ime novega žanra"
+
+msgid "Add a person"
+msgstr "Dodaj osebo"
+
+msgid "Name"
+msgstr "Ime"
+
+msgid "Thumb"
+msgstr "Slika"
+
+msgid "Select studios"
+msgstr "Izberi studije"
+
+msgid "Add a new studio"
+msgstr "Dodaj novi studio"
+
+msgid "Select language"
+msgstr "Izberi jezik"
+
+msgid "Set"
+msgstr "Nastavi"
+
+msgid "Select"
+msgstr "Izberi"
+
+msgid "Edit audio"
+msgstr "Uredi audio"
+
+msgid "Clear value"
+msgstr "Počisti"
+
+msgid "Bit rate in kbps"
+msgstr "Bitna hitrost v kb/s"
+
+msgid "Sampling rate in kHz"
+msgstr "Hitrost vzočevanja v kHz"
+
+msgid "Bit depth in bits"
+msgstr "Bitna globina v bitih"
+
+msgid "Edit person"
+msgstr "Uredi osebo"
+
+msgid "OK"
+msgstr "V redu"
+
+msgid "Edit video"
+msgstr "Uredi video"
+
+msgid "Resolution"
+msgstr "Ločljivost"
+
 msgid "Frame rate in frames/s"
 msgstr "Hitrost sličic na sekundo"
+
+msgid "Search Movies"
+msgstr "Išči filme"
+
+msgid "Search settings"
+msgstr "Nastavitve iskanja"
+
+msgid "Web art updater"
+msgstr "Posodabljanje slik"
+
+msgid "Searching for art online"
+msgstr "Iščem za slike v spletu"
+
+msgid "Web updater"
+msgstr "Posodobitev preko spleta"
+
+msgid "Searching for information online..."
+msgstr "Iščem za informacije v spletu..."
+
+msgid "Web promotional videos updater"
+msgstr "Spletna posodobitev promocijskih videoposnetkov"
+
+msgid "Searching for videos online..."
+msgstr "Iščem za promocijske videoposnetke na spletu..."
 
 msgid "Front center channel"
 msgstr "Sprednji osrednji kanal"
@@ -176,230 +567,339 @@ msgstr "Sprednji levi kanal"
 msgid "Front right channel"
 msgstr "Sprednji desni kanal"
 
-msgid "General Info"
-msgstr "Spošne informacije"
-
-msgid "Genres"
-msgstr "Žanri"
-
-msgid "Height"
-msgstr "Višina"
-
-msgid "If you have already seen this movie"
-msgstr "Če ste že videli ta film"
-
-msgid "Interlaced"
-msgstr "Prepleteno"
-
-msgid "Image"
-msgstr "Slika"
-
-msgid "ImdbID"
-msgstr "Imdb ID"
-
-msgid "Is embeded in the video:"
-msgstr "Je vdelan v video"
-
-msgid "Is for hearing impaired:"
-msgstr "Je za gluhe in naglušne"
-
-msgid "Language"
-msgstr "Jezik"
-
-msgid "LFE"
-msgstr "Nizkotonec"
-
-msgid "Lossless"
-msgstr "Brezizgubno"
-
-msgid "Lossy"
-msgstr "Izgubno"
-
-msgid "Movie has a .NFO metadata file"
-msgstr "Film ima .NFO datoteko z metapodatki"
-
-msgid "Movie has available fanart images"
-msgstr "Film ima priložene slike"
-
-msgid "Movie has available subtitles"
-msgstr "Film ima na voljo podnapise"
-
-msgid "Movie has available trailer"
-msgstr "Film ima na voljo napovednik"
-
-msgid "Name"
-msgstr "Ime"
-
-msgid "No actor selected"
-msgstr "Niste izbrali igralca"
-
-msgid "No directors selected"
-msgstr "Niste izbrali režiserja"
-
-msgid "No plot available"
-msgstr "Opis ni navoljo"
-
-msgid "No tagline"
-msgstr "Brez slogana"
-
-msgid "Number of channels"
-msgstr "Število kanalov"
-
-msgid "OK"
-msgstr "V redu"
-
-msgid "Open file search dialog"
-msgstr "Odpri dialog iskanja datotek"
-
-msgid "Original title"
-msgstr "Izvirni naslov"
-
-msgid "Path"
-msgstr "Pot"
-
-msgid "Play count"
-msgstr "Število predvajanj"
-
-msgid "Plot"
-msgstr "Opis"
-
-msgid "Plot full"
-msgstr "Obširni opis"
-
-msgid "Plot summary"
-msgstr "Povzetek"
-
-msgid "Preview"
-msgstr "Predogled"
-
-msgid "Promotional videos"
-msgstr "Promocijski videoposnetki"
-
-msgid "Progressive"
-msgstr "Progresivno"
-
-msgid "Rating"
-msgstr "Ocena"
-
-msgid "Release group"
-msgstr "Izdajna skupina"
-
-msgid "Release year"
-msgstr "Leto izdaje"
-
-msgid "Remove current plot"
-msgstr "Odstrani trenutni opis"
-
-msgid "Remove selected actor"
-msgstr "Odstrani izbranega igralca"
-
-msgid "Remove selected art"
-msgstr "Odstrani izbrano sliko"
-
-msgid "Remove selected country"
-msgstr "Odstrani izbrano državo"
-
-msgid "Remove selected director"
-msgstr "Odstrani izbranega režiserja"
-
-msgid "Remove selected genre"
-msgstr "Odstrani izbrani žanr"
-
-msgid "Remove selected studio"
-msgstr "Odstrani izbrani studijo"
-
-msgid "Resolution"
-msgstr "Ločljivost"
-
-msgid "Sampling rate (kHz)"
-msgstr "Hitrost vzorčevanje (kHz)"
-
-msgid "Sampling rate in kHz"
-msgstr "Hitrost vzorčevanja v kHz"
-
-msgid "Scan type"
-msgstr "Način osveževanja"
-
-msgid "Search"
-msgstr "Išči"
-
-msgid "Select language"
-msgstr "Izberite jezik"
-
-msgid "Select studios"
-msgstr "Izberite studije"
-
-msgid "Set"
-msgstr "Nastavi"
-
-msgid "Movie set"
-msgstr "Zbirka"
-
-msgid "Set plot language"
-msgsrt "Nastavi jezik opisa"
-
-msgid "Set language"
-msgstr "Nastavi jezik"
-
 msgid "Side left channel"
 msgstr "Stranski levi kanal"
 
 msgid "Side right channel"
 msgstr "Stranski desni kanal"
 
-msgid "Sort title"
-msgstr "Naslov za sortiranje"
+msgid "Back left channel"
+msgstr "Zadnji levi kanal"
 
-msgid "Source"
-msgstr "Vir"
+msgid "Back right channel"
+msgstr "Zadnji desni kanal"
 
-msgid "Standard"
-msgstr "Standard"
+msgid "LFE"
+msgstr "Nizkotonec"
 
-msgid "Studios"
-msgstr "Studiji"
+msgid "Could not access providers folder. Program will now exit"
+msgstr "Ni bilo mogoče dostopati mape z ponudniki. Program se bo zdaj zaključil."
 
-msgid "Subtitles"
-msgstr "Podnapisi"
+msgid "Couldn't load any providers in the plugin folder. Program will now exit."
+msgstr "Ni bilo mogoče naložiti nobenega ponudnika iz mape ponudnikov. Program se bo zdaj zaključil."
 
-msgid "Tagline"
-msgstr "Slogan"
+msgid "Error loading providers"
+msgstr "Napaka med nalaganjem ponudnikov"
 
-msgid "Thumb"
-msgstr "Sličica"
+msgid "No providers for movie library manipulation found. Program will now exit."
+msgstr "Noben ponudnik ni bil najden. Program se bo zdaj zaključil."
 
-msgid "Title"
-msgstr "Naslov"
+msgid "No providers found."
+msgstr "Noben ponudnik ni bil najden."
 
-msgid "TmdbID"
-msgstr "Tmdb ID"
+msgid "There was an error loading the provider, see log for more info. Program will now exit."
+msgstr "Napaka se je zgodila med nalaganjem ponudnika, za več informacij poglejte dnevniško datoteko.\nProgram se bo zdaj zaključil."
 
-msgid "Top 250"
-msgstr "Najboljših 250"
+msgid "Provider did not register a service, the program can not continue."
+msgstr "Ponudnik ni registriral storitve, program ne more nadaljevati in se bo zaključil."
 
-msgid "Trailer"
-msgstr "Napovednik"
+msgid "No service registered"
+msgstr "Nobena storitev ni bila registrirana"
 
-msgid "Trivia and goofs"
-msgstr "Zanimivosti in napake"
+msgid "Could not create provider service, the program can not continue. See log for more info."
+msgstr "Ni bilo mogoče ustvariti ponudnikove storitve, program se ne more nadaljevati.\nZa več informacij poglejte dnevniško datoteko."
 
-msgid "Type"
-msgstr "Tip"
+msgid "Error creating provider service"
+msgstr "Napaka med ustvarjanjem ponudnikove storitve"
 
-msgid "Unknown"
-msgstr "Neznano"
+msgid "There are unsaved changes, save?"
+msgstr "Imate neshranjene spremembe, shanim?"
 
-msgid "Unknown title"
-msgstr "Neznan naslov"
+msgid "Unsaved changes"
+msgstr "Neshranjene spremembe"
 
-msgid "Use advanced search"
-msgstr "Napredno iskanje"
+msgid "nomination"
+msgstr "nominacija"
 
-msgid "Variable"
-msgstr "Spremenljivo"
+msgid "Error opening IMDB page with address: "
+msgstr "Napaka med odpiranjem IMDB strani z naslovom: "
 
-msgid "Videos"
-msgstr "Videji"
+msgid "Error opening trailer in Windows Media Player"
+msgstr "Napaka med odpiranjem napovednika v Windows Media Player"
 
-msgid "Wdith"
-msgstr "Širina"
+msgid "Error opening trailer with path: "
+msgstr "Napaka med odpiranjem napovednika z potjo: "
+
+msgid "Go to previous movie"
+msgstr "Na prejšnji film"
+
+msgid "Go to next movie"
+msgstr "Na naslednji film"
+
+msgid "Provider service returned an error while retrieving movies."
+msgstr "Napaka se je zgodila med pridobivanjem filmov iz pondunikove storitve."
+
+msgid "Genre edit"
+msgstr "Uredi žanr"
+
+msgid "Genre name:"
+msgstr "Ime žanra:"
+
+msgid "Edit genre"
+msgstr "Uredi žanr"
+
+msgid "Edit"
+msgstr "Uredi"
+
+msgid "Confrim remove"
+msgstr "Potrdi odstranjevanje"
+
+msgid "Enter full description"
+msgstr "Vnesi poln opis"
+
+msgid "This actor with unspecified character already exists in the list. To add another role please specify a character."
+msgstr "Ta igralec v neznani vlogi že obstaja. Če želite dodati igralca v novi vlogi prosimo navedite vlogo."
+
+msgid "This actor already exists in the list. To add another actor's role specify a diffrent character."
+msgstr "Ta igralec že obstaja. Če želite dodati igralca v novi vlogi prosimo navedite drugaćno vlogo."
+
+msgid "Please note this will edit this studio name in all the movies in the collection.\nIf you want to edit studio name only for this movie remove this studio add a new one with desired name.\n\nDo you really want to edit this studio?"
+msgstr "To bo uredilo ime studija za vse fime.\nČe želite urediti ime samo za ta film odstranite za studio in dodajte novega z želenim imenom.\n\nŽelite urediti ta studijo?"
+
+msgid "Studio edit"
+msgstr "Urejanje studija"
+
+msgid "Studio name:"
+msgstr "Ime studija:"
+
+msgid "Edit studio"
+msgstr "Uredi studijo"
+
+msgid "Failed to load plugin {0}.\n\n{1}"
+msgstr "Nalaganje vtičnika {0} ni uspelo.\n\n{1}"
+
+msgid "Failed to access provider service"
+msgstr "Napaka med dostopom do ponudnikove storitve"
+
+msgid "Do you really want to remove {0}?"
+msgstr "Ali res želite odstraniti {0}?"
+
+msgid "movie"
+msgstr "film"
+
+msgid "Remove {0}"
+msgstr "Odstranim {0}"
+
+msgid "File could not be accessed: "
+msgstr "Dostop do datoteke ni uspel: "
+
+msgid "An error has occured opening file: "
+msgstr "Napaka se je zgodila med odprianjem datoteke: "
+
+msgid "Error opening movie folder"
+msgstr "Napaka med odpiranjem mape filma"
+
+msgid "Folder not accessible or doesn't exists."
+msgstr "Mapa ni dostopna ali pa ne obstaja."
+
+msgid "No folders to search have been added yet. Please add them in the options menu.\nWould you like to open the options now?"
+msgstr "Nobena mapa za iskanje še ni bila dodana. Prosimo dodajte jih v nastavitvah.\nŽelite odpreti nastavitve zdaj?"
+
+msgid "No folders to search."
+msgstr "Ni map za iskanje."
+
+msgid "No languages selected, search all?"
+msgstr "Niste izbrali nobenega jezika, iščem za vse?"
+
+msgid "No languages selected"
+msgstr "Niste izbrali jezika"
+
+msgid "Art has to be saved to the database first to be able to be set as default."
+msgstr "Slika mora biti shranjena v ponudnikovo bazo da jo lahko nastavite kot privzeto."
+
+msgid "Error opening video with path: "
+msgstr "Napaka odpiranja videa z potjo: "
+
+msgid "Enter new extension:"
+msgstr "Vnesite novo končnico:"
+
+msgid "Add new extension"
+msgstr "Dodajte novo končnico"
+
+msgid "Provider could not remove the item.\nProbable causes:\n\t* Item does not exists in the store\n\t* An error has occured."
+msgstr "Podnudnik ni mogel odstraniti elementa.\nMožni razlogi:\n\t* Element ne obstaja\n\t* Napaka se je zgodila."
+
+msgid "Error: Provider could not add the item.\nPlease contact provider creator."
+msgstr "Napaka: Ponudnik ni mogle odstraniti elementa.\nProsimo obrnite se na avtorja ponudnika."
+
+msgid "Provider does not support the requested operation."
+msgstr "Ponudnik ne podpira zahtevane operacija."
+
+msgid "\nProvider message: "
+msgstr "\nPonudnikov sporočilo: "
+
+msgid "Provider has not implemented the requested operation."
+msgstr "Podnunik še ni implementiral zahtevane operacije."
+
+msgid "An error has occured in the provider."
+msgstr "Napaka se je zgodila v ponudniku."
+
+msgid "an actor"
+msgstr "igralec"
+
+msgid "a writer"
+msgstr "pisatelj"
+
+msgid "a director"
+msgstr "režiser"
+
+msgid "This person has already been added to this movie as {0}."
+msgstr "Ta oseba je že bila dodana v ta film kot {0}."
+
+msgid "genre"
+msgstr "žanr"
+
+msgid "award"
+msgstr "nagrada"
+
+msgid "country"
+msgstr "država"
+
+msgid "promotional video"
+msgstr "promocijski videoposnetek"
+
+msgid "art"
+msgstr "slika"
+
+msgid "This {0} has already been added to this movie."
+msgstr "Ta {0} je že bil/bila dodana v ta film."
+
+msgid "Movie title"
+msgstr "Naslov filma"
+
+msgid "No required info found. Plugin requires:"
+msgstr "Zahtevane informacije niso bile najdene. Vtičnik zahteva:"
+
+msgid " or "
+msgstr " ali "
+
+msgid "No art found"
+msgstr "Slike niso bile najdene"
+
+msgid "Updating movie with art...."
+msgstr "Posodabljam film z slikami...."
+
+msgid "Updating ..."
+msgstr "Posodabljam ..."
+
+msgid "An error has occured accessing the parser/scrapper."
+msgstr "Napaka se je zgodila med dostopanjem do vtičnika."
+
+msgid "Searching for available movie information."
+msgstr "Iščem za informacije filma."
+
+msgid "Searching for movie in index."
+msgstr "Iščem film v predpomnilniku."
+
+msgid "An error has occured updating available movie information."
+msgstr "Napaka se je zgodila med posodabljanjem informacij filma."
+
+msgid "An error has occured downloading movie information."
+msgstr "Napaka se je zgodila med prenašanjem informacij filma iz spleta."
+
+msgid "Found {0} {1}"
+msgstr "Našel {0} {1}"
+
+msgid "Match found"
+msgstr "Našel ujemanje"
+
+msgid "Movie information not found."
+msgstr "Informacije o filmu niso bile najdene."
+
+msgid "Preforming a one-time indexing operation."
+msgstr "Izvajam en-kratno operacijo predpomnjenja filmov na voljo."
+
+msgid "Indexing available movies"
+msgstr "Predpomnim filme na voljo"
+
+msgid "Getting movie information."
+msgstr "Pridobivam informacije filma."
+
+msgid "There was an error downloading movie information"
+msgstr "Napaka se je zgodila med prenosom informacij filma iz spleta"
+
+msgid "Errors have occured ..."
+msgstr "Napaka so se zgodile ..."
+
+msgid "Searching for videos by Imdb ID"
+msgstr "Iščem videoposnetke preko Imdb ID"
+
+msgid "Searching for videos by Tmdb ID"
+msgstr "Iščem videoposnetke preko Tmdb ID"
+
+msgid "Searching for videos by Title"
+msgstr "Iščem videoposnetke preko imena filma"
+
+msgid "No videos found"
+msgstr "Ni najdenih videoposnetkov"
+
+msgid "Unknown directory path"
+msgstr "Neznana pot do mape"
+
+msgid "Failed to open the subtitle download site"
+msgstr "Odpiranje strani za prenos podnapisov ni uspelo"
+
+msgid "No download information available."
+msgstr "Informacije za prenos podnapisov ni na voljo."
+
+msgid "Provider failed to save the subtitle information"
+msgstr "Ponudnik ni uspel shraniti informacij o podnapisu."
+
+msgid "Failed to access subtitle file information. Don't have security privileges."
+msgstr "Dostop do datoteke podnapisa ni uspel. Ni varnostnih pravic za dostop."
+
+msgid "Failed to access subtitle file information. Access unauthorized."
+msgstr "Dostop do datoteke s podnapisi ni uspel. Ni zadostnih pooblastil."
+
+msgid "Failed to access subtitle file information."
+msgstr "Dostop do informacij o datoteke z podnapisi ni uspel."
+
+msgid "Failed to obtain subtitle file information."
+msgstr "Dostop do informacij o datoteke z podnapisi ni uspel."
+
+msgid "Failed to download the subtitle file.\n\nError message:\n"
+msgstr "Prenos datoteke podnapisa ni uspel.\n\nSporočilo napake:\n""
+
+msgid "Failed to download the subtitle archive.\n\nError message:\n"
+msgstr "Prenos arhiva podnapisa ni uspelo.\n\nSporočilo napake:\n"
+
+msgid "Failed to write subtitle file to drive with the following path:\n\"{0}\""
+msgstr "Shranjevanje podnapisa na disk ni uspelo z potjo:\n\"{0}\""
+
+msgid "Failed to decompress subtitle archive."
+msgstr "Razširjanje arhiva podnapisa ni uspelo."
+
+msgid "No subtitles found"
+msgstr "Ni najdenih podnapisov"
+
+msgid "An error has occured downloading subtitle information."
+msgstr "Napaka se je zgodila med prenašanjem informacij podnapisa."
+
+msgid "An error has occured getting subtitle information."
+msgstr "Napaka se je zgodila med pridobivanjem informacij o podnapisu."
+
+msgid "Image Files"
+msgstr "Slikovne datoteke"
+
+msgid "Errors occured during detection phase. Search & Save can not continue."
+msgstr "Napake so se zgodile med fazo zaznavanja. Iskanje se ne more nadaljevati."
+
+msgid "Error: Downloader plugin could not be instantied."
+msgstr "Napaka: Ni bilo mogoče dostopati do vtičnika."
+
+msgid "Error accessing movie info provider."
+msgstr "Napaka med dostopanjem do po vtičnika informacij filmov."
+
+msgid "Error accessing subtitle provider."
+msgstr "Napaka med dostopanjem do vtičnika za podnapise."
+

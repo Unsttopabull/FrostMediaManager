@@ -33,7 +33,7 @@ namespace RibbonUI {
             LoadPlugins();
 
             Gettext.CurrentTranslationProvider = new SecondLanguageTranslationProvider("Languages");
-            //DispatcherUnhandledException += UnhandledExeption;
+            DispatcherUnhandledException += UnhandledExeption;
         }
 
 
@@ -46,7 +46,7 @@ namespace RibbonUI {
                     plugins = Directory.GetFiles("providers", "*.dll");
                 }
                 catch (Exception) {
-                    MessageBox.Show("Could not access providers folder. Program will now exit");
+                    MessageBox.Show(Gettext.T("Could not access providers folder. Program will now exit"));
                     IsShutdown = true;
                     Shutdown();
                     return;
@@ -66,14 +66,14 @@ namespace RibbonUI {
                 }
 
                 if (numFailed == plugins.Length) {
-                    MessageBox.Show("Couldn't load any providers in the plugin folder. Program will now exit.", "Error loading providers", MessageBoxButton.OK);
+                    MessageBox.Show(Gettext.T("Couldn't load any providers in the plugin folder. Program will now exit."), Gettext.T("Error loading providers"), MessageBoxButton.OK);
                     IsShutdown = true;
                     Shutdown();
                 }
                 return;
             }
 
-            MessageBox.Show("No providers for movie library manipulation found. Program will now exit.", "No providers found.");
+            MessageBox.Show(Gettext.T("No providers for movie library manipulation found. Program will now exit."), Gettext.T("No providers found."));
             IsShutdown = true;
             Shutdown();
         }
@@ -87,7 +87,9 @@ namespace RibbonUI {
                 Log.Error("There was an error working with the database.", e.Exception);
             }
 
-            MessageBox.Show(e.Exception.Message);
+            if (e.Exception != null) {
+                MessageBox.Show(e.Exception.Message);
+            }
             e.Handled = true;
         }
     }

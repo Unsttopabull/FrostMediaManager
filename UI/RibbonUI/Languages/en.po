@@ -12,158 +12,548 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Virtaal 0.7.1\n"
 
+msgid "Directors"
+msgstr "Directors"
+
+msgid "Genres"
+msgstr "Genres"
+
+msgid "Movie set"
+msgstr "Set"
+
+msgid "No plot available"
+msgstr "No plot available"
+
+msgid "Unknown"
+msgstr "Unknown"
+
 msgid "Actor"
 msgstr "Actor"
-
-msgid "Actors"
-msgstr "Actors"
-
-msgid "Add"
-msgstr "Add"
-
-msgid "Add a new director"
-msgstr "Add a new director"
-
-msgid "Add new plot"
-msgstr "Add new plot"
-
-msgid "Add new studio"
-msgstr "Add new studio"
-
-msgid "Add a person"
-msgstr "Add a person"
-
-msgid "Add new actor"
-msgstr "Add new actor"
-
-msgid "Add new art"
-msgstr "Add new art"
-
-msgid "Add new countries"
-msgstr "Add new countries"
-
-msgid "Add new genre"
-msgstr "Add new genre"
-
-msgid "Art"
-msgstr "Art"
-
-msgid "Aspect"
-msgstr "Aspect"
-
-msgid "Audios"
-msgstr "Audios"
-
-msgid "Back left channel"
-msgstr "Back left channel"
-
-msgid "Back right channel"
-msgstr "Back right channel"
-
-msgid "Bit depth"
-msgstr "Bit depth"
-
-msgid "Bit depth in bits"
-msgstr "Bit depth in bits"
-
-msgid "Bit rate (kb/s)"
-msgstr "Bit rate (kb/s)"
-
-msgid "Bit rate in kbps"
-msgstr "Bit rate in kbps"
-
-msgid "Bit rate mode"
-msgstr "Bit rate mode"
-
-msgid "Cancel"
-msgstr "Cancel"
-
-msgid "Channel layout"
-msgstr "Channel layout"
-
-msgid "Channel positions"
-msgstr "Channel positions"
 
 msgid "Character"
 msgstr "Character"
 
-msgid "Chroma subsampling"
-msgstr "Chroma subsampling"
+msgid "Use advanced search"
+msgstr "Use advanced search"
 
-msgid "Clear value"
-msgstr "Clear value"
+msgid "Title"
+msgstr "Title"
 
-msgid "Click to set language"
-msgstr "Click to set language"
-
-msgid "Close"
-msgstr "Close"
-
-msgid "Codec"
-msgstr "Codec"
-
-msgid "Color space"
-msgstr "Color sapce"
-
-msgid "Compression mode"
-msgstr "Compression mode"
-
-msgid "Constant"
-msgstr "Constant"
-
-msgid "Countries"
-msgstr "Countries"
-
-msgid "Directors"
-msgstr "Directors"
-
-msgid "Duration"
-msgstr "Duration"
-
-msgid "DVD Region"
-msgstr "DVD Region"
-
-msgid "Edit audio"
-msgstr "Edit audio"
-
-msgid "Edit Movie info"
-msgstr "Edit Movie info"
-
-msgid "Edit person"
-msgstr "Edit person"
-
-msgid "Edit selected genre"
-msgstr "Edit selected genre"
-
-msgid "Edit selected person"
-msgstr "Edit selected person"
-
-msgid "Edit selected studio"
-msgstr "Edit selected studio"
-
-msgid "Edit video"
-msgstr "Edit video"
-
-msgid "Edithion"
-msgstr "Edithion"
-
-msgid "Encoding"
-msgstr "Encoding"
+msgid "Release year"
+msgstr "Release year"
 
 msgid "Fanart"
 msgstr "Fanart"
 
-msgid "File name"
-msgstr "File name"
+msgid "Movie has available fanart images"
+msgstr "Movie has available fanart images"
+
+msgid "Movie has a .NFO metadata file"
+msgstr "Movie has a .NFO metadata file"
+
+msgid "Movie has available trailer"
+msgstr "Movie has available trailer"
+
+msgid "Movie has available subtitles"
+msgstr "Movie has available subtitles"
+
+msgid "If you have already seen this movie"
+msgstr "If you have already seen this movie"
+
+msgid "General Info"
+msgstr "General Info"
+
+msgid "Edit Movie info"
+msgstr "Edit Movie info"
+
+msgid "Subtitles"
+msgstr "Subtitles"
+
+msgid "Videos"
+msgstr "Videos"
+
+msgid "Audios"
+msgstr "Audios"
+
+msgid "Promotional videos"
+msgstr "Promotional videos"
+
+msgid "Art"
+msgstr "Art"
+
+msgid "Original title"
+msgstr "Original title"
+
+msgid "Sort title"
+msgstr "Sort title"
+
+msgid "Edithion"
+msgstr "Edithion"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "DVD Region"
+msgstr "DVD Region"
+
+msgid "ImdbID"
+msgstr "ImdbID"
+
+msgid "TmdbID"
+msgstr "TmdbID"
+
+msgid "Rating"
+msgstr "Rating"
+
+msgid "Release group"
+msgstr "Release group"
+
+msgid "Play count"
+msgstr "Play count"
+
+msgid "Duration"
+msgstr "Duration"
+
+msgid "Top 250"
+msgstr "Top 250"
+
+msgid "Trailer"
+msgstr "Trailer"
+
+msgid "Open file search dialog"
+msgstr "Open file search dialog"
+
+msgid "Edit selected person"
+msgstr "Edit selected person"
+
+msgid "Add a new director"
+msgstr "Add a new director"
+
+msgid "Remove selected director"
+msgstr "Remove selected director"
+
+msgid "Countries"
+msgstr "Countries"
+
+msgid "Add new countries"
+msgstr "Add new countries"
+
+msgid "Remove selected country"
+msgstr "Remove selected country"
+
+msgid "Tagline"
+msgstr "Tagline"
+
+msgid "Plot"
+msgstr "Plot"
+
+msgid "Remove current plot"
+msgstr "Remove current plot"
+
+msgid "Add new plot"
+msgstr "Add new plot"
+
+msgid "Set as default"
+msgstr "Set as default"
+
+msgid "Unknown language"
+msgstr "Unknown language"
+
+msgid "Set plot language"
+msgstr "Set plot language"
+
+msgid "Set language"
+msgstr "Set language"
+
+msgid "Plot summary"
+msgstr "Plot summary"
+
+msgid "Plot full"
+msgstr "Plot full"
+
+msgid "Actors"
+msgstr "Actors"
+
+msgid "Remove selected actor"
+msgstr "Remove selected actor"
+
+msgid "Add new actor"
+msgstr "Add new actor"
+
+msgid "Image"
+msgstr "Image"
+
+msgid "Loading..."
+msgstr "Loading..."
+
+msgid "Remove selected genre"
+msgstr "Remove selected genre"
+
+msgid "Add new genre"
+msgstr "Add new genre"
+
+msgid "Edit selected genre"
+msgstr "Edit selected genre"
+
+msgid "Studios"
+msgstr "Studios"
+
+msgid "Remove selected studio"
+msgstr "Remove selected studio"
+
+msgid "Add new studio"
+msgstr "Add new studio"
+
+msgid "Edit selected studio"
+msgstr "Edit selected studio"
+
+msgid "Unknown title"
+msgstr "Unknown title"
+
+msgid "No tagline"
+msgstr "No tagline"
+
+msgid "Search"
+msgstr "Search"
+
+msgid "Web update"
+msgstr "Web update"
+
+msgid "Preview"
+msgstr "Preview"
+
+msgid "Path"
+msgstr "Path"
+
+msgid "Remove art"
+msgstr "Remove art"
+
+msgid "Source"
+msgstr "Source"
+
+msgid "Channel layout"
+msgstr "Channel layout"
+
+msgid "Number of channels"
+msgstr "Number of channels"
+
+msgid "Channel positions"
+msgstr "Channel positions"
+
+msgid "Codec"
+msgstr "Codec"
+
+msgid "Bit rate (kb/s)"
+msgstr "Bit rate (kb/s)"
+
+msgid "Bit rate mode"
+msgstr "Bit rate mode"
+
+msgid "Sampling rate (kHz)"
+msgstr "Sampling rate (kHz)"
+
+msgid "Bit depth"
+msgstr "Bit depth"
+
+msgid "Compression mode"
+msgstr "Compression mode"
+
+msgid "Language"
+msgstr "Language"
+
+msgid "Country"
+msgstr "Country"
+
+msgid "Click to play"
+msgstr "Click to play"
+
+msgid "Click to set language"
+msgstr "Click to set language"
 
 msgid "Format"
 msgstr "Format"
 
+msgid "Encoding"
+msgstr "Encoding"
+
+msgid "Is embeded in the video:"
+msgstr "Is embeded in the video:"
+
+msgid "Is for hearing impaired:"
+msgstr "Is for hearing impaired:"
+
+msgid "File name"
+msgstr "File name"
+
+msgid "Standard"
+msgstr "Standard"
+
 msgid "FPS"
 msgstr "FPS"
 
+msgid "Scan type"
+msgstr "Scan type"
+
+msgid "Color space"
+msgstr "Color space"
+
+msgid "Chroma subsampling"
+msgstr "Chroma subsampling"
+
+msgid "Aspect"
+msgstr "Aspect"
+
+msgid "Width"
+msgstr "Width"
+
+msgid "Height"
+msgstr "Height"
+
+msgid "File extensions to search for"
+msgstr "File extensions to search for"
+
+msgid "Subtitle extensions to search for"
+msgstr "Subtitle extensions to search for"
+
+msgid "Custom audio codec mappings"
+msgstr "Custom audio codec mappings"
+
+msgid "Custom video codec mappings"
+msgstr "Custom video codec mappings"
+
+msgid "Known segments"
+msgstr "Known segments"
+
+msgid "Remove selected known segment"
+msgstr "Remove selected known segment"
+
+msgid "Segment"
+msgstr "Segment"
+
+msgid "Segment type"
+msgstr "Segment type"
+
+msgid "Add a new known segment"
+msgstr "Add a new known segment"
+
+msgid "Excluded segments"
+msgstr "Excluded segments"
+
+msgid "Remove segment from exclusion"
+msgstr "Remove segment from exclusion"
+
+msgid "Release groups"
+msgstr "Release groups"
+
+msgid "Remove selected release group"
+msgstr "Remove selected release group"
+
+msgid "Custom language mappings"
+msgstr "Custom language mappings"
+
+msgid "Remove selected language mapping"
+msgstr "Remove selected language mapping"
+
+msgid "Mapping"
+msgstr "Mapping"
+
+msgid "Exclude a segment"
+msgstr "Exclude a segment"
+
+msgid "Add a new segment to exclude"
+msgstr "Add a new segment to exclude"
+
+msgid "Add a release group"
+msgstr "Add a release group"
+
+msgid "Add a new release group"
+msgstr "Add a new release group"
+
+msgid "Add a new language mapping"
+msgstr "Add a new language mapping"
+
+msgid "Set user interface langauge"
+msgstr "Set user interface langauge"
+
+msgid "NFO Export"
+msgstr "NFO Export"
+
+msgid "Exporting movie information to NFO files..."
+msgstr "Exporting movie information to NFO files..."
+
+msgid "Exported {0} Movies"
+msgstr "Exported {0} Movies"
+
+msgid "Close"
+msgstr "Close"
+
+msgid "Downloading ..."
+msgstr "Downloading ..."
+
+msgid "Provider select"
+msgstr "Provider select"
+
+msgid "Load"
+msgstr "Load"
+
+msgid "Select languages"
+msgstr "Select languages"
+
+msgid "Movie name:"
+msgstr "Movie name:"
+
+msgid "For release:"
+msgstr "For release:"
+
+msgid "Filename"
+msgstr "Filename"
+
+msgid "Part"
+msgstr "Part"
+
+msgid "Download count"
+msgstr "Download count"
+
+msgid "Is for hearing impaired"
+msgstr "Is for hearing impaired"
+
+msgid "Uploader comment"
+msgstr "Uploader comment"
+
+msgid "Anonymous"
+msgstr "Anonymous"
+
+msgid "None"
+msgstr "None"
+
+msgid "Download"
+msgstr "Download"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "UI and search folders"
+msgstr "UI and search folders"
+
+msgid "Feature detector"
+msgstr "Feature detector"
+
+msgid "File name parser"
+msgstr "File name parser"
+
+msgid "Reset to factory"
+msgstr "Reset to factory"
+
+msgid "Save"
+msgstr "Save"
+
+msgid "Add codec mapping"
+msgstr "Add codec mapping"
+
+msgid "Click to set logo"
+msgstr "Click to set logo"
+
+msgid "New codec id"
+msgstr "New codec id"
+
+msgid "The studio already exists"
+msgstr "The studio already exists"
+
+msgid "New codec mapping"
+msgstr "New codec mapping"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "SelectCountry"
+msgstr "Select country"
+
+msgid "Add new genres"
+msgstr "Add new genres"
+
+msgid "Select genres or add a new one"
+msgstr "Select genres or add a new one"
+
+msgid "New genre name"
+msgstr "New genre name"
+
+msgid "Add a person"
+msgstr "Add a person"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Thumb"
+msgstr "Thumb"
+
+msgid "Select studios"
+msgstr "Select studios"
+
+msgid "Add a new studio"
+msgstr "Add a new studio"
+
+msgid "Select language"
+msgstr "Select language"
+
+msgid "Set"
+msgstr "Set"
+
+msgid "Select"
+msgstr "Select"
+
+msgid "Edit audio"
+msgstr "Edit audio"
+
+msgid "Clear value"
+msgstr "Clear value"
+
+msgid "Bit rate in kbps"
+msgstr "Bit rate in kbps"
+
+msgid "Sampling rate in kHz"
+msgstr "Sampling rate in kHz"
+
+msgid "Bit depth in bits"
+msgstr "Bit depth in bits"
+
+msgid "Edit person"
+msgstr "Edit person"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Edit video"
+msgstr "Edit video"
+
+msgid "Resolution"
+msgstr "Resolution"
+
 msgid "Frame rate in frames/s"
 msgstr "Frame rate in frames/s"
+
+msgid "Search Movies"
+msgstr "Search Movies"
+
+msgid "Search settings"
+msgstr "Search settings"
+
+msgid "Web art updater"
+msgstr "Web art updater"
+
+msgid "Searching for art online"
+msgstr "Searching for art online"
+
+msgid "Web updater"
+msgstr "Web updater"
+
+msgid "Searching for information online..."
+msgstr "Searching for information online..."
+
+msgid "Web promotional videos updater"
+msgstr "Web promotional videos updater"
+
+msgid "Searching for videos online..."
+msgstr "Searching for videos online..."
 
 msgid "Front center channel"
 msgstr "Front center channel"
@@ -174,224 +564,340 @@ msgstr "Front left channel"
 msgid "Front right channel"
 msgstr "Front right channel"
 
-msgid "General Info"
-msgstr "General info"
-
-msgid "Genres"
-msgstr "Genres"
-
-msgid "Height"
-msgstr "Height"
-
-msgid "If you have already seen this movie"
-msgstr "If you have already seen this movie"
-
-msgid "Interlaced"
-msgstr "Interlaced"
-
-msgid "Image"
-msgstr "Image"
-
-msgid "ImdbID"
-msgstr "Imdb ID"
-
-msgid "Is embeded in the video:"
-msgstr "Is embedded in the video"
-
-msgid "Is for hearing impaired:"
-msgstr "Is for hearing impaired"
-
-msgid "Language"
-msgstr "Language"
-
-msgid "LFE"
-msgstr "LFE"
-
-msgid "Lossless"
-msgstr "Lossless"
-
-msgid "Lossy"
-msgstr "Lossy"
-
-msgid "Movie has a .NFO metadata file"
-msgstr "Movie has a .NFO metadata file"
-
-msgid "Movie has available fanart images"
-msgstr "Movie has available fanart images"
-
-msgid "Movie has available subtitles"
-msgstr "Movie has available subtitles"
-
-msgid "Movie has available trailer"
-msgstr "Movie has available trailer"
-
-msgid "Name"
-msgstr "Name"
-
-msgid "No plot available"
-msgstr "Opis ni navoljo"
-
-msgid "No tagline"
-msgstr "No tagline"
-
-msgid "Number of channels"
-msgstr "Number of channels"
-
-msgid "OK"
-msgstr "OK"
-
-msgid "Open file search dialog"
-msgstr "Open file search dialog"
-
-msgid "Original title"
-msgstr "Original title"
-
-msgid "Path"
-msgstr "Path"
-
-msgid "Play count"
-msgstr "Play count"
-
-msgid "Plot"
-msgstr "Plot"
-
-msgid "Plot full"
-msgstr "Plot full"
-
-msgid "Plot summary"
-msgstr "Plot summary"
-
-msgid "Preview"
-msgstr "Preview"
-
-msgid "Promotional videos"
-msgstr "Promotional videos"
-
-msgid "Progressive"
-msgstr "Progresivno"
-
-msgid "Rating"
-msgstr "Rating"
-
-msgid "Release group"
-msgstr "Release group"
-
-msgid "Release year"
-msgstr "Release year"
-
-msgid "Remove current plot"
-msgstr "Remove current plot"
-
-msgid "Remove selected actor"
-msgstr "Remove selected actor"
-
-msgid "Remove selected art"
-msgstr "Remove selected art"
-
-msgid "Remove selected country"
-msgstr "Remove selected country"
-
-msgid "Remove selected director"
-msgstr "Remove selected director"
-
-msgid "Remove selected genre"
-msgstr "Remove selected genre"
-
-msgid "Remove selected studio"
-msgstr "Remove selected studio"
-
-msgid "Resolution"
-msgstr "Resolution"
-
-msgid "Sampling rate (kHz)"
-msgstr "Sampling rate (kHz)"
-
-msgid "Sampling rate in kHz"
-msgstr "Sampling rate in kHz"
-
-msgid "Scan type"
-msgstr "Scan type"
-
-msgid "Search"
-msgstr "Search"
-
-msgid "Select language"
-msgstr "Select language"
-
-msgid "Select studios"
-msgstr "Select studios"
-
-msgid "Set"
-msgstr "Set"
-
-msgid "Movie set"
-msgstr "Set"
-
-msgid "Set plot language"
-msgsrt "Set plot language"
-
-msgid "Set language"
-msgstr "Set language"
-
 msgid "Side left channel"
 msgstr "Side left channel"
 
 msgid "Side right channel"
 msgstr "Side right channel"
 
-msgid "Sort title"
-msgstr "Sort title"
+msgid "Back left channel"
+msgstr "Back left channel"
 
-msgid "Source"
-msgstr "Source"
+msgid "Back right channel"
+msgstr "Back right channel"
 
-msgid "Standard"
-msgstr "Standard"
+msgid "LFE"
+msgstr "LFE"
 
-msgid "Studios"
-msgstr "Studios"
+msgid "Could not access providers folder. Program will now exit"
+msgstr "Could not access providers folder. Program will now exit"
 
-msgid "Subtitles"
-msgstr "Subtitles"
+msgid "Couldn't load any providers in the plugin folder. Program will now exit."
+msgstr "Couldn't load any providers in the plugin folder. Program will now exit."
 
-msgid "Tagline"
-msgstr "Tagline"
+msgid "Error loading providers"
+msgstr "Error loading providers"
 
-msgid "Thumb"
-msgstr "Thumb"
+msgid "No providers for movie library manipulation found. Program will now exit."
+msgstr "No providers for movie library manipulation found. Program will now exit."
 
-msgid "Title"
-msgstr "Title"
+msgid "No providers found."
+msgstr "No providers found."
 
-msgid "TmdbID"
-msgstr "Tmdb ID"
+msgid "There was an error loading the provider, see log for more info. Program will now exit."
+msgstr "There was an error loading the provider, see log for more info. Program will now exit."
 
-msgid "Top 250"
-msgstr "Top 250"
+msgid "Provider did not register a service, the program can not continue."
+msgstr "Provider did not register a service, the program can not continue."
 
-msgid "Trailer"
-msgstr "Trailer"
+msgid "No service registered"
+msgstr "No service registered"
 
-msgid "Trivia and goofs"
-msgstr "Trivia and goofs"
+msgid "Could not create provider service, the program can not continue. See log for more info."
+msgstr "Could not create provider service, the program can not continue. See log for more info."
 
-msgid "Type"
-msgstr "Type"
+msgid "Error creating provider service"
+msgstr "Error creating provider service"
+
+msgid "There are unsaved changes, save?"
+msgstr "There are unsaved changes, save?"
+
+msgid "Unsaved changes"
+msgstr "Unsaved changes"
+
+msgid "nomination"
+msgstr "nomination"
+
+msgid "Error opening IMDB page with address: "
+msgstr "Error opening IMDB page with address: "
+
+msgid "Error opening trailer in Windows Media Player"
+msgstr "Error opening trailer in Windows Media Player"
+
+msgid "Error opening trailer with path: "
+msgstr "Error opening trailer with path: "
+
+msgid "Go to previous movie"
+msgstr "Go to previous movie"
+
+msgid "Go to next movie"
+msgstr "Go to next movie"
+
+msgid "Provider service returned an error while retrieving movies."
+msgstr "Provider service returned an error while retrieving movies."
 
 msgid "Unknown"
 msgstr "Unknown"
 
-msgid "Unknown title"
-msgstr "Unknown title"
+msgid "Genre edit"
+msgstr "Genre edit"
 
-msgid "Use advanced search"
-msgstr "Use advanced search"
+msgid "Genre name:"
+msgstr "Genre name:"
 
-msgid "Variable"
-msgstr "Variable"
+msgid "Edit genre"
+msgstr "Edit genre"
 
-msgid "Videos"
-msgstr "Videos"
+msgid "Edit"
+msgstr "Edit"
 
-msgid "Wdith"
-msgstr ""
+msgid "Confrim remove"
+msgstr "Confrim remove"
+
+msgid "Enter full description"
+msgstr "Enter full description"
+
+msgid "This actor with unspecified character already exists in the list. To add another role please specify a character."
+msgstr "This actor with unspecified character already exists in the list. To add another role please specify a character."
+
+msgid "This actor already exists in the list. To add another actor's role specify a diffrent character."
+msgstr "This actor already exists in the list. To add another actor's role specify a diffrent character."
+
+msgid "Please note this will edit this studio name in all the movies in the collection.\nIf you want to edit studio name only for this movie remove this studio add a new one with desired name.\n\nDo you really want to edit this studio?"
+msgstr "Please note this will edit this studio name in all the movies in the collection.\nIf you want to edit studio name only for this movie remove this studio add a new one with desired name.\n\nDo you really want to edit this studio?"
+
+msgid "Studio edit"
+msgstr "Studio edit"
+
+msgid "Studio name:"
+msgstr "Studio name:"
+
+msgid "Edit studio"
+msgstr "Edit studio"
+
+msgid "Failed to load plugin {0}.\n\n{1}"
+msgstr "Failed to load plugin {0}.\n\n{1}"
+
+msgid "Failed to access provider service"
+msgstr "Failed to access provider service"
+
+msgid "Do you really want to remove {0}?"
+msgstr "Do you really want to remove {0}?"
+msgid "movie"
+msgstr "movie"
+
+msgid "Remove {0}"
+msgstr "Remove {0}",
+
+msgid "File could not be accessed: "
+msgstr "File could not be accessed: "
+
+msgid "An error has occured opening file: "
+msgstr "An error has occured opening file: "
+
+msgid "Error opening movie folder"
+msgstr "Error opening movie folder"
+
+msgid "Folder not accessible or doesn't exists."
+msgstr "Folder not accessible or doesn't exists."
+
+msgid "No folders to search have been added yet. Please add them in the options menu.\nWould you like to open the options now?"
+msgstr "No folders to search have been added yet. Please add them in the options menu.\nWould you like to open the options now?"
+
+msgid "No folders to search."
+msgstr "No folders to search."
+
+msgid "No languages selected, search all?"
+msgstr "No languages selected, search all?"
+
+msgid "No languages selected"
+msgstr "No languages selected"
+
+msgid "Art has to be saved to the database first to be able to be set as default."
+msgstr "Art has to be saved to the database first to be able to be set as default."
+
+msgid "Error opening video with path: "
+msgstr "Error opening video with path: "
+
+msgid "Enter new extension:"
+msgstr "Enter new extension:"
+
+msgid "Add new extension"
+msgstr "Add new extension"
+
+msgid "Provider could not remove the item.\nProbable causes:\n\t* Item does not exists in the store\n\t* An error has occured."
+msgstr "Provider could not remove the item.\nProbable causes:\n\t* Item does not exists in the store\n\t* An error has occured."
+
+msgid "Error: Provider could not add the item.\nPlease contact provider creator."
+msgstr "Error: Provider could not add the item.\nPlease contact provider creator."
+
+msgid "Provider does not support the requested operation."
+msgstr "Provider does not support the requested operation."
+
+msgid "\nProvider message: "
+msgstr "\nProvider message: "
+
+msgid "Provider has not implemented the requested operation."
+msgstr "Provider has not implemented the requested operation."
+
+msgid "An error has occured in the provider."
+msgstr "An error has occured in the provider."
+
+msgid "an actor"
+msgstr "an actor"
+
+msgid "a writer"
+msgstr "a writer"
+
+msgid "a director"
+msgstr "a director"
+
+msgid "This person has already been added to this movie as {0}."
+msgstr "This person has already been added to this movie as {0}."
+msgid "genre"
+msgstr "genre"
+
+msgid "award"
+msgstr "award"
+
+msgid "country"
+msgstr "country"
+
+msgid "promotional video"
+msgstr "promotional video"
+
+msgid "art"
+msgstr "art"
+
+msgid "This {0} has already been added to this movie."
+msgstr "This {0} has already been added to this movie."
+
+msgid "Movie title"
+msgstr "Movie title"
+
+msgid "No required info found. Plugin requires:"
+msgstr "No required info found. Plugin requires:"
+
+msgid " or "
+msgstr " or "
+
+msgid "No art found"
+msgstr "No art found"
+
+msgid "Updating movie with art...."
+msgstr "Updating movie with art...."
+
+msgid "Updating ..."
+msgstr "Updating ..."
+
+msgid "An error has occured accessing the parser/scrapper."
+msgstr "An error has occured accessing the parser/scrapper."
+
+msgid "Searching for available movie information."
+msgstr "Searching for available movie information."
+
+msgid "Searching for movie in index."
+msgstr "Searching for movie in index."
+
+msgid "An error has occured updating available movie information."
+msgstr "An error has occured updating available movie information."
+
+msgid "An error has occured downloading movie information."
+msgstr "An error has occured downloading movie information."
+
+msgid "Found {0} {1}"
+msgstr "Found {0} {1}"
+
+msgid "Match found"
+msgstr "Match found"
+
+msgid "Movie information not found."
+msgstr "Movie information not found."
+
+msgid "Preforming a one-time indexing operation."
+msgstr "Preforming a one-time indexing operation."
+
+msgid "Indexing available movies"
+msgstr "Indexing available movies"
+
+msgid "Getting movie information."
+msgstr "Getting movie information."
+
+msgid "There was an error downloading movie information"
+msgstr "There was an error downloading movie information"
+
+msgid "Errors have occured ..."
+msgstr "Errors have occured ..."
+
+msgid "Searching for videos by Imdb ID"
+msgstr "Searching for videos by Imdb ID"
+
+msgid "Searching for videos by Tmdb ID"
+msgstr "Searching for videos by Tmdb ID"
+
+msgid "Searching for videos by Title"
+msgstr "Searching for videos by Title"
+
+msgid "No videos found"
+msgstr "No videos found"
+
+msgid "Unknown directory path"
+msgstr "Unknown directory path"
+
+msgid "Failed to open the subtitle download site"
+msgstr "Failed to open the subtitle download site"
+
+msgid "No download information available."
+msgstr "No download information available."
+
+msgid "Provider failed to save the subtitle information"
+msgstr "Provider failed to save the subtitle information"
+
+msgid "Failed to access subtitle file information. Don't have security privileges."
+msgstr "Failed to access subtitle file information. Don't have security privileges."
+
+msgid "Failed to access subtitle file information. Access unauthorized."
+msgstr "Failed to access subtitle file information. Access unauthorized."
+
+msgid "Failed to access subtitle file information."
+msgstr "Failed to access subtitle file information."
+
+msgid "Failed to obtain subtitle file information."
+msgstr "Failed to obtain subtitle file information."
+
+msgid "Failed to download the subtitle file.\n\nError message:\n"
+msgstr "Failed to download the subtitle file.\n\nError message:\n"
+
+msgid "Failed to download the subtitle archive.\n\nError message:\n"
+msgstr "Failed to download the subtitle archive.\n\nError message:\n"
+
+msgid "Failed to write subtitle file to drive with the following path:\n\"{0}\""
+msgstr "Failed to write subtitle file to drive with the following path:\n\"{0}\""
+
+msgid "Failed to decompress subtitle archive."
+msgstr "Failed to decompress subtitle archive."
+
+msgid "No subtitles found"
+msgstr "No subtitles found"
+
+msgid "An error has occured downloading subtitle information."
+msgstr "An error has occured downloading subtitle information."
+
+msgid "An error has occured getting subtitle information."
+msgstr "An error has occured getting subtitle information."
+
+msgid "Image Files"
+msgstr "Image Files"
+
+msgid "Errors occured during detection phase. Search & Save can not continue."
+msgstr "Errors occured during detection phase. Search & Save can not continue."
+
+msgid "Error: Downloader plugin could not be instantied."
+msgstr "Error: Downloader plugin could not be instantied."
+
+msgid "Error accessing movie info provider."
+msgstr "Error accessing movie info provider."
+
+msgid "Error accessing subtitle provider."
+msgstr "Error accessing subtitle provider."
+

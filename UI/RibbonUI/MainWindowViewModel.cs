@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using Frost.Common;
+using Frost.GettextMarkupExtension;
 using Frost.XamlControls.Commands;
 using log4net;
 using RibbonUI.Util;
@@ -41,16 +42,23 @@ namespace RibbonUI {
                 UIHelper.HandleProviderException(Log, e);
             }
 
-            if (MessageBox.Show("There are unsaved changes, save?", "Unsaved changes", MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
+            if (MessageBox.Show(Gettext.T("There are unsaved changes, save?"), Gettext.T("Unsaved changes"), MessageBoxButton.YesNo) == MessageBoxResult.Yes) {
                 try {
                     _service.SaveChanges();
                 }
                 catch (Exception e) {
                     UIHelper.HandleProviderException(Log, e);
                 }
-            }  
+            }
 
-            LightInjectContainer.Dispose();
+            try {
+                LightInjectContainer.Dispose();
+            }
+            catch (Exception e) {
+                if (Log.IsErrorEnabled) {
+                    Log.Error("Failed to dispose some plugins & providers", e);
+                }
+            }
         }
     }
 }
