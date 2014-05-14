@@ -1,9 +1,9 @@
 ﻿using Frost.Common;
 using Frost.Common.Models.Provider;
+using Frost.RibbonUI.Design.Models;
 using LightInject;
-using RibbonUI.Design.Models;
 
-namespace RibbonUI.Design {
+namespace Frost.RibbonUI.Design {
     public class DesignCompositionRoot : ICompositionRoot {
         private const string SYSTEM_NAME = "Design";
 

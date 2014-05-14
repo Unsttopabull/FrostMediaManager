@@ -5,15 +5,15 @@ using System.Windows;
 using System.Windows.Data;
 using Frost.Common;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Design;
+using Frost.RibbonUI.Design.Fakes;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util;
+using Frost.RibbonUI.Util.ObservableWrappers;
+using Frost.RibbonUI.Windows.Edit;
 using Frost.XamlControls.Commands;
-using RibbonUI.Annotations;
-using RibbonUI.Design;
-using RibbonUI.Design.Fakes;
-using RibbonUI.Util;
-using RibbonUI.Util.ObservableWrappers;
-using RibbonUI.Windows.Edit;
 
-namespace RibbonUI.UserControls.List {
+namespace Frost.RibbonUI.UserControls.List {
 
     internal class ListAudiosViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;

@@ -7,8 +7,8 @@
     <ProjectGuid>{25D0E1A6-7FA0-49FA-989F-3F5F082BD23D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SharpFanartTv</RootNamespace>
-    <AssemblyName>SharpFanartTv</AssemblyName>
+    <RootNamespace>Frost.SharpFanartTv</RootNamespace>
+    <AssemblyName>Frost.SharpFanartTv</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -28,6 +28,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Frost.SharpFanartTv.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

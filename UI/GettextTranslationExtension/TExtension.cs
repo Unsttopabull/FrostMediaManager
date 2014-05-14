@@ -7,8 +7,10 @@ using System.Windows.Markup;
 [assembly:XmlnsPrefix("http://www.frostmediamanager.com/xaml/translation", "l")]
 namespace Frost.GettextMarkupExtension {
 
+    /// <summary>Represents a Gettext translation extension</summary>
     public class TExtension : MarkupExtension {
 
+        /// <summary>Initializes a new instance of a class derived from <see cref="T:System.Windows.Markup.MarkupExtension"/>. </summary>
         public TExtension() {
             
         }

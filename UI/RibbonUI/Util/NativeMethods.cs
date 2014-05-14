@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace RibbonUI.Util {
+namespace Frost.RibbonUI.Util {
     public class NativeMethods {
 
         private const int GWL_STYLE = -16;

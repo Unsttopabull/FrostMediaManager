@@ -6,11 +6,11 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Util;
 using log4net;
 using log4net.Config;
-using RibbonUI.Util;
 
-namespace RibbonUI {
+namespace Frost.RibbonUI {
 
     /// <summary>Interaction logic for App.xaml</summary>
     public partial class App : Application {

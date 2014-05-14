@@ -2,7 +2,7 @@
 using Frost.Common.Models.Provider.ISO;
 using Frost.Common.Util.ISO;
 
-namespace RibbonUI.Design.Models {
+namespace Frost.RibbonUI.Design.Models {
 
     public class DesignLanguage : ILanguage {
 

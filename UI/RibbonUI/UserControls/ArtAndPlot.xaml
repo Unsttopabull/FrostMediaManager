@@ -8,9 +8,9 @@
     xmlns:l="http://www.frostmediamanager.com/xaml/translation"
     xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:userControls="clr-namespace:RibbonUI.UserControls"
-    xmlns:ow="clr-namespace:RibbonUI.Util.ObservableWrappers"
-    x:Class="RibbonUI.UserControls.ArtAndPlot"
+    xmlns:userControls="clr-namespace:Frost.RibbonUI.UserControls"
+    xmlns:ow="clr-namespace:Frost.RibbonUI.Util.ObservableWrappers"
+    x:Class="Frost.RibbonUI.UserControls.ArtAndPlot"
     mc:Ignorable="d"
     d:DesignHeight="625" d:DesignWidth="1071">
     <UserControl.DataContext>

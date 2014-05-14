@@ -1,6 +1,8 @@
 namespace Frost.Common.Models.Provider {
 
+    /// <summary>Represents the audio track informtion that is acessible by the UI</summary>
     public interface IAudio : IHasLanguage, IMovieEntity {
+
         /// <summary>Gets or sets the source of the audio</summary>
         /// <value>the source of the audio</value>
         /// <example>\eg{<c>LD MD LINE MIC</c>}</example>

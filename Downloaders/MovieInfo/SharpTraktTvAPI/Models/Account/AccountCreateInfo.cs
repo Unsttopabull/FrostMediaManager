@@ -1,7 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace SharpTraktTvAPI.Models.Account {
+namespace Frost.SharpTraktTvAPI.Models.Account {
 
+    /// <summary>Represents the info required to create a new user.</summary>
     internal class AccountCreateInfo : AccountSettingsInfo {
 
         /// <summary>Initializes a new instance of the <see cref="AccountCreateInfo"/> class.</summary>
@@ -9,6 +10,7 @@ namespace SharpTraktTvAPI.Models.Account {
             Email = email;
         }
 
+        /// <summary>The user email</summary>
         [JsonProperty("email")]
         public string Email { get; set; }
     }

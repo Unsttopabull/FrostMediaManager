@@ -6,13 +6,13 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using Frost.Common.Models.Provider;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Design.Fakes;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util;
+using Frost.RibbonUI.Util.ObservableWrappers;
 using Frost.XamlControls.Commands;
-using RibbonUI.Annotations;
-using RibbonUI.Design.Fakes;
-using RibbonUI.Util;
-using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows.Edit {
+namespace Frost.RibbonUI.Windows.Edit {
     class EditAudioViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private MovieAudio _selectedAudio;

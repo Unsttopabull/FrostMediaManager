@@ -1,10 +1,10 @@
-﻿<Window x:Class="RibbonUI.Windows.WebUpdate.WebArtUpdater"
+﻿<Window x:Class="Frost.RibbonUI.Windows.WebUpdate.WebArtUpdater"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="http://www.frostmediamanager.com/xaml/translation"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:webUpdate="clr-namespace:RibbonUI.Util.WebUpdate"
+        xmlns:webUpdate="clr-namespace:Frost.RibbonUI.Util.WebUpdate"
         mc:Ignorable="d" WindowStyle="ToolWindow" ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
         Title="{l:T Web art updater}" SizeToContent="WidthAndHeight" x:Name="WebArtUpdaterWindow" d:DataContext="{d:DesignInstance webUpdate:ArtUpdater}">
     <StackPanel Margin="5">

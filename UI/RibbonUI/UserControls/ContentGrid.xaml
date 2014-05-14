@@ -4,16 +4,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:l="http://www.frostmediamanager.com/xaml/translation"
-    xmlns:controls="clr-namespace:RibbonUI.UserControls"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:list="clr-namespace:RibbonUI.UserControls.List"
-    x:Class="RibbonUI.UserControls.ContentGrid"
+    xmlns:userControls="clr-namespace:Frost.RibbonUI.UserControls"
+    xmlns:list="clr-namespace:Frost.RibbonUI.UserControls.List"
+    x:Class="Frost.RibbonUI.UserControls.ContentGrid"
     x:Name="ContentGridControl"
     mc:Ignorable="d" Loaded="OnWindowLoaded"
     d:DesignHeight="700" d:DesignWidth="1396">
     <!--MinWidth="{Binding MinRequiredWidth, Mode=OneWay, RelativeSource={RelativeSource Self}}"-->
     <UserControl.DataContext>
-        <controls:ContentGridViewModel/>
+        <userControls:ContentGridViewModel/>
     </UserControl.DataContext>
     <UserControl.Resources>
         <Style x:Key="BooleanImage" TargetType="{x:Type Image}">
@@ -189,14 +189,14 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <controls:MovieFlagsAndInfo x:Name="MovieFlags" SelectedMovie="{Binding ElementName=ContentGridControl, Path=DataContext.SelectedMovie}" />
+            <userControls:MovieFlagsAndInfo x:Name="MovieFlags" SelectedMovie="{Binding ElementName=ContentGridControl, Path=DataContext.SelectedMovie}" />
             <TabControl Grid.Row="1">
                 <TabItem Header="{l:T General Info}">
-                    <controls:ArtAndPlot x:Name="ArtAndPlot" Background="Transparent"
+                    <userControls:ArtAndPlot x:Name="ArtAndPlot" Background="Transparent"
                                          SelectedMovie="{Binding ElementName=ContentGridControl, Path=DataContext.SelectedMovie}"/>
                 </TabItem>
                 <TabItem x:Name="MovieEditTab" x:FieldModifier="private" Header="{l:T Edit Movie info}">
-                    <controls:EditMovie x:Name="EditMovie" SelectedMovie="{Binding IsAsync=True, ElementName=ContentGridControl, Path=DataContext.SelectedMovie}" />
+                    <userControls:EditMovie x:Name="EditMovie" SelectedMovie="{Binding IsAsync=True, ElementName=ContentGridControl, Path=DataContext.SelectedMovie}" />
                 </TabItem>
                 <TabItem Header="{l:T Subtitles}" x:Name="MovieSubtitles">
                     <i:Interaction.Triggers>

@@ -7,8 +7,8 @@
     <ProjectGuid>{7E74D034-0D99-4E49-BD80-F96B04D3ECA9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SharpTraktTvAPI</RootNamespace>
-    <AssemblyName>SharpTraktTvAPI</AssemblyName>
+    <RootNamespace>Frost.SharpTraktTvAPI</RootNamespace>
+    <AssemblyName>Frost.SharpTraktTvAPI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -28,6 +28,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Frost.SharpTraktTvAPI.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -78,9 +79,6 @@
     <Compile Include="URLBuilder.cs" />
     <Compile Include="SharpTraktTv.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

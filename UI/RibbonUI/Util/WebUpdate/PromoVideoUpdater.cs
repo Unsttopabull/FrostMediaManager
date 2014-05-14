@@ -9,11 +9,11 @@ using Frost.Common.Models;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers.Models;
 using Frost.InfoParsers.Models.Info;
+using Frost.RibbonUI.Design.Models;
+using Frost.RibbonUI.Properties;
 using log4net;
-using RibbonUI.Annotations;
-using RibbonUI.Design.Models;
 
-namespace RibbonUI.Util.WebUpdate {
+namespace Frost.RibbonUI.Util.WebUpdate {
     public class PromoVideoUpdater : INotifyPropertyChanged {
         private static readonly ILog Log = LogManager.GetLogger(typeof(PromoVideoUpdater));
         private readonly IPromotionalVideoClient _cli;

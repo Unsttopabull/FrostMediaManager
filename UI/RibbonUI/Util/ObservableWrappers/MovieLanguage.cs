@@ -1,7 +1,7 @@
 ﻿using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
 
-namespace RibbonUI.Util.ObservableWrappers {
+namespace Frost.RibbonUI.Util.ObservableWrappers {
     public class MovieLanguage : MovieItemBase<ILanguage> {
 
         public MovieLanguage(ILanguage country) : base(country) {

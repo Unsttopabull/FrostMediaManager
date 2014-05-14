@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Frost.Common.Models.Provider;
 
-namespace RibbonUI.Util.ObservableWrappers {
+namespace Frost.RibbonUI.Util.ObservableWrappers {
 
     public class MovieItemBase<T> : ObservableBase<T> where T : class, IMovieEntity {
 

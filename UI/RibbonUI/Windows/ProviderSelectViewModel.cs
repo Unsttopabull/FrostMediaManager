@@ -2,11 +2,11 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util;
 using Frost.XamlControls.Commands;
-using RibbonUI.Annotations;
-using RibbonUI.Util;
 
-namespace RibbonUI.Windows {
+namespace Frost.RibbonUI.Windows {
     public class ProviderSelectViewModel : INotifyPropertyChanged {
         private ObservableCollection<Provider> _providers;
         public event PropertyChangedEventHandler PropertyChanged;

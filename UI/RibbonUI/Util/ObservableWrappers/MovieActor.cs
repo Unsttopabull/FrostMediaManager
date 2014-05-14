@@ -1,7 +1,7 @@
 ﻿using System;
 using Frost.Common.Models.Provider;
 
-namespace RibbonUI.Util.ObservableWrappers {
+namespace Frost.RibbonUI.Util.ObservableWrappers {
     public class MovieActor : MoviePerson, IEquatable<IActor> {
 
         public MovieActor(IActor actor) : base(actor) {

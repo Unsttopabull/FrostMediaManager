@@ -3,11 +3,11 @@ using System.Windows;
 using System.Windows.Input;
 using Frost.Common;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Util;
 using Frost.XamlControls.Commands;
 using log4net;
-using RibbonUI.Util;
 
-namespace RibbonUI {
+namespace Frost.RibbonUI {
     class MainWindowViewModel {
         private static readonly ILog Log = LogManager.GetLogger(typeof(MainWindowViewModel));
         private readonly IMoviesDataService _service;

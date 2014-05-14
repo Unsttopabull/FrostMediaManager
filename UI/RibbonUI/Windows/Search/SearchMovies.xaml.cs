@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using RibbonUI.Util;
+using Frost.RibbonUI.Util;
 
-namespace RibbonUI.Windows.Search {
+namespace Frost.RibbonUI.Windows.Search {
 
     /// <summary>Interaction logic for SearchMovies.xaml</summary>
     public partial class SearchMovies : Window {

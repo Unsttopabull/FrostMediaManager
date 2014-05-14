@@ -107,7 +107,7 @@ namespace Frost.Providers.Xbmc.DB {
                     IEnumerable<string> enumerable = thumbUrls.Select(x => x.Value);
                     return enumerable.ToArray();
                 }
-                catch (Exception e) {
+                catch (Exception) {
                     return null;
                 }
             }
@@ -224,7 +224,7 @@ namespace Frost.Providers.Xbmc.DB {
                     var thumbUrls = xd.XPathSelectElements(@"//thumb").Select(x => x.Value).ToArray();
                     return thumbUrls;
                 }
-                catch (Exception e) {
+                catch (Exception) {
                     return null;
                 }
             }

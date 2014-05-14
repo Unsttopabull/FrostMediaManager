@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Frost.InfoParsers;
-using SharpOmdbAPI;
-using SharpOmdbAPI.Models;
+using Frost.SharpOmdbAPI;
+using Frost.SharpOmdbAPI.Models;
 
 namespace Frost.MovieInfoProviders.Info.OmdbAPI {
 

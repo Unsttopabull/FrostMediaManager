@@ -20,10 +20,16 @@ namespace Frost.Common.Util {
             return sb.ToString();
         }
 
+        /// <summary>Gets the movie hash from the stream.</summary>
+        /// <param name="input">The input stream from which to calculate the hash.</param>
+        /// <returns>The OpenSubtitle.org MovieHash as a byte array.</returns>
         public static byte[] GetMovieHash(this Stream input) {
             return ComputeMovieHash(input);
         }
 
+        /// <summary>Gets the movie hash from the stream as a hexadecimal string digest.</summary>
+        /// <param name="input">The input stream from which to calculate the hash.</param>
+        /// <returns>The OpenSubtitle.org MovieHash as hexadecimal string digest.</returns>
         public static string GetMovieHashAsHexString(this Stream input) {
             return ToHexString(ComputeMovieHash(input));
         }
@@ -37,6 +43,9 @@ namespace Frost.Common.Util {
             return ToHexString(ComputeMovieHash(fileName));
         }
 
+        /// <summary>Gets the movie hash from the file.</summary>
+        /// <param name="filename">The path to the file for which to calcluate the movie hash.</param>
+        /// <returns>The OpenSubtitle.org MovieHash as a byte array.</returns>
         private static byte[] ComputeMovieHash(string filename) {
             byte[] result;
             using (Stream input = File.OpenRead(filename)) {
@@ -45,6 +54,9 @@ namespace Frost.Common.Util {
             return result;
         }
 
+        /// <summary>Gets the movie hash from the stream.</summary>
+        /// <param name="input">The input stream from which to calculate the hash.</param>
+        /// <returns>The OpenSubtitle.org MovieHash as a byte array.</returns>
         public static byte[] ComputeMovieHash(Stream input) {
             long streamsize = input.Length;
             ulong lhash = (ulong) streamsize;

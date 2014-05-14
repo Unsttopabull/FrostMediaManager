@@ -2,7 +2,7 @@
 using Frost.Common.Models.Provider;
 using Frost.InfoParsers.Models.Info;
 
-namespace RibbonUI.Design.Models {
+namespace Frost.RibbonUI.Design.Models {
     public class DesignArt : IArt {
 
         public DesignArt(ArtType type, string path, string preview) {

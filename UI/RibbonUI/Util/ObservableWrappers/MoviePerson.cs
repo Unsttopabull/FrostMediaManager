@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Frost.Common.Comparers;
 using Frost.Common.Models.Provider;
 
-namespace RibbonUI.Util.ObservableWrappers {
+namespace Frost.RibbonUI.Util.ObservableWrappers {
 
     public class MoviePerson : ObservableBase<IPerson>, IEquatable<MoviePerson>, IEquatable<IPerson> {
         private readonly IEqualityComparer<IPerson> _comparer;

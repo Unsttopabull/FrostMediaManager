@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using RibbonUI.Util.ObservableWrappers;
+using Frost.RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.UserControls {
+namespace Frost.RibbonUI.UserControls {
 
     /// <summary>Interaction logic for ArtAndPlot.xaml</summary>
     public partial class ArtAndPlot : UserControl {

@@ -5,8 +5,8 @@ using System.Reflection;
 using Frost.InfoParsers;
 using Frost.InfoParsers.Models.Art;
 using Frost.InfoParsers.Models.Info;
+using Frost.SharpFanartTv;
 using Newtonsoft.Json.Linq;
-using SharpFanartTv;
 
 namespace Frost.MovieInfoProviders.Art {
 
@@ -61,7 +61,7 @@ namespace Frost.MovieInfoProviders.Art {
                 JObject jObject = JObject.Parse(json);
                 first = jObject.First.FirstOrDefault();
             }
-            catch (Exception e) {
+            catch (Exception) {
                 return null;
             }
 

@@ -1,7 +1,9 @@
 ﻿namespace Frost.Common.Models.Provider {
 
+    /// <summary>Represents the information about a movie plot that is accessible by the UI</summary>
     public interface IPlot : IMovieEntity {
-        /// <summary>Gets or sets the tagline (short one-liner).</summary>
+
+        /// <summary>Gets or sets the tagline/motto (short one-liner).</summary>
         /// <value>The tagline (short promotional slogan / one-liner / clarification).</value>
         string Tagline { get; set; }
 
@@ -9,7 +11,7 @@
         /// <value>A short story summary, the plot outline</value>
         string Summary { get; set; }
 
-        /// <summary>Gets or sets the full plot.</summary>
+        /// <summary>Gets or sets the plot full description.</summary>
         /// <value>The full plot.</value>
         string Full { get; set; }
 

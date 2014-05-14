@@ -2,8 +2,12 @@
 
 namespace Frost.Common.Models.FeatureDetector {
 
+    /// <summary>Represents an informationn about a movie certification that has been detected by Feature Detecor.</summary>
     public class CertificationInfo {
 
+        /// <summary>Initializes a new instance of the <see cref="CertificationInfo"/> class.</summary>
+        /// <param name="country">The country in which this certification applies.</param>
+        /// <param name="certification">The certification rating.</param>
         public CertificationInfo(ISOCountryCode country, string certification) {
             Country = country;
             Rating = certification;

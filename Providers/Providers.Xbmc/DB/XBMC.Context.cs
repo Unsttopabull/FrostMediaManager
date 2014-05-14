@@ -16,20 +16,17 @@ namespace Frost.Providers.Xbmc.DB {
 
     /// <summary>Represents a context used for manipulation of the XBMC database.</summary>
     public class XbmcContainer : DbContext {
-        private StreamWriter _sw;
         private const string WIN_XBMC_DB_LOC = @"XBMC\userdata\Database\";
 
         /// <summary>Initializes a new instance of the <see cref="XbmcContainer"/> class.</summary>
         public XbmcContainer() : base("name=XbmcEntities") {
             FixForEf();
-            SetupLogging();
         }
 
         /// <summary>Initializes a new instance of the <see cref="XbmcContainer"/> class.</summary>
         /// <param name="filePath">The path to the SQLite database file.</param>
         public XbmcContainer(string filePath) : base(new SQLiteConnection("data source=" + filePath), true) {
             FixForEf();
-            SetupLogging();
         }
 
         private void FixForEf() {
@@ -50,23 +47,10 @@ namespace Frost.Providers.Xbmc.DB {
                     }
                 }
             }
-            catch (SQLiteException e) {
+            catch (SQLiteException) {
             }
-            catch (Exception e) {
+            catch (Exception) {
             }
-        }
-
-        private void SetupLogging() {
-            // _sw = new StreamWriter(File.Create("xbmc.EF.log"));
-
-            //Database.Log = s => Task.Run(() => {
-            //    lock (_sw) {
-            //        _sw.WriteLine("############################");
-            //        _sw.WriteLine(s);
-            //        _sw.WriteLine("############################");
-            //        _sw.Flush();
-            //    }
-            //});
         }
 
         /// <summary>Gets or sets the information about the movies in the XBMC library.</summary>
@@ -148,7 +132,7 @@ namespace Frost.Providers.Xbmc.DB {
             try {
                 EfLogger.LogChanges(this, "xbmc.log");
             }
-            catch (Exception e) {
+            catch (Exception) {
             }
 
             return base.SaveChanges();
@@ -163,18 +147,6 @@ namespace Frost.Providers.Xbmc.DB {
             //escapamo separatorje med mapami da regex ne pomotoma proba narobe razumeti vzorca
             fn = fn.Replace(@"\", @"\\");
             return di.FirstOrDefault(file => Regex.IsMatch(file, fn + @"MyVideos\d+\.db"));
-        }
-
-        ~XbmcContainer() {
-            if (_sw != null) {
-                try {
-                    lock (_sw) {
-                        _sw.Dispose();
-                    }
-                }
-                catch (Exception e) {
-                }
-            }
         }
     }
 

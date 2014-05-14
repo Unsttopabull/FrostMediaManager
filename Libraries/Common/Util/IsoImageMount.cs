@@ -3,6 +3,8 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 
 namespace Frost.Common.Util {
+
+    /// <summary>Handles mounting and unmouting of an ISO image files as CD/DVD drives.</summary>
     public static class IsoImageMount {
         private static readonly bool Win8Plus;
 
@@ -12,6 +14,12 @@ namespace Frost.Common.Util {
             }
         }
 
+        /// <summary>Mounts the specified file name as an ISO image with the first available drive letter.</summary>
+        /// <param name="fileName">Path to the ISO image file.</param>
+        /// <param name="closeHandle">if set to <c>true</c> closes the disk handle upon function exit.</param>
+        /// <returns>Returns the drive handle that is a mounted ISO image.</returns>
+        /// <exception cref="System.NotSupportedException">The operation is only supported in Windows 8 / Windows Server 2012 or newer.</exception>
+        /// <exception cref="System.InvalidOperationException">Throws when image mouting has not succeded. See exception error message.</exception>
         public static IntPtr Mount(string fileName, bool closeHandle = true) {
             if (!Win8Plus) {
                 throw new NotSupportedException("The operation is only supported in Windows 8 / Windows Server 2012 or newer.");
@@ -43,9 +51,12 @@ namespace Frost.Common.Util {
             return handle;
         }
 
+        /// <summary>Unmounts the ISO image file using the drive handle.</summary>
+        /// <param name="handle">The drive handle that represents the ISO image file.</param>
+        /// <exception cref="System.NotSupportedException">The operation is only supported in Windows 7 / Windows Server 2008 R2 or newer.</exception>
         public static void Unmount(IntPtr handle) {
             if (!Win8Plus) {
-                throw new NotSupportedException("The operation is only supported in Windows 7 / Windows Server 2008 R2 or newer.");
+                throw new NotSupportedException("The operation is only supported in Windows 8 / Windows Server 2008 R2 or newer.");
             }
 
             DetachVirtualDisk(handle, DetachVirtualDiskFlag.DetachVirtualDiskFlagNone, 0);
@@ -124,7 +135,7 @@ namespace Frost.Common.Util {
 
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool CloseHandle(IntPtr hObject);
+        private static extern bool CloseHandle(IntPtr hObject);
 
         [DllImport("virtdisk.dll", CharSet = CharSet.Unicode)]
         private static extern IntPtr DetachVirtualDisk(IntPtr handle, DetachVirtualDiskFlag flags, ulong providerSpeficicFlags);

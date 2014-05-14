@@ -1,10 +1,9 @@
-﻿<Window x:Class="RibbonUI.Windows.Add.AddPerson"
+﻿<Window x:Class="Frost.RibbonUI.Windows.Add.AddPerson"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
-        xmlns:models="clr-namespace:Frost.Common.Models.Provider;assembly=Frost.Common"        
-        xmlns:windows="clr-namespace:RibbonUI.Windows"
-        xmlns:add="clr-namespace:RibbonUI.Windows.Add"
+        xmlns:models="clr-namespace:Frost.Common.Models.Provider;assembly=Frost.Common"
+        xmlns:add="clr-namespace:Frost.RibbonUI.Windows.Add"
         Closed="AddPersonOnClosed" Height="552" Width="590"
         Title="{l:T Add a person}" Name="AddPersonWindow"
         WindowStartupLocation="CenterOwner">
@@ -43,7 +42,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Source="{Binding (models:IPerson.Thumb), IsAsync=True, TargetNullValue={StaticResource DefaultPerson}, FallbackValue={StaticResource DefaultPerson}}"
                                MaxWidth="100" />
-                        <TextBlock Text="{Binding (models:IPerson.Name), TargetNullValue=Unknown, FallbackValue=Unknown}"
+                        <TextBlock Text="{Binding (models:IHasName.Name), TargetNullValue=Unknown, FallbackValue=Unknown}"
                                    Margin="5,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
                 </DataTemplate>

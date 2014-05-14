@@ -9,19 +9,19 @@ using System.Windows.Input;
 using Frost.Common;
 using Frost.Common.Models.Provider;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Design;
+using Frost.RibbonUI.Design.Fakes;
+using Frost.RibbonUI.Design.Models;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util;
+using Frost.RibbonUI.Util.ObservableWrappers;
+using Frost.RibbonUI.Windows;
+using Frost.RibbonUI.Windows.Add;
+using Frost.RibbonUI.Windows.Edit;
 using Frost.XamlControls.Commands;
 using Microsoft.Win32;
-using RibbonUI.Annotations;
-using RibbonUI.Design;
-using RibbonUI.Design.Fakes;
-using RibbonUI.Design.Models;
-using RibbonUI.Util;
-using RibbonUI.Util.ObservableWrappers;
-using RibbonUI.Windows;
-using RibbonUI.Windows.Add;
-using RibbonUI.Windows.Edit;
 
-namespace RibbonUI.UserControls {
+namespace Frost.RibbonUI.UserControls {
 
     public class EditMovieViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -262,7 +262,7 @@ namespace RibbonUI.UserControls {
             try {
                 ag.Genres = _service.Genres;
             }
-            catch (Exception e) {
+            catch (Exception) {
                 
             }
 

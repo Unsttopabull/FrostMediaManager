@@ -4,6 +4,7 @@ using Frost.Common.Models.FeatureDetector;
 
 namespace Frost.Common.Models.Provider {
 
+    /// <summary>Represents the information about the movie that is accessible by the UI.</summary>
     public interface IMovie : IMovieEntity {
 
         #region Columns
@@ -213,8 +214,12 @@ namespace Frost.Common.Models.Provider {
         /// <value>The movie genres.</value>
         IEnumerable<IGenre> Genres { get; }
 
+        /// <summary>Gets or sets the awards and nominations this movie has received.</summary>
+        /// <value>The awards and nominations of this movie.</value>
         IEnumerable<IAward> Awards { get; }
 
+        /// <summary>Gets or sets the promotional videos (trailers/tv spots/featurettes/interviews).</summary>
+        /// <value>The promotional videos.</value>
         IEnumerable<IPromotionalVideo> PromotionalVideos { get; }
 
         #endregion
@@ -230,9 +235,11 @@ namespace Frost.Common.Models.Provider {
         bool HasSubtitles { get; }
 
         /// <summary>Gets a value indicating whether this movie has available fanart.</summary>
-        /// <value>Is <c>true</c> if the movie has available fanart; otherwise, <c>false</c>.</value
+        /// <value>Is <c>true</c> if the movie has available fanart; otherwise, <c>false</c>.</value>
         bool HasArt { get; }
 
+        /// <summary>Gets a value indicating whether this movie has a NFO medata file.</summary>
+        /// <value>Is <c>true</c> if the movie has a NFO medata file; otherwise, <c>false</c>.</value>
         bool HasNfo { get; }
 
         #endregion

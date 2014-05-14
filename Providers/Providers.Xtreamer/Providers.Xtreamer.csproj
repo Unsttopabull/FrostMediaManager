@@ -73,7 +73,7 @@
     </Reference>
     <Reference Include="LightInject, Version=3.0.1.5, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\LightInject.3.0.1.5\lib\net45\LightInject.dll</HintPath>
+      <HintPath>..\..\ThirdParty\LightInject\LightInject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -147,9 +147,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Libraries\Common\Common.csproj">

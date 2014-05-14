@@ -9,8 +9,8 @@ namespace Frost.Common.Comparers {
 
         /// <summary>Determines whether the specified objects are equal.</summary>
         /// <returns>true if the specified objects are equal; otherwise, false.</returns>
-        /// <param name="lhs">The first object of type <paramref name="T"/> to compare.</param>
-        /// <param name="rhs">The second object of type <paramref name="T"/> to compare.</param>
+        /// <param name="lhs">The first object of type ICountry to compare.</param>
+        /// <param name="rhs">The second object of type ICountry to compare.</param>
         public bool Equals(ICountry lhs, ICountry rhs) {
             if (ReferenceEquals(lhs, rhs)) {
                 return true;

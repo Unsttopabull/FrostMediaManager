@@ -3,12 +3,12 @@ using System.Threading;
 using System.Windows;
 using Frost.Common;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util;
+using Frost.RibbonUI.Windows;
 using log4net;
-using RibbonUI.Properties;
-using RibbonUI.Util;
-using RibbonUI.Windows;
 
-namespace RibbonUI {
+namespace Frost.RibbonUI {
 
     /// <summary>Interaction logic for MainWindow.xaml</summary>
     public partial class MainWindow {

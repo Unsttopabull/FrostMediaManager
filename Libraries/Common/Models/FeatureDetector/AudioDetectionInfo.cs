@@ -2,8 +2,10 @@ using Frost.Common.Util.ISO;
 
 namespace Frost.Common.Models.FeatureDetector {
 
+    /// <summary>Represents the information about an audio track that has been detected by Feature Detector.</summary>
     public class AudioDetectionInfo {
 
+        /// <summary>Initializes a new instance of the <see cref="AudioDetectionInfo"/> class.</summary>
         public AudioDetectionInfo() {
             
         }
@@ -37,6 +39,8 @@ namespace Frost.Common.Models.FeatureDetector {
         /// <example>\eg{ <c>MP3, AC3, FLAC</c>}</example>
         public string Codec { get; set; }
 
+        /// <summary>Gets or sets the ID of the codec this audio is encoded in.</summary>
+        /// <value>The ID of the codec this audio is encoded in</value>
         public string CodecId { get; set; }
 
         /// <summary>Gets or sets the audio bit rate.</summary>
@@ -64,6 +68,8 @@ namespace Frost.Common.Models.FeatureDetector {
         /// <value>The audio duration in miliseconds.</value>
         public long? Duration { get; set; }
 
+        /// <summary>Gets or sets the language of this audio.</summary>
+        /// <value>The language of this audio.</value>
         public ISOLanguageCode Language { get; set; }
     }
 

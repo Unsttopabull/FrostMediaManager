@@ -1,18 +1,18 @@
-﻿<UserControl x:Class="RibbonUI.UserControls.List.ListSubtitles"
+﻿<UserControl x:Class="Frost.RibbonUI.UserControls.List.ListSubtitles"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:l="http://www.frostmediamanager.com/xaml/translation"
              xmlns:sys="clr-namespace:System.Text;assembly=mscorlib"
-             xmlns:vm="clr-namespace:RibbonUI.UserControls.List"
-             xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
              xmlns:models="clr-namespace:Frost.Common.Models.Provider;assembly=Frost.Common"
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
+             xmlns:list="clr-namespace:Frost.RibbonUI.UserControls.List"
+             xmlns:observableWrappers="clr-namespace:Frost.RibbonUI.Util.ObservableWrappers"
              mc:Ignorable="d" Name="ListSubtitlesControl"
              d:DesignHeight="300" d:DesignWidth="602" Loaded="ListSubtitlesOnLoaded">
     <UserControl.DataContext>
-        <vm:ListSubtitlesViewModel/>
+        <list:ListSubtitlesViewModel/>
     </UserControl.DataContext>    
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -28,7 +28,7 @@
             </Style>
         </ListView.Resources>
         <ListView.ItemTemplate>
-            <DataTemplate DataType="o:MovieSubtitle">
+            <DataTemplate DataType="observableWrappers:MovieSubtitle">
                 <DockPanel LastChildFill="False">
                     <StackPanel DockPanel.Dock="Left">
                         <Button Style="{StaticResource TransparentBorderlessButton}" CommandParameter="{Binding}" IsEnabled="{Binding [Language]}"

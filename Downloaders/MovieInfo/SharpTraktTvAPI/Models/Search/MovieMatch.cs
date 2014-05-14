@@ -1,8 +1,9 @@
+using Frost.SharpTraktTvAPI.Models.Genreal;
 using Newtonsoft.Json;
-using SharpTraktTvAPI.Models.Genreal;
 
-namespace SharpTraktTvAPI.Models.Search {
+namespace Frost.SharpTraktTvAPI.Models.Search {
 
+    /// <summary>Represents an information about a matched movie</summary>
     public class MovieMatch {
 
         [JsonProperty("title")]

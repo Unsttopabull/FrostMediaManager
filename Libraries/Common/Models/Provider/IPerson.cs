@@ -1,5 +1,6 @@
 namespace Frost.Common.Models.Provider {
 
+    /// <summary>Represents a base infor about a person that is accessible by the UI.</summary>
     public interface IPerson : IMovieEntity, IHasName {
 
         /// <summary>Gets or sets the persons thumbnail image.</summary>

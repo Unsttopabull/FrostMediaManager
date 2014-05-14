@@ -6,12 +6,12 @@ using System.Linq;
 using System.Windows;
 using Frost.Common;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util;
+using Frost.RibbonUI.Util.ObservableWrappers;
 using Frost.XamlControls.Commands;
-using RibbonUI.Annotations;
-using RibbonUI.Util;
-using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows.Edit {
+namespace Frost.RibbonUI.Windows.Edit {
     public class EditVideoViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private ObservableCollection<Codec> _codecs;

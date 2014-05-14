@@ -3,9 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using Frost.Common;
 using Frost.GettextMarkupExtension;
-using RibbonUI.Util.ObservableWrappers;
+using Frost.RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.UserControls {
+namespace Frost.RibbonUI.UserControls {
 
     /// <summary>Interaction logic for EditMovie.xaml</summary>
     public partial class EditMovie : UserControl {

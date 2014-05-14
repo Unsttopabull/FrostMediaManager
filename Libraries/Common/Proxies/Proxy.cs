@@ -3,6 +3,7 @@
     /// <summary>An abstract base class used for proxing classes</summary>
     /// <typeparam name="T"></typeparam>
     public abstract class Proxy<T> where T : class {
+        /// <summary>The entity that is proxied.</summary>
         protected readonly T Entity;
 
         /// <summary>Initializes a new instance of the <see cref="Proxy{T}"/> class.</summary>

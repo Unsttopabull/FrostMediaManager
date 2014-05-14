@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Frost.InfoParsers;
-using SharpTraktTvAPI;
-using SharpTraktTvAPI.Models.Movie;
-using SharpTraktTvAPI.Models.Search;
+using Frost.SharpTraktTvAPI;
+using Frost.SharpTraktTvAPI.Models.Movie;
+using Frost.SharpTraktTvAPI.Models.Search;
 
 namespace Frost.MovieInfoProviders.Info.TraktTV {
 

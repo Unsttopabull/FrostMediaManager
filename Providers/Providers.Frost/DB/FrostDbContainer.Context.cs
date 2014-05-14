@@ -167,7 +167,7 @@ namespace Frost.Providers.Frost.DB {
             try {
                 EfLogger.LogChanges(this, "frost.log");
             }
-            catch (Exception e) {
+            catch (Exception) {
             }
 
             List<DbEntityValidationResult> errors = GetValidationErrors().ToList();

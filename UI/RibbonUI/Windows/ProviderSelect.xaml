@@ -1,13 +1,14 @@
-﻿<Window x:Class="RibbonUI.Windows.ProviderSelect"
+﻿<Window x:Class="Frost.RibbonUI.Windows.ProviderSelect"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:l="http://www.frostmediamanager.com/xaml/translation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="clr-namespace:RibbonUI.Windows" Loaded="ProviderSelectOnLoaded"
+        xmlns:windows="clr-namespace:Frost.RibbonUI.Windows"
+        Loaded="ProviderSelectOnLoaded"
         Title="{l:T Provider select}" Height="422.325" Width="374"
         Icon="..\logo3.ico" Closed="ProviderSelectOnClosed" Name="ProviderSelectWindow"
         ResizeMode="NoResize" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
-        <vm:ProviderSelectViewModel />
+        <windows:ProviderSelectViewModel />
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>

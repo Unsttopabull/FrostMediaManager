@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util.ObservableWrappers;
 using Frost.XamlControls.Commands;
-using RibbonUI.Annotations;
-using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.UserControls {
+namespace Frost.RibbonUI.UserControls {
 
     public class MovieFlagsAndInfoViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;

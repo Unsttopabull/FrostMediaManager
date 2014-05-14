@@ -1,7 +1,7 @@
 ﻿using Frost.Common.Models.Provider;
 using Frost.InfoParsers.Models.Info;
 
-namespace RibbonUI.Design.Models {
+namespace Frost.RibbonUI.Design.Models {
     class DesignAward : IAward {
 
         public DesignAward() {

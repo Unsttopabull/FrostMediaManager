@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using RibbonUI.Util.ObservableWrappers;
+using Frost.RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.UserControls.List {
+namespace Frost.RibbonUI.UserControls.List {
 
     /// <summary>Interaction logic for ListCertifications.xaml</summary>
     public partial class ListCertifications : UserControl {

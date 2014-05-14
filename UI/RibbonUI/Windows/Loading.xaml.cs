@@ -4,9 +4,9 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Shell;
 using System.Windows.Threading;
-using RibbonUI.Annotations;
+using Frost.RibbonUI.Properties;
 
-namespace RibbonUI.Windows {
+namespace Frost.RibbonUI.Windows {
 
     /// <summary>Interaction logic for Loading.xaml</summary>
     public partial class Loading : Window, INotifyPropertyChanged {

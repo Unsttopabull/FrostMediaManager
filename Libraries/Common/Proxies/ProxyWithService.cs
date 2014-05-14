@@ -5,6 +5,7 @@
     /// <typeparam name="TService">The type of the service.</typeparam>
     public abstract class ProxyWithService<TEntity, TService> : Proxy<TEntity> where TEntity : class where TService : IMoviesDataService {
 
+        /// <summary>The IMovieDataService to use with proxy.</summary>
         protected readonly TService Service;
 
         /// <summary>Initializes a new instance of the <see cref="ProxyWithService{TEntity, TService}"/> class.</summary>

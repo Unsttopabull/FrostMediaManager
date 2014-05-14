@@ -3,9 +3,8 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
-using File = System.IO.File;
 
-namespace RibbonUI.Converters {
+namespace Frost.RibbonUI.Converters {
 
     public enum PathType {
         Unknown,

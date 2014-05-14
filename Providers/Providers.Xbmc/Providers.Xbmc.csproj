@@ -73,7 +73,7 @@
     </Reference>
     <Reference Include="LightInject, Version=3.0.1.5, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\LightInject.3.0.1.5\lib\net45\LightInject.dll</HintPath>
+      <HintPath>..\..\ThirdParty\LightInject\LightInject.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -130,9 +130,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="DB\extendSettings.sql" />

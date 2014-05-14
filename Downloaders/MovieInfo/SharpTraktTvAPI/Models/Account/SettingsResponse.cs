@@ -1,7 +1,8 @@
-﻿using SharpTraktTvAPI.Models.Account.SettingsModels;
+﻿using Frost.SharpTraktTvAPI.Models.Account.SettingsModels;
 
-namespace SharpTraktTvAPI.Models.Account {
+namespace Frost.SharpTraktTvAPI.Models.Account {
 
+    /// <summary>Represents a user settings on Trakt.TV</summary>
     public class SettingsResponse {
         public string status { get; set; }
         public string message { get; set; }

@@ -2,8 +2,14 @@ using Frost.Common.Util.ISO;
 
 namespace Frost.Common.Models.FeatureDetector {
 
+    /// <summary>The information about a movie plot as detected by Feature Detector</summary>
     public class PlotInfo {
 
+        /// <summary>Initializes a new instance of the <see cref="PlotInfo"/> class.</summary>
+        /// <param name="full">The movie full description.</param>
+        /// <param name="summary">The movie plot summary.</param>
+        /// <param name="tagline">The movie tagline.</param>
+        /// <param name="language">The plot language.</param>
         public PlotInfo(string full, string summary, string tagline, ISOLanguageCode language) {
             Full = full;
 

@@ -11,21 +11,19 @@ using System.Windows.Input;
 using System.Windows.Shell;
 using Frost.Common;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Design;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util;
+using Frost.RibbonUI.Util.ObservableWrappers;
+using Frost.RibbonUI.Util.WebUpdate;
+using Frost.RibbonUI.Windows;
+using Frost.RibbonUI.Windows.Add;
+using Frost.RibbonUI.Windows.Search;
+using Frost.RibbonUI.Windows.WebUpdate;
 using Frost.XamlControls.Commands;
 using log4net;
-using RibbonUI.Annotations;
-using RibbonUI.Design;
-using RibbonUI.Util;
-using RibbonUI.Util.ObservableWrappers;
-using RibbonUI.Util.WebUpdate;
-using RibbonUI.Windows;
-using RibbonUI.Windows.Add;
-using RibbonUI.Windows.Search;
-using RibbonUI.Windows.WebUpdate;
-using MessageBox = System.Windows.MessageBox;
-using SettingsEx = RibbonUI.Properties.Settings;
 
-namespace RibbonUI.UserControls {
+namespace Frost.RibbonUI.UserControls {
 
     public enum RibbonTabs {
         None,
@@ -282,7 +280,7 @@ namespace RibbonUI.UserControls {
             }
             catch (Exception e) {
                 if (Log.IsWarnEnabled) {
-                    Log.Warn(string.Format("Unknown error occured while accessing file \"{0}\" of movie {1} to play.", SelectedMovie.FirstFileName, SelectedMovie.Title));
+                    Log.Warn(string.Format("Unknown error occured while accessing file \"{0}\" of movie {1} to play.", SelectedMovie.FirstFileName, SelectedMovie.Title), e);
                 }
 
                 MessageBox.Show(Gettext.T("An error has occured opening file: ") + SelectedMovie.FirstFileName);
@@ -298,7 +296,7 @@ namespace RibbonUI.UserControls {
                     }
                     catch (Exception e) {
                         if (Log.IsWarnEnabled) {
-                            Log.Warn(string.Format("Could not open movie folder with path: \"{0}\" of movie \"{1}\".", directory, SelectedMovie.Title));
+                            Log.Warn(string.Format("Could not open movie folder with path: \"{0}\" of movie \"{1}\".", directory, SelectedMovie.Title), e);
                         }
 
                         MessageBox.Show(Gettext.T("Error opening movie folder"));
@@ -361,11 +359,11 @@ namespace RibbonUI.UserControls {
         }
 
         private void SearchMovies(bool searchArt, Plugin art, bool searchInfo, Plugin info, bool searchVideos, Plugin videos) {
-            if (SettingsEx.Default.SearchFolders == null) {
-                SettingsEx.Default.SearchFolders = new StringCollection();
+            if (global::Frost.RibbonUI.Properties.Settings.Default.SearchFolders == null) {
+                global::Frost.RibbonUI.Properties.Settings.Default.SearchFolders = new StringCollection();
             }
 
-            if (SettingsEx.Default.SearchFolders.Count > 0) {
+            if (global::Frost.RibbonUI.Properties.Settings.Default.SearchFolders.Count > 0) {
                 SearchMovies sm = new SearchMovies(searchInfo, searchArt, searchVideos, info, art, videos) {
                     Owner = ParentWindow,
                     TaskbarItemInfo = new TaskbarItemInfo {

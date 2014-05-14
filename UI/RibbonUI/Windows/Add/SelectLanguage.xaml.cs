@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
-using RibbonUI.Util.ObservableWrappers;
+using Frost.RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows.Add {
+namespace Frost.RibbonUI.Windows.Add {
 
     /// <summary>Interaction logic for SelectLanguage.xaml</summary>
     public partial class SelectLanguage : Window {

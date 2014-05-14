@@ -35,6 +35,8 @@ namespace Frost.Common.Models.Provider.ISO {
         /// <value>The ISO639-2 3-letter language code.</value>
         public string Alpha3 { get; set; }
 
+        /// <summary>Gets the english name of the language.</summary>
+        /// <value>The english language name.</value>
         public string EnglishName { get; private set; }
     }
 

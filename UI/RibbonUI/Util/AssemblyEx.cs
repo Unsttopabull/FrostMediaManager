@@ -4,7 +4,7 @@ using System.Reflection;
 using Frost.Common;
 using Frost.InfoParsers;
 
-namespace RibbonUI.Util {
+namespace Frost.RibbonUI.Util {
     public static class AssemblyEx {
 
         public static bool CheckIsProvider(string plugin, out Assembly assembly, out Provider provider) {
@@ -53,7 +53,7 @@ namespace RibbonUI.Util {
                 assembly = null;
                 return false;
             }
-            catch(Exception e) {
+            catch(Exception) {
                 assembly = null;
                 return false;
             }

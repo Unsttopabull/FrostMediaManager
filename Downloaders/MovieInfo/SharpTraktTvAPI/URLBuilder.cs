@@ -6,16 +6,24 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace SharpTraktTvAPI {
+namespace Frost.SharpTraktTvAPI {
 
+    /// <summary>Represents the REST URI builder and handler</summary>
     public class URLBuilder {
         private readonly StringBuilder _uri;
         private bool _first = true;
 
+        /// <summary>Initializes a new instance of the <see cref="URLBuilder"/> class.</summary>
+        /// <param name="baseUri">The base URI value.</param>
         public URLBuilder(string baseUri) {
             _uri = new StringBuilder(baseUri);
         }
 
+        /// <summary>Adds the URL parameter to the end of the URI and optionaly URL Encodes the value.</summary>
+        /// <typeparam name="T">The type of the value</typeparam>
+        /// <param name="paramName">The name of the parameter to use.</param>
+        /// <param name="value">The value to use (ToString() will be called).</param>
+        /// <param name="urlEncode">If set to <c>true</c> the string value of the <paramref name="value"/> will be URL Encoded.</param>
         public void AddParameter<T>(string paramName, T value, bool urlEncode = false) {
             if (_first) {
                 _uri.Append("?");
@@ -36,6 +44,9 @@ namespace SharpTraktTvAPI {
             }
         }
 
+        /// <summary>Adds the URL segment "/something/" to the end of the URI.</summary>
+        /// <param name="segmentName">The segment name to use.</param>
+        /// <param name="trailingSlash">if set to <c>true</c> "/" will be added to the end of the string.</param>
         public void AddSegment(string segmentName, bool trailingSlash = true) {
             _uri.Append(segmentName);
             if (trailingSlash) {
@@ -43,14 +54,21 @@ namespace SharpTraktTvAPI {
             }
         }
 
+        /// <summary>Adds the URL segments "/something/" to the end of the URI in the order they were passed in.</summary>
+        /// <param name="segments">An array of segments in order to add to the URL.</param>
         public void AddSegmentPath(params string[] segments) {
             _uri.Append(string.Join("/", segments) + "/");
         }
 
+        /// <summary>Converts the current URL value to string</summary>
         public string ToUri() {
             return _uri.ToString();
         }
 
+        /// <summary>Downloads the content at the current url by HTTP GET and deserializes the expected json as the specified type.</summary>
+        /// <typeparam name="T">The type to deserialize to.</typeparam>
+        /// <returns>Returns the deserialized JSON into an instance of <typeparamref name="T"/> or the default value of <typeparamref name="T"/>.</returns>
+        /// <exception cref="TraktTvException">Throws if there was an error downloading the data or an error decompressing or deserializing JSON.</exception>
         public T GetResposeAs<T>() {
             string response = GetRequest();
             if (string.IsNullOrEmpty(response)) {
@@ -60,6 +78,11 @@ namespace SharpTraktTvAPI {
             return ThrowOnFailure(response).ToObject<T>();
         }
 
+        /// <summary>Downloads the content at the current url by HTTP POST and deserializes the expected json as the specified type.</summary>
+        /// <param name="data">The data to POST.</param>
+        /// <typeparam name="T">The type to deserialize to.</typeparam>
+        /// <returns>Returns the deserialized JSON into an instance of <typeparamref name="T"/> or the default value of <typeparamref name="T"/>.</returns>
+        /// <exception cref="TraktTvException">Throws if there was an error downloading/posting the data or an error decompressing or deserializing JSON.</exception>
         public T GetPostResponseAs<T>(string data) {
             string response = PostRequest(data);
             if (string.IsNullOrEmpty(response)) {
@@ -69,6 +92,11 @@ namespace SharpTraktTvAPI {
             return ThrowOnFailure(response).ToObject<T>();
         }
 
+        /// <summary>Downloads the content at the current url by HTTP POST by serializing the data to JSON and deserializes the response JSON to the specified type.</summary>
+        /// <typeparam name="TData">The type of the data to serialize.</typeparam>
+        /// <typeparam name="TResponse">The type of the response to deserialize.</typeparam>
+        /// <returns>Returns the deserialized JSON into an instance of <typeparamref name="TResponse"/> or the default value of <typeparamref name="TResponse"/>.</returns>
+        /// <exception cref="TraktTvException">Throws if there was an error downloading/posting the data or an error decompressing or deserializing JSON.</exception>
         public TResponse GetPostResponseAs<TResponse, TData>(TData data) {
             string response = PostRequest(data);
             if (string.IsNullOrEmpty(response)) {
@@ -78,10 +106,18 @@ namespace SharpTraktTvAPI {
             return ThrowOnFailure(response).ToObject<TResponse>();
         }
 
+        /// <summary>Downloads the content at the current url by HTTP POST by serializing the data to JSON and returning the response as string.</summary>
+        /// <typeparam name="T">The type of the data to serialize.</typeparam>
+        /// <returns>Returns the response as string.</returns>
+        /// <exception cref="TraktTvException">Throws if there was an error downloading/posting or serializing the data or an error decompressing the response.</exception>
         public string PostRequest<T>(T data) {
             return PostRequest(JsonConvert.SerializeObject(data));
         }
 
+        /// <summary>Sends the string data to the current URI using the HTTP POST.</summary>
+        /// <param name="data">The data to send.</param>
+        /// <returns>Returns the response as string.</returns>
+        /// <exception cref="TraktTvException">Throws if there was an error downloading/posting the data or an error decompressing the response.</exception>
         public string PostRequest(string data) {
             using (WebClient wc = new WebClient()) {
                 wc.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip");
@@ -99,12 +135,15 @@ namespace SharpTraktTvAPI {
                 catch (WebException e) {
                     return HandleWebException(e);
                 }
-                catch (Exception e) {
+                catch (Exception) {
                     return null;
                 }
             }
         }
 
+        /// <summary>Retrieves the response at the current URI using HTTP GET.</summary>
+        /// <returns>The reponse as string</returns>
+        /// <exception cref="TraktTvException">Throws if there was an error retrieving or decompressing the response.</exception>
         public string GetRequest() {
             using (WebClient wc = new WebClient()) {
                 wc.Headers.Add(HttpRequestHeader.AcceptEncoding, "gzip");
@@ -127,7 +166,7 @@ namespace SharpTraktTvAPI {
                 catch (WebException e) {
                     return HandleWebException(e);
                 }
-                catch (Exception e) {
+                catch (Exception) {
                     return null;
                 }
             }
@@ -160,7 +199,7 @@ namespace SharpTraktTvAPI {
                     return JArray.Parse(json);
                 }
                 catch (Exception e) {
-                    throw new TraktTvException("Failed to parse the response as JSON.");
+                    throw new TraktTvException("Failed to parse the response as JSON.", e);
                 }
             }
 
@@ -169,7 +208,7 @@ namespace SharpTraktTvAPI {
                 jObject = JObject.Parse(json);
             }
             catch (Exception e) {
-                throw new TraktTvException("Failed to parse the response as JSON.");
+                throw new TraktTvException("Failed to parse the response as JSON.", e);
             }
 
             if (jObject.Count == 2) {

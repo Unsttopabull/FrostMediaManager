@@ -8,15 +8,17 @@ namespace Frost.Common.Util.ISO {
             
         }
 
-        /// <summary>Initializes a new instance of the <see cref="ISOCountryCode" /> class.</summary>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ISOCountryCode" /> class.
+        /// </summary>
         /// <param name="englishName">The ISO 3166-1 english language name.</param>
         /// <param name="alpha2">The ISO 639-1 Two letter code.</param>
         /// <param name="alpha3B">The ISO 639-2 Three letter code (Bibliographic).</param>
         /// <param name="alpha3T">The ISO 639-2 Three letter code (Terminology).</param>
+        /// <param name="dummy">ignore</param>
         internal ISOLanguageCode(string englishName, string alpha2, string alpha3B, string alpha3T = null, bool dummy = false) : base(englishName, alpha2, alpha3B) {
             Alpha3Terminology = alpha3T;
 
-            //Languages = englishName.SplitWithoutEmptyEntries(',');
             Languages = new[] { englishName };
         }
 

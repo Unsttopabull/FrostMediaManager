@@ -4,30 +4,18 @@ using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
-using RibbonUI.Design.Models;
+using Frost.RibbonUI.Design.Models;
 
-namespace RibbonUI.Design {
+namespace Frost.RibbonUI.Design {
 
     public class DesignMoviesDataService : IMoviesDataService {
         private ObservableCollection<IMovie> _movies;
-        private IEnumerable<IFile> _files;
-        private IEnumerable<IVideo> _videos;
-        private IEnumerable<IAudio> _audios;
-        private IEnumerable<ISubtitle> _subtitles;
-        private IEnumerable<IArt> _art;
         private IEnumerable<ICountry> _countries;
         private IEnumerable<IStudio> _studios;
-        private IEnumerable<IRating> _ratings;
-        private IEnumerable<IPlot> _plots;
         private IEnumerable<IGenre> _genres;
-        private IEnumerable<IAward> _awards;
-        private IEnumerable<IPromotionalVideo> _promotionalVideos;
-        private IEnumerable<ICertification> _certifications;
         private IEnumerable<IMovieSet> _sets;
         private IEnumerable<ILanguage> _languages;
-        private IEnumerable<ISpecial> _specials;
         private IEnumerable<IPerson> _people;
-        private IEnumerable<IActor> _actors;
 
         public DesignMoviesDataService() {
         }
@@ -515,143 +503,6 @@ namespace RibbonUI.Design {
 
         #endregion
 
-        public IEnumerable<IFile> Files {
-            get {
-                if (_files != null) {
-                    return _files;
-                }
-
-                //Create files
-                return _files;
-            }
-        }
-
-        public IEnumerable<IVideo> Videos {
-            get {
-                if (_videos != null) {
-                    return _videos;
-                }
-
-                //Create videos
-
-                return _videos;
-            }
-        }
-
-        public IEnumerable<IAudio> Audios {
-            get {
-                if (_audios != null) {
-                    return _audios;
-                }
-
-                _audios = new List<IAudio> {
-                    new DesignAudio {
-                        Source = null,
-                        Type = null,
-                        ChannelSetup = "3/2/0.1",
-                        NumberOfChannels = 6,
-                        ChannelPositions = "Front: L C R, Side: L R, LFE",
-                        Codec = "AC3",
-                        CodecId = "AC3",
-                        BitRate = 437.5f,
-                        BitRateMode = FrameOrBitRateMode.Unknown,
-                        SamplingRate = 46,
-                        BitDepth = 16,
-                        CompressionMode = CompressionMode.Lossy,
-                        Duration = 6727631,
-                        Language = null,
-                    },
-                    new DesignAudio {
-                        Source = null,
-                        Type = null,
-                        ChannelSetup = null,
-                        NumberOfChannels = 2,
-                        ChannelPositions = null,
-                        Codec = "MPEG-2 Audio layer 3",
-                        CodecId = "MP3",
-                        BitRate = 54.6875f,
-                        BitRateMode = FrameOrBitRateMode.Unknown,
-                        SamplingRate = 21,
-                        BitDepth = null,
-                        CompressionMode = CompressionMode.Lossy,
-                        Duration = 7401656,
-                        Language = null,
-                    },
-                    new DesignAudio {
-                        Source = null,
-                        Type = null,
-                        ChannelSetup = null,
-                        NumberOfChannels = 2,
-                        ChannelPositions = null,
-                        Codec = "MPEG-2 Audio layer 3",
-                        CodecId = "MP3",
-                        BitRate = 54.6875f,
-                        BitRateMode = FrameOrBitRateMode.Unknown,
-                        SamplingRate = 21,
-                        BitDepth = null,
-                        CompressionMode = CompressionMode.Lossy,
-                        Duration = 6655788,
-                        Language = null,
-                    },
-                    new DesignAudio {
-                        Source = null,
-                        Type = null,
-                        ChannelSetup = "3/2/0.1",
-                        NumberOfChannels = 6,
-                        ChannelPositions = "Front: L C R, Side: L R, LFE",
-                        Codec = "AC3",
-                        CodecId = "AC3",
-                        BitRate = 375,
-                        BitRateMode = FrameOrBitRateMode.Unknown,
-                        SamplingRate = 46,
-                        BitDepth = 16,
-                        CompressionMode = CompressionMode.Lossy,
-                        Duration = 7267058,
-                        Language = null,
-                    },
-                    new DesignAudio {
-                        Source = null,
-                        Type = null,
-                        ChannelSetup = null,
-                        NumberOfChannels = 2,
-                        ChannelPositions = null,
-                        Codec = "MPEG-1 Audio layer 3",
-                        CodecId = "MP3",
-                        BitRate = 109.375f,
-                        BitRateMode = FrameOrBitRateMode.Unknown,
-                        SamplingRate = 46,
-                        BitDepth = null,
-                        CompressionMode = CompressionMode.Lossy,
-                        Duration = 6778992,
-                        Language = null,
-                    }
-                };
-
-                return _audios;
-            }
-        }
-
-        public IEnumerable<ISubtitle> Subtitles {
-            get {
-                if (_subtitles == null) {
-                    //Create videos
-                }
-                return _subtitles;
-            }
-        }
-
-        public IEnumerable<IArt> Art {
-            get {
-                if (_art != null) {
-                    return _art;
-                }
-
-                //Create videos
-
-                return _art;
-            }
-        }
-
         public IEnumerable<ICountry> Countries {
             get {
                 if (_countries != null) {
@@ -692,30 +543,6 @@ namespace RibbonUI.Design {
             }
         }
 
-        public IEnumerable<IRating> Ratings {
-            get {
-                if (_ratings != null) {
-                    return _ratings;
-                }
-
-                //Create videos
-
-                return _ratings;
-            }
-        }
-
-        public IEnumerable<IPlot> Plots {
-            get {
-                if (_plots != null) {
-                    return _plots;
-                }
-
-                //Create videos
-
-                return _plots;
-            }
-        }
-
         public IEnumerable<IGenre> Genres {
             get {
                 if (_genres != null) {
@@ -741,61 +568,7 @@ namespace RibbonUI.Design {
             }
         }
 
-        public IEnumerable<IAward> Awards {
-            get {
-                if (_awards != null) {
-                    return _awards;
-                }
-
-                //Create videos
-
-                return _awards;
-            }
-        }
-
-        public IEnumerable<IPromotionalVideo> PromotionalVideos {
-            get {
-                if (_promotionalVideos != null) {
-                    return _promotionalVideos;
-                }
-
-                //Create videos
-
-                return _promotionalVideos;
-            }
-        }
-
-        public IEnumerable<ICertification> Certifications {
-            get {
-                if (_certifications != null) {
-                    return _certifications;
-                }
-
-                return new List<ICertification> {
-                    new DesignCertification {
-                        Country = new DesignCountry {
-                            ISO3166 = new ISO3166("us", "usa"),
-                            Name = "United States"
-                        },
-                        Rating = "R"
-                    },
-                    new DesignCertification {
-                        Country = new DesignCountry {
-                            ISO3166 = new ISO3166("gb", "gbr"),
-                            Name = "United Kingdom"
-                        },
-                        Rating = "15"
-                    },
-                    new DesignCertification {
-                        Country = new DesignCountry {
-                            ISO3166 = new ISO3166("de", "deu"),
-                            Name = "Germany"
-                        },
-                        Rating = "16"
-                    }
-                };
-            }
-        }
+        public IEnumerable<IAward> Awards { get; private set; }
 
         public IEnumerable<IMovieSet> Sets {
             get {
@@ -835,15 +608,7 @@ namespace RibbonUI.Design {
             }
         }
 
-        public IEnumerable<ISpecial> Specials {
-            get {
-                if (_specials != null) {
-                    return _specials;
-                }
-
-                return _specials;
-            }
-        }
+        public IEnumerable<ISpecial> Specials { get; private set; }
 
         public IEnumerable<IPerson> People {
             get {
@@ -865,18 +630,6 @@ namespace RibbonUI.Design {
                 };
 
                 return _people;
-            }
-        }
-
-        public IEnumerable<IActor> Actors {
-            get {
-                if (_actors != null) {
-                    return _actors;
-                }
-
-                //Create Actors
-
-                return _actors;
             }
         }
 

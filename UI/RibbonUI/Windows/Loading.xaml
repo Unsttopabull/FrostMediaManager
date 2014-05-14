@@ -2,7 +2,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" x:Class="RibbonUI.Windows.Loading" 
+        mc:Ignorable="d" x:Class="Frost.RibbonUI.Windows.Loading" 
         Title="Loading" x:Name="LoadingWindow"
         WindowStartupLocation="CenterScreen" WindowStyle="None" Icon="..\logo3.ico"
         AllowsTransparency="True" Height="580" Width="500">

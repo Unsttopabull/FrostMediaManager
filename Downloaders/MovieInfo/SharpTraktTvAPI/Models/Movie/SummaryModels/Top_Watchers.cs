@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace SharpTraktTvAPI.Models.Movie.SummaryModels {
+namespace Frost.SharpTraktTvAPI.Models.Movie.SummaryModels {
 
     public class Top_Watchers {
         public int plays { get; set; }

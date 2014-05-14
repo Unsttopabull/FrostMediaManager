@@ -4,15 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using Frost.Common.Properties;
 using Frost.Common.Proxies.ChangeTrackers;
 using Frost.Common.Util.ISO;
 using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util;
 using Frost.XamlControls.Commands;
-using RibbonUI.Util;
 
-namespace RibbonUI.UserControls.Settings {
+namespace Frost.RibbonUI.UserControls.Settings {
 
     internal class FileNameParserSettingsViewModel : INotifyPropertyChanged, IDataErrorInfo {
         public event PropertyChangedEventHandler PropertyChanged;

@@ -276,6 +276,8 @@ namespace Frost.Common.Util.ISO {
         private ISOCountryCodes() {
         }
 
+        /// <summary> Gets the singleton instance.</summary>
+        /// <value>The sginleton instance.</value>
         public static ISOCountryCodes Instance { get { return _instance; } }
 
         /// <summary>Gets the ISO code with specified english name.</summary>

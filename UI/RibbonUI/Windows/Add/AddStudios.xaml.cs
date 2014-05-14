@@ -2,9 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using RibbonUI.Util.ObservableWrappers;
+using Frost.RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows.Add {
+namespace Frost.RibbonUI.Windows.Add {
 
     /// <summary>Interaction logic for SelectCountry.xaml</summary>
     public partial class AddStudios : Window {

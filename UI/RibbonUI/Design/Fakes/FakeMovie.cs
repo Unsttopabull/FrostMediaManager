@@ -5,13 +5,11 @@ using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
-using RibbonUI.Design.Models;
+using Frost.RibbonUI.Design.Models;
 
-namespace RibbonUI.Design.Fakes {
+namespace Frost.RibbonUI.Design.Fakes {
 
     public class FakeMovie : IMovie {
-        private long _id;
-
         public long Id {
             get { return 11; }
         }

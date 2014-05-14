@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace RibbonUI.UserControls.Settings {
+namespace Frost.RibbonUI.UserControls.Settings {
 
     /// <summary>Interaction logic for EditFeatureDetector.xaml</summary>
     public partial class FeatureDetectorSettings : UserControl {

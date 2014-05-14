@@ -2,12 +2,12 @@
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util.ObservableWrappers;
 using Frost.XamlControls.Commands;
 using Microsoft.Win32;
-using RibbonUI.Annotations;
-using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows.Edit {
+namespace Frost.RibbonUI.Windows.Edit {
     class EditPersonViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private string _thumbnailPath;

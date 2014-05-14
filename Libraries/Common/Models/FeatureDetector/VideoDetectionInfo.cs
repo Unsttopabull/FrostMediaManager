@@ -2,12 +2,16 @@ using Frost.Common.Util.ISO;
 
 namespace Frost.Common.Models.FeatureDetector {
 
+    /// <summary>The video track information as detected by Featuer Detector</summary>
     public class VideoDetectionInfo {
 
+        /// <summary>Initializes a new instance of the <see cref="VideoDetectionInfo"/> class.</summary>
         public VideoDetectionInfo() {
             
         }
 
+        /// <summary>Gets or sets the OpenSubtitles.org movie hash.</summary>
+        /// <value>The movie hash.</value>
         public string MovieHash { get; set; }
 
         /// <summary>With or from what this video was made from</summary>
@@ -26,6 +30,8 @@ namespace Frost.Common.Models.FeatureDetector {
         /// <value>The name of the resolution.</value>
         public string ResolutionName { get; set; }
 
+        /// <summary>Gets or sets the video standard (NTSC/PAL, 720p, ...).</summary>
+        /// <value>The video standard.</value>
         public string Standard { get; set; }
 
         /// <summary>Gets or sets the frames per second in this video.</summary>
@@ -65,6 +71,8 @@ namespace Frost.Common.Models.FeatureDetector {
         /// <value>The chroma subsampling.</value>
         public string ChromaSubsampling { get; set; }
 
+        /// <summary>Gets or sets the format.</summary>
+        /// <value>The video format.</value>
         public string Format { get; set; }
 
         /// <summary>Gets or sets the codec this video is encoded in.</summary>
@@ -94,6 +102,8 @@ namespace Frost.Common.Models.FeatureDetector {
         /// <value>The height of the video.</value>
         public int? Height { get; set; }
 
+        /// <summary>Gets or sets the language used in the video.</summary>
+        /// <value>The language used in the video.</value>
         public ISOLanguageCode Language { get; set; }
     }
 

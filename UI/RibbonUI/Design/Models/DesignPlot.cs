@@ -1,6 +1,6 @@
 ﻿using Frost.Common.Models.Provider;
 
-namespace RibbonUI.Design.Models {
+namespace Frost.RibbonUI.Design.Models {
     public class DesignPlot : IPlot{
         public long Id { get; private set; }
 

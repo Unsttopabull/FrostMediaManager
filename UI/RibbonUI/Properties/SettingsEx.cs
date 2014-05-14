@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using Frost.Common.Util;
 using Frost.Common.Util.Collections;
 using Frost.DetectFeatures;
 using Frost.DetectFeatures.FileName;
 using Frost.DetectFeatures.Util;
 
-namespace RibbonUI.Properties {
+namespace Frost.RibbonUI.Properties {
 
     internal partial class Settings {
         #region Reset

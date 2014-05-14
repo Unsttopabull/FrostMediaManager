@@ -1,6 +1,8 @@
 namespace Frost.Common.Models.Provider {
 
+    /// <summary>Represents the information about a rating that is accessible by the UI</summary>
     public interface IRating : IMovieEntity {
+
         /// <summary>Gets or sets the name of the critic.</summary>
         /// <value>The name of the critic.</value>
         string Critic { get; set; }

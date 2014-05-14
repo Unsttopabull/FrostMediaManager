@@ -1,14 +1,14 @@
-﻿<Window x:Class="RibbonUI.Windows.SelectSubtitles"
+﻿<Window x:Class="Frost.RibbonUI.Windows.SelectSubtitles"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:l="http://www.frostmediamanager.com/xaml/translation"
-        xmlns:u="clr-namespace:RibbonUI.Util.WebUpdate"
         xmlns:subtitles="clr-namespace:Frost.InfoParsers.Models.Subtitles;assembly=Frost.InfoParsers"
-        xmlns:converters="clr-namespace:RibbonUI.Converters"
         xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
-        mc:Ignorable="d" d:DataContext="{d:DesignInstance u:SubtitleUpdater}" x:Name="SelectSubtitlesWindow"
+        xmlns:converters="clr-namespace:Frost.RibbonUI.Converters"
+        xmlns:webUpdate="clr-namespace:Frost.RibbonUI.Util.WebUpdate"
+        mc:Ignorable="d" d:DataContext="{d:DesignInstance webUpdate:SubtitleUpdater}" x:Name="SelectSubtitlesWindow"
         WindowStyle="ToolWindow" ResizeMode="CanResize" WindowStartupLocation="CenterOwner"
         Title="{l:T Select languages}" SizeToContent="WidthAndHeight" MaxHeight="500">
     <Window.Resources>

@@ -1,11 +1,11 @@
-﻿<Window x:Class="RibbonUI.Windows.Search.SearchSettings"
+﻿<Window x:Class="Frost.RibbonUI.Windows.Search.SearchSettings"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="http://www.frostmediamanager.com/xaml/translation"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:uc="clr-namespace:RibbonUI.UserControls"
-        xmlns:util="clr-namespace:RibbonUI.Util"
+        xmlns:uc="clr-namespace:Frost.RibbonUI.UserControls"
+        xmlns:util="clr-namespace:Frost.RibbonUI.Util"
         mc:Ignorable="d" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner"
         Title="{l:T Search settings}" SizeToContent="WidthAndHeight" x:Name="SearchSettingsWindow">
     <Window.Resources>

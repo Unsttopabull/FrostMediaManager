@@ -6,9 +6,11 @@ using Frost.Common.Util.ISO;
 
 namespace Frost.Common.Models.FeatureDetector {
 
+    /// <summary>Represents the information about a movie as detected by Feature Detector</summary>
     public class MovieInfo : IMovieInfo {
         private static readonly ISOCountryCode Usa = ISOCountryCodes.Instance.GetByISOCode("USA");
 
+        /// <summary>Initializes a new instance of the <see cref="MovieInfo"/> class.</summary>
         public MovieInfo() {
             FileInfos = new List<FileDetectionInfo>();
             Genres = new List<string>();
@@ -146,8 +148,12 @@ namespace Frost.Common.Models.FeatureDetector {
         /// <value>The video codec used most frequently in associated audios</value>
         public string VideoCodec { get; set; }
 
+        /// <summary>Gets or sets the name of the movie collection.</summary>
+        /// <value>The movie collection name</value>
         public string Set { get; set; }
 
+        /// <summary>Gets the MPAA rating.</summary>
+        /// <value>The mpaa rating.</value>
         public string MPAARating {
             get {
                 CertificationInfo ci = Certifications.Find(c => c.Country == Usa);
@@ -157,38 +163,72 @@ namespace Frost.Common.Models.FeatureDetector {
             }
         }
 
+        /// <summary>Gets or sets the movie plots.</summary>
+        /// <value>The movie plots.</value>
         public List<PlotInfo> Plots { get; set; }
 
+        /// <summary>Gets or sets the certifications of this movie.</summary>
+        /// <value>The certifications.</value>
         public List<CertificationInfo> Certifications { get; set; }
 
+        /// <summary>Gets or sets the file information of this movie.</summary>
+        /// <value>The file information.</value>
         public List<FileDetectionInfo> FileInfos { get; set; }
 
+        /// <summary>Gets or sets the movie genres.</summary>
+        /// <value>The movie genres.</value>
         public List<string> Genres { get; set; }
 
+        /// <summary>Gets or sets the special scene release tags.</summary>
+        /// <value>The special scene release tags.</value>
         public List<string> Specials { get; set; }
 
+        /// <summary>Gets or sets the associated studios.</summary>
+        /// <value>The studios that participated in the making of this movie.</value>
         public List<string> Studios { get; set; }
 
+        /// <summary>Gets or sets the information about writers.</summary>
+        /// <value>The writers of this movie.</value>
         public List<PersonInfo> Writers { get; set; }
 
+        /// <summary>Gets or sets the information about directors.</summary>
+        /// <value>The directors of this movie.</value>
         public List<PersonInfo> Directors { get; set; }
 
+        /// <summary>Gets or sets the information about actors that performed in this movie.</summary>
+        /// <value>The actors in this movie.</value>
         public List<ActorInfo> Actors { get; set; }
-        
+
+        /// <summary>Gets or sets the art of this movie (cover/fanart/posters).</summary>
+        /// <value>The art.</value>
         public List<ArtInfo> Art { get; set; }
 
+        /// <summary>Gets or sets the promotional videos (trailers/tv spots/featurettes/interviews).</summary>
+        /// <value>The promotional videos.</value>
         public List<PromotionalVideoInfo> PromotionalVideos { get; set; }
 
+        /// <summary>Gets or sets the awards and nominations this movie has received.</summary>
+        /// <value>The awards and nominations of this movie.</value>
         public List<AwardInfo> Awards { get; set; }
 
+        /// <summary>Gets or sets the countries this movie was made/shot in.</summary>
+        /// <value>The countries.</value>
         public List<ISOCountryCode> Countries { get; set; }
 
+        /// <summary>Gets the movie hashes of the video files.</summary>
+        /// <value>The movie hashes.</value>
         public IEnumerable<string> MovieHashes { get; private set; }
 
+        /// <summary>Adds the art to add to the movie.</summary>
+        /// <param name="art">The art to add.</param>
+        /// <param name="silent">if set to <c>true</c> it does not show any message boxes.</param>
         public void AddArt(IArt art, bool silent = false) {
             Art.Add(new ArtInfo(art.Type, art.Path, art.Preview));
         }
 
+        /// <summary>Adds the promotional video to add to the movie.</summary>
+        /// <param name="video">The promotional video to add.</param>
+        /// <param name="silent">if set to <c>true</c> it does not show any message boxes.</param>
         public void AddPromotionalVideo(IPromotionalVideo video, bool silent = false) {
             PromotionalVideos.Add(new PromotionalVideoInfo(video.Type, video.Title, video.Url, video.Duration, video.Language, video.SubtitleLanguage));
         }

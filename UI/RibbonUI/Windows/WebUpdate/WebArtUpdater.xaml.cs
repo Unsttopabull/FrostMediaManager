@@ -1,11 +1,11 @@
 ﻿using System.Windows;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers.Models.Art;
-using RibbonUI.Util;
-using RibbonUI.Util.ObservableWrappers;
-using RibbonUI.Util.WebUpdate;
+using Frost.RibbonUI.Util;
+using Frost.RibbonUI.Util.ObservableWrappers;
+using Frost.RibbonUI.Util.WebUpdate;
 
-namespace RibbonUI.Windows.WebUpdate {
+namespace Frost.RibbonUI.Windows.WebUpdate {
 
     /// <summary>Interaction logic for WebArtUpdater.xaml</summary>
     public partial class WebArtUpdater : Window {

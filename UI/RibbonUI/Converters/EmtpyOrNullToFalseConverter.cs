@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace RibbonUI.Converters {
+namespace Frost.RibbonUI.Converters {
     class EmtpyOrNullToFalseConverter : IValueConverter {
 
         /// <summary>Converts a value.</summary>

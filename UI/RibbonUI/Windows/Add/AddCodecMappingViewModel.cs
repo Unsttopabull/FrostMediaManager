@@ -11,12 +11,12 @@ using System.Windows.Data;
 using System.Windows.Input;
 using Frost.DetectFeatures;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util;
 using Frost.XamlControls.Commands;
 using Microsoft.Win32;
-using RibbonUI.Annotations;
-using RibbonUI.Util;
 
-namespace RibbonUI.Windows.Add {
+namespace Frost.RibbonUI.Windows.Add {
 
     public class AddCodecMappingViewModel : DependencyObject, INotifyPropertyChanged, IDisposable {
         private readonly bool _isVideo;

@@ -5,12 +5,12 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util;
+using Frost.RibbonUI.Util.ObservableWrappers;
 using Frost.XamlControls.Commands;
-using RibbonUI.Annotations;
-using RibbonUI.Util;
-using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows.Add {
+namespace Frost.RibbonUI.Windows.Add {
     class SelectLanguageViewModel : INotifyPropertyChanged {
         private IEnumerable<MovieLanguage> _languages;
         public event PropertyChangedEventHandler PropertyChanged;

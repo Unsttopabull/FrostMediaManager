@@ -4,12 +4,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:uc="clr-namespace:RibbonUI.UserControls"
     xmlns:l="http://www.frostmediamanager.com/xaml/translation"
-    x:Name="RibbonControl" x:Class="RibbonUI.UserControls.Ribbon"
+    xmlns:userControls="clr-namespace:Frost.RibbonUI.UserControls"
+    x:Name="RibbonControl" x:Class="Frost.RibbonUI.UserControls.Ribbon"
     mc:Ignorable="d" d:DesignHeight="140" d:DesignWidth="700">
     <UserControl.DataContext>
-        <uc:RibbonViewModel/>
+        <userControls:RibbonViewModel/>
     </UserControl.DataContext>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">

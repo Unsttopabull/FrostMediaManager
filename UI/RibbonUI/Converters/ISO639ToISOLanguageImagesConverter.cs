@@ -4,7 +4,7 @@ using System.IO;
 using System.Windows.Data;
 using Frost.Common.Util.ISO;
 
-namespace RibbonUI.Converters {
+namespace Frost.RibbonUI.Converters {
     public class ISO639ToISOLanguageImagesConverter : IValueConverter {
 
         /// <summary>Converts a value. </summary>

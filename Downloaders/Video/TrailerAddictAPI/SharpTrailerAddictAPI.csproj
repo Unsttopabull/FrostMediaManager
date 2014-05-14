@@ -7,8 +7,8 @@
     <ProjectGuid>{47253D45-6E80-498D-9BF8-7763D5E24D78}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SharpTrailerAddictAPI</RootNamespace>
-    <AssemblyName>SharpTrailerAddictAPI</AssemblyName>
+    <RootNamespace>Frost.SharpTrailerAddictAPI</RootNamespace>
+    <AssemblyName>Frost.SharpTrailerAddictAPI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -28,6 +28,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Frost.SharpTrailerAddictAPI.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

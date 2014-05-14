@@ -8,7 +8,12 @@ using Frost.Common.Util.ISO;
 
 namespace Frost.Common.NFO {
 
+    /// <summary>General XBMC NFO metadata file generator</summary>
     public static class NFO {
+
+        /// <summary>Creates a general NFO metadata object ready to be written to a file.</summary>
+        /// <param name="movie">The movie for which to build a NFO metadata file.</param>
+        /// <returns>Returns the NFO metadata object or <c>null</c> if unsuccessfull.</returns>
         public static NfoMovie FromIMovie(IMovie movie) {
             NfoMovie nfo = new NfoMovie();
 

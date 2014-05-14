@@ -112,7 +112,7 @@ namespace Frost.XamlControls {
                     li.ImageSource.DownloadFailed -= li._imageFailed;
                     li.ImageSource.DecodeFailed -= li._imageFailed;
                 }
-                catch(Exception ex) {
+                catch(Exception) {
                 }
             }
 

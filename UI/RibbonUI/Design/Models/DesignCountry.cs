@@ -1,7 +1,7 @@
 ﻿using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
 
-namespace RibbonUI.Design.Models {
+namespace Frost.RibbonUI.Design.Models {
     public class DesignCountry : ICountry {
 
         public DesignCountry() {

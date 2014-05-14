@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows;
-using RibbonUI.Util;
+using Frost.RibbonUI.Util;
 
-namespace RibbonUI.Windows.Add {
+namespace Frost.RibbonUI.Windows.Add {
 
     /// <summary>Interaction logic for AddCodecMapping.xaml</summary>
     public partial class AddCodecMapping : Window {

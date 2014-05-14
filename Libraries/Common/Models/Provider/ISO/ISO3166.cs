@@ -36,6 +36,8 @@ namespace Frost.Common.Models.Provider.ISO {
         /// <value>The ISO3166-1 3-letter country code.</value>
         public string Alpha3 { get; set; }
 
+        /// <summary>Gets the english name of the country</summary>
+        /// <value>The english country name.</value>
         public string EnglishName { get; private set; }
 
         #region IEquatable

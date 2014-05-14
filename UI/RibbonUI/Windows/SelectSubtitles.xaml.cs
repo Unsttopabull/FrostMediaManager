@@ -2,12 +2,11 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
 using Frost.InfoParsers.Models.Subtitles;
 using Frost.XamlControls.Commands;
 
-namespace RibbonUI.Windows {
+namespace Frost.RibbonUI.Windows {
     /// <summary>Interaction logic for SelectSubtitles.xaml</summary>
     public partial class SelectSubtitles : Window {
         private IEnumerable<ISubtitleInfo> _subtitles;

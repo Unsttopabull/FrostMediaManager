@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace SharpTraktTvAPI.Models.Account.SettingsModels {
+namespace Frost.SharpTraktTvAPI.Models.Account.SettingsModels {
 
     public class Twitter {
         [JsonProperty("connected")]

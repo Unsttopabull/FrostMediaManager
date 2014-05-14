@@ -3,11 +3,11 @@ using System.Collections.Specialized;
 using System.Windows;
 using Frost.Common.Proxies.ChangeTrackers;
 using Frost.Common.Util.Collections;
-using RibbonUI.Properties;
-using RibbonUI.UserControls.Settings;
-using RibbonUI.Util;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.UserControls.Settings;
+using Frost.RibbonUI.Util;
 
-namespace RibbonUI.Windows {
+namespace Frost.RibbonUI.Windows {
 
     /// <summary>Interaction logic for Settings.xaml</summary>
     public partial class SettingsWindow : Window {

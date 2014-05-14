@@ -12,10 +12,10 @@ using Frost.InfoParsers.Models;
 using Frost.InfoParsers.Models.Art;
 using Frost.InfoParsers.Models.Info;
 using Frost.InfoParsers.Models.Subtitles;
-using RibbonUI.Util;
-using RibbonUI.Util.ObservableWrappers;
+using Frost.RibbonUI.Util;
+using Frost.RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.UserControls {
+namespace Frost.RibbonUI.UserControls {
 
     internal enum DownloaderType {
         MovieInfo,
@@ -208,7 +208,7 @@ namespace RibbonUI.UserControls {
 
                     item.ImageSource = imageSource;
                 }
-                catch (Exception e) {
+                catch (Exception) {
                 }
             }
             

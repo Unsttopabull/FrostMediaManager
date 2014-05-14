@@ -1,7 +1,7 @@
 ﻿using System;
 using Frost.Common.Models.Provider;
 
-namespace RibbonUI.Design.Models {
+namespace Frost.RibbonUI.Design.Models {
     public class DesingFile : IFile {
 
         public DesingFile() {

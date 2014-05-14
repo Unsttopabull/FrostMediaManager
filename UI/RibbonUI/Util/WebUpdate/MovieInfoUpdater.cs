@@ -15,16 +15,16 @@ using Frost.Common.Util.ISO;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers;
 using Frost.InfoParsers.Models.Info;
+using Frost.RibbonUI.Design.Models;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util.ObservableWrappers;
+using Frost.RibbonUI.Windows.WebUpdate;
 using FuzzySearch;
 using log4net;
 using Newtonsoft.Json;
-using RibbonUI.Annotations;
-using RibbonUI.Design.Models;
-using RibbonUI.Util.ObservableWrappers;
-using RibbonUI.Windows.WebUpdate;
 using Swordfish.NET.Collections;
 
-namespace RibbonUI.Util.WebUpdate {
+namespace Frost.RibbonUI.Util.WebUpdate {
 
     public class MovieInfoUpdater : INotifyPropertyChanged {
         private static readonly ILog Log = LogManager.GetLogger(typeof(MovieInfoUpdater));

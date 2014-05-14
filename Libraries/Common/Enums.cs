@@ -1,13 +1,22 @@
 ﻿namespace Frost.Common {
 
+    /// <summary>Represents the known promotional video clip type</summary>
     public enum PromotionalVideoType {
+        /// <summary>Unknown type or Other</summary>
         Unknown,
+        /// <summary>Clip is a movie trailer</summary>
         Trailer,
+        /// <summary>Clip is an interview about the movie</summary>
         Interview,
+        /// <summary>Clip is a movie featurette</summary>
         Featurete,
+        /// <summary>Clip is about behind the scenes action.</summary>
         BehindTheScenes,
+        /// <summary>Clip is TvSpot or advert for the movie.</summary>
         TvSpot,
+        /// <summary>Clip is a review of a movie.</summary>
         Review,
+        /// <summary>Clip is a movie fragment or other.</summary>
         Clip
     }
 
@@ -63,24 +72,41 @@
 
     }
 
+    /// <summary>Represents the DVD Region this movie is set to or originates from.</summary>
     public enum DVDRegion {
+        /// <summary>Unknown region</summary>
         Unknown,
+        /// <summary>Region 0</summary>
         R0,
+        /// <summary>Region 0</summary>
         R1,
+        /// <summary>Region 2</summary>
         R2,
+        /// <summary>Region 3</summary>
         R3,
+        /// <summary>Region 4</summary>
         R4,
+        /// <summary>Region 5</summary>
         R5,
+        /// <summary>Region 6</summary>
         R6,
+        /// <summary>Region 7</summary>
         R7,
+        /// <summary>Region 8</summary>
         R8,
     }
 
+    /// <summary>Represents the type of the movie</summary>
     public enum MovieType {
+        /// <summary>Unknown type or Other</summary>
         Unknown,
+        /// <summary>Movie is a DVD</summary>
         DVD,
+        /// <summary>Movie is a BluRay</summary>
         BluRay,
+        /// <summary>Movie is a BluRay</summary>
         HDDVD,
+        /// <summary>Movie packed into an ISO image file</summary>
         ISO
     }
 
@@ -96,7 +122,11 @@
         /// <summary>The progressive (noninterlaced) scan type. All rows of the drawn for each frame.</summary>
         /// <remarks>Supported on all screens.</remarks>
         Progressive,
+
+        /// <summary>The MBAFF Scan Type</summary>
         MBAFF,
+
+        /// <summary>The mixed Scan Type</summary>
         Mixed
     }
 

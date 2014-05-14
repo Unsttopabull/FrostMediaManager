@@ -16,14 +16,13 @@ using Frost.GettextMarkupExtension;
 using Frost.InfoParsers.Models;
 using Frost.InfoParsers.Models.Art;
 using Frost.InfoParsers.Models.Info;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util;
+using Frost.RibbonUI.Util.WebUpdate;
 using Frost.XamlControls.Commands;
 using log4net;
-using RibbonUI.Annotations;
-using RibbonUI.Properties;
-using RibbonUI.Util;
-using RibbonUI.Util.WebUpdate;
 
-namespace RibbonUI.Windows.Search {
+namespace Frost.RibbonUI.Windows.Search {
 
     public class SearchMoviesViewModel : INotifyPropertyChanged {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SearchMoviesViewModel));

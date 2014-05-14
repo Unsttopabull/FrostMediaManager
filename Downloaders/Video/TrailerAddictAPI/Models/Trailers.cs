@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace SharpTrailerAddictAPI.Models {
+namespace Frost.SharpTrailerAddictAPI.Models {
 
     /// <remarks/>
     [XmlType(AnonymousType = true)]

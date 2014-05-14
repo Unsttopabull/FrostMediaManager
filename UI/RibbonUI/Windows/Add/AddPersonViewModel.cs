@@ -9,11 +9,11 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using Frost.Common.Models.Provider;
+using Frost.RibbonUI.Properties;
 using Frost.XamlControls.Commands;
 using Microsoft.Win32;
-using RibbonUI.Annotations;
 
-namespace RibbonUI.Windows.Add {
+namespace Frost.RibbonUI.Windows.Add {
     class AddPersonViewModel : INotifyPropertyChanged, IDisposable {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IDisposable _searchTextObservable;

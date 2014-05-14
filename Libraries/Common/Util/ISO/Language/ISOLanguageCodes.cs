@@ -523,6 +523,8 @@ namespace Frost.Common.Util.ISO {
         private ISOLanguageCodes() {
         }
 
+        /// <summary> Gets the singleton instance.</summary>
+        /// <value>The sginleton instance.</value>
         public static ISOLanguageCodes Instance { get { return _instance; } }
 
         /// <summary>Checks if the specified string is a valid ISO English langauge name.</summary>

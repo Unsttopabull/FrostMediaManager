@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util.ObservableWrappers;
 using Frost.XamlControls.Commands;
-using RibbonUI.Annotations;
-using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.UserControls.List {
+namespace Frost.RibbonUI.UserControls.List {
     public class ListCertificationsViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private ObservableMovie _selectedMovie;

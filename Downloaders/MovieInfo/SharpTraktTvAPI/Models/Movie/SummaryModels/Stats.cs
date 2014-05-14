@@ -1,4 +1,4 @@
-namespace SharpTraktTvAPI.Models.Movie.SummaryModels {
+namespace Frost.SharpTraktTvAPI.Models.Movie.SummaryModels {
 
     public class Stats {
         public int watchers { get; set; }

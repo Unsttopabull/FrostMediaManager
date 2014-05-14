@@ -1,4 +1,4 @@
-﻿<Window x:Class="RibbonUI.Windows.InputBox"
+﻿<Window x:Class="Frost.RibbonUI.Windows.InputBox"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" WindowStartupLocation="CenterOwner"
         Title="InputBox" x:Name="WindowInput" Height="130" Width="300" ResizeMode="NoResize" Loaded="OnWindowLoaded" KeyDown="OnWindowKeyDown">

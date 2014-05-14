@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using UserControl = System.Windows.Controls.UserControl;
+using System.Windows.Controls;
 
-namespace RibbonUI.UserControls.Settings {
+namespace Frost.RibbonUI.UserControls.Settings {
 
     /// <summary>Interaction logic for GeneralSettings.xaml</summary>
     public partial class GeneralSettings : UserControl {

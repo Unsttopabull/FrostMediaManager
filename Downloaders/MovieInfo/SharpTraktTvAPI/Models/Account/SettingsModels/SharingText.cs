@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace SharpTraktTvAPI.Models.Account.SettingsModels {
+namespace Frost.SharpTraktTvAPI.Models.Account.SettingsModels {
 
     [JsonObject(Title = "Sharing_Text")]
     public class SharingText {

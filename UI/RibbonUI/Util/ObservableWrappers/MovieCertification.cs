@@ -2,7 +2,7 @@
 using Frost.Common.Comparers;
 using Frost.Common.Models.Provider;
 
-namespace RibbonUI.Util.ObservableWrappers {
+namespace Frost.RibbonUI.Util.ObservableWrappers {
     public class MovieCertification : MovieItemBase<ICertification>, ICertification, IEquatable<ICertification> {
         private static CountryEqualityComparer _comparer = new CountryEqualityComparer();
 

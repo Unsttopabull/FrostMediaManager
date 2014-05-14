@@ -3,14 +3,14 @@ using System.Windows;
 using System.Windows.Data;
 using Frost.Common;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Design;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util;
+using Frost.RibbonUI.Util.ObservableWrappers;
+using Frost.RibbonUI.Windows.Edit;
 using Frost.XamlControls.Commands;
-using RibbonUI.Annotations;
-using RibbonUI.Design;
-using RibbonUI.Util;
-using RibbonUI.Util.ObservableWrappers;
-using RibbonUI.Windows.Edit;
 
-namespace RibbonUI.UserControls.List {
+namespace Frost.RibbonUI.UserControls.List {
     class ListVideosViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private readonly IMoviesDataService _service;

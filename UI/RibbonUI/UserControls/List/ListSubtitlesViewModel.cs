@@ -8,14 +8,14 @@ using System.Windows.Data;
 using Frost.Common;
 using Frost.Common.Models.Provider;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Design;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util;
+using Frost.RibbonUI.Util.ObservableWrappers;
+using Frost.RibbonUI.Windows.Add;
 using Frost.XamlControls.Commands;
-using RibbonUI.Annotations;
-using RibbonUI.Design;
-using RibbonUI.Util;
-using RibbonUI.Util.ObservableWrappers;
-using RibbonUI.Windows.Add;
 
-namespace RibbonUI.UserControls.List {
+namespace Frost.RibbonUI.UserControls.List {
 
     public class ListSubtitlesViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;

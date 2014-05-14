@@ -4,7 +4,7 @@ using Frost.Common.Comparers;
 using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
 
-namespace RibbonUI.Util.ObservableWrappers {
+namespace Frost.RibbonUI.Util.ObservableWrappers {
     public class MovieCountry : MovieItemBase<ICountry>, IEquatable<MovieCountry>, IEquatable<ICountry> {
         private readonly IEqualityComparer<ICountry> _comparer;
 

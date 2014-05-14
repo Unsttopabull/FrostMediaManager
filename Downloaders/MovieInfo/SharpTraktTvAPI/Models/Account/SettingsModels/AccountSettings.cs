@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace SharpTraktTvAPI.Models.Account.SettingsModels {
+namespace Frost.SharpTraktTvAPI.Models.Account.SettingsModels {
 
     [JsonObject(Title = "Account")]
     public class AccountSettings {

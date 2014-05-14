@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace RibbonUI.Util {
+namespace Frost.RibbonUI.Util {
 
     public class Provider {
 

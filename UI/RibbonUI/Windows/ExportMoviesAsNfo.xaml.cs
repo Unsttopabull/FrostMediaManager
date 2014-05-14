@@ -7,12 +7,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Frost.Common.Models.Provider;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util.WebUpdate;
+using Frost.RibbonUI.Windows.WebUpdate;
 using log4net;
-using RibbonUI.Annotations;
-using RibbonUI.Util.WebUpdate;
-using RibbonUI.Windows.WebUpdate;
 
-namespace RibbonUI.Windows {
+namespace Frost.RibbonUI.Windows {
 
     /// <summary>Interaction logic for ExportMoviesAsNfo.xaml</summary>
     public partial class ExportMoviesAsNfo : Window, INotifyPropertyChanged {

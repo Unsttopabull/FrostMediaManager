@@ -5,29 +5,47 @@ using System.Linq;
 
 namespace Frost.Common.Proxies.ChangeTrackers {
 
+    /// <summary>Can track changes made to the collection add/remove/move (can detect collection returning to the original state)</summary>
+    /// <typeparam name="TItem">The type of the item the collection holds.</typeparam>
     public class ChangeTrackingCollection<TItem> : ICollection<TItem> where TItem : IEquatable<TItem> {
-        protected readonly ICollection<TItem> Collection;
         private readonly Action<TItem> _add;
         private readonly Action<TItem> _remove;
         private readonly HashSet<TItem> _addedItems;
         private readonly HashSet<TItem> _removedItems;
         private readonly IEqualityComparer<TItem> _comparer;
 
+        /// <summary>The collection being proxied</summary>
+        protected readonly ICollection<TItem> Collection;
+
+        /// <summary>Initializes a new instance of the <see cref="ChangeTrackingCollection{TItem}"/> class.</summary>
+        /// <param name="collection">The collection to track.</param>
         public ChangeTrackingCollection(ICollection<TItem> collection) {
             Collection = collection;
             _addedItems = new HashSet<TItem>();
             _removedItems = new HashSet<TItem>();
         }
 
+        /// <summary>Initializes a new instance of the <see cref="ChangeTrackingCollection{TItem}"/> class.</summary>
+        /// <param name="collection">The collection to track.</param>
+        /// <param name="comparer">The comparer to use for item equality.</param>
         public ChangeTrackingCollection(ICollection<TItem> collection, IEqualityComparer<TItem> comparer) : this(collection) {
             _comparer = comparer;
         }
 
+        /// <summary>Initializes a new instance of the <see cref="ChangeTrackingCollection{TItem}"/> class.</summary>
+        /// <param name="collection">The collection to track.</param>
+        /// <param name="add">The action to run after a succesfull add.</param>
+        /// <param name="remove">The action to run after a succesfull remove</param>
         public ChangeTrackingCollection(ICollection<TItem> collection, Action<TItem> add, Action<TItem> remove) : this(collection){
             _add = add;
             _remove = remove;
         }
 
+        /// <summary>Initializes a new instance of the <see cref="ChangeTrackingCollection{TItem}"/> class.</summary>
+        /// <param name="collection">The collection to track.</param>
+        /// <param name="add">The action to run after a succesfull add.</param>
+        /// <param name="remove">The action to run after a succesfull remove</param>
+        /// <param name="comparer">The comparer to use for item equality.</param>
         public ChangeTrackingCollection(ICollection<TItem> collection, Action<TItem> add, Action<TItem> remove, IEqualityComparer<TItem> comparer) : this(collection, add, remove) {
             _comparer = comparer;
         }
@@ -95,6 +113,8 @@ namespace Frost.Common.Proxies.ChangeTrackers {
             return true;
         }
 
+        /// <summary>Removes the in the collection that match given predicate.</summary>
+        /// <param name="predicate">The predicate to match items against.</param>
         public void RemoveWhere(Predicate<TItem> predicate) {
             foreach (TItem item in this.Where(item => predicate(item))) {
                 Remove(item);

@@ -36,14 +36,14 @@ namespace Frost.Providers.Frost {
                     try {
                         SQLiteConnection.CreateFile(dbName);
                     }
-                    catch (Exception e) {
+                    catch (Exception) {
                         
                     }
 
                     try {
                         SQLiteCommand.Execute(_initSQL, SQLiteExecuteType.NonQuery, context.Database.Connection.ConnectionString, new object());
                     }
-                    catch (Exception e) {
+                    catch (Exception) {
                         
                     }
                     return;

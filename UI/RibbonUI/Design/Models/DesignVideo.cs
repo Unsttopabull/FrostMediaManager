@@ -2,7 +2,7 @@
 using Frost.Common;
 using Frost.Common.Models.Provider;
 
-namespace RibbonUI.Design.Models {
+namespace Frost.RibbonUI.Design.Models {
     class DesignVideo : IVideo {
         public ILanguage Language { get; set; }
         public long Id { get; private set; }

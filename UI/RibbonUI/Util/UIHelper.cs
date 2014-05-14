@@ -7,11 +7,11 @@ using Frost.Common.Models.Provider;
 using Frost.Common.Models.Provider.ISO;
 using Frost.Common.Util.ISO;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Design.Models;
+using Frost.RibbonUI.Util.ObservableWrappers;
 using log4net;
-using RibbonUI.Design.Models;
-using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Util {
+namespace Frost.RibbonUI.Util {
 
     public static class UIHelper {
         private static List<ILanguage> _languages;

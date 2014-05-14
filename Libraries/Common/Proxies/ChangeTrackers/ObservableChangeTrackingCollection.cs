@@ -36,6 +36,7 @@ namespace Frost.Common.Proxies.ChangeTrackers {
         /// <value><c>true</c> if it does; otherwise, <c>false</c>.</value>
         public bool IsDisposed { get; private set; }
 
+        /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         public void Dispose() {
             Dispose(false);
         }
@@ -54,6 +55,7 @@ namespace Frost.Common.Proxies.ChangeTrackers {
             IsDisposed = true;
         }
 
+        /// <summary>Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.</summary>
         ~ObservableChangeTrackingCollection() {
             Dispose(true);
         }

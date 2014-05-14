@@ -5,13 +5,12 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using Frost.Common.Util.ISO;
+using Frost.RibbonUI.Design.Models;
+using Frost.RibbonUI.Util;
+using Frost.RibbonUI.Util.ObservableWrappers;
 using Frost.XamlControls.Commands;
-using RibbonUI.Design.Models;
-using RibbonUI.Util;
-using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows.Add {
+namespace Frost.RibbonUI.Windows.Add {
 
     /// <summary>Interaction logic for SelectLanguages.xaml</summary>
     public partial class SelectLanguages : Window {

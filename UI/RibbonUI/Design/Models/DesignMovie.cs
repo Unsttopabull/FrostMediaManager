@@ -4,7 +4,7 @@ using Frost.Common;
 using Frost.Common.Models.FeatureDetector;
 using Frost.Common.Models.Provider;
 
-namespace RibbonUI.Design.Models {
+namespace Frost.RibbonUI.Design.Models {
     public class DesignMovie : IMovie {
         private List<ISubtitle> _subtitles;
         private List<ICountry> _countries;

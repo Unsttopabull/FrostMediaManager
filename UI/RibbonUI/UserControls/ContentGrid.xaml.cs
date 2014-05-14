@@ -10,11 +10,11 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Shell;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util.ObservableWrappers;
 using Frost.XamlControls.Commands;
-using RibbonUI.Annotations;
-using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.UserControls {
+namespace Frost.RibbonUI.UserControls {
 
     /// <summary>Interaction logic for ContentGrid.xaml</summary>
     public partial class ContentGrid : UserControl, INotifyPropertyChanged {

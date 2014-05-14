@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using System.Windows;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers.Models.Subtitles;
+using Frost.RibbonUI.Util;
+using Frost.RibbonUI.Util.ObservableWrappers;
+using Frost.RibbonUI.Util.WebUpdate;
 using log4net;
-using RibbonUI.Util;
-using RibbonUI.Util.ObservableWrappers;
-using RibbonUI.Util.WebUpdate;
 
-namespace RibbonUI.Windows.WebUpdate {
+namespace Frost.RibbonUI.Windows.WebUpdate {
 
     /// <summary>Interaction logic for WebSubtitleUpdater.xaml</summary>
     public partial class WebSubtitleUpdater : Window {

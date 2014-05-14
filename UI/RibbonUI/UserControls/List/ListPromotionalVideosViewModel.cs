@@ -6,12 +6,12 @@ using System.Windows;
 using System.Windows.Data;
 using Frost.Common.Models.Provider;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util.ObservableWrappers;
 using Frost.XamlControls.Commands;
 using log4net;
-using RibbonUI.Annotations;
-using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.UserControls.List {
+namespace Frost.RibbonUI.UserControls.List {
 
     internal class ListPromotionalVideosViewModel : INotifyPropertyChanged {
         private static readonly ILog Log = LogManager.GetLogger(typeof(ListPromotionalVideosViewModel));

@@ -1,7 +1,7 @@
 ﻿using Frost.Common.Models.Provider;
 using Frost.InfoParsers.Models.Info;
 
-namespace RibbonUI.Design.Models {
+namespace Frost.RibbonUI.Design.Models {
     public class DesignPerson : IPerson {
 
         /// <summary>Initializes a new instance of the <see cref="DesignPerson"/> class.</summary>

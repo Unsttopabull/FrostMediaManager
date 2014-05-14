@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using RibbonUI.Util.ObservableWrappers;
+using Frost.RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows.Edit {
+namespace Frost.RibbonUI.Windows.Edit {
 
     /// <summary>Interaction logic for EditAudio.xaml</summary>
     public partial class EditAudio : Window {

@@ -2,22 +2,26 @@
 
 namespace Frost.Common.Models.FeatureDetector {
 
+    /// <summary>Represents the information about an art that has been detected by Feature Detector.</summary>
     public class ArtInfo : IArt {
 
+        /// <summary>Initializes a new instance of the <see cref="ArtInfo"/> class.</summary>
         public ArtInfo() {
             
         }
 
         /// <summary>Initializes a new instance of the <see cref="ArtInfo"/> class.</summary>
-        /// <param name="type">The type.</param>
-        /// <param name="path">The path.</param>
-        /// <param name="preview">The preview.</param>
+        /// <param name="type">The type of the art.</param>
+        /// <param name="path">The full path/uri to the art.</param>
+        /// <param name="preview">The preview image (eg. downscaled original).</param>
         public ArtInfo(ArtType type, string path, string preview) {
             Type = type;
             Path = path;
             Preview = preview;
         }
 
+        /// <summary>Gets or sets the type of the art.</summary>
+        /// <value>The type of the art.</value>
         public ArtType Type { get; set; }
 
         /// <summary>Gets or sets the path to this art (can be local or network or an URI).</summary>

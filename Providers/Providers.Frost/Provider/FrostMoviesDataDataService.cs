@@ -532,10 +532,7 @@ namespace Frost.Providers.Frost.Provider {
             try {
                 _mvc.SaveChanges();
             }
-            catch (OptimisticConcurrencyException e) {
-            }
-            catch (Exception e) {
-                throw;
+            catch (OptimisticConcurrencyException) {
             }
 
             foreach (Movie mov in _mvc.Movies.Where(m => m.MainPlot == null || m.DefaultFanart == null || m.DefaultCover == null)) {
@@ -555,8 +552,7 @@ namespace Frost.Providers.Frost.Provider {
             try {
                 _mvc.SaveChanges();
             }
-            catch (Exception e) {
-                throw;
+            catch {
             }
 
             MovieSaver.Reset();

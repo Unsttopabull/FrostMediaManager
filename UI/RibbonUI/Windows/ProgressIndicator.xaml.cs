@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace RibbonUI.Windows {
+namespace Frost.RibbonUI.Windows {
 
     /// <summary>Interaction logic for ProgressIndicator.xaml</summary>
     public partial class ProgressIndicator : Window {

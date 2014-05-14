@@ -1,6 +1,10 @@
 namespace Frost.Common.Models.Provider {
 
+    /// <summary>The information about a video track that is accessible by the UI.</summary>
     public interface IVideo : IHasLanguage, IMovieEntity {
+
+        /// <summary>Gets or sets the OpenSubtitles.org movie hash.</summary>
+        /// <value>The movie hash.</value>
         string MovieHash { get; set; }
 
         /// <summary>With or from what this video was made from</summary>
@@ -19,6 +23,8 @@ namespace Frost.Common.Models.Provider {
         /// <value>The name of the resolution.</value>
         string ResolutionName { get; set; }
 
+        /// <summary>Gets or sets the video standard (NTSC/PAL, 720p, ...).</summary>
+        /// <value>The video standard.</value>
         string Standard { get; set; }
 
         /// <summary>Gets or sets the frames per second in this video.</summary>
@@ -58,6 +64,8 @@ namespace Frost.Common.Models.Provider {
         /// <value>The chroma subsampling.</value>
         string ChromaSubsampling { get; set; }
 
+        /// <summary>Gets or sets the format.</summary>
+        /// <value>The video format.</value>
         string Format { get; set; }
 
         /// <summary>Gets or sets the codec this video is encoded in.</summary>

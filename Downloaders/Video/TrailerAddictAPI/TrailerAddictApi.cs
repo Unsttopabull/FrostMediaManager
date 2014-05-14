@@ -3,10 +3,11 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Xml.Serialization;
-using SharpTrailerAddictAPI.Models;
+using Frost.SharpTrailerAddictAPI.Models;
 
-namespace SharpTrailerAddictAPI {
+namespace Frost.SharpTrailerAddictAPI {
 
+    /// <summary>The client for communicating with TralerAddict.NET API</summary>
     public static class TrailerAddictApi {
         private const string API_URL = "http://api.traileraddict.com/?{0}={1}{2}{3}";
         private static readonly Type TrailersType = typeof(Trailers);
@@ -15,7 +16,7 @@ namespace SharpTrailerAddictAPI {
         /// <param name="width">The width of embed videos.</param>
         /// <param name="count">The count of featured trailers to return.</param>
         /// <returns>Returns the currently featured trailers with specified embed width.</returns>
-        public static Models.Trailers GetFeatured(int count = 1, int width = 480) {
+        public static Trailers GetFeatured(int count = 1, int width = 480) {
             return Download(string.Format(API_URL, "featured", true, count > 1 ? "&count=" + count : null, width == -1 ? null : width.ToString(CultureInfo.InvariantCulture)));
         }
 
@@ -24,7 +25,7 @@ namespace SharpTrailerAddictAPI {
         /// <param name="width">The width of embed videos.</param>
         /// <param name="count">The count of videos to return.</param>
         /// <returns>Returns the specified number of trailers set width for the <paramref name="movieTitle"/> movie.</returns>
-        public static Models.Trailers GetMovieVideosByTitle(string movieTitle, int count = 1, int width = 480) {
+        public static Trailers GetMovieVideosByTitle(string movieTitle, int count = 1, int width = 480) {
             movieTitle = movieTitle.Replace("'", "");
 
             string format = string.Format(API_URL, "film", WebUtility.UrlEncode(movieTitle), count > 1 ? "&count=" + count : null, width <= 0 ? null : "&width=" + width.ToString(CultureInfo.InvariantCulture));
@@ -36,7 +37,7 @@ namespace SharpTrailerAddictAPI {
         /// <param name="width">The width of embed videos.</param>
         /// <param name="count">The count of videos to return.</param>
         /// <returns>Returns the specified number of trailers set width for the movie with <paramref name="imdbId"/>.</returns>
-        public static Models.Trailers GetMovieVideosByImdbId(string imdbId, int count = 1, int width = 480) {
+        public static Trailers GetMovieVideosByImdbId(string imdbId, int count = 1, int width = 480) {
             return Download(string.Format(API_URL, "imdb",
                                 imdbId, 
                                 count > 1 ? "&count=" + count : null,
@@ -50,7 +51,7 @@ namespace SharpTrailerAddictAPI {
         /// <param name="width">The width of embed videos.</param>
         /// <param name="count">The count of videos to return.</param>
         /// <returns>Returns the specified number of trailers set width for the <paramref name="actorName"/> actor.</returns>
-        public static Models.Trailers GetActorVideos(string actorName, int count = 1, int width = 480) {
+        public static Trailers GetActorVideos(string actorName, int count = 1, int width = 480) {
             return Download(string.Format(API_URL, "actor",
                                 WebUtility.UrlEncode(actorName), 
                                 count > 1 ? "&count=" + count : null,

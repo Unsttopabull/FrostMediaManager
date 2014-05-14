@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
-using Frost.Common.Properties;
+using Frost.RibbonUI.Properties;
 
-namespace RibbonUI.Util {
+namespace Frost.RibbonUI.Util {
     public class KnownCodec : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private string _codecId;

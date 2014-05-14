@@ -14,6 +14,9 @@ namespace Frost.Common.Util {
     /// <summary>Logs changes made to EF DbContext</summary>
     public static class EfLogger {
 
+        /// <summary>Logs the context changes.</summary>
+        /// <param name="context">The context for which changes to track.</param>
+        /// <param name="logFileName">File path to the log file.</param>
         public static void LogChanges(DbContext context, string logFileName) {
             context.ChangeTracker.DetectChanges(); // Important!
 

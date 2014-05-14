@@ -119,7 +119,7 @@ namespace Frost.Providers.Xbmc.DB {
             try {
                 di = new DirectoryInfo(FolderPath);
             }
-            catch (Exception e) {
+            catch (Exception) {
                 di = null;
             }
 

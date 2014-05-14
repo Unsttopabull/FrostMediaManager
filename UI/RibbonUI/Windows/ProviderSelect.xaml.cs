@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows;
 
-namespace RibbonUI.Windows {
+namespace Frost.RibbonUI.Windows {
 
     /// <summary>Interaction logic for ProviderSelect.xaml</summary>
     public partial class ProviderSelect : Window {

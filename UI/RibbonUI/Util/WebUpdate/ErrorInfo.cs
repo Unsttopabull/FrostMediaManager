@@ -1,6 +1,6 @@
-using RibbonUI.Windows.WebUpdate;
+using Frost.RibbonUI.Windows.WebUpdate;
 
-namespace RibbonUI.Util.WebUpdate {
+namespace Frost.RibbonUI.Util.WebUpdate {
 
     public class ErrorInfo {
         public ErrorInfo(ErrorType type, string message) {

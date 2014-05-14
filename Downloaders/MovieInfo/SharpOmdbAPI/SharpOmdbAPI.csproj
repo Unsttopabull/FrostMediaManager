@@ -7,8 +7,8 @@
     <ProjectGuid>{C796AC60-DB0E-41ED-9A65-47C7ABC52BE9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SharpOmdbAPI</RootNamespace>
-    <AssemblyName>SharpOmdbAPI</AssemblyName>
+    <RootNamespace>Frost.SharpOmdbAPI</RootNamespace>
+    <AssemblyName>Frost.SharpOmdbAPI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -28,6 +28,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Frost.SharpOmdbAPI.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

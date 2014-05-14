@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Dynamic;
 using System.Globalization;
 using System.IO;
@@ -12,6 +11,7 @@ using Frost.PHPtoNET.Attributes;
 
 namespace Frost.PHPtoNET {
 
+    /// <summary>The stream used to parse PHP serialize() serialized format.</summary>
     public class PHPSerializedStream : IDisposable {
         private readonly Encoding _enc;
         private readonly MemoryStream _ms;
@@ -28,14 +28,22 @@ namespace Frost.PHPtoNET {
             BindingFlags.Instance | BindingFlags.FlattenHierarchy |
             BindingFlags.NonPublic | BindingFlags.Static;
 
+        /// <summary>Initializes a new instance of the <see cref="PHPSerializedStream"/> class.</summary>
+        /// <param name="searializedData">The searialized data string to parse.</param>
+        /// <param name="enc">The encoding used to read the data string.</param>
         public PHPSerializedStream(string searializedData, Encoding enc) : this(enc.GetBytes(searializedData), enc) {
         }
 
+        /// <summary>Initializes a new instance of the <see cref="PHPSerializedStream"/> class.</summary>
+        /// <param name="serializedData">The searialized data byte array to parse.</param>
+        /// <param name="enc">The encoding used to read the data as string.</param>
         public PHPSerializedStream(byte[] serializedData, Encoding enc) {
             _enc = enc;
             _ms = new MemoryStream(serializedData);
         }
 
+        /// <summary>Gets the position the stream is currently at.</summary>
+        /// <value>The position the stream is currently at.</value>
         public long Position { get { return _ms.Position; } }
 
         private object InvokeGenericMethod(string methodName, Type genericArgument, params object[] methodParameters) {
@@ -51,6 +59,8 @@ namespace Frost.PHPtoNET {
             return genericArrParse.Invoke(this, methodParameters);
         }
 
+        /// <summary>Reads the next character without advancing the stream.</summary>
+        /// <returns></returns>
         public char Peek() {
             char peek = ReadChar();
             _ms.Position--;
@@ -60,6 +70,8 @@ namespace Frost.PHPtoNET {
 
         #region Read
 
+        /// <summary>Reads the character that is not a control character or space.</summary>
+        /// <returns>A character of ASCII value greater than 32. if EOF retunrs -1.</returns>
         public char ReadChar() {
             int b = _ms.ReadByte();
             if (b == -1) {
@@ -72,6 +84,9 @@ namespace Frost.PHPtoNET {
             return ReadChar();
         }
 
+        /// <summary>Reads a serialized string value from the current position.</summary>
+        /// <returns>The deserialized string</returns>
+        /// <exception cref="ParsingException">Throws if there is no string at this position or the data is malformed.</exception>
         public string ReadString() {
             CheckString("s:");
 
@@ -166,11 +181,17 @@ namespace Frost.PHPtoNET {
             }
         }
 
+        /// <summary>Reads a serialized null value from the stream.</summary>
+        /// <returns>A null value</returns>
+        /// <exception cref="ParsingException">Throws if null does not exists at this position or the data is malformed.</exception>
         public object ReadNull() {
             CheckString("N;");
             return null;
         }
 
+        /// <summary>Reads a serialized integer value from the stream.</summary>
+        /// <returns>The deserialized integer value</returns>
+        /// <exception cref="ParsingException">Throws if integer does not exists at this position or the data is malformed.</exception>
         public int ReadInteger() {
             CheckString("i:");
 
@@ -180,6 +201,9 @@ namespace Frost.PHPtoNET {
             return val;
         }
 
+        /// <summary>Reads a serialized double/long value from the stream.</summary>
+        /// <returns>The deserialized double/long value</returns>
+        /// <exception cref="ParsingException">Throws if double/long does not exists at this position or the data is malformed.</exception>
         public double ReadDouble() {
             CheckString("d:");
 
@@ -190,6 +214,9 @@ namespace Frost.PHPtoNET {
             return val;
         }
 
+        /// <summary>Reads a serialized boolean value from the stream.</summary>
+        /// <returns>The deserialized boolean value</returns>
+        /// <exception cref="ParsingException">Throws if boolean does not exists at this position or the data is malformed.</exception>
         public bool ReadBoolean() {
             CheckString("b:");
 
@@ -210,6 +237,9 @@ namespace Frost.PHPtoNET {
             return b;
         }
 
+        /// <summary>Reads a serialized array of values from the stream (can be mixed type).</summary>
+        /// <returns>The deserialized array.</returns>
+        /// <exception cref="ParsingException">Throws if an array does not exists at this position or the data is malformed.</exception>
         public IEnumerable ReadArray() {
             CheckString("a:");
             int len = ReadIntegerValue();
@@ -240,6 +270,9 @@ namespace Frost.PHPtoNET {
             return arr;
         }
 
+        /// <summary>Reads a serialized array of single type values from the stream.</summary>
+        /// <returns>The deserialized single-type array.</returns>
+        /// <exception cref="ParsingException">Throws if an array does not exists at this position or the data is malformed.</exception>
         public object[] ReadSingleTypeArray() {
             CheckString("a:");
             int len = ReadIntegerValue();
@@ -253,6 +286,9 @@ namespace Frost.PHPtoNET {
             return arr;
         }
 
+        /// <summary>Reads a key-value array where the keys can be string or integer (can mix).</summary>
+        /// <returns>The deserialized key-value array.</returns>
+        /// <exception cref="ParsingException">Throws if an array does not exists at this position or the data is malformed.</exception>
         public Hashtable ReadAsociativeArray() {
             CheckString("a:");
             int len = ReadIntegerValue();
@@ -326,6 +362,9 @@ namespace Frost.PHPtoNET {
             }
         }
 
+        /// <summary>Reads serailized object form the steam as a dynamicaly consturcted object.</summary>
+        /// <returns>An ExpandoObject dynamicly consturcted from the serialized data.</returns>
+        /// <exception cref="ParsingException">Throws if an object does not exists at this position or the data is malformed.</exception>
         public dynamic ReadObject() {
             CheckString("O:");
             int nameByteLenght = ReadIntegerValue();
@@ -797,6 +836,10 @@ namespace Frost.PHPtoNET {
             return (T) obj;
         }
 
+        /// <summary>Reads a serialized array of single type values from the stream.</summary>
+        /// <typeparam name="TElement">The type of the array elements.</typeparam>
+        /// <returns>The deserialized single-type array.</returns>
+        /// <exception cref="ParsingException">Throws if an array does not exists at this position or the data is malformed.</exception>
         public TElement[] DeserializeArray<TElement>() {
             CheckString("a:");
             int len = ReadIntegerValue();
@@ -815,6 +858,11 @@ namespace Frost.PHPtoNET {
             return arr;
         }
 
+        /// <summary>Reads a serialized key-value array from the stream.</summary>
+        /// <typeparam name="TKey">The type of the key (can be string or integral type).</typeparam>
+        /// <typeparam name="TValue">The type of the value (can be mixed if set to <see cref="Object"/>).</typeparam>
+        /// <returns>The deserialized key-value array.</returns>
+        /// <exception cref="ParsingException">Throws if the key-value array does not exists at this position or the data is malformed.</exception>
         public IDictionary<TKey, TValue> DeserializeDictionary<TKey, TValue>() {
             CheckString("a:");
             int len = ReadIntegerValue();

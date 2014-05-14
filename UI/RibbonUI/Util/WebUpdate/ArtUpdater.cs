@@ -8,11 +8,11 @@ using Frost.Common.Models;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers.Models.Art;
 using Frost.InfoParsers.Models.Info;
+using Frost.RibbonUI.Design.Models;
+using Frost.RibbonUI.Properties;
 using log4net;
-using RibbonUI.Annotations;
-using RibbonUI.Design.Models;
 
-namespace RibbonUI.Util.WebUpdate {
+namespace Frost.RibbonUI.Util.WebUpdate {
 
     public class ArtUpdater : INotifyPropertyChanged {
         private static readonly ILog Log = LogManager.GetLogger(typeof(ArtUpdater));

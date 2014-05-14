@@ -4,10 +4,10 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
 using Frost.Common.Models.Provider;
+using Frost.RibbonUI.Properties;
 using Frost.XamlControls.Commands;
-using RibbonUI.Annotations;
 
-namespace RibbonUI.Windows.Add {
+namespace Frost.RibbonUI.Windows.Add {
 
     public class AddGenreViewModel : INotifyPropertyChanged {
         private string _newGenreName;

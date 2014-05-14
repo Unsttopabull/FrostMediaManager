@@ -8,13 +8,13 @@ using System.Windows.Input;
 using Frost.Common;
 using Frost.DetectFeatures;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Design.Fakes;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util.ObservableWrappers;
 using Frost.XamlControls.Commands;
 using log4net;
-using RibbonUI.Annotations;
-using RibbonUI.Design.Fakes;
-using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.UserControls {
+namespace Frost.RibbonUI.UserControls {
 
     public class ArtAndPlotViewModel : INotifyPropertyChanged {
         private const string IMDB_PERSON_URI = "http://www.imdb.com/name/{0}";

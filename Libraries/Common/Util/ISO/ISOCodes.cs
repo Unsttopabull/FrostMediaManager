@@ -7,6 +7,7 @@ namespace Frost.Common.Util.ISO {
     /// <summary>Represents a mapping between english language names and their officialy assigned ISO codes.</summary>
     public abstract class ISOCodes<T> where T : ISOCode {
 
+        /// <summary>ISO Codes</summary>
         protected static readonly Dictionary<string, T> Codes = new Dictionary<string, T>(StringComparer.OrdinalIgnoreCase);
 
         static ISOCodes()  {
@@ -43,6 +44,10 @@ namespace Frost.Common.Util.ISO {
             return Codes.ContainsKey(isoCode);
         }
 
+        /// <summary>Gets the ISOLanguageCode or ISOCountryCode with the specified iso code.</summary>
+        /// <value>The ISOCode </value>
+        /// <param name="isoCode">The iso code.</param>
+        /// <returns>Returns the ISOCOde or null if not found</returns>
         public T this[string isoCode] { get { return GetByISOCode(isoCode); } }
     }
 

@@ -1,5 +1,6 @@
 namespace Frost.Common.Models.FeatureDetector {
 
+    /// <summary>The information about a person as detected by Fature Detector</summary>
     public class PersonInfo {
         private string _thumb;
 

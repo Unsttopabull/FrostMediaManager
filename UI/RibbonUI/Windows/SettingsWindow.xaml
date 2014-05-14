@@ -1,8 +1,8 @@
-﻿<Window x:Class="RibbonUI.Windows.SettingsWindow"
+﻿<Window x:Class="Frost.RibbonUI.Windows.SettingsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:settings="clr-namespace:RibbonUI.UserControls.Settings"
         xmlns:l="clr-namespace:Frost.GettextMarkupExtension;assembly=Frost.GettextMarkupExtension"
+        xmlns:settings="clr-namespace:Frost.RibbonUI.UserControls.Settings"
         Loaded="WindowLoaded" Name="SettingssWindow"
         Title="Settings" Height="635" Width="800" Background="#BCD6F5">
     <Grid>

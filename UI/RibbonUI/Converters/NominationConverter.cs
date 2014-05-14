@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using Frost.GettextMarkupExtension;
 
-namespace RibbonUI.Converters {
+namespace Frost.RibbonUI.Converters {
     public class NominationConverter : IValueConverter {
 
         /// <summary>Converts a value.</summary>

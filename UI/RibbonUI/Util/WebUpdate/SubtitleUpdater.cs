@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers.Models.Subtitles;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util.ObservableWrappers;
 using log4net;
-using RibbonUI.Annotations;
-using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Util.WebUpdate {
+namespace Frost.RibbonUI.Util.WebUpdate {
 
     public class SubtitleUpdater : INotifyPropertyChanged {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SubtitleUpdater));

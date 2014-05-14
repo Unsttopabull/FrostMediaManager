@@ -7,13 +7,13 @@ using Frost.Common.Proxies.ChangeTrackers;
 using Frost.DetectFeatures;
 using Frost.DetectFeatures.Util;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Util;
+using Frost.RibbonUI.Windows;
+using Frost.RibbonUI.Windows.Add;
 using Frost.XamlControls.Commands;
 using log4net;
-using RibbonUI.Util;
-using RibbonUI.Windows;
-using RibbonUI.Windows.Add;
 
-namespace RibbonUI.UserControls.Settings {
+namespace Frost.RibbonUI.UserControls.Settings {
 
     public class FeatureDetectorSettingsViewModel {
         private static readonly ILog Log = LogManager.GetLogger(typeof(FeatureDetectorSettingsViewModel));

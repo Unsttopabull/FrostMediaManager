@@ -3,11 +3,11 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
-using Frost.Common.Properties;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util.ObservableWrappers;
 using Frost.XamlControls.Commands;
-using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Windows.Add {
+namespace Frost.RibbonUI.Windows.Add {
     class AddCountriesViewModel : INotifyPropertyChanged {
         public event PropertyChangedEventHandler PropertyChanged;
         private IEnumerable<MovieCountry> _countries;

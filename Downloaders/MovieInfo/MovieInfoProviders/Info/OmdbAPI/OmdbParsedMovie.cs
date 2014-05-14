@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using Frost.InfoParsers;
-using SharpOmdbAPI.Models;
+using Frost.SharpOmdbAPI.Models;
 
 namespace Frost.MovieInfoProviders.Info.OmdbAPI {
 

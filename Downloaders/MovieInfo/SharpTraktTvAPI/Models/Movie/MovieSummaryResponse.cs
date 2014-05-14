@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using SharpTraktTvAPI.Models.Genreal;
-using SharpTraktTvAPI.Models.Movie.SummaryModels;
+﻿using Frost.SharpTraktTvAPI.Models.Genreal;
+using Frost.SharpTraktTvAPI.Models.Movie.SummaryModels;
+using Newtonsoft.Json;
 
-namespace SharpTraktTvAPI.Models.Movie {
+namespace Frost.SharpTraktTvAPI.Models.Movie {
 
     public class MovieSummaryResponse {
 

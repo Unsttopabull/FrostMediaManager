@@ -1,6 +1,6 @@
 ﻿using Frost.InfoParsers;
-using SharpTraktTvAPI.Models.Movie;
-using SharpTraktTvAPI.Models.Search;
+using Frost.SharpTraktTvAPI.Models.Movie;
+using Frost.SharpTraktTvAPI.Models.Search;
 
 namespace Frost.MovieInfoProviders.Info.TraktTV {
     public class TraktTvParsedMovie : ParsedMovie {

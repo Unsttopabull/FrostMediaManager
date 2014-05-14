@@ -6,8 +6,8 @@ using System.Reflection;
 using Frost.InfoParsers;
 using Frost.InfoParsers.Models;
 using Frost.InfoParsers.Models.Info;
-using SharpTrailerAddictAPI;
-using SharpTrailerAddictAPI.Models;
+using Frost.SharpTrailerAddictAPI;
+using Frost.SharpTrailerAddictAPI.Models;
 
 namespace Frost.MovieInfoProviders.Videos {
     public class TrailerAddictClient : IPromotionalVideoClient {

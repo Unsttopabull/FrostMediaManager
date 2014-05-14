@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using LightInject;
 
-namespace RibbonUI.Util {
+namespace Frost.RibbonUI.Util {
 
     public static class LightInjectContainer {
         private static readonly ServiceContainer Container = new ServiceContainer();

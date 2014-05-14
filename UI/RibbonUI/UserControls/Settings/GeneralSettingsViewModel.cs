@@ -10,12 +10,12 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Properties;
 using Frost.XamlControls.Commands;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using RibbonUI.Annotations;
 using ComboBox = System.Windows.Controls.ComboBox;
 
-namespace RibbonUI.UserControls.Settings {
+namespace Frost.RibbonUI.UserControls.Settings {
 
     public class GeneralSettingsViewModel : INotifyPropertyChanged {
         private ObservableCollection<string> _searchFolders;
@@ -40,11 +40,11 @@ namespace RibbonUI.UserControls.Settings {
         public ObservableCollection<string> SearchFolders {
             get {
                 if (_searchFolders == null) {
-                    if (Properties.Settings.Default.SearchFolders == null) {
-                        Properties.Settings.Default.SearchFolders = new StringCollection();
+                    if (global::Frost.RibbonUI.Properties.Settings.Default.SearchFolders == null) {
+                        global::Frost.RibbonUI.Properties.Settings.Default.SearchFolders = new StringCollection();
                     }
 
-                    _searchFolders = new ObservableCollection<string>(Properties.Settings.Default.SearchFolders.Cast<string>());
+                    _searchFolders = new ObservableCollection<string>(global::Frost.RibbonUI.Properties.Settings.Default.SearchFolders.Cast<string>());
                 }
                 return _searchFolders;
             }
@@ -80,8 +80,8 @@ namespace RibbonUI.UserControls.Settings {
                 }
             }
 
-            if (Properties.Settings.Default.SearchFolders == null) {
-                Properties.Settings.Default.SearchFolders = new StringCollection();
+            if (global::Frost.RibbonUI.Properties.Settings.Default.SearchFolders == null) {
+                global::Frost.RibbonUI.Properties.Settings.Default.SearchFolders = new StringCollection();
             }
 
             SearchFolders.Add(folderPath);

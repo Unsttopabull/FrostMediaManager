@@ -11,15 +11,15 @@ using System.Windows.Input;
 using Frost.Common;
 using Frost.Common.Models.Provider;
 using Frost.GettextMarkupExtension;
+using Frost.RibbonUI.Design;
+using Frost.RibbonUI.Properties;
+using Frost.RibbonUI.Util;
+using Frost.RibbonUI.Util.ObservableWrappers;
 using Frost.XamlControls.Commands;
 using log4net;
-using RibbonUI.Annotations;
-using RibbonUI.Design;
-using RibbonUI.Util;
-using RibbonUI.Util.ObservableWrappers;
 using Swordfish.NET.Collections;
 
-namespace RibbonUI.UserControls {
+namespace Frost.RibbonUI.UserControls {
 
     public class ContentGridViewModel : INotifyPropertyChanged, IDisposable {
         private static readonly ILog Log = LogManager.GetLogger(typeof(ContentGridViewModel));
@@ -161,7 +161,7 @@ namespace RibbonUI.UserControls {
             try {
                 return ((ObservableMovie) o).Title.IndexOf(MovieSearchFilter ?? "", StringComparison.CurrentCultureIgnoreCase) != -1;
             }
-            catch (Exception e) {
+            catch (Exception) {
                 return false;
             }
         }

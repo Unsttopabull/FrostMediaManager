@@ -1,32 +1,37 @@
-﻿using System;
-using System.Linq;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace SharpTraktTvAPI.Models.Genreal {
+namespace Frost.SharpTraktTvAPI.Models.Genreal {
 
+    /// <summary>Represents the Trakt.TV movie promotional images (posters/fanart/covers)</summary>
     public class Images {
 
+        /// <summary>Movie poster</summary>
         [JsonProperty("poster")]
         public string Poster { get; set; }
 
+        /// <summary>Movie poster small (138)</summary>
         [JsonIgnore]
         public string PosterSmall {
             get { return GetSpecificSize(Poster, 138); }
         }
 
+        /// <summary>Movie poster medium (300)</summary>
         [JsonIgnore]
         public string PosterMedium {
             get { return GetSpecificSize(Poster, 300); }
         }
 
+        /// <summary>Movie fanart</summary>
         [JsonProperty("fanart")]
         public string Fanart { get; set; }
 
+        /// <summary>Movie fanart small (218)</summary>
         [JsonIgnore]
         public string FanartSmall {
             get { return GetSpecificSize(Fanart, 218); }
         }
 
+        /// <summary>Movie fanart medium (940)</summary>
         [JsonIgnore]
         public string FanartMedium {
             get { return GetSpecificSize(Fanart, 940); }

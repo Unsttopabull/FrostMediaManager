@@ -2,7 +2,7 @@
 using Frost.Common;
 using Frost.Common.Models.Provider;
 
-namespace RibbonUI.Design.Fakes {
+namespace Frost.RibbonUI.Design.Fakes {
     class FakeAudio : IAudio {
         public ILanguage Language { get; set; }
         /// <summary>Unique identifier.</summary>

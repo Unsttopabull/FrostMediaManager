@@ -12,11 +12,11 @@ using Frost.Common.Models.Provider;
 using Frost.Common.Util.ISO;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers.Models.Subtitles;
+using Frost.RibbonUI.Design.Models;
+using Frost.RibbonUI.Util.ObservableWrappers;
 using log4net;
-using RibbonUI.Design.Models;
-using RibbonUI.Util.ObservableWrappers;
 
-namespace RibbonUI.Util.WebUpdate {
+namespace Frost.RibbonUI.Util.WebUpdate {
 
     public class SubtitleDownloader {
         private static readonly ILog Log = LogManager.GetLogger(typeof(SubtitleDownloader));
@@ -53,7 +53,7 @@ namespace RibbonUI.Util.WebUpdate {
                 }
                 catch (Exception e) {
                     if (Log.IsWarnEnabled) {
-                        Log.Warn(string.Format("Failed to open subtitle download link (user interaction required) with path: \"{0}\"", _info.SubtitlesLink));
+                        Log.Warn(string.Format("Failed to open subtitle download link (user interaction required) with path: \"{0}\"", _info.SubtitlesLink), e);
                     }
 
                     MessageBox.Show(Gettext.T("Failed to open the subtitle download site"));
@@ -71,7 +71,7 @@ namespace RibbonUI.Util.WebUpdate {
                 }
                 catch (Exception e) {
                     if (Log.IsWarnEnabled) {
-                        Log.Warn(string.Format("Failed to add downloaded subtitle info to the movie \"{0}\"", _movie.Title));
+                        Log.Warn(string.Format("Failed to add downloaded subtitle info to the movie \"{0}\"", _movie.Title), e);
                     }
 
                     MessageBox.Show(Gettext.T("Provider failed to save the subtitle information"));
@@ -155,7 +155,7 @@ namespace RibbonUI.Util.WebUpdate {
             }
             catch (Exception e) {
                 if (Log.IsWarnEnabled) {
-                    Log.Warn(string.Format("Failed to add downloaded subtitle info to the movie \"{0}\"", _movie.Title));
+                    Log.Warn(string.Format("Failed to add downloaded subtitle info to the movie \"{0}\"", _movie.Title), e);
                 }
 
                 MessageBox.Show(Gettext.T("Provider failed to save the subtitle information"));

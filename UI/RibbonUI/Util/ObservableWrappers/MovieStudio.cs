@@ -2,7 +2,7 @@
 using Frost.Common.Comparers;
 using Frost.Common.Models.Provider;
 
-namespace RibbonUI.Util.ObservableWrappers {
+namespace Frost.RibbonUI.Util.ObservableWrappers {
     public class MovieStudio : MovieItemBase<IStudio>, IEquatable<MovieStudio>, IEquatable<IStudio> {
         private readonly HasNameEqualityComparer _comparer;
 

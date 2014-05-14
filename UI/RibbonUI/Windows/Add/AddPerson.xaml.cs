@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Frost.Common.Models.Provider;
 
-namespace RibbonUI.Windows.Add {
+namespace Frost.RibbonUI.Windows.Add {
 
     /// <summary>Interaction logic for SelectCountry.xaml</summary>
     public partial class AddPerson : Window {

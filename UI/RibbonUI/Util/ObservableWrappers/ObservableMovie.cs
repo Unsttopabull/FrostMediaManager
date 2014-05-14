@@ -13,7 +13,7 @@ using Frost.InfoParsers.Models.Subtitles;
 using log4net;
 using Swordfish.NET.Collections;
 
-namespace RibbonUI.Util.ObservableWrappers {
+namespace Frost.RibbonUI.Util.ObservableWrappers {
 
     public class ObservableMovie : MovieItemBase<IMovie>, IMovieInfo, IEquatable<IMovie> {
         private static readonly ILog Log = LogManager.GetLogger(typeof(ObservableMovie));

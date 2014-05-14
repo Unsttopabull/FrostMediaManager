@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RibbonUI.Util {
+namespace Frost.RibbonUI.Util {
     public class Plugin {
 
         /// <summary>Initializes a new instance of the <see cref="T:System.Object"/> class.</summary>

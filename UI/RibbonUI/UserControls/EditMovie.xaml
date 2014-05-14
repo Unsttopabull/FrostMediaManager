@@ -1,4 +1,4 @@
-﻿<UserControl x:Name="MovieEdit" x:Class="RibbonUI.UserControls.EditMovie"
+﻿<UserControl x:Name="MovieEdit" x:Class="Frost.RibbonUI.UserControls.EditMovie"
              xmlns:a="http://schemas.AvalonControls/AvalonControlsLibrary/Controls"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -12,12 +12,12 @@
              xmlns:fmm="http://www.frostmediamanager.com/xaml/controls"
              xmlns:models="clr-namespace:Frost.Common.Models.Provider;assembly=Frost.Common"             
              xmlns:common="clr-namespace:Frost.Common;assembly=Frost.Common"
-             xmlns:o="clr-namespace:RibbonUI.Util.ObservableWrappers"
-             xmlns:vm="clr-namespace:RibbonUI.UserControls"
+             xmlns:userControls="clr-namespace:Frost.RibbonUI.UserControls"
+             xmlns:o="clr-namespace:Frost.RibbonUI.Util.ObservableWrappers"
              mc:Ignorable="d" Loaded="OnControlLoaded"
              d:DesignHeight="725" d:DesignWidth="1071">
     <UserControl.DataContext>
-        <vm:EditMovieViewModel/>
+        <userControls:EditMovieViewModel/>
     </UserControl.DataContext>
     <UserControl.Resources>
         <ObjectDataProvider x:Key="MovieTypes" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">

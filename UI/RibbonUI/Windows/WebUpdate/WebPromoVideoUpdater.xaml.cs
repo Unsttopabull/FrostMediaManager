@@ -1,11 +1,11 @@
 ﻿using System.Windows;
 using Frost.GettextMarkupExtension;
 using Frost.InfoParsers.Models;
-using RibbonUI.Util;
-using RibbonUI.Util.ObservableWrappers;
-using RibbonUI.Util.WebUpdate;
+using Frost.RibbonUI.Util;
+using Frost.RibbonUI.Util.ObservableWrappers;
+using Frost.RibbonUI.Util.WebUpdate;
 
-namespace RibbonUI.Windows.WebUpdate {
+namespace Frost.RibbonUI.Windows.WebUpdate {
 
     /// <summary>Interaction logic for WebPromoVideoUpdater.xaml</summary>
     public partial class WebPromoVideoUpdater : Window {
