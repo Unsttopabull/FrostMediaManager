@@ -1,0 +1,3 @@
+[submodule "Detection/UniversalCharsetDetector"]
+	path = Detection/UniversalCharsetDetector
+	url = https://github.com/Unsttopabull/SharpCharsetDetector.git
