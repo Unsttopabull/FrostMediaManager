@@ -1,3 +1,9 @@
+///////////////////////////////////////////////////////////////////
+//   Ported to C# by Martin Kraner <martinkraner@outlook.com>    //
+//   from https://code.google.com/p/language-detection/          //
+///////////////////////////////////////////////////////////////////
+
+
 using System;
 using System.Collections.Generic;
 using System.IO;

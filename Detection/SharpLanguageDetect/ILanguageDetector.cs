@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+﻿///////////////////////////////////////////////////////////////////
+//   Ported to C# by Martin Kraner <martinkraner@outlook.com>    //
+//   from https://code.google.com/p/language-detection/          //
+///////////////////////////////////////////////////////////////////
+
+
+using System.Collections.Generic;
 using System.IO;
 
 namespace Frost.SharpLanguageDetect {

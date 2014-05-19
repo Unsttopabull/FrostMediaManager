@@ -41,13 +41,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FrostPluginAttribute.cs" />
+    <Compile Include="Models\Art\IParsedArts.cs" />
     <Compile Include="Models\IInfoClient.cs" />
     <Compile Include="Models\Subtitles\IMovieHash.cs" />
     <Compile Include="Models\Info\IParsingClient.cs" />
     <Compile Include="Models\Info\IParsedActor.cs" />
     <Compile Include="Models\Art\IFanartClient.cs" />
     <Compile Include="Models\Info\IParsedArt.cs" />
-    <Compile Include="Models\Art\IParsedArts.cs" />
     <Compile Include="Models\Info\IParsedAward.cs" />
     <Compile Include="Models\Info\IParsedPerson.cs" />
     <Compile Include="Models\IPromotionalVideoClient.cs" />
