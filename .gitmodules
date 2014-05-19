@@ -19,3 +19,18 @@
 [submodule "UI/GettextTranslationExtension"]
 	path = UI/GettextTranslationExtension
 	url = https://github.com/Unsttopabull/TranslationExtension.git
+[submodule "Downloaders/Art/SharpFanartTv"]
+	path = Downloaders/Art/SharpFanartTv
+	url = https://github.com/Unsttopabull/SharpFanartTv.git
+[submodule "Downloaders/Subtitle/SharpOpenSubtitles"]
+	path = Downloaders/Subtitle/SharpOpenSubtitles
+	url = https://github.com/Unsttopabull/SharpOpenSubtitles.git
+[submodule "Downloaders/Video/TrailerAddictAPI"]
+	path = Downloaders/Video/TrailerAddictAPI
+	url = https://github.com/Unsttopabull/SharpTrailerAddictAPI.git
+[submodule "Downloaders/MovieInfo/SharpOmdbAPI"]
+	path = Downloaders/MovieInfo/SharpOmdbAPI
+	url = https://github.com/Unsttopabull/SharpOmdbAPI.git
+[submodule "Downloaders/MovieInfo/SharpTraktTvAPI"]
+	path = Downloaders/MovieInfo/SharpTraktTvAPI
+	url = https://github.com/Unsttopabull/SharpTraktTvAPI.git
