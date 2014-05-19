@@ -1,3 +1,21 @@
 [submodule "Detection/UniversalCharsetDetector"]
 	path = Detection/UniversalCharsetDetector
 	url = https://github.com/Unsttopabull/SharpCharsetDetector.git
+[submodule "Detection/SharpLanguageDetect"]
+	path = Detection/SharpLanguageDetect
+	url = https://github.com/Unsttopabull/SharpLanguageDetect.git
+[submodule "Detection/SharpMediaInfo"]
+	path = Detection/SharpMediaInfo
+	url = https://github.com/Unsttopabull/SharpMediaInfo.git
+[submodule "Libraries/PHPtoNet"]
+	path = Libraries/PHPtoNet
+	url = https://github.com/Unsttopabull/PHPtoNET.git
+[submodule "Libraries/xml-rpc.net.3.0.0"]
+	path = Libraries/xml-rpc.net.3.0.0
+	url = https://github.com/Unsttopabull/XmlRpc.git
+[submodule "UI/XamlControls"]
+	path = UI/XamlControls
+	url = https://github.com/Unsttopabull/XamlControls.git
+[submodule "UI/GettextTranslationExtension"]
+	path = UI/GettextTranslationExtension
+	url = https://github.com/Unsttopabull/TranslationExtension.git
