@@ -54,27 +54,11 @@
     <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\EF6\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="LightInject">
-      <HintPath>..\packages\LightInject.3.0.1.6\lib\net45\LightInject.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\ThirdParty\log4net\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ThirdParty\JsonNET\Net35\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite, Version=1.0.91.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ThirdParty\SQLite\EF6\System.Data.SQLite.dll</HintPath>
-    </Reference>
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
@@ -86,7 +70,6 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
@@ -104,40 +87,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Detection\FeatureDetector\FeatureDetector.csproj">
-      <Project>{8542c013-aa9a-4852-98fa-6f05cc037a91}</Project>
-      <Name>FeatureDetector</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Downloaders\Art\SharpFanartTv\SharpFanartTv.csproj">
-      <Project>{25d0e1a6-7fa0-49fa-989f-3f5f082bd23d}</Project>
-      <Name>SharpFanartTv</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Downloaders\MovieInfo\InfoParsersCommon\InfoParsersCommon.csproj">
-      <Project>{005F252B-C8AD-49E0-9A88-47BC289F00D0}</Project>
-      <Name>InfoParsersCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Downloaders\MovieInfo\SharpTraktTvAPI\SharpTraktTvAPI.csproj">
-      <Project>{7e74d034-0d99-4e49-bd80-f96b04d3eca9}</Project>
-      <Name>SharpTraktTvAPI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Downloaders\Subtitle\SharpOpenSubtitles\SharpOpenSubtitles.csproj">
-      <Project>{10711252-7056-44a6-ac29-5c7c203b0095}</Project>
-      <Name>SharpOpenSubtitles</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Libraries\Common\Common.csproj">
-      <Project>{73F12859-D8B1-49C1-A835-0810CE7BD006}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Libraries\xml-rpc.net.3.0.0\xmlrpc.csproj">
-      <Project>{1B4B0A58-0AFB-4090-91DD-18912CC7DE65}</Project>
-      <Name>xmlrpc</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Providers\Providers.Frost\Providers.Frost.csproj">
-      <Project>{b404da8f-fbf4-4ccc-be01-22c488863ec2}</Project>
-      <Name>Providers.Frost</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

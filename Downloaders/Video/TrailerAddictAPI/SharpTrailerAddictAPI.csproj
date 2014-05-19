@@ -31,6 +31,9 @@
     <DocumentationFile>bin\Release\Frost.SharpTrailerAddictAPI.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="LightInject">
+      <HintPath>..\..\..\ThirdParty\LightInject\LightInject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
@@ -42,9 +45,6 @@
     <Compile Include="TrailerAddictApi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TrailerAddictException.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
