@@ -33,8 +33,9 @@
     <Reference Include="HtmlAgilityPack">
       <HintPath>..\..\..\ThirdParty\HtmlAgilityPack\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
-    <Reference Include="LightInject">
-      <HintPath>..\..\..\packages\LightInject.3.0.1.6\lib\net45\LightInject.dll</HintPath>
+    <Reference Include="LightInject, Version=3.0.1.6, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\ThirdParty\LightInject\LightInject.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -89,9 +90,6 @@
       <Project>{7e74d034-0d99-4e49-bd80-f96b04d3eca9}</Project>
       <Name>SharpTraktTvAPI</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
